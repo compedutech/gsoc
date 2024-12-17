@@ -1,0 +1,1738 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+438776074,[GSoC] Add siamrpnpp.py,"### GSoC '20 : Real-time Single Object Tracking using Deep Learning (SiamRPN++)
+### Overview
+Proposal : https://summerofcode.withgoogle.com/projects/#4979746967912448
+Mentors : Liubov Batanina @l-bat, Stefano Fabri @bhack, Ilya Elizarov @ieliz
+Student : Jin Yeob Chung @jinyup100
+
+<cut/>
+
+### Details of the Pull Request
+-  Export of the torch implementation of the SiamRPN++ visual tracker to ONNX
+    - Please refer to (https://gist.github.com/jinyup100/7aa748686c5e234ed6780154141b4685) or _Code to 
+       generate ONNX models_ at the bottom of this PR description
+-  Addition of siamrpnpp.py in the opencv/samples/dnn repository  
+    - SiamRPN++ visual tracker can be performed on a sample video input
+    - Parsers include:
+       - --input_video  _path to sample video input_
+       - --target_net _path to target branch of the visual tracker_
+       - --search_net  _path to search branch of the visual tracker_
+       - --rpn_head _path to head of the visual tracker_
+       - --backend _selection of the computation backend_
+       - --target _selection of the computation target device_
+- Additional samples of the visual tracker performed on videos are available at:
+     - https://drive.google.com/drive/folders/1k7Z_SHaBWK_4aEQPxJJCGm3P7y2IFCjY?usp=sharing
+
+<details>
+
+<summary>Examples</summary>
+
+<img src=""https://user-images.githubusercontent.com/41290732/91156541-39dc2880-e6ff-11ea-87bc-64207f1f8f2c.gif"" width=""320"" height=""220""> <img src=""https://user-images.githubusercontent.com/41290732/91157483-59c01c00-e700-11ea-9e44-9aedcedb9e34.gif"" width=""320"" height=""220"">
+
+</details>
+
+### Pull Request Readiness Checklist
+
+See details at https://github.com/opencv/opencv/wiki/How_to_contribute#making-a-good-pull-request
+
+- [X] I agree to contribute to the project under OpenCV (BSD) License.
+- [X] To the best of my knowledge, the proposed patch is not based on a code under GPL or other license that is incompatible with OpenCV
+- [X] The PR is proposed to proper branch
+- [X] There is reference to original bug report and related work
+- [X] There is accuracy test, performance test and test data in opencv_extra repository, if applicable
+       Patch to opencv_extra has the same branch name.
+- [X] The feature is well documented and sample code can be built with the project CMake
+
+<details>
+
+<summary>Code to generate ONNX Models</summary>
+
+The code shown below to generate the ONNX models of siamrpn++ is also available from : 
+https://gist.github.com/jinyup100/7aa748686c5e234ed6780154141b4685
+
+
+![ball_track](https://user-images.githubusercontent.com/41290732/91156436-1dd88700-e6ff-11ea-85a3-db0f668e5eee.gif)
+
+
+The Final Version of the Pre-Trained Weights and successfully converted ONNX format of the models using the codes are available at::
+
+**Pre-Trained Weights in pth Format**
+https://drive.google.com/file/d/11bwgPFVkps9AH2NOD1zBDdpF_tQghAB-/view?usp=sharing
+
+**Target Net** : Import :heavy_check_mark: Export :heavy_check_mark: 
+https://drive.google.com/file/d/1dw_Ne3UMcCnFsaD6xkZepwE4GEpqq7U_/view?usp=sharing
+
+**Search Net** : Import :heavy_check_mark: Export :heavy_check_mark: 
+https://drive.google.com/file/d/1Lt4oE43ZSucJvze3Y-Z87CVDreO-Afwl/view?usp=sharing
+
+**RPN_head** : Import : :heavy_check_mark:   Export :heavy_check_mark:  
+https://drive.google.com/file/d/1zT1yu12mtj3JQEkkfKFJWiZ71fJ-dQTi/view?usp=sharing
+
+```python
+import numpy as np
+import onnx
+import torch
+import torch.nn as nn
+
+# Class for the Building Blocks required for ResNet
+class Bottleneck(nn.Module):
+    expansion = 4
+
+    def __init__(self, inplanes, planes, stride=1,
+                 downsample=None, dilation=1):
+        super(Bottleneck, self).__init__()
+        self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(planes)
+        padding = 2 - stride
+        if downsample is not None and dilation > 1:
+            dilation = dilation // 2
+            padding = dilation
+
+        assert stride == 1 or dilation == 1, \
+            ""stride and dilation must have one equals to zero at least""
+
+        if dilation > 1:
+            padding = dilation
+        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
+                               padding=padding, bias=False, dilation=dilation)
+        self.bn2 = nn.BatchNorm2d(planes)
+        self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
+        self.bn3 = nn.BatchNorm2d(planes * 4)
+        self.relu = nn.ReLU(inplace=True)
+        self.downsample = downsample
+        self.stride = stride
+
+    def forward(self, x):
+        residual = x
+
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = self.relu(out)
+
+        out = self.conv3(out)
+        out = self.bn3(out)
+
+        if self.downsample is not None:
+            residual = self.downsample(x)
+
+        out += residual
+
+        out = self.relu(out)
+
+        return out
+    
+# End of Building Blocks
+
+# Class for ResNet - the Backbone neural network
+
+class ResNet(nn.Module):
+    ""ResNET""
+    def __init__(self, block, layers, used_layers):
+        self.inplanes = 64
+        super(ResNet, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=0,  # 3
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.layer1 = self._make_layer(block, 64, layers[0])
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
+
+        self.feature_size = 128 * block.expansion
+        self.used_layers = used_layers
+        layer3 = True if 3 in used_layers else False
+        layer4 = True if 4 in used_layers else False
+
+        if layer3:
+            self.layer3 = self._make_layer(block, 256, layers[2],
+                                           stride=1, dilation=2)  # 15x15, 7x7
+            self.feature_size = (256 + 128) * block.expansion
+        else:
+            self.layer3 = lambda x: x  # identity
+
+        if layer4:
+            self.layer4 = self._make_layer(block, 512, layers[3],
+                                           stride=1, dilation=4)  # 7x7, 3x3
+            self.feature_size = 512 * block.expansion
+        else:
+            self.layer4 = lambda x: x  # identity
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, np.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
+    def _make_layer(self, block, planes, blocks, stride=1, dilation=1):
+        downsample = None
+        dd = dilation
+        if stride != 1 or self.inplanes != planes * block.expansion:
+            if stride == 1 and dilation == 1:
+                downsample = nn.Sequential(
+                    nn.Conv2d(self.inplanes, planes * block.expansion,
+                              kernel_size=1, stride=stride, bias=False),
+                    nn.BatchNorm2d(planes * block.expansion),
+                )
+            else:
+                if dilation > 1:
+                    dd = dilation // 2
+                    padding = dd
+                else:
+                    dd = 1
+                    padding = 0
+                downsample = nn.Sequential(
+                    nn.Conv2d(self.inplanes, planes * block.expansion,
+                              kernel_size=3, stride=stride, bias=False,
+                              padding=padding, dilation=dd),
+                    nn.BatchNorm2d(planes * block.expansion),
+                )
+
+        layers = []
+        layers.append(block(self.inplanes, planes, stride,
+                            downsample, dilation=dilation))
+        self.inplanes = planes * block.expansion
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes, dilation=dilation))
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x_ = self.relu(x)
+        x = self.maxpool(x_)
+
+        p1 = self.layer1(x)
+        p2 = self.layer2(p1)
+        p3 = self.layer3(p2)
+        p4 = self.layer4(p3)
+        out = [x_, p1, p2, p3, p4]
+        out = [out[i] for i in self.used_layers]
+        if len(out) == 1:
+            return out[0]
+        else:
+            return out
+        
+# End of ResNet
+
+# Class for Adjusting the layers of the neural net
+
+class AdjustLayer_1(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustLayer_1, self).__init__()
+        self.downsample = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            )
+        self.center_size = center_size
+
+    def forward(self, x):
+        x = self.downsample(x)
+        l = 4
+        r = 11
+        x = x[:, :, l:r, l:r]
+        return x
+
+class AdjustAllLayer_1(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustAllLayer_1, self).__init__()
+        self.num = len(out_channels)
+        if self.num == 1:
+            self.downsample = AdjustLayer_1(in_channels[0],
+                                          out_channels[0],
+                                          center_size)
+        else:
+            for i in range(self.num):
+                self.add_module('downsample'+str(i+2),
+                                AdjustLayer_1(in_channels[i],
+                                            out_channels[i],
+                                            center_size))
+
+    def forward(self, features):
+        if self.num == 1:
+            return self.downsample(features)
+        else:
+            out = []
+            for i in range(self.num):
+                adj_layer = getattr(self, 'downsample'+str(i+2))
+                out.append(adj_layer(features[i]))
+            return out
+        
+class AdjustLayer_2(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustLayer_2, self).__init__()
+        self.downsample = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            )
+        self.center_size = center_size
+
+    def forward(self, x):
+        x = self.downsample(x)
+        return x
+
+class AdjustAllLayer_2(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustAllLayer_2, self).__init__()
+        self.num = len(out_channels)
+        if self.num == 1:
+            self.downsample = AdjustLayer_2(in_channels[0],
+                                          out_channels[0],
+                                          center_size)
+        else:
+            for i in range(self.num):
+                self.add_module('downsample'+str(i+2),
+                                AdjustLayer_2(in_channels[i],
+                                            out_channels[i],
+                                            center_size))
+
+    def forward(self, features):
+        if self.num == 1:
+            return self.downsample(features)
+        else:
+            out = []
+            for i in range(self.num):
+                adj_layer = getattr(self, 'downsample'+str(i+2))
+                out.append(adj_layer(features[i]))
+            return out
+        
+# End of Class for Adjusting the layers of the neural net
+
+# Class for Region Proposal Neural Network
+
+class RPN(nn.Module):
+    ""Region Proposal Network""
+    def __init__(self):
+        super(RPN, self).__init__()
+
+    def forward(self, z_f, x_f):
+        raise NotImplementedError
+        
+class DepthwiseXCorr(nn.Module):
+    ""Depthwise Correlation Layer""
+    def __init__(self, in_channels, hidden, out_channels, kernel_size=3, hidden_kernel_size=5):
+        super(DepthwiseXCorr, self).__init__()
+        self.conv_kernel = nn.Sequential(
+                nn.Conv2d(in_channels, hidden, kernel_size=kernel_size, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                )
+        self.conv_search = nn.Sequential(
+                nn.Conv2d(in_channels, hidden, kernel_size=kernel_size, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                )
+        self.head = nn.Sequential(
+                nn.Conv2d(hidden, hidden, kernel_size=1, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(hidden, out_channels, kernel_size=1)
+                )
+        
+    def forward(self, kernel, search):    
+        kernel = self.conv_kernel(kernel)
+        search = self.conv_search(search)
+        
+        feature = xcorr_depthwise(search, kernel)
+        
+        out = self.head(feature)
+        
+        return out
+
+class DepthwiseRPN(RPN):
+    def __init__(self, anchor_num=5, in_channels=256, out_channels=256):
+        super(DepthwiseRPN, self).__init__()
+        self.cls = DepthwiseXCorr(in_channels, out_channels, 2 * anchor_num)
+        self.loc = DepthwiseXCorr(in_channels, out_channels, 4 * anchor_num)
+
+    def forward(self, z_f, x_f):
+        cls = self.cls(z_f, x_f)
+        loc = self.loc(z_f, x_f)
+        
+        return cls, loc
+
+class MultiRPN(RPN):
+    def __init__(self, anchor_num, in_channels):
+        super(MultiRPN, self).__init__()
+        for i in range(len(in_channels)):
+            self.add_module('rpn'+str(i+2),
+                    DepthwiseRPN(anchor_num, in_channels[i], in_channels[i]))
+        self.weight_cls = nn.Parameter(torch.Tensor([0.38156851768108546, 0.4364767608115956,  0.18195472150731892]))
+        self.weight_loc = nn.Parameter(torch.Tensor([0.17644893463361863, 0.16564198028417967, 0.6579090850822015]))
+
+    def forward(self, z_fs, x_fs):
+        cls = []
+        loc = []
+        
+        rpn2 = self.rpn2
+        z_f2 = z_fs[0]
+        x_f2 = x_fs[0]
+        c2,l2 = rpn2(z_f2, x_f2)
+        
+        cls.append(c2)
+        loc.append(l2)
+        
+        rpn3 = self.rpn3
+        z_f3 = z_fs[1]
+        x_f3 = x_fs[1]
+        c3,l3 = rpn3(z_f3, x_f3)
+        
+        cls.append(c3)
+        loc.append(l3)
+        
+        rpn4 = self.rpn4
+        z_f4 = z_fs[2]
+        x_f4 = x_fs[2]
+        c4,l4 = rpn4(z_f4, x_f4)
+        
+        cls.append(c4)
+        loc.append(l4)
+        
+        def avg(lst):
+            return sum(lst) / len(lst)
+
+        def weighted_avg(lst, weight):
+            s = 0
+            fixed_len = 3
+            for i in range(3):
+                s += lst[i] * weight[i]
+            return s
+
+        return weighted_avg(cls, self.weight_cls), weighted_avg(loc, self.weight_loc)
+        
+# End of class for RPN
+
+def conv3x3(in_planes, out_planes, stride=1, dilation=1):
+    ""3x3 convolution with padding""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
+                     padding=dilation, bias=False, dilation=dilation)
+
+def xcorr_depthwise(x, kernel):
+    """"""
+    Deptwise convolution for input and weights with different shapes
+    """"""
+    batch = kernel.size(0)
+    channel = kernel.size(1)
+    x = x.view(1, batch*channel, x.size(2), x.size(3))
+    kernel = kernel.view(batch*channel, 1, kernel.size(2), kernel.size(3))
+    conv = nn.Conv2d(batch*channel, batch*channel, kernel_size=(kernel.size(2), kernel.size(3)), bias=False, groups=batch*channel)
+    conv.weight = nn.Parameter(kernel)
+    out = conv(x) 
+    out = out.view(batch, channel, out.size(2), out.size(3))
+    out = out.detach()
+    return out
+
+class TargetNetBuilder(nn.Module):
+    def __init__(self):
+        super(TargetNetBuilder, self).__init__()
+        # Build Backbone Model
+        self.backbone = ResNet(Bottleneck, [3,4,6,3], [2,3,4])
+        # Build Neck Model
+        self.neck = AdjustAllLayer_1([512,1024,2048], [256,256,256])
+    
+    def forward(self, frame):
+        features = self.backbone(frame)
+        output = self.neck(features)
+        return output
+
+class SearchNetBuilder(nn.Module):
+    def __init__(self):
+        super(SearchNetBuilder, self).__init__()
+        # Build Backbone Model
+        self.backbone = ResNet(Bottleneck, [3,4,6,3], [2,3,4])
+        # Build Neck Model
+        self.neck = AdjustAllLayer_2([512,1024,2048], [256,256,256])
+        
+    def forward(self, frame):
+        features = self.backbone(frame)
+        output = self.neck(features)
+        return output
+ 
+class RPNBuilder(nn.Module):
+    def __init__(self):
+        super(RPNBuilder, self).__init__()
+
+        # Build Adjusted Layer Builder
+        self.rpn_head = MultiRPN(anchor_num=5,in_channels=[256, 256, 256])
+
+    def forward(self, zf, xf):
+        # Get Feature
+        cls, loc = self.rpn_head(zf, xf)
+
+        return cls, loc
+    
+""""""Load path should be the directory of the pre-trained siamrpn_r50_l234_dwxcorr.pth
+ The download link to siamrpn_r50_l234_dwxcorr.pth is shown in the description""""""
+
+current_path = os.getcwd()
+load_path = os.path.join(current_path, ""siamrpn_r50_l234_dwxcorr.pth"")
+pretrained_dict = torch.load(load_path,map_location=torch.device('cpu') )
+pretrained_dict_backbone = pretrained_dict
+pretrained_dict_neck_1 = pretrained_dict
+pretrained_dict_neck_2 = pretrained_dict
+pretrained_dict_head = pretrained_dict
+pretrained_dict_target = pretrained_dict
+pretrained_dict_search = pretrained_dict
+
+# The shape of the inputs to the Target Network and the Search Network
+target = torch.Tensor(np.random.rand(1,3,127,127))
+search = torch.Tensor(np.random.rand(1,3,125,125))
+
+# Build the torch backbone model
+target_net = TargetNetBuilder()
+target_net.eval()
+target_net.state_dict().keys()
+target_net_dict = target_net.state_dict()
+
+# Load the pre-trained weight to the torch target net model
+pretrained_dict_target = {k: v for k, v in pretrained_dict_target.items() if k in target_net_dict}
+target_net_dict.update(pretrained_dict_target)
+target_net.load_state_dict(target_net_dict)
+
+# Export the torch target net model to ONNX model
+torch.onnx.export(target_net, torch.Tensor(target), ""target_net.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names=['input'], output_names=['output_1,', 'output_2', 'output_3'])
+
+# Load the saved torch target net model using ONNX
+onnx_target = onnx.load(""target_net.onnx"")
+
+# Check whether the ONNX target net model has been successfully imported
+onnx.checker.check_model(onnx_target)
+print(onnx.checker.check_model(onnx_target))
+onnx.helper.printable_graph(onnx_target.graph)
+print(onnx.helper.printable_graph(onnx_target.graph))
+
+# Build the torch backbone model
+search_net = SearchNetBuilder()
+search_net.eval()
+search_net.state_dict().keys()
+search_net_dict = search_net.state_dict()
+
+# Load the pre-trained weight to the torch target net model
+pretrained_dict_search = {k: v for k, v in pretrained_dict_search.items() if k in search_net_dict}
+search_net_dict.update(pretrained_dict_search)
+search_net.load_state_dict(search_net_dict)
+
+# Export the torch target net model to ONNX model
+torch.onnx.export(search_net, torch.Tensor(search), ""search_net.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names=['input'], output_names=['output_1,', 'output_2', 'output_3'])
+
+# Load the saved torch target net model using ONNX
+onnx_search = onnx.load(""search_net.onnx"")
+
+# Check whether the ONNX target net model has been successfully imported
+onnx.checker.check_model(onnx_search)
+print(onnx.checker.check_model(onnx_search))
+onnx.helper.printable_graph(onnx_search.graph)
+print(onnx.helper.printable_graph(onnx_search.graph))
+
+# Outputs from the Target Net and Search Net
+zfs_1, zfs_2, zfs_3 = target_net(torch.Tensor(target))
+xfs_1, xfs_2, xfs_3 = search_net(torch.Tensor(search))
+
+# Adjustments to the outputs from each of the neck models to match to input shape of the torch rpn_head model
+zfs = np.stack([zfs_1.detach().numpy(), zfs_2.detach().numpy(), zfs_3.detach().numpy()])
+xfs = np.stack([xfs_1.detach().numpy(), xfs_2.detach().numpy(), xfs_3.detach().numpy()])
+
+# Build the torch rpn_head model
+rpn_head = RPNBuilder()
+rpn_head.eval()
+rpn_head.state_dict().keys()
+rpn_head_dict = rpn_head.state_dict()
+
+# Load the pre-trained weights to the rpn_head model
+pretrained_dict_head = {k: v for k, v in pretrained_dict_head.items() if k in rpn_head_dict}
+pretrained_dict_head.keys()
+rpn_head_dict.update(pretrained_dict_head)
+rpn_head.load_state_dict(rpn_head_dict)
+rpn_head.eval()
+
+# Export the torch rpn_head model to ONNX model
+torch.onnx.export(rpn_head, (torch.Tensor(np.random.rand(*zfs.shape)), torch.Tensor(np.random.rand(*xfs.shape))), ""rpn_head.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names = ['input_1', 'input_2'], output_names = ['output_1', 'output_2'])
+
+# Load the saved rpn_head model using ONNX
+onnx_rpn_head_model = onnx.load(""rpn_head.onnx"")
+
+# Check whether the rpn_head model has been successfully imported
+onnx.checker.check_model(onnx_rpn_head_model)
+print(onnx.checker.check_model(onnx_rpn_head_model))    
+onnx.helper.printable_graph(onnx_rpn_head_model.graph)
+print(onnx.helper.printable_graph(onnx_rpn_head_model.graph))
+
+```
+
+</details>
+",True,17647,https://api.github.com/repos/opencv/opencv/pulls/17647,https://github.com/opencv/opencv/pull/17647,closed,397,0,1,12,49,55,2,1,"[{'name': 'GSoC'}, {'name': 'category: dnn'}]",2020-06-23 19:32:32+00:00,2020-08-25 20:01:17+00:00,5444925.0,"63 days, 0:28:45","[{'comment_id': 462044924, 'comment_body': 'Can we simplify this?\r\n`x1, y1, x2, y2 = corner`\r\nor if len(corner) > 4\r\n`x1, y1, x2, y2 = corner[:4]`\r\n', 'comment_created': datetime.datetime(2020, 7, 29, 5, 21, 37, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462045710, 'comment_body': 'Can we use numpy instead of math?', 'comment_created': datetime.datetime(2020, 7, 29, 5, 24, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462047094, 'comment_body': '```suggestion\r\n    def _softmax(self, x):\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 5, 28, 55, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462050131, 'comment_body': '`import cv2 as cv` is better', 'comment_created': datetime.datetime(2020, 7, 29, 5, 39, 25, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462053424, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x,  y, h, w = bbox`\r\n', 'comment_created': datetime.datetime(2020, 7, 29, 5, 50, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054189, 'comment_body': ""```\r\nwinName = 'SiamRPN++ tracker in OpenCV'\r\ncv.namedWindow(winName, cv.WINDOW_NORMAL)\r\n```"", 'comment_created': datetime.datetime(2020, 7, 29, 5, 52, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054513, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 5, 53, 42, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054677, 'comment_body': 'Please add `ArgumentParser`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 54, 16, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054773, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x, y, h, w = bbox`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 54, 30, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462056521, 'comment_body': '```suggestion\r\n        context_xmin += left_pad\r\n        context_xmax += left_pad\r\n        context_ymin += top_pad\r\n        context_ymax += top_pad\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 5, 59, 36, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462058429, 'comment_body': 'When you need output from the last layer, you can use forward without args.\r\n```suggestion\r\n       self.zf_1 = neck_1_out_1.forward()\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 5, 12, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059505, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 6, 8, 32, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059547, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 6, 8, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059709, 'comment_body': '```suggestion\r\n        xf_1 = neck_1_out_2.forward()\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 9, 6, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462062949, 'comment_body': '```\r\noutNames = backbone_target.getUnconnectedOutLayersNames()\r\nresnet_target_1, resnet_target_2, resnet_target_3  = backbone_target.forward(outNames)\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 18, 2, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462198069, 'comment_body': 'Invalid syntax\r\n```suggestion\r\n    def __init__(self, backbone_search, backbone_target, neck_1_out_1, neck_1_out_2, neck_2_out_1, neck_2_out_2,\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 10, 26, 46, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466863596, 'comment_body': '```suggestion\r\n        size = self.stride ** 2\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 13, 42, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466865138, 'comment_body': 'Where is function called?', 'comment_created': datetime.datetime(2020, 8, 7, 7, 17, 28, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466866329, 'comment_body': '```suggestion\r\n        delta = delta_contig.reshape(4, -1)\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 20, 19, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466867500, 'comment_body': 'Can we rewrite this code without a loop? For example, using an axis:\r\n\r\n```python\r\n    def _softmax(self, x):\r\n        x_max = x.max(axis=0)\r\n        e_x = np.exp(x - x_max)\r\n        y = e_x / e_x.sum(axis=0)\r\n        return y\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 23, 5, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466869484, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x, y, h, w = bbox`', 'comment_created': datetime.datetime(2020, 8, 7, 7, 27, 29, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467705489, 'comment_body': 'Where is the function used?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 19, 19, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467705513, 'comment_body': 'Where is the function used?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467706527, 'comment_body': 'Please check that model files exist\r\n', 'comment_created': datetime.datetime(2020, 8, 10, 6, 22, 45, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467707780, 'comment_body': 'Could you try to create a single ONNX model from `backbone_target `and `neck_1`?\r\n', 'comment_created': datetime.datetime(2020, 8, 10, 6, 27, 17, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467707886, 'comment_body': 'Could you try to create a single ONNX model from `backbone_search `and `neck_2` or even `backbone_search`, `neck_2` and `rpn_head`?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 27, 44, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467709351, 'comment_body': ""For me, it's better:\r\n`self.anchors = self.generate_anchors()`"", 'comment_created': datetime.datetime(2020, 8, 10, 6, 32, 27, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467710395, 'comment_body': ""`parser.add_argument('--input_video', help='Path to input video file. Skip this argument to capture frames from a camera.')`"", 'comment_created': datetime.datetime(2020, 8, 10, 6, 35, 43, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467711246, 'comment_body': 'Please add link to original paper and repo like https://github.com/opencv/opencv/blob/master/samples/dnn/dasiamrpn_tracker.py#L3', 'comment_created': datetime.datetime(2020, 8, 10, 6, 38, 32, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467712590, 'comment_body': 'In my opinion, for sample it is enough to read a video from a file or from a camera.\r\n\r\n`cap = cv.VideoCapture(args.input_video if args.input_video else 0)`', 'comment_created': datetime.datetime(2020, 8, 10, 6, 42, 37, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467716996, 'comment_body': '```suggestion\r\n        key = cv.waitKey(1)\r\n        if key == ord(""q""):\r\n            break\r\n```', 'comment_created': datetime.datetime(2020, 8, 10, 6, 56, 14, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467801964, 'comment_body': 'I agree with you - I simplified the get_frames function such that it either reads a video file or reads from a camera', 'comment_created': datetime.datetime(2020, 8, 10, 10, 0, 32, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467802328, 'comment_body': 'Thanks for the advice - I have added the links to the paper and the repo', 'comment_created': datetime.datetime(2020, 8, 10, 10, 1, 15, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467803042, 'comment_body': 'I have combined backbone_target and neck_1, and combined backbone_search and neck_2.\r\nI have left rpn_head as a seperate file, which uses the outputs from each of these target branch and search branch.', 'comment_created': datetime.datetime(2020, 8, 10, 10, 2, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467803140, 'comment_body': 'I have updated my file to contain os. path.isfile to check the existence of the file in the relevant paths', 'comment_created': datetime.datetime(2020, 8, 10, 10, 2, 50, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467818923, 'comment_body': ""```suggestion\r\n    parser.add_argument('--input_video', type=str, help='Path to input video file. Skip this argument to capture frames from a camera.')\r\n```"", 'comment_created': datetime.datetime(2020, 8, 10, 10, 38, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468339569, 'comment_body': '```suggestion\r\n    if args.input_video and not os.path.isfile(args.input_video):\r\n        raise OSError(""Input video file does not exist"")\r\n```', 'comment_created': datetime.datetime(2020, 8, 11, 5, 45, 55, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468353272, 'comment_body': 'Please update models as in PR description\r\n', 'comment_created': datetime.datetime(2020, 8, 11, 6, 26, 8, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468394509, 'comment_body': '`args.target_net` has default value `target_net.onnx`.  Thus, we can only check  `os.path.isfile(args.input_video)`', 'comment_created': datetime.datetime(2020, 8, 11, 7, 55, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471449286, 'comment_body': 'Please replace `cv.dnn.DNN_TARGET_FPGA` to `cv.dnn.DNN_TARGET_MYRIAD`', 'comment_created': datetime.datetime(2020, 8, 17, 12, 38, 27, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471449390, 'comment_body': '```suggestion\r\n                        ""%d: Intel\'s Deep Learning Inference Engine (https://software.intel.com/openvino-toolkit)""\r\n```', 'comment_created': datetime.datetime(2020, 8, 17, 12, 38, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471937935, 'comment_body': 'Where is backend and target used?\r\n', 'comment_created': datetime.datetime(2020, 8, 18, 6, 16, 9, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471939487, 'comment_body': '```suggestion\r\n    backends = (cv.dnn.DNN_BACKEND_DEFAULT, cv.dnn.DNN_BACKEND_HALIDE, cv.dnn.DNN_BACKEND_INFERENCE_ENGINE, cv.dnn.DNN_BACKEND_OPENCV)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 20, 30, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471939595, 'comment_body': '```suggestion\r\n    targets = (cv.dnn.DNN_TARGET_CPU, cv.dnn.DNN_TARGET_OPENCL, cv.dnn.DNN_TARGET_OPENCL_FP16, cv.dnn.DNN_TARGET_MYRIAD)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 20, 43, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471955913, 'comment_body': '```suggestion\r\n        x = x.astype(dtype=np.float32)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 59, 1, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471957871, 'comment_body': 'Why not `anchors.anchor_num` ?', 'comment_created': datetime.datetime(2020, 8, 18, 7, 3, 11, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471975974, 'comment_body': 'Now we can use `self.search_net.getUnconnectedOutLayersNames()`', 'comment_created': datetime.datetime(2020, 8, 18, 7, 36, 12, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473635082, 'comment_body': '`cx, cy = pos`', 'comment_created': datetime.datetime(2020, 8, 20, 6, 13, 9, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473635378, 'comment_body': '```suggestion\r\n        im_h, im_w = im.shape\r\n```', 'comment_created': datetime.datetime(2020, 8, 20, 6, 13, 35, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473641622, 'comment_body': '`bbox_h, bbox_w = boundary`  or `bbox_cx, bbox_cy = boundary`?', 'comment_created': datetime.datetime(2020, 8, 20, 6, 22, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473642056, 'comment_body': '```suggestion\r\n        w_z = h + self.track_context_amount * (h + w)\r\n        h_z = w + self.track_context_amount * (h + w)\r\n```', 'comment_created': datetime.datetime(2020, 8, 20, 6, 23, 22, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473643515, 'comment_body': '`cx, cy = self.center_pos`\r\n`x, y, w, h = bbox`', 'comment_created': datetime.datetime(2020, 8, 20, 6, 25, 26, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 474540423, 'comment_body': ""Sure - I've been working on amending the gdocs and ouputting the video file.\r\nWill be making a commit later today!"", 'comment_created': datetime.datetime(2020, 8, 21, 8, 51, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 475429909, 'comment_body': 'Above you do:\r\n```python\r\n        im_h = im.shape[0]\r\n        im_w = im.shape[1]\r\n```\r\nCan we reuse these variables?\r\nFor example, `im_h , im_w, k = im.shape`\r\n\r\n', 'comment_created': datetime.datetime(2020, 8, 24, 8, 37, 8, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 475431997, 'comment_body': 'It seems like we can! It was just that we never use the variable k', 'comment_created': datetime.datetime(2020, 8, 24, 8, 40, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}]","[{'commit_sha': 'a0d93e2994994c2dda882e611dda1833e2291df5', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a71b70b2068f97d1458c8e0edb167d41b87441b4', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4d5c838c384dede686d1855c47341fb0afac530', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a4749c3bf8d5fef0a322c7afe7cbe414a37acad3', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd073a4c4e87a9e30c1d4e7c5a1c59533fe3b686c', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a123f216d008664b9e1e1a948ddf66a19807157c', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1714ce2f5b19cb0877bd7db8c464a254295b6b7', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af45f42cb2ac78e9c87a6fc4c6fd5a760e9f861f', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': '454ffbb86ecfe06fa7e4f3f9a5d3fe77d5fdef88', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4da08d60629cf85fc0a362aaab191ec4d754d47', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': '237ff1178f395eeb977d7b8bd6e07e85c6d96a34', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'baf8eef73719555f0c87d237e782ce232e230941', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}]",,41290732,,User,,20,,3,1
+438776074,[GSoC] Add siamrpnpp.py,"### GSoC '20 : Real-time Single Object Tracking using Deep Learning (SiamRPN++)
+### Overview
+Proposal : https://summerofcode.withgoogle.com/projects/#4979746967912448
+Mentors : Liubov Batanina @l-bat, Stefano Fabri @bhack, Ilya Elizarov @ieliz
+Student : Jin Yeob Chung @jinyup100
+
+<cut/>
+
+### Details of the Pull Request
+-  Export of the torch implementation of the SiamRPN++ visual tracker to ONNX
+    - Please refer to (https://gist.github.com/jinyup100/7aa748686c5e234ed6780154141b4685) or _Code to 
+       generate ONNX models_ at the bottom of this PR description
+-  Addition of siamrpnpp.py in the opencv/samples/dnn repository  
+    - SiamRPN++ visual tracker can be performed on a sample video input
+    - Parsers include:
+       - --input_video  _path to sample video input_
+       - --target_net _path to target branch of the visual tracker_
+       - --search_net  _path to search branch of the visual tracker_
+       - --rpn_head _path to head of the visual tracker_
+       - --backend _selection of the computation backend_
+       - --target _selection of the computation target device_
+- Additional samples of the visual tracker performed on videos are available at:
+     - https://drive.google.com/drive/folders/1k7Z_SHaBWK_4aEQPxJJCGm3P7y2IFCjY?usp=sharing
+
+<details>
+
+<summary>Examples</summary>
+
+<img src=""https://user-images.githubusercontent.com/41290732/91156541-39dc2880-e6ff-11ea-87bc-64207f1f8f2c.gif"" width=""320"" height=""220""> <img src=""https://user-images.githubusercontent.com/41290732/91157483-59c01c00-e700-11ea-9e44-9aedcedb9e34.gif"" width=""320"" height=""220"">
+
+</details>
+
+### Pull Request Readiness Checklist
+
+See details at https://github.com/opencv/opencv/wiki/How_to_contribute#making-a-good-pull-request
+
+- [X] I agree to contribute to the project under OpenCV (BSD) License.
+- [X] To the best of my knowledge, the proposed patch is not based on a code under GPL or other license that is incompatible with OpenCV
+- [X] The PR is proposed to proper branch
+- [X] There is reference to original bug report and related work
+- [X] There is accuracy test, performance test and test data in opencv_extra repository, if applicable
+       Patch to opencv_extra has the same branch name.
+- [X] The feature is well documented and sample code can be built with the project CMake
+
+<details>
+
+<summary>Code to generate ONNX Models</summary>
+
+The code shown below to generate the ONNX models of siamrpn++ is also available from : 
+https://gist.github.com/jinyup100/7aa748686c5e234ed6780154141b4685
+
+
+![ball_track](https://user-images.githubusercontent.com/41290732/91156436-1dd88700-e6ff-11ea-85a3-db0f668e5eee.gif)
+
+
+The Final Version of the Pre-Trained Weights and successfully converted ONNX format of the models using the codes are available at::
+
+**Pre-Trained Weights in pth Format**
+https://drive.google.com/file/d/11bwgPFVkps9AH2NOD1zBDdpF_tQghAB-/view?usp=sharing
+
+**Target Net** : Import :heavy_check_mark: Export :heavy_check_mark: 
+https://drive.google.com/file/d/1dw_Ne3UMcCnFsaD6xkZepwE4GEpqq7U_/view?usp=sharing
+
+**Search Net** : Import :heavy_check_mark: Export :heavy_check_mark: 
+https://drive.google.com/file/d/1Lt4oE43ZSucJvze3Y-Z87CVDreO-Afwl/view?usp=sharing
+
+**RPN_head** : Import : :heavy_check_mark:   Export :heavy_check_mark:  
+https://drive.google.com/file/d/1zT1yu12mtj3JQEkkfKFJWiZ71fJ-dQTi/view?usp=sharing
+
+```python
+import numpy as np
+import onnx
+import torch
+import torch.nn as nn
+
+# Class for the Building Blocks required for ResNet
+class Bottleneck(nn.Module):
+    expansion = 4
+
+    def __init__(self, inplanes, planes, stride=1,
+                 downsample=None, dilation=1):
+        super(Bottleneck, self).__init__()
+        self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(planes)
+        padding = 2 - stride
+        if downsample is not None and dilation > 1:
+            dilation = dilation // 2
+            padding = dilation
+
+        assert stride == 1 or dilation == 1, \
+            ""stride and dilation must have one equals to zero at least""
+
+        if dilation > 1:
+            padding = dilation
+        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
+                               padding=padding, bias=False, dilation=dilation)
+        self.bn2 = nn.BatchNorm2d(planes)
+        self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
+        self.bn3 = nn.BatchNorm2d(planes * 4)
+        self.relu = nn.ReLU(inplace=True)
+        self.downsample = downsample
+        self.stride = stride
+
+    def forward(self, x):
+        residual = x
+
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = self.relu(out)
+
+        out = self.conv3(out)
+        out = self.bn3(out)
+
+        if self.downsample is not None:
+            residual = self.downsample(x)
+
+        out += residual
+
+        out = self.relu(out)
+
+        return out
+    
+# End of Building Blocks
+
+# Class for ResNet - the Backbone neural network
+
+class ResNet(nn.Module):
+    ""ResNET""
+    def __init__(self, block, layers, used_layers):
+        self.inplanes = 64
+        super(ResNet, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=0,  # 3
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.layer1 = self._make_layer(block, 64, layers[0])
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
+
+        self.feature_size = 128 * block.expansion
+        self.used_layers = used_layers
+        layer3 = True if 3 in used_layers else False
+        layer4 = True if 4 in used_layers else False
+
+        if layer3:
+            self.layer3 = self._make_layer(block, 256, layers[2],
+                                           stride=1, dilation=2)  # 15x15, 7x7
+            self.feature_size = (256 + 128) * block.expansion
+        else:
+            self.layer3 = lambda x: x  # identity
+
+        if layer4:
+            self.layer4 = self._make_layer(block, 512, layers[3],
+                                           stride=1, dilation=4)  # 7x7, 3x3
+            self.feature_size = 512 * block.expansion
+        else:
+            self.layer4 = lambda x: x  # identity
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, np.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
+    def _make_layer(self, block, planes, blocks, stride=1, dilation=1):
+        downsample = None
+        dd = dilation
+        if stride != 1 or self.inplanes != planes * block.expansion:
+            if stride == 1 and dilation == 1:
+                downsample = nn.Sequential(
+                    nn.Conv2d(self.inplanes, planes * block.expansion,
+                              kernel_size=1, stride=stride, bias=False),
+                    nn.BatchNorm2d(planes * block.expansion),
+                )
+            else:
+                if dilation > 1:
+                    dd = dilation // 2
+                    padding = dd
+                else:
+                    dd = 1
+                    padding = 0
+                downsample = nn.Sequential(
+                    nn.Conv2d(self.inplanes, planes * block.expansion,
+                              kernel_size=3, stride=stride, bias=False,
+                              padding=padding, dilation=dd),
+                    nn.BatchNorm2d(planes * block.expansion),
+                )
+
+        layers = []
+        layers.append(block(self.inplanes, planes, stride,
+                            downsample, dilation=dilation))
+        self.inplanes = planes * block.expansion
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes, dilation=dilation))
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x_ = self.relu(x)
+        x = self.maxpool(x_)
+
+        p1 = self.layer1(x)
+        p2 = self.layer2(p1)
+        p3 = self.layer3(p2)
+        p4 = self.layer4(p3)
+        out = [x_, p1, p2, p3, p4]
+        out = [out[i] for i in self.used_layers]
+        if len(out) == 1:
+            return out[0]
+        else:
+            return out
+        
+# End of ResNet
+
+# Class for Adjusting the layers of the neural net
+
+class AdjustLayer_1(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustLayer_1, self).__init__()
+        self.downsample = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            )
+        self.center_size = center_size
+
+    def forward(self, x):
+        x = self.downsample(x)
+        l = 4
+        r = 11
+        x = x[:, :, l:r, l:r]
+        return x
+
+class AdjustAllLayer_1(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustAllLayer_1, self).__init__()
+        self.num = len(out_channels)
+        if self.num == 1:
+            self.downsample = AdjustLayer_1(in_channels[0],
+                                          out_channels[0],
+                                          center_size)
+        else:
+            for i in range(self.num):
+                self.add_module('downsample'+str(i+2),
+                                AdjustLayer_1(in_channels[i],
+                                            out_channels[i],
+                                            center_size))
+
+    def forward(self, features):
+        if self.num == 1:
+            return self.downsample(features)
+        else:
+            out = []
+            for i in range(self.num):
+                adj_layer = getattr(self, 'downsample'+str(i+2))
+                out.append(adj_layer(features[i]))
+            return out
+        
+class AdjustLayer_2(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustLayer_2, self).__init__()
+        self.downsample = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            )
+        self.center_size = center_size
+
+    def forward(self, x):
+        x = self.downsample(x)
+        return x
+
+class AdjustAllLayer_2(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustAllLayer_2, self).__init__()
+        self.num = len(out_channels)
+        if self.num == 1:
+            self.downsample = AdjustLayer_2(in_channels[0],
+                                          out_channels[0],
+                                          center_size)
+        else:
+            for i in range(self.num):
+                self.add_module('downsample'+str(i+2),
+                                AdjustLayer_2(in_channels[i],
+                                            out_channels[i],
+                                            center_size))
+
+    def forward(self, features):
+        if self.num == 1:
+            return self.downsample(features)
+        else:
+            out = []
+            for i in range(self.num):
+                adj_layer = getattr(self, 'downsample'+str(i+2))
+                out.append(adj_layer(features[i]))
+            return out
+        
+# End of Class for Adjusting the layers of the neural net
+
+# Class for Region Proposal Neural Network
+
+class RPN(nn.Module):
+    ""Region Proposal Network""
+    def __init__(self):
+        super(RPN, self).__init__()
+
+    def forward(self, z_f, x_f):
+        raise NotImplementedError
+        
+class DepthwiseXCorr(nn.Module):
+    ""Depthwise Correlation Layer""
+    def __init__(self, in_channels, hidden, out_channels, kernel_size=3, hidden_kernel_size=5):
+        super(DepthwiseXCorr, self).__init__()
+        self.conv_kernel = nn.Sequential(
+                nn.Conv2d(in_channels, hidden, kernel_size=kernel_size, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                )
+        self.conv_search = nn.Sequential(
+                nn.Conv2d(in_channels, hidden, kernel_size=kernel_size, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                )
+        self.head = nn.Sequential(
+                nn.Conv2d(hidden, hidden, kernel_size=1, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(hidden, out_channels, kernel_size=1)
+                )
+        
+    def forward(self, kernel, search):    
+        kernel = self.conv_kernel(kernel)
+        search = self.conv_search(search)
+        
+        feature = xcorr_depthwise(search, kernel)
+        
+        out = self.head(feature)
+        
+        return out
+
+class DepthwiseRPN(RPN):
+    def __init__(self, anchor_num=5, in_channels=256, out_channels=256):
+        super(DepthwiseRPN, self).__init__()
+        self.cls = DepthwiseXCorr(in_channels, out_channels, 2 * anchor_num)
+        self.loc = DepthwiseXCorr(in_channels, out_channels, 4 * anchor_num)
+
+    def forward(self, z_f, x_f):
+        cls = self.cls(z_f, x_f)
+        loc = self.loc(z_f, x_f)
+        
+        return cls, loc
+
+class MultiRPN(RPN):
+    def __init__(self, anchor_num, in_channels):
+        super(MultiRPN, self).__init__()
+        for i in range(len(in_channels)):
+            self.add_module('rpn'+str(i+2),
+                    DepthwiseRPN(anchor_num, in_channels[i], in_channels[i]))
+        self.weight_cls = nn.Parameter(torch.Tensor([0.38156851768108546, 0.4364767608115956,  0.18195472150731892]))
+        self.weight_loc = nn.Parameter(torch.Tensor([0.17644893463361863, 0.16564198028417967, 0.6579090850822015]))
+
+    def forward(self, z_fs, x_fs):
+        cls = []
+        loc = []
+        
+        rpn2 = self.rpn2
+        z_f2 = z_fs[0]
+        x_f2 = x_fs[0]
+        c2,l2 = rpn2(z_f2, x_f2)
+        
+        cls.append(c2)
+        loc.append(l2)
+        
+        rpn3 = self.rpn3
+        z_f3 = z_fs[1]
+        x_f3 = x_fs[1]
+        c3,l3 = rpn3(z_f3, x_f3)
+        
+        cls.append(c3)
+        loc.append(l3)
+        
+        rpn4 = self.rpn4
+        z_f4 = z_fs[2]
+        x_f4 = x_fs[2]
+        c4,l4 = rpn4(z_f4, x_f4)
+        
+        cls.append(c4)
+        loc.append(l4)
+        
+        def avg(lst):
+            return sum(lst) / len(lst)
+
+        def weighted_avg(lst, weight):
+            s = 0
+            fixed_len = 3
+            for i in range(3):
+                s += lst[i] * weight[i]
+            return s
+
+        return weighted_avg(cls, self.weight_cls), weighted_avg(loc, self.weight_loc)
+        
+# End of class for RPN
+
+def conv3x3(in_planes, out_planes, stride=1, dilation=1):
+    ""3x3 convolution with padding""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
+                     padding=dilation, bias=False, dilation=dilation)
+
+def xcorr_depthwise(x, kernel):
+    """"""
+    Deptwise convolution for input and weights with different shapes
+    """"""
+    batch = kernel.size(0)
+    channel = kernel.size(1)
+    x = x.view(1, batch*channel, x.size(2), x.size(3))
+    kernel = kernel.view(batch*channel, 1, kernel.size(2), kernel.size(3))
+    conv = nn.Conv2d(batch*channel, batch*channel, kernel_size=(kernel.size(2), kernel.size(3)), bias=False, groups=batch*channel)
+    conv.weight = nn.Parameter(kernel)
+    out = conv(x) 
+    out = out.view(batch, channel, out.size(2), out.size(3))
+    out = out.detach()
+    return out
+
+class TargetNetBuilder(nn.Module):
+    def __init__(self):
+        super(TargetNetBuilder, self).__init__()
+        # Build Backbone Model
+        self.backbone = ResNet(Bottleneck, [3,4,6,3], [2,3,4])
+        # Build Neck Model
+        self.neck = AdjustAllLayer_1([512,1024,2048], [256,256,256])
+    
+    def forward(self, frame):
+        features = self.backbone(frame)
+        output = self.neck(features)
+        return output
+
+class SearchNetBuilder(nn.Module):
+    def __init__(self):
+        super(SearchNetBuilder, self).__init__()
+        # Build Backbone Model
+        self.backbone = ResNet(Bottleneck, [3,4,6,3], [2,3,4])
+        # Build Neck Model
+        self.neck = AdjustAllLayer_2([512,1024,2048], [256,256,256])
+        
+    def forward(self, frame):
+        features = self.backbone(frame)
+        output = self.neck(features)
+        return output
+ 
+class RPNBuilder(nn.Module):
+    def __init__(self):
+        super(RPNBuilder, self).__init__()
+
+        # Build Adjusted Layer Builder
+        self.rpn_head = MultiRPN(anchor_num=5,in_channels=[256, 256, 256])
+
+    def forward(self, zf, xf):
+        # Get Feature
+        cls, loc = self.rpn_head(zf, xf)
+
+        return cls, loc
+    
+""""""Load path should be the directory of the pre-trained siamrpn_r50_l234_dwxcorr.pth
+ The download link to siamrpn_r50_l234_dwxcorr.pth is shown in the description""""""
+
+current_path = os.getcwd()
+load_path = os.path.join(current_path, ""siamrpn_r50_l234_dwxcorr.pth"")
+pretrained_dict = torch.load(load_path,map_location=torch.device('cpu') )
+pretrained_dict_backbone = pretrained_dict
+pretrained_dict_neck_1 = pretrained_dict
+pretrained_dict_neck_2 = pretrained_dict
+pretrained_dict_head = pretrained_dict
+pretrained_dict_target = pretrained_dict
+pretrained_dict_search = pretrained_dict
+
+# The shape of the inputs to the Target Network and the Search Network
+target = torch.Tensor(np.random.rand(1,3,127,127))
+search = torch.Tensor(np.random.rand(1,3,125,125))
+
+# Build the torch backbone model
+target_net = TargetNetBuilder()
+target_net.eval()
+target_net.state_dict().keys()
+target_net_dict = target_net.state_dict()
+
+# Load the pre-trained weight to the torch target net model
+pretrained_dict_target = {k: v for k, v in pretrained_dict_target.items() if k in target_net_dict}
+target_net_dict.update(pretrained_dict_target)
+target_net.load_state_dict(target_net_dict)
+
+# Export the torch target net model to ONNX model
+torch.onnx.export(target_net, torch.Tensor(target), ""target_net.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names=['input'], output_names=['output_1,', 'output_2', 'output_3'])
+
+# Load the saved torch target net model using ONNX
+onnx_target = onnx.load(""target_net.onnx"")
+
+# Check whether the ONNX target net model has been successfully imported
+onnx.checker.check_model(onnx_target)
+print(onnx.checker.check_model(onnx_target))
+onnx.helper.printable_graph(onnx_target.graph)
+print(onnx.helper.printable_graph(onnx_target.graph))
+
+# Build the torch backbone model
+search_net = SearchNetBuilder()
+search_net.eval()
+search_net.state_dict().keys()
+search_net_dict = search_net.state_dict()
+
+# Load the pre-trained weight to the torch target net model
+pretrained_dict_search = {k: v for k, v in pretrained_dict_search.items() if k in search_net_dict}
+search_net_dict.update(pretrained_dict_search)
+search_net.load_state_dict(search_net_dict)
+
+# Export the torch target net model to ONNX model
+torch.onnx.export(search_net, torch.Tensor(search), ""search_net.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names=['input'], output_names=['output_1,', 'output_2', 'output_3'])
+
+# Load the saved torch target net model using ONNX
+onnx_search = onnx.load(""search_net.onnx"")
+
+# Check whether the ONNX target net model has been successfully imported
+onnx.checker.check_model(onnx_search)
+print(onnx.checker.check_model(onnx_search))
+onnx.helper.printable_graph(onnx_search.graph)
+print(onnx.helper.printable_graph(onnx_search.graph))
+
+# Outputs from the Target Net and Search Net
+zfs_1, zfs_2, zfs_3 = target_net(torch.Tensor(target))
+xfs_1, xfs_2, xfs_3 = search_net(torch.Tensor(search))
+
+# Adjustments to the outputs from each of the neck models to match to input shape of the torch rpn_head model
+zfs = np.stack([zfs_1.detach().numpy(), zfs_2.detach().numpy(), zfs_3.detach().numpy()])
+xfs = np.stack([xfs_1.detach().numpy(), xfs_2.detach().numpy(), xfs_3.detach().numpy()])
+
+# Build the torch rpn_head model
+rpn_head = RPNBuilder()
+rpn_head.eval()
+rpn_head.state_dict().keys()
+rpn_head_dict = rpn_head.state_dict()
+
+# Load the pre-trained weights to the rpn_head model
+pretrained_dict_head = {k: v for k, v in pretrained_dict_head.items() if k in rpn_head_dict}
+pretrained_dict_head.keys()
+rpn_head_dict.update(pretrained_dict_head)
+rpn_head.load_state_dict(rpn_head_dict)
+rpn_head.eval()
+
+# Export the torch rpn_head model to ONNX model
+torch.onnx.export(rpn_head, (torch.Tensor(np.random.rand(*zfs.shape)), torch.Tensor(np.random.rand(*xfs.shape))), ""rpn_head.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names = ['input_1', 'input_2'], output_names = ['output_1', 'output_2'])
+
+# Load the saved rpn_head model using ONNX
+onnx_rpn_head_model = onnx.load(""rpn_head.onnx"")
+
+# Check whether the rpn_head model has been successfully imported
+onnx.checker.check_model(onnx_rpn_head_model)
+print(onnx.checker.check_model(onnx_rpn_head_model))    
+onnx.helper.printable_graph(onnx_rpn_head_model.graph)
+print(onnx.helper.printable_graph(onnx_rpn_head_model.graph))
+
+```
+
+</details>
+",True,17647,https://api.github.com/repos/opencv/opencv/pulls/17647,https://github.com/opencv/opencv/pull/17647,closed,397,0,1,12,49,55,2,1,"[{'name': 'GSoC'}, {'name': 'category: dnn'}]",2020-06-23 19:32:32+00:00,2020-08-25 20:01:17+00:00,5444925.0,"63 days, 0:28:45","[{'comment_id': 462044924, 'comment_body': 'Can we simplify this?\r\n`x1, y1, x2, y2 = corner`\r\nor if len(corner) > 4\r\n`x1, y1, x2, y2 = corner[:4]`\r\n', 'comment_created': datetime.datetime(2020, 7, 29, 5, 21, 37, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462045710, 'comment_body': 'Can we use numpy instead of math?', 'comment_created': datetime.datetime(2020, 7, 29, 5, 24, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462047094, 'comment_body': '```suggestion\r\n    def _softmax(self, x):\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 5, 28, 55, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462050131, 'comment_body': '`import cv2 as cv` is better', 'comment_created': datetime.datetime(2020, 7, 29, 5, 39, 25, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462053424, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x,  y, h, w = bbox`\r\n', 'comment_created': datetime.datetime(2020, 7, 29, 5, 50, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054189, 'comment_body': ""```\r\nwinName = 'SiamRPN++ tracker in OpenCV'\r\ncv.namedWindow(winName, cv.WINDOW_NORMAL)\r\n```"", 'comment_created': datetime.datetime(2020, 7, 29, 5, 52, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054513, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 5, 53, 42, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054677, 'comment_body': 'Please add `ArgumentParser`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 54, 16, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054773, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x, y, h, w = bbox`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 54, 30, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462056521, 'comment_body': '```suggestion\r\n        context_xmin += left_pad\r\n        context_xmax += left_pad\r\n        context_ymin += top_pad\r\n        context_ymax += top_pad\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 5, 59, 36, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462058429, 'comment_body': 'When you need output from the last layer, you can use forward without args.\r\n```suggestion\r\n       self.zf_1 = neck_1_out_1.forward()\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 5, 12, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059505, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 6, 8, 32, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059547, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 6, 8, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059709, 'comment_body': '```suggestion\r\n        xf_1 = neck_1_out_2.forward()\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 9, 6, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462062949, 'comment_body': '```\r\noutNames = backbone_target.getUnconnectedOutLayersNames()\r\nresnet_target_1, resnet_target_2, resnet_target_3  = backbone_target.forward(outNames)\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 18, 2, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462198069, 'comment_body': 'Invalid syntax\r\n```suggestion\r\n    def __init__(self, backbone_search, backbone_target, neck_1_out_1, neck_1_out_2, neck_2_out_1, neck_2_out_2,\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 10, 26, 46, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466863596, 'comment_body': '```suggestion\r\n        size = self.stride ** 2\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 13, 42, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466865138, 'comment_body': 'Where is function called?', 'comment_created': datetime.datetime(2020, 8, 7, 7, 17, 28, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466866329, 'comment_body': '```suggestion\r\n        delta = delta_contig.reshape(4, -1)\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 20, 19, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466867500, 'comment_body': 'Can we rewrite this code without a loop? For example, using an axis:\r\n\r\n```python\r\n    def _softmax(self, x):\r\n        x_max = x.max(axis=0)\r\n        e_x = np.exp(x - x_max)\r\n        y = e_x / e_x.sum(axis=0)\r\n        return y\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 23, 5, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466869484, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x, y, h, w = bbox`', 'comment_created': datetime.datetime(2020, 8, 7, 7, 27, 29, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467705489, 'comment_body': 'Where is the function used?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 19, 19, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467705513, 'comment_body': 'Where is the function used?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467706527, 'comment_body': 'Please check that model files exist\r\n', 'comment_created': datetime.datetime(2020, 8, 10, 6, 22, 45, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467707780, 'comment_body': 'Could you try to create a single ONNX model from `backbone_target `and `neck_1`?\r\n', 'comment_created': datetime.datetime(2020, 8, 10, 6, 27, 17, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467707886, 'comment_body': 'Could you try to create a single ONNX model from `backbone_search `and `neck_2` or even `backbone_search`, `neck_2` and `rpn_head`?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 27, 44, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467709351, 'comment_body': ""For me, it's better:\r\n`self.anchors = self.generate_anchors()`"", 'comment_created': datetime.datetime(2020, 8, 10, 6, 32, 27, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467710395, 'comment_body': ""`parser.add_argument('--input_video', help='Path to input video file. Skip this argument to capture frames from a camera.')`"", 'comment_created': datetime.datetime(2020, 8, 10, 6, 35, 43, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467711246, 'comment_body': 'Please add link to original paper and repo like https://github.com/opencv/opencv/blob/master/samples/dnn/dasiamrpn_tracker.py#L3', 'comment_created': datetime.datetime(2020, 8, 10, 6, 38, 32, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467712590, 'comment_body': 'In my opinion, for sample it is enough to read a video from a file or from a camera.\r\n\r\n`cap = cv.VideoCapture(args.input_video if args.input_video else 0)`', 'comment_created': datetime.datetime(2020, 8, 10, 6, 42, 37, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467716996, 'comment_body': '```suggestion\r\n        key = cv.waitKey(1)\r\n        if key == ord(""q""):\r\n            break\r\n```', 'comment_created': datetime.datetime(2020, 8, 10, 6, 56, 14, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467801964, 'comment_body': 'I agree with you - I simplified the get_frames function such that it either reads a video file or reads from a camera', 'comment_created': datetime.datetime(2020, 8, 10, 10, 0, 32, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467802328, 'comment_body': 'Thanks for the advice - I have added the links to the paper and the repo', 'comment_created': datetime.datetime(2020, 8, 10, 10, 1, 15, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467803042, 'comment_body': 'I have combined backbone_target and neck_1, and combined backbone_search and neck_2.\r\nI have left rpn_head as a seperate file, which uses the outputs from each of these target branch and search branch.', 'comment_created': datetime.datetime(2020, 8, 10, 10, 2, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467803140, 'comment_body': 'I have updated my file to contain os. path.isfile to check the existence of the file in the relevant paths', 'comment_created': datetime.datetime(2020, 8, 10, 10, 2, 50, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467818923, 'comment_body': ""```suggestion\r\n    parser.add_argument('--input_video', type=str, help='Path to input video file. Skip this argument to capture frames from a camera.')\r\n```"", 'comment_created': datetime.datetime(2020, 8, 10, 10, 38, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468339569, 'comment_body': '```suggestion\r\n    if args.input_video and not os.path.isfile(args.input_video):\r\n        raise OSError(""Input video file does not exist"")\r\n```', 'comment_created': datetime.datetime(2020, 8, 11, 5, 45, 55, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468353272, 'comment_body': 'Please update models as in PR description\r\n', 'comment_created': datetime.datetime(2020, 8, 11, 6, 26, 8, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468394509, 'comment_body': '`args.target_net` has default value `target_net.onnx`.  Thus, we can only check  `os.path.isfile(args.input_video)`', 'comment_created': datetime.datetime(2020, 8, 11, 7, 55, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471449286, 'comment_body': 'Please replace `cv.dnn.DNN_TARGET_FPGA` to `cv.dnn.DNN_TARGET_MYRIAD`', 'comment_created': datetime.datetime(2020, 8, 17, 12, 38, 27, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471449390, 'comment_body': '```suggestion\r\n                        ""%d: Intel\'s Deep Learning Inference Engine (https://software.intel.com/openvino-toolkit)""\r\n```', 'comment_created': datetime.datetime(2020, 8, 17, 12, 38, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471937935, 'comment_body': 'Where is backend and target used?\r\n', 'comment_created': datetime.datetime(2020, 8, 18, 6, 16, 9, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471939487, 'comment_body': '```suggestion\r\n    backends = (cv.dnn.DNN_BACKEND_DEFAULT, cv.dnn.DNN_BACKEND_HALIDE, cv.dnn.DNN_BACKEND_INFERENCE_ENGINE, cv.dnn.DNN_BACKEND_OPENCV)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 20, 30, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471939595, 'comment_body': '```suggestion\r\n    targets = (cv.dnn.DNN_TARGET_CPU, cv.dnn.DNN_TARGET_OPENCL, cv.dnn.DNN_TARGET_OPENCL_FP16, cv.dnn.DNN_TARGET_MYRIAD)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 20, 43, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471955913, 'comment_body': '```suggestion\r\n        x = x.astype(dtype=np.float32)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 59, 1, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471957871, 'comment_body': 'Why not `anchors.anchor_num` ?', 'comment_created': datetime.datetime(2020, 8, 18, 7, 3, 11, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471975974, 'comment_body': 'Now we can use `self.search_net.getUnconnectedOutLayersNames()`', 'comment_created': datetime.datetime(2020, 8, 18, 7, 36, 12, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473635082, 'comment_body': '`cx, cy = pos`', 'comment_created': datetime.datetime(2020, 8, 20, 6, 13, 9, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473635378, 'comment_body': '```suggestion\r\n        im_h, im_w = im.shape\r\n```', 'comment_created': datetime.datetime(2020, 8, 20, 6, 13, 35, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473641622, 'comment_body': '`bbox_h, bbox_w = boundary`  or `bbox_cx, bbox_cy = boundary`?', 'comment_created': datetime.datetime(2020, 8, 20, 6, 22, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473642056, 'comment_body': '```suggestion\r\n        w_z = h + self.track_context_amount * (h + w)\r\n        h_z = w + self.track_context_amount * (h + w)\r\n```', 'comment_created': datetime.datetime(2020, 8, 20, 6, 23, 22, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473643515, 'comment_body': '`cx, cy = self.center_pos`\r\n`x, y, w, h = bbox`', 'comment_created': datetime.datetime(2020, 8, 20, 6, 25, 26, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 474540423, 'comment_body': ""Sure - I've been working on amending the gdocs and ouputting the video file.\r\nWill be making a commit later today!"", 'comment_created': datetime.datetime(2020, 8, 21, 8, 51, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 475429909, 'comment_body': 'Above you do:\r\n```python\r\n        im_h = im.shape[0]\r\n        im_w = im.shape[1]\r\n```\r\nCan we reuse these variables?\r\nFor example, `im_h , im_w, k = im.shape`\r\n\r\n', 'comment_created': datetime.datetime(2020, 8, 24, 8, 37, 8, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 475431997, 'comment_body': 'It seems like we can! It was just that we never use the variable k', 'comment_created': datetime.datetime(2020, 8, 24, 8, 40, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}]","[{'commit_sha': 'a0d93e2994994c2dda882e611dda1833e2291df5', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a71b70b2068f97d1458c8e0edb167d41b87441b4', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4d5c838c384dede686d1855c47341fb0afac530', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a4749c3bf8d5fef0a322c7afe7cbe414a37acad3', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd073a4c4e87a9e30c1d4e7c5a1c59533fe3b686c', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a123f216d008664b9e1e1a948ddf66a19807157c', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1714ce2f5b19cb0877bd7db8c464a254295b6b7', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af45f42cb2ac78e9c87a6fc4c6fd5a760e9f861f', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': '454ffbb86ecfe06fa7e4f3f9a5d3fe77d5fdef88', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4da08d60629cf85fc0a362aaab191ec4d754d47', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': '237ff1178f395eeb977d7b8bd6e07e85c6d96a34', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'baf8eef73719555f0c87d237e782ce232e230941', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}]",,41290732,,User,,20,,3,1
+457763982,Supported convolution with non-const weights,"relates: #17647
+**merge with extra:** opencv/opencv_extra#777
+
+<cut/>
+
+```
+force_builders=Custom,Custom Win,Custom Mac
+build_image:Custom=ubuntu-openvino-2020.2.0:16.04
+build_image:Custom Win=openvino-2020.3.0
+build_image:Custom Mac=openvino-2020.3.0
+
+test_modules:Custom=dnn,python2,python3,java
+test_modules:Custom Win=dnn,python2,python3,java
+test_modules:Custom Mac=dnn,python2,python3,java
+
+buildworker:Custom=linux-1
+# disabled due high memory usage: test_opencl:Custom=ON
+test_opencl:Custom=OFF
+test_bigdata:Custom=1
+test_filter:Custom=*
+```",True,17967,https://api.github.com/repos/opencv/opencv/pulls/17967,https://github.com/opencv/opencv/pull/17967,closed,178,53,3,3,0,17,2,1,"[{'name': 'feature'}, {'name': 'category: dnn'}]",2020-07-28 12:02:34+00:00,2020-08-03 18:02:50+00:00,540016.0,"6 days, 6:00:16","[{'comment_id': 461548174, 'comment_body': 'Please check that there are two inputs to do so', 'comment_created': datetime.datetime(2020, 7, 28, 12, 41, 35, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461558412, 'comment_body': '`inputs.size() > outputs.size()` seems strange', 'comment_created': datetime.datetime(2020, 7, 28, 12, 58, 12, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461559180, 'comment_body': 'Why we need an extra limitation for NNBuilder and Myriad target?', 'comment_created': datetime.datetime(2020, 7, 28, 12, 59, 24, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461559823, 'comment_body': 'Is `numOutput` always correct?', 'comment_created': datetime.datetime(2020, 7, 28, 13, 0, 22, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461564052, 'comment_body': 'Myriad supports only ngraph::op::Constant op for weights', 'comment_created': datetime.datetime(2020, 7, 28, 13, 7, 1, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 461564948, 'comment_body': '`numOutput` is a required parameter, so I think it is always correct', 'comment_created': datetime.datetime(2020, 7, 28, 13, 8, 26, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 461569145, 'comment_body': 'I see, sorry. Just misunderstood', 'comment_created': datetime.datetime(2020, 7, 28, 13, 14, 36, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461570439, 'comment_body': 'if `blobs.empty()` then inputs contain input, weights and bias (optional) → ` inputs.size() > 1`, but `outputs.size() = 1`. I add this check instead of `inputs.size() > 1`, because in Deconvolution layer supports  `inputs.size() == outputs.size() >= 1.` https://github.com/opencv/opencv/blob/3.4/modules/dnn/src/layers/convolution_layer.cpp#L1914', 'comment_created': datetime.datetime(2020, 7, 28, 13, 16, 31, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 461571430, 'comment_body': 'Bias can be also as input? 😕  ', 'comment_created': datetime.datetime(2020, 7, 28, 13, 17, 52, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461572043, 'comment_body': 'Sure))', 'comment_created': datetime.datetime(2020, 7, 28, 13, 18, 47, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 461572836, 'comment_body': 'We need to make two runs to check that weights are not stalled. ', 'comment_created': datetime.datetime(2020, 7, 28, 13, 19, 52, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461574701, 'comment_body': 'Ok, I see. this way please modify a check `CV_Assert(inputs.size() > 0);` so it will go before \r\n```cpp\r\nMatSize weightShape = blobs.empty() ? inputs[1].size : blobs[0].size;\r\n```\r\nand will consider both cases', 'comment_created': datetime.datetime(2020, 7, 28, 13, 22, 31, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461575429, 'comment_body': 'Do we have default backend support for it?', 'comment_created': datetime.datetime(2020, 7, 28, 13, 23, 30, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 461609731, 'comment_body': 'This test contains bias `testONNXModels(""conv_depthwise_variable_w"", npy, 0, 0, false, false, 3);` and passed on OpenCV and nGraph backends.', 'comment_created': datetime.datetime(2020, 7, 28, 14, 9, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 461744012, 'comment_body': 'why reference is the same?', 'comment_created': datetime.datetime(2020, 7, 28, 17, 17, 45, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}, {'comment_id': 462042783, 'comment_body': 'First ref `output_conv_depthwise_variable_w.npy`, second ref  `output_conv_depthwise_variable_wb.npy`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 14, 4, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462063385, 'comment_body': 'Oh, I see. Do you mind to rename to  `output_conv_variable.npy` and `output_conv_variable_bias.npy` ? No need to have `depthwise` and more clear difference. (same for `input_` and `models/conv_variable.onnx`)', 'comment_created': datetime.datetime(2020, 7, 29, 6, 19, 9, tzinfo=datetime.timezone.utc), 'commenter': 'dkurt', 'type': 'User'}]","[{'commit_sha': '6ed007ede58f61634baae4d74b2c8d5dbcdc2954', 'committer_username': 'l-bat', 'committer_name': 'Liubov Talamanova ', 'committer_email': 'liubov.talamanova@intel.com', 'commit_date': datetime.datetime(2016, 9, 21, 13, 14, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dda6523335ba2a46469358237c0fdaab5c3c2867', 'committer_username': 'l-bat', 'committer_name': 'Liubov Talamanova ', 'committer_email': 'liubov.talamanova@intel.com', 'commit_date': datetime.datetime(2016, 9, 21, 13, 14, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '78d0fc0a3ce51da56b9fa447b7e4f9c5e564edf5', 'committer_username': 'l-bat', 'committer_name': 'Liubov Talamanova ', 'committer_email': 'liubov.talamanova@intel.com', 'commit_date': datetime.datetime(2016, 9, 21, 13, 14, 47, tzinfo=datetime.timezone.utc)}]",Liubov Talamanova ,22346860,liubov.talamanova@intel.com,User,,27,,5,56
+438776074,[GSoC] Add siamrpnpp.py,"### GSoC '20 : Real-time Single Object Tracking using Deep Learning (SiamRPN++)
+### Overview
+Proposal : https://summerofcode.withgoogle.com/projects/#4979746967912448
+Mentors : Liubov Batanina @l-bat, Stefano Fabri @bhack, Ilya Elizarov @ieliz
+Student : Jin Yeob Chung @jinyup100
+
+<cut/>
+
+### Details of the Pull Request
+-  Export of the torch implementation of the SiamRPN++ visual tracker to ONNX
+    - Please refer to (https://gist.github.com/jinyup100/7aa748686c5e234ed6780154141b4685) or _Code to 
+       generate ONNX models_ at the bottom of this PR description
+-  Addition of siamrpnpp.py in the opencv/samples/dnn repository  
+    - SiamRPN++ visual tracker can be performed on a sample video input
+    - Parsers include:
+       - --input_video  _path to sample video input_
+       - --target_net _path to target branch of the visual tracker_
+       - --search_net  _path to search branch of the visual tracker_
+       - --rpn_head _path to head of the visual tracker_
+       - --backend _selection of the computation backend_
+       - --target _selection of the computation target device_
+- Additional samples of the visual tracker performed on videos are available at:
+     - https://drive.google.com/drive/folders/1k7Z_SHaBWK_4aEQPxJJCGm3P7y2IFCjY?usp=sharing
+
+<details>
+
+<summary>Examples</summary>
+
+<img src=""https://user-images.githubusercontent.com/41290732/91156541-39dc2880-e6ff-11ea-87bc-64207f1f8f2c.gif"" width=""320"" height=""220""> <img src=""https://user-images.githubusercontent.com/41290732/91157483-59c01c00-e700-11ea-9e44-9aedcedb9e34.gif"" width=""320"" height=""220"">
+
+</details>
+
+### Pull Request Readiness Checklist
+
+See details at https://github.com/opencv/opencv/wiki/How_to_contribute#making-a-good-pull-request
+
+- [X] I agree to contribute to the project under OpenCV (BSD) License.
+- [X] To the best of my knowledge, the proposed patch is not based on a code under GPL or other license that is incompatible with OpenCV
+- [X] The PR is proposed to proper branch
+- [X] There is reference to original bug report and related work
+- [X] There is accuracy test, performance test and test data in opencv_extra repository, if applicable
+       Patch to opencv_extra has the same branch name.
+- [X] The feature is well documented and sample code can be built with the project CMake
+
+<details>
+
+<summary>Code to generate ONNX Models</summary>
+
+The code shown below to generate the ONNX models of siamrpn++ is also available from : 
+https://gist.github.com/jinyup100/7aa748686c5e234ed6780154141b4685
+
+
+![ball_track](https://user-images.githubusercontent.com/41290732/91156436-1dd88700-e6ff-11ea-85a3-db0f668e5eee.gif)
+
+
+The Final Version of the Pre-Trained Weights and successfully converted ONNX format of the models using the codes are available at::
+
+**Pre-Trained Weights in pth Format**
+https://drive.google.com/file/d/11bwgPFVkps9AH2NOD1zBDdpF_tQghAB-/view?usp=sharing
+
+**Target Net** : Import :heavy_check_mark: Export :heavy_check_mark: 
+https://drive.google.com/file/d/1dw_Ne3UMcCnFsaD6xkZepwE4GEpqq7U_/view?usp=sharing
+
+**Search Net** : Import :heavy_check_mark: Export :heavy_check_mark: 
+https://drive.google.com/file/d/1Lt4oE43ZSucJvze3Y-Z87CVDreO-Afwl/view?usp=sharing
+
+**RPN_head** : Import : :heavy_check_mark:   Export :heavy_check_mark:  
+https://drive.google.com/file/d/1zT1yu12mtj3JQEkkfKFJWiZ71fJ-dQTi/view?usp=sharing
+
+```python
+import numpy as np
+import onnx
+import torch
+import torch.nn as nn
+
+# Class for the Building Blocks required for ResNet
+class Bottleneck(nn.Module):
+    expansion = 4
+
+    def __init__(self, inplanes, planes, stride=1,
+                 downsample=None, dilation=1):
+        super(Bottleneck, self).__init__()
+        self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(planes)
+        padding = 2 - stride
+        if downsample is not None and dilation > 1:
+            dilation = dilation // 2
+            padding = dilation
+
+        assert stride == 1 or dilation == 1, \
+            ""stride and dilation must have one equals to zero at least""
+
+        if dilation > 1:
+            padding = dilation
+        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
+                               padding=padding, bias=False, dilation=dilation)
+        self.bn2 = nn.BatchNorm2d(planes)
+        self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
+        self.bn3 = nn.BatchNorm2d(planes * 4)
+        self.relu = nn.ReLU(inplace=True)
+        self.downsample = downsample
+        self.stride = stride
+
+    def forward(self, x):
+        residual = x
+
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = self.relu(out)
+
+        out = self.conv3(out)
+        out = self.bn3(out)
+
+        if self.downsample is not None:
+            residual = self.downsample(x)
+
+        out += residual
+
+        out = self.relu(out)
+
+        return out
+    
+# End of Building Blocks
+
+# Class for ResNet - the Backbone neural network
+
+class ResNet(nn.Module):
+    ""ResNET""
+    def __init__(self, block, layers, used_layers):
+        self.inplanes = 64
+        super(ResNet, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=0,  # 3
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.layer1 = self._make_layer(block, 64, layers[0])
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
+
+        self.feature_size = 128 * block.expansion
+        self.used_layers = used_layers
+        layer3 = True if 3 in used_layers else False
+        layer4 = True if 4 in used_layers else False
+
+        if layer3:
+            self.layer3 = self._make_layer(block, 256, layers[2],
+                                           stride=1, dilation=2)  # 15x15, 7x7
+            self.feature_size = (256 + 128) * block.expansion
+        else:
+            self.layer3 = lambda x: x  # identity
+
+        if layer4:
+            self.layer4 = self._make_layer(block, 512, layers[3],
+                                           stride=1, dilation=4)  # 7x7, 3x3
+            self.feature_size = 512 * block.expansion
+        else:
+            self.layer4 = lambda x: x  # identity
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, np.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
+    def _make_layer(self, block, planes, blocks, stride=1, dilation=1):
+        downsample = None
+        dd = dilation
+        if stride != 1 or self.inplanes != planes * block.expansion:
+            if stride == 1 and dilation == 1:
+                downsample = nn.Sequential(
+                    nn.Conv2d(self.inplanes, planes * block.expansion,
+                              kernel_size=1, stride=stride, bias=False),
+                    nn.BatchNorm2d(planes * block.expansion),
+                )
+            else:
+                if dilation > 1:
+                    dd = dilation // 2
+                    padding = dd
+                else:
+                    dd = 1
+                    padding = 0
+                downsample = nn.Sequential(
+                    nn.Conv2d(self.inplanes, planes * block.expansion,
+                              kernel_size=3, stride=stride, bias=False,
+                              padding=padding, dilation=dd),
+                    nn.BatchNorm2d(planes * block.expansion),
+                )
+
+        layers = []
+        layers.append(block(self.inplanes, planes, stride,
+                            downsample, dilation=dilation))
+        self.inplanes = planes * block.expansion
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes, dilation=dilation))
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x_ = self.relu(x)
+        x = self.maxpool(x_)
+
+        p1 = self.layer1(x)
+        p2 = self.layer2(p1)
+        p3 = self.layer3(p2)
+        p4 = self.layer4(p3)
+        out = [x_, p1, p2, p3, p4]
+        out = [out[i] for i in self.used_layers]
+        if len(out) == 1:
+            return out[0]
+        else:
+            return out
+        
+# End of ResNet
+
+# Class for Adjusting the layers of the neural net
+
+class AdjustLayer_1(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustLayer_1, self).__init__()
+        self.downsample = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            )
+        self.center_size = center_size
+
+    def forward(self, x):
+        x = self.downsample(x)
+        l = 4
+        r = 11
+        x = x[:, :, l:r, l:r]
+        return x
+
+class AdjustAllLayer_1(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustAllLayer_1, self).__init__()
+        self.num = len(out_channels)
+        if self.num == 1:
+            self.downsample = AdjustLayer_1(in_channels[0],
+                                          out_channels[0],
+                                          center_size)
+        else:
+            for i in range(self.num):
+                self.add_module('downsample'+str(i+2),
+                                AdjustLayer_1(in_channels[i],
+                                            out_channels[i],
+                                            center_size))
+
+    def forward(self, features):
+        if self.num == 1:
+            return self.downsample(features)
+        else:
+            out = []
+            for i in range(self.num):
+                adj_layer = getattr(self, 'downsample'+str(i+2))
+                out.append(adj_layer(features[i]))
+            return out
+        
+class AdjustLayer_2(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustLayer_2, self).__init__()
+        self.downsample = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            )
+        self.center_size = center_size
+
+    def forward(self, x):
+        x = self.downsample(x)
+        return x
+
+class AdjustAllLayer_2(nn.Module):
+    def __init__(self, in_channels, out_channels, center_size=7):
+        super(AdjustAllLayer_2, self).__init__()
+        self.num = len(out_channels)
+        if self.num == 1:
+            self.downsample = AdjustLayer_2(in_channels[0],
+                                          out_channels[0],
+                                          center_size)
+        else:
+            for i in range(self.num):
+                self.add_module('downsample'+str(i+2),
+                                AdjustLayer_2(in_channels[i],
+                                            out_channels[i],
+                                            center_size))
+
+    def forward(self, features):
+        if self.num == 1:
+            return self.downsample(features)
+        else:
+            out = []
+            for i in range(self.num):
+                adj_layer = getattr(self, 'downsample'+str(i+2))
+                out.append(adj_layer(features[i]))
+            return out
+        
+# End of Class for Adjusting the layers of the neural net
+
+# Class for Region Proposal Neural Network
+
+class RPN(nn.Module):
+    ""Region Proposal Network""
+    def __init__(self):
+        super(RPN, self).__init__()
+
+    def forward(self, z_f, x_f):
+        raise NotImplementedError
+        
+class DepthwiseXCorr(nn.Module):
+    ""Depthwise Correlation Layer""
+    def __init__(self, in_channels, hidden, out_channels, kernel_size=3, hidden_kernel_size=5):
+        super(DepthwiseXCorr, self).__init__()
+        self.conv_kernel = nn.Sequential(
+                nn.Conv2d(in_channels, hidden, kernel_size=kernel_size, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                )
+        self.conv_search = nn.Sequential(
+                nn.Conv2d(in_channels, hidden, kernel_size=kernel_size, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                )
+        self.head = nn.Sequential(
+                nn.Conv2d(hidden, hidden, kernel_size=1, bias=False),
+                nn.BatchNorm2d(hidden),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(hidden, out_channels, kernel_size=1)
+                )
+        
+    def forward(self, kernel, search):    
+        kernel = self.conv_kernel(kernel)
+        search = self.conv_search(search)
+        
+        feature = xcorr_depthwise(search, kernel)
+        
+        out = self.head(feature)
+        
+        return out
+
+class DepthwiseRPN(RPN):
+    def __init__(self, anchor_num=5, in_channels=256, out_channels=256):
+        super(DepthwiseRPN, self).__init__()
+        self.cls = DepthwiseXCorr(in_channels, out_channels, 2 * anchor_num)
+        self.loc = DepthwiseXCorr(in_channels, out_channels, 4 * anchor_num)
+
+    def forward(self, z_f, x_f):
+        cls = self.cls(z_f, x_f)
+        loc = self.loc(z_f, x_f)
+        
+        return cls, loc
+
+class MultiRPN(RPN):
+    def __init__(self, anchor_num, in_channels):
+        super(MultiRPN, self).__init__()
+        for i in range(len(in_channels)):
+            self.add_module('rpn'+str(i+2),
+                    DepthwiseRPN(anchor_num, in_channels[i], in_channels[i]))
+        self.weight_cls = nn.Parameter(torch.Tensor([0.38156851768108546, 0.4364767608115956,  0.18195472150731892]))
+        self.weight_loc = nn.Parameter(torch.Tensor([0.17644893463361863, 0.16564198028417967, 0.6579090850822015]))
+
+    def forward(self, z_fs, x_fs):
+        cls = []
+        loc = []
+        
+        rpn2 = self.rpn2
+        z_f2 = z_fs[0]
+        x_f2 = x_fs[0]
+        c2,l2 = rpn2(z_f2, x_f2)
+        
+        cls.append(c2)
+        loc.append(l2)
+        
+        rpn3 = self.rpn3
+        z_f3 = z_fs[1]
+        x_f3 = x_fs[1]
+        c3,l3 = rpn3(z_f3, x_f3)
+        
+        cls.append(c3)
+        loc.append(l3)
+        
+        rpn4 = self.rpn4
+        z_f4 = z_fs[2]
+        x_f4 = x_fs[2]
+        c4,l4 = rpn4(z_f4, x_f4)
+        
+        cls.append(c4)
+        loc.append(l4)
+        
+        def avg(lst):
+            return sum(lst) / len(lst)
+
+        def weighted_avg(lst, weight):
+            s = 0
+            fixed_len = 3
+            for i in range(3):
+                s += lst[i] * weight[i]
+            return s
+
+        return weighted_avg(cls, self.weight_cls), weighted_avg(loc, self.weight_loc)
+        
+# End of class for RPN
+
+def conv3x3(in_planes, out_planes, stride=1, dilation=1):
+    ""3x3 convolution with padding""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
+                     padding=dilation, bias=False, dilation=dilation)
+
+def xcorr_depthwise(x, kernel):
+    """"""
+    Deptwise convolution for input and weights with different shapes
+    """"""
+    batch = kernel.size(0)
+    channel = kernel.size(1)
+    x = x.view(1, batch*channel, x.size(2), x.size(3))
+    kernel = kernel.view(batch*channel, 1, kernel.size(2), kernel.size(3))
+    conv = nn.Conv2d(batch*channel, batch*channel, kernel_size=(kernel.size(2), kernel.size(3)), bias=False, groups=batch*channel)
+    conv.weight = nn.Parameter(kernel)
+    out = conv(x) 
+    out = out.view(batch, channel, out.size(2), out.size(3))
+    out = out.detach()
+    return out
+
+class TargetNetBuilder(nn.Module):
+    def __init__(self):
+        super(TargetNetBuilder, self).__init__()
+        # Build Backbone Model
+        self.backbone = ResNet(Bottleneck, [3,4,6,3], [2,3,4])
+        # Build Neck Model
+        self.neck = AdjustAllLayer_1([512,1024,2048], [256,256,256])
+    
+    def forward(self, frame):
+        features = self.backbone(frame)
+        output = self.neck(features)
+        return output
+
+class SearchNetBuilder(nn.Module):
+    def __init__(self):
+        super(SearchNetBuilder, self).__init__()
+        # Build Backbone Model
+        self.backbone = ResNet(Bottleneck, [3,4,6,3], [2,3,4])
+        # Build Neck Model
+        self.neck = AdjustAllLayer_2([512,1024,2048], [256,256,256])
+        
+    def forward(self, frame):
+        features = self.backbone(frame)
+        output = self.neck(features)
+        return output
+ 
+class RPNBuilder(nn.Module):
+    def __init__(self):
+        super(RPNBuilder, self).__init__()
+
+        # Build Adjusted Layer Builder
+        self.rpn_head = MultiRPN(anchor_num=5,in_channels=[256, 256, 256])
+
+    def forward(self, zf, xf):
+        # Get Feature
+        cls, loc = self.rpn_head(zf, xf)
+
+        return cls, loc
+    
+""""""Load path should be the directory of the pre-trained siamrpn_r50_l234_dwxcorr.pth
+ The download link to siamrpn_r50_l234_dwxcorr.pth is shown in the description""""""
+
+current_path = os.getcwd()
+load_path = os.path.join(current_path, ""siamrpn_r50_l234_dwxcorr.pth"")
+pretrained_dict = torch.load(load_path,map_location=torch.device('cpu') )
+pretrained_dict_backbone = pretrained_dict
+pretrained_dict_neck_1 = pretrained_dict
+pretrained_dict_neck_2 = pretrained_dict
+pretrained_dict_head = pretrained_dict
+pretrained_dict_target = pretrained_dict
+pretrained_dict_search = pretrained_dict
+
+# The shape of the inputs to the Target Network and the Search Network
+target = torch.Tensor(np.random.rand(1,3,127,127))
+search = torch.Tensor(np.random.rand(1,3,125,125))
+
+# Build the torch backbone model
+target_net = TargetNetBuilder()
+target_net.eval()
+target_net.state_dict().keys()
+target_net_dict = target_net.state_dict()
+
+# Load the pre-trained weight to the torch target net model
+pretrained_dict_target = {k: v for k, v in pretrained_dict_target.items() if k in target_net_dict}
+target_net_dict.update(pretrained_dict_target)
+target_net.load_state_dict(target_net_dict)
+
+# Export the torch target net model to ONNX model
+torch.onnx.export(target_net, torch.Tensor(target), ""target_net.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names=['input'], output_names=['output_1,', 'output_2', 'output_3'])
+
+# Load the saved torch target net model using ONNX
+onnx_target = onnx.load(""target_net.onnx"")
+
+# Check whether the ONNX target net model has been successfully imported
+onnx.checker.check_model(onnx_target)
+print(onnx.checker.check_model(onnx_target))
+onnx.helper.printable_graph(onnx_target.graph)
+print(onnx.helper.printable_graph(onnx_target.graph))
+
+# Build the torch backbone model
+search_net = SearchNetBuilder()
+search_net.eval()
+search_net.state_dict().keys()
+search_net_dict = search_net.state_dict()
+
+# Load the pre-trained weight to the torch target net model
+pretrained_dict_search = {k: v for k, v in pretrained_dict_search.items() if k in search_net_dict}
+search_net_dict.update(pretrained_dict_search)
+search_net.load_state_dict(search_net_dict)
+
+# Export the torch target net model to ONNX model
+torch.onnx.export(search_net, torch.Tensor(search), ""search_net.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names=['input'], output_names=['output_1,', 'output_2', 'output_3'])
+
+# Load the saved torch target net model using ONNX
+onnx_search = onnx.load(""search_net.onnx"")
+
+# Check whether the ONNX target net model has been successfully imported
+onnx.checker.check_model(onnx_search)
+print(onnx.checker.check_model(onnx_search))
+onnx.helper.printable_graph(onnx_search.graph)
+print(onnx.helper.printable_graph(onnx_search.graph))
+
+# Outputs from the Target Net and Search Net
+zfs_1, zfs_2, zfs_3 = target_net(torch.Tensor(target))
+xfs_1, xfs_2, xfs_3 = search_net(torch.Tensor(search))
+
+# Adjustments to the outputs from each of the neck models to match to input shape of the torch rpn_head model
+zfs = np.stack([zfs_1.detach().numpy(), zfs_2.detach().numpy(), zfs_3.detach().numpy()])
+xfs = np.stack([xfs_1.detach().numpy(), xfs_2.detach().numpy(), xfs_3.detach().numpy()])
+
+# Build the torch rpn_head model
+rpn_head = RPNBuilder()
+rpn_head.eval()
+rpn_head.state_dict().keys()
+rpn_head_dict = rpn_head.state_dict()
+
+# Load the pre-trained weights to the rpn_head model
+pretrained_dict_head = {k: v for k, v in pretrained_dict_head.items() if k in rpn_head_dict}
+pretrained_dict_head.keys()
+rpn_head_dict.update(pretrained_dict_head)
+rpn_head.load_state_dict(rpn_head_dict)
+rpn_head.eval()
+
+# Export the torch rpn_head model to ONNX model
+torch.onnx.export(rpn_head, (torch.Tensor(np.random.rand(*zfs.shape)), torch.Tensor(np.random.rand(*xfs.shape))), ""rpn_head.onnx"", export_params=True, opset_version=11,
+                  do_constant_folding=True, input_names = ['input_1', 'input_2'], output_names = ['output_1', 'output_2'])
+
+# Load the saved rpn_head model using ONNX
+onnx_rpn_head_model = onnx.load(""rpn_head.onnx"")
+
+# Check whether the rpn_head model has been successfully imported
+onnx.checker.check_model(onnx_rpn_head_model)
+print(onnx.checker.check_model(onnx_rpn_head_model))    
+onnx.helper.printable_graph(onnx_rpn_head_model.graph)
+print(onnx.helper.printable_graph(onnx_rpn_head_model.graph))
+
+```
+
+</details>
+",True,17647,https://api.github.com/repos/opencv/opencv/pulls/17647,https://github.com/opencv/opencv/pull/17647,closed,397,0,1,12,49,55,2,1,"[{'name': 'GSoC'}, {'name': 'category: dnn'}]",2020-06-23 19:32:32+00:00,2020-08-25 20:01:17+00:00,5444925.0,"63 days, 0:28:45","[{'comment_id': 462044924, 'comment_body': 'Can we simplify this?\r\n`x1, y1, x2, y2 = corner`\r\nor if len(corner) > 4\r\n`x1, y1, x2, y2 = corner[:4]`\r\n', 'comment_created': datetime.datetime(2020, 7, 29, 5, 21, 37, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462045710, 'comment_body': 'Can we use numpy instead of math?', 'comment_created': datetime.datetime(2020, 7, 29, 5, 24, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462047094, 'comment_body': '```suggestion\r\n    def _softmax(self, x):\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 5, 28, 55, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462050131, 'comment_body': '`import cv2 as cv` is better', 'comment_created': datetime.datetime(2020, 7, 29, 5, 39, 25, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462053424, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x,  y, h, w = bbox`\r\n', 'comment_created': datetime.datetime(2020, 7, 29, 5, 50, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054189, 'comment_body': ""```\r\nwinName = 'SiamRPN++ tracker in OpenCV'\r\ncv.namedWindow(winName, cv.WINDOW_NORMAL)\r\n```"", 'comment_created': datetime.datetime(2020, 7, 29, 5, 52, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054513, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 5, 53, 42, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054677, 'comment_body': 'Please add `ArgumentParser`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 54, 16, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462054773, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x, y, h, w = bbox`', 'comment_created': datetime.datetime(2020, 7, 29, 5, 54, 30, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462056521, 'comment_body': '```suggestion\r\n        context_xmin += left_pad\r\n        context_xmax += left_pad\r\n        context_ymin += top_pad\r\n        context_ymax += top_pad\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 5, 59, 36, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462058429, 'comment_body': 'When you need output from the last layer, you can use forward without args.\r\n```suggestion\r\n       self.zf_1 = neck_1_out_1.forward()\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 5, 12, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059505, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 6, 8, 32, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059547, 'comment_body': 'Why do we need this?', 'comment_created': datetime.datetime(2020, 7, 29, 6, 8, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462059709, 'comment_body': '```suggestion\r\n        xf_1 = neck_1_out_2.forward()\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 9, 6, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462062949, 'comment_body': '```\r\noutNames = backbone_target.getUnconnectedOutLayersNames()\r\nresnet_target_1, resnet_target_2, resnet_target_3  = backbone_target.forward(outNames)\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 6, 18, 2, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 462198069, 'comment_body': 'Invalid syntax\r\n```suggestion\r\n    def __init__(self, backbone_search, backbone_target, neck_1_out_1, neck_1_out_2, neck_2_out_1, neck_2_out_2,\r\n```', 'comment_created': datetime.datetime(2020, 7, 29, 10, 26, 46, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466863596, 'comment_body': '```suggestion\r\n        size = self.stride ** 2\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 13, 42, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466865138, 'comment_body': 'Where is function called?', 'comment_created': datetime.datetime(2020, 8, 7, 7, 17, 28, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466866329, 'comment_body': '```suggestion\r\n        delta = delta_contig.reshape(4, -1)\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 20, 19, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466867500, 'comment_body': 'Can we rewrite this code without a loop? For example, using an axis:\r\n\r\n```python\r\n    def _softmax(self, x):\r\n        x_max = x.max(axis=0)\r\n        e_x = np.exp(x - x_max)\r\n        y = e_x / e_x.sum(axis=0)\r\n        return y\r\n```', 'comment_created': datetime.datetime(2020, 8, 7, 7, 23, 5, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 466869484, 'comment_body': 'I think it is better to unpack bbox above:\r\n`x, y, h, w = bbox`', 'comment_created': datetime.datetime(2020, 8, 7, 7, 27, 29, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467705489, 'comment_body': 'Where is the function used?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 19, 19, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467705513, 'comment_body': 'Where is the function used?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467706527, 'comment_body': 'Please check that model files exist\r\n', 'comment_created': datetime.datetime(2020, 8, 10, 6, 22, 45, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467707780, 'comment_body': 'Could you try to create a single ONNX model from `backbone_target `and `neck_1`?\r\n', 'comment_created': datetime.datetime(2020, 8, 10, 6, 27, 17, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467707886, 'comment_body': 'Could you try to create a single ONNX model from `backbone_search `and `neck_2` or even `backbone_search`, `neck_2` and `rpn_head`?', 'comment_created': datetime.datetime(2020, 8, 10, 6, 27, 44, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467709351, 'comment_body': ""For me, it's better:\r\n`self.anchors = self.generate_anchors()`"", 'comment_created': datetime.datetime(2020, 8, 10, 6, 32, 27, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467710395, 'comment_body': ""`parser.add_argument('--input_video', help='Path to input video file. Skip this argument to capture frames from a camera.')`"", 'comment_created': datetime.datetime(2020, 8, 10, 6, 35, 43, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467711246, 'comment_body': 'Please add link to original paper and repo like https://github.com/opencv/opencv/blob/master/samples/dnn/dasiamrpn_tracker.py#L3', 'comment_created': datetime.datetime(2020, 8, 10, 6, 38, 32, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467712590, 'comment_body': 'In my opinion, for sample it is enough to read a video from a file or from a camera.\r\n\r\n`cap = cv.VideoCapture(args.input_video if args.input_video else 0)`', 'comment_created': datetime.datetime(2020, 8, 10, 6, 42, 37, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467716996, 'comment_body': '```suggestion\r\n        key = cv.waitKey(1)\r\n        if key == ord(""q""):\r\n            break\r\n```', 'comment_created': datetime.datetime(2020, 8, 10, 6, 56, 14, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 467801964, 'comment_body': 'I agree with you - I simplified the get_frames function such that it either reads a video file or reads from a camera', 'comment_created': datetime.datetime(2020, 8, 10, 10, 0, 32, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467802328, 'comment_body': 'Thanks for the advice - I have added the links to the paper and the repo', 'comment_created': datetime.datetime(2020, 8, 10, 10, 1, 15, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467803042, 'comment_body': 'I have combined backbone_target and neck_1, and combined backbone_search and neck_2.\r\nI have left rpn_head as a seperate file, which uses the outputs from each of these target branch and search branch.', 'comment_created': datetime.datetime(2020, 8, 10, 10, 2, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467803140, 'comment_body': 'I have updated my file to contain os. path.isfile to check the existence of the file in the relevant paths', 'comment_created': datetime.datetime(2020, 8, 10, 10, 2, 50, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 467818923, 'comment_body': ""```suggestion\r\n    parser.add_argument('--input_video', type=str, help='Path to input video file. Skip this argument to capture frames from a camera.')\r\n```"", 'comment_created': datetime.datetime(2020, 8, 10, 10, 38, 13, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468339569, 'comment_body': '```suggestion\r\n    if args.input_video and not os.path.isfile(args.input_video):\r\n        raise OSError(""Input video file does not exist"")\r\n```', 'comment_created': datetime.datetime(2020, 8, 11, 5, 45, 55, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468353272, 'comment_body': 'Please update models as in PR description\r\n', 'comment_created': datetime.datetime(2020, 8, 11, 6, 26, 8, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 468394509, 'comment_body': '`args.target_net` has default value `target_net.onnx`.  Thus, we can only check  `os.path.isfile(args.input_video)`', 'comment_created': datetime.datetime(2020, 8, 11, 7, 55, 40, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471449286, 'comment_body': 'Please replace `cv.dnn.DNN_TARGET_FPGA` to `cv.dnn.DNN_TARGET_MYRIAD`', 'comment_created': datetime.datetime(2020, 8, 17, 12, 38, 27, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471449390, 'comment_body': '```suggestion\r\n                        ""%d: Intel\'s Deep Learning Inference Engine (https://software.intel.com/openvino-toolkit)""\r\n```', 'comment_created': datetime.datetime(2020, 8, 17, 12, 38, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471937935, 'comment_body': 'Where is backend and target used?\r\n', 'comment_created': datetime.datetime(2020, 8, 18, 6, 16, 9, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471939487, 'comment_body': '```suggestion\r\n    backends = (cv.dnn.DNN_BACKEND_DEFAULT, cv.dnn.DNN_BACKEND_HALIDE, cv.dnn.DNN_BACKEND_INFERENCE_ENGINE, cv.dnn.DNN_BACKEND_OPENCV)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 20, 30, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471939595, 'comment_body': '```suggestion\r\n    targets = (cv.dnn.DNN_TARGET_CPU, cv.dnn.DNN_TARGET_OPENCL, cv.dnn.DNN_TARGET_OPENCL_FP16, cv.dnn.DNN_TARGET_MYRIAD)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 20, 43, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471955913, 'comment_body': '```suggestion\r\n        x = x.astype(dtype=np.float32)\r\n```', 'comment_created': datetime.datetime(2020, 8, 18, 6, 59, 1, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471957871, 'comment_body': 'Why not `anchors.anchor_num` ?', 'comment_created': datetime.datetime(2020, 8, 18, 7, 3, 11, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 471975974, 'comment_body': 'Now we can use `self.search_net.getUnconnectedOutLayersNames()`', 'comment_created': datetime.datetime(2020, 8, 18, 7, 36, 12, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473635082, 'comment_body': '`cx, cy = pos`', 'comment_created': datetime.datetime(2020, 8, 20, 6, 13, 9, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473635378, 'comment_body': '```suggestion\r\n        im_h, im_w = im.shape\r\n```', 'comment_created': datetime.datetime(2020, 8, 20, 6, 13, 35, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473641622, 'comment_body': '`bbox_h, bbox_w = boundary`  or `bbox_cx, bbox_cy = boundary`?', 'comment_created': datetime.datetime(2020, 8, 20, 6, 22, 39, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473642056, 'comment_body': '```suggestion\r\n        w_z = h + self.track_context_amount * (h + w)\r\n        h_z = w + self.track_context_amount * (h + w)\r\n```', 'comment_created': datetime.datetime(2020, 8, 20, 6, 23, 22, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 473643515, 'comment_body': '`cx, cy = self.center_pos`\r\n`x, y, w, h = bbox`', 'comment_created': datetime.datetime(2020, 8, 20, 6, 25, 26, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 474540423, 'comment_body': ""Sure - I've been working on amending the gdocs and ouputting the video file.\r\nWill be making a commit later today!"", 'comment_created': datetime.datetime(2020, 8, 21, 8, 51, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}, {'comment_id': 475429909, 'comment_body': 'Above you do:\r\n```python\r\n        im_h = im.shape[0]\r\n        im_w = im.shape[1]\r\n```\r\nCan we reuse these variables?\r\nFor example, `im_h , im_w, k = im.shape`\r\n\r\n', 'comment_created': datetime.datetime(2020, 8, 24, 8, 37, 8, tzinfo=datetime.timezone.utc), 'commenter': 'l-bat', 'type': 'User'}, {'comment_id': 475431997, 'comment_body': 'It seems like we can! It was just that we never use the variable k', 'comment_created': datetime.datetime(2020, 8, 24, 8, 40, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jinyup100', 'type': 'User'}]","[{'commit_sha': 'a0d93e2994994c2dda882e611dda1833e2291df5', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a71b70b2068f97d1458c8e0edb167d41b87441b4', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4d5c838c384dede686d1855c47341fb0afac530', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a4749c3bf8d5fef0a322c7afe7cbe414a37acad3', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd073a4c4e87a9e30c1d4e7c5a1c59533fe3b686c', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a123f216d008664b9e1e1a948ddf66a19807157c', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1714ce2f5b19cb0877bd7db8c464a254295b6b7', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af45f42cb2ac78e9c87a6fc4c6fd5a760e9f861f', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': '454ffbb86ecfe06fa7e4f3f9a5d3fe77d5fdef88', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4da08d60629cf85fc0a362aaab191ec4d754d47', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': '237ff1178f395eeb977d7b8bd6e07e85c6d96a34', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'baf8eef73719555f0c87d237e782ce232e230941', 'committer_username': 'jinyup100', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 16, 11, 5, 24, tzinfo=datetime.timezone.utc)}]",,41290732,,User,,20,,3,1
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+5108051,opencv,opencv/opencv,C++,55703,77574,2655,2194,34487,2603,6,135,"[{'id': 438776074, 'number': 17647, 'closed': datetime.datetime(2020, 8, 25, 20, 1, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 23, 19, 32, 32, tzinfo=datetime.timezone.utc), 'time_taken': 5444925.0, 'time_delta': '63 days, 0:28:45', 'additions': 397, 'deletions': 0, 'state': 'closed'}]"

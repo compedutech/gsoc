@@ -1,0 +1,124 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+672677622,"behave_tests: Implemented basic behave test scenario's for cephadm, ceph shell and OSD commands","<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+
+This commit includes the basic implementation of behave test scenario's ( for cephadm, ceph shell and OSD commands) and 
+python implementations for interacting with kcli and behave test cases. The test scenarios can be execute all together or only the
+specific scenarios with tags.
+ ## Checklist
+- [ ] References tracker ticket
+- [x] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",True,41918,https://api.github.com/repos/ceph/ceph/pulls/41918,https://github.com/ceph/ceph/pull/41918,closed,698,0,11,1,9,13,3,0,"[{'name': 'documentation'}, {'name': 'tests'}, {'name': 'cephadm'}]",2021-06-17 14:14:03+00:00,2021-08-25 08:14:46+00:00,5940043.0,"68 days, 18:00:43","[{'comment_id': 653685628, 'comment_body': 'change this by ""tox"" after creating out tox.ini file', 'comment_created': datetime.datetime(2021, 6, 17, 15, 37, 22, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 653686228, 'comment_body': 'okay', 'comment_created': datetime.datetime(2021, 6, 17, 15, 38, 8, tzinfo=datetime.timezone.utc), 'commenter': 'SudhanAruna', 'type': 'User'}, {'comment_id': 653694442, 'comment_body': 'This can be heavily improved using [regular expressions](https://docs.python.org/3/library/re.html ):\r\n\r\nexample:\r\n```\r\n>>> m = re.match(r""(?P<first_name>\\w+) (?P<last_name>\\w+)"", ""Malcolm Reynolds"")\r\n>>> m.group(\'first_name\')\r\n\'Malcolm\'\r\n>>> m.group(\'last_name\')\r\n\'Reynolds\'\r\n```\r\n\r\nIn our case, we are trying to extract information from a couple of lines with fixed structure like:\r\n```\r\n          - 3 nodes with 4Gb RAM, 2 CPUs, and 3 storage devices of 20Gb each.\r\n          - Using Fedora32 image in each node\r\n```\r\n\r\nSo it must no be difficult to extract directly the information we need to the configuration dict \r\n \r\n', 'comment_created': datetime.datetime(2021, 6, 17, 15, 47, 43, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 653726097, 'comment_body': 'Here we have a small problem... what uses kcli as plan is a ""jinja template"" , and we are processing the template and providing a plan with all the replacements needed. That could work .. but is not enough flexible\r\n\r\nWe need to produce a jinja template for the kcli plan: i mean, we need to produce something completely identical  to:\r\nhttps://github.com/jmolmo/kcli-plans/blob/ceph_dev/ceph/ceph_cluster.yml\r\n\r\nLook, we have in the right ""ceph_cluster.yml"" file  things that are going to be processed by kcli in order to produce a plan, with the current implementation you are doing part of the kcli work, and that is not correct. \r\nFor example, you are generating directly the configuration for each of the nodes... we really want kcli to do this part of the job.\r\n\r\nNote: probably you will need to use:\r\nhttps://jinja.palletsprojects.com/en/3.0.x/templates/#escaping\r\nto avoid our behave test doing all the job .', 'comment_created': datetime.datetime(2021, 6, 17, 16, 26, 35, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 655634470, 'comment_body': '@jmolmo I have made the changes.', 'comment_created': datetime.datetime(2021, 6, 21, 19, 4, 37, tzinfo=datetime.timezone.utc), 'commenter': 'SudhanAruna', 'type': 'User'}, {'comment_id': 655972943, 'comment_body': 'this generates a wrong output for disks, for example:\r\nusing a spec: `""...and 3 storage devices of 20Gb each.""`\r\nit produces in the template:\r\n`disks: [20, 3]`\r\n\r\nAnd what we want to have is:\r\n`disks: [20,20,20]`\r\n\r\n\r\n\r\n', 'comment_created': datetime.datetime(2021, 6, 22, 7, 59, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 656206505, 'comment_body': 'Referring the kcli plans you shared with me `ceph_cluster_dev.yml` and  https://github.com/jmolmo/kcli-plans/blob/ceph_dev/ceph/ceph_cluster.yml the disk is defined has \r\ndisks:\r\n  -- 20\r\n  -- 3\r\n', 'comment_created': datetime.datetime(2021, 6, 22, 13, 12, 5, tzinfo=datetime.timezone.utc), 'commenter': 'SudhanAruna', 'type': 'User'}, {'comment_id': 667079824, 'comment_body': 'The name for this scenario must be ""Execute commands in cluster nodes""', 'comment_created': datetime.datetime(2021, 7, 9, 16, 40, 3, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 667082704, 'comment_body': ""Improve this step ... \r\n@then('I get a result witch contains:')\r\n\r\nThe tesxt provided in the behave text must be included as part of the command output\r\n"", 'comment_created': datetime.datetime(2021, 7, 9, 16, 44, 50, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 667086844, 'comment_body': 'Replace by a function where we check if the bootstrap process has finished or not depending of the content of the \r\ncommand ""journalctl -t cloud-init | grep <text witch means we have a  ceph cluster installed>"" ', 'comment_created': datetime.datetime(2021, 7, 9, 16, 51, 51, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 690321476, 'comment_body': 'We need to improve this part.. because waiting for nothing is not the right thing to do :-)\r\n\r\nWhat we really need is to execute something and if the expected output is not the desired, wait a little bit, and execute again the command to see if the things have changed.\r\n\r\nWhen can add the decorator in all the functions that must obtain a result a the result maybe is not going to be immediate, the definition of this step could be very similar to the one proposed by you_\r\n\r\n@then(""I will continue trying to get  and compare the result every {wait_time:n} seconds with a timeout of {timeout_time:n} seconds "")\r\n\r\nI suggest to create a function to work as decorator. This function will receive as parameter the function that implements the step and returns true if the function success , and false if the parameter function has failed 8 or the timeout expires.\r\nWe will need also to change functions to implement each step to return a boolean. \r\n\r\nEx:\r\n```\r\n\r\n@execute_with_timeout(60,5)\r\ndef execute_step(context):\r\n     ... \r\n    return expected_output == executed_output)\r\n```\r\n\r\ndef execute_with_timeout(f, timeout, wait)\r\n    time_waiting =0\r\n    while timeout > time_waiting:\r\n        result = f()\r\n        if result:\r\n            return result\r\n        else:\r\n            time.sleep(wait)\r\n            time_waiting += wait\r\n    print(""Timeout reached waiting for expected output"")\r\n    return result\r\n\r\n', 'comment_created': datetime.datetime(2021, 8, 17, 12, 28, 40, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}, {'comment_id': 693029247, 'comment_body': '```suggestion\r\nBehave framework is based on the Behaviour driven development where the test cases defined using gherkin language (written natural language style). The test cases are defined in .feature files in `feature` directory and python implementation defined under `/feature/steps`.\r\n```', 'comment_created': datetime.datetime(2021, 8, 20, 15, 20, 15, tzinfo=datetime.timezone.utc), 'commenter': 'alfonsomthd', 'type': 'User'}]","[{'commit_sha': '2071dfde09a654952b3630dc1d4b8451fb5dc06b', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}]",Arunagirinadan Sudharshan,49593471,,User,,19,,10,6
+717179744,WIP: behave_test: Including rbd commad test cases and modifying step to access kcli vm's details,"This PR is based on #41918, which adds additional test cases and modification to execution steps.
+<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+## Checklist
+- [ ] References tracker ticket
+- [ ] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test dashboard cephadm`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",False,42877,https://api.github.com/repos/ceph/ceph/pulls/42877,https://github.com/ceph/ceph/pull/42877,closed,220,30,5,7,5,1,3,0,"[{'name': 'documentation'}, {'name': 'tests'}, {'name': 'stale'}]",2021-08-21 16:57:49+00:00,2023-01-06 00:04:04+00:00,43398375.0,"502 days, 7:06:15","[{'comment_id': 693865750, 'comment_body': 'Is better to separate the RBD test functionality from the OSD test functionality. \r\nSeveral reasons:\r\n1. Separate functionality makes easy to test different things.\r\n2. Errors and problems are more easy to isolate and debug\r\n3. We do not need to repeat all the steps and checks needed to reach to have a basic test cluster  and test a more complex functionality like RBD. For exampl in the RBD test you can start with a ceph cluster like the one used for ""cephadm commands"" , and avoid all the previous scenario.\r\n\r\nso we need to have one test for testing OSD creation\r\nand anohther different one for RBD test\r\n', 'comment_created': datetime.datetime(2021, 8, 23, 10, 50, 23, tzinfo=datetime.timezone.utc), 'commenter': 'jmolmo', 'type': 'User'}]","[{'commit_sha': 'df3c466b057ec54cc61281243bfccc9bdc27a772', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c67a75081717aa4f52b552e2b97a76694c776e5', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c5c27d2bce528d4bd74b0c4b1540c2583771a6e', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '01c114baa6548516f2cf67d1360e5ed4256dc3bb', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd4b955904f22197b68926a795a839302bda004f', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3aeb138139ff57c1456ce1f2f950a39cd56235b9', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd02b57fec31b3b52a89a1c8f2f0bcadae22f402f', 'committer_username': 'SudhanAruna', 'committer_name': 'Arunagirinadan Sudharshan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 13, 16, 14, 55, tzinfo=datetime.timezone.utc)}]",Arunagirinadan Sudharshan,49593471,,User,,19,,10,6
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+2310495,ceph,ceph/ceph,C++,5924,13721,656,1919,147611,965,217,965,"[{'id': 717179744, 'number': 42877, 'closed': datetime.datetime(2023, 1, 6, 0, 4, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 21, 16, 57, 49, tzinfo=datetime.timezone.utc), 'time_taken': 43398375.0, 'time_delta': '502 days, 7:06:15', 'additions': 220, 'deletions': 30, 'state': 'closed'}, {'id': 672677622, 'number': 41918, 'closed': datetime.datetime(2021, 8, 25, 8, 14, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 14, 14, 3, tzinfo=datetime.timezone.utc), 'time_taken': 5940043.0, 'time_delta': '68 days, 18:00:43', 'additions': 698, 'deletions': 0, 'state': 'closed'}]"

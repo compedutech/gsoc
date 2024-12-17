@@ -1,0 +1,332 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+979414187,GSoC22: Refactoring and Code Quality ,"## Introduction
+This is my first GSoC22 contribution to the project. This PR focus on improving the code quality of the project so the maintenance and adding new features to the project be much easier. This PR includes the following:  
+
+## Bug Fixes
+### Can't clear filter created on Pie Chart
+### Before
+![error1](https://user-images.githubusercontent.com/30212455/175835196-a81d39f6-d8db-4ed5-a8d7-b32c65d99258.gif)
+### After
+![fix1](https://user-images.githubusercontent.com/30212455/175835263-efd41be4-44b0-4409-8c0c-7c022b3389cf.gif)
+
+### The Pie Chart doesn't load filters on reload
+### Before
+![error2](https://user-images.githubusercontent.com/30212455/175835398-f0c97b24-3262-481e-a800-d12ccecc7e5e.gif)
+### After
+![fix2](https://user-images.githubusercontent.com/30212455/175835444-d62cffa0-7516-4fca-bb38-6dda7a34a2bb.gif)
+
+### Components don't render when resizing
+### Before
+![error3](https://user-images.githubusercontent.com/30212455/175835719-2509cba1-3962-462d-bb0e-4d94162f7691.gif)
+### After
+![fix3](https://user-images.githubusercontent.com/30212455/175835740-523619d5-5c91-4198-b297-878da05b377c.gif)
+
+## Update used packages 
+updating the packages that use unsafe component lifecycles such as `react-resizable` and `react-grid-layout` 
+
+![image](https://user-images.githubusercontent.com/30212455/175835951-1b9bf117-ff5c-478b-8deb-ba660c7d294a.png)
+ 
+
+## Rewrite Most Of The Components To A Functional Style
+Updating most of the components to use the new functional style of React and hooks.  The functional style is easier to read and it produces less code. It also eliminates the usage of `this` and `bind` keywords.   
+
+## Move Config and App Data To A Global State
+Using the `Context` API now the config, data, filters and filtered data are accessible globally to all the components in the app, this is useful to avoid props drilling and this will enable us to add the ability for the user to change some of the configurations from the app GUI., for example, the config data can be accessed as follows
+`const { config, configLoading, configError } = useContext(ConfigContext);`
+
+## Abstracting The Data Fetching Logic
+Creating a custom-created React hook `useFetch` to handle all fetch requests in the app. This hook can be used as follows
+` const { error, data, isPending } = useFetch(URL);`
+
+## Adding ESLint To The Project
+Adding a static code analyzer is very important as it makes the coding style consistent in all code files and it helps to avoid any potential bug in the code
+
+I configured the ESLint tool with React plugin: https://github.com/jsx-eslint/eslint-plugin-react
+With Airbnb code style guide: https://github.com/airbnb/javascript
+I fixed all linting issues in the code except the files in the `experimental` folder which I created to contain the files that aren't used currently in the project
+
+### Removing The Build Files From Git Tracking
+",True,53,https://api.github.com/repos/sharmalab/eaglescope/pulls/53,https://github.com/sharmalab/eaglescope/pull/53,closed,15478,29339,199,3,0,2,0,0,[],2022-06-26 23:18:32+00:00,2022-07-01 02:17:37+00:00,356345.0,"4 days, 2:59:05","[{'comment_id': 907771874, 'comment_body': 'So you have just moved some things to the experimental dir?', 'comment_created': datetime.datetime(2022, 6, 27, 20, 30, 6, tzinfo=datetime.timezone.utc), 'commenter': 'birm', 'type': 'User'}, {'comment_id': 907819279, 'comment_body': ""Yes \nThis folder content files that is not used in the project right now. I also added this file here as the download and home buttons doesn't use any thing from it."", 'comment_created': datetime.datetime(2022, 6, 27, 21, 37, 19, tzinfo=datetime.timezone.utc), 'commenter': 'yahia3200', 'type': 'User'}]","[{'commit_sha': '2efbeaa6c9b541fd0059a7616f1353097dfc2585', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc0798f3f3ab646165a6381c994730c6425b7a35', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b32dfe0ee4fd745010285c349a57d42f17f2a24', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+986861495,GSoC22: Update Scatter Chart To Use Canvas,"The current implementation for the scatter chart uses SVG which can be very slow when the data gets big (you can start noticing this with datasets with thousands of points), so I changed the implementation to use the Canvas API which is very fast compared to the SVG
+
+### Performance Using SVG 
+
+![before](https://user-images.githubusercontent.com/30212455/177221238-0031d08c-98c7-4dba-b716-56a340e0a314.gif)
+
+### Performance Using Canvas
+
+![after](https://user-images.githubusercontent.com/30212455/177221249-f8583589-68a1-4f7a-a6ec-7b45fcd885ff.gif)
+
+",True,54,https://api.github.com/repos/sharmalab/eaglescope/pulls/54,https://github.com/sharmalab/eaglescope/pull/54,closed,73,25,4,1,0,0,0,0,[],2022-07-04 22:48:44+00:00,2022-07-05 01:30:59+00:00,9735.0,2:42:15,[],"[{'commit_sha': 'e4546545d2e1e29b0266482da06e7e94d76feeaf', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1014784831,GSoC22: Add Settings Board ,"# Description
+This component will allow the user to edit the general configurations of the dashboard and add a new chart to the current dashboard
+
+![image](https://user-images.githubusercontent.com/30212455/182327875-e2054634-1ada-49e1-9e4e-5c93dd3b5e59.png)
+
+![image](https://user-images.githubusercontent.com/30212455/182327777-5a9d5bc3-ed13-470a-b24d-06991af1004b.png)
+
+## Change Title of Dashboard 
+![set2](https://user-images.githubusercontent.com/30212455/182329325-afc20d73-fe01-416a-b102-f8e768de70b6.gif)
+
+## Change Color Theme of Dashboard  
+![set1](https://user-images.githubusercontent.com/30212455/182329371-06540f9d-7ea5-44f2-aff9-529ed23e4a57.gif)
+
+## Change Margin Between Charts
+![set3](https://user-images.githubusercontent.com/30212455/182329459-1dac109c-842a-4749-b6b5-1db3ec21047c.gif)
+
+## Change Charts Size
+![set4](https://user-images.githubusercontent.com/30212455/182329943-0f2dd457-6aae-4c53-83e8-8814f7d1fa3d.gif)
+
+
+## Currently not implemented
+- Change data URL 
+- Change data format
+- Change Vis header size
+",True,62,https://api.github.com/repos/sharmalab/eaglescope/pulls/62,https://github.com/sharmalab/eaglescope/pull/62,closed,495,1377,25,1,0,1,0,0,[],2022-08-02 08:32:46+00:00,2022-08-02 19:46:00+00:00,40394.0,11:13:14,"[{'comment_id': 935965668, 'comment_body': 'Nice that this included a little cleanup, thanks!', 'comment_created': datetime.datetime(2022, 8, 2, 19, 45, 20, tzinfo=datetime.timezone.utc), 'commenter': 'birm', 'type': 'User'}]","[{'commit_sha': 'ffec6b42c32044e0ea8db253305e1fff55807a1b', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1025606904,GSoC22: Add Chart Settings Dashboard,"# Description
+This component will allow the user to edit the configurations for a specific chart such as title, description, and its input fields
+
+![image](https://user-images.githubusercontent.com/30212455/184497813-82c4e52b-6eda-4781-a088-199333c1e658.png)
+![image](https://user-images.githubusercontent.com/30212455/184497752-5ab2a6cc-cca5-4343-abb2-e80d8d1ed7b1.png)
+
+The component is designed to handle different cases as not all charts have the structure field, some have x fields and others have y fields also some charts have multiple fields
+
+![visSet1](https://user-images.githubusercontent.com/30212455/184498364-7f3e8db5-0606-43ed-8681-2a8db1d925b6.gif)
+
+## Change Chart Title
+![visSet2](https://user-images.githubusercontent.com/30212455/184498379-87067413-227e-4dc8-8931-40e69074a835.gif)
+
+## Change Chart Description
+![visSet3](https://user-images.githubusercontent.com/30212455/184498822-4287731e-1615-4bb9-8ae8-d0329d1ef49a.gif)
+
+## Change Chart Size
+![visSet4](https://user-images.githubusercontent.com/30212455/184498890-69af0227-179c-4054-906e-b3723fbb951c.gif)
+
+## Change Chart Fields
+![visSet5](https://user-images.githubusercontent.com/30212455/184498967-3e348e67-9bdb-4886-8cb3-10e141049551.gif)
+
+",True,63,https://api.github.com/repos/sharmalab/eaglescope/pulls/63,https://github.com/sharmalab/eaglescope/pull/63,closed,447,18,12,2,0,0,0,0,[],2022-08-13 14:39:39+00:00,2022-08-18 03:19:52+00:00,391213.0,"4 days, 12:40:13",[],"[{'commit_sha': '1dc5a320d500b5d973f55a8bb7b35fbcbe60dc04', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e02646d3fe44467c66a086cccb47e350a838eed', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1045217149,GSoC22: Add And Delete Charts From GUI,"# Description
+This PR is for competing the settings and Vis-settings components. The implemented features are related to adding and removing charts directly from GUI instead of using the config file
+
+## Deleting Charts
+![delete_chart](https://user-images.githubusercontent.com/30212455/188221580-2445105e-9b07-4e51-9fb6-7da55247592f.gif)
+
+## Adding Charts
+![add_chart](https://user-images.githubusercontent.com/30212455/188221783-fd122bfa-312b-42ad-ba95-5f760350290c.gif)
+
+## Changing data URL source 
+Note: when changing data URL source or data type all the previous charts will be deleted automatically because they aren't valid anymore and the user can add new charts using the settings board
+
+![change_url](https://user-images.githubusercontent.com/30212455/188223159-31912ffa-3b1e-49c5-bad9-991d025af12f.gif)
+![new_dashboard](https://user-images.githubusercontent.com/30212455/188223176-065122fd-3527-4a21-81dd-1638c6693ac0.gif)
+
+",True,66,https://api.github.com/repos/sharmalab/eaglescope/pulls/66,https://github.com/sharmalab/eaglescope/pull/66,closed,141,28,6,1,0,0,0,0,[],2022-09-02 19:26:46+00:00,2022-09-03 18:53:23+00:00,84397.0,23:26:37,[],"[{'commit_sha': '3638ba8bf18fceb76f50969f04698ec82f889aa8', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+884043652,Add histogram visualization,"Adding a new interactive univariate visualization **Histogram**
+Parameters in the config file: 
+fields.x : column to create the histogram from
+binsCount: number of bins to split data on
+
+### Interactivity
+![Animation](https://user-images.githubusercontent.com/30212455/159137687-79a53083-8538-4bb3-a039-3d2a011e5662.gif)
+
+![Animation2](https://user-images.githubusercontent.com/30212455/159137710-77c6fb81-9f60-420c-8c74-0e45ea5c6ccd.gif)
+
+",True,46,https://api.github.com/repos/sharmalab/eaglescope/pulls/46,https://github.com/sharmalab/eaglescope/pull/46,closed,15,2,2,2,1,0,0,0,[],2022-03-19 20:41:13+00:00,2022-03-23 16:13:47+00:00,329554.0,"3 days, 19:32:34",[],"[{'commit_sha': '329588fecdf0f17b489d300c1ec9b239ec35ce65', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ba80210fb3f8d17713378d60f9e24c166bbb569', 'committer_username': 'birm', 'committer_name': 'Birm', 'committer_email': None, 'commit_date': datetime.datetime(2013, 7, 6, 2, 20, 10, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+979414187,GSoC22: Refactoring and Code Quality ,"## Introduction
+This is my first GSoC22 contribution to the project. This PR focus on improving the code quality of the project so the maintenance and adding new features to the project be much easier. This PR includes the following:  
+
+## Bug Fixes
+### Can't clear filter created on Pie Chart
+### Before
+![error1](https://user-images.githubusercontent.com/30212455/175835196-a81d39f6-d8db-4ed5-a8d7-b32c65d99258.gif)
+### After
+![fix1](https://user-images.githubusercontent.com/30212455/175835263-efd41be4-44b0-4409-8c0c-7c022b3389cf.gif)
+
+### The Pie Chart doesn't load filters on reload
+### Before
+![error2](https://user-images.githubusercontent.com/30212455/175835398-f0c97b24-3262-481e-a800-d12ccecc7e5e.gif)
+### After
+![fix2](https://user-images.githubusercontent.com/30212455/175835444-d62cffa0-7516-4fca-bb38-6dda7a34a2bb.gif)
+
+### Components don't render when resizing
+### Before
+![error3](https://user-images.githubusercontent.com/30212455/175835719-2509cba1-3962-462d-bb0e-4d94162f7691.gif)
+### After
+![fix3](https://user-images.githubusercontent.com/30212455/175835740-523619d5-5c91-4198-b297-878da05b377c.gif)
+
+## Update used packages 
+updating the packages that use unsafe component lifecycles such as `react-resizable` and `react-grid-layout` 
+
+![image](https://user-images.githubusercontent.com/30212455/175835951-1b9bf117-ff5c-478b-8deb-ba660c7d294a.png)
+ 
+
+## Rewrite Most Of The Components To A Functional Style
+Updating most of the components to use the new functional style of React and hooks.  The functional style is easier to read and it produces less code. It also eliminates the usage of `this` and `bind` keywords.   
+
+## Move Config and App Data To A Global State
+Using the `Context` API now the config, data, filters and filtered data are accessible globally to all the components in the app, this is useful to avoid props drilling and this will enable us to add the ability for the user to change some of the configurations from the app GUI., for example, the config data can be accessed as follows
+`const { config, configLoading, configError } = useContext(ConfigContext);`
+
+## Abstracting The Data Fetching Logic
+Creating a custom-created React hook `useFetch` to handle all fetch requests in the app. This hook can be used as follows
+` const { error, data, isPending } = useFetch(URL);`
+
+## Adding ESLint To The Project
+Adding a static code analyzer is very important as it makes the coding style consistent in all code files and it helps to avoid any potential bug in the code
+
+I configured the ESLint tool with React plugin: https://github.com/jsx-eslint/eslint-plugin-react
+With Airbnb code style guide: https://github.com/airbnb/javascript
+I fixed all linting issues in the code except the files in the `experimental` folder which I created to contain the files that aren't used currently in the project
+
+### Removing The Build Files From Git Tracking
+",True,53,https://api.github.com/repos/sharmalab/eaglescope/pulls/53,https://github.com/sharmalab/eaglescope/pull/53,closed,15478,29339,199,3,0,2,0,0,[],2022-06-26 23:18:32+00:00,2022-07-01 02:17:37+00:00,356345.0,"4 days, 2:59:05","[{'comment_id': 907771874, 'comment_body': 'So you have just moved some things to the experimental dir?', 'comment_created': datetime.datetime(2022, 6, 27, 20, 30, 6, tzinfo=datetime.timezone.utc), 'commenter': 'birm', 'type': 'User'}, {'comment_id': 907819279, 'comment_body': ""Yes \nThis folder content files that is not used in the project right now. I also added this file here as the download and home buttons doesn't use any thing from it."", 'comment_created': datetime.datetime(2022, 6, 27, 21, 37, 19, tzinfo=datetime.timezone.utc), 'commenter': 'yahia3200', 'type': 'User'}]","[{'commit_sha': '2efbeaa6c9b541fd0059a7616f1353097dfc2585', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc0798f3f3ab646165a6381c994730c6425b7a35', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b32dfe0ee4fd745010285c349a57d42f17f2a24', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+986861495,GSoC22: Update Scatter Chart To Use Canvas,"The current implementation for the scatter chart uses SVG which can be very slow when the data gets big (you can start noticing this with datasets with thousands of points), so I changed the implementation to use the Canvas API which is very fast compared to the SVG
+
+### Performance Using SVG 
+
+![before](https://user-images.githubusercontent.com/30212455/177221238-0031d08c-98c7-4dba-b716-56a340e0a314.gif)
+
+### Performance Using Canvas
+
+![after](https://user-images.githubusercontent.com/30212455/177221249-f8583589-68a1-4f7a-a6ec-7b45fcd885ff.gif)
+
+",True,54,https://api.github.com/repos/sharmalab/eaglescope/pulls/54,https://github.com/sharmalab/eaglescope/pull/54,closed,73,25,4,1,0,0,0,0,[],2022-07-04 22:48:44+00:00,2022-07-05 01:30:59+00:00,9735.0,2:42:15,[],"[{'commit_sha': 'e4546545d2e1e29b0266482da06e7e94d76feeaf', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+986861495,GSoC22: Update Scatter Chart To Use Canvas,"The current implementation for the scatter chart uses SVG which can be very slow when the data gets big (you can start noticing this with datasets with thousands of points), so I changed the implementation to use the Canvas API which is very fast compared to the SVG
+
+### Performance Using SVG 
+
+![before](https://user-images.githubusercontent.com/30212455/177221238-0031d08c-98c7-4dba-b716-56a340e0a314.gif)
+
+### Performance Using Canvas
+
+![after](https://user-images.githubusercontent.com/30212455/177221249-f8583589-68a1-4f7a-a6ec-7b45fcd885ff.gif)
+
+",True,54,https://api.github.com/repos/sharmalab/eaglescope/pulls/54,https://github.com/sharmalab/eaglescope/pull/54,closed,73,25,4,1,0,0,0,0,[],2022-07-04 22:48:44+00:00,2022-07-05 01:30:59+00:00,9735.0,2:42:15,[],"[{'commit_sha': 'e4546545d2e1e29b0266482da06e7e94d76feeaf', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+993295135,"GSoC22: Adding New Visualisation Type ""Density-2d plot""","## Description
+The density 2d plot is used to plot the combined distribution between two numerical values
+
+## Normal View
+![image](https://user-images.githubusercontent.com/30212455/178308591-39873b19-2d9e-4128-ac54-546d7cbcddfe.png)
+
+## Full Screen View 
+![image](https://user-images.githubusercontent.com/30212455/178308657-ec864635-7274-4f00-9283-996cca44ef3b.png)
+
+## Interactivity
+![DP1](https://user-images.githubusercontent.com/30212455/178308860-f15fa329-c789-4cdf-a07b-710185f87ddc.gif)
+
+
+## Adding Filters
+![DP2](https://user-images.githubusercontent.com/30212455/178308914-9d05a5fe-84a0-49b6-bdd0-eeaf1424eeb9.gif)
+
+",True,57,https://api.github.com/repos/sharmalab/eaglescope/pulls/57,https://github.com/sharmalab/eaglescope/pull/57,closed,187,15,4,2,0,0,0,0,[],2022-07-11 16:10:12+00:00,2022-07-11 16:14:55+00:00,283.0,0:04:43,[],"[{'commit_sha': '558feb91dce82c5d32e20a35c96728785fd185dd', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '123b086cb92b087933659b72251326a47e6feedb', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+998732230,"GSoC22: Adding New Visualisation Type ""Heatmap""","## Description
+Heatmap is a visualization used to plot the data in a matrix format using the color of each cell to represent its value
+
+## Normal View
+![image](https://user-images.githubusercontent.com/30212455/179425035-c74a9aee-3c56-450f-97d1-4e5163d1e904.png)
+![image](https://user-images.githubusercontent.com/30212455/179425042-f2358e40-0310-41b7-9807-1561ea00e30a.png)
+
+## Full Screen View 
+![image](https://user-images.githubusercontent.com/30212455/179425061-287a7b45-412a-4e6c-b3d1-0bf9b42a6fa5.png)
+
+## Interactivity
+![hm1](https://user-images.githubusercontent.com/30212455/179425153-20094569-ae13-449b-9c10-cb6a14261e74.gif)
+
+## Adding Filters
+![hm2](https://user-images.githubusercontent.com/30212455/179425163-cf7ec125-b820-48b8-a762-560720d47853.gif)
+
+
+",True,58,https://api.github.com/repos/sharmalab/eaglescope/pulls/58,https://github.com/sharmalab/eaglescope/pull/58,closed,213,7,6,1,1,0,0,0,[],2022-07-17 21:20:49+00:00,2022-07-19 20:01:32+00:00,168043.0,"1 day, 22:40:43",[],"[{'commit_sha': '6c6c2a69a964a9451385a525989930a63f294d08', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1007581371,GSoC 22: Abstract tooltip to be used in different  charts,"This pull request includes the following changes 
+
+## Using the same tooltip across all components to avoid code duplication and for visual consistency
+![image](https://user-images.githubusercontent.com/30212455/180837045-d45b7c16-bb25-4425-ba22-6cfdd1146425.png)
+![image](https://user-images.githubusercontent.com/30212455/180837095-0eebf644-fad4-4fce-9a29-010d1eef3bb0.png)
+![image](https://user-images.githubusercontent.com/30212455/180837293-b91ea4bb-70e0-44ec-b007-41aa933c091c.png)
+
+## Adding a legend to Pie Chart if there is enough space or in full-screen mode
+![image](https://user-images.githubusercontent.com/30212455/180837175-fcb4d85e-c175-46ad-93ef-a82cb68a29ec.png)
+",True,61,https://api.github.com/repos/sharmalab/eaglescope/pulls/61,https://github.com/sharmalab/eaglescope/pull/61,closed,183,114,6,1,0,0,0,0,[],2022-07-25 17:31:41+00:00,2022-07-25 21:57:00+00:00,15919.0,4:25:19,[],"[{'commit_sha': '1ccceb886d1df3e99191f613379f65943c763b13', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1014784831,GSoC22: Add Settings Board ,"# Description
+This component will allow the user to edit the general configurations of the dashboard and add a new chart to the current dashboard
+
+![image](https://user-images.githubusercontent.com/30212455/182327875-e2054634-1ada-49e1-9e4e-5c93dd3b5e59.png)
+
+![image](https://user-images.githubusercontent.com/30212455/182327777-5a9d5bc3-ed13-470a-b24d-06991af1004b.png)
+
+## Change Title of Dashboard 
+![set2](https://user-images.githubusercontent.com/30212455/182329325-afc20d73-fe01-416a-b102-f8e768de70b6.gif)
+
+## Change Color Theme of Dashboard  
+![set1](https://user-images.githubusercontent.com/30212455/182329371-06540f9d-7ea5-44f2-aff9-529ed23e4a57.gif)
+
+## Change Margin Between Charts
+![set3](https://user-images.githubusercontent.com/30212455/182329459-1dac109c-842a-4749-b6b5-1db3ec21047c.gif)
+
+## Change Charts Size
+![set4](https://user-images.githubusercontent.com/30212455/182329943-0f2dd457-6aae-4c53-83e8-8814f7d1fa3d.gif)
+
+
+## Currently not implemented
+- Change data URL 
+- Change data format
+- Change Vis header size
+",True,62,https://api.github.com/repos/sharmalab/eaglescope/pulls/62,https://github.com/sharmalab/eaglescope/pull/62,closed,495,1377,25,1,0,1,0,0,[],2022-08-02 08:32:46+00:00,2022-08-02 19:46:00+00:00,40394.0,11:13:14,"[{'comment_id': 935965668, 'comment_body': 'Nice that this included a little cleanup, thanks!', 'comment_created': datetime.datetime(2022, 8, 2, 19, 45, 20, tzinfo=datetime.timezone.utc), 'commenter': 'birm', 'type': 'User'}]","[{'commit_sha': 'ffec6b42c32044e0ea8db253305e1fff55807a1b', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1025606904,GSoC22: Add Chart Settings Dashboard,"# Description
+This component will allow the user to edit the configurations for a specific chart such as title, description, and its input fields
+
+![image](https://user-images.githubusercontent.com/30212455/184497813-82c4e52b-6eda-4781-a088-199333c1e658.png)
+![image](https://user-images.githubusercontent.com/30212455/184497752-5ab2a6cc-cca5-4343-abb2-e80d8d1ed7b1.png)
+
+The component is designed to handle different cases as not all charts have the structure field, some have x fields and others have y fields also some charts have multiple fields
+
+![visSet1](https://user-images.githubusercontent.com/30212455/184498364-7f3e8db5-0606-43ed-8681-2a8db1d925b6.gif)
+
+## Change Chart Title
+![visSet2](https://user-images.githubusercontent.com/30212455/184498379-87067413-227e-4dc8-8931-40e69074a835.gif)
+
+## Change Chart Description
+![visSet3](https://user-images.githubusercontent.com/30212455/184498822-4287731e-1615-4bb9-8ae8-d0329d1ef49a.gif)
+
+## Change Chart Size
+![visSet4](https://user-images.githubusercontent.com/30212455/184498890-69af0227-179c-4054-906e-b3723fbb951c.gif)
+
+## Change Chart Fields
+![visSet5](https://user-images.githubusercontent.com/30212455/184498967-3e348e67-9bdb-4886-8cb3-10e141049551.gif)
+
+",True,63,https://api.github.com/repos/sharmalab/eaglescope/pulls/63,https://github.com/sharmalab/eaglescope/pull/63,closed,447,18,12,2,0,0,0,0,[],2022-08-13 14:39:39+00:00,2022-08-18 03:19:52+00:00,391213.0,"4 days, 12:40:13",[],"[{'commit_sha': '1dc5a320d500b5d973f55a8bb7b35fbcbe60dc04', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e02646d3fe44467c66a086cccb47e350a838eed', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1038660371,GSoC22: Scatter Chart Bug Fix and Adding Vis-Borders Control,"# Description
+This PR contains fixes for the scatter chart as it wasn't responsive to changes from vis settings component, this PR also includes adding some control to vis borders from UI
+
+## Before Fix
+![e1](https://user-images.githubusercontent.com/30212455/187037950-3177c686-f68e-4c6c-b646-53a1713c2cfe.gif)
+
+## After
+![e2](https://user-images.githubusercontent.com/30212455/187037972-cb5c6a4d-f7ff-44e9-9dcb-9bf30943e0be.gif)
+
+## Hide or Show Borders
+![B1](https://user-images.githubusercontent.com/30212455/187037511-e63b90a8-c730-4579-bf3c-5997a394c735.gif)
+
+## Control Borders Radius
+![B2](https://user-images.githubusercontent.com/30212455/187037541-9c375446-33a3-40bd-976e-8a489776709e.gif)
+",True,65,https://api.github.com/repos/sharmalab/eaglescope/pulls/65,https://github.com/sharmalab/eaglescope/pull/65,closed,33,12,4,3,0,1,0,0,[],2022-08-27 15:57:45+00:00,2022-08-27 17:07:27+00:00,4182.0,1:09:42,"[{'comment_id': 956603554, 'comment_body': 'Good idea', 'comment_created': datetime.datetime(2022, 8, 27, 17, 7, tzinfo=datetime.timezone.utc), 'commenter': 'birm', 'type': 'User'}]","[{'commit_sha': '7ad78c5ecd01104ba3eb7510b6cef828854da043', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1901bd0667d782743399ddc2fca81bc9cef354c3', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e7cb95ed0572ab362229a71a9614fa0610ee1680', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+1045217149,GSoC22: Add And Delete Charts From GUI,"# Description
+This PR is for competing the settings and Vis-settings components. The implemented features are related to adding and removing charts directly from GUI instead of using the config file
+
+## Deleting Charts
+![delete_chart](https://user-images.githubusercontent.com/30212455/188221580-2445105e-9b07-4e51-9fb6-7da55247592f.gif)
+
+## Adding Charts
+![add_chart](https://user-images.githubusercontent.com/30212455/188221783-fd122bfa-312b-42ad-ba95-5f760350290c.gif)
+
+## Changing data URL source 
+Note: when changing data URL source or data type all the previous charts will be deleted automatically because they aren't valid anymore and the user can add new charts using the settings board
+
+![change_url](https://user-images.githubusercontent.com/30212455/188223159-31912ffa-3b1e-49c5-bad9-991d025af12f.gif)
+![new_dashboard](https://user-images.githubusercontent.com/30212455/188223176-065122fd-3527-4a21-81dd-1638c6693ac0.gif)
+
+",True,66,https://api.github.com/repos/sharmalab/eaglescope/pulls/66,https://github.com/sharmalab/eaglescope/pull/66,closed,141,28,6,1,0,0,0,0,[],2022-09-02 19:26:46+00:00,2022-09-03 18:53:23+00:00,84397.0,23:26:37,[],"[{'commit_sha': '3638ba8bf18fceb76f50969f04698ec82f889aa8', 'committer_username': 'yahia3200', 'committer_name': 'Yahia', 'committer_email': 'yahiazakaria3200@gmail.com', 'commit_date': datetime.datetime(2017, 7, 16, 12, 39, 31, tzinfo=datetime.timezone.utc)}]",Yahia,30212455,yahiazakaria3200@gmail.com,User,,30,,132,104
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+185853579,eaglescope,sharmalab/eaglescope,JavaScript,18,10,5,8,325,15,12,3,"[{'id': 1050253990, 'number': 69, 'closed': datetime.datetime(2022, 9, 12, 18, 13, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 8, 13, 28, 14, tzinfo=datetime.timezone.utc), 'time_taken': 362733.0, 'time_delta': '4 days, 4:45:33', 'additions': 12788, 'deletions': 830, 'state': 'closed'}, {'id': 1045217149, 'number': 66, 'closed': datetime.datetime(2022, 9, 3, 18, 53, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 2, 19, 26, 46, tzinfo=datetime.timezone.utc), 'time_taken': 84397.0, 'time_delta': '23:26:37', 'additions': 141, 'deletions': 28, 'state': 'closed'}, {'id': 1038660371, 'number': 65, 'closed': datetime.datetime(2022, 8, 27, 17, 7, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 27, 15, 57, 45, tzinfo=datetime.timezone.utc), 'time_taken': 4182.0, 'time_delta': '1:09:42', 'additions': 33, 'deletions': 12, 'state': 'closed'}, {'id': 1025606904, 'number': 63, 'closed': datetime.datetime(2022, 8, 18, 3, 19, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 13, 14, 39, 39, tzinfo=datetime.timezone.utc), 'time_taken': 391213.0, 'time_delta': '4 days, 12:40:13', 'additions': 447, 'deletions': 18, 'state': 'closed'}, {'id': 1014784831, 'number': 62, 'closed': datetime.datetime(2022, 8, 2, 19, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 2, 8, 32, 46, tzinfo=datetime.timezone.utc), 'time_taken': 40394.0, 'time_delta': '11:13:14', 'additions': 495, 'deletions': 1377, 'state': 'closed'}, {'id': 1007581371, 'number': 61, 'closed': datetime.datetime(2022, 7, 25, 21, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 25, 17, 31, 41, tzinfo=datetime.timezone.utc), 'time_taken': 15919.0, 'time_delta': '4:25:19', 'additions': 183, 'deletions': 114, 'state': 'closed'}, {'id': 998732230, 'number': 58, 'closed': datetime.datetime(2022, 7, 19, 20, 1, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 17, 21, 20, 49, tzinfo=datetime.timezone.utc), 'time_taken': 168043.0, 'time_delta': '1 day, 22:40:43', 'additions': 213, 'deletions': 7, 'state': 'closed'}, {'id': 993295135, 'number': 57, 'closed': datetime.datetime(2022, 7, 11, 16, 14, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 11, 16, 10, 12, tzinfo=datetime.timezone.utc), 'time_taken': 283.0, 'time_delta': '0:04:43', 'additions': 187, 'deletions': 15, 'state': 'closed'}, {'id': 993280713, 'number': 56, 'closed': datetime.datetime(2022, 7, 11, 15, 56, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 11, 15, 55, 24, tzinfo=datetime.timezone.utc), 'time_taken': 68.0, 'time_delta': '0:01:08', 'additions': 461, 'deletions': 6279, 'state': 'closed'}, {'id': 988949202, 'number': 55, 'closed': datetime.datetime(2022, 7, 11, 22, 39, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 6, 15, 24, 44, tzinfo=datetime.timezone.utc), 'time_taken': 458062.0, 'time_delta': '5 days, 7:14:22', 'additions': 310, 'deletions': 6229, 'state': 'closed'}, {'id': 986861495, 'number': 54, 'closed': datetime.datetime(2022, 7, 5, 1, 30, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 4, 22, 48, 44, tzinfo=datetime.timezone.utc), 'time_taken': 9735.0, 'time_delta': '2:42:15', 'additions': 73, 'deletions': 25, 'state': 'closed'}, {'id': 979414187, 'number': 53, 'closed': datetime.datetime(2022, 7, 1, 2, 17, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 26, 23, 18, 32, tzinfo=datetime.timezone.utc), 'time_taken': 356345.0, 'time_delta': '4 days, 2:59:05', 'additions': 15478, 'deletions': 29339, 'state': 'closed'}, {'id': 884043652, 'number': 46, 'closed': datetime.datetime(2022, 3, 23, 16, 13, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 19, 20, 41, 13, tzinfo=datetime.timezone.utc), 'time_taken': 329554.0, 'time_delta': '3 days, 19:32:34', 'additions': 15, 'deletions': 2, 'state': 'closed'}, {'id': 878245817, 'number': 45, 'closed': datetime.datetime(2022, 3, 23, 16, 9, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 12, 20, 23, 47, tzinfo=datetime.timezone.utc), 'time_taken': 935168.0, 'time_delta': '10 days, 19:46:08', 'additions': 137781, 'deletions': 3, 'state': 'closed'}]"

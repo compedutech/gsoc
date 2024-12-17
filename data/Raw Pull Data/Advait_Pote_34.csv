@@ -1,0 +1,173 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+968125354,[GSoC] physics/continuum_mechanics: Truss class implemented and documentation added,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+Implemented the initial phase of the Truss class by first adding the initialising methods like `add_node` & `add_member`, along with the required test cases. The Documentation for the same has also been included.
+
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+  * Started with the implementation of the Truss class by first adding the initialising methods like `add_node` and `add_member` methods along with the Documentation
+
+<!-- END RELEASE NOTES -->
+",True,23629,https://api.github.com/repos/sympy/sympy/pulls/23629,https://github.com/sympy/sympy/pull/23629,closed,720,1,7,21,14,17,2,0,"[{'name': 'GSoC'}, {'name': 'physics.continuum_mechanics'}]",2022-06-15 12:40:37+00:00,2022-07-10 09:35:17+00:00,2148880.0,"24 days, 20:54:40","[{'comment_id': 900849510, 'comment_body': 'Add the direction here.\r\n` the load vector makes with the horizontal in the counterclockwise direction`', 'comment_created': datetime.datetime(2022, 6, 18, 11, 51, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 900851062, 'comment_body': ""Add reaction forces according to the support. The names can be 'R'+(node name)+(x/y) "", 'comment_created': datetime.datetime(2022, 6, 18, 11, 54, 18, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 900851529, 'comment_body': 'Remove the reaction forces added in `add_support`', 'comment_created': datetime.datetime(2022, 6, 18, 11, 55, 18, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 900853282, 'comment_body': 'Throw an error when a member already exists and another member with opposite start and end points is added.\r\nThrow an error when a member is added having same start and end points. ', 'comment_created': datetime.datetime(2022, 6, 18, 11, 58, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 900857402, 'comment_body': 'You can make a dictionary( str : bool) called _existing_members(or a better name) where you can insert\r\n```\r\ndict[ string(start+end) ] = True\r\ndict[ string(end+start) ] = True\r\n```\r\nand you can use dict.get() to check\r\n\r\n', 'comment_created': datetime.datetime(2022, 6, 18, 12, 6, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 900858256, 'comment_body': 'Members should be removed before removing a node.', 'comment_created': datetime.datetime(2022, 6, 18, 12, 7, 30, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 900859006, 'comment_body': 'Add functions for changing labels of members and nodes', 'comment_created': datetime.datetime(2022, 6, 18, 12, 8, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 906651294, 'comment_body': ""It would be better to have different change label functions for members and nodes. This way if some node and member share the same name, both labels won't get changed"", 'comment_created': datetime.datetime(2022, 6, 25, 7, 59, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 906653178, 'comment_body': 'nitpick: add the ""message"" directly in the `ValueError()`, no need for variable `msg`', 'comment_created': datetime.datetime(2022, 6, 25, 8, 19, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 906654251, 'comment_body': ""Instead of adding reaction forces to `self._reaction_forces` and setting them to 0, you should apply a load at the node with magnitude = symbol('R_'+str(location)+'_x') and similarly for y direction. The forces should be added to `self._reaction_forces` only after solve function is called, which will calculate the actual magnitude.\r\n\r\nCalling the function `self.reaction_forces()` should return an empty list before the solve function is called.\r\n`self._reaction_forces` should contain only the solved reaction loads\r\nSee how the beam module handles this [here](https://github.com/sympy/sympy/blob/ce53e7b5aeee7019cf019b9e7cbea07fe3f8cbac/sympy/physics/continuum_mechanics/beam.py#L419)"", 'comment_created': datetime.datetime(2022, 6, 25, 8, 30, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 906654862, 'comment_body': 'Similarly for removing a support, you should also remove the load you will be applying', 'comment_created': datetime.datetime(2022, 6, 25, 8, 34, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 906655315, 'comment_body': ""The old label's reaction forces should be removed as well, currently it shows both the old label and the new label reaction force when `self.reaction_forces` is called.\r\n\r\nAlso this whole section might be changed after you fix the apply_support function, you  might have to remove the existing label reaction loads by using `remove_load` and apply new loads as well."", 'comment_created': datetime.datetime(2022, 6, 25, 8, 39, 45, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 913030385, 'comment_body': ""Just remove these default values. We don't need info about every node unless a load or a support has been applied to it"", 'comment_created': datetime.datetime(2022, 7, 4, 13, 56, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 913034533, 'comment_body': ""These lines throw an error when `change_node_label` is called  after applying support to a node. I think this is happening because the `self._loads` has node labels as keys, not forces. So this should be something like\r\n`self._loads[new label]['R_'+str(new_label)+'_x'] = ......`"", 'comment_created': datetime.datetime(2022, 7, 4, 14, 0, 30, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 913049609, 'comment_body': 'Why do we have three member data structures? \r\n```\r\nself._member_labels\r\nself._members\r\nself._member_nodes\r\n```\r\nAre they really required?\r\nIf not, you can just keep `self._members` in the form of `self._member_nodes` ( a dictionary with member label as key and (node1,node2) as values. ', 'comment_created': datetime.datetime(2022, 7, 4, 14, 18, 9, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 917246149, 'comment_body': 'I don\'t think you should add loads that act in the same direction. It would be better to simply append them.\r\nRight now the following code throws an error\r\n```\r\n>>> from sympy.physics.continuum_mechanics.truss import Truss\r\n>>> t = Truss()\r\n>>> t.add_node(""node_1"", 0, 0)\r\n>>> t.apply_load(""node_1"", magnitude=10, direction=0)\r\n>>> t.apply_load(""node_1"", magnitude=10, direction=0)\r\n>>> t.remove_load(""node_1"", magnitude=10, direction=0)\r\n', 'comment_created': datetime.datetime(2022, 7, 9, 9, 13, 40, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 917246588, 'comment_body': 'You should treat both x and y reactions equally, you are calling remove load for x but not for y.\r\nThis will give an error if a load is applied in x and then support is applied and removed. For example:\r\n```\r\n>>> from sympy.physics.continuum_mechanics.truss import Truss\r\n>>> t = Truss() \r\n>>> t.add_node(""node_1"", 0, 0)\r\n>>> t.apply_load(""node_1"",10,0)\r\n>>> t.apply_support(""node_1"",""pinned"")\r\n>>> t.remove_support(""node_1"")\r\n```\r\nI think after you update `apply_load` according to my comment above, you will just have to call `remove_load` for both x and y and it will work.', 'comment_created': datetime.datetime(2022, 7, 9, 9, 19, 28, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}]","[{'commit_sha': '158f441d4fae4bd406597a41ba8af142e5eeb593', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '1d08f86a65afcd4ec04b27d895d6582ff580b997', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '0bdf4a9334ebe2849081a15190df8d1deddd39e0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'cf91f81588e05fecbdc86c47335fb5098a5b317a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '9b3ee1242d53add30b4a6e6f50625f136aa4e37b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '24ab2d5a15c6868e19dcd5b56001d93a4a95672c', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '5f2e97a8f32fcb5f44f28ba12200b508c9a54d84', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'c4a2fe0ffb17c776cfa0039ca98a417bb81fba81', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '3271a804b75de41219871adea50e6c60de72e21c', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8b2f9d2a6fae77cff87de0bac7554331dd64094b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '648d94b8318d89880b1db888d55e5d268b8afd66', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '3ec2a58c75dd653bf82c33aff687dcfb0e4c023f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '27c9c491d1c872f7078a2b2b49e7502cf56a2c45', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '82b7dccb2171235e9fca7cf7cf6ac19c4998a529', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '99ede53223eafb56b2c2b4ab7b8a6764b628c9d9', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f58ef1f7b58f22353e5a538fd2237ab835e3d6d7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'c9ce748eb035146e3e6af5dd6c231478c86c5f7e', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '69fd08e497d8cf5a42576c384dfd3cc69abf386a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '73b2975a89b45ef437f11b697d39796f755a856b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'da3162411ad744963c01f57ba3d7cb75c6e44577', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b6e792c521077d661ae212e7de414696e13ccb6', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}]",Advait Pote,92469698,,User,,18,,5,4
+992477454,[GSoC] physics/continuum_mechanics: solve Method along with documentation and tests added for the Truss class ,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+After the implementation of the `truss` class with the initialising methods like `add_node` and `add_method` along with many others, the main solving method responsible for solving a given Truss added. After calling the `solve` method for a given truss, the `reaction_loads` and `internal_forces` are updated with the calculated values. 
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+  * Added the `solve` method for solving a given `truss` for its reaction loads and internal forces. 
+<!-- END RELEASE NOTES -->
+",True,23755,https://api.github.com/repos/sympy/sympy/pulls/23755,https://github.com/sympy/sympy/pull/23755,closed,147,0,2,4,7,1,0,0,[],2022-07-10 18:45:04+00:00,2022-08-02 12:29:31+00:00,1964667.0,"22 days, 17:44:27","[{'comment_id': 926875925, 'comment_body': 'Please mention what signs the compressive and tensile forces are using.', 'comment_created': datetime.datetime(2022, 7, 21, 16, 18, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}]","[{'commit_sha': 'af847114b9138a321933574fc3c3ec73af8b3459', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '048968070baee47272ebea1d698f48e673bcac47', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e7f7c93ecb3fb5d802f6eee87f3b9cabad4e8d2', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7742f7c929920044b50e360d25638533d1ca7322', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}]",Advait Pote,92469698,,User,,18,,5,4
+1014635716,[GSoC] physics/continuum_mechanics: Added a method for solving torsional problems in the Beam3D Class ,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+Added the `angular_deflection` property in the `Beam3D` class along with `solve_for_torsion` method which solves for the angular deflection at any point along the beam due to all the torques/moments acting parallel to the axis. Currently the method solves only for circular cross-sections. 
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+  * Added the `solve_for_torsion` method and the `angular_deflection` property in the `Beam3D` class.
+<!-- END RELEASE NOTES -->
+",True,23868,https://api.github.com/repos/sympy/sympy/pulls/23868,https://github.com/sympy/sympy/pull/23868,closed,63,0,2,4,6,0,0,0,[],2022-08-02 05:32:21+00:00,2022-08-20 10:53:44+00:00,1574483.0,"18 days, 5:21:23",[],"[{'commit_sha': 'efb5f1f2b5a90d9542a4b4be7af75c9af079fa92', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dff42c87053a65e391040f586de9a1cec966b949', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '899400b77793a8520096f6d3710d4e07a3c5bbae', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e7325ba7220e38623c3407cac915e1063448d21', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}]",Advait Pote,92469698,,User,,18,,5,4
+1040731122,[GSoC] physics/continuum_mechanics: Added the `draw` method for the Truss Class,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+Fixes #24040 
+
+#### Brief description of what is fixed or changed
+As a final step for the `Truss` class, the `draw` method for the same has been added. This method, similar to the one in `Beam`, returns a plot object representing the state of the truss denoting all of its properties like loads and supports along with its structural components like nodes and members. 
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+  * Added the `draw` method for getting the diagram of a given `truss`.
+<!-- END RELEASE NOTES -->
+",True,23991,https://api.github.com/repos/sympy/sympy/pulls/23991,https://github.com/sympy/sympy/pull/23991,closed,370,6,1,14,18,1,1,0,[{'name': 'physics.continuum_mechanics'}],2022-08-30 09:42:34+00:00,2023-06-02 13:56:01+00:00,23861607.0,"276 days, 4:13:27","[{'comment_id': 961537535, 'comment_body': 'Just add the direction of the angle as well after ""positive x-axis"" ', 'comment_created': datetime.datetime(2022, 9, 2, 10, 33, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}]","[{'commit_sha': '3d268de526226c7a6899923038f0aacec624074d', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '766f600c0f8f2f3ec0eae2c69c15b56dee350bdd', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '72dd01f44d42dbe720ea01f797c33a42638206f5', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '230703518b81b18bafe33f0ac32224d114eea7ec', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef9238c64a6a1016ca0fdc1b959d88c057a60d21', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '92fb5e3625b39ecd6ed62230827b19c5616e1c6b', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ddc46704dffa81a5a2a8df4348bf98dff07ebd5', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d729699a2da489ac73accd37a0fbb6284c94910', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '86975d1b114689b68dd9f7b953602f318c4497ec', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44957f0e57c7a7724214de239ca6ce41ba4df6f6', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9743ee7bc44f5b63ec7519f64e0069103402ee83', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c7a86eff53612d2966782ac380d93d9407e242de', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab9cf79bf89a47568949e5cca84502e19c460847', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7272a5f04bd903ac067e85ddcc76db887717374a', 'committer_username': 'AdvaitPote', 'committer_name': 'Advait Pote', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 13, 18, 3, 59, tzinfo=datetime.timezone.utc)}]",Advait Pote,92469698,,User,,18,,5,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+640534,sympy,sympy/sympy,Python,4367,12710,293,1320,58687,5125,14,718,"[{'id': 1051745397, 'number': 24039, 'closed': datetime.datetime(2022, 9, 14, 5, 53, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 9, 15, 50, 50, tzinfo=datetime.timezone.utc), 'time_taken': 396142.0, 'time_delta': '4 days, 14:02:22', 'additions': 12, 'deletions': 12, 'state': 'closed'}, {'id': 1040731122, 'number': 23991, 'closed': datetime.datetime(2023, 6, 2, 13, 56, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 30, 9, 42, 34, tzinfo=datetime.timezone.utc), 'time_taken': 23861607.0, 'time_delta': '276 days, 4:13:27', 'additions': 370, 'deletions': 6, 'state': 'closed'}, {'id': 1014635716, 'number': 23868, 'closed': datetime.datetime(2022, 8, 20, 10, 53, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 2, 5, 32, 21, tzinfo=datetime.timezone.utc), 'time_taken': 1574483.0, 'time_delta': '18 days, 5:21:23', 'additions': 63, 'deletions': 0, 'state': 'closed'}, {'id': 992477454, 'number': 23755, 'closed': datetime.datetime(2022, 8, 2, 12, 29, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 10, 18, 45, 4, tzinfo=datetime.timezone.utc), 'time_taken': 1964667.0, 'time_delta': '22 days, 17:44:27', 'additions': 147, 'deletions': 0, 'state': 'closed'}, {'id': 968125354, 'number': 23629, 'closed': datetime.datetime(2022, 7, 10, 9, 35, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 15, 12, 40, 37, tzinfo=datetime.timezone.utc), 'time_taken': 2148880.0, 'time_delta': '24 days, 20:54:40', 'additions': 720, 'deletions': 1, 'state': 'closed'}, {'id': 867835448, 'number': 23189, 'closed': datetime.datetime(2022, 3, 1, 16, 15, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 1, 12, 52, 58, tzinfo=datetime.timezone.utc), 'time_taken': 12166.0, 'time_delta': '3:22:46', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 843028190, 'number': 23045, 'closed': datetime.datetime(2022, 2, 10, 18, 5, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 8, 16, 50, 1, tzinfo=datetime.timezone.utc), 'time_taken': 177305.0, 'time_delta': '2 days, 1:15:05', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 831312991, 'number': 22914, 'closed': datetime.datetime(2022, 2, 1, 13, 16, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 25, 10, 37, 44, tzinfo=datetime.timezone.utc), 'time_taken': 614332.0, 'time_delta': '7 days, 2:38:52', 'additions': 7, 'deletions': 2, 'state': 'closed'}, {'id': 812546406, 'number': 22776, 'closed': None, 'created': datetime.datetime(2022, 1, 1, 9, 34, 42, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 51, 'deletions': 0, 'state': 'open'}, {'id': 804326690, 'number': 22683, 'closed': datetime.datetime(2021, 12, 20, 6, 42, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 16, 11, 2, 48, tzinfo=datetime.timezone.utc), 'time_taken': 329985.0, 'time_delta': '3 days, 19:39:45', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 800104710, 'number': 22641, 'closed': datetime.datetime(2021, 12, 11, 13, 14, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 10, 17, 20, 25, tzinfo=datetime.timezone.utc), 'time_taken': 71618.0, 'time_delta': '19:53:38', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 798903700, 'number': 22632, 'closed': datetime.datetime(2021, 12, 9, 14, 53, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 9, 14, 52, 49, tzinfo=datetime.timezone.utc), 'time_taken': 60.0, 'time_delta': '0:01:00', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 760716208, 'number': 22315, 'closed': datetime.datetime(2021, 10, 19, 7, 8, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 18, 17, 51, 33, tzinfo=datetime.timezone.utc), 'time_taken': 47795.0, 'time_delta': '13:16:35', 'additions': 51, 'deletions': 27, 'state': 'closed'}]"

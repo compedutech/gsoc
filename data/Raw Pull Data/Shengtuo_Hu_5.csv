@@ -1,0 +1,28 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1944087647,Update f1_c_gen.py,"Fix #46 
+
+This commit addresses a UnicodeEncodeError that occurred when attempting to 
+serialize TreeNode objects containing Unicode characters outside the Latin-1 
+range (0-255). The specific error was triggered by the character '\u2421'.
+
+Changes:
+
+1. Modified TreeNode.to_bytes() method:
+   - Replaced Latin-1 encoding with UTF-8 for broader Unicode support.
+   - Updated val_len to store the byte length of the UTF-8 encoded string 
+     instead of the character count.
+
+2. Updated TreeNode.from_bytes() method:
+   - Changed decoding from Latin-1 to UTF-8 to match the new encoding.
+
+These modifications allow the serialization and deserialization of TreeNode 
+objects containing any valid Unicode character, resolving the 
+UnicodeEncodeError while maintaining compatibility with the existing byte 
+structure.
+
+Note: This change may slightly increase the size of serialized data for 
+non-ASCII characters, but it ensures correct handling of all Unicode 
+characters in the grammar.",True,50,https://api.github.com/repos/AFLplusplus/Grammar-Mutator/pulls/50,https://github.com/AFLplusplus/Grammar-Mutator/pull/50,closed,7,14,1,1,2,0,0,0,[],2024-06-28 10:48:59+00:00,2024-06-28 14:32:56+00:00,13437.0,3:43:57,[],"[{'commit_sha': '56f0ebafba7d51d29386a9670f64dc8919799b57', 'committer_username': '20urc3', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 11, 24, 15, 58, 5, tzinfo=datetime.timezone.utc)}]",,94982366,,User,,9,,0,85
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+261392188,Grammar-Mutator,AFLplusplus/Grammar-Mutator,Python,18,223,7,8,291,6,2,0,"[{'id': 1944087647, 'number': 50, 'closed': datetime.datetime(2024, 6, 28, 14, 32, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 6, 28, 10, 48, 59, tzinfo=datetime.timezone.utc), 'time_taken': 13437.0, 'time_delta': '3:43:57', 'additions': 7, 'deletions': 14, 'state': 'closed'}]"

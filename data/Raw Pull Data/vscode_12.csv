@@ -1,0 +1,65 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1474745428,Apple metadata cache,"<!--
+    Hello! Thanks for submitting a pull request to ListenBrainz. We appreciate
+    your time and interest in helping our project!
+
+    Use this template to help us review your change. Not everything is required,
+    depending on your change. Keep or delete what is relevant for your change.
+    Remember that it helps us review if you give more helpful info for us to
+    understand your change.
+
+    Ensure that you've read through and followed the Contributing Guidelines, in
+    ./github/CONTRIBUTING.md.
+-->
+
+# Problem
+
+<!--
+    What problem are you trying to fix? What does this change address? Please try to
+    think of people who do not have the context you have on the problem.
+
+    Mention and link a JIRA ticket if there is one that's relevant.
+-->
+The metadata content resolver is used to store metadata of the entire catalog present in an external service's database. Currently, ListenBrainz has such a resolver for Spotify but not for Apple Music.
+
+# Solution
+
+<!--
+    The details of your change. Talk about technical details, considerations, or
+    other interesting points. If you have a lot to say, be more detailed in this
+    section.
+-->
+ As a part of linking their Apple Music account with ListenBrainz, I added a similar content resolver for Apple Music as well.
+
+The code in this pull request defines a Python class `AppleCrawlerHandler` which is a handler for crawling and fetching data related to Apple Music's albums and artists. Here's a summary of the main functionalities and methods in the code:
+
+1. The class is a subclass of `BaseHandler`.
+
+2. In the constructor (`__init__`), the class is initialized with various attributes including the name, external service queue, schema name, and cache key prefix. The constructor also initializes instance variables for the app, discovered albums, discovered artists, and an instance of the `Apple` class.
+
+3. The method `get_seed_albums` retrieves Apple album IDs from new releases for all markets by making requests to the Apple Music API.
+
+4. The method `get_items_from_listen` extracts album IDs from a given ""listen"" data and creates a list of `JobItem` instances.
+
+5. The method `get_items_from_seeder` takes a message containing Apple album IDs and creates a list of `JobItem` instances.
+
+6. The method `transform_album` transforms raw album data by organizing tracks and artists into appropriate data structures and returns an `Album` object.
+
+7. The method `fetch_albums` fetches album data from the Apple Music API and transforms it using the `transform_album` method. It returns a list of transformed albums and new items to be processed.
+
+8. The method `discover_albums` looks up albums of a given artist to discover more albums for seeding the job queue. It keeps track of discovered artists and albums, and returns a list of new `JobItem` instances.
+
+Overall, the `AppleCrawlerHandler` class is designed to interact with the Apple Music API to fetch and process album and artist data, and generate job items for further processing. The class is part of a larger system or application responsible for crawling and caching Apple Music metadata. 
+
+# Action
+
+<!--
+    Other than merging your change, do you want / need us to do anything else
+    with your change? This could include reviewing a specific part of your PR.
+-->
+
+
+",False,2546,https://api.github.com/repos/metabrainz/listenbrainz-server/pulls/2546,https://github.com/metabrainz/listenbrainz-server/pull/2546,closed,262,2,9,4,5,0,0,0,[],2023-08-14 16:34:46+00:00,2023-09-04 15:52:17+00:00,1811851.0,"20 days, 23:17:31",[],"[{'commit_sha': '675a70edf0e1ec3517ed9a86ae34a7ec2cdc1956', 'committer_username': 'vardansaini', 'committer_name': 'Vardan Saini', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 19, 21, 28, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bccdf598e165dfd7c93a4a81f494ec33127e7953', 'committer_username': 'vardansaini', 'committer_name': 'Vardan Saini', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 19, 21, 28, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5763ecbea1ae85f0ef99fc7f657cb1110944fbb1', 'committer_username': 'elomatreb', 'committer_name': 'Ole Bertram', 'committer_email': 'ole@bertr.am', 'commit_date': datetime.datetime(2013, 1, 26, 2, 49, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '190166cb097ea85eb26c432c2dc46feda462f1b1', 'committer_username': 'vardansaini', 'committer_name': 'Vardan Saini', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 19, 21, 28, 11, tzinfo=datetime.timezone.utc)}]",Vardan Saini,61253200,,User,,48,,17,10
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+41960013,listenbrainz-server,metabrainz/listenbrainz-server,Python,208,669,33,120,11802,14,83,14,"[{'id': 1474745428, 'number': 2546, 'closed': datetime.datetime(2023, 9, 4, 15, 52, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 14, 16, 34, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1811851.0, 'time_delta': '20 days, 23:17:31', 'additions': 262, 'deletions': 2, 'state': 'closed'}, {'id': 1474740272, 'number': 2545, 'closed': datetime.datetime(2023, 8, 14, 16, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 14, 16, 31, 2, tzinfo=datetime.timezone.utc), 'time_taken': 178.0, 'time_delta': '0:02:58', 'additions': 467, 'deletions': 0, 'state': 'closed'}, {'id': 1408281351, 'number': 2509, 'closed': datetime.datetime(2024, 4, 18, 13, 17, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 16, 19, 27, tzinfo=datetime.timezone.utc), 'time_taken': 25649869.0, 'time_delta': '296 days, 20:57:49', 'additions': 952, 'deletions': 44, 'state': 'closed'}, {'id': 1408275588, 'number': 2508, 'closed': datetime.datetime(2023, 6, 26, 16, 17, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 16, 14, 42, tzinfo=datetime.timezone.utc), 'time_taken': 148.0, 'time_delta': '0:02:28', 'additions': 1127, 'deletions': 10, 'state': 'closed'}, {'id': 1368196220, 'number': 2499, 'closed': datetime.datetime(2023, 6, 6, 17, 33, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 28, 22, 26, 49, tzinfo=datetime.timezone.utc), 'time_taken': 760004.0, 'time_delta': '8 days, 19:06:44', 'additions': 15, 'deletions': 9, 'state': 'closed'}, {'id': 1290059738, 'number': 2427, 'closed': datetime.datetime(2023, 4, 3, 9, 48, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 25, 15, 10, 11, tzinfo=datetime.timezone.utc), 'time_taken': 758320.0, 'time_delta': '8 days, 18:38:40', 'additions': 91, 'deletions': 1, 'state': 'closed'}, {'id': 958373559, 'number': 2033, 'closed': datetime.datetime(2022, 7, 20, 19, 59, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 5, 8, 54, 36, tzinfo=datetime.timezone.utc), 'time_taken': 3927885.0, 'time_delta': '45 days, 11:04:45', 'additions': 1430, 'deletions': 2, 'state': 'closed'}, {'id': 950838173, 'number': 2022, 'closed': datetime.datetime(2022, 5, 31, 15, 14, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 30, 10, 56, 59, tzinfo=datetime.timezone.utc), 'time_taken': 101870.0, 'time_delta': '1 day, 4:17:50', 'additions': 6, 'deletions': 6, 'state': 'closed'}, {'id': 610972157, 'number': 1377, 'closed': datetime.datetime(2021, 4, 21, 14, 17, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 7, 20, 10, 17, tzinfo=datetime.timezone.utc), 'time_taken': 1188460.0, 'time_delta': '13 days, 18:07:40', 'additions': 5, 'deletions': 5, 'state': 'closed'}]"

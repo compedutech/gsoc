@@ -1,0 +1,71 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+908402412,"Add support for GPUs identified as ""Display controller"" in `kw device`","I tried to get my GPU info using `kw device --local` but it wasn't working. A quick glance into the script shed a light on the reason, `lspci | grep` was filtering out my model, which is somewhat old. 
+
+```
+01:00.0 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] Jet PRO [Radeon R5 M230 / R7 M260DX / Radeon 520 Mobile] (rev c3)
+  Subsystem: Dell Jet PRO [Radeon R5 M230 / R7 M260DX / Radeon 520 Mobile]
+  Flags: bus master, fast devsel, latency 0, IRQ 129
+  Memory at c0000000 (64-bit, prefetchable) [size=256M]
+  Memory at d0000000 (64-bit, non-prefetchable) [size=256K]
+  I/O ports at e000 [size=256]
+  Expansion ROM at d0040000 [disabled] [size=128K]
+  Capabilities: <access denied>
+  Kernel driver in use: radeon
+  Kernel modules: radeon, amdgpu
+```
+
+As far as I could see, there weren't any tests for the `get_gpu()` function yet, so I've used my own `lspci` result as a sample value to write tests for it. 
+
+If there's anything I'm doing wrong here, please let me know.
+
+Kind regards",False,592,https://api.github.com/repos/kworkflow/kworkflow/pulls/592,https://github.com/kworkflow/kworkflow/pull/592,closed,111,4,2,1,6,13,0,0,[],2022-04-13 02:09:45+00:00,2022-04-30 21:30:23+00:00,1538438.0,"17 days, 19:20:38","[{'comment_id': 851626778, 'comment_body': 'What does VS1 mean? Could you use a more intuitive name here? Same thing for all of these mock variables.\r\nP.s.: Feel free to add some comments.', 'comment_created': datetime.datetime(2022, 4, 16, 13, 15, 7, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851626817, 'comment_body': 'Drop this extra line', 'comment_created': datetime.datetime(2022, 4, 16, 13, 15, 39, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851626974, 'comment_body': 'Use single quotes here.\r\nAlso, can we have a local variable that will have a meaningful name and receives `$*`?', 'comment_created': datetime.datetime(2022, 4, 16, 13, 17, 28, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851627125, 'comment_body': 'I think this is a good candidate to be inside a `setUp()` function. Try to create `seUp()` and add shopt in there.', 'comment_created': datetime.datetime(2022, 4, 16, 13, 19, 15, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851627159, 'comment_body': 'Use single-quotes.', 'comment_created': datetime.datetime(2022, 4, 16, 13, 19, 35, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851627339, 'comment_body': 'Add a newline after `)`', 'comment_created': datetime.datetime(2022, 4, 16, 13, 21, 55, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851628543, 'comment_body': ""After reviewing this commit, I'm under the impression that we only use the `else` part, and the `mocked_lspci_*` variables are not used. Did I miss something? If those variables are not used, please drop them."", 'comment_created': datetime.datetime(2022, 4, 16, 13, 34, 58, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}, {'comment_id': 851631301, 'comment_body': 'I\'ve used ""mocked_lspci_vs*"" as in `lspci -v -s`, will think of a better name!', 'comment_created': datetime.datetime(2022, 4, 16, 14, 6, 2, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}, {'comment_id': 851644081, 'comment_body': 'I might be wrong, but I believe that I\'m testing whether the global variable `$gpus` was filled as expected, using the output from the two mocked `lspci -v -s` (`mocked_lspci_vs1` and `mocked_lspci_vs2`), i.e., I\'m testing if the array `$gpus` has the values extracted from `""Subsystem: (.*)""` and ""`controller: (.*)`"".', 'comment_created': datetime.datetime(2022, 4, 16, 15, 49, 43, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}, {'comment_id': 859369178, 'comment_body': 'I kept the first line with double quotes to avoid editing `device_info.sh`, but if you want me to, I can change it.', 'comment_created': datetime.datetime(2022, 4, 27, 4, 29, 58, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}, {'comment_id': 859370143, 'comment_body': 'I created oneTimeSetUp and refactored other references to `shopt -s expand_aliases` in this file', 'comment_created': datetime.datetime(2022, 4, 27, 4, 31, 14, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}, {'comment_id': 859370494, 'comment_body': 'Done as asked', 'comment_created': datetime.datetime(2022, 4, 27, 4, 31, 38, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}, {'comment_id': 859372632, 'comment_body': ""I have updated the variables' names, but I gotta admit, didn't really like them. I would appreciate if you have any suggestions"", 'comment_created': datetime.datetime(2022, 4, 27, 4, 34, 33, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}]","[{'commit_sha': '53104741bf5b4deede6af2665e689cd9a72f058f', 'committer_username': 'tales-aparecida', 'committer_name': 'Tales Lelo da Aparecida', 'committer_email': 'tales.aparecida@gmail.com', 'commit_date': datetime.datetime(2014, 7, 29, 13, 41, 58, tzinfo=datetime.timezone.utc)}]",Tales Lelo da Aparecida,8299832,tales.aparecida@gmail.com,User,,18,,10,6
+930352016,Enhance docs for kw-pomodoro and kw-report,"# Fixes kw-report code-block
+
+## Before (https://kworkflow.org/man/features/report.html)
+![image](https://user-images.githubusercontent.com/8299832/167271443-5f7ea448-8cfb-404d-ad71-acb3a417235f.png)
+
+## Now
+![image](https://user-images.githubusercontent.com/8299832/167271435-6bce40b6-01c4-43b6-ad63-d7d85a97ab4f.png)
+
+# Fixes kw-pomodoro tutorial code-block ""console"" syntax highlight
+ 
+## Before (https://kworkflow.org/tutorials/pomodoro-report.html#start-a-focus-session)
+![image](https://user-images.githubusercontent.com/8299832/167271581-11f3d1d6-0b0f-4e7b-9e42-bda65dc54e8f.png)
+
+## Now
+![image](https://user-images.githubusercontent.com/8299832/167271495-f623df96-c6b4-4291-a1ea-bc8cb49898df.png)
+
+# Enhance kw-report tutorial examples with ""markdown"" syntax highlight
+
+## Before (https://kworkflow.org/tutorials/pomodoro-report.html#generate-a-report)
+![image](https://user-images.githubusercontent.com/8299832/167271636-233ec169-c1c2-4fe7-a074-7db2322cc074.png)
+
+## Now
+![image](https://user-images.githubusercontent.com/8299832/167271620-221cce10-4b24-4f8b-b040-d1830bf3cbc6.png)
+
+# Fixes kw-pomodoro flag in its tutorial
+
+`--time` -> `--set-timer` 
+
+
+---
+Thanks for the review",False,607,https://api.github.com/repos/kworkflow/kworkflow/pulls/607,https://github.com/kworkflow/kworkflow/pull/607,closed,16,14,2,4,2,0,0,0,[],2022-05-07 21:07:36+00:00,2022-05-21 11:47:05+00:00,1175969.0,"13 days, 14:39:29",[],"[{'commit_sha': 'ab7a3faa64bcf7ba7fa6d2b69692fc0dd385854d', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'dd2ea27f6e975300b5004158b6635f129aaac53b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2d296ac4054d80b7eb12b61f234bb4232a5782f3', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '55ab1bf34279b77e740e44e97dfefa43fc2be9c6', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Tales Lelo da Aparecida,8299832,tales.aparecida@gmail.com,User,,18,,10,6
+929207740,Fix large initramfs issue,"Usually, I work with the same set of test systems and kernel branches.
+However, I had to switch hardware and branch recently, but I kept the
+same config file since it was the same hardware family. Usually, I have
+the CONFIG_DEBUG_INFO option set to yes, and I don't have any issue with
+that; but for some reason, it started to generate a huge initramfs
+(>256Mb) which caused boot failure. After a lot of research, I found
+this page:
+
+https://01.org/linuxgraphics/gfx-docs/drm/kbuild/kbuild.html
+
+I also realize that the Debian package uses this option by default. For
+this reason, I decided to add this as a default in the kw, and I also
+added a warning in case the user has this option and explicitly disabled
+the strip from the kw config file.
+
+Signed-off-by: Rodrigo Siqueira <siqueirajordao@riseup.net>",False,606,https://api.github.com/repos/kworkflow/kworkflow/pulls/606,https://github.com/kworkflow/kworkflow/pull/606,closed,49,6,7,1,2,2,1,0,[{'name': 'deploy'}],2022-05-05 23:34:44+00:00,2022-05-21 11:40:31+00:00,1339547.0,"15 days, 12:05:47","[{'comment_id': 867571998, 'comment_body': 'Hi, everything looks okay, I just didn\'t understand why this was not added to the ""local"" installation.\r\nCould you explain it for me? Is it because of the fore-mentioned ""Debian package uses this option by default.""?', 'comment_created': datetime.datetime(2022, 5, 9, 1, 13, 47, tzinfo=datetime.timezone.utc), 'commenter': 'tales-aparecida', 'type': 'User'}, {'comment_id': 868594179, 'comment_body': 'I missed it! Really nice catch! Thanks a lot.', 'comment_created': datetime.datetime(2022, 5, 9, 23, 36, 10, tzinfo=datetime.timezone.utc), 'commenter': 'rodrigosiqueira', 'type': 'User'}]","[{'commit_sha': '9d6043ac9bd54c92bf380e9614e33e934b4cf178', 'committer_username': 'rodrigosiqueira', 'committer_name': 'Rodrigo Siqueira Jordão', 'committer_email': None, 'commit_date': datetime.datetime(2012, 12, 30, 13, 17, 53, tzinfo=datetime.timezone.utc)}]",Rodrigo Siqueira Jordão,3153524,,User,,36,,9,85
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+133577268,kworkflow,kworkflow/kworkflow,Shell,89,127,10,43,1063,181,2,12,"[{'id': 930352016, 'number': 607, 'closed': datetime.datetime(2022, 5, 21, 11, 47, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 7, 21, 7, 36, tzinfo=datetime.timezone.utc), 'time_taken': 1175969.0, 'time_delta': '13 days, 14:39:29', 'additions': 16, 'deletions': 14, 'state': 'closed'}, {'id': 908402412, 'number': 592, 'closed': datetime.datetime(2022, 4, 30, 21, 30, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 13, 2, 9, 45, tzinfo=datetime.timezone.utc), 'time_taken': 1538438.0, 'time_delta': '17 days, 19:20:38', 'additions': 111, 'deletions': 4, 'state': 'closed'}, {'id': 908176722, 'number': 591, 'closed': datetime.datetime(2022, 4, 16, 13, 4, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 12, 21, 28, 53, tzinfo=datetime.timezone.utc), 'time_taken': 315360.0, 'time_delta': '3 days, 15:36:00', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"

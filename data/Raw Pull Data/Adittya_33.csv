@@ -1,0 +1,77 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1490669276,[GSoC 2023] Implementing a discrete plane wave source,"
+![one-dimensional_fields](https://github.com/gprMax/gprMax/assets/42172854/d4bb9073-572b-4e58-80f2-2c3e6b45c539)
+Figure: Waterfall plots of the six auxiliary one-dimensional arrays for the discrete plane wave. 
+
+# Problem Description
+
+The objective of the project was to implement a discrete plane wave source in gprMax as described in T. Tan and M. Potter, _FDTD Discrete Planewave (FDTD-DPW) Formulation for a Perfectly Matched Source in TFSF Simulations_, in IEEE Transactions on Antennas and Propagation, vol. 58, no. 8, pp. 2641-2648, Aug. 2010, [doi: 10.1109/TAP.2010.2050446](https://doi.org/10.1109/TAP.2010.2050446). Plane wave sources are a useful tool in multiple different scenarios of electromagnetic simulations, especially when the wave is emitted by a source that is quite far away from the target or maybe even multiple targets. Such a source was not formulated in the current version of gprMax used. This pull request is the work done to implement the idea, that has been shown to work in a MATLAB script, and place it in a much larger environment of gprMax, in Python, blending it seamlessly with the other sources available in gprMax. 
+
+# Deliverables
+
+- added the [planeWavesModules.pyx](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/cython/planeWaveModules.pyx) which contains all the cythonized functions necessary for implementing the discrete plane wave in gprMax.
+- added [class DiscretePlaneWave()](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/devel/gprMax/sources.py#L494) to the [sources.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/sources.py) which is the blueprint for a discrete plane wave source with the necessary parameters as instance variables.  
+- added a [class DiscretePlaneWave()](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/cmds_multiuse.py#L727) to [cmds_multiuse.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/cmds_multiuse.py) so that objects of the [class DiscretePlaneWave()](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/sources.py#L494) in [sources.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/sources.py) can be created from the input provided in the Python API file.
+- added to the [update_magnetic_sources()](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/devel/gprMax/updates.py#L87) method of [updates.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/updates.py) to include the plane wave code in a time stepping loop of the FDTD run.
+- added a hash command [#discrete_plane_wave](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/hash_cmds_multiuse.py#L175) in [hash_cmds_multiuse.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/hash_cmds_multiuse.py) to process the input for a discrete plane wave from a hash input (.in) file.
+- added the #discrete_plane_wave hash command to the list of multiplecmds in [hash_cmds_file.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/hash_cmds_file.py#L249).
+- added the import statement for the class DiscretePlanewave() so that it can be accessed directly from the Python API in [__init__.py](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/__init__.py#L45).
+- added import statements on the header of the edited files so that the functions can work properly.
+
+# Implementation Structure
+
+The plane wave source can be added in the Python API with the creation of an object of the class DiscretePlaneWave() as
+
+`plWave = gprMax.DiscretePlaneWave(p1 = (0.010, 0.010, 0.010), p2=(0.040, 0.040, 0.040), psi = 90.0, phi = 63.4, delta_phi = 2.0, theta = 36.7, delta_theta = 1.0, waveform_id = ""mypulse"")` 
+
+The parameters p1 and p2 specify the start vertex and the end vertex of the TFSF box, while \psi specifies the polarization, and \phi, \theta specify the orientation of the wave in the TFSF box (in polar coordinates). The waveform_id must match one of the ids of the waveforms initialized. delta_phi, delta_theta are optional parameters to determine how close to the requested phi and theta values the user would like to approximate the rational angles to. There are additional optional parameters, start and stop to control when the place wave source is added and removed from the TFSF box. Lastly, there is a material_id to specify the background medium in the TFSF box where the plane wave propagates. Or alternatively a hash command might be specified
+
+`#discrete_plane_wave: 0.010 0.010 0.010 0.040 0.040 0.040 90.0 63.4 36.7 mypulse`
+
+with the order of the parameters p1, p2, psi, phi, theta, waveform_id. 
+Additionally options might be specified in [update_magnetic_sources()](https://github.com/AdittyaPal/gprMax-PlaneWave/blob/5ba5eb314fa356e29a5d636725095249667420ed/gprMax/updates.py#L113) whether to use the cythonized version of the code or the python version, and whether to precompute the fields values for the sources or compute them on the fly. The workflow roughly follows the scheme:
+
+- A regular three-dimensional FDTD computational domain is set up in the normal fashion using gprMax. The location for the TF/SF interface is determined through the inputted coordinate positions.
+- The angle of incidence for the plane-wave is inputted and mapped to integers [ m_x , m_y , m_z ] to get the rational angles by 
+     > \tan \phi = \frac{m_y \Delta x}{m_x \Delta y}
+     > \tan \theta = \frac{\sqrt{(m_x / \Delta x)^2 + (m_y / \Delta y)^2}}{m_z / \Delta z}
+-  Six incident plane-wave one-dimensional arrays are initialized to store the 1-D FDTD field grids based on the calculated integers. The source fields for a chunk of cells of these one-dimensional arrays are set up for three of the six fields.
+-  Normal E field and H field updates are performed in the primary three-dimensional FDTD grid using the existing framework of gprMax.
+- Simultaneously, the field updates in the six auxiliary 1-D arrays for the FDTD incident plane-wave using the equations described in the Tan and Potter paper. 
+
+![equations](https://github.com/gprMax/gprMax/assets/42172854/59e47107-c39d-43fd-90d0-685ef54c8a8f)
+
+The appropriate fields from these auxiliary one-dimensional arrays are placed in on the interface of the total field/scattered field region of the regular three-dimensional FDTD grids in the same iteration of the time stepping loop.
+
+
+## Type of change
+
+<!----Please delete options that are not relevant.And in order to tick the check box just add x inside them for example [x] like this----->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+## Checklist:
+
+<!----Please delete options that are not relevant.And in order to tick the check box just but x inside them for example [x] like this----->
+- [x] I have made this from my own
+- [ ] I have taken help from some online resources 
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] The title of my pull request is a short description of the requested changes.
+
+## Future Scope
+
+Currently there is the provision of introducing the plane wave from the direction of the origin only, if the Total field/scattered field  box is considered to be present in the first octant (the region in the coordinate space determined by the positive x-axis, positive y-axis and positive z-axis). The implementation should ideally be able to handle the introduction of the plane wave from any direction but currently it supports 0 <= phi <= 90 degrees and 0 <= theta <= 90 degrees only. It might be able to generalize the souring angle in future improvements of the feature. 
+
+# ATTACH SCREEN-SHOTS 
+
+![e_fields](https://github.com/gprMax/gprMax/assets/42172854/23536548-6ad7-4370-8f65-4a560d2f0bd5)
+Figure: Progression of the electric fields with time for the discrete plane wave (the fields are plotted in the order E_x, E_y, E_z, constant x section, constant y section, constant z section). ",False,373,https://api.github.com/repos/gprMax/gprMax/pulls/373,https://github.com/gprMax/gprMax/pull/373,open,1510,1,10,18,3,0,0,0,[],2023-08-26 14:23:16+00:00,,0.0,,[],"[{'commit_sha': '7742af565c0f3758eb329ef81cf039a637362e3f', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'faf067953b6d3cd48a2fecaf530e18e06724a6a6', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24e00828e425309c22b2cb020c47bbcd2bd7dde0', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a59bb8f60740ed9d3b5d2db925038ddf74e3f611', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3fc4ddc8cb2d1693268a98a7ec164e8ba3c74f68', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '477e5c4fe296f4740eb721810a4ae10b1170e60b', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8cff14d48a4c67b4708015b29987dfb4d3c31b26', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b4dffa12ac32836c53b35cc934db0e30eeec6e91', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '798adc91690320c7d1089c540a0860f167fc7f51', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c0fae11eb7de8d97145c44f2c593a015fbec6d7a', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'adb94a5325b94c9f97e5f6fafea2aed7eec68cd2', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '94ccaf8600afc2e472fc325ecd394c4021907cae', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09a962076d7900eee751f4576d4c72f503bc6d5b', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '26d373bc4fa4b228f9c95c8539b981eaa0160851', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44cd71bfe1ddbfc3725b8dc36ad769dfca1bb301', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8d54deada62a0da5691469ee5f714be810b3fc8', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de48191e002063afa93371f857fe37be54572a03', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ba5eb314fa356e29a5d636725095249667420ed', 'committer_username': 'AdittyaPal', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 8, 7, 10, 6, 45, tzinfo=datetime.timezone.utc)}]",,42172854,,User,,37,,0,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43433739,gprMax,gprMax/gprMax,Python,249,601,37,40,1927,23,2,6,"[{'id': 1490669276, 'number': 373, 'closed': None, 'created': datetime.datetime(2023, 8, 26, 14, 23, 16, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1510, 'deletions': 1, 'state': 'open'}]"

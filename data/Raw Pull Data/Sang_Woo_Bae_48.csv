@@ -1,0 +1,102 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+687356718,Persistent Networks Resources created on host during time of connecti…,"…on, and cleanup during time of removal
+
+### Description
+
+
+<!--- Describe your changes in DETAIL - And how has behaviour functionally changed. -->
+This PR is a GSoC project: https://github.com/apache/cloudstack/issues/4814
+
+This PR adds a feature to L2 persitent networks, where resources of the persistent networks are created at hostConnect phase of DefaultHostListener, and cleaned up at hostAboutToBeRemoved phase. 
+
+<!-- For new features, provide link to FS, dev ML discussion etc. -->
+<!-- In case of bug fix, the expected and actual behaviours, steps to reproduce. -->
+This PR also fixes a bug, where rebooting the hosts removes the persistent network's resources, without readding them when the host is readded to the zone.
+
+Fixes: #5196 
+<!-- When ""Fixes: #<id>"" is specified, the issue/PR will automatically be closed when this PR gets merged -->
+<!-- For addressing multiple issues/PRs, use multiple ""Fixes: #<id>"" -->
+<!-- Fixes: # -->
+
+<!--- ********************************************************************************* -->
+<!--- NOTE: AUTOMATATION USES THE DESCRIPTIONS TO SET LABELS AND PRODUCE DOCUMENTATION. -->
+<!--- PLEASE PUT AN 'X' in only **ONE** box -->
+<!--- ********************************************************************************* -->
+
+### Types of changes
+
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] Enhancement (improves an existing feature and functionality)
+- [ ] Cleanup (Code refactoring and cleanup, that may add test cases)
+
+### Feature/Enhancement Scale or Bug Severity
+
+#### Feature/Enhancement Scale
+
+- [ ] Major
+- [x] Minor
+
+#### Bug Severity
+
+- [ ] BLOCKER
+- [ ] Critical
+- [ ] Major
+- [x] Minor
+- [ ] Trivial
+
+
+### Screenshots (if appropriate):
+
+
+### How Has This Been Tested?
+This has been manually tested with a mbx KVM, XenServer and VmWare setup on a local machine. 
+
+Different manual test scenarios:
+1. When the persistent network is created and the host is added afterwards, the newly added host has the persistent network's resources.
+2. When a host within a zone with a persistent network is removed from the zone, its resources will be cleaned up.
+3. When a host with a running VM is removed from the zone, the running VM will migrate before the resources are cleaned up.
+4. When a host is rebooted, it still has access to the persistent network's resources.
+
+A Marvin component test under 
+test/integration/component/test_persistent_networks.py
+added that tests the following steps for a KVM environment.
+1. identify hosts in the zone, and remove the first
+2. create a L2 persistent network
+3. add the host back to the zone
+
+Validation steps:
+1. Persistent network state should be implemented before adding the host
+2. Host should be added back in successfully
+3. Host should have the persistent networks resources after being added
+<!-- Please describe in detail how you tested your changes. -->
+<!-- Include details of your testing environment, and the tests you ran to -->
+<!-- see how your change affects other areas of the code, etc. -->
+
+Test output results should be:
+
+==== Marvin Init Started ====
+
+=== Marvin Parse Config Successful ===
+
+=== Marvin Setting TestData Successful===
+
+==== Log Folder Path: /tmp/MarvinLogs/<LogId>. All logs will be available here ====
+
+=== Marvin Init Logging Successful===
+
+==== Marvin Init Successful ====
+====Trying SSH Connection: Host:172.20.0.121 User:root                                   Port:22 RetryCnt:10===
+===SSH to Host 172.20.0.121 port : 22 SUCCESSFUL===
+{Cmd: ip addr | grep breth0-991 > /dev/null 2>&1; echo $? via Host: 172.20.0.121} {returns: ['0']}
+=== TestName: test_newly_added_host_for_persistent_network_resources | Status : SUCCESS ===
+
+===final results are now copied to: /tmp//MarvinLogs/test_persistent_networks_<LogId>===
+
+
+<!-- Please read the [CONTRIBUTING](https://github.com/apache/cloudstack/blob/main/CONTRIBUTING.md) document -->
+",False,5195,https://api.github.com/repos/apache/cloudstack/pulls/5195,https://github.com/apache/cloudstack/pull/5195,closed,368,149,6,3,10,3,1,0,[{'name': 'gsoc2021'}],2021-07-11 15:52:19+00:00,2022-02-10 07:00:27+00:00,18457688.0,"213 days, 15:08:08","[{'comment_id': 677734833, 'comment_body': 'We could invert this if to reduce indentation and maybe add a log.', 'comment_created': datetime.datetime(2021, 7, 27, 19, 23, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GutoVeronezi', 'type': 'User'}, {'comment_id': 677735399, 'comment_body': 'We could improve this message with more context than only id. Also we could use String.format here. ', 'comment_created': datetime.datetime(2021, 7, 27, 19, 24, 2, tzinfo=datetime.timezone.utc), 'commenter': 'GutoVeronezi', 'type': 'User'}, {'comment_id': 677735812, 'comment_body': 'We could invert this if to reduce indentation and maybe add a log.', 'comment_created': datetime.datetime(2021, 7, 27, 19, 24, 40, tzinfo=datetime.timezone.utc), 'commenter': 'GutoVeronezi', 'type': 'User'}]","[{'commit_sha': 'ff478a44bd42e34debf6db6bb5bdd94bbe509c86', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8af9c0a0357e2ffe990df5217c3fb592accb1c3f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'd25021065b8daaa73c041330f88a2bc0952a9fce', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Sang Woo Bae,57257492,,User,,10,,12,11
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+9759448,cloudstack,apache/cloudstack,Java,1084,1945,142,775,37053,529,275,152,"[{'id': 687356718, 'number': 5195, 'closed': datetime.datetime(2022, 2, 10, 7, 0, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 11, 15, 52, 19, tzinfo=datetime.timezone.utc), 'time_taken': 18457688.0, 'time_delta': '213 days, 15:08:08', 'additions': 368, 'deletions': 149, 'state': 'closed'}, {'id': 612383557, 'number': 4903, 'closed': datetime.datetime(2021, 4, 27, 10, 28, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 9, 11, 32, 55, tzinfo=datetime.timezone.utc), 'time_taken': 1551331.0, 'time_delta': '17 days, 22:55:31', 'additions': 2, 'deletions': 2, 'state': 'closed'}]"

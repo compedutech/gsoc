@@ -1,0 +1,101 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1034353027,Fixture generation utilities,"<!--
+ 1. Following guidance below, replace …'s with your own words
+ 2. After saving the PR, tick of completed checklist items
+ 3. Skip checklist items that are not applicable or not necessary
+ 4. Delete instruction/comment blocks
+-->
+
+## GSoC Work Summary 
+
+created 3 python scripts for generating all relevant data for the following apps models
+
+>  [content](https://github.com/learningequality/kolibri/tree/develop/kolibri/core/content) 
+>  [kolibriauth](https://github.com/learningequality/kolibri/tree/develop/kolibri/core/auth) 
+>  [lessons](https://github.com/learningequality/kolibri/tree/develop/kolibri/core/lessons) 
+>  [exams](https://github.com/learningequality/kolibri/tree/develop/kolibri/core/exams) 
+>  [logger](https://github.com/learningequality/kolibri/tree/develop/kolibri/core/logger) 
+
+## Goal
+
+#### before
+Kolibri was lacking authentic testing data which should represent real usage scenarios, existing data generation utilities are run during unit test runtime making them not so efficient
+
+#### after
+new scripts that can generate authentic data ( for models of apps specefied above ) that are representable of real Kolibri data taking in account most use cases and scenarios with the ability of being deterministic i.e. developers can choose and specify what exact data to produce (e.g. range/number of data, what fields to include) depending on the current testing scenario requirements, ability to dump these generated data into fixtures `.json files` to be used directly in unit testing
+
+
+## Features
+to do ..
+## Usage
+
+run `kolibri manage (script_name)`  with or without arguments
+
+where `script_name` can be  : 
+ 
+#### `generate_content_data`  for content app
+-  `--channels` number of channels trees `default 1`
+-  `--levels` number of channel tree levels `default 2`
+-  `--children` how many children for each parent node ( of kind `topic` ) `default 3`
+-  `--resources_kind` kind of resources `default random`
+
+
+#### `generate_auth_data`   for  kolibriauth, lessons  and  exams apps
+-  `--facilities` number of facilities `default 1`
+-  `--not_assigned_users` number of facility users that are not assigned to any collection `default 5`
+-  `--admins` number of facility admins `default 1` 
+-  `--coaches` number of facility coaches  `default 1`
+-  `--classes` number of classes  `default 2`
+-  `--class_coaches` number of class coaches `default 1` 
+-  `--class_learners` number of class learners `default 20`
+-  `--class_lessons` number of class lessons `default 3`
+-  `--class_exams` number of class  `default 3`
+-  `--groups` number of groups per class `default 1`
+-  `--group_members` number of group members  `default 5`
+-  `--adhoc_lessons`  number of lessons assigned for specific learners `default 0`
+-  `--adhoc_lesson_learners` number of adhoc_lesson learners `default 0`
+-  `--adhoc_exams` number of exams assigned for specific learners  `default 0`
+- `--adhoc_exams_learners` number of adhoc_exam learners `default 0`
+
+#### `generate_interactions`  for  **logger** app 
+-  `--users` number of authenticated users `default 20` 
+-  `--visitors` number of anonymous users `default 5`
+-  `--start_time` Minimum start_timstamp for all logs `default 2022-01-01` 
+-  `--end_time` Maximum end_timstamp  for all logs `default current run time`
+-  `--session` kolibri user session duration (in mins >=15 )  `default 15`
+-  `--n_sessions` number of user sessions in kolibri (not used yet)
+-  `--n_resources` how many resources should each user interact with (not used yet) 
+
+#### shared arguments
+- `--mode` generated data destination ( **json file** as fixtures or **saved in local db**) `default default_db`
+- `--seed` random seed value, so all operations can be randomized predictably `default 1`
+- `--fixtures_path`  fixtures file path
+
+
+## Testing checklist
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [x] PR has 'needs review' or 'work-in-progress' label
+- [x] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",False,9652,https://api.github.com/repos/learningequality/kolibri/pulls/9652,https://github.com/learningequality/kolibri/pull/9652,open,1866,1,4,11,3,9,1,0,[{'name': 'TODO: needs review'}],2022-08-23 15:28:52+00:00,,0.0,,"[{'comment_id': 954908167, 'comment_body': ""this function is called 14 times in the code, is it really needed? why can't you just do `uuid.uuid4().hex` wherever you need it."", 'comment_created': datetime.datetime(2022, 8, 25, 12, 31, 32, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 954909233, 'comment_body': ""I don't understand why this has to be a global instead of a variable returned by this function and called by `get_user_base_data` It's not used in any other places"", 'comment_created': datetime.datetime(2022, 8, 25, 12, 32, 42, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 954909715, 'comment_body': 'why is this global?, same case as the `all_users_base_data`', 'comment_created': datetime.datetime(2022, 8, 25, 12, 33, 13, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 954934334, 'comment_body': 'please use logger instead of print, example of use at https://github.com/learningequality/kolibri/blob/develop/kolibri/core/auth/management/commands/bulkimportusers.py#L33 and https://github.com/learningequality/kolibri/blob/develop/kolibri/core/auth/management/commands/bulkimportusers.py#L822-L824', 'comment_created': datetime.datetime(2022, 8, 25, 12, 57, 30, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 955128707, 'comment_body': 'ok , done !', 'comment_created': datetime.datetime(2022, 8, 25, 15, 37, 27, tzinfo=datetime.timezone.utc), 'commenter': 'abdelrahman725', 'type': 'User'}, {'comment_id': 955151158, 'comment_body': ""when you modify (and not just access) a global variable (variables outisde function are global by default) from inside a function you have to specity the keyword global\r\nand it's global because this makes sense as it's  incremented every time a relevant function gets called\r\n"", 'comment_created': datetime.datetime(2022, 8, 25, 15, 57, 37, tzinfo=datetime.timezone.utc), 'commenter': 'abdelrahman725', 'type': 'User'}, {'comment_id': 955158633, 'comment_body': 'it can be like that \r\n\r\n> **called by get_user_base_data**""\r\n\r\nbut that means we will have to open and read the csv file for every time we call ( generate new user) get_user_base_data ?', 'comment_created': datetime.datetime(2022, 8, 25, 16, 3, 4, tzinfo=datetime.timezone.utc), 'commenter': 'abdelrahman725', 'type': 'User'}, {'comment_id': 955162973, 'comment_body': 'also if you noticed ` users_data_iterator` is accessed from 2 functions, so global makese sense right?', 'comment_created': datetime.datetime(2022, 8, 25, 16, 6, 18, tzinfo=datetime.timezone.utc), 'commenter': 'abdelrahman725', 'type': 'User'}, {'comment_id': 955817943, 'comment_body': 'ok done !', 'comment_created': datetime.datetime(2022, 8, 26, 8, 48, 46, tzinfo=datetime.timezone.utc), 'commenter': 'abdelrahman725', 'type': 'User'}]","[{'commit_sha': '3d41fb080a718d93f45f4e3be9f5bf87001aeb43', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7418b62f36eb4feb93ae1305cd9349b29255528d', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aff830a5455c758ac0c6bc2a4aeba72243468b5a', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2df152577419311cd8be5574ba18d02c97d68691', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e562e82a71ebe379b7a97586062b875959da6ed6', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41f192ccd6a4692485fd8a76072baeb7ab822962', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10399cdfab9992b0a56fc4236b95dd9f182a5721', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58f4bffd55bc2d259b93599dd5b29b640d90c06b', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1f9ddc077a7b60001c0fca97020b73e752970cc1', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b82fe7bbf3fa1386c9685b68e8a9bbd6d55bddc', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fe264c5d70c2be22eed0712a790c6127ded2e4e', 'committer_username': 'abdelrahman725', 'committer_name': 'Bedo Khaled', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 23, 17, 54, 46, tzinfo=datetime.timezone.utc)}]",Bedo Khaled,64221784,,User,,10,,6,8
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+49976939,kolibri,learningequality/kolibri,CSS,636,763,42,199,31377,415,33,29,"[{'id': 1034353027, 'number': 9652, 'closed': None, 'created': datetime.datetime(2022, 8, 23, 15, 28, 52, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1866, 'deletions': 1, 'state': 'open'}, {'id': 1010115500, 'number': 9579, 'closed': datetime.datetime(2022, 7, 28, 13, 18, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 27, 20, 54, 3, tzinfo=datetime.timezone.utc), 'time_taken': 59070.0, 'time_delta': '16:24:30', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1004707710, 'number': 9575, 'closed': datetime.datetime(2022, 7, 27, 17, 9, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 21, 21, 32, 23, tzinfo=datetime.timezone.utc), 'time_taken': 502601.0, 'time_delta': '5 days, 19:36:41', 'additions': 113, 'deletions': 3, 'state': 'closed'}, {'id': 1003411249, 'number': 9572, 'closed': datetime.datetime(2022, 7, 21, 21, 14, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 21, 2, 48, 13, tzinfo=datetime.timezone.utc), 'time_taken': 66406.0, 'time_delta': '18:26:46', 'additions': 113, 'deletions': 3, 'state': 'closed'}, {'id': 986793275, 'number': 9548, 'closed': datetime.datetime(2022, 7, 20, 23, 43, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 4, 20, 14, 31, tzinfo=datetime.timezone.utc), 'time_taken': 1394953.0, 'time_delta': '16 days, 3:29:13', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 894533847, 'number': 9238, 'closed': datetime.datetime(2022, 4, 3, 21, 0, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 30, 14, 38, 43, tzinfo=datetime.timezone.utc), 'time_taken': 368480.0, 'time_delta': '4 days, 6:21:20', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 890273050, 'number': 9223, 'closed': datetime.datetime(2022, 4, 1, 15, 37, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 26, 11, 28, 33, tzinfo=datetime.timezone.utc), 'time_taken': 533361.0, 'time_delta': '6 days, 4:09:21', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"

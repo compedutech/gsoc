@@ -1,0 +1,67 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1061565155,GSoC'22: Log File Rotation,"## Description
+
+This pull request is intended to introduce a log file rotation mechanism for the syslog-ng application which will solve the current issue of log files becoming very large and thus affecting the performance of the application.
+
+## Overview of changes
+
+The following changes have been made in order to implement the solution:
+
+* LogProtoFileWriter class have been modified to connect to the existing SignalSlotConnector class in order to receive notifications via `log_proto_file_writer_new()` function when a log file is opened and will carry filename and reopener pointer as user_data.
+
+* A new slot have been added to the SignalSlotConnector class which will receive notifications when a log file is opened and will call a new function `log_proto_file_writer_reopen()` in order to check if the opened file needs to be rotated and all the necessary logic is applied to rotate the log file for which the file-rotation functionality was built.
+
+
+## Configuration snippets
+
+
+### Whole configuration file
+
+```
+#############################################################################
+# Default syslog-ng.conf file which collects all local logs into a
+# single file called /var/log/messages.
+#
+
+@version: 3.37
+@include ""scl.conf""
+
+destination d_file {
+    file(""/tmp/temp.log"", file-rotation(size(0KB), interval(""daily""), dateformat(""-%Y-%m-%d""), rotate(2)));
+};
+
+source my_tcp {
+    stdin();
+};
+
+
+log {
+source(my_tcp);
+destination(d_file);
+};
+```
+### Necessary changes
+
+```
+destination d_file {
+    file(""/tmp/temp.log"", file-rotation(size(0KB), interval(""daily""), dateformat(""-%Y-%m-%d""), rotate(2)));
+};
+```
+
+## Alternatives/Problem faced
+
+1. lseek vs fstat call. Can refer the discussion [here](https://github.com/MrAnno/syslog-ng/pull/18#discussion_r971037562)
+
+2. Attaching a reopner function to the LogProtoFileWriter class vs using a global flag to signal file-rotation plugin to rotate the file. 
+
+
+## Discussions
+
+*  [Pull Request - 1 ](https://github.com/MrAnno/syslog-ng/pull/17)
+
+* [Pull Request - 2](https://github.com/MrAnno/syslog-ng/pull/18)
+
+Resolves #2964",False,4145,https://api.github.com/repos/syslog-ng/syslog-ng/pulls/4145,https://github.com/syslog-ng/syslog-ng/pull/4145,open,768,17,28,20,8,7,1,0,[{'name': 'abandoned'}],2022-09-20 13:07:15+00:00,,0.0,,"[{'comment_id': 987585174, 'comment_body': 'this should probably named to resemble the functionality that is associated with the slot, e.g. file_rotation_signal or something like that.\r\n', 'comment_created': datetime.datetime(2022, 10, 5, 6, 51, 3, tzinfo=datetime.timezone.utc), 'commenter': 'bazsi', 'type': 'User'}, {'comment_id': 987586401, 'comment_body': ""I think the reopener should probably be a pointer here. Also I'd look into encapsulating the last three arguments into\r\na struct of some kind, which all relates to rotation support."", 'comment_created': datetime.datetime(2022, 10, 5, 6, 53, 13, tzinfo=datetime.timezone.utc), 'commenter': 'bazsi', 'type': 'User'}, {'comment_id': 987588146, 'comment_body': ""the slot is probably better placed in the FileOpener constructor so that if an implementation of construct_dst_proto needs it it can find it in self and we wouldn't need to change the prototype here.\r\n\r\nI guess this only applies to regular files and not so much to /proc/kmsg or named pipes."", 'comment_created': datetime.datetime(2022, 10, 5, 6, 56, tzinfo=datetime.timezone.utc), 'commenter': 'bazsi', 'type': 'User'}, {'comment_id': 987590953, 'comment_body': ""I think we could allow the file opener plugin to indicate that a reopen is needed via a return value, so we wouldn't have to push the FileReopener instance down to the guts of the rotation plugin.\r\n\r\nThis way the reopen would  either be delegated to the LogProtoFileWriter or even better back to the driver via the use of the log_pipe_notify() mechanism.\r\n"", 'comment_created': datetime.datetime(2022, 10, 5, 7, 0, 17, tzinfo=datetime.timezone.utc), 'commenter': 'bazsi', 'type': 'User'}, {'comment_id': 996312120, 'comment_body': 'Do you mean that we can have a returning flag of some sort for the purpose of reopening the file ?', 'comment_created': datetime.datetime(2022, 10, 15, 14, 15, 32, tzinfo=datetime.timezone.utc), 'commenter': 'shikharvashistha', 'type': 'User'}, {'comment_id': 996312396, 'comment_body': 'Okay sure', 'comment_created': datetime.datetime(2022, 10, 15, 14, 17, 15, tzinfo=datetime.timezone.utc), 'commenter': 'shikharvashistha', 'type': 'User'}, {'comment_id': 996312854, 'comment_body': ""I've updated the name"", 'comment_created': datetime.datetime(2022, 10, 15, 14, 21, 9, tzinfo=datetime.timezone.utc), 'commenter': 'shikharvashistha', 'type': 'User'}]","[{'commit_sha': '8ed89f32ea4700e768670e44d2e17c3de9fc8dfe', 'committer_username': 'MrAnno', 'committer_name': 'László Várady', 'committer_email': None, 'commit_date': datetime.datetime(2012, 12, 26, 23, 25, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb0a45480a642b4f849e9de0ec9c3c8cc43b732b', 'committer_username': 'MrAnno', 'committer_name': 'László Várady', 'committer_email': None, 'commit_date': datetime.datetime(2012, 12, 26, 23, 25, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b95a27296b716d27dd99b30bc8f333fd66f0fc5', 'committer_username': 'MrAnno', 'committer_name': 'László Várady', 'committer_email': None, 'commit_date': datetime.datetime(2012, 12, 26, 23, 25, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f3d24dd2fbe1ed53833a201cb39d4ac6191e9e7a', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'becf9adc19fb2421fda24dca9ee545d0b6e3fc19', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10f40286bcfd8f0387e5b232857dc048855ae14d', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c91b2f18060269d7b262d182647328e7a0c9038', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'beb23909d1f50c04617994cf7f1fefe7ecf3ad54', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '65c46d25adc496b4268d8b4f318b2f4eea22a56a', 'committer_username': 'MrAnno', 'committer_name': 'László Várady', 'committer_email': None, 'commit_date': datetime.datetime(2012, 12, 26, 23, 25, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6591aa6d8ab0b2cfa33b5a19d5e00672f4bf039f', 'committer_username': 'MrAnno', 'committer_name': 'László Várady', 'committer_email': None, 'commit_date': datetime.datetime(2012, 12, 26, 23, 25, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b190773b5213a05429b882e4c73e15ddde31268c', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58f75a98d7769b9dd1d33a33ed3b9c846158a3d0', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a14a403b4fe949322a6c225e889e0d0bac6956c', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba47503c592405dad6633bdc5295e7558171a341', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '296030ba120ac88b452d9ca0a0e4362aaeb0f4b3', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce53a871feec9ea95caa899ed6cb309e0b0ab8e3', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3313eeea3d203dfd0b5e920dcc4d548e0010ef11', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1510cf72b89878ea969ef2be59d4ccec5a9423d0', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5291a905eace8f0cffb6bed7926d6126b8178552', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd152b6f7b80f7aad7d4bd01038b956a30e74e9cb', 'committer_username': 'shikharvashistha', 'committer_name': 'Shikhar Vashistha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 28, 3, 16, 2, tzinfo=datetime.timezone.utc)}]",Shikhar Vashistha,51105234,,User,,104,,0,22
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+14146757,syslog-ng,syslog-ng/syslog-ng,C,464,2092,91,201,17230,211,19,7,"[{'id': 1061565155, 'number': 4145, 'closed': None, 'created': datetime.datetime(2022, 9, 20, 13, 7, 15, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 768, 'deletions': 17, 'state': 'open'}, {'id': 941017261, 'number': 4009, 'closed': datetime.datetime(2022, 6, 23, 8, 22, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 19, 3, 39, 6, tzinfo=datetime.timezone.utc), 'time_taken': 3041020.0, 'time_delta': '35 days, 4:43:40', 'additions': 42, 'deletions': 20, 'state': 'closed'}, {'id': 911223104, 'number': 3986, 'closed': datetime.datetime(2022, 5, 19, 3, 40, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 16, 7, 48, 4, tzinfo=datetime.timezone.utc), 'time_taken': 2836350.0, 'time_delta': '32 days, 19:52:30', 'additions': 33, 'deletions': 20, 'state': 'closed'}]"

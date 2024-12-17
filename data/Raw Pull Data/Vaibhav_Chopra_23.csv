@@ -1,0 +1,316 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+952453648,Benchmarks for model X parameter set combinations,"# Description
+
+Added benchmarks for `SPM`, `SPMe`, and `DFN` with all the parameter sets (except Sulzer2019 and Xu2019).
+
+Some concerns -
+- I could not solve the `DFN` model with `Mohtat2020` parameter sets for the benchmarks (commented code). I tried varying `dt_max` and used different solvers but nothing worked. Here is a reproducible example for the same-
+```python
+import numpy as np
+import pybamm
+import matplotlib.pyplot as plt
+
+def prepare_model_Mohtat2020(model):
+    geometry = model.default_geometry
+
+    param = pybamm.ParameterValues(""Mohtat2020"")
+    param.process_model(model)
+    param.process_geometry(geometry)
+
+    var_pts = {""x_n"": 20, ""x_s"": 20, ""x_p"": 20, ""r_n"": 30, ""r_p"": 30, ""y"": 10, ""z"": 10}
+    mesh = pybamm.Mesh(geometry, model.default_submesh_types, var_pts)
+
+    disc = pybamm.Discretisation(mesh, model.default_spatial_methods)
+    disc.process_model(model)
+
+solver = pybamm.CasadiSolver()
+model = pybamm.lithium_ion.DFN()
+c_rate = 1
+tmax = 4000 / c_rate
+nb_points = 500
+t_eval = np.linspace(0, tmax, nb_points)
+prepare_model_Mohtat2020(model)
+solver.solve(model, t_eval=t_eval)
+solution = solver.solve(model, t_eval=t_eval)
+voltage = solution['Terminal voltage [V]']
+c_s_n_surf = solution['Negative particle surface concentration']
+c_s_p_surf = solution['Positive particle surface concentration']
+t = solution[""Time [s]""].entries
+x = solution[""x [m]""].entries[:, 0]
+f, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(13,4))
+
+ax1.plot(t, voltage(t))
+ax1.set_xlabel(r'$Time [s]$')
+ax1.set_ylabel('Terminal voltage [V]')
+
+ax2.plot(t, c_s_n_surf(t=t, x=x[0]))  
+ax2.set_xlabel(r'$Time [s]$')
+ax2.set_ylabel('Negative particle surface concentration')
+
+ax3.plot(t, c_s_p_surf(t=t, x=x[-1])) 
+ax3.set_xlabel(r'$Time [s]$')
+ax3.set_ylabel('Positive particle surface concentration')
+
+plt.tight_layout()
+plt.show()
+```
+The error-
+```
+The linesearch algorithm failed with too small a step.
+At t = 3.7305e-005 and h = 3.3406e-019, the corrector convergence failed repeatedly or with |h| = hmin.
+At t = 3.73046e-005 and h = 3.12482e-019, the corrector convergence failed repeatedly or with |h| = hmin.
+At t = 3.73044e-005 and h = 3.16429e-020, the corrector convergence failed repeatedly or with |h| = hmin.
+At t = 3.7305e-005 and h = 3.3406e-019, the corrector convergence failed repeatedly or with |h| = hmin.
+Traceback (most recent call last):
+  File ""d:\LearningProjects\python\second.py"", line 25, in <module>
+    solver.solve(model, t_eval=t_eval)
+  File ""C:\Users\Vaibhav Chopra\AppData\Local\Programs\Python\Python39\lib\site-packages\pybamm\solvers\base_solver.py"", line 1018, in solve
+    new_solution = self._integrate(
+  File ""C:\Users\Vaibhav Chopra\AppData\Local\Programs\Python\Python39\lib\site-packages\pybamm\solvers\casadi_solver.py"", line 263, in _integrate
+    raise pybamm.SolverError(
+pybamm.expression_tree.exceptions.SolverError: Maximum number of decreased steps occurred at t=0.0. Try solving the model up to this time only or reducing dt_max (currently, dt_max=5.010622778599846).
+PS D:\LearningProjects> python -u ""d:\LearningProjects\python\second.py""
+The linesearch algorithm failed with too small a step.
+At t = 3.7305e-005 and h = 3.3406e-019, the corrector convergence failed repeatedly or with |h| = hmin.
+At t = 3.73046e-005 and h = 3.12482e-019, the corrector convergence failed repeatedly or with |h| = hmin.
+At t = 3.73044e-005 and h = 3.16429e-020, the corrector convergence failed repeatedly or with |h| = hmin.
+At t = 3.7305e-005 and h = 3.3406e-019, the corrector convergence failed repeatedly or with |h| = hmin.
+Traceback (most recent call last):
+  File ""d:\LearningProjects\python\second.py"", line 25, in <module>
+    solver.solve(model, t_eval=t_eval)
+  File ""C:\Users\Vaibhav Chopra\AppData\Local\Programs\Python\Python39\lib\site-packages\pybamm\solvers\base_solver.py"", line 1018, in solve
+    new_solution = self._integrate(
+  File ""C:\Users\Vaibhav Chopra\AppData\Local\Programs\Python\Python39\lib\site-packages\pybamm\solvers\casadi_solver.py"", line 263, in _integrate
+    raise pybamm.SolverError(
+pybamm.expression_tree.exceptions.SolverError: Maximum number of decreased steps occurred at t=0.0. Try solving the model up to this time only or reducing dt_max (currently, dt_max=5.010622778599846).
+```
+- Should I group these benchmarks in some way. For example- multiple files with each file containing benchmarks of a particular parameter or model.
+- As discussed with @brosaplanella on slack I have used `ScikitsDaeSolver` for some benchmarks, will this create a problem or is it safe to use different solvers for similar benchmarks?
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [ ] No style issues: `$ flake8`
+- [ ] All tests pass: `$ python run-tests.py --unit`
+- [ ] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2086,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2086,https://github.com/pybamm-team/PyBaMM/pull/2086,closed,161,56,3,5,6,9,0,0,[],2022-05-31 21:33:02+00:00,2022-06-07 10:33:35+00:00,565233.0,"6 days, 13:00:33","[{'comment_id': 886398297, 'comment_body': 'Could you revert the changes on this file? This way we keep the SEI changes on PR #2080 and the benchmarks here.', 'comment_created': datetime.datetime(2022, 6, 1, 7, 23, 7, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 886401355, 'comment_body': 'There is a lot of repeated code here, you could try using ""parameterized benchmarks"" (see docs [here](https://asv.readthedocs.io/en/stable/writing_benchmarks.html#parameterized-benchmarks)) so you write one single benchmark but pass the various parameters each time.\r\n\r\nThe only think I don\'t know is how this will work in terms of website visualisation (I think it will place all the benchmarks in one plot).', 'comment_created': datetime.datetime(2022, 6, 1, 7, 26, 38, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 886403040, 'comment_body': 'Same here with parameterised benchmarks, though you will need to change the voltage limit in the experiment as well (probably the best way is just to read the minimum voltage from the parameters).', 'comment_created': datetime.datetime(2022, 6, 1, 7, 28, 31, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 886519925, 'comment_body': 'If you use parameters (as in my previous comment) you can have a single `prepare_model(model, parameters)` function.', 'comment_created': datetime.datetime(2022, 6, 1, 8, 15, 41, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 886521770, 'comment_body': 'Same as before, but need to be careful as you will have two `parameter` sets for the tests: the battery parameters and the solve (True, False). In the [docs](https://asv.readthedocs.io/en/stable/writing_benchmarks.html#parameterized-benchmarks) there is an example on how to do it.', 'comment_created': datetime.datetime(2022, 6, 1, 8, 17, 29, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 886522730, 'comment_body': 'This applies everywhere (but just spotted it here). You can instead type `self` to refer to the own class, so it is more compact.', 'comment_created': datetime.datetime(2022, 6, 1, 8, 18, 24, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 886525254, 'comment_body': ""Sorry, I didn't explain myself very well on Slack. In the benchmarks we should use the same solver (with same settings, like dt_max) for all tests, so results are comparable. I suggested trying Scikits to check if the model solved fine. If it does, then you can go and fiddle with CasADI. We still don't know why this happens, but sometimes changing the tmax (like to `3800 / c_rate` or `4200 / c_rate`) makes the solver work. If you can't get it to work straight away, just comment the benchmark out and we can skip it for the time being."", 'comment_created': datetime.datetime(2022, 6, 1, 8, 20, 57, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 887291205, 'comment_body': 'Yes, done!', 'comment_created': datetime.datetime(2022, 6, 1, 20, 54, 10, tzinfo=datetime.timezone.utc), 'commenter': 'Vaibhav-Chopra-GT', 'type': 'User'}, {'comment_id': 887849151, 'comment_body': 'Could you make a global variable with a list of these parameter sets outside the classes and use that in all the functions to reduce code duplication', 'comment_created': datetime.datetime(2022, 6, 2, 11, 31, 15, tzinfo=datetime.timezone.utc), 'commenter': 'priyanshuone6', 'type': 'User'}]","[{'commit_sha': '83871219cbecd5c8d41c9cce7b8a987077201633', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c10250c6f5fe14575c0b05cf0cc87a7f9b75a7a', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c115e02d1e8fa91524c39402a2bacf0c470a87d2', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e8795939ce5af716e3d935acc7289d19edc82c6', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'deefe3dac258d16b2d7bb4924449af693de2b66a', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+960823827,add unit benchmarks,"# Description
+
+Created unit benchmarks (create an expression, parameterise a model, discretise a model, and solve a model) using this [example](https://github.com/Vaibhav-Chopra-GT/PyBaMM/blob/develop/examples/notebooks/Creating%20Models/3-negative-particle-problem.ipynb).
+
+I tried developing these benchmarks using classes and inheritance, but `asv` runs `time_*` functions of the parent class in the child classes too. This results in benchmarks running multiple times.
+
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [x] No style issues: `$ flake8`
+- [x] All tests pass: `$ python run-tests.py --unit`
+- [x] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2092,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2092,https://github.com/pybamm-team/PyBaMM/pull/2092,closed,85,0,1,3,1,5,0,0,[],2022-06-07 19:46:22+00:00,2022-06-15 15:52:48+00:00,677186.0,"7 days, 20:06:26","[{'comment_id': 891689685, 'comment_body': 'you should be able to do this without using `global`. I have never seen a good reason to use it', 'comment_created': datetime.datetime(2022, 6, 7, 20, 39, 45, tzinfo=datetime.timezone.utc), 'commenter': 'valentinsulzer', 'type': 'User'}, {'comment_id': 892025979, 'comment_body': 'You should define a class like with the [other benchmarks](https://github.com/pybamm-team/PyBaMM/blob/develop/benchmarks/time_solve_models.py). The first bit can be pushed under the `setup` method, and then have the different benchmarks. ', 'comment_created': datetime.datetime(2022, 6, 8, 7, 42, 54, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 892027332, 'comment_body': 'The discretisation and parameterisation methods modify the model, so if you define `model` to be a variable of the class then hopefully you do not need to initialise every single time.', 'comment_created': datetime.datetime(2022, 6, 8, 7, 44, 12, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 892672064, 'comment_body': ""The benchmarks don't work without these global variables even after adding the setup functions. I don't know why this is the case, but when I run the benchmarks with the global variables they work"", 'comment_created': datetime.datetime(2022, 6, 8, 17, 29, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Vaibhav-Chopra-GT', 'type': 'User'}, {'comment_id': 892678406, 'comment_body': ""I tried this but got an error because `asv` runs every method separately, so the changes made in one method don't carry on to others. For example-\r\nfor the `time_solve` benchmark to work we will need to run previous methods in its setup, and a class cannot have more than 1 setup; hence, I cannot put this under the class containing other `time_*` functions as they require a different setup"", 'comment_created': datetime.datetime(2022, 6, 8, 17, 37, 12, tzinfo=datetime.timezone.utc), 'commenter': 'Vaibhav-Chopra-GT', 'type': 'User'}]","[{'commit_sha': 'f53a7f438a1f218cdf91d708eaab59b7bd87cac4', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '188ee315b0ef0e71e2f4469cf061336c53f31d9b', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '194af38ce512b6f0eed938cb299d17de643329c2', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+969306368,add experiment benchmarks,"# Description
+Added benchmarks for `CCCV` and `GITT` experiments for `SPM` and `DFN` models with Chen2020 and Marquis2019 parameter sets
+
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [x] No style issues: `$ flake8`
+- [x] All tests pass: `$ python run-tests.py --unit`
+- [x] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2106,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2106,https://github.com/pybamm-team/PyBaMM/pull/2106,closed,67,0,1,1,1,0,0,0,[],2022-06-16 13:06:46+00:00,2022-06-16 17:25:43+00:00,15537.0,4:18:57,[],"[{'commit_sha': 'e90646c6228e1a0985811d5bd5eabedc8f805ba8', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+976841765,Docs for asv,"# Description
+Added `README.md` file in the `benchmarks` directory with contents from `CONTRIBUTING.md`. I think it would be good to have these contents in both of these files for future users and developers. Should these contents be also available or linked somewhere in PyBaMM's documentation website?
+Fixes # (issue)
+
+## Type of change
+
+
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [x] No style issues: `$ flake8`
+- [x] All tests pass: `$ python run-tests.py --unit`
+- [x] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2120,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2120,https://github.com/pybamm-team/PyBaMM/pull/2120,closed,84,85,3,3,0,0,0,0,[],2022-06-23 08:55:58+00:00,2022-06-28 21:24:38+00:00,476920.0,"5 days, 12:28:40",[],"[{'commit_sha': '557bc7d0bcc262ef5a201b37305fdc728117ff46', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed653669ecef97497b7405b4ae6df82cf06beb95', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '424899db9986a077a84afb50e5cabc94aecdd47a', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+977182174,Memory  benchmarks,"# Description
+
+add memory benchmarks
+
+Fixes # (issue)
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [ ] No style issues: `$ flake8`
+- [ ] All tests pass: `$ python run-tests.py --unit`
+- [ ] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2121,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2121,https://github.com/pybamm-team/PyBaMM/pull/2121,closed,171,3,3,4,0,0,0,0,[],2022-06-23 13:44:52+00:00,2022-06-28 21:26:11+00:00,459679.0,"5 days, 7:41:19",[],"[{'commit_sha': 'b4cc44c820d290b095b3a8c4bacd28f15220d102', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e78995bbe9ceeb8747ee683e5cd91332437b54c0', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '62cf140f93164eadca3b23ef4990121bb20f96c6', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85386d79669a6a5e874b98ff2323cc4711f949c0', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+981867268,add degradation models benchmarks,"# Description
+
+Added benchmarks for degradation models for SPM and DFN (build, simulate, solve) for each model option by adding model values and model as params.
+Also, what should I name them?
+
+Fixes # (issue)
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [ ] No style issues: `$ flake8`
+- [ ] All tests pass: `$ python run-tests.py --unit`
+- [ ] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2132,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2132,https://github.com/pybamm-team/PyBaMM/pull/2132,closed,245,3,2,7,4,3,0,0,[],2022-06-28 20:54:11+00:00,2022-07-21 17:50:01+00:00,1976150.0,"22 days, 20:55:50","[{'comment_id': 910975151, 'comment_body': 'Are you using 30 in the particles for some reason (e.g. convergence)? Otherwise might be better to keep the default (20).', 'comment_created': datetime.datetime(2022, 6, 30, 12, 37, 6, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 910975749, 'comment_body': 'Small typo in the filename (`degredation` instead of `degradation`).', 'comment_created': datetime.datetime(2022, 6, 30, 12, 37, 45, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 910977438, 'comment_body': 'Can these lines be replaced by `compute_discretisation`? (It appears multiple times below, so not repeating the comment)', 'comment_created': datetime.datetime(2022, 6, 30, 12, 39, 36, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}]","[{'commit_sha': '08120df068498e23ed824f7d3443f913df8637b9', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cff4b8cfcab314ee4752af01a1c88e02ea7b858f', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2c91278d276f972f2da7da5bb912a315301f7af', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c8551a438ae4cd8aeabadc530322f0f2de09ba6', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '063921f8156f890bbd577098177a90f3a0968ba9', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b26f80c2514c7c6bd6dba32a4e69a9030146f67', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5a91418934774b51543008f8736fdb10bc5b1994', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+988989522,Add work precision sets and an automated workflow for the same  ,"# Description
+Created work precision sets for time vs abstols, and added a workflow to create a pr with new benchmarks on every release.
+- The script `work_precision_sets_abstols.py` creates and saves the plot in `benchmark_images` folder, and prepends the `release_work_precision_sets.md`  file with the plot.
+- The workflow runs the script on every release and creates a pull request.
+
+I tested the workflow and it works. I couldn't trigger workflow without a release so I added the workflow dispatch option and manually triggered it on my fork. It created this [PR](https://github.com/Vaibhav-Chopra-GT/PyBaMM/pull/7) which looks good.
+
+Fixes # (issue)
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [ ] No style issues: `$ flake8`
+- [ ] All tests pass: `$ python run-tests.py --unit`
+- [ ] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2157,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2157,https://github.com/pybamm-team/PyBaMM/pull/2157,closed,568,0,13,26,5,28,0,0,[],2022-07-06 15:56:04+00:00,2022-08-25 13:33:38+00:00,4311454.0,"49 days, 21:37:34","[{'comment_id': 915595005, 'comment_body': 'Might be good to define the number of runs as a variable so users can easily change it locally. ', 'comment_created': datetime.datetime(2022, 7, 7, 8, 18, 26, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937856119, 'comment_body': 'Will make some general comments on this script on how to simplify the code, but they apply to all the scripts I believe.', 'comment_created': datetime.datetime(2022, 8, 4, 14, 25, 11, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937862205, 'comment_body': 'You can actually create a list of PyBaMM models. You can also pass their name (to abbreviate it). This way you can get rid of lines 34-37.\r\n\r\n```python3\r\nmodels = [pybamm.lithium_ion.SPM(name=""SPM""), pybamm.lithium_ion.DFN(name=""DFN"")]\r\n```\r\n\r\nYou can then access the name as `models[i].name`.', 'comment_created': datetime.datetime(2022, 8, 4, 14, 29, 21, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937868120, 'comment_body': 'You can define the figure outside the `for` loop and then loop over the axes (see https://stackoverflow.com/questions/20288842/matplotlib-iterate-subplot-axis-array-through-single-list).\r\n\r\nYou can also get all the possible combinations of solvers and models by using `itertools.product` (see https://stackoverflow.com/questions/533905/get-the-cartesian-product-of-a-series-of-lists).\r\n\r\nIf you zip the `axes` and the output of `itertools.product`, you can get rid of lines 68-85. Hopefully, this way it will also be more generalisable (i.e. if we want to add a model).\r\n\r\n', 'comment_created': datetime.datetime(2022, 8, 4, 14, 33, 8, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937869790, 'comment_body': ""You can do the same as with the models and define a list of PyBaMM solvers. They also have a name that you can get, but in this case comes by default and you can't set it when defining the solver. But I think it will be fine."", 'comment_created': datetime.datetime(2022, 8, 4, 14, 34, 12, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937873461, 'comment_body': 'If you iterate over the axes (assume the iterating variable is `ax`) you can just do\r\n\r\n```python3\r\nax.plot(...)\r\nax.set_xlabel(...)\r\nax.set_ylabel(...)\r\n```\r\nand so on (not sure if the ticks and scale options also use the `set_`, check `matplotlib` documentation).', 'comment_created': datetime.datetime(2022, 8, 4, 14, 37, 3, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937874118, 'comment_body': 'I think you have to move the `tight_layout` after you change the plot size.', 'comment_created': datetime.datetime(2022, 8, 4, 14, 37, 39, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937875658, 'comment_body': 'Remove `""Work Precision Sets for ""` and leave only the model and solver. Hopefully this way the titles fit in the plot.', 'comment_created': datetime.datetime(2022, 8, 4, 14, 38, 56, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937878520, 'comment_body': 'The legend only show the DFN parameters and not the SPM. You can either have two legends (but it will be a bit too packed) or, instead, you put the legend on SPM and you change the order of the SPM parameters so `Ramadass2004` is second. This way, the legend will also work for DFN.\r\n\r\nRelated to that, why is DFN only tested for 2 parameter sets?', 'comment_created': datetime.datetime(2022, 8, 4, 14, 41, 17, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 937879518, 'comment_body': ""Not sure what is going on here but I can't comment the `png` so I comment the script. The colours look weird, like some are repeated and some don't appear."", 'comment_created': datetime.datetime(2022, 8, 4, 14, 42, 9, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951117733, 'comment_body': ""Here you set a 10C discharge, but later I don't think you update the C-rate so it is 1C but for a shorter time. In fact, 10C is pretty aggressive, so 1C would be better."", 'comment_created': datetime.datetime(2022, 8, 22, 7, 49, 18, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951118082, 'comment_body': 'It is usually better to do 3700 / c_rate to give it some slack (sometimes it takes a bit longer to discharge).', 'comment_created': datetime.datetime(2022, 8, 22, 7, 49, 44, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951119122, 'comment_body': 'Why is that for?', 'comment_created': datetime.datetime(2022, 8, 22, 7, 50, 59, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951120275, 'comment_body': 'Make the figure taller, for example set it to `(8, 10)`.', 'comment_created': datetime.datetime(2022, 8, 22, 7, 52, 17, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951122621, 'comment_body': 'If you switch models and solvers, the plot should have same model in each column, and same solver for each row, making comparison of plots easier. Bear in mind that you will also need how you access `i` and `j` below.', 'comment_created': datetime.datetime(2022, 8, 22, 7, 54, 54, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951124296, 'comment_body': 'Make it a tiny bit taller (e.g. `(8, 6)`)', 'comment_created': datetime.datetime(2022, 8, 22, 7, 56, 39, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951124791, 'comment_body': 'Flip models and solvers like I suggested before to keep consistency.', 'comment_created': datetime.datetime(2022, 8, 22, 7, 57, 7, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951125357, 'comment_body': 'Figsize `(8, 6)`', 'comment_created': datetime.datetime(2022, 8, 22, 7, 57, 45, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951125451, 'comment_body': 'Flip models and solvers', 'comment_created': datetime.datetime(2022, 8, 22, 7, 57, 52, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951126699, 'comment_body': 'Solver time should be a bit longer to ensure we do a full discharge (not sure if that will work with CasADI fast). @tinosulzer, what are your thoughts?', 'comment_created': datetime.datetime(2022, 8, 22, 7, 59, 8, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951126875, 'comment_body': 'Same as before with the C-rate', 'comment_created': datetime.datetime(2022, 8, 22, 7, 59, 21, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951127139, 'comment_body': 'Flip models and solvers', 'comment_created': datetime.datetime(2022, 8, 22, 7, 59, 40, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951127797, 'comment_body': 'Make taller, e.g. `(8, 10)`', 'comment_created': datetime.datetime(2022, 8, 22, 8, 0, 22, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951196060, 'comment_body': ""It's difficult because we don't want to trigger the event when testing casadi fast, but we do want to trigger it when testing casadi safe"", 'comment_created': datetime.datetime(2022, 8, 22, 9, 9, 4, tzinfo=datetime.timezone.utc), 'commenter': 'valentinsulzer', 'type': 'User'}, {'comment_id': 951288314, 'comment_body': 'Good point. Then I think this is fine as it is.', 'comment_created': datetime.datetime(2022, 8, 22, 10, 47, 27, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 951888078, 'comment_body': 'When I use any `c_rate` = 1, I get solver errors for a lot of combinations -\r\n```\r\ntraceback (most recent call last):\r\n  File ""d:\\code\\PyBaMM\\benchmarks\\work_precision_sets\\time_vs_abstols.py"", line 86, in <module>\r\n    solver.solve(model, t_eval=t_eval)\r\n  File ""C:\\Users\\Vaibhav Chopra\\AppData\\Local\\Programs\\Python\\Python39\\lib\\site-packages\\pybamm\\solvers\\base_solver.py"", line 1083, in solve        \r\n    new_solution = self._integrate(\r\n  File ""C:\\Users\\Vaibhav Chopra\\AppData\\Local\\Programs\\Python\\Python39\\lib\\site-packages\\pybamm\\solvers\\casadi_solver.py"", line 177, in _integrate  \r\n    solution = self._run_integrator(\r\n  File ""C:\\Users\\Vaibhav Chopra\\AppData\\Local\\Programs\\Python\\Python39\\lib\\site-packages\\pybamm\\solvers\\casadi_solver.py"", line 741, in _run_integrator\r\n    raise pybamm.SolverError(e.args[0])\r\npybamm.expression_tree.exceptions.SolverError: .../casadi/interfaces/sundials/cvodes_interface.cpp:392: CVode returned ""CV_RHSFUNC_FAIL"". Consult CVODES documentation.\r\n```\r\nIf I use a try-except block to skip through the error, I get different lengths of x and y coordinate lists which cannot be plotted together.\r\nShould I manually create x and y coordinates while iterating through the combinations rather than using the list defined at the top directly?', 'comment_created': datetime.datetime(2022, 8, 22, 20, 35, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Vaibhav-Chopra-GT', 'type': 'User'}, {'comment_id': 952252131, 'comment_body': ""That's weird. Do you know exactly which combinations are actually failing?\r\n\r\nCan you try setting `tmax = 3500` (like the example below) and see if that works better?"", 'comment_created': datetime.datetime(2022, 8, 23, 7, 33, 32, tzinfo=datetime.timezone.utc), 'commenter': 'brosaplanella', 'type': 'User'}, {'comment_id': 953135686, 'comment_body': 'All work now except `Prada2013` with Casadi - fast, so I replaced it with Ecker2015 which was previously giving error, but now works!', 'comment_created': datetime.datetime(2022, 8, 23, 21, 45, 50, tzinfo=datetime.timezone.utc), 'commenter': 'Vaibhav-Chopra-GT', 'type': 'User'}]","[{'commit_sha': '47858f15f5fec6de78f05f5e87adc2a36291d1cc', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c323a362d3afc7e4aaa4992e0ff1e8e400f46c07', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'db2f43f3a389ffe400d00215a56bd2c2f209c94f', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c4351ddaa3427a9ab447b3365847b6b4120109b0', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08e206b5eaf7311f091d2e0c99ec357be0a4cfaf', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82c1709bbb6d60643da4f76e9bee34e6734abef5', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17b396c1538065d8666acad0e28612b35ff9ef57', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bebdccb7d589c4690b472048d4b37ab92f33e9f6', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aed6a672a4d1dd9ab75f1d7d590c40fdc60181c3', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '826f7a4e59860790cf58e799105f5943689edeeb', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a090089fbe0e738ce2dba3a4c9ecd812eb0dd0be', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'acd97a02ab98bc2eb27492d9361280aecc55beca', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7a729e407871814282a06992af379ec843f472a9', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1b2e0dff28a1616e2dd3433c130d488dfa6c2e37', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd660a092c1dc60bd743e88abeeeed8c47d1138d4', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7860fa11ed2fa44b3a7e971f0975093199f5a273', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eed268f6d89b42096e77ace73cc2aef66aaf7ffc', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23b9d096cddeeb7d1def3cff5a7820cf648885e6', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0f593f1d68586f22109e66204175307995c5ccf9', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '62dd0a31c587c3440cdde614db6e8b32b37d8fbc', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ec2f35e44bf4da2c0bc70fd8af824b4bb724dfed', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85748b0fd40663154f813ce349e294d4cd439696', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98f63f4c9b2308c9254a9cef4418775d27223142', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37bc05d0d68d0ec77537f44356e8a0affb1dc082', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2413077c626f53bc9dc5f3cffe4403d93675e4e', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a36cd8c8488ba40f4fd787e1d5e859b55d667ef3', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+1043723117,Validation,"Add work precision sets and a workflow that runs when there is a push or release in pybamm's main repository.
+For every push, the workflow saves the images with their commit id, eg - time_vs_dt_max_1bb43ebf0e9c9245fa99f8eb3c7c42160542a9aa.",True,1,https://api.github.com/repos/pybamm-team/pybamm-validation/pulls/1,https://github.com/pybamm-team/pybamm-validation/pull/1,closed,1034,2,18,5,1,0,0,0,[],2022-09-01 13:17:28+00:00,2022-09-08 13:37:04+00:00,605976.0,"7 days, 0:19:36",[],"[{'commit_sha': '545023ac586fde6961ab99b7c7437bd037ee6fbc', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e271c77b58aedbc3e718e18bc073b59a39d6225', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9641bdad897a1c8ad3e7705837166063b8cbaca1', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '439fc4c480556c27bee022025fa4d94aa048e48e', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '77d05dc4855e0736d30b0a7afae0eeb528ba0db1', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+1043723117,Validation,"Add work precision sets and a workflow that runs when there is a push or release in pybamm's main repository.
+For every push, the workflow saves the images with their commit id, eg - time_vs_dt_max_1bb43ebf0e9c9245fa99f8eb3c7c42160542a9aa.",True,1,https://api.github.com/repos/pybamm-team/pybamm-validation/pulls/1,https://github.com/pybamm-team/pybamm-validation/pull/1,closed,1034,2,18,5,1,0,0,0,[],2022-09-01 13:17:28+00:00,2022-09-08 13:37:04+00:00,605976.0,"7 days, 0:19:36",[],"[{'commit_sha': '545023ac586fde6961ab99b7c7437bd037ee6fbc', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e271c77b58aedbc3e718e18bc073b59a39d6225', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9641bdad897a1c8ad3e7705837166063b8cbaca1', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '439fc4c480556c27bee022025fa4d94aa048e48e', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': '77d05dc4855e0736d30b0a7afae0eeb528ba0db1', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+1043722887,add workflow for validation repo,"# Description
+
+Created a workflow that triggers the workflow in the pybamm-validation repository.
+
+Fixes # (issue)
+
+## Type of change
+
+Please add a line in the relevant section of [CHANGELOG.md](https://github.com/pybamm-team/PyBaMM/blob/develop/CHANGELOG.md) to document the change (include PR #) - note reverse order of PR #s. If necessary, also add to the list of breaking changes.
+
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Optimization (back-end change that speeds up the code)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+
+
+# Key checklist:
+
+- [ ] No style issues: `$ flake8`
+- [ ] All tests pass: `$ python run-tests.py --unit`
+- [ ] The documentation builds: `$ cd docs` and then `$ make clean; make html`
+
+You can run all three at once, using `$ python run-tests.py --quick`.
+
+## Further checks:
+
+- [ ] Code is commented, particularly in hard-to-understand areas
+- [ ] Tests added that prove fix is effective or that feature works
+",True,2274,https://api.github.com/repos/pybamm-team/PyBaMM/pulls/2274,https://github.com/pybamm-team/PyBaMM/pull/2274,closed,25,1,2,2,1,0,0,0,[],2022-09-01 13:17:18+00:00,2022-09-08 13:36:56+00:00,605978.0,"7 days, 0:19:38",[],"[{'commit_sha': '9dc31a7449dad348a87dfcba53aacb88bb97dc23', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af451331185bc81c7826ff92d240538bc0628204', 'committer_username': 'Vaibhav-Chopra-GT', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 16, 14, 16, 36, tzinfo=datetime.timezone.utc)}]",,92637595,,User,,31,,2,1
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+155538761,PyBaMM,pybamm-team/PyBaMM,Python,515,1031,29,118,15106,162,46,29,"[{'id': 1053902205, 'number': 2297, 'closed': datetime.datetime(2022, 10, 20, 16, 16, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 12, 21, 29, 17, tzinfo=datetime.timezone.utc), 'time_taken': 3264444.0, 'time_delta': '37 days, 18:47:24', 'additions': 351, 'deletions': 45, 'state': 'closed'}, {'id': 1043722887, 'number': 2274, 'closed': datetime.datetime(2022, 9, 8, 13, 36, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 1, 13, 17, 18, tzinfo=datetime.timezone.utc), 'time_taken': 605978.0, 'time_delta': '7 days, 0:19:38', 'additions': 25, 'deletions': 1, 'state': 'closed'}, {'id': 1017561074, 'number': 2215, 'closed': datetime.datetime(2024, 2, 20, 6, 59, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 4, 13, 37, 16, tzinfo=datetime.timezone.utc), 'time_taken': 48792139.0, 'time_delta': '564 days, 17:22:19', 'additions': 41, 'deletions': 0, 'state': 'closed'}, {'id': 988989522, 'number': 2157, 'closed': datetime.datetime(2022, 8, 25, 13, 33, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 6, 15, 56, 4, tzinfo=datetime.timezone.utc), 'time_taken': 4311454.0, 'time_delta': '49 days, 21:37:34', 'additions': 568, 'deletions': 0, 'state': 'closed'}, {'id': 987825580, 'number': 2155, 'closed': datetime.datetime(2022, 7, 6, 15, 56, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 5, 20, 43, 18, tzinfo=datetime.timezone.utc), 'time_taken': 69217.0, 'time_delta': '19:13:37', 'additions': 137, 'deletions': 0, 'state': 'closed'}, {'id': 981867268, 'number': 2132, 'closed': datetime.datetime(2022, 7, 21, 17, 50, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 28, 20, 54, 11, tzinfo=datetime.timezone.utc), 'time_taken': 1976150.0, 'time_delta': '22 days, 20:55:50', 'additions': 245, 'deletions': 3, 'state': 'closed'}, {'id': 977182174, 'number': 2121, 'closed': datetime.datetime(2022, 6, 28, 21, 26, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 23, 13, 44, 52, tzinfo=datetime.timezone.utc), 'time_taken': 459679.0, 'time_delta': '5 days, 7:41:19', 'additions': 171, 'deletions': 3, 'state': 'closed'}, {'id': 976841765, 'number': 2120, 'closed': datetime.datetime(2022, 6, 28, 21, 24, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 23, 8, 55, 58, tzinfo=datetime.timezone.utc), 'time_taken': 476920.0, 'time_delta': '5 days, 12:28:40', 'additions': 84, 'deletions': 85, 'state': 'closed'}, {'id': 969306368, 'number': 2106, 'closed': datetime.datetime(2022, 6, 16, 17, 25, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 16, 13, 6, 46, tzinfo=datetime.timezone.utc), 'time_taken': 15537.0, 'time_delta': '4:18:57', 'additions': 67, 'deletions': 0, 'state': 'closed'}, {'id': 960823827, 'number': 2092, 'closed': datetime.datetime(2022, 6, 15, 15, 52, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 7, 19, 46, 22, tzinfo=datetime.timezone.utc), 'time_taken': 677186.0, 'time_delta': '7 days, 20:06:26', 'additions': 85, 'deletions': 0, 'state': 'closed'}, {'id': 952453648, 'number': 2086, 'closed': datetime.datetime(2022, 6, 7, 10, 33, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 31, 21, 33, 2, tzinfo=datetime.timezone.utc), 'time_taken': 565233.0, 'time_delta': '6 days, 13:00:33', 'additions': 161, 'deletions': 56, 'state': 'closed'}, {'id': 950124349, 'number': 2080, 'closed': datetime.datetime(2022, 7, 26, 1, 30, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 28, 19, 35, 39, tzinfo=datetime.timezone.utc), 'time_taken': 5032518.0, 'time_delta': '58 days, 5:55:18', 'additions': 21, 'deletions': 3, 'state': 'closed'}, {'id': 925041401, 'number': 2049, 'closed': datetime.datetime(2022, 5, 9, 1, 51, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 1, 21, 31, 11, tzinfo=datetime.timezone.utc), 'time_taken': 620414.0, 'time_delta': '7 days, 4:20:14', 'additions': 18, 'deletions': 0, 'state': 'closed'}, {'id': 878456159, 'number': 1980, 'closed': datetime.datetime(2022, 3, 15, 11, 33, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 13, 19, 24, 24, tzinfo=datetime.timezone.utc), 'time_taken': 144536.0, 'time_delta': '1 day, 16:08:56', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 863698563, 'number': 1950, 'closed': datetime.datetime(2022, 3, 13, 13, 57, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 25, 18, 30, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1366039.0, 'time_delta': '15 days, 19:27:19', 'additions': 172, 'deletions': 145, 'state': 'closed'}, {'id': 860793470, 'number': 1947, 'closed': datetime.datetime(2022, 2, 22, 21, 50, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 22, 20, 23, 41, tzinfo=datetime.timezone.utc), 'time_taken': 5236.0, 'time_delta': '1:27:16', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 855752145, 'number': 1943, 'closed': datetime.datetime(2022, 2, 24, 22, 14, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 17, 17, 43, 39, tzinfo=datetime.timezone.utc), 'time_taken': 621038.0, 'time_delta': '7 days, 4:30:38', 'additions': 9, 'deletions': 9, 'state': 'closed'}, {'id': 833625664, 'number': 1920, 'closed': datetime.datetime(2022, 2, 3, 21, 54, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 27, 16, 5, 34, tzinfo=datetime.timezone.utc), 'time_taken': 625733.0, 'time_delta': '7 days, 5:48:53', 'additions': 93, 'deletions': 41, 'state': 'closed'}]"
+528883068,pybamm-validation,pybamm-team/pybamm-validation,Python,1,5,5,3,16,1,1,0,"[{'id': 1092865730, 'number': 3, 'closed': datetime.datetime(2022, 10, 19, 20, 59, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 19, 20, 48, 29, tzinfo=datetime.timezone.utc), 'time_taken': 642.0, 'time_delta': '0:10:42', 'additions': 22, 'deletions': 17, 'state': 'closed'}, {'id': 1053903680, 'number': 2, 'closed': datetime.datetime(2022, 10, 17, 20, 19, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 12, 21, 30, 48, tzinfo=datetime.timezone.utc), 'time_taken': 3019703.0, 'time_delta': '34 days, 22:48:23', 'additions': 14, 'deletions': 2, 'state': 'closed'}, {'id': 1043723117, 'number': 1, 'closed': datetime.datetime(2022, 9, 8, 13, 37, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 1, 13, 17, 28, tzinfo=datetime.timezone.utc), 'time_taken': 605976.0, 'time_delta': '7 days, 0:19:36', 'additions': 1034, 'deletions': 2, 'state': 'closed'}]"

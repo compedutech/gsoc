@@ -1,0 +1,259 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+675329285,Channel initialization span,"<!-- Please describe your pull request here. -->
+
+close #41 
+ref #40 
+
+## What I did
+
+- Enable to collect Channel Initialization Span
+  - Only for JNLP inbound connection
+  - Channel Initialization Span is between the first TCP handshaking begins and the `org.hudson.Channel` is connected
+  - Contains following the child spans
+    - Jnlp Endpoint Resolving Span
+    - Jnlp Initialization Span
+      - between the JNLP starts and `org.hudson.Channel` is connected or the JNLP fails
+  - [According to the JIRA ticket survey](https://docs.google.com/spreadsheets/d/1vpUJg5pfDZy6kMt9V8cbcrtplJQPg45h6bwu-h1FmL4/edit#gid=0), unexpected Jnlp endpoint resolution causes problems, especially under the special network environment, e.g., HTTP Proxy, SSH Tunnel. And that's why I create Jnlp Endpoint Resolving Span
+
+## Limitation
+
+Some spans are not precise enough as I only use the already-existing listener functionality in the remoting module.
+To collect more spans more precisely, I'm going to create a PR for the remoting modules.
+
+## Demo
+
+I disconnected and reconnected the agent several times to produce Channel Initialization spans.
+
+### Jaeger
+
+#### list
+
+![Screen Shot 2021-06-22 at 20 23 12](https://user-images.githubusercontent.com/44729662/122916301-b24f5c80-d397-11eb-9532-6e32c353cc43.png)
+
+#### each span
+
+![Screen Shot 2021-06-22 at 20 14 23](https://user-images.githubusercontent.com/44729662/122915179-723baa00-d396-11eb-9cae-f3382d765be3.png)
+
+#### details
+
+Protocol, port and host can be seen
+
+![Screen Shot 2021-06-25 at 15 35 53](https://user-images.githubusercontent.com/44729662/123380959-0ee68d80-d5cb-11eb-893a-ddb0429c0cc5.png)
+
+### Zipkin
+
+![Screen Shot 2021-06-22 at 20 17 54](https://user-images.githubusercontent.com/44729662/122915654-efffb580-d396-11eb-8339-027df7fbb280.png)
+
+## Checklist
+
+- [x] Make sure you are opening from a **topic/feature/bugfix branch** (right side) and not your master branch!
+- [x] Ensure that the pull request title represents the desired changelog entry
+- [x] Please describe what you did
+- [x] Link to relevant issues in GitHub or Jira
+- [x] Link to relevant pull requests, esp. upstream and downstream changes
+- [x] All follow-ups are documented as issues and-or TODO comments
+- [x] Ensure you have provided tests - that demonstrates feature works or fixes the issue
+- [x] Please update user documentation if needed
+- [x] Please update developer documentation if needed
+
+<!--
+Put an `x` into the [ ] to show you have filled the information
+-->
+",True,49,https://api.github.com/repos/jenkinsci/remoting-opentelemetry-plugin/pulls/49,https://github.com/jenkinsci/remoting-opentelemetry-plugin/pull/49,closed,614,143,11,1,0,0,0,0,[],2021-06-22 11:24:12+00:00,2021-07-05 07:34:15+00:00,1109403.0,"12 days, 20:10:03",[],"[{'commit_sha': 'c7bcaa8b68d043ef29034dc92819e7ffdb1f4cbf', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}]",Akihiro Kiuchi,44729662,,User,,69,,14,20
+689956541,Instrumentation feature,"<!-- Please describe your pull request here. -->
+
+## Proposal to introduce remoting instrumentation feature.
+
+Related to GSoC '21 [Remoting Monitoring project](https://www.jenkins.io/projects/gsoc/2021/projects/remoting-monitoring/).
+
+In the Remoting Monitoring project, we are trying to observe the behavior of remoting modules using OpenTelemetry. And users will be able to visualize the remoting behavior like this.
+
+![image](https://user-images.githubusercontent.com/44729662/125631850-14e446f1-2ddf-4dcc-99d6-53ebca8f4143.png)
+
+To collect more accurate and valuable data, we want to introduce a new feature to observe the remoting module.
+
+### What I did
+
+1. Adjust Launcher's `-cp` flag for Java9+
+  - It doesn't behave as Java's `-cp` flag in Java9+, but somehow valuable.
+  - In Java9+, we use a new URLClassLoader to load and set it to context class loader.
+2. Introduce `LauncherInstrumentationListener` and `EngineInstrumentationListener`
+  - They issue an event. e.g. `onRunWithStdinStdout`
+3. Enable to load user-defined `LauncherInstrumentationListener` and `EngineInstrumentationListener`
+  - Users have to pass the JAR file using the `-cp` flag
+    - the JAR file will include user-defined listener classes, which inherit `LauncherInstrumentationListenerAdapter` or `EngineInstrumentationListenerAdapter`
+  - Users have to set System properties.
+    - value is the comma-separated canonical names of the listener classes users created. 
+
+
+Command example
+```
+java \
+-Dhudson.remoting.Engine.engineInstrumentationListenerCanonicalNames=user.defined.engine.instrumentation.listener \
+-Dhudson.remoting.Launcher.launcherInstrumentationListenerCanonicalNames=user.defined.launcher.instrumentation.listener \
+-jar agent.jar -jnlpUrl $JENKINS_ROOT/computer/$NODE_NAME/jenkins-agent.jnlp \
+-workDir $WORK_DIR -cp user-defined-instrumentations.jar
+``` 
+
+Some references regarding the `-cp` flag.
+https://github.com/jenkinsci/remoting/pull/468
+https://github.com/jenkinsci/remoting/pull/443
+https://issues.jenkins.io/browse/JENKINS-64831
+
+### I would appreciate any negative or positive feedback!
+
+- [x] Make sure you are opening from a **topic/feature/bugfix branch** (right side) and not your main branch!
+- [x] Ensure that the pull request title represents the desired changelog entry
+- [x] Please describe what you did
+- [x] Link to relevant issues in GitHub or Jira
+- [x] Link to relevant pull requests, esp. upstream and downstream changes
+- [x] Ensure you have provided tests - that demonstrates feature works or fixes the issue
+
+<!--
+Put an `x` into the [ ] to show you have filled the information.
+The template comes from https://github.com/jenkinsci/.github/blob/master/.github/pull_request_template.md 
+You can override it by creating .github/pull_request_template.md  in your own repository 
+-->
+",False,471,https://api.github.com/repos/jenkinsci/remoting/pulls/471,https://github.com/jenkinsci/remoting/pull/471,closed,214,11,10,1,7,4,1,0,[{'name': 'enhancement'}],2021-07-14 14:18:20+00:00,2021-07-27 08:26:25+00:00,1102085.0,"12 days, 18:08:05","[{'comment_id': 673154426, 'comment_body': 'Do not rely on `Thread.contextClassLoader` please.\r\n\r\nIf you want to offer a flag allowing custom listener code to be loaded, do not do it this way. First of all, stop using system properties; introduce a real option with documentation. Then have it somehow specify the location of a JAR and/or class name(s) to load from it in a fresh class loader.\r\n\r\n(Nicest would be to use SezPoz but adding a new library dep for this purpose is likely overkill, and anyway it would potentially clash with the copy loaded from `jenkins-core.jar`.)', 'comment_created': datetime.datetime(2021, 7, 20, 14, 4, 56, tzinfo=datetime.timezone.utc), 'commenter': 'jglick', 'type': 'User'}, {'comment_id': 673158003, 'comment_body': 'KISS\r\n\r\n```suggestion\r\n            } catch (Exception e) {\r\n                LOGGER.log(Level.WARNING, ""Failed to load "" + listenerName, e);\r\n                success = false;\r\n```', 'comment_created': datetime.datetime(2021, 7, 20, 14, 8, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jglick', 'type': 'User'}, {'comment_id': 673159117, 'comment_body': 'Java’s built-in CCEs in newer versions are better than any message you come up with.\r\n\r\n```suggestion\r\n                instrumentation.add((EngineInstrumentationListener) listener);\r\n                LOGGER.log(Level.INFO, ""Loaded an external engine instrumentation listener ({0})"", listenerName);\r\n```', 'comment_created': datetime.datetime(2021, 7, 20, 14, 10, 10, tzinfo=datetime.timezone.utc), 'commenter': 'jglick', 'type': 'User'}, {'comment_id': 673265987, 'comment_body': 'For example, define a hook as a JAR whose manifest has a `Main-Class` entry giving the FQN of a class implementing whichever listener interface makes sense, with a `public` no-arg constructor. Then define a CLI arg\r\n\r\n```bash\r\n-listener /path/to/impl.jar\r\n```\r\n\r\nWhen specified, the hook would be loaded in its own private `URLClassLoader` parented to that of `agent.jar`.', 'comment_created': datetime.datetime(2021, 7, 20, 16, 11, 34, tzinfo=datetime.timezone.utc), 'commenter': 'jglick', 'type': 'User'}]","[{'commit_sha': 'd6820234c35d9f5139a4b5a7f03cf3ee4ba096d3', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}]",Akihiro Kiuchi,44729662,,User,,69,,14,20
+701443567,Logging feature,"<!-- Please describe your pull request here. -->
+
+## What I did are
+- Remove tracing feature
+- Introduce logging feature
+  - only logs committed via `java.util.logging`.
+    - TODO: collect logs printed to standard error
+  - OpenTelemetry logging implementation in Java is still a work in progress. 
+    See https://github.com/open-telemetry/opentelemetry-java/pull/3415.
+    So I implement some functions needed on my own.
+    I'll replace the code below when OpenTelemetry Java SDK fully implements these functions.
+      - BatchLogProcessor(Builder)
+      - LogSinkSdkProvider(Builder)
+      - OtlpGrpcLogExporter(Builder)
+      - TaggedLogRecord
+      - LogAdapter
+      - related interfaces (LogExporter and LogProcessor)
+- Stop using thread for monitoring engine
+- Package monitoring engine as Java agent.
+- Write user documentation including getting started (README.adoc)
+- Prepare docker-compose.yaml to set up
+   - OpenTelemetry collector
+   - Loki for log aggregation
+   - Prometheus for metric backend
+   - Grafana for log and metric visualization
+     - detasource is preconfigured.
+
+## Checklist
+
+- [x] Make sure you are opening from a **topic/feature/bugfix branch** (right side) and not your master branch!
+- [x] Ensure that the pull request title represents the desired changelog entry
+- [x] Please describe what you did
+- [x] Link to relevant issues in GitHub or Jira
+- [x] Link to relevant pull requests, esp. upstream and downstream changes
+- [x] All follow-ups are documented as issues and-or TODO comments
+- [x] Ensure you have provided tests - that demonstrates feature works or fixes the issue
+- [x] Please update user documentation if needed
+- [x] Please update developer documentation if needed
+
+<!--
+Put an `x` into the [ ] to show you have filled the information
+-->
+
+close #61
+close #2",True,67,https://api.github.com/repos/jenkinsci/remoting-opentelemetry-plugin/pulls/67,https://github.com/jenkinsci/remoting-opentelemetry-plugin/pull/67,closed,1404,1431,49,2,0,3,1,0,[{'name': 'enhancement'}],2021-08-02 13:00:09+00:00,2021-08-05 14:07:34+00:00,263245.0,"3 days, 1:07:25","[{'comment_id': 680954015, 'comment_body': 'Most of this class is just a copy of the `io.opentelemetry.sdk.logging.export.BatchLogProcessor`', 'comment_created': datetime.datetime(2021, 8, 2, 13, 6, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Aki-7', 'type': 'User'}, {'comment_id': 680958064, 'comment_body': ""I understand it's bad manners. I'm sure I'll remove this class when this [PR](https://github.com/open-telemetry/opentelemetry-java/pull/3415) is merged."", 'comment_created': datetime.datetime(2021, 8, 2, 13, 11, 45, tzinfo=datetime.timezone.utc), 'commenter': 'Aki-7', 'type': 'User'}, {'comment_id': 683471441, 'comment_body': 'Could it be a separate PR? ', 'comment_created': datetime.datetime(2021, 8, 5, 13, 49, 55, tzinfo=datetime.timezone.utc), 'commenter': 'oleg-nenashev', 'type': 'User'}]","[{'commit_sha': 'f063e198caf561eb9f9780d52aee2e087eeedc61', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e322ffb0fb63fda494d73fa9a9574deb9db152d', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}]",Akihiro Kiuchi,44729662,,User,,69,,14,20
+705528138,Filter metrics by regular expression,"<!-- Please describe your pull request here. -->
+
+What metrics to collect is different from user to user, and this enables users to filter metrics to collect by regular expression.
+The regular expression will be specified by `REMOTING_OTEL_METRIC_FILTER` environment variables.
+The metrics whose name match the specified regex will be collected.
+
+close #73 
+
+## Checklist
+
+- [x] Make sure you are opening from a **topic/feature/bugfix branch** (right side) and not your master branch!
+- [x] Ensure that the pull request title represents the desired changelog entry
+- [x] Please describe what you did
+- [x] Link to relevant issues in GitHub or Jira
+- [x] Link to relevant pull requests, esp. upstream and downstream changes
+- [x] All follow-ups are documented as issues and-or TODO comments
+- [x] Ensure you have provided tests - that demonstrates feature works or fixes the issue
+- [x] Please update user documentation if needed
+- [x] Please update developer documentation if needed
+
+<!--
+Put an `x` into the [ ] to show you have filled the information
+-->
+",True,80,https://api.github.com/repos/jenkinsci/remoting-opentelemetry-plugin/pulls/80,https://github.com/jenkinsci/remoting-opentelemetry-plugin/pull/80,closed,217,201,10,1,0,2,1,0,[{'name': 'enhancement'}],2021-08-06 14:27:26+00:00,2021-08-09 11:28:33+00:00,248467.0,"2 days, 21:01:07","[{'comment_id': 684910197, 'comment_body': 'It might be more efficient to pass the null pattern and to handle it as separate case', 'comment_created': datetime.datetime(2021, 8, 9, 5, 0, 21, tzinfo=datetime.timezone.utc), 'commenter': 'oleg-nenashev', 'type': 'User'}, {'comment_id': 684916624, 'comment_body': ""I see, but it does the pattern evaluation only once for each metric at the registration phase, and I couldn't come up with a better way to achieve this without redundant code. So I will merge this PR as it is and I'll fix this later if the efficiency seems to be a problem. Thank you for your review!"", 'comment_created': datetime.datetime(2021, 8, 9, 5, 25, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Aki-7', 'type': 'User'}]","[{'commit_sha': 'bd7b37414660e04973be7162c85d12090626b0a2', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}]",Akihiro Kiuchi,44729662,,User,,69,,14,20
+707037361,Filesystem metrics (Linux only),"<!-- Please describe your pull request here. -->
+
+Collect filesystem metrics ([OpenTelmetry specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/system-metrics.md#systemfilesystem---filesystem-metrics)).
+
+- get mount info by reading `/proc/mounts`
+- use [File#getUsableSpace](https://docs.oracle.com/javase/8/docs/api/java/io/File.html#getUsableSpace--) and [File#getTotalSpace](https://docs.oracle.com/javase/8/docs/api/java/io/File.html#getTotalSpace--) to get free disk space and total disk space of each filesystem.
+- thus, Linux only so far. (leave #83)
+
+close: #72 
+leave: #83 
+
+## Checklist
+
+- [x] Make sure you are opening from a **topic/feature/bugfix branch** (right side) and not your master branch!
+- [x] Ensure that the pull request title represents the desired changelog entry
+- [x] Please describe what you did
+- [x] Link to relevant issues in GitHub or Jira
+- [x] Link to relevant pull requests, esp. upstream and downstream changes
+- [x] All follow-ups are documented as issues and-or TODO comments
+- [x] Ensure you have provided tests - that demonstrates feature works or fixes the issue
+- [x] Please update user documentation if needed
+- [x] Please update developer documentation if needed
+
+<!--
+Put an `x` into the [ ] to show you have filled the information
+-->
+",True,82,https://api.github.com/repos/jenkinsci/remoting-opentelemetry-plugin/pulls/82,https://github.com/jenkinsci/remoting-opentelemetry-plugin/pull/82,closed,293,31,6,1,0,0,1,0,[{'name': 'enhancement'}],2021-08-10 05:17:54+00:00,2021-08-13 04:58:09+00:00,258015.0,"2 days, 23:40:15",[],"[{'commit_sha': '8806bf50864a77df74715cec72bdcd48e8541b64', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}]",Akihiro Kiuchi,44729662,,User,,69,,14,20
+710284836,Refactor: Introduce declarative configuration layer,"<!-- Please describe your pull request here. -->
+
+Preparation for #71 #39 .
+
+Enable to load configurations like this.
+
+```java
+@Configuration
+public class Config {
+    @ConfigOption(env = ""OTEL_EXPORTER_OTLP_ENDPOINT"", required = true)
+    public String endpoint;
+
+    @ConfigOption(env = ""SOME_ENV"")
+    public Pattern value = Pattern.compile(""^default value$"");
+}
+
+```
+```java
+Config conf = new Config();
+ConfigParser parser = new ConfigParser(conf);
+parser.parse();
+```
+
+It supports loading config from environment variables using a `env` attribute.
+And I'm planning to add more attributes if needed to load configurations from files, system properties, etc...
+
+## Checklist
+
+- [x] Make sure you are opening from a **topic/feature/bugfix branch** (right side) and not your master branch!
+- [x] Ensure that the pull request title represents the desired changelog entry
+- [x] Please describe what you did
+- [x] Link to relevant issues in GitHub or Jira
+- [x] Link to relevant pull requests, esp. upstream and downstream changes
+- [x] All follow-ups are documented as issues and-or TODO comments
+- [x] Ensure you have provided tests - that demonstrates feature works or fixes the issue
+- [ ] Please update user documentation if needed
+- [ ] Please update developer documentation if needed
+
+<!--
+Put an `x` into the [ ] to show you have filled the information
+-->
+",True,86,https://api.github.com/repos/jenkinsci/remoting-opentelemetry-plugin/pulls/86,https://github.com/jenkinsci/remoting-opentelemetry-plugin/pull/86,closed,440,68,16,4,0,7,0,0,[],2021-08-12 06:17:17+00:00,2021-08-17 06:27:33+00:00,432616.0,"5 days, 0:10:16","[{'comment_id': 687933735, 'comment_body': 'hey, you can define "".*"" as a common constant', 'comment_created': datetime.datetime(2021, 8, 12, 17, 10, 54, tzinfo=datetime.timezone.utc), 'commenter': 'stellargo', 'type': 'User'}, {'comment_id': 687934566, 'comment_body': 'similarly, can define this string in common constants as well', 'comment_created': datetime.datetime(2021, 8, 12, 17, 12, 6, tzinfo=datetime.timezone.utc), 'commenter': 'stellargo', 'type': 'User'}, {'comment_id': 687938682, 'comment_body': 'instead of asserting for boolean hasError you can do:\r\n`@Test(expected = ConfigurationParseException.class)`', 'comment_created': datetime.datetime(2021, 8, 12, 17, 18, 3, tzinfo=datetime.timezone.utc), 'commenter': 'stellargo', 'type': 'User'}, {'comment_id': 687944584, 'comment_body': 'linting', 'comment_created': datetime.datetime(2021, 8, 12, 17, 26, 9, tzinfo=datetime.timezone.utc), 'commenter': 'stellargo', 'type': 'User'}, {'comment_id': 688941969, 'comment_body': 'It is possible, but overall it is an overkill when there is just one usage', 'comment_created': datetime.datetime(2021, 8, 14, 15, 18, 32, tzinfo=datetime.timezone.utc), 'commenter': 'oleg-nenashev', 'type': 'User'}, {'comment_id': 688942038, 'comment_body': 'same. OTOH there is a typo\r\n\r\n```suggestion\r\n            LOGGER.log(Level.WARNING, ""Failed to load configuration"", e);\r\n```', 'comment_created': datetime.datetime(2021, 8, 14, 15, 19, 25, tzinfo=datetime.timezone.utc), 'commenter': 'oleg-nenashev', 'type': 'User'}, {'comment_id': 688942476, 'comment_body': ""It is not the best practice in general, because it would catch 'Error's that should be fatal. In this case it leads to a failure"", 'comment_created': datetime.datetime(2021, 8, 14, 15, 23, 2, tzinfo=datetime.timezone.utc), 'commenter': 'oleg-nenashev', 'type': 'User'}]","[{'commit_sha': 'd40cfa448900afa597a40aa6dbb05a41254d6e0a', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a4ad6ed013be4ea3fd3285357d2dbc44ef4cae8', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '517d42fab63e70b4ccd99368f45130de863e331b', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b6262b17aeef144a407be60e16eb1cb83f77032c', 'committer_username': 'Aki-7', 'committer_name': 'Akihiro Kiuchi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 3, 15, 42, 59, tzinfo=datetime.timezone.utc)}]",Akihiro Kiuchi,44729662,,User,,69,,14,20
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+373481895,remoting-opentelemetry-plugin,jenkinsci/remoting-opentelemetry-plugin,Java,10,16,5,3,92,21,11,13,"[{'id': 732714186, 'number': 99, 'closed': datetime.datetime(2021, 9, 14, 17, 53, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 13, 12, 50, 18, tzinfo=datetime.timezone.utc), 'time_taken': 104580.0, 'time_delta': '1 day, 5:03:00', 'additions': 21, 'deletions': 13, 'state': 'closed'}, {'id': 732221661, 'number': 98, 'closed': datetime.datetime(2021, 9, 13, 4, 29, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 12, 19, 18, 51, tzinfo=datetime.timezone.utc), 'time_taken': 33043.0, 'time_delta': '9:10:43', 'additions': 150, 'deletions': 0, 'state': 'closed'}, {'id': 721046900, 'number': 94, 'closed': datetime.datetime(2021, 8, 27, 5, 46, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 27, 5, 46, 51, tzinfo=datetime.timezone.utc), 'time_taken': 8.0, 'time_delta': '0:00:08', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 714818850, 'number': 92, 'closed': datetime.datetime(2021, 8, 18, 15, 13, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 18, 7, 28, 32, tzinfo=datetime.timezone.utc), 'time_taken': 27916.0, 'time_delta': '7:45:16', 'additions': 6, 'deletions': 0, 'state': 'closed'}, {'id': 713434214, 'number': 89, 'closed': datetime.datetime(2021, 8, 18, 7, 7, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 13, 21, 40, tzinfo=datetime.timezone.utc), 'time_taken': 150357.0, 'time_delta': '1 day, 17:45:57', 'additions': 8, 'deletions': 1, 'state': 'closed'}, {'id': 713410476, 'number': 88, 'closed': datetime.datetime(2021, 8, 18, 7, 8, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 12, 52, 53, tzinfo=datetime.timezone.utc), 'time_taken': 152133.0, 'time_delta': '1 day, 18:15:33', 'additions': 166, 'deletions': 4, 'state': 'closed'}, {'id': 710284836, 'number': 86, 'closed': datetime.datetime(2021, 8, 17, 6, 27, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 12, 6, 17, 17, tzinfo=datetime.timezone.utc), 'time_taken': 432616.0, 'time_delta': '5 days, 0:10:16', 'additions': 440, 'deletions': 68, 'state': 'closed'}, {'id': 708268867, 'number': 85, 'closed': datetime.datetime(2021, 8, 11, 8, 24, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 11, 5, 52, 51, tzinfo=datetime.timezone.utc), 'time_taken': 9071.0, 'time_delta': '2:31:11', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 708227927, 'number': 84, 'closed': datetime.datetime(2021, 8, 11, 5, 43, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 11, 5, 23, 31, tzinfo=datetime.timezone.utc), 'time_taken': 1186.0, 'time_delta': '0:19:46', 'additions': 0, 'deletions': 5, 'state': 'closed'}, {'id': 707037361, 'number': 82, 'closed': datetime.datetime(2021, 8, 13, 4, 58, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 5, 17, 54, tzinfo=datetime.timezone.utc), 'time_taken': 258015.0, 'time_delta': '2 days, 23:40:15', 'additions': 293, 'deletions': 31, 'state': 'closed'}, {'id': 705528138, 'number': 80, 'closed': datetime.datetime(2021, 8, 9, 11, 28, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 14, 27, 26, tzinfo=datetime.timezone.utc), 'time_taken': 248467.0, 'time_delta': '2 days, 21:01:07', 'additions': 217, 'deletions': 201, 'state': 'closed'}, {'id': 705431987, 'number': 79, 'closed': datetime.datetime(2021, 8, 6, 12, 18, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 12, 5, 50, tzinfo=datetime.timezone.utc), 'time_taken': 735.0, 'time_delta': '0:12:15', 'additions': 56, 'deletions': 0, 'state': 'closed'}, {'id': 705249580, 'number': 78, 'closed': datetime.datetime(2021, 8, 6, 7, 25, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 7, 13, 5, tzinfo=datetime.timezone.utc), 'time_taken': 724.0, 'time_delta': '0:12:04', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 705230044, 'number': 76, 'closed': datetime.datetime(2021, 8, 6, 6, 58, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 6, 33, 16, tzinfo=datetime.timezone.utc), 'time_taken': 1491.0, 'time_delta': '0:24:51', 'additions': 0, 'deletions': 16, 'state': 'closed'}, {'id': 705219446, 'number': 75, 'closed': datetime.datetime(2021, 8, 6, 6, 16, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 6, 9, 37, tzinfo=datetime.timezone.utc), 'time_taken': 441.0, 'time_delta': '0:07:21', 'additions': 10, 'deletions': 4, 'state': 'closed'}, {'id': 705178212, 'number': 74, 'closed': datetime.datetime(2021, 8, 6, 12, 20, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 4, 16, 57, tzinfo=datetime.timezone.utc), 'time_taken': 29034.0, 'time_delta': '8:03:54', 'additions': 17, 'deletions': 0, 'state': 'closed'}, {'id': 702084402, 'number': 69, 'closed': datetime.datetime(2021, 8, 5, 4, 37, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 8, 49, 24, tzinfo=datetime.timezone.utc), 'time_taken': 157671.0, 'time_delta': '1 day, 19:47:51', 'additions': 1, 'deletions': 19, 'state': 'closed'}, {'id': 701443567, 'number': 67, 'closed': datetime.datetime(2021, 8, 5, 14, 7, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 2, 13, 0, 9, tzinfo=datetime.timezone.utc), 'time_taken': 263245.0, 'time_delta': '3 days, 1:07:25', 'additions': 1404, 'deletions': 1431, 'state': 'closed'}, {'id': 690867482, 'number': 66, 'closed': datetime.datetime(2021, 8, 3, 7, 6, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 15, 16, 18, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1608463.0, 'time_delta': '18 days, 14:47:43', 'additions': 542, 'deletions': 799, 'state': 'closed'}, {'id': 684209366, 'number': 64, 'closed': datetime.datetime(2021, 7, 15, 16, 27, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 6, 9, 28, 2, tzinfo=datetime.timezone.utc), 'time_taken': 802750.0, 'time_delta': '9 days, 6:59:10', 'additions': 320, 'deletions': 76, 'state': 'closed'}, {'id': 683530986, 'number': 52, 'closed': datetime.datetime(2021, 7, 6, 8, 49, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 9, 27, 44, tzinfo=datetime.timezone.utc), 'time_taken': 84121.0, 'time_delta': '23:22:01', 'additions': 522, 'deletions': 53, 'state': 'closed'}, {'id': 675329285, 'number': 49, 'closed': datetime.datetime(2021, 7, 5, 7, 34, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 22, 11, 24, 12, tzinfo=datetime.timezone.utc), 'time_taken': 1109403.0, 'time_delta': '12 days, 20:10:03', 'additions': 614, 'deletions': 143, 'state': 'closed'}, {'id': 674349302, 'number': 43, 'closed': datetime.datetime(2021, 6, 22, 10, 14, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 21, 8, 45, tzinfo=datetime.timezone.utc), 'time_taken': 91748.0, 'time_delta': '1 day, 1:29:08', 'additions': 221, 'deletions': 189, 'state': 'closed'}, {'id': 672177372, 'number': 40, 'closed': datetime.datetime(2021, 6, 21, 8, 20, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 4, 18, 39, tzinfo=datetime.timezone.utc), 'time_taken': 360125.0, 'time_delta': '4 days, 4:02:05', 'additions': 571, 'deletions': 42, 'state': 'closed'}, {'id': 669289576, 'number': 37, 'closed': datetime.datetime(2021, 6, 16, 8, 30, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 7, 2, 21, tzinfo=datetime.timezone.utc), 'time_taken': 178113.0, 'time_delta': '2 days, 1:28:33', 'additions': 480, 'deletions': 4, 'state': 'closed'}, {'id': 669287504, 'number': 35, 'closed': datetime.datetime(2021, 6, 14, 7, 0, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 7, 0, 7, tzinfo=datetime.timezone.utc), 'time_taken': 13.0, 'time_delta': '0:00:13', 'additions': 0, 'deletions': 1, 'state': 'closed'}, {'id': 669279725, 'number': 34, 'closed': datetime.datetime(2021, 6, 14, 6, 52, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 6, 51, 35, tzinfo=datetime.timezone.utc), 'time_taken': 51.0, 'time_delta': '0:00:51', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 669275319, 'number': 33, 'closed': datetime.datetime(2021, 6, 14, 7, 1, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 6, 46, 48, tzinfo=datetime.timezone.utc), 'time_taken': 883.0, 'time_delta': '0:14:43', 'additions': 480, 'deletions': 4, 'state': 'closed'}, {'id': 669254408, 'number': 32, 'closed': datetime.datetime(2021, 6, 14, 6, 43, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 6, 20, 18, tzinfo=datetime.timezone.utc), 'time_taken': 1372.0, 'time_delta': '0:22:52', 'additions': 480, 'deletions': 4, 'state': 'closed'}, {'id': 668107626, 'number': 30, 'closed': datetime.datetime(2021, 6, 14, 5, 41, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 11, 12, 45, 48, tzinfo=datetime.timezone.utc), 'time_taken': 233738.0, 'time_delta': '2 days, 16:55:38', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 666619870, 'number': 23, 'closed': datetime.datetime(2021, 6, 11, 8, 23, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 7, 51, 11, tzinfo=datetime.timezone.utc), 'time_taken': 88317.0, 'time_delta': '1 day, 0:31:57', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 666615242, 'number': 22, 'closed': datetime.datetime(2021, 6, 14, 5, 41, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 7, 45, 6, tzinfo=datetime.timezone.utc), 'time_taken': 338195.0, 'time_delta': '3 days, 21:56:35', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 665644596, 'number': 20, 'closed': datetime.datetime(2021, 6, 10, 2, 39, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 7, 33, 35, tzinfo=datetime.timezone.utc), 'time_taken': 68731.0, 'time_delta': '19:05:31', 'additions': 0, 'deletions': 12, 'state': 'closed'}, {'id': 665621278, 'number': 19, 'closed': datetime.datetime(2021, 6, 11, 8, 23, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 7, 0, 19, tzinfo=datetime.timezone.utc), 'time_taken': 177790.0, 'time_delta': '2 days, 1:23:10', 'additions': 6, 'deletions': 1, 'state': 'closed'}, {'id': 664720940, 'number': 13, 'closed': datetime.datetime(2021, 6, 10, 3, 30, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 8, 11, 8, 16, tzinfo=datetime.timezone.utc), 'time_taken': 145314.0, 'time_delta': '1 day, 16:21:54', 'additions': 157, 'deletions': 35, 'state': 'closed'}, {'id': 663735797, 'number': 9, 'closed': datetime.datetime(2021, 6, 8, 1, 55, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 7, 16, 50, 57, tzinfo=datetime.timezone.utc), 'time_taken': 32654.0, 'time_delta': '9:04:14', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 662951921, 'number': 4, 'closed': datetime.datetime(2021, 6, 7, 11, 4, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 6, 13, 22, 17, tzinfo=datetime.timezone.utc), 'time_taken': 78159.0, 'time_delta': '21:42:39', 'additions': 318, 'deletions': 0, 'state': 'closed'}]"
+2040168,remoting,jenkinsci/remoting,Java,268,236,36,107,3261,10,18,10,"[{'id': 689956541, 'number': 471, 'closed': datetime.datetime(2021, 7, 27, 8, 26, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 14, 14, 18, 20, tzinfo=datetime.timezone.utc), 'time_taken': 1102085.0, 'time_delta': '12 days, 18:08:05', 'additions': 214, 'deletions': 11, 'state': 'closed'}, {'id': 634062340, 'number': 452, 'closed': datetime.datetime(2021, 5, 13, 19, 2, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 8, 6, 54, 54, tzinfo=datetime.timezone.utc), 'time_taken': 475677.0, 'time_delta': '5 days, 12:07:57', 'additions': 28, 'deletions': 2, 'state': 'closed'}, {'id': 628925095, 'number': 450, 'closed': datetime.datetime(2021, 5, 7, 1, 32, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 3, 8, 15, 41, tzinfo=datetime.timezone.utc), 'time_taken': 321382.0, 'time_delta': '3 days, 17:16:22', 'additions': 7, 'deletions': 0, 'state': 'closed'}]"

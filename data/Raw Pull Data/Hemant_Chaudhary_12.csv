@@ -1,0 +1,26 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1490640331,[Do not merge] POC for @plone/client integration with Volto,"This PR adds a POC  for `@plone/client` integration with the Breadcrumbs component and updates the tests accordingly.
+
+`@plone/client` provides react-hooks and `@tanstack/react-query` query objects to fetch data and call mutations for various actions,
+
+This POC currently uses an older version of `@plone/client`. I will update the POC when the latest version is published.
+
+## Some callouts for this PR:
+
+### Issue with axios import (used by `@plone/client` internally)
+Jest requires cjs version of axios to work, so I have linked to the cjs version directly in the jest ""moduleNameMapper"" - apparently latest version of jest should work out of the box though so we can consider upgrading jest and other jest-related dependencies of volto (ref: https://stackoverflow.com/a/74020536)
+
+### Mocking API calls
+Previously the tests were written by updating the redux `store` object with a mocked value that would resolve to props in the components being tested. With `@tanstack/react-query` we don't need the redux store anymore, as it maintains its own data store internally based on the query keys. Consequently, we need to mock the API call being made by `@plone/client` to get the data.
+
+There are 2 ways to do it:
+1. mock the `axios` object - this is non-trivial because `axios` is a transitive dependency for volto (volto => @plone/client => axios) and that makes it hard to do. I have tried multiple ways to do this with no success. We can definitely do it if we make `axios` a peer-dependency of `@plone/client` instead of a direct dependency.
+2. use a global http interceptor for nodejs like `nock` - this is a fairly simple solution and it is implemented in this POC
+
+### Issue with moduleNameMapper Regex
+To work around a conflict between moduleNameMapper Regex and `node_modules/zod`, we can modify the regex from `""/(.*)\/locales\/(.*)/"": ""<rootDir>/locales/$2""` to `""/\\.\\.\/locales\/(.*)/"": ""<rootDir>/locales/$2""`. This ensures the regex targets the desired paths and avoids unintended matches with zod for now.
+
+There are some improvements to be made to `@plone/client` to make sure that the integration with volto (and other non-react) projects is smoother. More info on this will be added to `@plone/client` readme.",False,5133,https://api.github.com/repos/plone/volto/pulls/5133,https://github.com/plone/volto/pull/5133,open,244,77,7,3,6,0,0,0,[],2023-08-26 12:13:37+00:00,,0.0,,[],"[{'commit_sha': 'f1fc1afef026f2465064625355e777af01f6bc8e', 'committer_username': 'hemant-hc', 'committer_name': 'Hemant Chaudhary', 'committer_email': 'me@hemantchaudhary.in', 'commit_date': datetime.datetime(2021, 10, 16, 8, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ff9e9e6f3d78fb4d9895236f91e2ff86d767cbdd', 'committer_username': 'hemant-hc', 'committer_name': 'Hemant Chaudhary', 'committer_email': 'me@hemantchaudhary.in', 'commit_date': datetime.datetime(2021, 10, 16, 8, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '784cf746609c93f33b5dfc65604bddb950c56a3e', 'committer_username': 'hemant-hc', 'committer_name': 'Hemant Chaudhary', 'committer_email': 'me@hemantchaudhary.in', 'commit_date': datetime.datetime(2021, 10, 16, 8, 39, tzinfo=datetime.timezone.utc)}]",Hemant Chaudhary,92625518,me@hemantchaudhary.in,User,,8,,3,10
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+58869158,volto,plone/volto,JavaScript,597,439,170,147,6456,946,563,174,"[{'id': 1490640331, 'number': 5133, 'closed': None, 'created': datetime.datetime(2023, 8, 26, 12, 13, 37, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 244, 'deletions': 77, 'state': 'open'}]"

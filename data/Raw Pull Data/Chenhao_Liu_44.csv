@@ -1,0 +1,32 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1512480315,Canasta2.0 adding wiki farm support,"# AddWiki Farm Support in Canasta
+
+Related Issue: #57 
+### Overview
+One big feature Canasta lacks is the ability to support running multiple wikis, i.e. a wiki family or wiki farm, within the same container. Such wikis would be differentiated by either:
+
+a different directory (e.g. example.com/a, example.com/b)
+a different subdomain (e.g. a.example.com, b.example.com)
+or different domains for each wiki (example1.com, example2.com).
+
+We added wiki farm support for canasta.
+
+### New Features and Improvements
+- **Wiki Farm Support**: The updated implementation allows multiple wikis to run independently within a single container.
+- **Enhanced CLI**: Canasta's command-line interface is now extended to manage wiki farm configurations effortlessly.
+
+### Implementation Details
+1. **Common Setting**: A shared configuration file provides settings that are common across all wikis.
+2. **Unique IDs and settings**: Each wiki has a unique ID that allows for customized settings.
+3. **Auto-Generated `.htaccess`**: The `generatewikihtaccess.sh` script automatically sets up `.htaccess` files for wikis hosted under directories, thereby managing access permissions.
+
+### Test
+We deployed the Canasta2.0 on the AWS.
+Now it have three wikis running in one container.
+[https://canasta2.com](https://canasta2.com)
+[https://canasta2.com/a](https://canasta2.com/a)
+[https://subdomain.canasta2.com](https://subdomain.canasta2.com)
+They are all publicly accessible and everyone is welcome to test them.",True,295,https://api.github.com/repos/CanastaWiki/Canasta/pulls/295,https://github.com/CanastaWiki/Canasta/pull/295,closed,574,31,11,1,4,0,0,0,[],2023-09-12 16:54:40+00:00,2023-09-29 13:52:51+00:00,1457891.0,"16 days, 20:58:11",[],"[{'commit_sha': '454bb2ac90b94e336f009a627377d2a0a2ad7d25', 'committer_username': 'chl178', 'committer_name': 'Chenhao Liu', 'committer_email': 'chenhaoliu959@gmail.com', 'commit_date': datetime.datetime(2022, 10, 27, 1, 23, 42, tzinfo=datetime.timezone.utc)}]",Chenhao Liu,116774313,chenhaoliu959@gmail.com,User,,15,,36,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+381891423,Canasta,CanastaWiki/Canasta,Shell,27,36,13,18,475,46,70,5,"[{'id': 1512480315, 'number': 295, 'closed': datetime.datetime(2023, 9, 29, 13, 52, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 12, 16, 54, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1457891.0, 'time_delta': '16 days, 20:58:11', 'additions': 574, 'deletions': 31, 'state': 'closed'}, {'id': 1460071786, 'number': 269, 'closed': datetime.datetime(2024, 2, 12, 14, 52, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 2, 16, 18, 54, tzinfo=datetime.timezone.utc), 'time_taken': 16756438.0, 'time_delta': '193 days, 22:33:58', 'additions': 104, 'deletions': 5, 'state': 'closed'}, {'id': 1378101455, 'number': 250, 'closed': datetime.datetime(2023, 9, 12, 17, 1, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 5, 2, 37, 51, tzinfo=datetime.timezone.utc), 'time_taken': 8605423.0, 'time_delta': '99 days, 14:23:43', 'additions': 574, 'deletions': 32, 'state': 'closed'}, {'id': 1295548298, 'number': 228, 'closed': datetime.datetime(2023, 7, 3, 21, 12, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 30, 3, 9, 11, tzinfo=datetime.timezone.utc), 'time_taken': 8273027.0, 'time_delta': '95 days, 18:03:47', 'additions': 43, 'deletions': 41, 'state': 'closed'}]"

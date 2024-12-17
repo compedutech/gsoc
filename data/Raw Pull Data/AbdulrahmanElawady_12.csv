@@ -1,0 +1,349 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1424929547,Add Varnish Support Blueprint,"<!--
+Thank you for contributing! Please be sure to read our contribution guidelines: https://github.com/apache/trafficcontrol/blob/master/CONTRIBUTING.md
+If this closes or relates to an existing issue, please reference it using one of the following:
+
+Closes: #ISSUE
+Related: #ISSUE
+
+If this PR fixes a security vulnerability, DO NOT submit! Instead, contact
+the Apache Traffic Control Security Team at security@trafficcontrol.apache.org and follow the
+guidelines at https://apache.org/security regarding vulnerability disclosure.
+-->
+
+This is a Blueprint describing the changes required to use Varnish as a cache server in Traffic Control.
+
+<!-- **^ Add meaningful description above** --><hr/>
+
+## Which Traffic Control components are affected by this PR?
+<!-- Please delete all components from this list that are NOT affected by this PR.
+Feel free to add the name of a tool or script that is affected but not on the list.
+-->
+- Documentation
+
+## What is the best way to verify this PR?
+<!-- Please include here ALL the steps necessary to test your PR.
+If your PR has tests (and most should), provide the steps needed to run the tests.
+If not, please provide step-by-step instructions to test the PR manually and explain why your PR does not need tests. -->
+This is a Blueprint.
+
+## PR submission checklist
+- [ ] This PR has tests <!-- If not, please delete this text and explain why this PR does not need tests. -->
+- [x] This PR has documentation <!-- If not, please delete this text and explain why this PR does not need documentation. -->
+- [ ] This PR has a CHANGELOG.md entry <!-- A fix for a bug from an ATC release, an improvement, or a new feature should have a changelog entry. -->
+- [x] This PR **DOES NOT FIX A SERIOUS SECURITY VULNERABILITY** (see [the Apache Software Foundation's security guidelines](https://apache.org/security) for details)
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+""License""); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+",True,7620,https://api.github.com/repos/apache/trafficcontrol/pulls/7620,https://github.com/apache/trafficcontrol/pull/7620,closed,116,0,1,3,0,19,2,1,"[{'name': 'cache-config'}, {'name': 'blueprint'}]",2023-07-07 16:30:35+00:00,2023-07-21 16:23:22+00:00,1209167.0,"13 days, 23:52:47","[{'comment_id': 1260092223, 'comment_body': 'What does this profile type do?', 'comment_created': datetime.datetime(2023, 7, 11, 18, 0, 36, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260093279, 'comment_body': ""I would love it, personally, if we stopped doing the whole `go-` prefix thing. It's a Go package, so it kinda seems redundant.\r\n\r\nAlso, I'd vote we make it a subpackage of the atscfg package. Or maybe that would be a big refactor to pull generic stuff out into like a `genconfig` package with separate sub-packages for different caching systems. Might be out-of-scope, but you do mention a refactor below."", 'comment_created': datetime.datetime(2023, 7, 11, 18, 1, 28, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260096826, 'comment_body': ""why not just let `t3c-generate` do that? Add, like `--cache=varnish` if it can't auto-detect it. Although, maybe that's what the profile type could be used for? Tells `t3c` it's a varnish cache?"", 'comment_created': datetime.datetime(2023, 7, 11, 18, 4, 19, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260099349, 'comment_body': 'This seems out-of-scope for ATC - some things use logrotate and some don\'t, but it\'s not part of our project\'s responsibilities to dictate that. It\'s an operations decision how that\'s handled.\r\n\r\nAlso, not sure what ""manage SSL part of the server"" means. SSL keys are retrieved from Traffic Vault, supporting dynamically generating them on the cache-side seems like a headache we don\'t need.', 'comment_created': datetime.datetime(2023, 7, 11, 18, 6, 32, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260126259, 'comment_body': ""We could definitely reuse `t3c-generate` and `t3c-apply`, however flags used with these commands are made for ATS and I assume new Varnish stuff will introduce new flags too. So, it might be confusing to have some flags work with `--cache=ats` and some with `--cache=varnish` and possibly new cache servers added to ATC. Wouldn't it be better if `t3c` decides from profile type if it uses `t3c-varnish-apply` or basically for any cache server `t3c-*-apply` instead of having all logic in the same command?"", 'comment_created': datetime.datetime(2023, 7, 11, 18, 31, 8, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1260135573, 'comment_body': ""For `logrotate` part, the idea was that ATS already handles log rotating https://docs.trafficserver.apache.org/admin-guide/files/logging.yaml.en.html#logs\r\nSo, the idea was to replicate exactly how ATS works in a system using Varnish. However, if it is not desirable to have the cache server handles the log rotation we could ignore that and assume the system administrator will handle that.\r\n\r\nFor Hitch part, maybe the wording wasn't clear (will change that) but basically it handles secure connections coming to the cache server as Varnish alone does not handle that. So, terminating certificates for example and anything related to `https` requests will be managed by Hitch not Varnish as again it does not support any of that."", 'comment_created': datetime.datetime(2023, 7, 11, 18, 41, 30, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1260159090, 'comment_body': 'While it is definitely a better and cleaner solution to have some common package between all cache generation packages, it might be a out of scope as the refactoring mentioned was meant to be about making some functions related to config data public and reusable from another package but not a new package containing every thing related to config data. But, It is an interesting idea and we could discuss if it should be a priority or another project to be done later.\r\n\r\nNot sure exactly what is meant by making `varnishcfg` subpackage to `atscfg`? Are new packages for other cache servers will be also part of `atscfg`?', 'comment_created': datetime.datetime(2023, 7, 11, 19, 1, 51, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1260274381, 'comment_body': 'no, each cache server software should be its own package, but just ideally all underneath a larger generic package that defers to specific implementations to calculate file contents. Which may be out of scope, like I said.', 'comment_created': datetime.datetime(2023, 7, 11, 20, 57, 45, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260326226, 'comment_body': ""anything in t3c generate that currently works a specific way because it only supports ATS should be rewritten/reworded to also support varnish, if we're gonna support varnish. Just as an example, there's an option `--dir` that says it's used to specify the ATS configuration directory - it should instead just say that it's used to specify the cache server configuration directory."", 'comment_created': datetime.datetime(2023, 7, 11, 22, 0, 7, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260345241, 'comment_body': ""Varnish really doesn't support HTTPS. I didn't believe you, but then I read the docs. That's.... odd. But regardless, since HTTPS **is** widely used and quite important to ATC instances, it makes sense to accept responsibility for running the TLS proxy - it's basically just a part of the caching service.\r\n\r\nI stand by the `logrotate` thing, though."", 'comment_created': datetime.datetime(2023, 7, 11, 22, 27, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1260910535, 'comment_body': ""Well, for options used in all cache servers it is no problem to just rewrite it. For options that is not used in Varnish (or other cache servers in the future) like `disable-parent-config-comments` or `ats-version` it won't make sense in other cache servers context. The same case also will happen when other options are introduced in Varnish case.\r\nI guess we could restructure the documentation and help option to show options per cache server type:\r\n```\r\n## common options\r\n-dir\r\n-silent\r\n...\r\n## ats options\r\n-ats-version\r\n...\r\n## varnish options\r\n...\r\n```\r\nWhat do you think?"", 'comment_created': datetime.datetime(2023, 7, 12, 9, 41, 46, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1260917279, 'comment_body': 'Since ATS currently use `ATS_PROFILE` it didn\'t make sense to include Varnish as the same type. However, I don\'t see currently any use for that profile after the point you made about `t3c-generate`. So, maybe we could change it to something that fits all cache servers like `CACHE_PROFILE` instead of all cache servers be of ""ATS"" type?', 'comment_created': datetime.datetime(2023, 7, 12, 9, 47, 3, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1261862395, 'comment_body': 'my thoughts exactly', 'comment_created': datetime.datetime(2023, 7, 13, 1, 3, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1261864939, 'comment_body': ""`--ats-version` should probably be just `--cache-version` or something, since - and I don't know anything about Varnish - that probably still has consequences no matter which software you use.\r\n\r\nAs for `disable-parent-config-comments`, I don't really know what the purpose of that is. What comments does it include or not include? If it's just a comment, why would you ever care enough to even use that option?\r\n\r\nIn any case, there's probably some example that very clearly and obviously only has meaning to an ATS cache - in that case, I'd vote we just note that does nothing for Varnish caches. Or, rather, only does things for ATS caches. I'm not too concerned with how the docs get structured as long they exist, are accurate, and make sense."", 'comment_created': datetime.datetime(2023, 7, 13, 1, 7, 53, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1262827821, 'comment_body': 'It could be done this way or a server profile parameter could be used to indicate what type of server it is.  Server profiles already reference ATS specific rpm packages (although t3c only supporting redhat type distros is probably bad).', 'comment_created': datetime.datetime(2023, 7, 13, 16, 55, 2, tzinfo=datetime.timezone.utc), 'commenter': 'traeak', 'type': 'User'}, {'comment_id': 1262833056, 'comment_body': ""In cache-config/testing there's an entire docker based test suite that ideally should be extended to add in varnish."", 'comment_created': datetime.datetime(2023, 7, 13, 16, 58, 46, tzinfo=datetime.timezone.utc), 'commenter': 'traeak', 'type': 'User'}, {'comment_id': 1262897230, 'comment_body': ""Well that's exactly the plan, but `varnishtest` part is just added because it allows for testing Varnish cache instance without any of the backend instances running. But yes the goal is to extend already existing docker based tests with Varnish specific tests."", 'comment_created': datetime.datetime(2023, 7, 13, 17, 58, 56, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1262898286, 'comment_body': ""I strongly oppose using the loosey-goosey free-form text of a Parameter to define things like this. If it's desirable that `t3c` automatically detect the cache server software, and that can't be done by inspecting the system locally (which would be ideal but difficult), then I'd vote on bringing back the Profile Type that's specific to Varnish cache servers."", 'comment_created': datetime.datetime(2023, 7, 13, 18, 0, 3, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1270782620, 'comment_body': 'those options seem reasonable.', 'comment_created': datetime.datetime(2023, 7, 21, 15, 1, 57, tzinfo=datetime.timezone.utc), 'commenter': 'traeak', 'type': 'User'}]","[{'commit_sha': '7186637e47f3658603cc170018bfbbd7fdf6dc89', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2144572baaa3a5534e41a2abce2eab1bb84377e', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0c957044e6b2b37bb493f78ad97025ddf2a75c4', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}]",,60783742,abdoelawady125@gmail.com,User,,17,,3,9
+1444859539,Add parents to varnish cache,"<!--
+Thank you for contributing! Please be sure to read our contribution guidelines: https://github.com/apache/trafficcontrol/blob/master/CONTRIBUTING.md
+If this closes or relates to an existing issue, please reference it using one of the following:
+
+Closes: #ISSUE
+Related: #ISSUE
+
+If this PR fixes a security vulnerability, DO NOT submit! Instead, contact
+the Apache Traffic Control Security Team at security@trafficcontrol.apache.org and follow the
+guidelines at https://apache.org/security regarding vulnerability disclosure.
+-->
+Add the least required changes to run Varnish in a topology with parents by reusing some implementation already made in `go-atscfg` and add Dockerfile for Varnish to be testable in CIAB.
+
+<!-- **^ Add meaningful description above** --><hr/>
+
+## Which Traffic Control components are affected by this PR?
+<!-- Please delete all components from this list that are NOT affected by this PR.
+Feel free to add the name of a tool or script that is affected but not on the list.
+-->
+- Traffic Control Cache Config (`t3c`, formerly ORT)
+- CDN in a Box
+
+## What is the best way to verify this PR?
+<!-- Please include here ALL the steps necessary to test your PR.
+If your PR has tests (and most should), provide the steps needed to run the tests.
+If not, please provide step-by-step instructions to test the PR manually and explain why your PR does not need tests. -->
+Using CIAB:
+- change the dockerfile path to point to varnish dir in either edge or mid.
+- change the status to ONLINE in the cache server you choose overriding Traffic Monitor reports. for edge it will be [here](https://github.com/apache/trafficcontrol/blob/master/infrastructure/cdn-in-a-box/traffic_ops/to-access.sh#L217).
+- remove `chkconfig` and `package` parameters from edge or mid profile.
+- start docker-compose and curl the CDN domain from enroller container.
+- check varnish container logs to verify it properly handled the request.
+- try again and it should be a hit returning cached object.
+
+Note: since both mid servers use the same profile Varnish can run either as the two mid caches or just edge. It can't run as all servers for now as the router does not route to servers if Traffic Monitor does not poll any cache server. So, either both mid servers or edge.
+
+
+
+## PR submission checklist
+- [x] This PR has tests <!-- If not, please delete this text and explain why this PR does not need tests. -->
+- [x] This PR has documentation <!-- If not, please delete this text and explain why this PR does not need documentation. -->
+- [ ] This PR has a CHANGELOG.md entry <!-- A fix for a bug from an ATC release, an improvement, or a new feature should have a changelog entry. -->
+- [x] This PR **DOES NOT FIX A SERIOUS SECURITY VULNERABILITY** (see [the Apache Software Foundation's security guidelines](https://apache.org/security) for details)
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+""License""); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+",True,7669,https://api.github.com/repos/apache/trafficcontrol/pulls/7669,https://github.com/apache/trafficcontrol/pull/7669,closed,1097,29,22,7,4,17,5,0,"[{'name': 'new feature'}, {'name': 'low impact'}, {'name': 'cdn-in-a-box'}, {'name': 'cache-config'}, {'name': 'Varnish'}]",2023-07-21 18:30:38+00:00,2023-08-14 17:42:32+00:00,2070714.0,"23 days, 23:11:54","[{'comment_id': 1279344708, 'comment_body': 'Consider moving default.vcl into a different directory, not `trafficserver` related?', 'comment_created': datetime.datetime(2023, 7, 31, 14, 1, 56, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1279468470, 'comment_body': 'are we guaranteed to always have a `vcl_init` or do we need to check for presence first?', 'comment_created': datetime.datetime(2023, 7, 31, 15, 16, 48, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1279494550, 'comment_body': 'Might want to consider moving this to vcl_backend_fetch, and doing `set bereq.http.host=...` so that the host header is only changed on the request to the backend, and the original host header is preserved in the client request processing', 'comment_created': datetime.datetime(2023, 7, 31, 15, 34, 57, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1279496662, 'comment_body': 'Why skip this silently? Seems like it would be an error if the parent and origin backend names conflict?', 'comment_created': datetime.datetime(2023, 7, 31, 15, 36, 44, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1279500336, 'comment_body': 'Consider adding a separate `sticky` return from getDirectorType so all that evaluation happens in the same place', 'comment_created': datetime.datetime(2023, 7, 31, 15, 40, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1282017945, 'comment_body': 'while that is definitely an issue if in the same topology a parent had conflicts with the origin it can still happen across topologies as this is the map of all backends the server currently added. So, a warning here might report some cases which is not an issue.', 'comment_created': datetime.datetime(2023, 8, 2, 14, 48, 17, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1282499398, 'comment_body': 'It looks like for varnish cache servers, this will cause it to look for configuration files under `/etc/trafficserver/etc/varnish` (by default I think `tsHome` is `/opt/trafficserver` so that winds up being `/opt/trafficserver/etc/trafficserver/etc/varnish`) - is that really how we want to structure that?', 'comment_created': datetime.datetime(2023, 8, 2, 23, 22, 47, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282501133, 'comment_body': ""This seems to be relying on `varnishreload` being in the running user's `$PATH` - with ATS cache servers we typically install everything under `/opt/trafficserver` (not that I think that's a good idea, personally) but it seems like that won't work for varnish caches if everything winds up installed under e.g. `/opt/varnish`. Or, at least, not without some extra work. Is that intentional, or is there some reason why it wouldn't find `varnishreload` in the same directory as the `varnish` binary?"", 'comment_created': datetime.datetime(2023, 8, 2, 23, 26, 49, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282501510, 'comment_body': 'license header should go above imports, below package declaration', 'comment_created': datetime.datetime(2023, 8, 2, 23, 27, 34, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282504399, 'comment_body': ""I wouldn't worry about it; the enroller is pulling in a lot of things it doesn't strictly need. We can evaluate it if it becomes a problem, and try to clean it up a bit, but varnishcfg is small compared to the rest of the cruft so there's no point worrying about it"", 'comment_created': datetime.datetime(2023, 8, 2, 23, 34, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282505160, 'comment_body': ""Do you really want to pin down to a specific release like that? If there's a major security bug that gets fixed with no breaking changes in v7.3.0-2 then we'd have to update this script. Also not sure it's a good idea to hard-code the CPU architecture; a lot of ATC devs use Macs, for example, and their new chipset isn't x86_64."", 'comment_created': datetime.datetime(2023, 8, 2, 23, 36, 28, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282505916, 'comment_body': 'is it absolutely necessary to use systemd? Doing that in a Docker container is prone to problems and headaches', 'comment_created': datetime.datetime(2023, 8, 2, 23, 38, 12, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282506582, 'comment_body': 'At least one file in a package should have a GoDoc comment.', 'comment_created': datetime.datetime(2023, 8, 2, 23, 39, 41, tzinfo=datetime.timezone.utc), 'commenter': 'ocket8888', 'type': 'User'}, {'comment_id': 1282885135, 'comment_body': 'Since `t3c-apply` only manages services using `systemctl` (or `service` in sysV systems) Traffic Server image and Varnish image both include a script replacing `systemctl` to start, restart, show status, enable and stop the cache service. There is no actual invoking of systemd, the scripts just mimics the behavior of `systemctl` regarding services', 'comment_created': datetime.datetime(2023, 8, 3, 9, 4, 12, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1282906079, 'comment_body': ""Maybe the comment can be improved, but it is not removed for optimization reasons. if we remove this line it won't be able to build the enroller binary because `varnishcfg` requires `t3c-util` package for the `ConfigData` struct [here](https://github.com/AbdelrahmanElawady/trafficcontrol/blob/add-parents-varnish/lib/varnishcfg/vclbuilder.go#L32). So, we will need to copy `t3c` packages too. `t3c` also requires some other packages not included with the enroller, so also they will need to be copied. The problem will be in keeping track of all these packages and what they require and any changes in the future. So I Just remove it instead of managing all that when it is not needed. But I believe it might be better to make `varnishcfg` not depend on `t3c-util` "", 'comment_created': datetime.datetime(2023, 8, 3, 9, 21, 10, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1282930571, 'comment_body': ""I believe the config dir will be either `home + /etc/trafficserver`, `home + /etc/varnish` or if `--trafficserver-home` flag is not used it will default to `/opt/trafficerver/etc/trafficserver` and won't go into the if block (which is not good) other than that it will be `home + /etc/varnish` for varnish case. For example specifying `--trafficserver-home` flag with `/opt/cache` will write the config to `/opt/cache/etc/varnish` and that is what is done in varnish [entrypoint](https://github.com/AbdelrahmanElawady/trafficcontrol/blob/add-parents-varnish/infrastructure/cdn-in-a-box/varnish/run.sh#L85).\r\n\r\nI think ultimately default home and config dir shouldn't be related to TS. However, this change will affect CIAB, tests, workflows and some other code depending on that. So, Maybe it would be better if it is done in a separate PR?"", 'comment_created': datetime.datetime(2023, 8, 3, 9, 40, 20, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1282949540, 'comment_body': ""It is done that way because Varnish currently is installed under root. So, `varnishreload` is currently installed in user's `$PATH`. It will be a problem indeed if Varnish is installed under different directory. Should Varnish be installed under different directory?"", 'comment_created': datetime.datetime(2023, 8, 3, 9, 50, 47, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}]","[{'commit_sha': '2fc572e682c015a1e8d3c7dbdd002c3b572b9891', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7b4a0273ee23cb084282029930f1de89458e0d52', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a59baa1f4cd6b521b42960d641cad0f0524464c', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a5c26a538af66b3ca8c82c3751e830da53613bd', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '312c6733b4668f872697433cd1b816d17d60f326', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc55c79c8275b291909b3d83daa2c09769ff5663', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c42d0d481ff5a3fe58bed8ae32c8a973921ef63a', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}]",,60783742,abdoelawady125@gmail.com,User,,17,,3,9
+1463200578,Add access control to varnish,"<!--
+Thank you for contributing! Please be sure to read our contribution guidelines: https://github.com/apache/trafficcontrol/blob/master/CONTRIBUTING.md
+If this closes or relates to an existing issue, please reference it using one of the following:
+
+Closes: #ISSUE
+Related: #ISSUE
+
+If this PR fixes a security vulnerability, DO NOT submit! Instead, contact
+the Apache Traffic Control Security Team at security@trafficcontrol.apache.org and follow the
+guidelines at https://apache.org/security regarding vulnerability disclosure.
+-->
+Add access control to Varnish server with the same rules as TS.
+
+<!-- **^ Add meaningful description above** --><hr/>
+
+## Which Traffic Control components are affected by this PR?
+<!-- Please delete all components from this list that are NOT affected by this PR.
+Feel free to add the name of a tool or script that is affected but not on the list.
+-->
+- Traffic Control Cache Config (`t3c`, formerly ORT)
+
+## What is the best way to verify this PR?
+<!-- Please include here ALL the steps necessary to test your PR.
+If your PR has tests (and most should), provide the steps needed to run the tests.
+If not, please provide step-by-step instructions to test the PR manually and explain why your PR does not need tests. -->
+following the same steps in #7669 
+- if Varnish is running as edge, try adding `-X ""PURGE""` to curl command and it should return not allowed.
+- if Varnish is running as mid, same thing as edge but change the domain to `mid-01.infra.ciab.test`. it will return not allowed too.
+- you can also check VCL output at `/opt/cache/etc/varnish/default.vcl`
+
+
+## PR submission checklist
+- [x] This PR has tests <!-- If not, please delete this text and explain why this PR does not need tests. -->
+- [x] This PR has documentation <!-- If not, please delete this text and explain why this PR does not need documentation. -->
+- [ ] This PR has a CHANGELOG.md entry <!-- A fix for a bug from an ATC release, an improvement, or a new feature should have a changelog entry. -->
+- [x] This PR **DOES NOT FIX A SERIOUS SECURITY VULNERABILITY** (see [the Apache Software Foundation's security guidelines](https://apache.org/security) for details)
+
+Fixes: #7714
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+""License""); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+",True,7700,https://api.github.com/repos/apache/trafficcontrol/pulls/7700,https://github.com/apache/trafficcontrol/pull/7700,closed,567,142,6,2,2,0,5,0,"[{'name': 'new feature'}, {'name': 'low impact'}, {'name': 'cdn-in-a-box'}, {'name': 'cache-config'}, {'name': 'Varnish'}]",2023-08-04 16:29:13+00:00,2023-08-25 19:40:40+00:00,1825887.0,"21 days, 3:11:27",[],"[{'commit_sha': '0db717e1b97fc521d6638cdeeeca44f2a0cbf038', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ec6460895d0ddda0ab16efe64a9c9da4994d9dd4', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}]",,60783742,abdoelawady125@gmail.com,User,,17,,3,9
+1477478052,Add HTTPS support to Varnish cache using Hitch,"<!--
+Thank you for contributing! Please be sure to read our contribution guidelines: https://github.com/apache/trafficcontrol/blob/master/CONTRIBUTING.md
+If this closes or relates to an existing issue, please reference it using one of the following:
+
+Closes: #ISSUE
+Related: #ISSUE
+
+If this PR fixes a security vulnerability, DO NOT submit! Instead, contact
+the Apache Traffic Control Security Team at security@trafficcontrol.apache.org and follow the
+guidelines at https://apache.org/security regarding vulnerability disclosure.
+-->
+Add HTTPS support to Varnish based CIAB instances using Hitch and configuring certificates using TO data.
+
+Closes: #7722 
+
+<!-- **^ Add meaningful description above** --><hr/>
+
+## Which Traffic Control components are affected by this PR?
+<!-- Please delete all components from this list that are NOT affected by this PR.
+Feel free to add the name of a tool or script that is affected but not on the list.
+-->
+- Traffic Control Cache Config (`t3c`, formerly ORT)
+- CDN in a Box
+
+## What is the best way to verify this PR?
+<!-- Please include here ALL the steps necessary to test your PR.
+If your PR has tests (and most should), provide the steps needed to run the tests.
+If not, please provide step-by-step instructions to test the PR manually and explain why your PR does not need tests. -->
+- Run CIAB as mentioned in #7669 with Varnish as Edge (requests between cache servers are  using HTTP. So, Edge will only verify this PR).
+- Try the readiness check by running `docker-compose -f docker-compose.readiness.yml up`
+- Or just run `docker-compose exec enroller curl -L --insecure ""https://video.demo1.mycdn.ciab.test""`
+- It should serve the request with no problem.
+
+## PR submission checklist
+- [x] This PR has tests <!-- If not, please delete this text and explain why this PR does not need tests. -->
+- [x] This PR has documentation <!-- If not, please delete this text and explain why this PR does not need documentation. -->
+- [ ] This PR has a CHANGELOG.md entry <!-- A fix for a bug from an ATC release, an improvement, or a new feature should have a changelog entry. -->
+- [x] This PR **DOES NOT FIX A SERIOUS SECURITY VULNERABILITY** (see [the Apache Software Foundation's security guidelines](https://apache.org/security) for details)
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+""License""); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+",True,7725,https://api.github.com/repos/apache/trafficcontrol/pulls/7725,https://github.com/apache/trafficcontrol/pull/7725,closed,260,24,7,2,2,0,5,0,"[{'name': 'new feature'}, {'name': 'low impact'}, {'name': 'cdn-in-a-box'}, {'name': 'cache-config'}, {'name': 'Varnish'}]",2023-08-16 13:21:31+00:00,2023-09-05 13:55:10+00:00,1730019.0,"20 days, 0:33:39",[],"[{'commit_sha': '22169f1ce359361e2ce388be069a9a39a2dbc74c', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17fa8f18595d1384b3e4a6e2150cd1f9c3ce1a01', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}]",,60783742,abdoelawady125@gmail.com,User,,17,,3,9
+1499222342,Configure uncacheable delivery services in Varnish,"<!--
+Thank you for contributing! Please be sure to read our contribution guidelines: https://github.com/apache/trafficcontrol/blob/master/CONTRIBUTING.md
+If this closes or relates to an existing issue, please reference it using one of the following:
+
+Closes: #ISSUE
+Related: #ISSUE
+
+If this PR fixes a security vulnerability, DO NOT submit! Instead, contact
+the Apache Traffic Control Security Team at security@trafficcontrol.apache.org and follow the
+guidelines at https://apache.org/security regarding vulnerability disclosure.
+-->
+Skip caching delivery services with type `HTTP_NO_CACHE`.
+
+Closes: #7770 
+
+<!-- **^ Add meaningful description above** --><hr/>
+
+## Which Traffic Control components are affected by this PR?
+<!-- Please delete all components from this list that are NOT affected by this PR.
+Feel free to add the name of a tool or script that is affected but not on the list.
+-->
+- Traffic Control Cache Config (`t3c`, formerly ORT)
+
+## What is the best way to verify this PR?
+<!-- Please include here ALL the steps necessary to test your PR.
+If your PR has tests (and most should), provide the steps needed to run the tests.
+If not, please provide step-by-step instructions to test the PR manually and explain why your PR does not need tests. -->
+unit tests added.
+CIAB doesn't have a DS with no cache type, however if manually changed the DS [profile](https://github.com/apache/trafficcontrol/blob/master/infrastructure/cdn-in-a-box/traffic_ops_data/deliveryservices/010-demo1.json#L9) to `HTTP_NO_CACHE` requests should not be cached with Varnish.
+
+## PR submission checklist
+- [x] This PR has tests <!-- If not, please delete this text and explain why this PR does not need tests. -->
+- [x] This PR has documentation <!-- If not, please delete this text and explain why this PR does not need documentation. -->
+- [ ] This PR has a CHANGELOG.md entry <!-- A fix for a bug from an ATC release, an improvement, or a new feature should have a changelog entry. -->
+- [x] This PR **DOES NOT FIX A SERIOUS SECURITY VULNERABILITY** (see [the Apache Software Foundation's security guidelines](https://apache.org/security) for details)
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+""License""); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+",True,7771,https://api.github.com/repos/apache/trafficcontrol/pulls/7771,https://github.com/apache/trafficcontrol/pull/7771,closed,227,51,4,1,3,0,3,0,"[{'name': 'low impact'}, {'name': 'cache-config'}, {'name': 'Varnish'}]",2023-09-01 17:51:28+00:00,2023-09-12 16:45:13+00:00,946425.0,"10 days, 22:53:45",[],"[{'commit_sha': '63fca4fe9c8e4227a23d585aae2f1f7bf66ead4a', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}]",,60783742,abdoelawady125@gmail.com,User,,17,,3,9
+1490189693,Add TM integration and separate docker-compose services for Varnish,"<!--
+Thank you for contributing! Please be sure to read our contribution guidelines: https://github.com/apache/trafficcontrol/blob/master/CONTRIBUTING.md
+If this closes or relates to an existing issue, please reference it using one of the following:
+
+Closes: #ISSUE
+Related: #ISSUE
+
+If this PR fixes a security vulnerability, DO NOT submit! Instead, contact
+the Apache Traffic Control Security Team at security@trafficcontrol.apache.org and follow the
+guidelines at https://apache.org/security regarding vulnerability disclosure.
+-->
+Add Traffic Monitor integration with a daemon running on Varnish cache servers to report whether Varnish is running or not and to report load average and interface stats. Also, running Varnish now with CIAB is more user friendly and does not require changing any file manually just specifying varnish docker compose file with the default one.
+
+<!-- **^ Add meaningful description above** --><hr/>
+
+## Which Traffic Control components are affected by this PR?
+<!-- Please delete all components from this list that are NOT affected by this PR.
+Feel free to add the name of a tool or script that is affected but not on the list.
+-->
+- Traffic Monitor
+- CDN in a Box
+
+## What is the best way to verify this PR?
+<!-- Please include here ALL the steps necessary to test your PR.
+If your PR has tests (and most should), provide the steps needed to run the tests.
+If not, please provide step-by-step instructions to test the PR manually and explain why your PR does not need tests. -->
+After building rpms needed for CIAB:
+- Run using `docker-compose -f docker-compose.yml -f docker-compose.varnish.yml up` that should run all cache servers with Varnish.
+- Open Traffic Portal and navigate to Cache stats. Cache servers should be healthy.
+- Stop Varnish in any cache server with `docker-compose exec edge systemctl stop varnish.service`.
+- Traffic Portal will show edge as unhealthy.
+
+
+## PR submission checklist
+- [x] This PR has tests <!-- If not, please delete this text and explain why this PR does not need tests. -->
+- [x] This PR has documentation <!-- If not, please delete this text and explain why this PR does not need documentation. -->
+- [ ] This PR has a CHANGELOG.md entry <!-- A fix for a bug from an ATC release, an improvement, or a new feature should have a changelog entry. -->
+- [x] This PR **DOES NOT FIX A SERIOUS SECURITY VULNERABILITY** (see [the Apache Software Foundation's security guidelines](https://apache.org/security) for details)
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+""License""); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+",True,7746,https://api.github.com/repos/apache/trafficcontrol/pulls/7746,https://github.com/apache/trafficcontrol/pull/7746,closed,317,5,10,4,2,5,4,0,"[{'name': 'Traffic Monitor'}, {'name': 'low impact'}, {'name': 'cdn-in-a-box'}, {'name': 'Varnish'}]",2023-08-25 19:04:29+00:00,2023-09-08 22:11:11+00:00,1220802.0,"14 days, 3:06:42","[{'comment_id': 1317365054, 'comment_body': 'Can this struct be shared with anything that Traffic Monitor already deserializes?', 'comment_created': datetime.datetime(2023, 9, 6, 14, 21, 16, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1317534468, 'comment_body': 'It definitely should be shared however it\'s implemented as just ""main"" package separated from TC so it\'s not a package that TM can call. However, I think it should be a package under TC and be built with `pkg` considering statistics will be added too. Should that be in this PR or done separately?', 'comment_created': datetime.datetime(2023, 9, 6, 16, 18, 7, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1317541485, 'comment_body': ""If its ok with you, let's keep it separate, since this one is pretty well baked already"", 'comment_created': datetime.datetime(2023, 9, 6, 16, 23, 28, tzinfo=datetime.timezone.utc), 'commenter': 'limited', 'type': 'User'}, {'comment_id': 1317542758, 'comment_body': 'Yep, will open an issue for it to be done later.', 'comment_created': datetime.datetime(2023, 9, 6, 16, 24, 38, tzinfo=datetime.timezone.utc), 'commenter': 'AbdelrahmanElawady', 'type': 'User'}, {'comment_id': 1317838053, 'comment_body': '## Uncontrolled data used in path expression\n\nThis path depends on a [user-provided value](1).\n\n[Show more details](https://github.com/apache/trafficcontrol/security/code-scanning/307)', 'comment_created': datetime.datetime(2023, 9, 6, 21, 12, 48, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}]","[{'commit_sha': 'f66ef6225c17e8507e25d750136f9f0e33a0fb98', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d3a6392e393d14e3f8db536569c6a09ae7a7d24', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29638850b2bdef7b71b61d8f8d7b0e4a71d95f1a', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e840378acaa9514678b559f8b02b8c76952385ca', 'committer_username': 'AbdelrahmanElawady', 'committer_name': None, 'committer_email': 'abdoelawady125@gmail.com', 'commit_date': datetime.datetime(2020, 2, 7, 13, 39, 49, tzinfo=datetime.timezone.utc)}]",,60783742,abdoelawady125@gmail.com,User,,17,,3,9
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+67198520,trafficcontrol,apache/trafficcontrol,Go,339,1045,72,185,12903,707,33,94,"[{'id': 1573510215, 'number': 7850, 'closed': None, 'created': datetime.datetime(2023, 10, 25, 19, 14, 42, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 103, 'deletions': 2, 'state': 'open'}, {'id': 1515851684, 'number': 7805, 'closed': None, 'created': datetime.datetime(2023, 9, 14, 14, 44, 15, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 193, 'deletions': 6, 'state': 'open'}, {'id': 1505018159, 'number': 7783, 'closed': datetime.datetime(2023, 9, 11, 19, 31, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 6, 17, 21, 30, tzinfo=datetime.timezone.utc), 'time_taken': 439777.0, 'time_delta': '5 days, 2:09:37', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 1499222342, 'number': 7771, 'closed': datetime.datetime(2023, 9, 12, 16, 45, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 1, 17, 51, 28, tzinfo=datetime.timezone.utc), 'time_taken': 946425.0, 'time_delta': '10 days, 22:53:45', 'additions': 227, 'deletions': 51, 'state': 'closed'}, {'id': 1490189693, 'number': 7746, 'closed': datetime.datetime(2023, 9, 8, 22, 11, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 25, 19, 4, 29, tzinfo=datetime.timezone.utc), 'time_taken': 1220802.0, 'time_delta': '14 days, 3:06:42', 'additions': 317, 'deletions': 5, 'state': 'closed'}, {'id': 1477771780, 'number': 7727, 'closed': datetime.datetime(2023, 9, 1, 16, 10, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 16, 27, 43, tzinfo=datetime.timezone.utc), 'time_taken': 1381349.0, 'time_delta': '15 days, 23:42:29', 'additions': 842, 'deletions': 3, 'state': 'closed'}, {'id': 1477478052, 'number': 7725, 'closed': datetime.datetime(2023, 9, 5, 13, 55, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 13, 21, 31, tzinfo=datetime.timezone.utc), 'time_taken': 1730019.0, 'time_delta': '20 days, 0:33:39', 'additions': 260, 'deletions': 24, 'state': 'closed'}, {'id': 1463200578, 'number': 7700, 'closed': datetime.datetime(2023, 8, 25, 19, 40, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 4, 16, 29, 13, tzinfo=datetime.timezone.utc), 'time_taken': 1825887.0, 'time_delta': '21 days, 3:11:27', 'additions': 567, 'deletions': 142, 'state': 'closed'}, {'id': 1444859539, 'number': 7669, 'closed': datetime.datetime(2023, 8, 14, 17, 42, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 21, 18, 30, 38, tzinfo=datetime.timezone.utc), 'time_taken': 2070714.0, 'time_delta': '23 days, 23:11:54', 'additions': 1097, 'deletions': 29, 'state': 'closed'}, {'id': 1424929547, 'number': 7620, 'closed': datetime.datetime(2023, 7, 21, 16, 23, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 16, 30, 35, tzinfo=datetime.timezone.utc), 'time_taken': 1209167.0, 'time_delta': '13 days, 23:52:47', 'additions': 116, 'deletions': 0, 'state': 'closed'}, {'id': 1350275620, 'number': 7521, 'closed': datetime.datetime(2023, 5, 17, 20, 38, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 15, 7, 42, 17, tzinfo=datetime.timezone.utc), 'time_taken': 219353.0, 'time_delta': '2 days, 12:55:53', 'additions': 131, 'deletions': 0, 'state': 'closed'}, {'id': 1340113483, 'number': 7493, 'closed': datetime.datetime(2023, 5, 9, 18, 50, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 5, 16, 20, 41, tzinfo=datetime.timezone.utc), 'time_taken': 354614.0, 'time_delta': '4 days, 2:30:14', 'additions': 17, 'deletions': 1, 'state': 'closed'}]"

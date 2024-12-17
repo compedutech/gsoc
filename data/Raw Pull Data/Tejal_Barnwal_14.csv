@@ -1,0 +1,101 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1448726236,Updated code to use angle as input for wavefield parameter direction,"aims to address comments in #651 
+
+Summary:
+Previously, the direction 2D vector was normalized and then used as angles.
+Updated code directly takes an angle as input and is used further.
+
+Test:
+the results are evident with `practice_2023_stationkeeping0_task.sdf`,  `practice_2023_stationkeeping1_task.sdf` and `practice_2023_stationkeeping2_task.sdf`. The direction is more evident when we view the worlds from the top view
+
+Result:
+`practice_2023_stationkeeping0_task.sdf`: mean wave direction angle=0.0
+
+![Screenshot from 2023-07-25 21-26-14](https://github.com/osrf/vrx/assets/64950661/9682c966-9e12-4d46-b345-e1b9ca3dd6b4)
+
+`practice_2023_stationkeeping1_task.sdf`: mean wave direction angle=45 degrees
+
+![Screenshot from 2023-07-25 21-27-11](https://github.com/osrf/vrx/assets/64950661/ded4a91c-f727-435a-97a1-243042e0b3f4)
+
+`practice_2023_stationkeeping2_task.sdf`: mean wave direction angle=90 degrees
+
+![Screenshot from 2023-07-25 21-28-14](https://github.com/osrf/vrx/assets/64950661/8c515251-14bd-409c-b83f-0cdfa6000b86)
+
+",True,709,https://api.github.com/repos/osrf/vrx/pulls/709,https://github.com/osrf/vrx/pull/709,closed,95,189,38,6,0,0,0,0,[],2023-07-25 16:02:57+00:00,2023-07-27 17:18:48+00:00,177351.0,"2 days, 1:15:51",[],"[{'commit_sha': '480c7769ba996dac71b759db3d3ad729a1c9c4d3', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7b42989eb4bbfec4d441bcd7f16570f7b706387', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a03d446ce13e4a817f1e11b85ac9a7d129a377e', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e403a2cf7952bec05a73de5218877527655808fd', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8a793253b1306a767184f5ef5242d066c319cc3c', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8ba6c7502e179662494b11f262acedef780aa9c', 'committer_username': 'caguero', 'committer_name': 'Carlos Agüero', 'committer_email': 'caguero@openrobotics.org', 'commit_date': datetime.datetime(2012, 2, 15, 18, 6, 19, tzinfo=datetime.timezone.utc)}]",Tejal Ashwini Barnwal,64950661,,User,,59,,198,24
+1414432409,Reduce oscillations of buoys in perception task,"aims to close #689 
+
+Summary:
+A detailed analysis of the various parameters can be found in the discussion of the associated issue.
+The following updates have been done:
+1. Round Buoys:
+    geometry radius updated to 0.21(for both *perception_task1* and *perception_task2*)
+    updated drag coefficient to 75(for both *perception_task1* and *perception_task2*)
+    updated spawning z=0.7 in *perception_task1* 
+2. Marker Buoys
+   Updated spawning z=0.7 for both (*perception_task1* and *perception_task2*)
+   Updated linear drag coefficient to 50 in *perception_task2* to reduce the magnitude of oscillations a little.
+
+Test:
+Run `2023_practice/practice_2023_perception1_task` and `2023_practice/practice_2023_perception2_task` worlds
+ 
+Results:
+
+https://github.com/osrf/vrx/assets/64950661/d2787769-611b-406a-bdbf-f6d7c27625b7
+
+
+
+https://github.com/osrf/vrx/assets/64950661/41444310-c9e1-4a15-bd4e-e3a0bea7767e
+
+",True,699,https://api.github.com/repos/osrf/vrx/pulls/699,https://github.com/osrf/vrx/pull/699,closed,35,35,2,3,0,0,0,0,[],2023-06-30 07:44:11+00:00,2023-07-03 16:39:49+00:00,291338.0,"3 days, 8:55:38",[],"[{'commit_sha': '8120324ce3c5aeb96b535c2b4af2195270e7b63b', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69602bd6a78981282b82d4fa8cb6bb6873099ae6', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8887711966be0947816acc02f43e3079f8611f21', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}]",Tejal Ashwini Barnwal,64950661,,User,,59,,198,24
+1399350049,default value initialization to avoid redundant variable assignment,"## Sub-Tasks
+-  [x] Modify `wavefield.cc` to initialize the wavefield parameter with default values and update them only when a user passes a value for it in the SDF file.
+-  [x] Modify all world sdf files in order only to have PMS model wave parameters, namely -- direction, steepness, gain, and period(will do it after the first review)
+
+### Summary
+The modification avoids repeated initialization of some wavefield variables, which always have the same value across all world files. Therefore now, the publisher allows the user to indicate solely the variable they wish to modify, leaving the remaining variables to be managed automatically.
+
+### Test it
+To test this, one can use the `sydney_regatta.sdf`. The world file currently only publishes direction, steepness, gain, and period.",True,678,https://api.github.com/repos/osrf/vrx/pulls/678,https://github.com/osrf/vrx/pull/678,closed,198,2332,38,14,10,6,0,0,[],2023-06-20 07:26:33+00:00,2023-06-26 20:51:38+00:00,566705.0,"6 days, 13:25:05","[{'comment_id': 1241209784, 'comment_body': 'Do we need this `#include`?', 'comment_created': datetime.datetime(2023, 6, 25, 14, 42, 41, tzinfo=datetime.timezone.utc), 'commenter': 'caguero', 'type': 'User'}, {'comment_id': 1241210066, 'comment_body': 'nitpick: Could you move the open bracket to the next line to be consistent with the Gazebo style?\r\n\r\n```\r\nif (params.count(""size"") > 0)\r\n{\r\n  this->data->size = {params[""size""].vector3d_value().x(),\r\n    params[""size""].vector3d_value().y()};\r\n}\r\n```', 'comment_created': datetime.datetime(2023, 6, 25, 14, 44, 32, tzinfo=datetime.timezone.utc), 'commenter': 'caguero', 'type': 'User'}, {'comment_id': 1241211802, 'comment_body': ""Is this change on purpose? It's usually `0`."", 'comment_created': datetime.datetime(2023, 6, 25, 14, 48, 1, tzinfo=datetime.timezone.utc), 'commenter': 'caguero', 'type': 'User'}, {'comment_id': 1241795199, 'comment_body': 'sure, i will update them', 'comment_created': datetime.datetime(2023, 6, 26, 8, 8, 59, tzinfo=datetime.timezone.utc), 'commenter': 'tejalbarnwal', 'type': 'User'}, {'comment_id': 1241795959, 'comment_body': 'sorry, I forgot to remove that\r\nI used it to debug initially, will remove it', 'comment_created': datetime.datetime(2023, 6, 26, 8, 9, 44, tzinfo=datetime.timezone.utc), 'commenter': 'tejalbarnwal', 'type': 'User'}, {'comment_id': 1241812754, 'comment_body': 'Apologies for the oversight, i forgot to reset the value back to 0 after conducting the tuning experiments, resulting in its unchanged state. I will update it in with a commit.', 'comment_created': datetime.datetime(2023, 6, 26, 8, 24, 33, tzinfo=datetime.timezone.utc), 'commenter': 'tejalbarnwal', 'type': 'User'}]","[{'commit_sha': 'b6271a21884ec23c256a71b5879b6ec2a0fd2523', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd56e6fe6dde6f2ff3ab1a6e9943f68d5882cdbcc', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '56a0909c0abc3c1aa65b8350304902d686a54e35', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f42a243809d7c5144a3a9f96420d16904566b753', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17aa66e4ca12aa0ac5cdd65c1fe8138d23c88b21', 'committer_username': 'caguero', 'committer_name': 'Carlos Agüero', 'committer_email': 'caguero@openrobotics.org', 'commit_date': datetime.datetime(2012, 2, 15, 18, 6, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bfc3884edf4ccd95ebb057654daef8dc058221a3', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47044e9f01405e811c06f2fdf5a4d5c6a8e65536', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'feedd84fc680a5cc621848724e6b990d16834bb4', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a8185c22f2df0d92776693b1c336160c88de54e', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7605e2f29d6960a34e2996c5bc6e4bde9bdd8ba5', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e02206191b099a4dd14b01670839a652f17445a3', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53fc26648dc12f4caf2d5e8a8dae491a8dabc17c', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9909ea3f9c49f24f53c4da6a4c120e882f68db9a', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f78da3bd9cbac0e635618976dbc191387d6278ba', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}]",Tejal Ashwini Barnwal,64950661,,User,,59,,198,24
+1387116295,update order of wavefield parameters message,"Aims to close #651 and #650
+
+## Sub-Tasks
+-  [x] Update the order inside the wavefield parameter message published with the `.sdf` file
+-  [ ] Tune the steepness parameter to have trochoidal-shaped waves(yet to be done)
+
+
+
+## Test it
+Launching one of the  2023 practice worlds with a considerable gain parameter(like say 0.8) would work
+```
+ros2 launch vrx_gz competition.launch.py world:=2023_practice/practice_2023_stationkeeping2_task
+```
+
+",False,674,https://api.github.com/repos/osrf/vrx/pulls/674,https://github.com/osrf/vrx/pull/674,closed,1308,990,36,2,9,0,0,0,[],2023-06-10 11:25:17+00:00,2023-06-20 18:35:57+00:00,889840.0,"10 days, 7:10:40",[],"[{'commit_sha': 'b6271a21884ec23c256a71b5879b6ec2a0fd2523', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd56e6fe6dde6f2ff3ab1a6e9943f68d5882cdbcc', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}]",Tejal Ashwini Barnwal,64950661,,User,,59,,198,24
+
+1408711732,Adjust practice worlds to make use of new wavefield model envelope,"This PR adjusts the wavefield parameters for the practice worlds to cover a broader spectrum of possibilities using our recently updated wavefield envelope (see #684). The changes introduced to the worlds are as follows:
+* I updated all easy (0) worlds so they have no waves at all.
+* I changed all intermediate (1) worlds to use period 6, gain 0.6, which produces mild swells. I also varied the direction of the wavefield so teams will not expect it to always stay the same.
+* I changed the wavefield of some of the hard (2) worlds so they are not all the same. Specifically, I left the period of 2 and gain of 2.0 for tasks that rely on perception. For other tasks, such as stationkeeping and wayfinding I used period 6, gain 0.8 to produce medium swells. I also introduced some simple variations to the direction of the wavefield.
+
+## To test:
+* The easy worlds can probably be verified with a spot check and visual inspection of the code.
+* Try to run a few of the intermediate worlds to make sure the wave effects are reasonable and nothing is too challenging. Please also look to make sure I set all the parameters to the values given above.
+* For the hard worlds, please run each and verify that they are challenging but not so extreme as to be unsolvable, and not broken (i.e. no weird physical effects).",True,686,https://api.github.com/repos/osrf/vrx/pulls/686,https://github.com/osrf/vrx/pull/686,closed,53,43,21,6,8,1,0,0,[],2023-06-26 21:08:19+00:00,2023-06-27 15:13:50+00:00,65131.0,18:05:31,"[{'comment_id': 1243421551, 'comment_body': 'i updated this to 0.0', 'comment_created': datetime.datetime(2023, 6, 27, 9, 25, 53, tzinfo=datetime.timezone.utc), 'commenter': 'tejalbarnwal', 'type': 'User'}]","[{'commit_sha': 'c30a86d384ae6999bab0013162950157eed96853', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'feb2ea83e70084c3a336613ef2cba7c66ca61610', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'caea6c2843e5b9b9f2bc67564e685b9b0ed228e0', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5caf9eca2df6102907aaa4ad789b6f59f77a5f0b', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0035b538cf048246e64bd5fe173f97f5ed6e3e1', 'committer_username': 'tejalbarnwal', 'committer_name': 'Tejal Ashwini Barnwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 7, 7, 11, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5589026f542636ba599d7adb8f46aa9ccb8209f9', 'committer_username': 'M1chaelM', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2014, 9, 1, 7, 8, 1, tzinfo=datetime.timezone.utc)}]",,8611855,,User,,6,,0,8
+1409969310,add debug option to wind publishers,"We will not want to publish the wind speed and direction during the actual competition events.  Some options for enabling/disabling these topics, in order of difficulty of implementation, are:
+* add a <debug> tag to the wind plugin sdf, and set it to false when creating competition worlds (or, we could do the opposite and have it default to false)
+* add an argument into launch.py that tells us whether we want to run in competition or debug mode, which adds topics to the bridge as needed
+* change how we're selecting which topics to bridge/ publish, as described in the comments for [680](https://github.com/osrf/vrx/issues/680)
+
+This PR implements the first option.  To test, add the <debug> tag to a world file, launch vrx with that world, and observe that no data is published to `/vrx/debug/wind/direction` or `/vrx/debug/wind/speed`.
+
+For example:
+* add `<debug>false</debug>` to stationkeeping_task.sdf around line 604
+* run `ros2 launch vrx_gz competition.launch.py world:=stationkeeping_task`
+* run `ros2 topic echo /vrx/debug/wind/direction`
+
+
+",False,687,https://api.github.com/repos/osrf/vrx/pulls/687,https://github.com/osrf/vrx/pull/687,closed,19,4,1,1,4,0,0,0,[],2023-06-27 13:58:20+00:00,2023-08-28 21:00:16+00:00,5382116.0,"62 days, 7:01:56",[],"[{'commit_sha': 'cb49065343e33bd2ca562ab88b47db6a95ec1bcc', 'committer_username': 'j-herman', 'committer_name': 'Jessica', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 13, 15, 45, 29, tzinfo=datetime.timezone.utc)}]",Jessica,61019526,,User,,5,,0,1
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+261288737,vrx,osrf/vrx,C++,186,403,13,35,2422,78,92,12,"[{'id': 1448726236, 'number': 709, 'closed': datetime.datetime(2023, 7, 27, 17, 18, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 25, 16, 2, 57, tzinfo=datetime.timezone.utc), 'time_taken': 177351.0, 'time_delta': '2 days, 1:15:51', 'additions': 95, 'deletions': 189, 'state': 'closed'}, {'id': 1414432409, 'number': 699, 'closed': datetime.datetime(2023, 7, 3, 16, 39, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 30, 7, 44, 11, tzinfo=datetime.timezone.utc), 'time_taken': 291338.0, 'time_delta': '3 days, 8:55:38', 'additions': 35, 'deletions': 35, 'state': 'closed'}, {'id': 1399350049, 'number': 678, 'closed': datetime.datetime(2023, 6, 26, 20, 51, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 20, 7, 26, 33, tzinfo=datetime.timezone.utc), 'time_taken': 566705.0, 'time_delta': '6 days, 13:25:05', 'additions': 198, 'deletions': 2332, 'state': 'closed'}, {'id': 1387116295, 'number': 674, 'closed': datetime.datetime(2023, 6, 20, 18, 35, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 10, 11, 25, 17, tzinfo=datetime.timezone.utc), 'time_taken': 889840.0, 'time_delta': '10 days, 7:10:40', 'additions': 1308, 'deletions': 990, 'state': 'closed'}]"
+

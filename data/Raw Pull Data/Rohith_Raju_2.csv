@@ -1,0 +1,389 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1399929811,update: support build for wasm,"
+**What type of PR is this?**
+
+/kind feature
+
+**Any specific area of the project related to this PR?**
+
+/area build
+
+/area CI
+
+/area tests
+
+
+**Does this PR require a change in the driver versions?**
+
+
+**What this PR does / why we need it**:
+
+This PR adds support to WASM target. This is a preliminary work for Google Summer of Code 
+https://github.com/falcosecurity/evolution/issues/262
+
+
+**Which issue(s) this PR fixes**:
+
+<!--
+Automatically closes linked issue when PR is merged.
+Usage: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
+If PR is `kind/failing-tests` please post the related issues/tests in a comment and do not use `Fixes`.
+-->
+
+Fixes #
+
+**Special notes for your reviewer**:
+
+**Does this PR introduce a user-facing change?**:
+
+<!--
+If no, you have to do nothing.
+If yes, a release note is required:
+Delete `NONE` and enter your extended release note in the block below.
+Please note, the release note follows the ""conventional commit specification"" (https://www.conventionalcommits.org/en/v1.0.0/):
+For example: `fix: broken link`.
+If the PR requires additional action from users switching to the new release, prepend the string ""action required:"".
+For example, `action required: change the API interface of libscap`.
+-->
+
+```release-note
+update: support build for wasm
+```
+",True,1156,https://api.github.com/repos/falcosecurity/libs/pulls/1156,https://github.com/falcosecurity/libs/pull/1156,closed,430,134,43,12,11,11,9,2,"[{'name': 'kind/feature'}, {'name': 'release-note'}, {'name': 'dco-signoff: yes'}, {'name': 'size/XXL'}, {'name': 'lgtm'}, {'name': 'approved'}, {'name': 'area/build'}, {'name': 'area/tests'}, {'name': 'area/CI'}]",2023-06-20 13:56:40+00:00,2023-08-03 11:55:18+00:00,3794318.0,"43 days, 21:58:38","[{'comment_id': 1235404621, 'comment_body': ""Isn't this going to conflict with @gnosek refactor on scap platform library?"", 'comment_created': datetime.datetime(2023, 6, 20, 15, 1, 8, tzinfo=datetime.timezone.utc), 'commenter': 'FedeDP', 'type': 'User'}, {'comment_id': 1235405565, 'comment_body': ""If affirmative, i'd wait until Grzeg's work is merged before going with this one, since he has been rebasing his PRs for months now :) "", 'comment_created': datetime.datetime(2023, 6, 20, 15, 1, 49, tzinfo=datetime.timezone.utc), 'commenter': 'FedeDP', 'type': 'User'}, {'comment_id': 1235413709, 'comment_body': ""I need to check. Which of his PR concern is on top of your mind? These are simple stubs, so I'm happy to move them according to the new design or eventually help @gnosek integrate it in his patches in case we want to merge this first."", 'comment_created': datetime.datetime(2023, 6, 20, 15, 7, 56, tzinfo=datetime.timezone.utc), 'commenter': 'jasondellaluce', 'type': 'User'}, {'comment_id': 1235425328, 'comment_body': ""1/n (https://github.com/falcosecurity/libs/pull/1040) should be (mostly) fine since it's a no-op but merging only that is pointless\r\n2/n (https://github.com/falcosecurity/libs/pull/1041) will almost certainly conflict\r\n3/n (https://github.com/falcosecurity/libs/pull/1042) might be fine but since it builds on top of 2/n, it won't apply cleanly either\r\n\r\nBTW, from a drive-by look, it seems `emscripten` will fit right in in the platform work (either as a separate platform, or possibly as a generic platform instance that does not list processes, users etc.)"", 'comment_created': datetime.datetime(2023, 6, 20, 15, 15, 31, tzinfo=datetime.timezone.utc), 'commenter': 'gnosek', 'type': 'User'}, {'comment_id': 1235480126, 'comment_body': '@gnosek do you prefer to merge yours first and then let us adapt this one accordingly, or the other way around?', 'comment_created': datetime.datetime(2023, 6, 20, 15, 56, 52, tzinfo=datetime.timezone.utc), 'commenter': 'jasondellaluce', 'type': 'User'}, {'comment_id': 1235481885, 'comment_body': 'Does the order imply *who* will do the adapting? ;D', 'comment_created': datetime.datetime(2023, 6, 20, 15, 58, 16, tzinfo=datetime.timezone.utc), 'commenter': 'gnosek', 'type': 'User'}, {'comment_id': 1235591683, 'comment_body': ""@gnosek I'm ok in merging yours first then :)"", 'comment_created': datetime.datetime(2023, 6, 20, 17, 30, 2, tzinfo=datetime.timezone.utc), 'commenter': 'jasondellaluce', 'type': 'User'}, {'comment_id': 1282749067, 'comment_body': 'Why is this needed? I mean, i think part of the @gnosek purpose when doing the platform refactor was to avoid conditionals like this one.\r\nAlso, this seems more like a fix unrelated to the PR, right?', 'comment_created': datetime.datetime(2023, 8, 3, 7, 11, 15, tzinfo=datetime.timezone.utc), 'commenter': 'FedeDP', 'type': 'User'}, {'comment_id': 1282750812, 'comment_body': 'This is a rather interesting change; can you explain why was it needed?', 'comment_created': datetime.datetime(2023, 8, 3, 7, 12, 50, tzinfo=datetime.timezone.utc), 'commenter': 'FedeDP', 'type': 'User'}, {'comment_id': 1282888397, 'comment_body': 'Seems like Grzegz implemented the same logic in https://github.com/falcosecurity/libs/blob/d1f3bd3a5d51b89e90030ff666967f866a1e49f9/userspace/libscap/scap.c#L38C50-L38C50. This is a leftover, good catch! Let me remove it.', 'comment_created': datetime.datetime(2023, 8, 3, 9, 7, 4, tzinfo=datetime.timezone.utc), 'commenter': 'jasondellaluce', 'type': 'User'}, {'comment_id': 1282905230, 'comment_body': 'This is a leftover too, let me clean it,', 'comment_created': datetime.datetime(2023, 8, 3, 9, 20, 23, tzinfo=datetime.timezone.utc), 'commenter': 'jasondellaluce', 'type': 'User'}]","[{'commit_sha': '396394efb7248e479b63d047b2215a26dee3adc1', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8036e943d63cc6d6347d53889169155b91cde6a6', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e83ca012ff4c10e94b9351339567ad22698639e', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1e54049f0d51d67e1c9bb59b7fe0d1a219fcb61f', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3af86ba5eb98c460fadf391273ad027f6fbb9a2c', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b4ee13dd48e3ce892e3cfc0d7497a0ddc05c5a21', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e3811ec1cffb51fcb2082fddfb57c4933234788', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a7a9ea5f28f24acadaf131b5ab58a725bbdf3f07', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '64bf719020349b1679a62a3e2f9e4a0f97ebcc0e', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce12f42f2a38bb03c93f27f860e0b5dfa12f18cf', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc701875160d273177d1ab935737f5cc76c3d594', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3477e5c5b469166a5de119179af6377e8db832b', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}]",Rohith Raju,55309324,,User,,51,,34,19
+1411320923,update : support build for wasm ,"<!--  Thanks for sending a pull request! Here are some tips for you:
+1. If this is your first time, please read our contributor guidelines in the https://github.com/falcosecurity/.github/blob/main/CONTRIBUTING.md file.
+2. Please label this pull request according to what type of issue you are addressing.
+3. Please add a release note!
+4. If the PR is unfinished while opening it specify a wip in the title before the actual title, for example, ""wip: my awesome feature""
+-->
+
+**What type of PR is this?**
+
+/kind feature
+
+**Any specific area of the project related to this PR?**
+
+/area build
+
+/area tests
+
+/area CI
+
+<!--
+Please remove the leading whitespace before the `/area <>` you uncommented.
+-->
+
+**What this PR does / why we need it**:
+
+
+**Which issue(s) this PR fixes**:
+This PR adds support to WASM target. This is a preliminary work for Google Summer of Code
+https://github.com/falcosecurity/evolution/issues/262
+https://github.com/falcosecurity/libs/pull/1156
+
+Fixes #
+
+**Special notes for your reviewer**:
+
+**Does this PR introduce a user-facing change?**:
+
+
+```release-note
+update : support build for wasm 
+```
+",True,2663,https://api.github.com/repos/falcosecurity/falco/pulls/2663,https://github.com/falcosecurity/falco/pull/2663,closed,313,119,32,18,8,0,9,2,"[{'name': 'kind/feature'}, {'name': 'size/XL'}, {'name': 'release-note'}, {'name': 'dco-signoff: yes'}, {'name': 'lgtm'}, {'name': 'approved'}, {'name': 'area/build'}, {'name': 'area/tests'}, {'name': 'area/ci'}]",2023-06-28 09:31:49+00:00,2023-08-24 08:30:40+00:00,4921131.0,"56 days, 22:58:51",[],"[{'commit_sha': 'ab3d78ca462db9edd4d5fb661d2c4cb86506afe0', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d90fe0d1b6b62b70879318967b40cef07189098', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50c8a80383de0e363da750838f7e7924b68a4682', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a97878ef468336822051c01186133eb12d5d2c9f', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b11e4b30f5ed38d7db6460d75cf5fe77dba75c25', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd5aba88dfc3dca04c276523a5645ff87b7acbf6', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd626be0e5759f1752f88617e1c18636d9d099938', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a5e270fb3b32c6e31f2f0aac7e558480796c9c8', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f8aa07a56dc09226b54bfd50e7965ddc04d7ea00', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '715e568d33b276146b07cbc36ccf656f30789b0c', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6892255c6b55f6ab976bf8f0d59af61a3f6d7753', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b81e82953a0844ef2ca172241311c8e822d50ad9', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c5cf1673ede4db17f5300485640679ef23255af', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14b39217178c27588b88a67a8055321b27538dd5', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b291ad625e22c7407492f767196cedb0f2c5d026', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ff7a5a438b1cda1fdb6893d9390907175a76954', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa6199868602d90bda5e3465ab7dc6e482ddad24', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}, {'commit_sha': '156bc091cfc4e56613286c8267a313401daa25ff', 'committer_username': 'jasondellaluce', 'committer_name': 'Jason Dellaluce', 'committer_email': 'jasondellaluce@gmail.com', 'commit_date': datetime.datetime(2015, 8, 17, 16, 25, 1, tzinfo=datetime.timezone.utc)}]",Rohith Raju,55309324,,User,,51,,34,19
+1371481770,new: Support for memfd_create syscall,"<!--  Thanks for sending a pull request!  Here are some tips for you:
+
+1. If this is your first time, please read our contributor guidelines in the [CONTRIBUTING.md](https://github.com/falcosecurity/.github/blob/master/CONTRIBUTING.md) file and learn how to compile Falco from source [here](https://falco.org/docs/source).
+2. Please label this pull request according to what type of issue you are addressing.
+3. Please add a release note!
+4. If the PR is unfinished while opening it specify a wip in the title before the actual title, for example, ""wip: my awesome feature""
+-->
+
+**What type of PR is this?**
+
+ /kind feature
+
+<!--
+Please remove the leading whitespace before the `/kind <>` you uncommented.
+-->
+
+**Any specific area of the project related to this PR?**
+
+/area driver-kmod
+/area driver-bpf
+/area driver-modern-bpf
+/area libscap
+/area tests
+
+<!--
+Please remove the leading whitespace before the `/area <>` you uncommented.
+-->
+
+**Does this PR require a change in the driver versions?**
+/version driver-SCHEMA-version-minor
+
+<!--
+Please remove the leading whitespace before the `/version <>` you uncommented.
+-->
+
+**What this PR does / why we need it**:
+
+This PR adds support to `memfd_create` syscall
+- [x] https://github.com/falcosecurity/falco/issues/1998
+
+**Which issue(s) this PR fixes**:
+<!--
+Automatically closes linked issue when PR is merged.
+Usage: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
+If PR is `kind/failing-tests` please post the related issues/tests in a comment and do not use `Fixes`.
+-->
+
+Fixes #
+
+**Special notes for your reviewer**:
+
+**Does this PR introduce a user-facing change?**:
+
+<!--
+If no, you have to do nothing.
+If yes, a release note is required:
+Delete `NONE` and enter your extended release note in the block below.
+Please note, the release note follows the ""conventional commit specification"" (https://www.conventionalcommits.org/en/v1.0.0/):
+For example: `fix: broken link`.
+If the PR requires additional action from users switching to the new release, prepend the string ""action required:"".
+For example, `action required: change the API interface of libscap`.
+-->
+
+```release-note
+new: support for memfd_syscall
+```
+",True,1127,https://api.github.com/repos/falcosecurity/libs/pulls/1127,https://github.com/falcosecurity/libs/pull/1127,closed,322,8,18,11,12,25,6,2,"[{'name': 'release-note'}, {'name': 'dco-signoff: yes'}, {'name': 'lgtm'}, {'name': 'approved'}, {'name': 'area/tests'}, {'name': 'size/XL'}]",2023-05-31 05:22:49+00:00,2023-06-15 10:50:20+00:00,1315651.0,"15 days, 5:27:31","[{'comment_id': 1226614862, 'comment_body': 'there seem to be some extra tabs could we remove them?', 'comment_created': datetime.datetime(2023, 6, 12, 12, 47, 6, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226623433, 'comment_body': 'Can we use the same style we use in the modern probe? I know that we have quite a mess with our old drivers, but the idea we are trying to follow is to adapt the old ones to the modern style :) thank you and sorry for the confusion\r\n\r\n```suggestion\r\n        /* Parameter 1: ret (type: PT_FD) */\r\n```\r\n\r\nSame for all other parameters, also in the kmod', 'comment_created': datetime.datetime(2023, 6, 12, 12, 53, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226629007, 'comment_body': 'Here we are sending a CHARBUF so we need to use:\r\n\r\n```suggestion\r\n\t\tres = bpf_val_to_ring(data, val);\r\n```', 'comment_created': datetime.datetime(2023, 6, 12, 12, 57, 25, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226633446, 'comment_body': 'we need to use `memfd_create_flags_to_scap` helper here.', 'comment_created': datetime.datetime(2023, 6, 12, 13, 0, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226638489, 'comment_body': 'We create a new file descriptor so we modify the sinsp state, same for the exit event\r\n\r\n```suggestion\r\n\t[PPME_SYSCALL_MEMFD_CREATE_E] = {""memfd_create"", EC_MEMORY | EC_SYSCALL, EF_CREATES_FD | EF_MODIFIES_STATE, 0},\r\n```', 'comment_created': datetime.datetime(2023, 6, 12, 13, 5, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226641332, 'comment_body': '```suggestion\r\n\t[PPME_SYSCALL_MEMFD_CREATE_X] = {""memfd_create"", EC_MEMORY | EC_SYSCALL, EF_CREATES_FD | EF_MODIFIES_STATE, 3, {{""fd"",PT_FD,PF_DEC},{""name"", PT_CHARBUF, PF_NA},{""flags"", PT_FLAGS32, PF_HEX, memfd_create_flags} } },\r\n```', 'comment_created': datetime.datetime(2023, 6, 12, 13, 7, 29, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226651084, 'comment_body': 'here we should use the `ringbuf` approach, see `prctl_e` as an example. Some time ago I wrote some docs about new this topic, i need to revamp it but in the meanwhile you could take a look: https://github.com/falcosecurity/libs/pull/781/files', 'comment_created': datetime.datetime(2023, 6, 12, 13, 15, 13, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226652737, 'comment_body': 'we need to change `open_flags_to_scap` with the right helper as we said in the old bpf probe', 'comment_created': datetime.datetime(2023, 6, 12, 13, 16, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226667864, 'comment_body': 'i would leave a space before this line', 'comment_created': datetime.datetime(2023, 6, 12, 13, 27, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226668699, 'comment_body': '```suggestion\r\n\tCHECK_RES(res);\r\n```\r\nSame below', 'comment_created': datetime.datetime(2023, 6, 12, 13, 28, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226676702, 'comment_body': 'Probably we need to include `#include <sys/mman.h>` at the top of this file', 'comment_created': datetime.datetime(2023, 6, 12, 13, 34, 6, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226679330, 'comment_body': 'The kernel provides us a u32 for flags so i would use it\r\n```c\r\nSYSCALL_DEFINE2(memfd_create,\r\n\t\tconst char __user *, uname,\r\n\t\tunsigned int, flags)\r\n```\r\n\r\n```suggestion\r\nstatic __always_inline u32 memfd_create_flags_to_scap(u32 flags)\r\n```', 'comment_created': datetime.datetime(2023, 6, 12, 13, 36, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226682529, 'comment_body': 'can we move this block after the `prctl` one? usually, we put all the implemented syscalls together', 'comment_created': datetime.datetime(2023, 6, 12, 13, 38, 31, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226704416, 'comment_body': 'probably we need a test for the failure case and one for the success one... see `openX_success` and `openX_failure`', 'comment_created': datetime.datetime(2023, 6, 12, 13, 52, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226705023, 'comment_body': 'here we need to assert also the params value not just the number', 'comment_created': datetime.datetime(2023, 6, 12, 13, 52, 30, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1226779288, 'comment_body': 'According to `int memfd_create(const char *name, unsigned int flags);` prototype, the argument number should be `1` instead of `2`.\r\n```suggestion\r\n\t\tval = bpf_syscall_get_argument(data, 1);\r\n```', 'comment_created': datetime.datetime(2023, 6, 12, 14, 36, 22, tzinfo=datetime.timezone.utc), 'commenter': 'hbrueckner', 'type': 'User'}, {'comment_id': 1229122908, 'comment_body': ""Flags value doesn't seem to be propogated!!"", 'comment_created': datetime.datetime(2023, 6, 14, 7, 10, 40, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1229232584, 'comment_body': 'I would keep the inlcude path similar to the other just for consistency so `<linux/memfd.h>`', 'comment_created': datetime.datetime(2023, 6, 14, 8, 37, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229252448, 'comment_body': ""the issue is that the modern bpf doesn't take flag definitions from the kernel headers, we need to define them explicitly in the `missing_definitions.h` file https://github.com/falcosecurity/libs/blob/master/driver/modern_bpf/definitions/missing_definitions.h. If you add them here also should work fine"", 'comment_created': datetime.datetime(2023, 6, 14, 8, 52, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229418326, 'comment_body': ""@Andreagit97 I tried doing that, but weirdly the macros in `memfd_create_flags_to_scap` don't execute. The flags don't propagate resulting in the value of the flag being zero in the tests.  I changed it to `<linux/memfd.h>` to ensure it's my local setup's problem.  If the `CI` fails, I'll change it back to `<uapi/linux/memfd.h>` 😄 \r\n\r\n"", 'comment_created': datetime.datetime(2023, 6, 14, 11, 3, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1229421485, 'comment_body': ""@Andreagit97  The problem persists! I'll change it back to `<uapi/linux/memfd.h>` for now.  https://app.circleci.com/pipelines/github/falcosecurity/libs/1230/workflows/f408e0fd-8a7b-4b64-9df3-f1e441d44650/jobs/3416?invite=true#step-106-188"", 'comment_created': datetime.datetime(2023, 6, 14, 11, 6, 24, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1229464215, 'comment_body': 'Ok, I will take a look :) thank you for reporting the issue', 'comment_created': datetime.datetime(2023, 6, 14, 11, 46, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229746432, 'comment_body': '```suggestion\r\n\t[PPME_SYSCALL_MEMFD_CREATE_X] = {""memfd_create"", EC_MEMORY | EC_SYSCALL, EF_CREATES_FD, 3, {{""fd"",PT_FD,PF_DEC},{""name"", PT_CHARBUF, PF_NA},{""flags"", PT_FLAGS32, PF_HEX, memfd_create_flags} } },\r\n```\r\n\r\nremove the `EF_MODIFIES_STATE` flag until we don\'t support the userspace parsers... sorry I know I told you to add it but if we don\'t implement the userspace part we shouldn\'t put it here.\r\nSame for the ENTER event', 'comment_created': datetime.datetime(2023, 6, 14, 14, 48, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1230672644, 'comment_body': 'ahahhaha here we are, my fault sorry, damn copy and paste!\r\n```suggestion\r\n#ifdef __NR_memfd_create\r\n```', 'comment_created': datetime.datetime(2023, 6, 15, 8, 52, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1230752145, 'comment_body': ""Ahh, yes I should've tried that!! "", 'comment_created': datetime.datetime(2023, 6, 15, 9, 49, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}]","[{'commit_sha': '39e352b1e52b826bfc3281acb9680f1206fe8466', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '93d51b93e676a970a065553e928de33ee2c2e4a5', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c9f40ab21c50c55c12cbe8c59a5d85f4abfc1a6', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09e1c5f4e2ac5d9ca9aa25413138e6bb47cfc21f', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2616189bcc28fade81f60b97e6e95f34376b9f3f', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '334fa6134189f9c45baab4f13d35b247b5fed7ff', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1a015681b68bd6d5f2ac5f51b077c70149048dd', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2add3cf5047505b7e22eb7b6a8144d7d4685db3f', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f97b67debb489641ba92c6569088c36a86b6ff97', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '54cb7bfe805dc23ba8b1107edef8f6990349ecf0', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4c0554d4b0be1774676c243c89e23dd429716605', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}]",Rohith Raju,55309324,,User,,51,,34,19
+1382622971,Feat: Support for pidfd_getfd syscall,"<!--  Thanks for sending a pull request!  Here are some tips for you:
+
+1. If this is your first time, please read our contributor guidelines in the [CONTRIBUTING.md](https://github.com/falcosecurity/.github/blob/master/CONTRIBUTING.md) file and learn how to compile Falco from source [here](https://falco.org/docs/source).
+2. Please label this pull request according to what type of issue you are addressing.
+3. Please add a release note!
+4. If the PR is unfinished while opening it specify a wip in the title before the actual title, for example, ""wip: my awesome feature""
+-->
+
+**What type of PR is this?**
+
+> Uncomment one (or more) `/kind <>` lines:
+
+> /kind bug
+
+> /kind cleanup
+
+> /kind design
+
+> /kind documentation
+
+> /kind failing-test
+
+kind feature
+
+<!--
+Please remove the leading whitespace before the `/kind <>` you uncommented.
+-->
+
+**Any specific area of the project related to this PR?**
+
+> Uncomment one (or more) `/area <>` lines:
+
+> /area API-version
+
+> /area build
+
+> /area CI
+
+area driver-kmod
+
+area driver-bpf
+
+area driver-modern-bpf
+
+> /area libscap-engine-bpf
+
+> /area libscap-engine-gvisor
+
+> /area libscap-engine-kmod
+
+> /area libscap-engine-modern-bpf
+
+> /area libscap-engine-nodriver
+
+> /area libscap-engine-noop
+
+> /area libscap-engine-source-plugin
+
+> /area libscap-engine-savefile
+
+> /area libscap-engine-udig
+
+area libscap
+
+> /area libpman
+
+> /area libsinsp
+
+area tests
+
+> /area proposals
+
+<!--
+Please remove the leading whitespace before the `/area <>` you uncommented.
+-->
+
+**Does this PR require a change in the driver versions?**
+
+> /version driver-API-version-major
+
+version driver-API-version-minor
+
+> /version driver-API-version-patch
+
+> /version driver-SCHEMA-version-major
+
+> /version driver-SCHEMA-version-minor
+
+> /version driver-SCHEMA-version-patch
+
+<!--
+Please remove the leading whitespace before the `/version <>` you uncommented.
+-->
+
+**What this PR does / why we need it**:
+
+This PR adds support to `pidfd_getfd` syscall.
+- https://github.com/falcosecurity/falco/issues/1998
+
+**Which issue(s) this PR fixes**:
+
+<!--
+Automatically closes linked issue when PR is merged.
+Usage: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
+If PR is `kind/failing-tests` please post the related issues/tests in a comment and do not use `Fixes`.
+-->
+
+Fixes #
+
+**Special notes for your reviewer**:
+
+**Does this PR introduce a user-facing change?**:
+
+<!--
+If no, you have to do nothing.
+If yes, a release note is required:
+Delete `NONE` and enter your extended release note in the block below.
+Please note, the release note follows the ""conventional commit specification"" (https://www.conventionalcommits.org/en/v1.0.0/):
+For example: `fix: broken link`.
+If the PR requires additional action from users switching to the new release, prepend the string ""action required:"".
+For example, `action required: change the API interface of libscap`.
+-->
+
+```release-note
+new: support for pidfd_getfd syscall
+```
+",True,1145,https://api.github.com/repos/falcosecurity/libs/pulls/1145,https://github.com/falcosecurity/libs/pull/1145,closed,267,14,16,5,7,34,5,2,"[{'name': 'release-note'}, {'name': 'dco-signoff: yes'}, {'name': 'lgtm'}, {'name': 'approved'}, {'name': 'size/XL'}]",2023-06-07 12:54:50+00:00,2023-06-22 09:10:55+00:00,1282565.0,"14 days, 20:16:05","[{'comment_id': 1228391169, 'comment_body': 'This line should not be removed as this is required below for the `__s390x__` block. However, I have corrected this with PR #1150. Thanks.', 'comment_created': datetime.datetime(2023, 6, 13, 16, 15, 32, tzinfo=datetime.timezone.utc), 'commenter': 'hbrueckner', 'type': 'User'}, {'comment_id': 1229778163, 'comment_body': 'even if it is `0` we can capture its real value and send it to userspace, if the syscall fails the flag value could be also different from `0`\r\n\r\n```suggestion\r\n\treturn bpf_push_u32_to_ring(data, val);\r\n```', 'comment_created': datetime.datetime(2023, 6, 14, 15, 5, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229788859, 'comment_body': 'when we manage parameters on 32 bit and we then translate them to 64 bit we need to pay attention, see the explanation here https://github.com/falcosecurity/libs/pull/783#issue-1486570992\r\nSo probably here you should do something like this:\r\n\r\n```suggestion\r\n\ts32 pidfd = (s32)bpf_syscall_get_argument(data, 0);\r\n\tres = bpf_push_s64_to_ring(data, (s64)pidfd);\r\n```\r\n\r\nSame for all other places that involve 32 bit vars\r\n', 'comment_created': datetime.datetime(2023, 6, 14, 15, 13, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229791393, 'comment_body': 'Same comment of the other PR https://github.com/falcosecurity/libs/pull/1127#discussion_r1226623433 ', 'comment_created': datetime.datetime(2023, 6, 14, 15, 14, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229795135, 'comment_body': 'we don\'t need the `EF_NONE`\r\n```suggestion\r\n\t[PPME_SYSCALL_PIDFD_GETFD_E] = {""pidfd_getfd"", EC_PROCESS | EC_SYSCALL, EF_CREATES_FD, 0},\r\n```', 'comment_created': datetime.datetime(2023, 6, 14, 15, 17, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229797113, 'comment_body': 'I would avoid creating it at all, we could create it if we will really need it one day, WDYT?', 'comment_created': datetime.datetime(2023, 6, 14, 15, 18, 18, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229799189, 'comment_body': 'Same of `memfd_create_e` we need the `ringbuf-approach` her', 'comment_created': datetime.datetime(2023, 6, 14, 15, 19, 45, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229799925, 'comment_body': 'can we remove this white line?', 'comment_created': datetime.datetime(2023, 6, 14, 15, 20, 20, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229801182, 'comment_body': '```suggestion\r\n    s32 pidfd = (s32)extract__syscall_argument(regs, 0);\r\n    auxmap__store_s64_param(auxmap, (s64)pidfd);\r\n```', 'comment_created': datetime.datetime(2023, 6, 14, 15, 21, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229802736, 'comment_body': 'This is a fixed size event so again we need to use the `ringbuf` approach', 'comment_created': datetime.datetime(2023, 6, 14, 15, 22, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229804096, 'comment_body': 'we need to do this in all other drivers as i wrote also in the old bpf probe', 'comment_created': datetime.datetime(2023, 6, 14, 15, 22, 44, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229805696, 'comment_body': 'here I would extract the real value and i would send it to  userspace as i wrote in the old probe', 'comment_created': datetime.datetime(2023, 6, 14, 15, 23, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229806106, 'comment_body': 'i would remove it', 'comment_created': datetime.datetime(2023, 6, 14, 15, 23, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229807440, 'comment_body': '```suggestion\r\n\tCHECK_RES(res);\r\n```\r\nPlus the same comments of the other drivers', 'comment_created': datetime.datetime(2023, 6, 14, 15, 24, 55, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229809449, 'comment_body': 'same as `memfd_create` can we move it near the other implemented syscalls?', 'comment_created': datetime.datetime(2023, 6, 14, 15, 26, 20, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229812582, 'comment_body': 'uhm probably now we should remove it otherwise we will have it defined twice on s390x :thinking: ', 'comment_created': datetime.datetime(2023, 6, 14, 15, 28, 32, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1229814349, 'comment_body': 'If we apply the suggested changes in the driver this should become:\r\n\r\n```suggestion\r\n     evt_test->assert_numeric_param(4, flags);\r\n```', 'comment_created': datetime.datetime(2023, 6, 14, 15, 29, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1230494055, 'comment_body': 'Yes, I agree!', 'comment_created': datetime.datetime(2023, 6, 15, 6, 25, 18, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1230604085, 'comment_body': 'On `master` this line is already removed and I have added it again for `s390x` with PR #1150 . I think this hunk above will go away with rebasing to latest `master`.', 'comment_created': datetime.datetime(2023, 6, 15, 8, 0, 26, tzinfo=datetime.timezone.utc), 'commenter': 'hbrueckner', 'type': 'User'}, {'comment_id': 1230730463, 'comment_body': 'oh, bad trip hahaha! thank you for the hint', 'comment_created': datetime.datetime(2023, 6, 15, 9, 31, 41, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236719979, 'comment_body': 'I will write it here to not forget about it, we need a SCHEMA_VERSION minor bump in this PR https://github.com/falcosecurity/libs/blob/master/driver/README.VERSION.md', 'comment_created': datetime.datetime(2023, 6, 21, 9, 47, 22, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236725194, 'comment_body': 'we still need to address it, same for exit event', 'comment_created': datetime.datetime(2023, 6, 21, 9, 51, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236726686, 'comment_body': 'I would remove this comment ', 'comment_created': datetime.datetime(2023, 6, 21, 9, 53, 9, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236727886, 'comment_body': 'i would remove this space', 'comment_created': datetime.datetime(2023, 6, 21, 9, 54, 10, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236728182, 'comment_body': 'i would remove this space', 'comment_created': datetime.datetime(2023, 6, 21, 9, 54, 26, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236728928, 'comment_body': 'i would leave a space here', 'comment_created': datetime.datetime(2023, 6, 21, 9, 54, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236732109, 'comment_body': 'we need to apply the same conversion `s32` to `s64` as in the other drivers, consider this as an example\r\nhttps://github.com/falcosecurity/libs/blob/9eed784ff804d53b64d3f5cd12c1c329afa3e857/driver/ppm_fillers.c#L397 \r\n\r\nSame for `targetfd`', 'comment_created': datetime.datetime(2023, 6, 21, 9, 57, 26, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236734538, 'comment_body': 'this seems not used, i would remove it', 'comment_created': datetime.datetime(2023, 6, 21, 9, 59, 29, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1236738115, 'comment_body': 'I would use random vaules to test if our fillers correctly work\r\n```suggestion\r\n    int pid_fd = -1;\r\n    int target_fd = 1023;\r\n```', 'comment_created': datetime.datetime(2023, 6, 21, 10, 2, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1237029491, 'comment_body': ""@Andreagit97, I keep getting stuck or unaware of when why and where we must use type conversions. I'm aware of this https://github.com/falcosecurity/libs/pull/783#issue-1486570992 but can't quite understand it. Could you please explain briefly or link and article for me!! "", 'comment_created': datetime.datetime(2023, 6, 21, 13, 45, 22, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1237289246, 'comment_body': '```suggestion\r\n```\r\n\r\nCan we remove this?', 'comment_created': datetime.datetime(2023, 6, 21, 16, 35, 58, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1237321078, 'comment_body': 'sure!\r\nAs you see in your tests, the `pid_fd` syscall argument is 32-bit and signed, so in the kernel, we should expect to retrieve a signed number on 32-bit as well. `pid_fd` is  `-1` on 32 bit and it will be represented as `0xFFFFFFFF`.\r\n\r\n```cpp\r\n    int pid_fd = -1;\r\n    int target_fd = -1;\r\n    uint32_t flags = 1;\r\n    assert_syscall_state(SYSCALL_FAILURE, ""pidfd_getfd"", syscall(__NR_pidfd_getfd, pid_fd, target_fd, flags));\r\n```\r\n\r\nLet\'s see the kernel side considering the bpf probe as an example.\r\nThe `bpf_syscall_get_argument` method will return us an unsigned long so a number on 64-bit. In the specific case of `pid_fd` it will return us `0x00000000FFFFFFFF`, the high 32 bits contain all 0 while the lower ones contain the real number we want: `-1`. If we send this unsigned long as it is to userspace we will obtain something weird.\r\n\r\n```c\r\n/* Parameter 2: pidfd (type: PT_FD) */\r\nunsigned long pidfd = bpf_syscall_get_argument(data, 0);\r\nres = bpf_push_s64_to_ring(data, pidfd);\r\nCHECK_RES(res);\r\n```\r\n\r\nWe are sending to userspace an unsigned long `0x00000000FFFFFFFF` telling to treat it as an `s64` so a signed number on 64 bit. Userspace will read `4294967295` instead of `-1` because `-1` on 64-bit should be represented as `0xFFFFFFFFFFFFFFFF` and not as `0x00000000FFFFFFFF`. What we have to do in order to allow the userspace to understand is:\r\n \r\n1. Keep only the first 32 bits of the `bpf_syscall_get_argument` method:\r\n\r\n```c\r\ns32 pidfd = (s32)bpf_syscall_get_argument(data, 0);\r\n```\r\n   Now we have s32 pidfd = `0xFFFFFFFF`. \r\n\r\n2. Before sending it we need to convert it to a signed 64-bit and not to an unsigned long:\r\n\r\n\r\n```c\r\nres = bpf_push_s64_to_ring(data, (s64)pidfd)\r\n```\r\n\r\nwith this  `(s64)pidfd` we will convert `0xFFFFFFFF` to `0xFFFFFFFFFFFFFFFF`. \r\n\r\nNow the userspace can correctly read `-1`:tada:', 'comment_created': datetime.datetime(2023, 6, 21, 17, 3, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1237333915, 'comment_body': ""I've seen we have already another PR doing this, since we are here could you remove these changes? Sorry I know I asked it but things are changed in the meanwhile :joy: "", 'comment_created': datetime.datetime(2023, 6, 21, 17, 12, 58, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1237943268, 'comment_body': 'This makes sense!! Thank you for the detailed explanation!!', 'comment_created': datetime.datetime(2023, 6, 22, 3, 15, 18, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}]","[{'commit_sha': 'e422fede6befffb503ac249c0fd68624d7bc4ccd', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7232c19a7f73c783a6134f4295c148a2320b8be', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43baf336b99e19d690b65a8f822d8947488c3c09', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8fc8e01b243976cfcca0587cc66e2c4ab83a4e6', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ece5324668f9d529f837d107533e325bad4d86d3', 'committer_username': 'Andreagit97', 'committer_name': 'Andrea Terzolo', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 9, 20, 58, 12, tzinfo=datetime.timezone.utc)}]",Rohith Raju,55309324,,User,,51,,34,19
+1420765847,Support pidfd_open syscall,"**What type of PR is this?**
+
+/kind feature
+
+**Any specific area of the project related to this PR?**
+
+/area driver-kmod
+
+/area driver-bpf
+
+/area driver-modern-bpf
+
+/area tests
+
+**Does this PR require a change in the driver versions?**
+
+**What this PR does / why we need it**:
+
+This PR adds support for `pidfd_open` syscall 
+
+**Which issue(s) this PR fixes**:
+
+<!--
+Automatically closes linked issue when PR is merged.
+Usage: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
+If PR is `kind/failing-tests` please post the related issues/tests in a comment and do not use `Fixes`.
+-->
+
+Fixes #
+
+**Special notes for your reviewer**:
+
+**Does this PR introduce a user-facing change?**:
+
+<!--
+If no, you have to do nothing.
+If yes, a release note is required:
+Delete `NONE` and enter your extended release note in the block below.
+Please note, the release note follows the ""conventional commit specification"" (https://www.conventionalcommits.org/en/v1.0.0/):
+For example: `fix: broken link`.
+If the PR requires additional action from users switching to the new release, prepend the string ""action required:"".
+For example, `action required: change the API interface of libscap`.
+-->
+
+```release-note
+Support pidfd_open syscall
+```
+",True,1187,https://api.github.com/repos/falcosecurity/libs/pulls/1187,https://github.com/falcosecurity/libs/pull/1187,closed,340,39,20,6,6,22,11,2,"[{'name': 'kind/feature'}, {'name': 'release-note'}, {'name': 'dco-signoff: yes'}, {'name': 'lgtm'}, {'name': 'approved'}, {'name': 'area/driver-kmod'}, {'name': 'area/driver-bpf'}, {'name': 'area/tests'}, {'name': 'size/XL'}, {'name': 'area/proposals'}, {'name': 'area/driver-modern-bpf'}]",2023-07-05 09:43:50+00:00,2023-07-18 13:02:36+00:00,1135126.0,"13 days, 3:18:46","[{'comment_id': 1265251570, 'comment_body': '```suggestion\r\n\tlong retval = bpf_syscall_get_retval(data->ctx);\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 5, 20, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265256661, 'comment_body': '```suggestion\r\n\tint res = bpf_push_s64_to_ring(data, retval);\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 10, 3, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265257455, 'comment_body': '```suggestion\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 10, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265264410, 'comment_body': 'Please note that we need the initial declaration only in the kernel module because ISO C90 forbids mixed declarations and code. With bpf drivers usually we declare the variable when we use it', 'comment_created': datetime.datetime(2023, 7, 17, 12, 15, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265287877, 'comment_body': 'why do we use `1U` here? In the kernel I found\r\n```c\r\n#define PIDFD_NONBLOCK O_NONBLOCK\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 31, 31, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265292020, 'comment_body': '```suggestion\r\n\tu32 flags = (u32)bpf_syscall_get_argument(data, 1);\r\n\treturn bpf_push_u32_to_ring(data, pidfd_open_flags_to_scap(flags));\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 35, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265295017, 'comment_body': 'can we remove this?', 'comment_created': datetime.datetime(2023, 7, 17, 12, 37, 48, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265295876, 'comment_body': '```suggestion\r\n\tlong retval;\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 38, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265300860, 'comment_body': 'if you accept the following suggestion we can remove this', 'comment_created': datetime.datetime(2023, 7, 17, 12, 43, 14, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265301221, 'comment_body': 'Since `define PIDFD_NONBLOCK O_NONBLOCK` what about doing something like this?\r\n```suggestion\r\nstatic __always_inline uint32_t pidfd_open_flags_to_scap(uint32_t flags)\r\n{\r\n\tuint32_t res = 0;\r\n\t// See https://elixir.bootlin.com/linux/v5.10.185/source/include/uapi/linux/pidfd.h#L10\r\n#ifdef O_NONBLOCK\r\n\tif(flags & O_NONBLOCK) res |= PPM_PIDFD_NONBLOCK;\r\n#endif\r\n\treturn res;\r\n}\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 12, 43, 32, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265434465, 'comment_body': '```suggestion\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 14, 15, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265439821, 'comment_body': '```suggestion\r\n#ifdef PIDFD_NONBLOCK\r\n    flags = PIDFD_NONBLOCK;\r\n#else\r\n    flags = O_NONBLOCK;\r\n#endif \r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 14, 18, 56, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265440251, 'comment_body': 'What about something like this?', 'comment_created': datetime.datetime(2023, 7, 17, 14, 19, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265441447, 'comment_body': '```suggestion\r\n    /* Parameter 3: flags (type: PT_FLAGS32) */ \r\n     evt_test->assert_numeric_param(3, (uint32_t)PPM_PIDFD_NONBLOCK);\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 14, 20, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265441910, 'comment_body': '```suggestion\r\n    /* Parameter 2: pid (type: PT_PID)*/\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 14, 20, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1265442162, 'comment_body': '```suggestion\r\n    /* Parameter 2: pid (type: PT_PID)*/\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 14, 20, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1266268456, 'comment_body': ""Sure, I've used the same declaration for `memfd_create` and `pidfd_open` as well. Do I change that as well?"", 'comment_created': datetime.datetime(2023, 7, 18, 6, 1, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1266273703, 'comment_body': 'Sure!! this makes sense. I thought I had to enforce `pidfd_open` flags ', 'comment_created': datetime.datetime(2023, 7, 18, 6, 8, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1266317277, 'comment_body': 'If you have time it would be great!', 'comment_created': datetime.datetime(2023, 7, 18, 6, 56, 28, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1266482225, 'comment_body': '```suggestion\r\n\tres = bpf_push_s64_to_ring(data, (s64)pid);\r\n```', 'comment_created': datetime.datetime(2023, 7, 18, 9, 12, 27, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1266483352, 'comment_body': 'we still need to address this', 'comment_created': datetime.datetime(2023, 7, 18, 9, 13, 25, tzinfo=datetime.timezone.utc), 'commenter': 'Andreagit97', 'type': 'User'}, {'comment_id': 1266551417, 'comment_body': 'Oops forgot to commit 😅', 'comment_created': datetime.datetime(2023, 7, 18, 10, 8, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}]","[{'commit_sha': '028a6183baa050d292dd16ef30284cddc44deab2', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61e1dc5b8d72002da639453e65e6198c7cf9a300', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0c6ad89fb5e31dbd8f4470cb135ed1d4b1fd15df', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '42d6c18050d1babceae44793744fd4594fa9926b', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf66008f60c86955fe572e5b772d36d732ef95d7', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e12a98de8cc9f20e42de02018ebf67d10e852ff', 'committer_username': 'Andreagit97', 'committer_name': 'Andrea Terzolo', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 9, 20, 58, 12, tzinfo=datetime.timezone.utc)}]",Rohith Raju,55309324,,User,,51,,34,19
+1404588132,update(parsers): Support userspace parsers for memfd_create syscall.,"**What type of PR is this?**
+
+/kind feature
+
+**Any specific area of the project related to this PR?**
+
+/area libscap
+
+/area tests
+
+**Does this PR require a change in the driver versions?**
+
+<!--
+Please remove the leading whitespace before the `/version <>` you uncommented.
+-->
+
+**What this PR does / why we need it**:
+
+Since `memfd_create` creates an anonymous file it would be useful to extract the filename. 
+Also see https://github.com/falcosecurity/libs/pull/1127#discussion_r1229746432 
+
+**Which issue(s) this PR fixes**:
+
+<!--
+Automatically closes linked issue when PR is merged.
+Usage: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
+If PR is `kind/failing-tests` please post the related issues/tests in a comment and do not use `Fixes`.
+-->
+
+Fixes #
+
+**Special notes for your reviewer**:
+
+**Does this PR introduce a user-facing change?**:
+
+<!--
+If no, you have to do nothing.
+If yes, a release note is required:
+Delete `NONE` and enter your extended release note in the block below.
+Please note, the release note follows the ""conventional commit specification"" (https://www.conventionalcommits.org/en/v1.0.0/):
+For example: `fix: broken link`.
+If the PR requires additional action from users switching to the new release, prepend the string ""action required:"".
+For example, `action required: change the API interface of libscap`.
+-->
+
+```release-note
+update(parsers): Support userspace parsers for memfd_create syscall
+```
+",True,1162,https://api.github.com/repos/falcosecurity/libs/pulls/1162,https://github.com/falcosecurity/libs/pull/1162,closed,89,4,9,2,4,4,8,2,"[{'name': 'kind/feature'}, {'name': 'release-note'}, {'name': 'dco-signoff: yes'}, {'name': 'lgtm'}, {'name': 'approved'}, {'name': 'area/libscap'}, {'name': 'area/tests'}, {'name': 'size/L'}]",2023-06-23 07:06:03+00:00,2023-06-27 17:02:55+00:00,381412.0,"4 days, 9:56:52","[{'comment_id': 1240407497, 'comment_body': 'indentation', 'comment_created': datetime.datetime(2023, 6, 23, 21, 15, 43, tzinfo=datetime.timezone.utc), 'commenter': 'incertum', 'type': 'User'}, {'comment_id': 1240413245, 'comment_body': 'Suggesting to add a comment here something in line of:\r\n\r\nSuppose you create a memfd named `libstest` resulting in a fd.name `libstest` while on disk (e.g.   ` ls -l /proc/$PID/fd/$FD_NUM`) it may look like `/memfd:libstest (deleted)`\r\n\r\n\r\n\r\n\r\n\r\n\r\n', 'comment_created': datetime.datetime(2023, 6, 23, 21, 21, 32, tzinfo=datetime.timezone.utc), 'commenter': 'incertum', 'type': 'User'}, {'comment_id': 1241049190, 'comment_body': 'Well, this is weird!! why isn\'t my spaces being formatted correctly? Looks fine in my editor.\r\n<img width=""233"" alt=""Screenshot 2023-06-25 at 11 43 46 AM"" src=""https://github.com/falcosecurity/libs/assets/55309324/dab99227-add5-4985-98bd-fb58488dd4af"">\r\n\r\n', 'comment_created': datetime.datetime(2023, 6, 25, 6, 16, 13, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}, {'comment_id': 1241049906, 'comment_body': 'Yes, this makes sense!!', 'comment_created': datetime.datetime(2023, 6, 25, 6, 18, 56, tzinfo=datetime.timezone.utc), 'commenter': 'Rohith-Raju', 'type': 'User'}]","[{'commit_sha': '3006aa558377b406108f2af9b0f94ddc2a4cdc3d', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29c203d116d05a16fcb712c8b6aedde47177e160', 'committer_username': 'Rohith-Raju', 'committer_name': 'Rohith Raju', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 14, 6, 10, 6, tzinfo=datetime.timezone.utc)}]",Rohith Raju,55309324,,User,,51,,34,19
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+337107978,libs,falcosecurity/libs,C,160,220,26,238,9353,89,98,28,"[{'id': 1629887874, 'number': 1545, 'closed': datetime.datetime(2024, 2, 7, 9, 4, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 5, 8, 55, tzinfo=datetime.timezone.utc), 'time_taken': 5530196.0, 'time_delta': '64 days, 0:09:56', 'additions': 121, 'deletions': 16, 'state': 'closed'}, {'id': 1558969398, 'number': 1419, 'closed': datetime.datetime(2023, 11, 24, 22, 12, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 16, 16, 16, 15, tzinfo=datetime.timezone.utc), 'time_taken': 3390997.0, 'time_delta': '39 days, 5:56:37', 'additions': 107, 'deletions': 17, 'state': 'closed'}, {'id': 1511648660, 'number': 1348, 'closed': datetime.datetime(2023, 11, 21, 15, 15, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 12, 8, 44, 21, tzinfo=datetime.timezone.utc), 'time_taken': 6071480.0, 'time_delta': '70 days, 6:31:20', 'additions': 494, 'deletions': 174, 'state': 'closed'}, {'id': 1455621816, 'number': 1257, 'closed': datetime.datetime(2023, 8, 28, 9, 2, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 31, 6, 21, 5, tzinfo=datetime.timezone.utc), 'time_taken': 2428912.0, 'time_delta': '28 days, 2:41:52', 'additions': 174, 'deletions': 3, 'state': 'closed'}, {'id': 1420765847, 'number': 1187, 'closed': datetime.datetime(2023, 7, 18, 13, 2, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 9, 43, 50, tzinfo=datetime.timezone.utc), 'time_taken': 1135126.0, 'time_delta': '13 days, 3:18:46', 'additions': 340, 'deletions': 39, 'state': 'closed'}, {'id': 1412908227, 'number': 1179, 'closed': datetime.datetime(2023, 6, 30, 12, 40, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 29, 8, 6, 9, tzinfo=datetime.timezone.utc), 'time_taken': 102876.0, 'time_delta': '1 day, 4:34:36', 'additions': 101, 'deletions': 5, 'state': 'closed'}, {'id': 1404588132, 'number': 1162, 'closed': datetime.datetime(2023, 6, 27, 17, 2, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 23, 7, 6, 3, tzinfo=datetime.timezone.utc), 'time_taken': 381412.0, 'time_delta': '4 days, 9:56:52', 'additions': 89, 'deletions': 4, 'state': 'closed'}, {'id': 1399929811, 'number': 1156, 'closed': datetime.datetime(2023, 8, 3, 11, 55, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 20, 13, 56, 40, tzinfo=datetime.timezone.utc), 'time_taken': 3794318.0, 'time_delta': '43 days, 21:58:38', 'additions': 430, 'deletions': 134, 'state': 'closed'}, {'id': 1382622971, 'number': 1145, 'closed': datetime.datetime(2023, 6, 22, 9, 10, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 7, 12, 54, 50, tzinfo=datetime.timezone.utc), 'time_taken': 1282565.0, 'time_delta': '14 days, 20:16:05', 'additions': 267, 'deletions': 14, 'state': 'closed'}, {'id': 1376700297, 'number': 1135, 'closed': datetime.datetime(2023, 6, 5, 8, 17, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 3, 6, 45, 58, tzinfo=datetime.timezone.utc), 'time_taken': 178294.0, 'time_delta': '2 days, 1:31:34', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 1371481770, 'number': 1127, 'closed': datetime.datetime(2023, 6, 15, 10, 50, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 31, 5, 22, 49, tzinfo=datetime.timezone.utc), 'time_taken': 1315651.0, 'time_delta': '15 days, 5:27:31', 'additions': 322, 'deletions': 8, 'state': 'closed'}]"
+49986046,falco,falcosecurity/falco,C++,888,7197,128,207,4596,105,114,12,"[{'id': 1680578876, 'number': 3017, 'closed': datetime.datetime(2024, 2, 7, 13, 31, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 16, 10, 8, 17, tzinfo=datetime.timezone.utc), 'time_taken': 1913020.0, 'time_delta': '22 days, 3:23:40', 'additions': 49, 'deletions': 1, 'state': 'closed'}, {'id': 1411320923, 'number': 2663, 'closed': datetime.datetime(2023, 8, 24, 8, 30, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 28, 9, 31, 49, tzinfo=datetime.timezone.utc), 'time_taken': 4921131.0, 'time_delta': '56 days, 22:58:51', 'additions': 313, 'deletions': 119, 'state': 'closed'}]"

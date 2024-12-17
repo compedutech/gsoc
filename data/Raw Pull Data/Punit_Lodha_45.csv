@@ -1,0 +1,435 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+673873507,Update function declarations and naming style,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Add declarations for undeclared functions
+Update naming style for all 708 related functions to have a consistent prefix of `dtvcc_`
+",True,1350,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1350,https://github.com/CCExtractor/ccextractor/pull/1350,closed,768,696,11,3,0,0,0,0,[],2021-06-19 12:30:34+00:00,2021-06-19 15:32:34+00:00,10920.0,3:02:00,[],"[{'commit_sha': '19dd322db00fe09dd9f74944dfc0e2e0841b8260', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aaf290f3aaaedc068f1d05f98fa0c8ebcb4d18b9', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ead7a8c6c72ca2313ca8cec02afd9f15c6006550', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+674171220,Add rust library,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Added rust library, bindings for C functions and types required for the 708 decoder
+Also ported the dtvcc_process_data() function
+
+Need to add:-
+- [ ] Documentation on how to build with rust library
+- [ ] Github action for building rust library and formatting using clippy
+ ",True,1351,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1351,https://github.com/CCExtractor/ccextractor/pull/1351,closed,564,0,11,11,2,9,0,0,[],2021-06-21 02:51:15+00:00,2021-06-26 01:03:00+00:00,425505.0,"4 days, 22:11:45","[{'comment_id': 658320654, 'comment_body': ""Are these debug leftovers? I haven't tried it but doesn't this produce thousands of lines on console? "", 'comment_created': datetime.datetime(2021, 6, 24, 22, 21, 49, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 658320730, 'comment_body': 'Same as above', 'comment_created': datetime.datetime(2021, 6, 24, 22, 21, 59, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 658321675, 'comment_body': 'Do we need the whole function to be unsafe? We want as many rust safeguards as possible.\r\nI can live with some additional memory copy (since these are just a few bytes) in return of that.\r\n', 'comment_created': datetime.datetime(2021, 6, 24, 22, 23, 20, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 658417310, 'comment_body': 'These lines are for logs. I have temporarily added them as println. I have to figure out logging', 'comment_created': datetime.datetime(2021, 6, 25, 1, 57, 10, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 658420719, 'comment_body': 'Since we are dereferencing a raw pointer, we have to mark it as unsafe. We can change data to not be a raw pointer, but dtvcc might be bigger to copy', 'comment_created': datetime.datetime(2021, 6, 25, 2, 2, 39, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 658421639, 'comment_body': ""I know, but this makes the program unusable. This can't be merged as is. \r\nIt's not that rust doesn't have good logging crates :-)"", 'comment_created': datetime.datetime(2021, 6, 25, 2, 5, 59, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 658422190, 'comment_body': ""What you can do here is have a very small function that copies the data (which would have to be unsafe) and then pass it to the large function.\r\n\r\nclosed caption data is always a few bytes. It's not going to have a performance impact.\r\n\r\nLet's prioritize correct code. Otherwise we'd have no reason to use rust in the first place."", 'comment_created': datetime.datetime(2021, 6, 25, 2, 7, 45, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 658477155, 'comment_body': ""Yes, I'll fix this\r\n"", 'comment_created': datetime.datetime(2021, 6, 25, 5, 6, 48, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 658477315, 'comment_body': 'Ok\r\n', 'comment_created': datetime.datetime(2021, 6, 25, 5, 7, 11, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}]","[{'commit_sha': 'c8307c78aa3c3c75d3d0a7d5d8d58ffadaa1cdb0', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40a310d58c310ebb07b9996efbb44bbd5e9636e5', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f0ee4c9b98d7df38902f4ea86eee213aefa642a7', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da0726a42fb3c73d463eb7a2ca78ffdf1889e8fe', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a389846ea80edb33e8083846b923c202ac6edacf', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f4cc43b32effea5c0d6272a55a55074c0720e432', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a17b43a123f2f3db0f4cc54eb237ecbb8420f8d3', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07e7448a1c1b67f13ac8737c7ed2f82d943fb9b1', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1143b0696d7c3711635f1a593a77ce3568cd6b06', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd384789d4e33d6460b66e4869e71f6072d6d2d72', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b13283b5edbcb81b7ce8ed27cd1716aa7c6167ad', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+675892536,Update cmake for unix platforms,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Add -DGPAC_CONFIG_LINUX for UNIX platforms
+",True,1353,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1353,https://github.com/CCExtractor/ccextractor/pull/1353,closed,4,0,1,1,0,0,0,0,[],2021-06-23 02:13:35+00:00,2021-06-23 06:22:30+00:00,14935.0,4:08:55,[],"[{'commit_sha': '24504ebb35b4487c2c572d72f2da668a3d09bc16', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+677133496,Add CI and docs for rust lib,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Add build and format CI for rust code
+Add docs on how to compile rust code
+
+Merge only after #1351 is merged
+",True,1355,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1355,https://github.com/CCExtractor/ccextractor/pull/1355,closed,53,1,4,2,9,0,0,0,[],2021-06-24 13:54:10+00:00,2021-06-27 17:58:51+00:00,273881.0,"3 days, 4:04:41",[],"[{'commit_sha': '97e6b97a087770147c7e2baab83a0fd20ac992e0', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '22d2151a97416b40cfda5cf0afb7d446085a542f', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+680901808,Add functions to rust,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [x] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Add process current packet and process service decoders functions to rust
+",True,1358,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1358,https://github.com/CCExtractor/ccextractor/pull/1358,closed,417,8,4,5,0,16,0,0,[],2021-06-30 13:57:16+00:00,2021-07-04 18:11:03+00:00,360827.0,"4 days, 4:13:47","[{'comment_id': 661849386, 'comment_body': ""We should answer that question :-) I'd suppose that illegal, but I don't know. And if yes - is resetting the decoder the right way to go? \r\nDo we write something on the logs or just silently try to recover?"", 'comment_created': datetime.datetime(2021, 6, 30, 22, 23, 28, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661851128, 'comment_body': 'Are all these type conversions/declarations really needed?', 'comment_created': datetime.datetime(2021, 6, 30, 22, 27, 57, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661851549, 'comment_body': 'A reference to the part of the specs that explain this magic number would be good :-)', 'comment_created': datetime.datetime(2021, 6, 30, 22, 28, 54, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661851889, 'comment_body': 'Can we avoid unsafe here?', 'comment_created': datetime.datetime(2021, 6, 30, 22, 29, 41, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661852051, 'comment_body': 'resetting', 'comment_created': datetime.datetime(2021, 6, 30, 22, 30, 9, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661852360, 'comment_body': 'What problem?', 'comment_created': datetime.datetime(2021, 6, 30, 22, 30, 49, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661852643, 'comment_body': 'match instead of cascaded if would be better?', 'comment_created': datetime.datetime(2021, 6, 30, 22, 31, 34, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661853008, 'comment_body': ""What's C0? I know we might not have it in the existing implementation, but we should have some comment for each function explaining each command."", 'comment_created': datetime.datetime(2021, 6, 30, 22, 32, 20, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661853311, 'comment_body': ""I don't believe that each command processing function needs to be unsafe completely :-) \r\nMost likely this can be reduced to one single unsafe in the calling function."", 'comment_created': datetime.datetime(2021, 6, 30, 22, 33, 15, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 661976470, 'comment_body': '`self.report` is a raw pointer, so we have to use unsafe here', 'comment_created': datetime.datetime(2021, 7, 1, 5, 1, 31, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 661991526, 'comment_body': ""I think I'll just remove this check. It's not needed. We will never reach this case due to this check, https://github.com/CCExtractor/ccextractor/blob/master/src/rust/src/decoder/mod.rs#L63"", 'comment_created': datetime.datetime(2021, 7, 1, 5, 45, 49, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 661991997, 'comment_body': 'Yes, because the C bindings use `c_int`, which is `i32` in rust', 'comment_created': datetime.datetime(2021, 7, 1, 5, 47, 12, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 661992265, 'comment_body': ""unsafe is being used here for calling the C function. Once I port the function, unsafe won't be needed"", 'comment_created': datetime.datetime(2021, 7, 1, 5, 47, 53, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 661992823, 'comment_body': ""Even this one is unreachable, I'll remove it"", 'comment_created': datetime.datetime(2021, 7, 1, 5, 49, 23, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 661998822, 'comment_body': 'This comes if there is missing data for a command. e.g. if the command has 3 bytes of data, but we have only 2.\r\n\r\nThis is an additional log. Whenever the case occurs, there will be an appropriate log entry for that', 'comment_created': datetime.datetime(2021, 7, 1, 5, 58, 59, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 662033227, 'comment_body': ""I have added a line for C0. Also, I'll make sure to add explanations when I add the functions for individual commands"", 'comment_created': datetime.datetime(2021, 7, 1, 7, 4, 54, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}]","[{'commit_sha': '8b103c1c0db8f2395d49fe37d5361b18a4d656bf', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '57d8694d2b19af40f481804f72cd3e490668c1a9', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dce29991fa2d9157d36f55f7a556ee9ac5a0fd3', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da561ebaa7a85d308aac67766f330717b88a869e', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a35ecc33b926a89d00cd699d6c9cc009bd5f371', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+685395623,[Rust] Add few commands and refactor the code,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+ Added handlers for CLW, HDW, TGW, DLW, and CR, and did some refactoring
+",True,1360,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1360,https://github.com/CCExtractor/ccextractor/pull/1360,closed,844,255,9,5,1,5,0,0,[],2021-07-07 17:54:06+00:00,2021-07-10 16:32:53+00:00,254327.0,"2 days, 22:38:47","[{'comment_id': 665731988, 'comment_body': ""I think it's safe to have this declaration all the time, ENABLE_RUST or not :-)"", 'comment_created': datetime.datetime(2021, 7, 7, 21, 57, 35, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 665732597, 'comment_body': 'Why do we have two separate functions? dtvcc_process_cc_data is the rust version now?', 'comment_created': datetime.datetime(2021, 7, 7, 21, 58, 50, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 665733013, 'comment_body': 'I hate globally unsafe functions :-)', 'comment_created': datetime.datetime(2021, 7, 7, 21, 59, 45, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 665895006, 'comment_body': ""That's a rust function, so it needs to be inside ENABLE_RUST "", 'comment_created': datetime.datetime(2021, 7, 8, 6, 7, 16, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}, {'comment_id': 665895529, 'comment_body': ""I realize that the naming for rust function might be confusing. There's only a single rust function called inside C code, named dtvcc_process_cc_data"", 'comment_created': datetime.datetime(2021, 7, 8, 6, 8, 27, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}]","[{'commit_sha': 'fb7f73e9ecc1525708a65454419ec8dc85e450fa', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5a2c9734931f2d130d14886b06ce796dd60655ae', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b407318da783b4d490eb477f82d2400f97896c1', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aeb2a5bca895a630cd9d575b95b2bc8c2f55ca3e', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb76feff7e8ec22f504e237baa25320f98b244bc', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+692064843,Rust updates,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+Added DSW, DFx, some C0 and extended commands.
+Also did some refactoring",True,1361,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1361,https://github.com/CCExtractor/ccextractor/pull/1361,closed,643,159,7,9,0,0,0,0,[],2021-07-18 10:17:05+00:00,2021-07-18 17:48:15+00:00,27070.0,7:31:10,[],"[{'commit_sha': 'fb7f73e9ecc1525708a65454419ec8dc85e450fa', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5a2c9734931f2d130d14886b06ce796dd60655ae', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b407318da783b4d490eb477f82d2400f97896c1', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aeb2a5bca895a630cd9d575b95b2bc8c2f55ca3e', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb76feff7e8ec22f504e237baa25320f98b244bc', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '051af896897eba7a621f0ad8e8a5931340ab048e', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea46a760c161bd3c03f9a5e214e19bb3fd6c7c17', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c183fbc0f3cbaa35657646e0621ce1c04cea6c1d', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '402d8ecfbb128dbd648b9b09f88d83aa021bfc15', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+695366846,[rust] Add Pen Presets and timing functions,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+---
+Add Pen Presets and timing functions",True,1363,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1363,https://github.com/CCExtractor/ccextractor/pull/1363,closed,375,83,6,3,0,0,0,0,[],2021-07-22 17:29:58+00:00,2021-07-23 02:26:07+00:00,32169.0,8:56:09,[],"[{'commit_sha': '3cd31603e27d4f531aa4383b132db60878910568', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c251a7873c55e8aa1699c52eb6301c234fc1329', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '163f80f06a81a87865bf75944cd27f1be729e01a', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+697249290,Rust updates,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+Add tv_screen module, copy to screen and other functions",True,1364,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1364,https://github.com/CCExtractor/ccextractor/pull/1364,closed,504,167,4,2,0,0,0,0,[],2021-07-26 18:18:19+00:00,2021-07-28 06:55:24+00:00,131825.0,"1 day, 12:37:05",[],"[{'commit_sha': '04225843b73b6ca60ebf50f8fc8dd868d697b30a', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1102fab004d2dd1110d4b07572b896aa10efbcd9', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+702481881,Rust updates: Added srt writer,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+Added Writer for srt files",True,1368,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1368,https://github.com/CCExtractor/ccextractor/pull/1368,closed,448,23,11,5,0,0,0,0,[],2021-08-03 17:55:44+00:00,2021-08-03 20:59:31+00:00,11027.0,3:03:47,[],"[{'commit_sha': '1033c80689a73e438924aed96a9ac8d1abd9aeb3', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e0fc48c3bbf6b7cd4759f9c1d2ba59f8ab9391b', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1a51553688d756d65f42b682e72fd0b3b501b477', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17f24063bb81f7a3336fea249b03e5aabf15ad30', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '020f81a929ac701022c65c9419b62e0f6746c1f2', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+707260865,Rust updates:- Add writers for transcripts and SAMI,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+Use rust-iconv for charset conversation
+Add writers for transcripts and SAMI",True,1372,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1372,https://github.com/CCExtractor/ccextractor/pull/1372,closed,222,73,9,3,0,0,0,0,[],2021-08-10 11:19:01+00:00,2021-08-10 11:21:22+00:00,141.0,0:02:21,[],"[{'commit_sha': '17da3063422d952f995ece007f49b8ba053e0260', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82440c837ad399a664ba74a58508b4cd04ee33cb', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07edcbf32cec948c2bb251b8de6297ae2ea4d3c8', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+712794636,Rust updates:- Update documentation,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+Update rust code documentation",True,1374,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1374,https://github.com/CCExtractor/ccextractor/pull/1374,closed,631,427,9,4,0,0,0,0,[],2021-08-14 15:39:06+00:00,2021-08-14 15:44:24+00:00,318.0,0:05:18,[],"[{'commit_sha': '136832dce12b3b701aca5cb39abe779f054c2b60', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e718b0a82ccb0a853f57976733874aa6121c6b2', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d103e6171cf0586f9ace95e2bfc28c75978268d', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '67c96f69cd312f853a7e6cc3b8d1b96bab5f0071', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+613490662,Fix 708 timing issue,"Process packet as soon as the packet len is equal to the specified len
+
+<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [ ] I have never used CCExtractor.
+- [x] I have used CCExtractor just a couple of times.
+- [ ] I am an active contributor to CCExtractor.
+
+---
+Process current packet as soon as the packet length is equal to the specified length. This leads to the packet being processed in the current FTS, instead of being processed in the next FTS, like before. Fixes #641 
+
+Also ends up fixing #646, as the last packet is now processed instead of waiting for a next packet which never comes
+
+This is causing the issue #677 again. Working on a fix for that
+",True,1319,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1319,https://github.com/CCExtractor/ccextractor/pull/1319,closed,16,12,3,4,4,0,0,0,[],2021-04-12 10:17:33+00:00,2021-04-12 16:42:16+00:00,23083.0,6:24:43,[],"[{'commit_sha': 'c710766af2152e3e99e44b9fcaf3d99fd91ebf97', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2eb4b4dc8db19f4611146c2397940aabe831ef30', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7b89c2c8a75f789c6dcbc0d5894f8463adbb8635', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8130ddd9af97d6422d27b0e3ce76d807839051fc', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+591720826,Ignore extra padding data in the current_packet,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [x] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [ ] I am an active contributor to CCExtractor.
+
+---
+Fixes issue #677 
+Instead of resetting the decoder, when current_length doesn't equal the len in header, change current_length to len(ignore the extra data as padding)
+",True,1304,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1304,https://github.com/CCExtractor/ccextractor/pull/1304,closed,3,3,1,2,6,2,0,0,[],2021-03-12 14:24:02+00:00,2021-04-04 23:20:04+00:00,2019362.0,"23 days, 8:56:02","[{'comment_id': 595340802, 'comment_body': ""It's a small thing but worth talking about :-) That variable (current_packet_length) is used here src/lib_ccx/ccx_dtvcc.c by the loop that writes the CC data to the packet buffer... so it originally comes from ourselves.\r\n\r\nIs there a bug in the loop? Or some assumption there is incorrect?\r\n\r\nOn visual inspection I think that if dtvcc->current_packet_length < len then we are in trouble: The encoded data says it has more data than what we actually have, so if we ignore it we're going to get into buffer overruns.\r\n\r\nSo _maybe_ (this would have to be tested) it would be saner to do \r\n\r\nif (dtvcc->current_packet_length < len) {\r\n// Most likely things are going to be bad for us\r\nlen = dtvcc->current_packet_length ; // At least don't read beyond the buffer\r\n}\r\n\r\nI'm not sure it's a good idea to overwrite current_packet_length with len. Two reasons\r\n- current_packet_length is the amount data we actually have while len is the amount of data that the file says we should have. So it would be trivial to create a file that makes CCExtractor crash if we trust the external source rather than ourselves :-)\r\n- current_packet_length is not used later in this function at all, so changing it will not affect how data is processed here, but it might affect what happens later."", 'comment_created': datetime.datetime(2021, 3, 16, 16, 30, 57, tzinfo=datetime.timezone.utc), 'commenter': 'cfsmp3', 'type': 'User'}, {'comment_id': 596280836, 'comment_body': '> Is there a bug in the loop? Or some assumption there is incorrect?\r\n\r\nAs far as i know, it is not a bug in the code. Instead i guess that given file might not follow the specification correctly, as i mentioned in [this comment](https://github.com/CCExtractor/ccextractor/issues/677#issuecomment-796490909) about the two ""should be padding"" bytes\r\n\r\n> On visual inspection I think that if dtvcc->current_packet_length < len then we are in trouble: The encoded data says it has more data than what we actually have, so if we ignore it we\'re going to get into buffer overruns.\r\n\r\nThe issue we are facing here is not with dtvcc->current_packet_length < len, but with dtvcc->current_packet_length > len (dtvcc->current_packet_length = len + 2)\r\nWe have more data (2 bytes) than specified in encoded data, as explained in [this comment](https://github.com/CCExtractor/ccextractor/issues/677#issuecomment-796490909) \r\n\r\n>So maybe (this would have to be tested) it would be saner to do\r\nif (dtvcc->current_packet_length < len) {\r\n// Most likely things are going to be bad for us\r\nlen = dtvcc->current_packet_length ; // At least don\'t read beyond the buffer\r\n}\r\n\r\nI tested it.(Changed to `if(dtvcc->current_packet_length != len)` ) This causes the extra data to be considered as a service packet, which leads to it being a null service packet header (service number and block size both are 0). We ignore the any packet with service_number=0 in the current code. So i guess we should be fine with this approach\r\n\r\n\r\n> current_packet_length is not used later in this function at all, so changing it will not affect how data is processed here, but it might affect what happens later.\r\n\r\nThis shouldn\'t be an issue because later in the function we clear the packet and set current length to 0\r\n\r\n\r\n>current_packet_length is the amount data we actually have while len is the amount of data that the file says we should have. So it would be trivial to create a file that makes CCExtractor crash if we trust the external source rather than ourselves :-)\r\n\r\nThis definitely seems like an issue. We can go ahead with your approach then\r\n', 'comment_created': datetime.datetime(2021, 3, 17, 18, 26, 52, tzinfo=datetime.timezone.utc), 'commenter': 'PunitLodha', 'type': 'User'}]","[{'commit_sha': 'ca6c0df7835fe14a14ea2befa7297d22304de276', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd9227fce9b4e2b08798a44972af4b800e3f0845', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+613819570,Revert #1304,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [x] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [ ] I am an active contributor to CCExtractor.
+
+---
+This reverts commit 7f4acae74b9e1a931cdf10b490fd1e3c4ec73d4c.
+Revert changes from #1304 
+",True,1325,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1325,https://github.com/CCExtractor/ccextractor/pull/1325,closed,3,3,1,1,1,0,0,0,[],2021-04-12 17:43:41+00:00,2021-04-12 17:45:15+00:00,94.0,0:01:34,[],"[{'commit_sha': 'a81e86f1ad94be10aaa3dd94e0fa9c713001b5ed', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+655011428,Fix min and max fts when PTS resets,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+VOB files can contain multiple chapters in a single file. This causes PTS to reset to 0 when a new chapter starts. This leads to FTS also getting reset. But min and max fts aren't reset. So fixed that
+Fixes https://github.com/CCExtractor/ccextractor/issues/1277
+",True,1338,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1338,https://github.com/CCExtractor/ccextractor/pull/1338,closed,17,0,2,1,0,0,0,0,[],2021-05-27 13:52:13+00:00,2021-05-27 15:03:43+00:00,4290.0,1:11:30,[],"[{'commit_sha': '6b66d51dfcfbbf21a1f9d3da087fb3244d60f06a', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+662307232,"Fix timing zero-ing out, when Direct Rollup is selected","<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Fix timing zero-ing out, when Direct Rollup is selected
+Fixes #1327 
+",True,1342,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1342,https://github.com/CCExtractor/ccextractor/pull/1342,closed,16,1,1,1,0,0,0,0,[],2021-06-05 05:50:09+00:00,2021-06-05 15:30:30+00:00,34821.0,9:40:21,[],"[{'commit_sha': '954815fbcb1b7cf4c2f85e951b73863e2f51286f', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+665968664,Fix for missing subtitles,"Avoid overwriting data, by processing it first
+
+<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Flush buffered cc blocks before storing new ones if FTS has changed, to avoid overwriting subtitle data
+",True,1344,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1344,https://github.com/CCExtractor/ccextractor/pull/1344,closed,8,1,1,1,0,0,0,0,[],2021-06-09 14:30:52+00:00,2021-06-10 15:01:28+00:00,88236.0,"1 day, 0:30:36",[],"[{'commit_sha': '457c14203adfc9e804fa89c0ce4077f870322925', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+668195350,Fix column length,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [x] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+Don't take column length from curr_window, as row could from any window
+",True,1345,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1345,https://github.com/CCExtractor/ccextractor/pull/1345,closed,5,11,2,2,0,0,0,0,[],2021-06-11 14:12:21+00:00,2021-06-11 14:39:31+00:00,1630.0,0:27:10,[],"[{'commit_sha': '06f4f452e41932cddf9fd130e6eafffc12b852aa', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8054caefbffd0022414e16e4268148398f67a7b3', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+678393058,Update win_iconv path,"<!-- Please prefix your pull request with one of the following: **[FEATURE]** **[FIX]** **[IMPROVEMENT]**. -->
+
+**In raising this pull request, I confirm the following (please check boxes):**
+
+- [x] I have read and understood the [contributors guide](https://github.com/CCExtractor/ccextractor/blob/master/.github/CONTRIBUTING.md).
+- [x] I have checked that another pull request for this purpose does not exist.
+- [x] I have considered, and confirmed that this submission will be valuable to others.
+- [x] I accept that this submission may not be used, and the pull request closed at the will of the maintainer.
+- [x] I give this submission freely, and claim no ownership to its content.
+- [ ] **I have mentioned this change in the [changelog](https://github.com/CCExtractor/ccextractor/blob/master/docs/CHANGES.TXT).**
+
+**My familiarity with the project is as follows (check one):**
+
+- [ ] I have never used CCExtractor.
+- [ ] I have used CCExtractor just a couple of times.
+- [ ] I absolutely love CCExtractor, but have not contributed previously.
+- [x] I am an active contributor to CCExtractor.
+
+---
+
+Add thirdparty to win_iconv path
+",True,1356,https://api.github.com/repos/CCExtractor/ccextractor/pulls/1356,https://github.com/CCExtractor/ccextractor/pull/1356,closed,2,2,2,1,0,0,0,0,[],2021-06-26 18:15:12+00:00,2021-06-26 18:43:33+00:00,1701.0,0:28:21,[],"[{'commit_sha': '7926fde981be3d809d5e2789c6679f899d4b6874', 'committer_username': 'PunitLodha', 'committer_name': 'Punit Lodha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 5, 15, 45, 54, tzinfo=datetime.timezone.utc)}]",Punit Lodha,48253287,,User,,40,,41,47
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+18644373,ccextractor,CCExtractor/ccextractor,C,421,702,37,165,2477,103,4,7,"[{'id': 1286557989, 'number': 1514, 'closed': datetime.datetime(2023, 3, 23, 0, 12, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 22, 22, 11, 39, tzinfo=datetime.timezone.utc), 'time_taken': 7277.0, 'time_delta': '2:01:17', 'additions': 11, 'deletions': 0, 'state': 'closed'}, {'id': 1282550796, 'number': 1507, 'closed': datetime.datetime(2023, 3, 20, 14, 6, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 20, 12, 32, 8, tzinfo=datetime.timezone.utc), 'time_taken': 5671.0, 'time_delta': '1:34:31', 'additions': 9, 'deletions': 0, 'state': 'closed'}, {'id': 986090692, 'number': 1444, 'closed': datetime.datetime(2022, 7, 9, 13, 34, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 4, 7, 18, 29, tzinfo=datetime.timezone.utc), 'time_taken': 454532.0, 'time_delta': '5 days, 6:15:32', 'additions': 13, 'deletions': 3, 'state': 'closed'}, {'id': 869519662, 'number': 1420, 'closed': datetime.datetime(2022, 3, 2, 13, 16, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 2, 13, 1, 23, tzinfo=datetime.timezone.utc), 'time_taken': 906.0, 'time_delta': '0:15:06', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 803660807, 'number': 1404, 'closed': datetime.datetime(2021, 12, 15, 17, 3, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 15, 16, 51, 20, tzinfo=datetime.timezone.utc), 'time_taken': 745.0, 'time_delta': '0:12:25', 'additions': 5, 'deletions': 5, 'state': 'closed'}, {'id': 803650697, 'number': 1403, 'closed': datetime.datetime(2021, 12, 15, 16, 41, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 15, 16, 39, 26, tzinfo=datetime.timezone.utc), 'time_taken': 105.0, 'time_delta': '0:01:45', 'additions': 19, 'deletions': 2, 'state': 'closed'}, {'id': 802585054, 'number': 1402, 'closed': datetime.datetime(2021, 12, 14, 17, 37, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 14, 17, 36, 10, tzinfo=datetime.timezone.utc), 'time_taken': 73.0, 'time_delta': '0:01:13', 'additions': 3, 'deletions': 0, 'state': 'closed'}, {'id': 795298132, 'number': 1398, 'closed': datetime.datetime(2021, 12, 5, 14, 21, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 5, 13, 40, 32, tzinfo=datetime.timezone.utc), 'time_taken': 2463.0, 'time_delta': '0:41:03', 'additions': 48, 'deletions': 15, 'state': 'closed'}, {'id': 785337050, 'number': 1396, 'closed': datetime.datetime(2021, 11, 21, 15, 13, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 21, 7, 5, 30, tzinfo=datetime.timezone.utc), 'time_taken': 29299.0, 'time_delta': '8:08:19', 'additions': 22, 'deletions': 9, 'state': 'closed'}, {'id': 780928983, 'number': 1394, 'closed': datetime.datetime(2021, 11, 20, 17, 29, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 15, 17, 52, 2, tzinfo=datetime.timezone.utc), 'time_taken': 430637.0, 'time_delta': '4 days, 23:37:17', 'additions': 6, 'deletions': 9, 'state': 'closed'}, {'id': 780073262, 'number': 1393, 'closed': datetime.datetime(2021, 11, 14, 18, 3, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 14, 12, 3, 23, tzinfo=datetime.timezone.utc), 'time_taken': 21616.0, 'time_delta': '6:00:16', 'additions': 35, 'deletions': 20, 'state': 'closed'}, {'id': 779848488, 'number': 1392, 'closed': datetime.datetime(2021, 11, 13, 14, 38, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 13, 6, 58, 35, tzinfo=datetime.timezone.utc), 'time_taken': 27615.0, 'time_delta': '7:40:15', 'additions': 13, 'deletions': 8, 'state': 'closed'}, {'id': 763528966, 'number': 1387, 'closed': datetime.datetime(2021, 10, 28, 16, 8, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 21, 18, 12, 47, tzinfo=datetime.timezone.utc), 'time_taken': 597364.0, 'time_delta': '6 days, 21:56:04', 'additions': 223, 'deletions': 12, 'state': 'closed'}, {'id': 749870538, 'number': 1383, 'closed': datetime.datetime(2021, 10, 8, 22, 30, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 5, 13, 20, 41, tzinfo=datetime.timezone.utc), 'time_taken': 292213.0, 'time_delta': '3 days, 9:10:13', 'additions': 4, 'deletions': 5, 'state': 'closed'}, {'id': 714311192, 'number': 1375, 'closed': datetime.datetime(2021, 10, 15, 15, 15, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 17, 14, 38, 5, tzinfo=datetime.timezone.utc), 'time_taken': 5099866.0, 'time_delta': '59 days, 0:37:46', 'additions': 719, 'deletions': 481, 'state': 'closed'}, {'id': 712794636, 'number': 1374, 'closed': datetime.datetime(2021, 8, 14, 15, 44, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 15, 39, 6, tzinfo=datetime.timezone.utc), 'time_taken': 318.0, 'time_delta': '0:05:18', 'additions': 631, 'deletions': 427, 'state': 'closed'}, {'id': 707260865, 'number': 1372, 'closed': datetime.datetime(2021, 8, 10, 11, 21, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 11, 19, 1, tzinfo=datetime.timezone.utc), 'time_taken': 141.0, 'time_delta': '0:02:21', 'additions': 222, 'deletions': 73, 'state': 'closed'}, {'id': 702481881, 'number': 1368, 'closed': datetime.datetime(2021, 8, 3, 20, 59, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 17, 55, 44, tzinfo=datetime.timezone.utc), 'time_taken': 11027.0, 'time_delta': '3:03:47', 'additions': 448, 'deletions': 23, 'state': 'closed'}, {'id': 697249290, 'number': 1364, 'closed': datetime.datetime(2021, 7, 28, 6, 55, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 26, 18, 18, 19, tzinfo=datetime.timezone.utc), 'time_taken': 131825.0, 'time_delta': '1 day, 12:37:05', 'additions': 504, 'deletions': 167, 'state': 'closed'}, {'id': 695366846, 'number': 1363, 'closed': datetime.datetime(2021, 7, 23, 2, 26, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 22, 17, 29, 58, tzinfo=datetime.timezone.utc), 'time_taken': 32169.0, 'time_delta': '8:56:09', 'additions': 375, 'deletions': 83, 'state': 'closed'}, {'id': 692064843, 'number': 1361, 'closed': datetime.datetime(2021, 7, 18, 17, 48, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 18, 10, 17, 5, tzinfo=datetime.timezone.utc), 'time_taken': 27070.0, 'time_delta': '7:31:10', 'additions': 643, 'deletions': 159, 'state': 'closed'}, {'id': 685395623, 'number': 1360, 'closed': datetime.datetime(2021, 7, 10, 16, 32, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 7, 17, 54, 6, tzinfo=datetime.timezone.utc), 'time_taken': 254327.0, 'time_delta': '2 days, 22:38:47', 'additions': 844, 'deletions': 255, 'state': 'closed'}, {'id': 680901808, 'number': 1358, 'closed': datetime.datetime(2021, 7, 4, 18, 11, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 30, 13, 57, 16, tzinfo=datetime.timezone.utc), 'time_taken': 360827.0, 'time_delta': '4 days, 4:13:47', 'additions': 417, 'deletions': 8, 'state': 'closed'}, {'id': 678393058, 'number': 1356, 'closed': datetime.datetime(2021, 6, 26, 18, 43, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 26, 18, 15, 12, tzinfo=datetime.timezone.utc), 'time_taken': 1701.0, 'time_delta': '0:28:21', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 677133496, 'number': 1355, 'closed': datetime.datetime(2021, 6, 27, 17, 58, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 24, 13, 54, 10, tzinfo=datetime.timezone.utc), 'time_taken': 273881.0, 'time_delta': '3 days, 4:04:41', 'additions': 53, 'deletions': 1, 'state': 'closed'}, {'id': 675892536, 'number': 1353, 'closed': datetime.datetime(2021, 6, 23, 6, 22, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 23, 2, 13, 35, tzinfo=datetime.timezone.utc), 'time_taken': 14935.0, 'time_delta': '4:08:55', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 674171220, 'number': 1351, 'closed': datetime.datetime(2021, 6, 26, 1, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 21, 2, 51, 15, tzinfo=datetime.timezone.utc), 'time_taken': 425505.0, 'time_delta': '4 days, 22:11:45', 'additions': 564, 'deletions': 0, 'state': 'closed'}, {'id': 673873507, 'number': 1350, 'closed': datetime.datetime(2021, 6, 19, 15, 32, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 19, 12, 30, 34, tzinfo=datetime.timezone.utc), 'time_taken': 10920.0, 'time_delta': '3:02:00', 'additions': 768, 'deletions': 696, 'state': 'closed'}, {'id': 668195350, 'number': 1345, 'closed': datetime.datetime(2021, 6, 11, 14, 39, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 11, 14, 12, 21, tzinfo=datetime.timezone.utc), 'time_taken': 1630.0, 'time_delta': '0:27:10', 'additions': 5, 'deletions': 11, 'state': 'closed'}, {'id': 665968664, 'number': 1344, 'closed': datetime.datetime(2021, 6, 10, 15, 1, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 14, 30, 52, tzinfo=datetime.timezone.utc), 'time_taken': 88236.0, 'time_delta': '1 day, 0:30:36', 'additions': 8, 'deletions': 1, 'state': 'closed'}, {'id': 662307232, 'number': 1342, 'closed': datetime.datetime(2021, 6, 5, 15, 30, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 5, 5, 50, 9, tzinfo=datetime.timezone.utc), 'time_taken': 34821.0, 'time_delta': '9:40:21', 'additions': 16, 'deletions': 1, 'state': 'closed'}, {'id': 655011428, 'number': 1338, 'closed': datetime.datetime(2021, 5, 27, 15, 3, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 27, 13, 52, 13, tzinfo=datetime.timezone.utc), 'time_taken': 4290.0, 'time_delta': '1:11:30', 'additions': 17, 'deletions': 0, 'state': 'closed'}, {'id': 613819570, 'number': 1325, 'closed': datetime.datetime(2021, 4, 12, 17, 45, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 12, 17, 43, 41, tzinfo=datetime.timezone.utc), 'time_taken': 94.0, 'time_delta': '0:01:34', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 613490662, 'number': 1319, 'closed': datetime.datetime(2021, 4, 12, 16, 42, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 12, 10, 17, 33, tzinfo=datetime.timezone.utc), 'time_taken': 23083.0, 'time_delta': '6:24:43', 'additions': 16, 'deletions': 12, 'state': 'closed'}, {'id': 591720826, 'number': 1304, 'closed': datetime.datetime(2021, 4, 4, 23, 20, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 12, 14, 24, 2, tzinfo=datetime.timezone.utc), 'time_taken': 2019362.0, 'time_delta': '23 days, 8:56:02', 'additions': 3, 'deletions': 3, 'state': 'closed'}]"

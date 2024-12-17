@@ -1,0 +1,427 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1392714210,feat(api): openapi.yaml exposed through API,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This Pull request exposes the `openapi.yaml` file through the new `/openapi` endpoint.
+### Changes
+`src/www/ui/api/Controllers/InfoController.php`
+`src/www/ui/api/index.php`
+
+
+## How to test
+use the `/openapi` endpoint in postman.
+
+##Screenshots:
+![Screenshot from 2023-06-14 21-37-19](https://github.com/fossology/fossology/assets/63705023/552719a2-0bcf-4b0d-b1fb-9c0f832c0396)
+
+Closes #2452 
+
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2474""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2474,https://api.github.com/repos/fossology/fossology/pulls/2474,https://github.com/fossology/fossology/pull/2474,closed,172,17,5,2,1,0,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-14 16:09:20+00:00,2023-06-29 10:43:14+00:00,1276434.0,"14 days, 18:33:54",[],"[{'commit_sha': '5bcb4f5a6a1d81952fb71953d57a3302f7dee714', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9207e349a9e97560e08e23819116ed6c558df36c', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1393545187,feat(api): copyright info for file,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+Copyright info for file is exposed through `/file/upload/{UploadId}/item/{ItemId}/copyrights` endpoint
+
+## Screenshots
+
+
+![Screenshot from 2023-06-15 12-27-40](https://github.com/fossology/fossology/assets/63705023/219ea736-9036-407b-9c0a-b643e53e7874)
+
+## How to test
+Send a GET request to `/file/upload/{UploadId}/item/{ItemId}/copyrights` endpoint to see the result.
+
+Closes #2468 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2475""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2475,https://api.github.com/repos/fossology/fossology/pulls/2475,https://github.com/fossology/fossology/pull/2475,closed,256,5,4,1,12,40,4,0,"[{'name': 'needs code review'}, {'name': 'has merge conflicts'}, {'name': 'needs test'}, {'name': 'GSOC-23'}]",2023-06-15 06:59:52+00:00,2023-07-05 06:29:22+00:00,1726170.0,"19 days, 23:29:30","[{'comment_id': 1246437072, 'comment_body': 'Please follow good coding style. Check guideline at: https://github.com/fossology/fossology/wiki/Coding-Style#coding-guidelines-for-php\r\n```suggestion\r\n   * @brief Get Agent ID for an upload\r\n   * @param integer $upload_pk Upload ID\r\n   * @param string $copyrightType Copyright Type\r\n   * @return integer Agent ID\r\n   */\r\n  public function getAgentId($upload_pk,$copyrightType)\r\n  {\r\n    return LatestAgentpk($upload_pk, $copyrightType);\r\n  }\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 10, 23, 57, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246437401, 'comment_body': ""I didn't wrote this file I believe :smiley: "", 'comment_created': datetime.datetime(2023, 6, 29, 10, 24, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246438559, 'comment_body': 'Parent class already does this for you.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 25, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246439966, 'comment_body': 'No need to assign `uploadDao` here. Can be accessed via `$this->restHelper->getUploadDao()` wherever needed.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 27, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246440095, 'comment_body': 'Parent class does this for you.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 27, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246440374, 'comment_body': ""Please follow coding guidelines.\r\n```suggestion\r\n    $this->copyrightHist = $this->restHelper->getPlugin('ajax-copyright-hist');\r\n```"", 'comment_created': datetime.datetime(2023, 6, 29, 10, 27, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246441251, 'comment_body': 'Would be better if `getAgentId()` is modified to get `copyright` as the second argument and add `_ars` when needed.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 28, 38, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246441474, 'comment_body': 'Please following coding guidelines.\r\n```suggestion\r\n    $uploadTreeTableName = $this->uploadDao->getUploadtreeTableName($uploadPk);\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 10, 28, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246442186, 'comment_body': 'Reduce the scope of `try/catch` to the where needed. It improves error handling and identifying the issue.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 29, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246442563, 'comment_body': 'Move the checks before getting the `$uploadTreeTableName`.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 30, 11, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246446536, 'comment_body': 'Please be consistent with other endpoints.\r\n```suggestion\r\n  /uploads/{id}/item/{itemId}/copyrights:\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 10, 34, 34, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246446865, 'comment_body': 'Uploadtree is a single word.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 34, 57, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246448920, 'comment_body': 'Please consider using a dummy value here instead of an actual copyright. This will result in confusion.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 37, 31, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246932949, 'comment_body': 'I could not get this. Would you provide some more explanation? Like under which specific condition we will be adding the `_ars` to the parameter?\r\n', 'comment_created': datetime.datetime(2023, 6, 29, 17, 28, 31, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1247557901, 'comment_body': 'Can you please modify the response as bellow object:\r\n```json\r\n[\r\n  {\r\n    ""content"": ""Copyright ..."",\r\n    ""hash"": ""deadbeef..."",\r\n    ""copyright_count"": 1\r\n  }\r\n]\r\n```\r\nAlso modify the `copyright_count` as integer.', 'comment_created': datetime.datetime(2023, 6, 30, 7, 55, 49, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247559027, 'comment_body': 'Also, please modify the function `\\CopyrightHistogramProcessPost::getCopyrights()` to read the `$offset` and `$limit` as a function parameter. Then this endpoint can be paginated with `page` and `limit` headers.', 'comment_created': datetime.datetime(2023, 6, 30, 7, 57, 3, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247561214, 'comment_body': 'Also, the function returns `[$copyrights, $dispRecords, $totalRecords]` which can be read as:\r\n```php\r\nlist($rows, $iTotalDisplayRecords, $iTotalRecords) = getCopyrights();\r\n```\r\n\r\nNow, the `$rows` become the response body and `$iTotalRecords` should be placed in `X-Total-Pages` headers (with calculation of total/limit).', 'comment_created': datetime.datetime(2023, 6, 30, 7, 59, 24, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247562976, 'comment_body': 'Would be better to send expected values as `active` and `inactive` as well.', 'comment_created': datetime.datetime(2023, 6, 30, 8, 0, 50, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247574363, 'comment_body': 'You mean in the error message right? ', 'comment_created': datetime.datetime(2023, 6, 30, 8, 11, 34, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1247671798, 'comment_body': 'Sounds great!! Will be implementing the same\r\n', 'comment_created': datetime.datetime(2023, 6, 30, 9, 41, 5, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1250233564, 'comment_body': 'Yes', 'comment_created': datetime.datetime(2023, 7, 3, 5, 4, 19, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250237060, 'comment_body': 'Why this class is needed in this page?', 'comment_created': datetime.datetime(2023, 7, 3, 5, 6, 32, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250239960, 'comment_body': 'Would instead recommend to update the function call on line 206 to send the limit and offset reading them from `GetParm()` and do that here if they are null.', 'comment_created': datetime.datetime(2023, 7, 3, 5, 8, 12, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250241925, 'comment_body': 'The limit and offset is not read from the headers like in other endpoints and sent to `getCopyrights()`. Please update.', 'comment_created': datetime.datetime(2023, 7, 3, 5, 9, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250244453, 'comment_body': 'Also, `iTotalRecords` is count of total rows, not total pages. Please update calculation as bellow:\n\n```php\n$totalPages = intval(ceil($iTotalRecords / $limit));\n```', 'comment_created': datetime.datetime(2023, 7, 3, 5, 10, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250245595, 'comment_body': 'Please add `limit` and `page` as a header parameter in this endpoint as with other paginated endpoints.', 'comment_created': datetime.datetime(2023, 7, 3, 5, 11, 49, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250247383, 'comment_body': 'Please add `limit` and `page` parameters from header as done in other paginated endpoints', 'comment_created': datetime.datetime(2023, 7, 3, 5, 13, 33, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250247613, 'comment_body': 'Add response header `X-Total-Pages` as done in other paginated endpoints.', 'comment_created': datetime.datetime(2023, 7, 3, 5, 13, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250257355, 'comment_body': 'This was an unused class..... removing it', 'comment_created': datetime.datetime(2023, 7, 3, 5, 24, 59, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1250259821, 'comment_body': 'So there would be two instances of GetParm() right? One for the function call in Line 206 and one inside the function for the case of null parameters right?\r\n', 'comment_created': datetime.datetime(2023, 7, 3, 5, 28, 20, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1250306417, 'comment_body': ""```php\r\n$offset = GetParm('iDisplayStart', PARM_INTEGER);\r\n$limit = GetParm('iDisplayLength', PARM_INTEGER);\r\nlist ($rows, $iTotalDisplayRecords, $iTotalRecords) = $this->getCopyrights($upload, $item, $this->uploadtree_tablename, $agent_pk, $type, $filter, $activated, $offset, $limit);\r\n```"", 'comment_created': datetime.datetime(2023, 7, 3, 6, 19, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250306700, 'comment_body': 'No need to check for `null` inside the `getCopyrights()`', 'comment_created': datetime.datetime(2023, 7, 3, 6, 20, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250309475, 'comment_body': 'got it thank you!!', 'comment_created': datetime.datetime(2023, 7, 3, 6, 22, 45, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1251588403, 'comment_body': 'Please work on it.\r\n\r\nElse remove the block as it is unnecessary.', 'comment_created': datetime.datetime(2023, 7, 4, 7, 7, 11, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1251589441, 'comment_body': 'Please use more efficient way\r\n```suggestion\r\n          $finalVal[] = $row;\r\n```', 'comment_created': datetime.datetime(2023, 7, 4, 7, 8, 17, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1251590951, 'comment_body': 'Why the max value of 1000?', 'comment_created': datetime.datetime(2023, 7, 4, 7, 9, 57, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1251597676, 'comment_body': 'Should I be removing the limit parameter from the docs?', 'comment_created': datetime.datetime(2023, 7, 4, 7, 14, 24, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1252539248, 'comment_body': 'No change was done on this line. Please do not resolve the issue if no work was done.', 'comment_created': datetime.datetime(2023, 7, 5, 5, 0, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252539775, 'comment_body': 'Its an arbitrary value and thus should not be there.', 'comment_created': datetime.datetime(2023, 7, 5, 5, 1, 11, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252543489, 'comment_body': 'Sorry, my bad. Fixed it!', 'comment_created': datetime.datetime(2023, 7, 5, 5, 8, 58, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}]","[{'commit_sha': '22b4c594c7f3966d87c789147e7df625d8c3ddfa', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1396737600,feat(api): Delete Copyright for a File,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Deletes a copyright for a file using `/file/upload/<uploadId>/item/<ItemId>/copyright/<Hash>`
+
+
+
+## Screenshot
+![Screenshot from 2023-06-17 16-49-34](https://github.com/fossology/fossology/assets/63705023/4a0f395c-6627-414c-8e7f-87e2c7d7482d)
+
+@GMishx 
+@shaheemazmalmmd 
+
+closes #2468
+
+Please consider using the closing keyword if the pull request is proposed to
+fix an issue already created in the repository
+(https://help.github.com/articles/closing-issues-using-keywords/)
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2478""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",False,2478,https://api.github.com/repos/fossology/fossology/pulls/2478,https://github.com/fossology/fossology/pull/2478,closed,104,2,4,1,6,15,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-17 11:22:08+00:00,2023-07-05 06:40:02+00:00,1538274.0,"17 days, 19:17:54","[{'comment_id': 1246463848, 'comment_body': 'I did not create this file :smiley:', 'comment_created': datetime.datetime(2023, 6, 29, 10, 54, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246464309, 'comment_body': 'Already done in parent class. Please remove.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 54, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246464649, 'comment_body': 'Please use `$this->restHelper->getUploadDao()` as and when needed.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 55, 17, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246464787, 'comment_body': 'Already done in parent class.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 55, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246465194, 'comment_body': ""Please following coding guidelines.\r\n```suggestion\r\n    $this->copyrightHist = $this->restHelper->getPlugin('ajax-copyright-hist');\r\n```"", 'comment_created': datetime.datetime(2023, 6, 29, 10, 55, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246465537, 'comment_body': 'Please limit the scope of `try/catch` block to the needed lines only.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 56, 20, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246465735, 'comment_body': ""```suggestion\r\n      $copyrightHash = $args['hash'];\r\n```"", 'comment_created': datetime.datetime(2023, 6, 29, 10, 56, 35, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246465915, 'comment_body': 'Please following coding guidelines.\r\n```suggestion\r\n      $uploadTreeTableName = $uploadDao->getUploadtreeTableName($uploadTreeId);\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 10, 56, 46, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246466734, 'comment_body': 'Please check if id exists or not before performing any operations on the provided id.\r\n\r\nAlso, please add check for upload id.', 'comment_created': datetime.datetime(2023, 6, 29, 10, 57, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246467688, 'comment_body': 'Please be consistent.\r\n```suggestion\r\n      return $response->withJson($returnVal->getArray(), $returnVal->getCode());\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 10, 58, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246468316, 'comment_body': 'Please be consistent with other endpoints.\r\n```suggestion\r\n  /uploads/{id}/item/{itemId}/copyrights/{hash}:\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 10, 59, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246469105, 'comment_body': ""Isn't the response object exactly same as `Info` object?"", 'comment_created': datetime.datetime(2023, 6, 29, 11, 0, 20, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246472045, 'comment_body': 'Please following coding guidelines.\r\n```suggestion\r\n  public function deleteFileCopyrights($request, $response, $args)\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 3, 44, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247626929, 'comment_body': 'This header is not required for the response.', 'comment_created': datetime.datetime(2023, 6, 30, 8, 56, 41, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247627491, 'comment_body': '```suggestion\r\n   */\r\n  public function deleteFileCopyrights($request, $response, $args)\r\n```', 'comment_created': datetime.datetime(2023, 6, 30, 8, 57, 12, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': 'bec422b64d187c2f826999e17827f2486c215238', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1397126790,feat(api): API for updating File copyright content,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+API to update File copyright is added  in this PR
+
+
+## How to test
+
+Send a `PUT` request to the endpoint `/file/upload/{Upload_id}/item/{Item_id}/copyright/{Copyright_hash}`
+
+with a body :
+```
+{
+  ""content"": ""New Test copyright text""
+}
+```
+##Screenshots:
+- Before sending the API request:
+
+![Screenshot from 2023-06-18 18-09-36](https://github.com/fossology/fossology/assets/63705023/f34151a0-b24b-4c23-bc16-d05a9bbdc0dc)
+
+- The API Request:
+
+![Screenshot from 2023-06-18 18-09-50](https://github.com/fossology/fossology/assets/63705023/4a3b5507-044f-43ae-9bb5-7560a8c3da9b)
+
+- After the API request:
+
+![Screenshot from 2023-06-18 18-10-01](https://github.com/fossology/fossology/assets/63705023/2662a03e-5367-4678-ba25-f621458cdd93)
+
+closes #2468
+
+Please consider using the closing keyword if the pull request is proposed to
+fix an issue already created in the repository
+(https://help.github.com/articles/closing-issues-using-keywords/)
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2479""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2479,https://api.github.com/repos/fossology/fossology/pulls/2479,https://github.com/fossology/fossology/pull/2479,closed,72,3,3,1,8,16,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-18 12:42:56+00:00,2023-07-05 07:41:13+00:00,1450697.0,"16 days, 18:58:17","[{'comment_id': 1246470924, 'comment_body': 'I did not write this file :smiley:', 'comment_created': datetime.datetime(2023, 6, 29, 11, 2, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246471431, 'comment_body': 'Check review comments from https://github.com/fossology/fossology/pull/2478#discussion_r1246464309', 'comment_created': datetime.datetime(2023, 6, 29, 11, 2, 58, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246471721, 'comment_body': 'Limit the scope of `try/catch` block.', 'comment_created': datetime.datetime(2023, 6, 29, 11, 3, 20, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246472274, 'comment_body': 'Please following coding guidelines.\r\n```suggestion\r\n  public function updateFileCopyrights($request, $response, $args)\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 3, 58, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246472513, 'comment_body': ""```suggestion\r\n      $copyrightHash = $args['hash'];\r\n```"", 'comment_created': datetime.datetime(2023, 6, 29, 11, 4, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246472602, 'comment_body': 'Please following coding guidelines.\r\n```suggestion\r\n      $uploadTreeTableName = $uploadDao->getUploadtreeTableName($uploadTreeId);\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 4, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246473102, 'comment_body': 'Check if the upload ID, item ID and copyright exists before performing operations.', 'comment_created': datetime.datetime(2023, 6, 29, 11, 4, 58, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246474460, 'comment_body': 'Be consistent with other endpoints\r\n```suggestion\r\n  /uploads/{id}/item/{itemId}/copyrights/{hash}:\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 6, 33, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246475109, 'comment_body': 'The response code is exactly same as `INFO`?', 'comment_created': datetime.datetime(2023, 6, 29, 11, 7, 19, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247689003, 'comment_body': ""Please add a sanity check for upload ID as well, even though the backend doesn't need it."", 'comment_created': datetime.datetime(2023, 6, 30, 9, 59, 32, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247692151, 'comment_body': 'Sure I will add it', 'comment_created': datetime.datetime(2023, 6, 30, 10, 2, 49, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1250261611, 'comment_body': 'Please remove the assignment. It is already done for you in the parent class.', 'comment_created': datetime.datetime(2023, 7, 3, 5, 30, 31, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250261944, 'comment_body': ""```suggestion\n    $this->copyrightDao = $this->container->get('dao.copyright');\n```"", 'comment_created': datetime.datetime(2023, 7, 3, 5, 30, 53, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1250266163, 'comment_body': 'The endpoint is not generating this header in the code and is not needed as well.', 'comment_created': datetime.datetime(2023, 7, 3, 5, 36, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1251583574, 'comment_body': ""```suggestion\r\n    $this->copyrightDao = $this->container->get('dao.copyright');\r\n```"", 'comment_created': datetime.datetime(2023, 7, 4, 7, 1, 50, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1251585034, 'comment_body': 'Please work on it.\r\n\r\nElse remove the block as it in unnecessary.', 'comment_created': datetime.datetime(2023, 7, 4, 7, 3, 24, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': 'ee2b2f703ea91718510cef4e261dcf4d98150f4b', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1401024064,feat(api): restore deleted copyrights,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Restores deleted copyright statements for a file
+
+## How to test
+
+send a `patch` request to the endpoint `file/upload/{uploadId}/item/{itemid}/copyright{copyrightHash}`
+
+## Screenshots
+
+![Screenshot from 2023-06-21 11-58-18](https://github.com/fossology/fossology/assets/63705023/47bd0d03-6cbc-4a81-a785-81c3571fd84c)
+
+closes #2468
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2486""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2486,https://api.github.com/repos/fossology/fossology/pulls/2486,https://github.com/fossology/fossology/pull/2486,closed,56,0,3,1,6,12,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-21 06:29:19+00:00,2023-07-10 08:04:01+00:00,1647282.0,"19 days, 1:34:42","[{'comment_id': 1252854825, 'comment_body': 'Please rebase to resolve changes required in initializer.', 'comment_created': datetime.datetime(2023, 7, 5, 9, 51, 10, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252855364, 'comment_body': 'Please follow code style\r\n```suggestion\r\n   */\r\n  public function restoreFileCopyrights($request, $response, $args)\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 9, 51, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252855569, 'comment_body': 'Please remove `try/catch` as discussed.', 'comment_created': datetime.datetime(2023, 7, 5, 9, 51, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252862464, 'comment_body': '```suggestion\r\n      $uploadTreeTableName = $uploadDao->getUploadtreeTableName($uploadTreeId);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 9, 57, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252862858, 'comment_body': 'Please move checks before accessing variables.', 'comment_created': datetime.datetime(2023, 7, 5, 9, 58, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252863439, 'comment_body': 'Please update the path to be consistent with other endpoints.', 'comment_created': datetime.datetime(2023, 7, 5, 9, 58, 32, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252863997, 'comment_body': 'The header is irrelevant here.', 'comment_created': datetime.datetime(2023, 7, 5, 9, 58, 54, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252864404, 'comment_body': 'Response is same as `Info`.', 'comment_created': datetime.datetime(2023, 7, 5, 9, 59, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1253293425, 'comment_body': ""```suggestion\r\n              $ref: '#/components/schemas/SetCopyrightInfo'\r\n```"", 'comment_created': datetime.datetime(2023, 7, 5, 15, 35, 29, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1253297422, 'comment_body': 'resolved', 'comment_created': datetime.datetime(2023, 7, 5, 15, 38, 32, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1257806454, 'comment_body': ""```suggestion\r\n              $ref: '#/components/schemas/SetCopyrightInfo'\r\n```"", 'comment_created': datetime.datetime(2023, 7, 10, 6, 59, 47, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1257807338, 'comment_body': 'Uh, seems like you removed one space instead of adding (as suggested).', 'comment_created': datetime.datetime(2023, 7, 10, 7, 0, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '76d75929bc287d16139441ae025a78aca9d7f875', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1400077253,feat(api): get inactive copyright details for a file,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+Inactive copyright info for file is exposed through `/file/upload/{UploadId}/item/{ItemId}/copyrights/inactive` endpoint
+
+## Screenshots
+
+
+![Screenshot from 2023-06-20 20-50-25](https://github.com/fossology/fossology/assets/63705023/3f1717c7-5c5a-4191-b64f-5122d9da4c7a)
+
+## How to test
+Send a GET request to `/file/upload/{UploadId}/item/{ItemId}/copyrights/inactive` endpoint to see the result.
+
+closes #2468
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2485""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",False,2485,https://api.github.com/repos/fossology/fossology/pulls/2485,https://github.com/fossology/fossology/pull/2485,closed,643,3,5,1,4,13,4,0,"[{'name': 'needs code review'}, {'name': 'has merge conflicts'}, {'name': 'needs test'}, {'name': 'GSOC-23'}]",2023-06-20 15:21:25+00:00,2023-07-01 03:05:40+00:00,906255.0,"10 days, 11:44:15","[{'comment_id': 1246514678, 'comment_body': '```suggestion\r\n  /**\r\n   * @brief Get Agent ID for an upload\r\n   * @param integer $upload_pk Upload ID\r\n   * @param string $copyrightType Copyright Type\r\n   * @return integer Agent ID\r\n   */\r\n  public function getAgentId($upload_pk, $copyrightType)\r\n  {\r\n    return LatestAgentpk($upload_pk, $copyrightType);\r\n  }\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 51, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246514933, 'comment_body': 'I believe I did not wrote this file :smiley:', 'comment_created': datetime.datetime(2023, 6, 29, 11, 51, 59, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246515225, 'comment_body': 'Please check earlier reviews.', 'comment_created': datetime.datetime(2023, 6, 29, 11, 52, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246515490, 'comment_body': '```suggestion\r\n   * Get inactive copyrights for a particular upload-tree\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 52, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246515657, 'comment_body': '```suggestion\r\n    $uploadTreeTableName = $this->uploadDao->getUploadtreeTableName($uploadPk);\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 52, 35, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246515973, 'comment_body': 'Please limit the scope of `try/catch` block.', 'comment_created': datetime.datetime(2023, 6, 29, 11, 52, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246516604, 'comment_body': 'Please check if provided upload and uploadtree id exists before performing operations.', 'comment_created': datetime.datetime(2023, 6, 29, 11, 53, 25, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246517564, 'comment_body': 'Please be consistent with other endpoints\r\n```suggestion\r\n  /uploads/{id}/items/{itemId}/copyrights:\r\n```', 'comment_created': datetime.datetime(2023, 6, 29, 11, 54, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1246518399, 'comment_body': 'Would suggest to use a query parameter like `filter` with enum `active, inactive` rather than creating separate endpoints to get active and inactive copyrights.', 'comment_created': datetime.datetime(2023, 6, 29, 11, 54, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247447916, 'comment_body': 'Yes sir, I will be implementing this and updating one of the PRs for this operation', 'comment_created': datetime.datetime(2023, 6, 30, 5, 21, 34, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1247498393, 'comment_body': ""> Would suggest to use a query parameter like `filter` with enum `active, inactive` rather than creating separate endpoints to get active and inactive copyrights.\r\n\r\nThis PR's feature is implemented in #2475 using query parameters. \r\n\r\n@GMishx please do have a look when possible.\r\n"", 'comment_created': datetime.datetime(2023, 6, 30, 6, 46, 44, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1247564096, 'comment_body': 'So can I close this in favor of #2475 ?', 'comment_created': datetime.datetime(2023, 6, 30, 8, 1, 41, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1247573826, 'comment_body': 'Sure sir! ', 'comment_created': datetime.datetime(2023, 6, 30, 8, 10, 58, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}]","[{'commit_sha': '8068b203dec77b0b8b902493bb760724d23acf64', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1407696696,feat(api): File info API ,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+API endpoint to get info for a file
+
+## How to test
+Send a get request to `/file/upload/{UploadId}/item/{ItemId}/info`
+
+## Screenshots
+![image](https://github.com/fossology/fossology/assets/63705023/87455744-0413-48cc-ba2a-8431d93d6c34)
+
+closes #2493
+
+@shaheemazmalmmd @GMishx 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2496""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2496,https://api.github.com/repos/fossology/fossology/pulls/2496,https://github.com/fossology/fossology/pull/2496,closed,217,0,4,1,5,11,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-26 10:57:58+00:00,2023-07-26 07:46:08+00:00,2580490.0,"29 days, 20:48:10","[{'comment_id': 1257858706, 'comment_body': 'I did not authored this file :smiley: ', 'comment_created': datetime.datetime(2023, 7, 10, 7, 50, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1257860441, 'comment_body': 'Please following coding guideline.\r\n```suggestion\r\n  private $viewInfo;\r\n```', 'comment_created': datetime.datetime(2023, 7, 10, 7, 52, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1257861188, 'comment_body': 'Please remove `try/catch` blocks as recommended.', 'comment_created': datetime.datetime(2023, 7, 10, 7, 53, 10, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1257861830, 'comment_body': 'Would recommend creating a new Model class for the response.', 'comment_created': datetime.datetime(2023, 7, 10, 7, 53, 48, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1257862654, 'comment_body': 'Please update to be consistent with other endpoints.\r\n```suggestion\r\n  /uploads/{id}/item/{itemId}/info:\r\n```', 'comment_created': datetime.datetime(2023, 7, 10, 7, 54, 33, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271778121, 'comment_body': 'Please fix indentation.', 'comment_created': datetime.datetime(2023, 7, 24, 5, 52, 24, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271778807, 'comment_body': 'Ummm.. Does not seem to have been resolved.', 'comment_created': datetime.datetime(2023, 7, 24, 5, 52, 54, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271783521, 'comment_body': ""Setting container is already done in parent class.\r\n```suggestion\r\n    $this->clearingDao = $this->container->get('dao.clearing');\r\n    $this->licenseDao = $this->container->get('dao.license');\r\n    $this->uploadDao = $this->container->get('dao.upload');\r\n    $this->restHelper = $this->container->get('helper.restHelper');\r\n```"", 'comment_created': datetime.datetime(2023, 7, 24, 5, 57, 48, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1274390341, 'comment_body': 'Parent class initializer does this for you. No need to override it. Please remove the line.\r\n\r\nhttps://github.com/fossology/fossology/blob/3d6195aeff303a01511b5b7662e138f059557f16/src/www/ui/api/Controllers/RestController.php#L52', 'comment_created': datetime.datetime(2023, 7, 26, 5, 27, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1274390982, 'comment_body': ""Since the endpoint is move to `/uploads/{id}/item/{itemId}/info`, shouldn't this be removed as well?"", 'comment_created': datetime.datetime(2023, 7, 26, 5, 28, 17, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1274470536, 'comment_body': 'Unused property. Please remove.', 'comment_created': datetime.datetime(2023, 7, 26, 7, 10, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '13d79e23e991aa72d1ee535ed6b3fb13f3ad20d7', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1402116649,feat(api): API to return total number of copyrights for a file,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This API returns the total number of copyrights for a UploadTree
+
+## How to test
+Send a `GET` request to `/file/upload/{UploadId}/item/{ItemId}/totalcopyrights`
+
+##Screenshots
+![Screenshot from 2023-06-21 22-47-51](https://github.com/fossology/fossology/assets/63705023/d0671ea0-53bd-4e2b-97ab-0345e54a3d87)
+
+Fixes #2468
+
+@shaheemazmalmmd Please do have a look as this was requested on priority basis.
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2488""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2488,https://api.github.com/repos/fossology/fossology/pulls/2488,https://github.com/fossology/fossology/pull/2488,closed,198,1,4,1,7,8,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-21 17:19:38+00:00,2023-07-11 11:32:10+00:00,1707152.0,"19 days, 18:12:32","[{'comment_id': 1252913560, 'comment_body': 'Please rebase to resolve issues here.', 'comment_created': datetime.datetime(2023, 7, 5, 10, 41, 19, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252913724, 'comment_body': '```suggestion\r\n    $uploadTreeTableName = $this->uploadDao->getUploadtreeTableName($uploadPk);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 10, 41, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252913924, 'comment_body': 'Please remove `try/catch` as discussed.', 'comment_created': datetime.datetime(2023, 7, 5, 10, 41, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252914259, 'comment_body': 'Please move checks before accessing the variables.', 'comment_created': datetime.datetime(2023, 7, 5, 10, 42, 2, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252921465, 'comment_body': 'Please use more efficient ways:\r\n```suggestion\r\n      return $response->withJson([""total_copyrights"" => $returnVal[2]], 200);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 10, 47, 10, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252923444, 'comment_body': 'Even faster way is to move following lines to CopyrightDao as the function `getCopyrights()` also fetches other things from DB which are not required for this endpoint.\r\n\r\nhttps://github.com/fossology/fossology/blob/fc89e1f3153d7c6eb088942ef6f0a2b44b58ade2/src/copyright/ui/ajax-copyright-hist.php#L288-L292', 'comment_created': datetime.datetime(2023, 7, 5, 10, 48, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252923857, 'comment_body': 'Please update path to be consistent with other endpoints.', 'comment_created': datetime.datetime(2023, 7, 5, 10, 48, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1252925558, 'comment_body': 'Such simple response body can directly be embedded in the response of endpoint.', 'comment_created': datetime.datetime(2023, 7, 5, 10, 50, 10, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '707094c314f1c4e8195922ee8c836720ed923f2a', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1409188074,feat(api): conf info for upload,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This endpoint provides us full conf information as a response for an Upload. 
+
+## How to test
+
+Send a GET request to `/file/upload/{UploadId}/item/{UploadId}/conf`
+
+## Screenshots
+![image](https://github.com/fossology/fossology/assets/63705023/b9274cb7-cf7c-4770-9b39-d61966d15b95)
+
+Closes #2504
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2505""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2505,https://api.github.com/repos/fossology/fossology/pulls/2505,https://github.com/fossology/fossology/pull/2505,closed,247,0,4,1,11,17,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-06-27 06:27:56+00:00,2023-08-08 05:58:14+00:00,3627018.0,"41 days, 23:30:18","[{'comment_id': 1258009203, 'comment_body': 'I did not author this file :smiley:', 'comment_created': datetime.datetime(2023, 7, 10, 9, 55, 24, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258009479, 'comment_body': 'Please remove `try/catch` as discussed.', 'comment_created': datetime.datetime(2023, 7, 10, 9, 55, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258010219, 'comment_body': 'Create a new Model class for the same.', 'comment_created': datetime.datetime(2023, 7, 10, 9, 56, 20, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258011982, 'comment_body': 'Please update the patch to be consistent with other endpoints.\r\n```suggestion\r\n  /uploads/{id}/conf:\r\n```\r\n\r\nThe item id is not required for this endpoint to work.', 'comment_created': datetime.datetime(2023, 7, 10, 9, 57, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258024534, 'comment_body': 'Use following JSON format for the same:\r\n```json\r\n{\r\n  ""reviewed"": ""Some Name"",\r\n  ""footer"": ""Some Organization"",\r\n  ""reportRel"": ""Some release date"",\r\n  ""community"": ""Community name"",\r\n  ""component"": ""Component name"",\r\n  ""version"": ""1.2.3"",\r\n  ""releaseDate"": ""12\\\\/05\\\\/2018"",\r\n  ""sw360Link"": ""NA"",\r\n  ""componentType"": ""package-url"",\r\n  ""componentId"": ""pkg:npm\\\\/30-seconds-of-code@1.2.3"",\r\n  ""generalAssesment"": ""Some assessment test"",\r\n  ""gaAdditional"": ""NA"",\r\n  ""gaRisk"": ""No additional information\\\\/violations found for the package."",\r\n  ""gaCheckbox"": ""unchecked,unchecked,unchecked,unchecked,unchecked,unchecked,unchecked,unchecked,unchecked"",\r\n  ""spdxSelection"": ""checked,unchecked"",\r\n  ""excludedObligations"": {\r\n    ""Obligation 1"": [\r\n      ""MIT"",\r\n      ""GPL-3.0-only""\r\n    ]\r\n  },\r\n  ""department"": ""FOSSology Generation"",\r\n  ""depNotes"": ""NA"",\r\n  ""exportNotes"": ""NA"",\r\n  ""copyrightNotes"": ""NA"",\r\n  ""unifiedColumns"": {""assessment"":{""Assessment Summary"":""on""},""compliancetasks"":{""Required license compliance tasks"":""on""},""acknowledgements"":{""Acknowledgements"":""on""},""exportrestrictions"":{""Export Restrictions"":""on""},""intellectualProperty"":{""Patent Relevant Statements"":""on""},""notes"":{""Notes"":""on""},""scanresults"":{""Results of License Scan"":""on""},""mainlicenses"":{""Main Licenses"":""on""},""redlicense"":{""Other OSS Licenses (red) - Do not Use Licenses"":""on""},""yellowlicense"":{""Other OSS Licenses (yellow) - additional obligations to common rules (e.g. copyleft)"":""on""},""whitelicense"":{""Other OSS Licenses (white) - only common rules"":""on""},""overviewwithwithoutobligations"":{""Overview of All Licenses with or without Obligations"":""on""},""copyrights"":{""Copyrights"":""on""},""copyrightsuf"":{""Copyrights (User Findings)"":""on""},""bulkfindings"":{""Bulk Findings"":""on""},""licensenf"":{""Non-Functional Licenses"":""on""},""irrelevantfiles"":{""Irrelevant Files"":""on""},""dnufiles"":{""Do not use Files"":""on""},""changelog"":{""Clearing Protocol Change Log"":""on""}},\r\n  ""globalDecision"": false\r\n}\r\n```\r\n\r\nAdditional notes:\r\n1. `componentType`: Use map from class \\Fossology\\Lib\\Data\\Package\\ComponentType\r\n2. `excludedObligations`: Can be an object, `null` or empty array `[]`\r\n3. `unifiedColumns`: It is an object with key: ""report conf section id"" and value: ""{display text, on/off}""\r\n4. `globalDecision`: It is a boolean.', 'comment_created': datetime.datetime(2023, 7, 10, 10, 9, 52, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271788925, 'comment_body': ""Container is set in parent class.\n\n```suggestion\n    parent::__construct($container);\n    $this->clearingDao = $this->container->get('dao.clearing');\n    $this->licenseDao = $this->container->get('dao.license');\n```"", 'comment_created': datetime.datetime(2023, 7, 24, 6, 7, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271789367, 'comment_body': '```suggestion\n    $this->uploadDao = $this->restHelper->getUploadDao();\n```', 'comment_created': datetime.datetime(2023, 7, 24, 6, 8, 12, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271791580, 'comment_body': 'Please following naming convention\n```suggestion\n    ConfResponse\n```', 'comment_created': datetime.datetime(2023, 7, 24, 6, 11, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271793131, 'comment_body': 'Translate this data back as an array. It currently renders as a JSON string.', 'comment_created': datetime.datetime(2023, 7, 24, 6, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1271795843, 'comment_body': 'Translate this as well from JSON string to array. See comment https://github.com/fossology/fossology/pull/2505#discussion_r1258024534', 'comment_created': datetime.datetime(2023, 7, 24, 6, 18, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1274393375, 'comment_body': 'No need to re-declare the property again. Please remove.', 'comment_created': datetime.datetime(2023, 7, 26, 5, 32, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1274394304, 'comment_body': 'I see no code changes here. Why the conversation was marked as resolved?', 'comment_created': datetime.datetime(2023, 7, 26, 5, 33, 41, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1274394703, 'comment_body': 'I see no code changes here. Why the conversation was marked as resolved?', 'comment_created': datetime.datetime(2023, 7, 26, 5, 33, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278812586, 'comment_body': 'Reminder @soham4abc ', 'comment_created': datetime.datetime(2023, 7, 31, 5, 40, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278812852, 'comment_body': 'Please remove invalid copyright text.', 'comment_created': datetime.datetime(2023, 7, 31, 5, 41, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278812935, 'comment_body': 'Please remove as requested.', 'comment_created': datetime.datetime(2023, 7, 31, 5, 41, 29, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278813355, 'comment_body': '```suggestion\n                - on\n                - off\n              example: on\n```', 'comment_created': datetime.datetime(2023, 7, 31, 5, 42, 19, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': 'e82a0cf8a4f2e46deedff8e75ac94fff66c8cc36', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1419849449,feat(api): Get Customise page data,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This PR introduces an endpoint to fetch data for the customize page from admin panel 
+
+THIS PR IS WIP and to be updated according to the requirements.
+
+
+## How to test
+
+send a `GET` request to `localhost/repo/api/v1/customise`
+
+## Screenshots
+![Screenshot from 2023-07-04 20-50-06](https://github.com/fossology/fossology/assets/63705023/693daddd-2383-47e3-8738-f168cdbdaec9)
+
+closes #2519
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2520""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2520,https://api.github.com/repos/fossology/fossology/pulls/2520,https://github.com/fossology/fossology/pull/2520,closed,203,1,6,1,7,15,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-07-04 15:33:27+00:00,2023-08-08 06:35:42+00:00,2991735.0,"34 days, 15:02:15","[{'comment_id': 1258071330, 'comment_body': 'DAO will be a better place to get this method. Once there is the update endpoint, the same function can go into same DAO as well.', 'comment_created': datetime.datetime(2023, 7, 10, 10, 50, 17, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258081963, 'comment_body': 'Please use consistent quote types.', 'comment_created': datetime.datetime(2023, 7, 10, 11, 1, 25, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258082738, 'comment_body': '```suggestion\r\n      return $response->withJson($finalVal, 200);\r\n```', 'comment_created': datetime.datetime(2023, 7, 10, 11, 2, 16, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258124317, 'comment_body': 'Please document different types as enum', 'comment_created': datetime.datetime(2023, 7, 10, 11, 43, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258124620, 'comment_body': '```suggestion\r\n              type: string\r\n```', 'comment_created': datetime.datetime(2023, 7, 10, 11, 43, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258124852, 'comment_body': '```suggestion\r\n  $Schema[""TABLE""][""sysconfig""][""vartype""][""DESC""] = ""COMMENT ON COLUMN \\""sysconfig\\"".\\""vartype\\"" IS \'variable type.  1=int, 2=text, 3=textarea, 4=password, 5=dropdown, 6=boolean\'"";\r\n```', 'comment_created': datetime.datetime(2023, 7, 10, 11, 43, 45, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1258447101, 'comment_body': 'So, should I be creating a separate DAO for the admin functions named AdminDAO? and create a method there itself to get the config data in the desired output format?', 'comment_created': datetime.datetime(2023, 7, 10, 15, 35, 24, tzinfo=datetime.timezone.utc), 'commenter': 'soham4abc', 'type': 'User'}, {'comment_id': 1278830000, 'comment_body': 'Use modern DBManager.\n```suggestion\n    $sql = ""SELECT * FROM sysconfig ORDER BY group_name, group_order"";\n    return $this->dbManager->getRows($sql);\n```', 'comment_created': datetime.datetime(2023, 7, 31, 6, 12, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278830572, 'comment_body': 'Please document in docstring what `$data` should look like.', 'comment_created': datetime.datetime(2023, 7, 31, 6, 13, 3, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278831463, 'comment_body': 'Keeping the return type consistent as string will help consumer of the endpoint by using single class to read the data.', 'comment_created': datetime.datetime(2023, 7, 31, 6, 14, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278832719, 'comment_body': '```suggestion\n\n```', 'comment_created': datetime.datetime(2023, 7, 31, 6, 16, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1278833215, 'comment_body': 'This structure no longer matches the current response. Please update.', 'comment_created': datetime.datetime(2023, 7, 31, 6, 17, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1286637112, 'comment_body': '```suggestion\r\n      summary: Get the Admin configuration data\r\n      description: >\r\n        Returns the admin configuration data from the server\r\n```', 'comment_created': datetime.datetime(2023, 8, 8, 6, 10, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1286637317, 'comment_body': '```suggestion\r\n      description: Admin customise data object\r\n```', 'comment_created': datetime.datetime(2023, 8, 8, 6, 10, 38, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 1286638222, 'comment_body': ""Small formatting changes needed.\r\n```suggestion\r\n          - boolean\r\n        label:\r\n          description: field label\r\n          type: string\r\n        group_name:\r\n          description: group name for the field\r\n          type: string\r\n        group_order:\r\n          description: group order of the field\r\n          type: integer\r\n        option_value:\r\n          description: If type is 'dropdown', provide options in format op1{val1}|op2{val2}|...\r\n          type: string\r\n\r\n```"", 'comment_created': datetime.datetime(2023, 8, 8, 6, 11, 55, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '01f73826a4c813b4ebdc322754a3b8c5218d7b03', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1450308432,feat(api): Get banner message,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Get banner message for all the users.
+
+## How to test
+
+Send a GET response to `/customise/banner` endpoint.
+
+# Screenshots
+
+![image](https://github.com/fossology/fossology/assets/63705023/e1ea2676-8a2d-42b8-953d-3aa158a3f87a)
+
+@GMishx @shaheemazmalmmd @avinal 
+
+Fixes #2519 
+
+
+NOTE: Do not merge this before merging #2520 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2553""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2553,https://api.github.com/repos/fossology/fossology/pulls/2553,https://github.com/fossology/fossology/pull/2553,closed,45,0,4,2,3,0,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-07-26 13:47:22+00:00,2023-10-03 07:16:13+00:00,5938131.0,"68 days, 17:28:51",[],"[{'commit_sha': 'be9d9cba6797aa98c8452b5fb8a49098390a92a0', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d6ab4550ccc357ec0db5fdcd442a81f48440705', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1459122482,feat(api): api to get the list of obligations,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+API to get the list of the obligations. 
+
+## How to test
+
+Send `GET` request to `/obligations/list` endpoint.
+
+## Screenshots
+![image](https://github.com/fossology/fossology/assets/63705023/db552f2f-df65-4646-8f32-d17efc96b13a)
+
+@GMishx @shaheemazmalmmd Please do have a look.
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2559""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2559,https://api.github.com/repos/fossology/fossology/pulls/2559,https://github.com/fossology/fossology/pull/2559,closed,90,3,5,2,1,0,3,0,"[{'name': 'needs code review'}, {'name': 'needs test'}, {'name': 'GSOC-23'}]",2023-08-02 04:58:29+00:00,2023-10-03 08:18:37+00:00,5368808.0,"62 days, 3:20:08",[],"[{'commit_sha': 'e0220f921ddb0538a13adea65a9c9f9965ca778a', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1e9ef3739b9bdb69ab0f7dce18d92e977af356b5', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1461569054,feat(api): get details of a particular obligation using id,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Get Details of a particular Obligation by requesting it with obligation_id.
+
+## How to test
+
+Send a `GET` request to `/obligations/{id}` endpoint.
+
+## Screenshot
+
+![image](https://github.com/fossology/fossology/assets/63705023/8e01bc49-0e12-4303-b313-ec249dd1b19b)
+
+@GMishx @shaheemazmalmmd @avinal 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2564""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2564,https://api.github.com/repos/fossology/fossology/pulls/2564,https://github.com/fossology/fossology/pull/2564,closed,310,3,5,2,1,0,3,0,"[{'name': 'needs code review'}, {'name': 'needs test'}, {'name': 'GSOC-23'}]",2023-08-03 14:26:39+00:00,2023-10-03 10:46:12+00:00,5257173.0,"60 days, 20:19:33",[],"[{'commit_sha': '8d8573ff8c9c0574123c2c5c166c3124296f879e', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e630262fca700bfd6a34b0e398fb864e9cc47b2', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1466266202,feat(api): Get details of all obligations,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+API endpoint to get all the Obligation details
+
+## How to test
+
+Send a `GET` Request to `/obligations/all` endpoint.
+
+## Screenshots
+
+![Screenshot from 2023-08-08 11-17-06](https://github.com/fossology/fossology/assets/63705023/865e783f-b2cd-41f2-b172-869ce9a76fe9)
+
+
+@GMishx @shaheemazmalmmd @avinal 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2565""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2565,https://api.github.com/repos/fossology/fossology/pulls/2565,https://github.com/fossology/fossology/pull/2565,closed,60,7,4,2,2,0,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-08-08 05:47:45+00:00,2023-10-03 11:44:41+00:00,4859816.0,"56 days, 5:56:56",[],"[{'commit_sha': 'a5f29c38c5a5e90d01e6cbe8ac02e1d5652dbc33', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0eb92849063a3b51f6254024a393b296200d83ea', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+1466266202,feat(api): Get details of all obligations,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+API endpoint to get all the Obligation details
+
+## How to test
+
+Send a `GET` Request to `/obligations/all` endpoint.
+
+## Screenshots
+
+![Screenshot from 2023-08-08 11-17-06](https://github.com/fossology/fossology/assets/63705023/865e783f-b2cd-41f2-b172-869ce9a76fe9)
+
+
+@GMishx @shaheemazmalmmd @avinal 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2565""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2565,https://api.github.com/repos/fossology/fossology/pulls/2565,https://github.com/fossology/fossology/pull/2565,closed,60,7,4,2,2,0,2,0,"[{'name': 'ready'}, {'name': 'GSOC-23'}]",2023-08-08 05:47:45+00:00,2023-10-03 11:44:41+00:00,4859816.0,"56 days, 5:56:56",[],"[{'commit_sha': 'a5f29c38c5a5e90d01e6cbe8ac02e1d5652dbc33', 'committer_username': 'soham4abc', 'committer_name': 'Soham Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 15, 7, 29, 52, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0eb92849063a3b51f6254024a393b296200d83ea', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Soham Banerjee,63705023,,User,,103,,66,65
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+15866170,fossology,fossology/fossology,PHP,397,779,64,142,9788,391,76,18,"[{'id': 1484349697, 'number': 2572, 'closed': datetime.datetime(2023, 10, 9, 9, 29, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 22, 9, 8, 57, tzinfo=datetime.timezone.utc), 'time_taken': 4148431.0, 'time_delta': '48 days, 0:20:31', 'additions': 957, 'deletions': 296, 'state': 'closed'}, {'id': 1470589555, 'number': 2568, 'closed': datetime.datetime(2023, 10, 6, 8, 37, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 10, 15, 47, 14, tzinfo=datetime.timezone.utc), 'time_taken': 4899034.0, 'time_delta': '56 days, 16:50:34', 'additions': 59, 'deletions': 7, 'state': 'closed'}, {'id': 1466266202, 'number': 2565, 'closed': datetime.datetime(2023, 10, 3, 11, 44, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 8, 5, 47, 45, tzinfo=datetime.timezone.utc), 'time_taken': 4859816.0, 'time_delta': '56 days, 5:56:56', 'additions': 60, 'deletions': 7, 'state': 'closed'}, {'id': 1461569054, 'number': 2564, 'closed': datetime.datetime(2023, 10, 3, 10, 46, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 3, 14, 26, 39, tzinfo=datetime.timezone.utc), 'time_taken': 5257173.0, 'time_delta': '60 days, 20:19:33', 'additions': 310, 'deletions': 3, 'state': 'closed'}, {'id': 1459122482, 'number': 2559, 'closed': datetime.datetime(2023, 10, 3, 8, 18, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 2, 4, 58, 29, tzinfo=datetime.timezone.utc), 'time_taken': 5368808.0, 'time_delta': '62 days, 3:20:08', 'additions': 90, 'deletions': 3, 'state': 'closed'}, {'id': 1450308432, 'number': 2553, 'closed': datetime.datetime(2023, 10, 3, 7, 16, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 26, 13, 47, 22, tzinfo=datetime.timezone.utc), 'time_taken': 5938131.0, 'time_delta': '68 days, 17:28:51', 'additions': 45, 'deletions': 0, 'state': 'closed'}, {'id': 1445229069, 'number': 2549, 'closed': datetime.datetime(2023, 9, 28, 13, 12, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 22, 6, 37, 27, tzinfo=datetime.timezone.utc), 'time_taken': 5898899.0, 'time_delta': '68 days, 6:34:59', 'additions': 181, 'deletions': 7, 'state': 'closed'}, {'id': 1437158543, 'number': 2545, 'closed': datetime.datetime(2023, 9, 28, 10, 54, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 17, 11, 44, 14, tzinfo=datetime.timezone.utc), 'time_taken': 6304220.0, 'time_delta': '72 days, 23:10:20', 'additions': 126, 'deletions': 5, 'state': 'closed'}, {'id': 1419849449, 'number': 2520, 'closed': datetime.datetime(2023, 8, 8, 6, 35, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 15, 33, 27, tzinfo=datetime.timezone.utc), 'time_taken': 2991735.0, 'time_delta': '34 days, 15:02:15', 'additions': 203, 'deletions': 1, 'state': 'closed'}, {'id': 1409188074, 'number': 2505, 'closed': datetime.datetime(2023, 8, 8, 5, 58, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 27, 6, 27, 56, tzinfo=datetime.timezone.utc), 'time_taken': 3627018.0, 'time_delta': '41 days, 23:30:18', 'additions': 247, 'deletions': 0, 'state': 'closed'}, {'id': 1407696696, 'number': 2496, 'closed': datetime.datetime(2023, 7, 26, 7, 46, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 10, 57, 58, tzinfo=datetime.timezone.utc), 'time_taken': 2580490.0, 'time_delta': '29 days, 20:48:10', 'additions': 217, 'deletions': 0, 'state': 'closed'}, {'id': 1402915733, 'number': 2490, 'closed': datetime.datetime(2023, 7, 10, 7, 6, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 22, 6, 14, 15, tzinfo=datetime.timezone.utc), 'time_taken': 1558349.0, 'time_delta': '18 days, 0:52:29', 'additions': 541, 'deletions': 2, 'state': 'closed'}, {'id': 1402116649, 'number': 2488, 'closed': datetime.datetime(2023, 7, 11, 11, 32, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 21, 17, 19, 38, tzinfo=datetime.timezone.utc), 'time_taken': 1707152.0, 'time_delta': '19 days, 18:12:32', 'additions': 198, 'deletions': 1, 'state': 'closed'}, {'id': 1401024064, 'number': 2486, 'closed': datetime.datetime(2023, 7, 10, 8, 4, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 21, 6, 29, 19, tzinfo=datetime.timezone.utc), 'time_taken': 1647282.0, 'time_delta': '19 days, 1:34:42', 'additions': 56, 'deletions': 0, 'state': 'closed'}, {'id': 1400077253, 'number': 2485, 'closed': datetime.datetime(2023, 7, 1, 3, 5, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 20, 15, 21, 25, tzinfo=datetime.timezone.utc), 'time_taken': 906255.0, 'time_delta': '10 days, 11:44:15', 'additions': 643, 'deletions': 3, 'state': 'closed'}, {'id': 1397126790, 'number': 2479, 'closed': datetime.datetime(2023, 7, 5, 7, 41, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 18, 12, 42, 56, tzinfo=datetime.timezone.utc), 'time_taken': 1450697.0, 'time_delta': '16 days, 18:58:17', 'additions': 72, 'deletions': 3, 'state': 'closed'}, {'id': 1396737600, 'number': 2478, 'closed': datetime.datetime(2023, 7, 5, 6, 40, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 17, 11, 22, 8, tzinfo=datetime.timezone.utc), 'time_taken': 1538274.0, 'time_delta': '17 days, 19:17:54', 'additions': 104, 'deletions': 2, 'state': 'closed'}, {'id': 1393545187, 'number': 2475, 'closed': datetime.datetime(2023, 7, 5, 6, 29, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 15, 6, 59, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1726170.0, 'time_delta': '19 days, 23:29:30', 'additions': 256, 'deletions': 5, 'state': 'closed'}, {'id': 1392714210, 'number': 2474, 'closed': datetime.datetime(2023, 6, 29, 10, 43, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 14, 16, 9, 20, tzinfo=datetime.timezone.utc), 'time_taken': 1276434.0, 'time_delta': '14 days, 18:33:54', 'additions': 172, 'deletions': 17, 'state': 'closed'}, {'id': 1049647555, 'number': 2311, 'closed': datetime.datetime(2022, 9, 26, 6, 46, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 8, 7, 22, 51, tzinfo=datetime.timezone.utc), 'time_taken': 1553043.0, 'time_delta': '17 days, 23:24:03', 'additions': 2, 'deletions': 4, 'state': 'closed'}, {'id': 1044757735, 'number': 2309, 'closed': datetime.datetime(2022, 9, 5, 9, 52, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 2, 10, 34, 18, tzinfo=datetime.timezone.utc), 'time_taken': 256686.0, 'time_delta': '2 days, 23:18:06', 'additions': 92, 'deletions': 1, 'state': 'closed'}, {'id': 1022852689, 'number': 2288, 'closed': datetime.datetime(2023, 2, 27, 14, 43, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 10, 15, 20, 38, tzinfo=datetime.timezone.utc), 'time_taken': 17364165.0, 'time_delta': '200 days, 23:22:45', 'additions': 197, 'deletions': 24, 'state': 'closed'}, {'id': 1002806393, 'number': 2273, 'closed': datetime.datetime(2022, 7, 25, 10, 46, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 20, 19, 25, 15, tzinfo=datetime.timezone.utc), 'time_taken': 400887.0, 'time_delta': '4 days, 15:21:27', 'additions': 140, 'deletions': 0, 'state': 'closed'}, {'id': 995603877, 'number': 2260, 'closed': datetime.datetime(2022, 7, 20, 13, 19, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 14, 50, 56, tzinfo=datetime.timezone.utc), 'time_taken': 599304.0, 'time_delta': '6 days, 22:28:24', 'additions': 83, 'deletions': 0, 'state': 'closed'}, {'id': 988305097, 'number': 2252, 'closed': datetime.datetime(2022, 7, 13, 13, 12, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 6, 6, 51, 54, tzinfo=datetime.timezone.utc), 'time_taken': 627652.0, 'time_delta': '7 days, 6:20:52', 'additions': 146, 'deletions': 10, 'state': 'closed'}, {'id': 943360230, 'number': 2226, 'closed': datetime.datetime(2022, 6, 6, 7, 39, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 21, 5, 42, 54, tzinfo=datetime.timezone.utc), 'time_taken': 1389388.0, 'time_delta': '16 days, 1:56:28', 'additions': 7, 'deletions': 5, 'state': 'closed'}, {'id': 913433015, 'number': 2213, 'closed': datetime.datetime(2022, 5, 5, 8, 45, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 19, 18, 51, 21, tzinfo=datetime.timezone.utc), 'time_taken': 1346056.0, 'time_delta': '15 days, 13:54:16', 'additions': 21, 'deletions': 10, 'state': 'closed'}]"

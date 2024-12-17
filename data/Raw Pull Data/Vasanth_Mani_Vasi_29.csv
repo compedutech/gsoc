@@ -1,0 +1,130 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+667394616,Type support for all MIDI events,"This PR adds types for the events in the midi spec and functions to encode/decode the events. The types store the decoded event data in their fields, so the values can be used directly as opposed to decoding the byte data each time it is needed. This allows code to be written concisely, improves readability and also simplifies the API.
+
+As a preview, the function for retrieving the qpm can be written this way:
+
+Before the PR:
+```julia
+ function qpm(t::MIDI.MIDIFile) 
+     tttttt = Vector{UInt32}() 
+     for event in t.tracks[1].events 
+         if typeof(event) == MetaEvent 
+             if event.metatype == 0x51 
+                 tttttt = deepcopy(event.data) 
+                 break 
+             end 
+         end 
+     end 
+  
+     # Default QPM if it is not present in the MIDI file. 
+     if isempty(tttttt) 
+         return 120.0 
+     end 
+
+     if tttttt[1] != 0x00 
+         pushfirst!(tttttt, 0x00) 
+     else 
+         tttttt = tttttt[findin(tttttt, 0x00)[end]:end] 
+     end 
+
+     u = ntoh(reinterpret(UInt32, tttttt)[1]) 
+     μs = Int64(u) 
+     # QPM: 
+     qpm = 60000000/μs 
+ end
+```
+
+After the PR:
+```julia
+ function qpm(t::MIDI.MIDIFile) 
+     for event in t.tracks[1].events 
+         if event isa SetTempoEvent 
+             return 6e7 / event.tempo 
+         end 
+     end 
+  
+     # Default QPM if it is not present in the MIDI file. 
+     return 120.0 
+ end
+```
+
+#### Implementation
+
+The `MIDI_EVENTS_SPEC` dictionary maps the event type byte (such as 0x51, 0x03, etc.) to their corresponding types. While reading the events from a file, we use `MIDI_EVENTS_SPEC` to obtain the type of an event from it's type byte. Then the the type's constructor is called to decode the data from it's byte representation. While writing the events back to a file, we use `encode(::Type)` to get the byte representation of the event.
+
+Most MetaEvents and MIDIEvents are added and the existing code is updated to work with the new event types. Please give it a try!
+Any advice on the design would be very helpful! :)
+
+Defining each type separately is quite a lot copy/paste work so it uses a little bit of metaprogramming. To define new event types now, the name, the fields and the encode, decode expressions must be added to `MIDI_EVENTS_DEFS`. Any advice on the readability and efficiency would also be of great help!
+
+**Checklist**
+- [x] Add Meta events
+- [x] Add Midi events
+- [x] Update existing code to support the events
+- [x] Update tests",True,142,https://api.github.com/repos/JuliaMusic/MIDI.jl/pulls/142,https://github.com/JuliaMusic/MIDI.jl/pull/142,closed,543,212,14,22,25,4,0,0,[],2021-06-10 20:52:15+00:00,2021-06-13 17:27:43+00:00,246928.0,"2 days, 20:35:28","[{'comment_id': 650372158, 'comment_body': 'global constants should be written in all capitals, `SPECS`. Furthermore, we should have a more intention revealing name. I suggest `MIDI_EVENTS_SPEC`', 'comment_created': datetime.datetime(2021, 6, 12, 9, 41, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Datseris', 'type': 'User'}, {'comment_id': 650375515, 'comment_body': '`MIDI_EVENTS_SPEC` sounds great, thanks! Done in 6a5aea9.', 'comment_created': datetime.datetime(2021, 6, 12, 10, 17, 10, tzinfo=datetime.timezone.utc), 'commenter': 'VasanthManiVasi', 'type': 'User'}, {'comment_id': 650434928, 'comment_body': ""I'm confused here. Why would the `TrackName` event have no other fields? Where is the actual name stored...?"", 'comment_created': datetime.datetime(2021, 6, 12, 20, 47, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Datseris', 'type': 'User'}, {'comment_id': 650439775, 'comment_body': ""Since all the text events have the same field and encode/decode functions, their definitions were stored in a separate `text_defs` to avoid repetition. I've added a comment in eb63915, thanks!"", 'comment_created': datetime.datetime(2021, 6, 12, 21, 50, 33, tzinfo=datetime.timezone.utc), 'commenter': 'VasanthManiVasi', 'type': 'User'}]","[{'commit_sha': '3848fb947787f9e49b1a055019a678da136f5df5', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '639cdfaf5793b9c3a261f8ccc62b2f98cd26df0e', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c27bec87f051843bf80ad945ae4967a12312137', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '435d483b6a58edaca82395df56dfad13cdfcbfc2', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6168f378fa04038695e76014ccbae57a890bdd6f', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c96ab0cba5114522e2adfb07984fd6d21499c6ab', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da5c053a8ed7dc17d99d2a79c61d15c43d7875ca', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61c84dc9b1a433614351ef9bd95e821dafac4338', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2cb16b560ff367c73ac6fc3692fbf5d30d724bb', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf1a33c680afff50559b8fa6c24f94952c35514f', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a5aea984bc1f5b0dedeeaf9607823f30b602cfb', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '556ed0318c94c13158db5e720ee3c3eb5868988a', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3543507229c40479165e9b040ec826053e2b8079', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40ddafd65137f8dde1a53f96e5898efa2799812b', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb63915588f97324a7e78cf42ed1d34b6de37cac', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '353914cf0a16d0d8b6a7cea01e8c55f7d68f0329', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f48d6583082c7c07395b0f878a9dd963d3faeb35', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c67f05743b00f7bd785adb0b1f340e96b3e094e', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0cf76c1828a886d42b8f490b1cce6b3a97fe1fa6', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0674f4ce7225d4cba1119fad8c334b37b7cf5acc', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98df3bb8214e6ca18cd00e03551b14672da45881', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b7314c5f56d0fcc2348ca637539c34126d402f8', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}]",,44256983,,User,,23,,6,10
+667394616,Type support for all MIDI events,"This PR adds types for the events in the midi spec and functions to encode/decode the events. The types store the decoded event data in their fields, so the values can be used directly as opposed to decoding the byte data each time it is needed. This allows code to be written concisely, improves readability and also simplifies the API.
+
+As a preview, the function for retrieving the qpm can be written this way:
+
+Before the PR:
+```julia
+ function qpm(t::MIDI.MIDIFile) 
+     tttttt = Vector{UInt32}() 
+     for event in t.tracks[1].events 
+         if typeof(event) == MetaEvent 
+             if event.metatype == 0x51 
+                 tttttt = deepcopy(event.data) 
+                 break 
+             end 
+         end 
+     end 
+  
+     # Default QPM if it is not present in the MIDI file. 
+     if isempty(tttttt) 
+         return 120.0 
+     end 
+
+     if tttttt[1] != 0x00 
+         pushfirst!(tttttt, 0x00) 
+     else 
+         tttttt = tttttt[findin(tttttt, 0x00)[end]:end] 
+     end 
+
+     u = ntoh(reinterpret(UInt32, tttttt)[1]) 
+     μs = Int64(u) 
+     # QPM: 
+     qpm = 60000000/μs 
+ end
+```
+
+After the PR:
+```julia
+ function qpm(t::MIDI.MIDIFile) 
+     for event in t.tracks[1].events 
+         if event isa SetTempoEvent 
+             return 6e7 / event.tempo 
+         end 
+     end 
+  
+     # Default QPM if it is not present in the MIDI file. 
+     return 120.0 
+ end
+```
+
+#### Implementation
+
+The `MIDI_EVENTS_SPEC` dictionary maps the event type byte (such as 0x51, 0x03, etc.) to their corresponding types. While reading the events from a file, we use `MIDI_EVENTS_SPEC` to obtain the type of an event from it's type byte. Then the the type's constructor is called to decode the data from it's byte representation. While writing the events back to a file, we use `encode(::Type)` to get the byte representation of the event.
+
+Most MetaEvents and MIDIEvents are added and the existing code is updated to work with the new event types. Please give it a try!
+Any advice on the design would be very helpful! :)
+
+Defining each type separately is quite a lot copy/paste work so it uses a little bit of metaprogramming. To define new event types now, the name, the fields and the encode, decode expressions must be added to `MIDI_EVENTS_DEFS`. Any advice on the readability and efficiency would also be of great help!
+
+**Checklist**
+- [x] Add Meta events
+- [x] Add Midi events
+- [x] Update existing code to support the events
+- [x] Update tests",True,142,https://api.github.com/repos/JuliaMusic/MIDI.jl/pulls/142,https://github.com/JuliaMusic/MIDI.jl/pull/142,closed,543,212,14,22,25,4,0,0,[],2021-06-10 20:52:15+00:00,2021-06-13 17:27:43+00:00,246928.0,"2 days, 20:35:28","[{'comment_id': 650372158, 'comment_body': 'global constants should be written in all capitals, `SPECS`. Furthermore, we should have a more intention revealing name. I suggest `MIDI_EVENTS_SPEC`', 'comment_created': datetime.datetime(2021, 6, 12, 9, 41, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Datseris', 'type': 'User'}, {'comment_id': 650375515, 'comment_body': '`MIDI_EVENTS_SPEC` sounds great, thanks! Done in 6a5aea9.', 'comment_created': datetime.datetime(2021, 6, 12, 10, 17, 10, tzinfo=datetime.timezone.utc), 'commenter': 'VasanthManiVasi', 'type': 'User'}, {'comment_id': 650434928, 'comment_body': ""I'm confused here. Why would the `TrackName` event have no other fields? Where is the actual name stored...?"", 'comment_created': datetime.datetime(2021, 6, 12, 20, 47, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Datseris', 'type': 'User'}, {'comment_id': 650439775, 'comment_body': ""Since all the text events have the same field and encode/decode functions, their definitions were stored in a separate `text_defs` to avoid repetition. I've added a comment in eb63915, thanks!"", 'comment_created': datetime.datetime(2021, 6, 12, 21, 50, 33, tzinfo=datetime.timezone.utc), 'commenter': 'VasanthManiVasi', 'type': 'User'}]","[{'commit_sha': '3848fb947787f9e49b1a055019a678da136f5df5', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '639cdfaf5793b9c3a261f8ccc62b2f98cd26df0e', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c27bec87f051843bf80ad945ae4967a12312137', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '435d483b6a58edaca82395df56dfad13cdfcbfc2', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6168f378fa04038695e76014ccbae57a890bdd6f', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c96ab0cba5114522e2adfb07984fd6d21499c6ab', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da5c053a8ed7dc17d99d2a79c61d15c43d7875ca', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61c84dc9b1a433614351ef9bd95e821dafac4338', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2cb16b560ff367c73ac6fc3692fbf5d30d724bb', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf1a33c680afff50559b8fa6c24f94952c35514f', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a5aea984bc1f5b0dedeeaf9607823f30b602cfb', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '556ed0318c94c13158db5e720ee3c3eb5868988a', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3543507229c40479165e9b040ec826053e2b8079', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40ddafd65137f8dde1a53f96e5898efa2799812b', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb63915588f97324a7e78cf42ed1d34b6de37cac', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '353914cf0a16d0d8b6a7cea01e8c55f7d68f0329', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f48d6583082c7c07395b0f878a9dd963d3faeb35', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c67f05743b00f7bd785adb0b1f340e96b3e094e', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0cf76c1828a886d42b8f490b1cce6b3a97fe1fa6', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0674f4ce7225d4cba1119fad8c334b37b7cf5acc', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98df3bb8214e6ca18cd00e03551b14672da45881', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b7314c5f56d0fcc2348ca637539c34126d402f8', 'committer_username': 'VasanthManiVasi', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 18, 8, 5, 28, tzinfo=datetime.timezone.utc)}]",,44256983,,User,,23,,6,10
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+41460547,MIDI.jl,JuliaMusic/MIDI.jl,Julia,22,67,5,26,376,8,1,0,"[{'id': 669886295, 'number': 143, 'closed': datetime.datetime(2021, 6, 14, 21, 47, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 21, 23, 12, tzinfo=datetime.timezone.utc), 'time_taken': 1430.0, 'time_delta': '0:23:50', 'additions': 19, 'deletions': 19, 'state': 'closed'}, {'id': 667394616, 'number': 142, 'closed': datetime.datetime(2021, 6, 13, 17, 27, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 20, 52, 15, tzinfo=datetime.timezone.utc), 'time_taken': 246928.0, 'time_delta': '2 days, 20:35:28', 'additions': 543, 'deletions': 212, 'state': 'closed'}, {'id': 622628904, 'number': 141, 'closed': datetime.datetime(2021, 4, 24, 19, 35, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 24, 18, 30, 17, tzinfo=datetime.timezone.utc), 'time_taken': 3934.0, 'time_delta': '1:05:34', 'additions': 13, 'deletions': 4, 'state': 'closed'}, {'id': 621173959, 'number': 140, 'closed': datetime.datetime(2021, 4, 24, 18, 11, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 22, 14, 53, 44, tzinfo=datetime.timezone.utc), 'time_taken': 184647.0, 'time_delta': '2 days, 3:17:27', 'additions': 84, 'deletions': 90, 'state': 'closed'}, {'id': 620984240, 'number': 139, 'closed': datetime.datetime(2021, 4, 22, 13, 23, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 22, 11, 2, 20, tzinfo=datetime.timezone.utc), 'time_taken': 8472.0, 'time_delta': '2:21:12', 'additions': 23, 'deletions': 8, 'state': 'closed'}, {'id': 617470626, 'number': 136, 'closed': datetime.datetime(2021, 4, 18, 18, 21, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 18, 11, 48, 49, tzinfo=datetime.timezone.utc), 'time_taken': 23545.0, 'time_delta': '6:32:25', 'additions': 4, 'deletions': 7, 'state': 'closed'}, {'id': 616963163, 'number': 135, 'closed': datetime.datetime(2021, 4, 18, 8, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 16, 16, 24, 11, tzinfo=datetime.timezone.utc), 'time_taken': 145429.0, 'time_delta': '1 day, 16:23:49', 'additions': 47, 'deletions': 5, 'state': 'closed'}, {'id': 609059116, 'number': 134, 'closed': datetime.datetime(2021, 4, 5, 17, 31, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 5, 16, 39, 27, tzinfo=datetime.timezone.utc), 'time_taken': 3140.0, 'time_delta': '0:52:20', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 608969901, 'number': 133, 'closed': datetime.datetime(2021, 4, 5, 15, 44, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 5, 14, 0, 43, tzinfo=datetime.timezone.utc), 'time_taken': 6209.0, 'time_delta': '1:43:29', 'additions': 83, 'deletions': 6, 'state': 'closed'}, {'id': 608685962, 'number': 131, 'closed': datetime.datetime(2021, 4, 5, 9, 14, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 5, 4, 18, 36, tzinfo=datetime.timezone.utc), 'time_taken': 17727.0, 'time_delta': '4:55:27', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 606088110, 'number': 130, 'closed': datetime.datetime(2021, 4, 1, 7, 22, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 31, 17, 52, 28, tzinfo=datetime.timezone.utc), 'time_taken': 48617.0, 'time_delta': '13:30:17', 'additions': 34, 'deletions': 2, 'state': 'closed'}]"

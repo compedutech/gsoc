@@ -1,0 +1,237 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+438397895,Avoid server-side errors caused by nil,"This may be a rare case, but I found some method calls with `nil`-able values.
+
+The existence of errors is confirmed by the cooperation of @mame.
+
+Footnote: This bug is found by static analysis with RBS, RBS Rails, and Steep.",True,196,https://api.github.com/repos/ruby/rubyci/pulls/196,https://github.com/ruby/rubyci/pull/196,closed,4,2,1,1,0,0,0,0,[],2020-06-23 08:11:55+00:00,2020-07-28 00:47:46+00:00,2997351.0,"34 days, 16:35:51",[],"[{'commit_sha': '9a6909a0eb93b12987d2941f2ac5e531f6363626', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+425423878,Small fix for README,"As far as I've tried, README seemed to be a bit wrong.
+
+* `list` subcommand should be placed after options like `--class`
+* `interface` option also needs `--` prefix as same as `--class` or `--module`
+
+In other words, `rbs list --interface` worked for me.",True,294,https://api.github.com/repos/ruby/rbs/pulls/294,https://github.com/ruby/rbs/pull/294,closed,1,1,1,1,0,0,0,0,[],2020-05-30 06:34:01+00:00,2020-06-01 01:39:26+00:00,155125.0,"1 day, 19:05:25",[],"[{'commit_sha': 'c228da1efe65428859983235c40c3848d3f13a23', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+431489996,"Use require_relative() for ""prototype runtime --require-relative""","As of now, `rbs prototype runtime --require-relative` is identical with `... --require` because it uses `require()`, not `require_relative()`.
+
+This PR changes `--require-relative` to use `require_relative()`.
+
+With this change, the below command works as expected with local rails application.
+
+```
+bundle exec rbs prototype runtime --require-relative config/environment ModelName
+```
+
+(Note: I needed to add `Rails.application.eager_load!` to environment.rb for proper recognition of classes)",True,299,https://api.github.com/repos/ruby/rbs/pulls/299,https://github.com/ruby/rbs/pull/299,closed,1,1,1,1,0,0,0,0,[],2020-06-09 02:06:24+00:00,2020-06-10 05:09:29+00:00,97385.0,"1 day, 3:03:05",[],"[{'commit_sha': '8abb9334b5a1305b8bee748327e2621cea1b8485', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+431504671,`s/ruby.signare/rbs/g` with manual filtering,"Although `rbs` has been renamed from `ruby-signature`, the old name still seems to be around in many places. This may lead to misunderstanding.
+
+This PR tries to clean up those. I confirmed all tests with `rake` are passed, but I recommend checking manually with your eyes :eyes: before merging.
+
+Note that there is still one line when you run `git grep ruby.signature`. This has remained on purpose because the line is a warning message of deprecation.
+
+> lib/ruby/signature.rb:STDERR.puts ""🚨🚨 ruby-signature is renamed to rbs. require 'rbs' instead of 'ruby/signature'. 🚨🚨""
+",True,300,https://api.github.com/repos/ruby/rbs/pulls/300,https://github.com/ruby/rbs/pull/300,closed,32,32,13,1,0,0,0,0,[],2020-06-09 02:54:47+00:00,2020-06-10 01:04:45+00:00,79798.0,22:09:58,[],"[{'commit_sha': '2da5f53ff3a6367bdb2ad127ab2c7dc96f4239af', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+432237675,Workaround: just skip anonymous superclasses and included modules,"Fixes #301 and https://github.com/ruby/rbs/issues/301#issuecomment-641747375 based on the direction of https://github.com/ruby/rbs/issues/301#issuecomment-641726359.
+
+For this `./c.rb`,
+
+```ruby
+class C < Class.new
+  include Module.new
+  def x; end
+end
+```
+
+the command `bundle exec rbs prototype runtime --require ./c C` generates warning messages and  signatures:
+
+```
+W, [2020-06-10T15:39:12.732355 #28227]  WARN -- rbs: Skipping anonymous superclass #<Class:0x000055b123e491a0>
+W, [2020-06-10T15:39:12.732475 #28227]  WARN -- rbs: Skipping anonymous module #<Module:0x000055b123e49010>
+class C
+  public
+
+  def x: () -> untyped
+end
+```",True,302,https://api.github.com/repos/ruby/rbs/pulls/302,https://github.com/ruby/rbs/pull/302,closed,49,0,2,1,8,2,0,0,[],2020-06-10 06:43:31+00:00,2020-06-13 12:29:53+00:00,279982.0,"3 days, 5:46:22","[{'comment_id': 437910000, 'comment_body': 'Should I move this and [unless clause below](https://github.com/ruby/rbs/pull/302/files#diff-d15f6899dad56f0e659ff044e5c71b36R377-R381) to the inside of `def each_mixin`?', 'comment_created': datetime.datetime(2020, 6, 10, 7, 20, 26, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 438821098, 'comment_body': 'My opinion is to keep the test here.', 'comment_created': datetime.datetime(2020, 6, 11, 14, 18, 6, tzinfo=datetime.timezone.utc), 'commenter': 'soutaro', 'type': 'User'}]","[{'commit_sha': '9905383ada5ed1fd69abf10c6f8750231013f41f', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+425424411,Add some type mappings,"This adds some type mappings that needed for real Rails apps.
+
+* `:float` => `""Float""`
+* `:binary` => `""String""`",True,12,https://api.github.com/repos/pocke/rbs_rails/pulls/12,https://github.com/pocke/rbs_rails/pull/12,closed,3,1,1,1,0,0,0,0,[],2020-05-30 06:39:57+00:00,2020-05-30 06:58:39+00:00,1122.0,0:18:42,[],"[{'commit_sha': '3f7831794e9f43cb91c3ea901332244fbc566522', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+441775479,Add type IPAddr (inet),"Though it is a PostgreSQL-dependent feature, `inet` was needed to type Mastodon.
+https://github.com/tootsuite/mastodon
+https://github.com/tootsuite/mastodon/blob/ce9ae9aa50/db/schema.rb#L705",True,28,https://api.github.com/repos/pocke/rbs_rails/pulls/28,https://github.com/pocke/rbs_rails/pull/28,closed,2,0,1,1,3,0,0,0,[],2020-06-30 04:30:33+00:00,2020-06-30 07:56:25+00:00,12352.0,3:25:52,[],"[{'commit_sha': 'e21c403d60c115ea1a4bb333a88d50797a327f01', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+441780616,Add a signature of `last` method for AR,Add a signature of the `last` method as the same as `first`.,True,29,https://api.github.com/repos/pocke/rbs_rails/pulls/29,https://github.com/pocke/rbs_rails/pull/29,closed,4,0,1,1,0,0,0,0,[],2020-06-30 04:50:36+00:00,2020-06-30 05:49:53+00:00,3557.0,0:59:17,[],"[{'commit_sha': '0f4a86fe847cf5bbe7b71d9ed6619d5b6363957d', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+442381450,Add a signature of `Rails.env`,"Just add a signature.
+
+(IMHO, Typing `ActiveSupport::StringInquirer` like `Rails.env.test?` is a really hard thing. But it's another story :)",True,30,https://api.github.com/repos/pocke/rbs_rails/pulls/30,https://github.com/pocke/rbs_rails/pull/30,closed,1,0,1,1,1,0,0,0,[],2020-07-01 01:10:16+00:00,2020-07-01 09:30:44+00:00,30028.0,8:20:28,[],"[{'commit_sha': '583957286c825155dc01690b8526a75b8a71a81f', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+445892339,Generate additional signatures for auto-generated AR methods,"AR automatically creates some additional methods which correspond to DB columns.
+
+* `ActiveRecord::Base` includes [`ActiveModel::Dirty`](https://api.rubyonrails.org/classes/ActiveModel/Dirty.html) 
+  * We can use some auto-generated methods like `foo_changed?` or `foo_will_change!` for column `foo`
+* `bar?` is also generated for `:boolean` column `bar`
+
+It would be an advantage to developers if RBS Rails generated signatures for those auto-generated methods.
+
+I tried `steep check` with [newly-generated signatures](https://github.com/tadd/mastodon/commit/e9e92889a15e3bce05775ff3bab914240139632c). It passed without syntactic errors.",True,32,https://api.github.com/repos/pocke/rbs_rails/pulls/32,https://github.com/pocke/rbs_rails/pull/32,closed,22,1,2,1,0,0,0,0,[],2020-07-08 03:15:29+00:00,2020-07-11 11:15:49+00:00,288020.0,"3 days, 8:00:20",[],"[{'commit_sha': '2bcd5adcfc6aeec92ca885fd517952d254431d71', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+458153299,Earlier shutdown with interruption while `steep watch`,"When I run `steep watch` by mistake, it took a long time to stop the steep process. This PR tries to make it shorter.
+
+## Current Status of `master`
+
+For example, if I run `steep watch` in a large project directory like [Mastodon](https://github.com/tootsuite/mastodon), it takes about **40 seconds** currently to stop the watching process with `Ctrl+C`:
+
+```sh
+$ time bundle exec steep --log-level=fatal watch app/models/
+[deprecation warnings omitted]
+👀 Watching directories, Ctrl-C to stop.
+^CShutting down workers... # I typed Ctrl+C immediately after 👀 printed
+
+real	0m40.593s
+user	0m48.878s
+sys	0m1.637s
+```
+
+## After PR Applied
+
+It takes only **4 seconds** if this PR applied.
+
+```sh
+$ time bundle exec steep --log-level=error watch app/models/
+[deprecation warnings omitted]
+👀 Watching directories, Ctrl-C to stop.
+^CShutting down workers...
+
+real	0m4.045s
+user	0m6.723s
+sys	0m1.438s
+```
+",True,173,https://api.github.com/repos/soutaro/steep/pulls/173,https://github.com/soutaro/steep/pull/173,closed,7,4,2,1,3,3,0,0,[],2020-07-29 02:22:27+00:00,2020-08-31 14:16:08+00:00,2894021.0,"33 days, 11:53:41","[{'comment_id': 462001700, 'comment_body': 'Currently, if the running process was interrupted, `shutdown` and `exit` messages are sent.\r\n\r\nI added to sleep for a while then interrupt the master worker because sending messages does not mean worker processes stop immediately.   `master.interrupt` yields all child worker processes are stopped soon.', 'comment_created': datetime.datetime(2020, 7, 29, 2, 31, 47, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 462002953, 'comment_body': 'Worker processes can be stopped earlier by sending signals.\r\n\r\nIn my environment, SIGINT was not effective sometimes. Because of that, I added some lines to send a signal again with SIGTERM.', 'comment_created': datetime.datetime(2020, 7, 29, 2, 36, 45, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 465102505, 'comment_body': 'After `Interrupt`, wait for `main_thread` again with timeout value.\r\nIf the timeout was occured, `master.intterupt` was called because  `Thread#join` returns `nil`.', 'comment_created': datetime.datetime(2020, 8, 4, 14, 40, 48, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}]","[{'commit_sha': 'e61949d7d454ef9e44dcec53ebb0585edd2a5539', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+438397895,Avoid server-side errors caused by nil,"This may be a rare case, but I found some method calls with `nil`-able values.
+
+The existence of errors is confirmed by the cooperation of @mame.
+
+Footnote: This bug is found by static analysis with RBS, RBS Rails, and Steep.",True,196,https://api.github.com/repos/ruby/rubyci/pulls/196,https://github.com/ruby/rubyci/pull/196,closed,4,2,1,1,0,0,0,0,[],2020-06-23 08:11:55+00:00,2020-07-28 00:47:46+00:00,2997351.0,"34 days, 16:35:51",[],"[{'commit_sha': '9a6909a0eb93b12987d2941f2ac5e531f6363626', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+425423878,Small fix for README,"As far as I've tried, README seemed to be a bit wrong.
+
+* `list` subcommand should be placed after options like `--class`
+* `interface` option also needs `--` prefix as same as `--class` or `--module`
+
+In other words, `rbs list --interface` worked for me.",True,294,https://api.github.com/repos/ruby/rbs/pulls/294,https://github.com/ruby/rbs/pull/294,closed,1,1,1,1,0,0,0,0,[],2020-05-30 06:34:01+00:00,2020-06-01 01:39:26+00:00,155125.0,"1 day, 19:05:25",[],"[{'commit_sha': 'c228da1efe65428859983235c40c3848d3f13a23', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+431489996,"Use require_relative() for ""prototype runtime --require-relative""","As of now, `rbs prototype runtime --require-relative` is identical with `... --require` because it uses `require()`, not `require_relative()`.
+
+This PR changes `--require-relative` to use `require_relative()`.
+
+With this change, the below command works as expected with local rails application.
+
+```
+bundle exec rbs prototype runtime --require-relative config/environment ModelName
+```
+
+(Note: I needed to add `Rails.application.eager_load!` to environment.rb for proper recognition of classes)",True,299,https://api.github.com/repos/ruby/rbs/pulls/299,https://github.com/ruby/rbs/pull/299,closed,1,1,1,1,0,0,0,0,[],2020-06-09 02:06:24+00:00,2020-06-10 05:09:29+00:00,97385.0,"1 day, 3:03:05",[],"[{'commit_sha': '8abb9334b5a1305b8bee748327e2621cea1b8485', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+431504671,`s/ruby.signare/rbs/g` with manual filtering,"Although `rbs` has been renamed from `ruby-signature`, the old name still seems to be around in many places. This may lead to misunderstanding.
+
+This PR tries to clean up those. I confirmed all tests with `rake` are passed, but I recommend checking manually with your eyes :eyes: before merging.
+
+Note that there is still one line when you run `git grep ruby.signature`. This has remained on purpose because the line is a warning message of deprecation.
+
+> lib/ruby/signature.rb:STDERR.puts ""🚨🚨 ruby-signature is renamed to rbs. require 'rbs' instead of 'ruby/signature'. 🚨🚨""
+",True,300,https://api.github.com/repos/ruby/rbs/pulls/300,https://github.com/ruby/rbs/pull/300,closed,32,32,13,1,0,0,0,0,[],2020-06-09 02:54:47+00:00,2020-06-10 01:04:45+00:00,79798.0,22:09:58,[],"[{'commit_sha': '2da5f53ff3a6367bdb2ad127ab2c7dc96f4239af', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+432237675,Workaround: just skip anonymous superclasses and included modules,"Fixes #301 and https://github.com/ruby/rbs/issues/301#issuecomment-641747375 based on the direction of https://github.com/ruby/rbs/issues/301#issuecomment-641726359.
+
+For this `./c.rb`,
+
+```ruby
+class C < Class.new
+  include Module.new
+  def x; end
+end
+```
+
+the command `bundle exec rbs prototype runtime --require ./c C` generates warning messages and  signatures:
+
+```
+W, [2020-06-10T15:39:12.732355 #28227]  WARN -- rbs: Skipping anonymous superclass #<Class:0x000055b123e491a0>
+W, [2020-06-10T15:39:12.732475 #28227]  WARN -- rbs: Skipping anonymous module #<Module:0x000055b123e49010>
+class C
+  public
+
+  def x: () -> untyped
+end
+```",True,302,https://api.github.com/repos/ruby/rbs/pulls/302,https://github.com/ruby/rbs/pull/302,closed,49,0,2,1,8,2,0,0,[],2020-06-10 06:43:31+00:00,2020-06-13 12:29:53+00:00,279982.0,"3 days, 5:46:22","[{'comment_id': 437910000, 'comment_body': 'Should I move this and [unless clause below](https://github.com/ruby/rbs/pull/302/files#diff-d15f6899dad56f0e659ff044e5c71b36R377-R381) to the inside of `def each_mixin`?', 'comment_created': datetime.datetime(2020, 6, 10, 7, 20, 26, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 438821098, 'comment_body': 'My opinion is to keep the test here.', 'comment_created': datetime.datetime(2020, 6, 11, 14, 18, 6, tzinfo=datetime.timezone.utc), 'commenter': 'soutaro', 'type': 'User'}]","[{'commit_sha': '9905383ada5ed1fd69abf10c6f8750231013f41f', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+432237675,Workaround: just skip anonymous superclasses and included modules,"Fixes #301 and https://github.com/ruby/rbs/issues/301#issuecomment-641747375 based on the direction of https://github.com/ruby/rbs/issues/301#issuecomment-641726359.
+
+For this `./c.rb`,
+
+```ruby
+class C < Class.new
+  include Module.new
+  def x; end
+end
+```
+
+the command `bundle exec rbs prototype runtime --require ./c C` generates warning messages and  signatures:
+
+```
+W, [2020-06-10T15:39:12.732355 #28227]  WARN -- rbs: Skipping anonymous superclass #<Class:0x000055b123e491a0>
+W, [2020-06-10T15:39:12.732475 #28227]  WARN -- rbs: Skipping anonymous module #<Module:0x000055b123e49010>
+class C
+  public
+
+  def x: () -> untyped
+end
+```",True,302,https://api.github.com/repos/ruby/rbs/pulls/302,https://github.com/ruby/rbs/pull/302,closed,49,0,2,1,8,2,0,0,[],2020-06-10 06:43:31+00:00,2020-06-13 12:29:53+00:00,279982.0,"3 days, 5:46:22","[{'comment_id': 437910000, 'comment_body': 'Should I move this and [unless clause below](https://github.com/ruby/rbs/pull/302/files#diff-d15f6899dad56f0e659ff044e5c71b36R377-R381) to the inside of `def each_mixin`?', 'comment_created': datetime.datetime(2020, 6, 10, 7, 20, 26, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 438821098, 'comment_body': 'My opinion is to keep the test here.', 'comment_created': datetime.datetime(2020, 6, 11, 14, 18, 6, tzinfo=datetime.timezone.utc), 'commenter': 'soutaro', 'type': 'User'}]","[{'commit_sha': '9905383ada5ed1fd69abf10c6f8750231013f41f', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+425424411,Add some type mappings,"This adds some type mappings that needed for real Rails apps.
+
+* `:float` => `""Float""`
+* `:binary` => `""String""`",True,12,https://api.github.com/repos/pocke/rbs_rails/pulls/12,https://github.com/pocke/rbs_rails/pull/12,closed,3,1,1,1,0,0,0,0,[],2020-05-30 06:39:57+00:00,2020-05-30 06:58:39+00:00,1122.0,0:18:42,[],"[{'commit_sha': '3f7831794e9f43cb91c3ea901332244fbc566522', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+441775479,Add type IPAddr (inet),"Though it is a PostgreSQL-dependent feature, `inet` was needed to type Mastodon.
+https://github.com/tootsuite/mastodon
+https://github.com/tootsuite/mastodon/blob/ce9ae9aa50/db/schema.rb#L705",True,28,https://api.github.com/repos/pocke/rbs_rails/pulls/28,https://github.com/pocke/rbs_rails/pull/28,closed,2,0,1,1,3,0,0,0,[],2020-06-30 04:30:33+00:00,2020-06-30 07:56:25+00:00,12352.0,3:25:52,[],"[{'commit_sha': 'e21c403d60c115ea1a4bb333a88d50797a327f01', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+441780616,Add a signature of `last` method for AR,Add a signature of the `last` method as the same as `first`.,True,29,https://api.github.com/repos/pocke/rbs_rails/pulls/29,https://github.com/pocke/rbs_rails/pull/29,closed,4,0,1,1,0,0,0,0,[],2020-06-30 04:50:36+00:00,2020-06-30 05:49:53+00:00,3557.0,0:59:17,[],"[{'commit_sha': '0f4a86fe847cf5bbe7b71d9ed6619d5b6363957d', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+442381450,Add a signature of `Rails.env`,"Just add a signature.
+
+(IMHO, Typing `ActiveSupport::StringInquirer` like `Rails.env.test?` is a really hard thing. But it's another story :)",True,30,https://api.github.com/repos/pocke/rbs_rails/pulls/30,https://github.com/pocke/rbs_rails/pull/30,closed,1,0,1,1,1,0,0,0,[],2020-07-01 01:10:16+00:00,2020-07-01 09:30:44+00:00,30028.0,8:20:28,[],"[{'commit_sha': '583957286c825155dc01690b8526a75b8a71a81f', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+445892339,Generate additional signatures for auto-generated AR methods,"AR automatically creates some additional methods which correspond to DB columns.
+
+* `ActiveRecord::Base` includes [`ActiveModel::Dirty`](https://api.rubyonrails.org/classes/ActiveModel/Dirty.html) 
+  * We can use some auto-generated methods like `foo_changed?` or `foo_will_change!` for column `foo`
+* `bar?` is also generated for `:boolean` column `bar`
+
+It would be an advantage to developers if RBS Rails generated signatures for those auto-generated methods.
+
+I tried `steep check` with [newly-generated signatures](https://github.com/tadd/mastodon/commit/e9e92889a15e3bce05775ff3bab914240139632c). It passed without syntactic errors.",True,32,https://api.github.com/repos/pocke/rbs_rails/pulls/32,https://github.com/pocke/rbs_rails/pull/32,closed,22,1,2,1,0,0,0,0,[],2020-07-08 03:15:29+00:00,2020-07-11 11:15:49+00:00,288020.0,"3 days, 8:00:20",[],"[{'commit_sha': '2bcd5adcfc6aeec92ca885fd517952d254431d71', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+458153299,Earlier shutdown with interruption while `steep watch`,"When I run `steep watch` by mistake, it took a long time to stop the steep process. This PR tries to make it shorter.
+
+## Current Status of `master`
+
+For example, if I run `steep watch` in a large project directory like [Mastodon](https://github.com/tootsuite/mastodon), it takes about **40 seconds** currently to stop the watching process with `Ctrl+C`:
+
+```sh
+$ time bundle exec steep --log-level=fatal watch app/models/
+[deprecation warnings omitted]
+👀 Watching directories, Ctrl-C to stop.
+^CShutting down workers... # I typed Ctrl+C immediately after 👀 printed
+
+real	0m40.593s
+user	0m48.878s
+sys	0m1.637s
+```
+
+## After PR Applied
+
+It takes only **4 seconds** if this PR applied.
+
+```sh
+$ time bundle exec steep --log-level=error watch app/models/
+[deprecation warnings omitted]
+👀 Watching directories, Ctrl-C to stop.
+^CShutting down workers...
+
+real	0m4.045s
+user	0m6.723s
+sys	0m1.438s
+```
+",True,173,https://api.github.com/repos/soutaro/steep/pulls/173,https://github.com/soutaro/steep/pull/173,closed,7,4,2,1,3,3,0,0,[],2020-07-29 02:22:27+00:00,2020-08-31 14:16:08+00:00,2894021.0,"33 days, 11:53:41","[{'comment_id': 462001700, 'comment_body': 'Currently, if the running process was interrupted, `shutdown` and `exit` messages are sent.\r\n\r\nI added to sleep for a while then interrupt the master worker because sending messages does not mean worker processes stop immediately.   `master.interrupt` yields all child worker processes are stopped soon.', 'comment_created': datetime.datetime(2020, 7, 29, 2, 31, 47, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 462002953, 'comment_body': 'Worker processes can be stopped earlier by sending signals.\r\n\r\nIn my environment, SIGINT was not effective sometimes. Because of that, I added some lines to send a signal again with SIGTERM.', 'comment_created': datetime.datetime(2020, 7, 29, 2, 36, 45, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}, {'comment_id': 465102505, 'comment_body': 'After `Interrupt`, wait for `main_thread` again with timeout value.\r\nIf the timeout was occured, `master.intterupt` was called because  `Thread#join` returns `nil`.', 'comment_created': datetime.datetime(2020, 8, 4, 14, 40, 48, tzinfo=datetime.timezone.utc), 'commenter': 'tadd', 'type': 'User'}]","[{'commit_sha': 'e61949d7d454ef9e44dcec53ebb0585edd2a5539', 'committer_username': 'tadd', 'committer_name': 'Tadashi Saito', 'committer_email': 'tad.a.digger@gmail.com', 'commit_date': datetime.datetime(2010, 4, 14, 10, 36, 22, tzinfo=datetime.timezone.utc)}]",Tadashi Saito,243698,tad.a.digger@gmail.com,User,,73,,48,55
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+2888246,rubyci,ruby/rubyci,Ruby,24,31,30,17,1561,1,2,1,"[{'id': 438397895, 'number': 196, 'closed': datetime.datetime(2020, 7, 28, 0, 47, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 23, 8, 11, 55, tzinfo=datetime.timezone.utc), 'time_taken': 2997351.0, 'time_delta': '34 days, 16:35:51', 'additions': 4, 'deletions': 2, 'state': 'closed'}]"
+174796313,rbs,ruby/rbs,Ruby,207,1930,52,124,4851,148,20,49,"[{'id': 487367140, 'number': 396, 'closed': datetime.datetime(2020, 9, 28, 13, 16, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 15, 15, 10, 33, tzinfo=datetime.timezone.utc), 'time_taken': 1116357.0, 'time_delta': '12 days, 22:05:57', 'additions': 20, 'deletions': 12, 'state': 'closed'}, {'id': 432237675, 'number': 302, 'closed': datetime.datetime(2020, 6, 13, 12, 29, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 10, 6, 43, 31, tzinfo=datetime.timezone.utc), 'time_taken': 279982.0, 'time_delta': '3 days, 5:46:22', 'additions': 49, 'deletions': 0, 'state': 'closed'}, {'id': 431504671, 'number': 300, 'closed': datetime.datetime(2020, 6, 10, 1, 4, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 9, 2, 54, 47, tzinfo=datetime.timezone.utc), 'time_taken': 79798.0, 'time_delta': '22:09:58', 'additions': 32, 'deletions': 32, 'state': 'closed'}, {'id': 431489996, 'number': 299, 'closed': datetime.datetime(2020, 6, 10, 5, 9, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 9, 2, 6, 24, tzinfo=datetime.timezone.utc), 'time_taken': 97385.0, 'time_delta': '1 day, 3:03:05', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 425423878, 'number': 294, 'closed': datetime.datetime(2020, 6, 1, 1, 39, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 30, 6, 34, 1, tzinfo=datetime.timezone.utc), 'time_taken': 155125.0, 'time_delta': '1 day, 19:05:25', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"
+241420790,rbs_rails,pocke/rbs_rails,Ruby,31,280,10,16,542,31,10,16,"[{'id': 445892339, 'number': 32, 'closed': datetime.datetime(2020, 7, 11, 11, 15, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 8, 3, 15, 29, tzinfo=datetime.timezone.utc), 'time_taken': 288020.0, 'time_delta': '3 days, 8:00:20', 'additions': 22, 'deletions': 1, 'state': 'closed'}, {'id': 442381450, 'number': 30, 'closed': datetime.datetime(2020, 7, 1, 9, 30, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 1, 1, 10, 16, tzinfo=datetime.timezone.utc), 'time_taken': 30028.0, 'time_delta': '8:20:28', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 441780616, 'number': 29, 'closed': datetime.datetime(2020, 6, 30, 5, 49, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 30, 4, 50, 36, tzinfo=datetime.timezone.utc), 'time_taken': 3557.0, 'time_delta': '0:59:17', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 441775479, 'number': 28, 'closed': datetime.datetime(2020, 6, 30, 7, 56, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 30, 4, 30, 33, tzinfo=datetime.timezone.utc), 'time_taken': 12352.0, 'time_delta': '3:25:52', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 425424411, 'number': 12, 'closed': datetime.datetime(2020, 5, 30, 6, 58, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 30, 6, 39, 57, tzinfo=datetime.timezone.utc), 'time_taken': 1122.0, 'time_delta': '0:18:42', 'additions': 3, 'deletions': 1, 'state': 'closed'}]"
+86352893,steep,soutaro/steep,Ruby,86,1346,26,46,3154,120,13,12,"[{'id': 458153299, 'number': 173, 'closed': datetime.datetime(2020, 8, 31, 14, 16, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 29, 2, 22, 27, tzinfo=datetime.timezone.utc), 'time_taken': 2894021.0, 'time_delta': '33 days, 11:53:41', 'additions': 7, 'deletions': 4, 'state': 'closed'}]"

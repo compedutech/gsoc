@@ -1,0 +1,315 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+454592806,Change checks to distinct methods & rename variables,"This commit contains
+- Refactored checks into individual methods,
+    - _check_no_cleaning_of_buildroot
+    - _check_no_buildroot_tag
+    - _check_no_s_section
+    - _check_more_than_one_s_section
+    - _check_lib_package_without_mklibname
+    - _check_descript_without_disabling_depgen
+    - _check_patch_fuzz_is_changed
+    - _check_mixed_use_of_space_and_tabs
+    - _check_if_arch_applied_patch
+    - _check_patch_not_applied
+    - _check_specfile_error
+    - _check_invalid_url
+- Renamed variables in SpecCheck snake-case-naming style
+    - r -> rpm_tag
+    - ts -> transaction_set
+    - hashPos -> hash_pos
+    - e -> deptoken
+    - cfgPos -> cfg_pos",True,446,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/446,https://github.com/rpm-software-management/rpmlint/pull/446,closed,105,60,1,1,3,0,0,0,[],2020-07-21 15:47:04+00:00,2020-07-22 09:14:45+00:00,62861.0,17:27:41,[],"[{'commit_sha': 'fd4b69d104412ec0b857d450b72b73f57caadd7a', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+463220271,Add tests in test_tags & modify TagsCheck.toml,"This commit contains tests for checks,
+- description-line-too-long
+- description-shorter-than-summary
+- invalid-dependency
+- invalid-url
+- invalid-version
+- name-repeated-in-summary
+- no-description-tag
+- obsolete-not-provided
+- self-obsoletion
+- summary-ended-with-dot
+- summary-has-leading-spaces
+- summary-not-capitalized
+- summary-too-long
+- tag-in-description
+- unexpanded-macro
+- unreasonable-epoch",True,450,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/450,https://github.com/rpm-software-management/rpmlint/pull/450,closed,198,0,11,1,1,0,0,0,[],2020-08-05 08:07:28+00:00,2020-08-16 13:41:22+00:00,970434.0,"11 days, 5:33:54",[],"[{'commit_sha': 'aafcc1414fef003ac158b34af0f16fec72ce8e99', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+467158931, Modify no-changelogname-tag toml,"This commit contains,
+- Modified no-changelogname-tag toml
+
+- Reason:
+    The check is triggered when either the %changelog is empty or
+    %changelog tag is not present.
+
+- Tested with:
+    (error in stdout)
+        - invalid-version-0pre-3.1.x86_64.rpm (no %changelog section)
+        - invalid-dependency-0-0.x86_64.rpm (empty %changelog section)
+    (error not in stdout)
+        - hello-2.0-1.x86_64-signed.rpm (non-empty %changelog section)",True,452,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/452,https://github.com/rpm-software-management/rpmlint/pull/452,closed,2,2,1,2,2,0,0,0,[],2020-08-13 05:34:34+00:00,2020-08-17 05:43:05+00:00,346111.0,"4 days, 0:08:31",[],"[{'commit_sha': 'e0de9ace633a62cb0080e15740851c608f3a3919', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f5a965b6d50faeaeff153bd2ecad3f6a6529abba', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+467405255,Fix non-coherent-filename check in TagsCheck.py,"This commit contains,
+- Fixed non-coherent-filename check,
+    - Path(pkg.filename).parent -> Path(pkg.filename).name
+    - Detailed explanation: https://gist.github.com/thisisshub/7423c6a71d75f191ef6b5cf363f5d231",True,453,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/453,https://github.com/rpm-software-management/rpmlint/pull/453,closed,1,1,1,1,0,0,0,0,[],2020-08-13 14:00:44+00:00,2020-08-16 13:40:35+00:00,257991.0,"2 days, 23:39:51",[],"[{'commit_sha': 'aa6e900380f4e0e1087b85f72d6ec0a505c79992', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+471382939,Refactor TagsCheck.py,"This commit contains,
+- Refactor checks to individual methods
+    - Convert %s strings to {}.format methods
+    - Rename variables to snake-case-naming style
+- Modify Docstrings and methods in TagsCheck.py
+- Drop checks no-packager, invalid-packager
+     - Modify methods and Docstrings
+",True,457,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/457,https://github.com/rpm-software-management/rpmlint/pull/457,closed,420,154,1,3,14,1,0,0,[],2020-08-21 05:14:55+00:00,2020-09-14 12:17:45+00:00,2098970.0,"24 days, 7:02:50","[{'comment_id': 474526831, 'comment_body': '`confifdefaults.toml` -> `configdefaults.toml`', 'comment_created': datetime.datetime(2020, 8, 21, 8, 36, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Conan-Kudo', 'type': 'User'}]","[{'commit_sha': '0bbb4dee7c5bfb29fb372466968baa1677e4987e', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3591b3b599e36aabc29b9b65cd4af6ca649b637', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a038c13f35424a687e43775abb79a2dd3a101722', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+474681974, Add tests in test_tags & description in TagsCheck.toml,"This commit contains,
+- Add test in test_tags.py
+    - test_check_requires_on_release
+    - test_check_invalid_license
+    - test_package_not_std_release_extension
+    - test_check_non_standard_group
+    - test_package_dev_dependency
+- Add description of non-standard-group check in
+TagsCheck.toml
+- Add packages in test/binary/",True,460,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/460,https://github.com/rpm-software-management/rpmlint/pull/460,closed,95,1,7,1,1,0,0,0,[],2020-08-27 12:56:08+00:00,2020-09-14 12:18:27+00:00,1552939.0,"17 days, 23:22:19",[],"[{'commit_sha': '99d902d413542075ada5ea49d7868a079140a25b', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+437685309,"Add test in test_speccheck, modified SpecCheck.py","This commit contains,
+1. Refactored check in SpecCheck.py
+
+2. Source-rpms in test/source
+
+3. Tests in test_speccheck which are named with test_check_* and
+    their subsequent test_check_*_not_found/applied listed as,
+
+ - test_check_no_spec_file
+- test_check_no_spec_file_not_applied
+- test_check_non_utf8_spec_file
+- test_check_non_utf8_spec_file_not_applied
+- test_check_invalid_spec_name
+- test_check_invalid_spec_name_not_applied
+- test_check_non_break_space
+- test_check_non_break_space_not_applied
+- test_check_rpm_buildroot_usage_under_prep
+- test_check_rpm_buildroot_usage_under_build
+- test_check_rpm_buildroot_usage_not_applied
+- test_check_make_check_outside_check_section
+- test_check_make_check_inside_check_section
+- test_check_make_check_outside_not_applied
+- test_check_setup_not_quiet
+- test_check_setup_is_quiet
+- test_check_setup_not_quiet_not_applied
+- test_check_setup_not_in_prep
+- test_check_setup_inside_prep
+- test_check_setup_not_in_prep_not_applied
+- test_check_autopatch_not_in_prep
+- test_check_autopatch_in_prep
+- test_check_autopatch_not_in_prep_not_applied
+- test_check_autosetup_not_in_prep
+- test_check_autosetup_inside_prep
+- test_check_autosetup_not_in_prep_not_applied
+- test_check_use_of_rpm_source_dir
+- test_check_use_of_rsd_not_applied
+- test_check_configure_without_libdir_spec
+- test_check_cwls_not_applied
+- test_check_hardcoded_library_path
+- test_check_hclp_not_applied
+- test_check_obsolete_tag
+- test_check_obsolete_tag_not_applied
+- test_check_hardcoded_path_in_buildroot_tag
+- test_check_hpbt_not_applied
+- test_check_buildarch_instead_of_exclusivearch_tag
+- test_check_biet_not_applied
+- test_check_hardcoded_packager_tag
+- test_check_hardcoded_packager_tag_not_applied
+- test_check_hardcoded_prefix_tag
+- test_check_hardcoded_prefix_tag_not_applied
+- test_check_buildprereq_use
+- test_check_buildprereq_use_not_applied
+- test_check_bsisr
+- test_check_bsisr_not_applied
+- test_check_forbidden_controlchar_found
+- test_check_forbidden_controlchar_not_found
+- test_check_coid
+- test_check_coid_found
+- test_check_coid_is_found
+- test_check_coid_is_found_with_single_space
+- test_check_coid_is_found_with_double_space
+- test_check_unversioned_explicit_version
+- test_check_unversioned_explicit_version_not_found
+- test_check_uev_not_applied
+- test_check_unversioned_explicit_obsoletes
+- test_check_unversioned_explicit_obsoletes_not_found
+- test_check_ueo_not_found
+- test_check_macro_in_changelog
+- test_check_macro_in_changelog_not_found
+- test_check_macro_in_changelog_not_applied
+- test_check_libdir_macro_in_noarch_package
+- test_check_lmnp_not_applied
+- test_check_deprecated_grep
+- test_check_deprecated_grep_not_found
+- test_check_deprecated_grep_not_applied
+- test_check_macro_in_comment
+- test_check_macro_in_comment_not_found
+- test_check_macro_in_comment_not_applied
+- test_check_no_build_root_tag
+- test_check_no_build_root_tag_not_applied
+- test_check_no_essential_section
+- test_check_no_essential_section_not_applied
+- test_check_more_than_one_changelog_section
+- test_check_mtocs_not_applied
+- test_check_lib_package_without_mklibname
+- test_check_lpwm_not_applied
+- test_check_depscript_without_disabling_depgen
+- test_check_depscript_without_disabling_depgen_not_found
+- test_check_dwdd_not_applied
+- test_check_mixed_use_of_spaces_and_tabs
+- test_check_mixed_use_of_spaces_and_tabs_not_applied
+- test_check_ifarch_applied_patch
+- test_check_ifarch_applied_not_enforced
+- test_check_patch_not_applied
+- test_check_patch_not_found
+- test_check_patch_not_applied_not_enforced
+- test_check_invalid_url
+- test_check_invalid_url_not_applied
+
+4. Specfile in test/spec listed as,
+
+- %autopatch-not-in-prep.spec
+- %autosetup-not-in-prep.spec
+- broken-syntax-in-scriptlet-requires.spec
+- buildarch-instead-of-exclusivearch-tag.spec
+- buildprereq-use.spec
+- comparison-operator-in-deptoken.spec
+- configure-without-libdir-spec.spec
+- deprecated-grep.spec
+- depscript-without-disabling-depgen.spec
+- forbidden-controlchar-found.spec
+- hardcoded-library-path.spec
+- hardcoded-packager-tag.spec
+- hardcoded-path-in-buildroot-tag.spec
+- hardcoded-prefix-tag.spec
+- %ifarch-applied-patch.spec
+- invalid-url.spec
+- libdir-macro-in-noarch-package.spec
+- lib-package-without-%mklibname.spec
+- macro-in-changelog.spec
+- macro-in-comment.spec
+- make-check-outside-check-section.spec
+- mixed-use-of-spaces-and-tabs.spec
+- more-than-one-%changelog.spec
+- no-buildroot-tag.spec
+- non-break-space.spec
+- non-standard-group.spec
+- non-utf8-spec-file.spec
+- no-%%%s-section.spec
+- obsolete-tag.spec
+- rpm-buildroot-usage.spec
+- setup-not-in-prep.spec
+- setup-not-quiet.spec
+- SpecCheck2.spec
+- SpecCheck3.spec
+- SpecCheck4.spec
+- SpecCheck.spec
+- SpecCheckTemp.spec
+- unversioned-explicit-obsoletes.spec
+- unversioned-explicit-version.spec
+- use-of-RPM-SOURCE-DIR.spec",True,436,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/436,https://github.com/rpm-software-management/rpmlint/pull/436,closed,2036,23,42,4,7,0,0,0,[],2020-06-22 05:11:42+00:00,2020-07-02 08:14:32+00:00,874970.0,"10 days, 3:02:50",[],"[{'commit_sha': 'f9d6dd4c7fb019f5f66a74abd910aec5ee353f69', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1555f7455fb104a3a9c72c91d5a6db52de3a5ae9', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3cb4fa03b57019259aa3c9760325a64f07b88b7', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1b740f400f2ef2a1191101fde33fce77163e6a1', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+446992118,Refactor checks in SpecCheck & add test in test_speccheck,"This commit contains,
+- Refactored checks to indviual methods in SpecCheck
+    - _check_no_cleaning_of_buildroot
+    - _check_no_buildroot_tag
+    - _check_no_s_section
+    - _check_more_than_one_s_section
+    - _check_lib_package_without_mklibname
+    - _check_descript_without_disabling_depgen
+    - _check_patch_fuzz_is_changed
+    - _check_mixed_use_of_space_and_tabs
+    - _check_if_arch_applied_patch
+    - _check_patch_not_applied
+    - _check_specfile_error
+    - _check_invalid_url
+- Renamed variables to snake-case-naming style
+    - r -> rpm_tag
+    - ts -> transaction_set
+    - hashPos -> hash_pos
+    - e -> deptoken
+    - cfgPos -> cfg_pos
+ - Add test in test_speccheck
+    - test_check_prereq_use
+    - test_check_patch_fuzz_is_changed",False,441,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/441,https://github.com/rpm-software-management/rpmlint/pull/441,closed,261,94,9,4,11,7,0,0,[],2020-07-09 17:19:17+00:00,2020-07-21 14:34:48+00:00,1026931.0,"11 days, 21:15:31","[{'comment_id': 452798924, 'comment_body': ""f'Conflicts: {deptoken}'\r\n\r\nThe above is much more readable."", 'comment_created': datetime.datetime(2020, 7, 10, 11, 59, 21, tzinfo=datetime.timezone.utc), 'commenter': 'scarabeusiv', 'type': 'User'}, {'comment_id': 452799171, 'comment_body': 'Why not convert all the forbiden_chars calls into one function as it is almost the same every time.', 'comment_created': datetime.datetime(2020, 7, 10, 11, 59, 55, tzinfo=datetime.timezone.utc), 'commenter': 'scarabeusiv', 'type': 'User'}, {'comment_id': 452799505, 'comment_body': 'use format instead of % syntax if you are already rewritting the line.', 'comment_created': datetime.datetime(2020, 7, 10, 12, 0, 38, tzinfo=datetime.timezone.utc), 'commenter': 'scarabeusiv', 'type': 'User'}, {'comment_id': 453029909, 'comment_body': 'Thanks for the suggestion, I made the necessary changes in the most recent commit. \r\nCheck it out [here](https://github.com/rpm-software-management/rpmlint/pull/441/commits/e5eec10c43042c34624743b140792d7c5900e992)', 'comment_created': datetime.datetime(2020, 7, 10, 19, 8, 45, tzinfo=datetime.timezone.utc), 'commenter': 'thisisshub', 'type': 'User'}, {'comment_id': 453032064, 'comment_body': 'acknowledged in the most recent commit [here](https://github.com/thisisshub/rpmlint/commit/153d7211e6afabe5bb938012cf99a60cc2897e21)\r\n', 'comment_created': datetime.datetime(2020, 7, 10, 19, 13, 39, tzinfo=datetime.timezone.utc), 'commenter': 'thisisshub', 'type': 'User'}, {'comment_id': 453035425, 'comment_body': 'If you notice,\r\nall of the `forbidden-controlchar-found` are inside the single `for loop`\r\nhttps://github.com/rpm-software-management/rpmlint/blob/e485305ad01f5d480ea9d9d18937ea2e32ae726e/rpmlint/checks/SpecCheck.py#L215\r\n\r\nSince everything (checks are intertwined or depend on each other) is basically nested within this particular loop. Breaking this cycle seems not an ""efficient"" step as of now as it could lead to breaking of unnecessary checks. \r\nAlthough I do plan to refactor this loop properly later.', 'comment_created': datetime.datetime(2020, 7, 10, 19, 20, 53, tzinfo=datetime.timezone.utc), 'commenter': 'thisisshub', 'type': 'User'}, {'comment_id': 456389120, 'comment_body': 'From line https://github.com/rpm-software-management/rpmlint/blob/e485305ad01f5d480ea9d9d18937ea2e32ae726e/rpmlint/checks/SpecCheck.py#L406 to 466 those are exactly same operations just with different variable to check, thats what I ment.\r\nYou could reduce it with some dict/loop.', 'comment_created': datetime.datetime(2020, 7, 17, 11, 40, 47, tzinfo=datetime.timezone.utc), 'commenter': 'scarabeusiv', 'type': 'User'}]","[{'commit_sha': 'b0ee1b6caa539071ba4b44f784babe0c9dea015a', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '153d7211e6afabe5bb938012cf99a60cc2897e21', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85a1ec2b5add140a2a8401899cefa1873a615fd6', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5eec10c43042c34624743b140792d7c5900e992', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+454566740,Add tests in test_speccheck,"This commit contains tests added in the test_speccheck,
+- test_check_prereq_use
+- test_check_patch_fuzz_is_changed",True,445,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/445,https://github.com/rpm-software-management/rpmlint/pull/445,closed,128,2,3,1,2,0,0,0,[],2020-07-21 15:04:54+00:00,2020-07-22 06:23:39+00:00,55125.0,15:18:45,[],"[{'commit_sha': '03262b62a87b08b9fbf33995922ea1c071514922', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+454592806,Change checks to distinct methods & rename variables,"This commit contains
+- Refactored checks into individual methods,
+    - _check_no_cleaning_of_buildroot
+    - _check_no_buildroot_tag
+    - _check_no_s_section
+    - _check_more_than_one_s_section
+    - _check_lib_package_without_mklibname
+    - _check_descript_without_disabling_depgen
+    - _check_patch_fuzz_is_changed
+    - _check_mixed_use_of_space_and_tabs
+    - _check_if_arch_applied_patch
+    - _check_patch_not_applied
+    - _check_specfile_error
+    - _check_invalid_url
+- Renamed variables in SpecCheck snake-case-naming style
+    - r -> rpm_tag
+    - ts -> transaction_set
+    - hashPos -> hash_pos
+    - e -> deptoken
+    - cfgPos -> cfg_pos",True,446,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/446,https://github.com/rpm-software-management/rpmlint/pull/446,closed,105,60,1,1,3,0,0,0,[],2020-07-21 15:47:04+00:00,2020-07-22 09:14:45+00:00,62861.0,17:27:41,[],"[{'commit_sha': 'fd4b69d104412ec0b857d450b72b73f57caadd7a', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+463220271,Add tests in test_tags & modify TagsCheck.toml,"This commit contains tests for checks,
+- description-line-too-long
+- description-shorter-than-summary
+- invalid-dependency
+- invalid-url
+- invalid-version
+- name-repeated-in-summary
+- no-description-tag
+- obsolete-not-provided
+- self-obsoletion
+- summary-ended-with-dot
+- summary-has-leading-spaces
+- summary-not-capitalized
+- summary-too-long
+- tag-in-description
+- unexpanded-macro
+- unreasonable-epoch",True,450,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/450,https://github.com/rpm-software-management/rpmlint/pull/450,closed,198,0,11,1,1,0,0,0,[],2020-08-05 08:07:28+00:00,2020-08-16 13:41:22+00:00,970434.0,"11 days, 5:33:54",[],"[{'commit_sha': 'aafcc1414fef003ac158b34af0f16fec72ce8e99', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+467158931, Modify no-changelogname-tag toml,"This commit contains,
+- Modified no-changelogname-tag toml
+
+- Reason:
+    The check is triggered when either the %changelog is empty or
+    %changelog tag is not present.
+
+- Tested with:
+    (error in stdout)
+        - invalid-version-0pre-3.1.x86_64.rpm (no %changelog section)
+        - invalid-dependency-0-0.x86_64.rpm (empty %changelog section)
+    (error not in stdout)
+        - hello-2.0-1.x86_64-signed.rpm (non-empty %changelog section)",True,452,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/452,https://github.com/rpm-software-management/rpmlint/pull/452,closed,2,2,1,2,2,0,0,0,[],2020-08-13 05:34:34+00:00,2020-08-17 05:43:05+00:00,346111.0,"4 days, 0:08:31",[],"[{'commit_sha': 'e0de9ace633a62cb0080e15740851c608f3a3919', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f5a965b6d50faeaeff153bd2ecad3f6a6529abba', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+467405255,Fix non-coherent-filename check in TagsCheck.py,"This commit contains,
+- Fixed non-coherent-filename check,
+    - Path(pkg.filename).parent -> Path(pkg.filename).name
+    - Detailed explanation: https://gist.github.com/thisisshub/7423c6a71d75f191ef6b5cf363f5d231",True,453,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/453,https://github.com/rpm-software-management/rpmlint/pull/453,closed,1,1,1,1,0,0,0,0,[],2020-08-13 14:00:44+00:00,2020-08-16 13:40:35+00:00,257991.0,"2 days, 23:39:51",[],"[{'commit_sha': 'aa6e900380f4e0e1087b85f72d6ec0a505c79992', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+471382939,Refactor TagsCheck.py,"This commit contains,
+- Refactor checks to individual methods
+    - Convert %s strings to {}.format methods
+    - Rename variables to snake-case-naming style
+- Modify Docstrings and methods in TagsCheck.py
+- Drop checks no-packager, invalid-packager
+     - Modify methods and Docstrings
+",True,457,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/457,https://github.com/rpm-software-management/rpmlint/pull/457,closed,420,154,1,3,14,1,0,0,[],2020-08-21 05:14:55+00:00,2020-09-14 12:17:45+00:00,2098970.0,"24 days, 7:02:50","[{'comment_id': 474526831, 'comment_body': '`confifdefaults.toml` -> `configdefaults.toml`', 'comment_created': datetime.datetime(2020, 8, 21, 8, 36, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Conan-Kudo', 'type': 'User'}]","[{'commit_sha': '0bbb4dee7c5bfb29fb372466968baa1677e4987e', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3591b3b599e36aabc29b9b65cd4af6ca649b637', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a038c13f35424a687e43775abb79a2dd3a101722', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+474681974, Add tests in test_tags & description in TagsCheck.toml,"This commit contains,
+- Add test in test_tags.py
+    - test_check_requires_on_release
+    - test_check_invalid_license
+    - test_package_not_std_release_extension
+    - test_check_non_standard_group
+    - test_package_dev_dependency
+- Add description of non-standard-group check in
+TagsCheck.toml
+- Add packages in test/binary/",True,460,https://api.github.com/repos/rpm-software-management/rpmlint/pulls/460,https://github.com/rpm-software-management/rpmlint/pull/460,closed,95,1,7,1,1,0,0,0,[],2020-08-27 12:56:08+00:00,2020-09-14 12:18:27+00:00,1552939.0,"17 days, 23:22:19",[],"[{'commit_sha': '99d902d413542075ada5ea49d7868a079140a25b', 'committer_username': 'thisisshub', 'committer_name': 'Shubhashish Dixit', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 9, 4, 12, 55, tzinfo=datetime.timezone.utc)}]",Shubhashish Dixit,44888010,,User,,82,,2,60
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+38818937,rpmlint,rpm-software-management/rpmlint,Python,118,129,17,94,3513,84,7,7,"[{'id': 474681974, 'number': 460, 'closed': datetime.datetime(2020, 9, 14, 12, 18, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 27, 12, 56, 8, tzinfo=datetime.timezone.utc), 'time_taken': 1552939.0, 'time_delta': '17 days, 23:22:19', 'additions': 95, 'deletions': 1, 'state': 'closed'}, {'id': 471382939, 'number': 457, 'closed': datetime.datetime(2020, 9, 14, 12, 17, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 21, 5, 14, 55, tzinfo=datetime.timezone.utc), 'time_taken': 2098970.0, 'time_delta': '24 days, 7:02:50', 'additions': 420, 'deletions': 154, 'state': 'closed'}, {'id': 467405255, 'number': 453, 'closed': datetime.datetime(2020, 8, 16, 13, 40, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 13, 14, 0, 44, tzinfo=datetime.timezone.utc), 'time_taken': 257991.0, 'time_delta': '2 days, 23:39:51', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 467158931, 'number': 452, 'closed': datetime.datetime(2020, 8, 17, 5, 43, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 13, 5, 34, 34, tzinfo=datetime.timezone.utc), 'time_taken': 346111.0, 'time_delta': '4 days, 0:08:31', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 463220271, 'number': 450, 'closed': datetime.datetime(2020, 8, 16, 13, 41, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 8, 7, 28, tzinfo=datetime.timezone.utc), 'time_taken': 970434.0, 'time_delta': '11 days, 5:33:54', 'additions': 198, 'deletions': 0, 'state': 'closed'}, {'id': 454592806, 'number': 446, 'closed': datetime.datetime(2020, 7, 22, 9, 14, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 21, 15, 47, 4, tzinfo=datetime.timezone.utc), 'time_taken': 62861.0, 'time_delta': '17:27:41', 'additions': 105, 'deletions': 60, 'state': 'closed'}, {'id': 454566740, 'number': 445, 'closed': datetime.datetime(2020, 7, 22, 6, 23, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 21, 15, 4, 54, tzinfo=datetime.timezone.utc), 'time_taken': 55125.0, 'time_delta': '15:18:45', 'additions': 128, 'deletions': 2, 'state': 'closed'}, {'id': 446992118, 'number': 441, 'closed': datetime.datetime(2020, 7, 21, 14, 34, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 9, 17, 19, 17, tzinfo=datetime.timezone.utc), 'time_taken': 1026931.0, 'time_delta': '11 days, 21:15:31', 'additions': 261, 'deletions': 94, 'state': 'closed'}, {'id': 437685309, 'number': 436, 'closed': datetime.datetime(2020, 7, 2, 8, 14, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 5, 11, 42, tzinfo=datetime.timezone.utc), 'time_taken': 874970.0, 'time_delta': '10 days, 3:02:50', 'additions': 2036, 'deletions': 23, 'state': 'closed'}]"

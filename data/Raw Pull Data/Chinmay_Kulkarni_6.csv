@@ -1,0 +1,181 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+456797666,FINERACT-838 Added Swagger Codegen Support,"FINERACT-838
+
+## Description
+Integrated Swagger Codegen support for automatically generating client code from OpenAPI Specification
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1206,https://api.github.com/repos/apache/fineract/pulls/1206,https://github.com/apache/fineract/pull/1206,closed,62,0,4,9,6,10,0,0,[],2020-07-26 19:57:25+00:00,2020-08-01 13:08:11+00:00,493846.0,"5 days, 17:10:46","[{'comment_id': 460697195, 'comment_body': 'We shouldn\'t use ""org.mifos"" for Java package names that are code generated in an Apache project... how about making this e.g. org.apache.fineract.client?', 'comment_created': datetime.datetime(2020, 7, 27, 7, 30, 19, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 460707265, 'comment_body': 'Sorry about that! I missed it out. I\'ll change it to **org.apache.fineract.client**\r\n\r\nTo verify the changes:\r\n- ""modelPackage"": ""org.apache.fineract.client.models""\r\n- ""apiPackage"": ""org.apache.fineract.client.services""\r\n- ""invokerPackage"": ""org.apache.fineract.client""\r\n- ""groupId"": ""org.apache.fineract""\r\n- ""artifactId"": ""client""\r\n\r\nThis is how we want right?\r\n\r\n> could you put the description about how to use this which you provided above into the/README.md as part of this PR?\r\nYeah sure. I\'ll add this in the Readme.md', 'comment_created': datetime.datetime(2020, 7, 27, 7, 50, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Grandolf49', 'type': 'User'}, {'comment_id': 460725784, 'comment_body': '@vorburger Actually, I already added the description in the README.md. \r\nBut I can definitely create a new file, as you suggested, under `docs/developers/swagger/client.md` and link it with the main README.md', 'comment_created': datetime.datetime(2020, 7, 27, 8, 25, 4, tzinfo=datetime.timezone.utc), 'commenter': 'Grandolf49', 'type': 'User'}, {'comment_id': 460726953, 'comment_body': '```suggestion\r\nThe client code will be generated in the directory `build/swagger-code-fineract`.\r\n```', 'comment_created': datetime.datetime(2020, 7, 27, 8, 27, 4, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 460727300, 'comment_body': '```suggestion\r\n- Navigate to `build/swagger-code-fineract` directory (`cd`)\r\n```', 'comment_created': datetime.datetime(2020, 7, 27, 8, 27, 37, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 460727454, 'comment_body': '```suggestion\r\n- Run `/gradlew build`\r\n```', 'comment_created': datetime.datetime(2020, 7, 27, 8, 27, 54, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 460728456, 'comment_body': 'If you move it to a separate MD docs file, you could just ""inline"" your entire Gist? Better. Actually, perhaps even better you could link to the appropriate docs page of Swagger CodeGen where they document this? Assuming they have proper doc! :imp: That way, it stays up to date, as we\'ll upgrade the plugin in the future.', 'comment_created': datetime.datetime(2020, 7, 27, 8, 29, 37, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 460729842, 'comment_body': '```suggestion\r\n   ""artifactVersion"": ""1.4.0"",\r\n```', 'comment_created': datetime.datetime(2020, 7, 27, 8, 31, 48, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 460744830, 'comment_body': ""I spent a lot of time trying to find where they have documented these options. 😅 [This](https://github.com/swagger-api/swagger-codegen/issues/7795) thread was useful but just a workaround.\r\n\r\nI also came across [this](https://openapi-generator.tech/docs/generators/java) which seems like the official documentation from the OpenAPI Team. \r\n\r\nI think it's just better to move this to a separate doc. I'll put a link to this in the doc as you suggested"", 'comment_created': datetime.datetime(2020, 7, 27, 8, 56, 42, tzinfo=datetime.timezone.utc), 'commenter': 'Grandolf49', 'type': 'User'}, {'comment_id': 460769242, 'comment_body': ""@vorburger I have done the necessary changes and created a new client.md. I could also spot some minor corrections in the main readme.md file. So I have updated those too! I hope that's okay! 😅\r\n\r\nLet me know if I need to change anything else."", 'comment_created': datetime.datetime(2020, 7, 27, 9, 39, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Grandolf49', 'type': 'User'}]","[{'commit_sha': '7e75fca7eeefeb06cf3ed6727e7627b674f616ed', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e163af2a211738e63cb9aeb1c56a1715f978faf6', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '161452e8b4a179fb5d8f1ae1e55f105a092716e6', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aea4513bb896b08f34d2a8a307763dcfe4d686a9', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40681e66a6533389ddc7289639f2c5025f11f588', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '859597aeaa1a3edd6018251169a99df9b3c8456c', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d3e6e3759d28941d6aa036a9ed9dc8b2cdcc38d', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e1d5ece274aae3b11e30e5542d0d910acd9dd14', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '64683dd932ae9bff0a9bf3e0ae869340fc21bf0a', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+461276960,FINERACT-838 TravisCI Setup | Updated swagger-codegen-cli version,"## Description
+- Updated the `swagger-codegen-cli` version to `3.0.18` since all greater versions throw `Missing OpenApi File` error. https://github.com/swagger-api/swagger-codegen/issues/10157 . (A bug in swagger-codegen-cli)
+- Fixed Base URL in [fineract-input.yml](https://github.com/Grandolf49/fineract/blob/swagger-codegen/fineract-provider/config/swagger/fineract-input.yaml) for Swagger Codegen since build for generated code was failing due to incorrect Base URL.
+- Added ""Generate and Build"" commands in [.travis.yml](https://github.com/Grandolf49/fineract/blob/swagger-codegen/.travis.yml)
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1228,https://api.github.com/repos/apache/fineract/pulls/1228,https://github.com/apache/fineract/pull/1228,closed,8,3,3,6,2,3,0,0,[],2020-08-01 17:27:20+00:00,2020-08-02 15:48:44+00:00,80484.0,22:21:24,"[{'comment_id': 464088156, 'comment_body': 'This currently appears to be down? But even if it was up, I would much prefer this to use `fineract.dev` instead:\r\n\r\n```suggestion\r\n- url: https://demo.fineract.dev/fineract-provider/api/v1\r\n```\r\n\r\n@Grandolf49 see https://www.fineract.dev for background... OK for you?', 'comment_created': datetime.datetime(2020, 8, 2, 15, 3, 1, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 464089044, 'comment_body': '@Grandolf49 in the interest of moving forward with this, I\'ll add this to your branch by self-accepting this suggestion to your PR, and if the build still passes, I\'ll merge this. Please comment here if you disagree with changing this URL, and we can discuss it further. Whatever server we use server is IMHO ""wrong"" anyway - we should use the LOCAL server - otherwise this will never work for new APIs being added... I\'ll comment about this on  FINERACT-838.', 'comment_created': datetime.datetime(2020, 8, 2, 15, 11, 19, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 464200768, 'comment_body': 'Yeah sure! This works for me!', 'comment_created': datetime.datetime(2020, 8, 3, 5, 27, 28, tzinfo=datetime.timezone.utc), 'commenter': 'Grandolf49', 'type': 'User'}]","[{'commit_sha': '8720b811e033fadfdfdd548701f0ee36359d44f1', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dfac83c5d7135b04f952925e0f600696ff28c966', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '512b0aac863bfdf1f46857b2cd39addc1eebd189', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8621f3eccd7c896b9672d6a8c6958101ac898d93', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c1cf3c50e889dbd37e2b8f7ae42da07f7fe2e5a9', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '84c522aaead1bd8174905acb30bd56cc7ef38256', 'committer_username': 'vorburger', 'committer_name': 'Michael Vorburger', 'committer_email': 'mike@vorburger.ch', 'commit_date': datetime.datetime(2010, 6, 7, 8, 33, 56, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+472043303,FINERACT-1105 Swagger now generates a valid spec file,"## Description
+FINERACT-1105
+
+It is essential that Swagger Gradle Plugin generates a valid spec file so that Swagger Codegen is able to generate a valid client library. Earlier, swagger was generating an invalid spec file due to some missing elements in the source code. This PR fixes the issue. Some APIs were missing Path Parameter. So I have added it in the appropriate methods. Still exploring if this can be avoided.
+
+This is an example of a valid spec file generated by swagger: [fineract-valid-spec.yaml](https://gist.github.com/Grandolf49/5f97ac65f689a73eaa4b386b1d01b51f) 
+Test it using https://validator.swagger.io/
+
+This is the earlier spec file: [fineract.yaml](https://gist.github.com/Grandolf49/7101c0dd473b76f18ae3e801b1be4bb4)
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide",True,1270,https://api.github.com/repos/apache/fineract/pulls/1270,https://github.com/apache/fineract/pull/1270,closed,222,208,54,1,1,0,0,0,[],2020-08-22 21:42:51+00:00,2020-08-23 13:17:33+00:00,56082.0,15:34:42,[],"[{'commit_sha': 'b3aeaba6b7ed66b8faa9f28a327b86a9eb5eec8a', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+472362491,FINERACT-1101 Swagger Codegen build using Gradle,"## Description
+This PR addresses FINERACT-1101 issue. Following were the problems earlier:
+1. Library generated by `./gradlew generateSwaggerCode` was required to be build using `mvn package` only. If a user executed `./gradlew build`, the build used to fail saying `Could not determine java version from '11.0.8'.` The issue was with the gradle-wrapper of the project. This is resolved by adding the Mustache Template for the `gradle-wrapper.properties` file.
+
+2. Moreover, `mvn package` also failed due to an error in `maven-javadoc-plugin`. It was using the version `2.10.4` and was failing because of that. Version `3.2.0` worked correctly. This is resolved by adding the Mustache template for the `pom.xml` file
+
+3. To be able to use Mustache Templates, we needed `swagger-codegen-cli` version `3.0.21`. But if we used version `3.0.21` to generate swagger code, it would fail throwing an error `Missing OpenAPI File`. This was because the generated OpenAPI file was invalid. This was preventing to use the Mustache Templates. This is resolved in this [PR](https://github.com/apache/fineract/pull/1270).
+
+Updated the `client.md` file with necessary documentation
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1271,https://api.github.com/repos/apache/fineract/pulls/1271,https://github.com/apache/fineract/pull/1271,closed,391,6,6,4,4,2,0,0,[],2020-08-24 08:46:05+00:00,2020-08-25 21:52:59+00:00,133614.0,"1 day, 13:06:54","[{'comment_id': 476538887, 'comment_body': 'I think we usually just call it ""Apache Fineract"" (VS ""Fineract CN""), not ""1.x"" (I think).\r\n\r\n```suggestion\r\n   ""artifactDescription"": ""A Java and Retrofit2 based client library for Apache Fineract Platform"",\r\n```', 'comment_created': datetime.datetime(2020, 8, 25, 15, 28, 56, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}, {'comment_id': 476538927, 'comment_body': ""the use of a particular commit here was probably an oversight, and you meant to use `develop` here, like in line 29? Actually, I wonder if you couldn't just use a relative path (like `...../fineract-provider/...` you what I mean here?)\r\n\r\n```suggestion\r\nThe `resolve` task in [build.gradle](https://github.com/apache/fineract/blob/develop/fineract-provider/build.gradle#L212) file will generate the OpenAPI Spec File for the project. To make sure Swagger Codegen generates a correct library, it is important for the OpenAPI Spec file to be valid. Use [Swagger OpenAPI Validator](https://validator.swagger.io/) to validate the spec file.\r\n```"", 'comment_created': datetime.datetime(2020, 8, 25, 15, 29, tzinfo=datetime.timezone.utc), 'commenter': 'vorburger', 'type': 'User'}]","[{'commit_sha': '6886f1420c29a705a2e3afca471167fb758fd5d8', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb86d08e4ea97a9e1b1df04b63d5e75e9f452296', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1173d9f11bdca7248bbf4ed5199708bad6103a08', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea54a14e4de82803b90a71a6098372c11cf9f696', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+472442962,FINERACT-1105 Swagger generates valid Spec File,"## Description
+This is a backport PR of #1270 for adding the changes in Fineract `1.4.0` version 
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1272,https://api.github.com/repos/apache/fineract/pulls/1272,https://github.com/apache/fineract/pull/1272,closed,226,210,57,3,3,0,0,0,[],2020-08-24 11:10:05+00:00,2020-08-25 21:50:03+00:00,124798.0,"1 day, 10:39:58",[],"[{'commit_sha': '64a4ac464c564a4073ce69ed18672fe90adb6291', 'committer_username': 'renovate-bot', 'committer_name': 'Mend Renovate', 'committer_email': 'renovate@whitesourcesoftware.com', 'commit_date': datetime.datetime(2017, 1, 17, 16, 55, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '416d0a6ff8b8edb53099ac9da9a1b6ca2edee9ed', 'committer_username': 'ptuomola', 'committer_name': 'Petri Tuomola', 'committer_email': None, 'commit_date': datetime.datetime(2012, 9, 22, 9, 32, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b3aeaba6b7ed66b8faa9f28a327b86a9eb5eec8a', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+473803278,FINERACT-1101 [Backport PR] Added Mustache templates to Swagger Codegen,"## Description
+This is a backport PR for `1.4.0`. It addresses FINERACT-1101. Read #1271 for more details.
+ 
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1285,https://api.github.com/repos/apache/fineract/pulls/1285,https://github.com/apache/fineract/pull/1285,closed,391,6,6,1,4,0,0,0,[],2020-08-26 10:13:55+00:00,2020-08-26 21:30:26+00:00,40591.0,11:16:31,[],"[{'commit_sha': 'b217982ea08bc344b8d143b073c2364664c380ac', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+474150851,FINERACT-1133 Added Mustache templates for documentation of generated library,"## Description
+Fix FINERACT-1133 This PR adds Mustache templates for correcting documentation of the client library generated by Swagger Codegen.
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1293,https://api.github.com/repos/apache/fineract/pulls/1293,https://github.com/apache/fineract/pull/1293,closed,191,1,3,1,0,0,0,0,[],2020-08-26 21:01:43+00:00,2020-08-27 01:49:23+00:00,17260.0,4:47:40,[],"[{'commit_sha': '083783777f68018566877f157ebd2d3dfc1cfd7e', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+474667579,FINERACT-1133 [Backport PR] Added Mustache templates,"## Description
+This is a backport PR for `1.4.0` branch. 
+
+## Checklist
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Commit message starts with the issue number from https://issues.apache.org/jira/projects/FINERACT/. Ex: FINERACT-646 Pockets API.
+
+- [x] Coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions have been followed.
+
+- [x] API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm has been updated with details of any API changes.
+
+- [x] Integration tests have been created/updated for verifying the changes made.
+
+- [x] All Integrations tests are passing with the new commits.
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the list.)
+
+Our guidelines for code reviews is at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide
+",True,1295,https://api.github.com/repos/apache/fineract/pulls/1295,https://github.com/apache/fineract/pull/1295,closed,544,354,3,1,0,0,0,0,[],2020-08-27 12:29:44+00:00,2020-08-27 20:49:30+00:00,29986.0,8:19:46,[],"[{'commit_sha': '09bd45988fdc641e1a3a35fd3ea94d3115bce4dc', 'committer_username': 'Grandolf49', 'committer_name': 'Chinmay Kulkarni', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 13, 4, 39, 49, tzinfo=datetime.timezone.utc)}]",Chinmay Kulkarni,30969403,,User,,38,,140,109
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+48418599,fineract,apache/fineract,Java,1575,1296,113,266,8025,35,19,35,"[{'id': 474667579, 'number': 1295, 'closed': datetime.datetime(2020, 8, 27, 20, 49, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 27, 12, 29, 44, tzinfo=datetime.timezone.utc), 'time_taken': 29986.0, 'time_delta': '8:19:46', 'additions': 544, 'deletions': 354, 'state': 'closed'}, {'id': 474150851, 'number': 1293, 'closed': datetime.datetime(2020, 8, 27, 1, 49, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 26, 21, 1, 43, tzinfo=datetime.timezone.utc), 'time_taken': 17260.0, 'time_delta': '4:47:40', 'additions': 191, 'deletions': 1, 'state': 'closed'}, {'id': 473803278, 'number': 1285, 'closed': datetime.datetime(2020, 8, 26, 21, 30, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 26, 10, 13, 55, tzinfo=datetime.timezone.utc), 'time_taken': 40591.0, 'time_delta': '11:16:31', 'additions': 391, 'deletions': 6, 'state': 'closed'}, {'id': 473769644, 'number': 1283, 'closed': datetime.datetime(2020, 8, 26, 10, 14, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 26, 9, 15, 3, tzinfo=datetime.timezone.utc), 'time_taken': 3596.0, 'time_delta': '0:59:56', 'additions': 393, 'deletions': 8, 'state': 'closed'}, {'id': 472442962, 'number': 1272, 'closed': datetime.datetime(2020, 8, 25, 21, 50, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 24, 11, 10, 5, tzinfo=datetime.timezone.utc), 'time_taken': 124798.0, 'time_delta': '1 day, 10:39:58', 'additions': 226, 'deletions': 210, 'state': 'closed'}, {'id': 472362491, 'number': 1271, 'closed': datetime.datetime(2020, 8, 25, 21, 52, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 24, 8, 46, 5, tzinfo=datetime.timezone.utc), 'time_taken': 133614.0, 'time_delta': '1 day, 13:06:54', 'additions': 391, 'deletions': 6, 'state': 'closed'}, {'id': 472043303, 'number': 1270, 'closed': datetime.datetime(2020, 8, 23, 13, 17, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 22, 21, 42, 51, tzinfo=datetime.timezone.utc), 'time_taken': 56082.0, 'time_delta': '15:34:42', 'additions': 222, 'deletions': 208, 'state': 'closed'}, {'id': 461739030, 'number': 1229, 'closed': datetime.datetime(2020, 8, 2, 6, 10, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 2, 5, 27, 36, tzinfo=datetime.timezone.utc), 'time_taken': 2578.0, 'time_delta': '0:42:58', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 461276960, 'number': 1228, 'closed': datetime.datetime(2020, 8, 2, 15, 48, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 1, 17, 27, 20, tzinfo=datetime.timezone.utc), 'time_taken': 80484.0, 'time_delta': '22:21:24', 'additions': 8, 'deletions': 3, 'state': 'closed'}, {'id': 456797666, 'number': 1206, 'closed': datetime.datetime(2020, 8, 1, 13, 8, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 26, 19, 57, 25, tzinfo=datetime.timezone.utc), 'time_taken': 493846.0, 'time_delta': '5 days, 17:10:46', 'additions': 62, 'deletions': 0, 'state': 'closed'}, {'id': 456663338, 'number': 1203, 'closed': datetime.datetime(2020, 7, 26, 19, 58, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 25, 20, 5, 56, tzinfo=datetime.timezone.utc), 'time_taken': 85936.0, 'time_delta': '23:52:16', 'additions': 29, 'deletions': 4, 'state': 'closed'}]"

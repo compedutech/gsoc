@@ -1,0 +1,629 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1022313735,fix(API): merge multiple upload-api calls into one.,"<!-- SPDX-FileCopyrightText: © Fossology contributors
+
+     SPDX-License-Identifier: GPL-2.0-only
+-->
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+This implementation is merging the two processes for the upload feature into one request.
+**The processes are :**
+ 1. Create the upload.
+ 2. Create the corresponding job for the new upload.
+
+In  the previous implementation, the frontend would wait up to 10 calls for the agents `ununpack` and `adj2nest` to finish their role.
+
+Now from a single upload request with corresponding scan options, we can post the upload and manage the rest of the work on the backend.
+
+### Changes
+
+   1. Make a reusable function `handleScheduleAnalysis` in `UploadHelper` to proceed with analysis job after upload has been 
+       created.
+   2. Update the `createJob` function from `JobController` to reuse `handleScheduleAnalysis`.
+   3. Call the  `handleScheduleAnalysis` after creating the upload.
+   4. Updated `openapi.yaml` to match the new request format.
+  
+## How to test
+   ###  1. Upload Request
+ 
+**Here's the expected upload request format.**
+
+![merge_uploads_request](https://user-images.githubusercontent.com/66276301/183834811-4acfd778-0ad2-4e3f-8d45-6877a60bfece.png)
+
+![merge_uploads](https://user-images.githubusercontent.com/66276301/183834861-daa3fc09-3a43-4e8b-b18c-a92b5f1f7684.png)
+
+ ### 2. Response
+   **You should see this response object with the ID of the corresponding job in the message.**
+   
+   
+![merge_uploads_response](https://user-images.githubusercontent.com/66276301/183835124-4e1326f7-ec78-4714-98ff-a6abddc60e10.png)
+
+## Related issue
+closes : https://github.com/Shruti3004/FOSSology-REST-API/issues/2
+
+cc: @shaheemazmalmmd @GMishx
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2287""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2287,https://api.github.com/repos/fossology/fossology/pulls/2287,https://github.com/fossology/fossology/pull/2287,closed,212,110,7,2,3,13,3,0,"[{'name': 'enhancement'}, {'name': 'ready'}, {'name': 'GSoC-22'}]",2022-08-10 07:03:07+00:00,2023-02-27 12:31:23+00:00,17386096.0,"201 days, 5:28:16","[{'comment_id': 942154045, 'comment_body': 'It is not required for the user to select any agent during the upload. This will be contradicting with the current UI.', 'comment_created': datetime.datetime(2022, 8, 10, 8, 12, 3, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 942154581, 'comment_body': 'Please remove irrelevant changes.', 'comment_created': datetime.datetime(2022, 8, 10, 8, 12, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 942155262, 'comment_body': '```suggestion\r\n   * @return \\Fossology\\UI\\Api\\Models\\Info\r\n```', 'comment_created': datetime.datetime(2022, 8, 10, 8, 13, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 942156321, 'comment_body': 'Please add the same options for upload methods like upload from file as well.', 'comment_created': datetime.datetime(2022, 8, 10, 8, 14, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 942323615, 'comment_body': ""Yes, this's because I want to create the corresponding job immediately after the upload-creation on the backend. So i want to receive all the required arguments onwards including those for the job I will do later; so as to execute the two processes simultaneously (one after the other).\r\n\r\nSo in order to continue with the job process, I'm required to specify  those  scanOptions eventhough it's properties might all be set to false.\r\n\r\nIn order words; I've followed the same flow for creating the job for the upload referring to this existing job controller's function.\r\n\r\n![Menu_002](https://user-images.githubusercontent.com/66276301/183885215-63cdb23a-dc0c-48ae-b8a6-d759e61bb2af.png)\r\n\r\n"", 'comment_created': datetime.datetime(2022, 8, 10, 11, 11, 10, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 942329050, 'comment_body': ""let me know if I'm right sir"", 'comment_created': datetime.datetime(2022, 8, 10, 11, 17, 40, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 942332611, 'comment_body': 'sure done.', 'comment_created': datetime.datetime(2022, 8, 10, 11, 22, 2, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 944403185, 'comment_body': 'Not exactly. The other endpoint is built specifically to schedule agents on an upload. So it there are no agents selected by the user to schedule, the endpoint will not do any thing. Therefore, it send `403` if no agent is selected.\r\n\r\nHowever, the upload endpoint still have some tasks to do even if user selects no agents to schedule. The same principle is followed in current UI. You can select no agent in section 7 (aptly names ""Select **optional** analysis)\r\n![image](https://user-images.githubusercontent.com/18077542/184351397-b08ce782-a9f9-472e-8faf-354000b727a4.png)\r\n\r\nWhere as while scheduling agents on an existing upload, the section is called ""Select additional analysis"". You can visit the UI for it by visiting [Jobs > Schedule Agents](http://localhost/repo/?mod=agent_add)\r\n![image](https://user-images.githubusercontent.com/18077542/184351481-4ef68b3b-606f-4c0b-b607-5c135cbc5301.png)\r\n', 'comment_created': datetime.datetime(2022, 8, 12, 12, 13, 44, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954072442, 'comment_body': 'Reminder @dushimsam ', 'comment_created': datetime.datetime(2022, 8, 24, 17, 18, 38, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '4c7be95cad279562f05e448185f61d995502f924', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2ac466b19c928853168dbc728a58a9a9830c682e', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1022357358,fix(MULTIPLE-API-CALLS) merge multiple upload-api calls into one,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+
+## Description
+Merge the create upload API and create job API into one API request.
+
+### Changes
+
+1. Removed the getUploadApiRequest.
+2. Removed the createJobApiRequest.
+3. Added scanOptions parameter on the uploadApiRequest.
+
+## How to test
+
+## How to test
+
+   ###  1. Upload Request
+ 
+**Fill up the input details on Vcs Upload Page for the upload click the upload button
+  hence the request should look as follows.**
+
+![merge_uploads_request](https://user-images.githubusercontent.com/66276301/183834811-4acfd778-0ad2-4e3f-8d45-6877a60bfece.png)
+
+![merge_uploads](https://user-images.githubusercontent.com/66276301/183834861-daa3fc09-3a43-4e8b-b18c-a92b5f1f7684.png)
+
+ ### 2. Response
+   **You should see this response object with the ID of the corresponding job in the message.**
+   
+   
+![merge_uploads_response](https://user-images.githubusercontent.com/66276301/183835124-4e1326f7-ec78-4714-98ff-a6abddc60e10.png)
+
+## Related issue
+closes : https://github.com/Shruti3004/FOSSology-REST-API/issues/2 ,https://github.com/fossology/FOSSologyUI/issues/260 
+
+cc: @shaheemazmalmmd @GMishx
+    
+",False,249,https://api.github.com/repos/fossology/FOSSologyUI/pulls/249,https://github.com/fossology/FOSSologyUI/pull/249,open,392,163,6,1,3,2,2,0,"[{'name': 'needs review'}, {'name': 'needs test'}]",2022-08-10 07:51:26+00:00,,0.0,,"[{'comment_id': 943420232, 'comment_body': 'Can directly be imported like: \r\n`import messages from ""constants/messages"";`', 'comment_created': datetime.datetime(2022, 8, 11, 12, 22, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Shruti3004', 'type': 'User'}, {'comment_id': 943489870, 'comment_body': 'sure , thanks', 'comment_created': datetime.datetime(2022, 8, 11, 13, 32, 13, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': 'cb840f66f6ec001775ab8652755963d6a5713814', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+995237560,feat(ui): added delete group page,"Signed-off-by: dushimsam <dushsam@gmail.com>
+
+
+## Description
+
+Added delete group page.
+
+### Changes
+
+1. Added a new file [src/pages/Admin/Group/Delete/index.jsx](https://github.com/fossology/FOSSologyUI/compare/main...dushimsam:dushimsam/feat/admin/delete-group?expand=1#diff-c6b9aa81b2449d23ccce198771cd8a82eaa0c2cb79471649612205743a6c8bd4) for the UI feature.
+2. Introduced a new route in `src/Routes.jsx`
+3. Introduced new API callers for the UI integration.
+4. Added a new constant message for successful group deletion.
+
+## How to test
+
+1. Go to the project's main directory.
+2. run command `npm start`
+3. Visit the page at `http://localhost:PORT/admin/group/delete` 
+4. You are going to see a list of deletable groups which you can select.
+5. Select the group you wish to delete then press `Delete` button.
+
+![delete_group_ui](https://user-images.githubusercontent.com/66276301/178696736-6a5c6674-0f03-4628-a0d2-b6b2ee777479.png)
+
+
+#### Related Issue:
+Fixes https://github.com/fossology/FOSSologyUI/issues/234
+
+@shaheemazmalmmd @GMishx",True,241,https://api.github.com/repos/fossology/FOSSologyUI/pulls/241,https://github.com/fossology/FOSSologyUI/pull/241,closed,314,3,12,1,5,2,2,0,"[{'name': 'enhancement'}, {'name': 'needs test'}]",2022-07-13 09:12:50+00:00,2022-08-29 06:48:34+00:00,4052144.0,"46 days, 21:35:44","[{'comment_id': 920071679, 'comment_body': 'Is it possible to add a pop-up once user clicks on ""Delete"" and ask ""Are you sure? <Yes> <No>"" ??\r\n\r\nChanges otherwise looks good.', 'comment_created': datetime.datetime(2022, 7, 13, 13, 21, 58, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920248351, 'comment_body': 'Exactly, my next task now.', 'comment_created': datetime.datetime(2022, 7, 13, 15, 55, 14, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': 'b6457172a45aca563ce1bd0756d3c130aa149ada', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1021269044,feat(UI): added manage group-users page,"# Description
+
+Added Manage Group Users Page.
+
+### Changes
+
+1. Added a new file [src/pages/Admin/Group/Manage/index.jsx]
+3. Introduced a new route in `src/Routes.jsx`
+4. Introduced new API callers for the UI integration.
+
+## How to test
+
+1. Go to the project's main directory.
+2. run command `npm start`
+3. Visit the page at `http://localhost:PORT/admin/group/manage` 
+4. You will see a list of group members for the default selected group.
+6. You can change the permission of any use in that group.
+
+https://user-images.githubusercontent.com/66276301/183613559-6a682fe1-303c-46a1-83f2-d710092a3606.mp4
+
+## Related Issue 
+Closing #242
+
+cc: @shaheemazmalmmd @GMishx",False,248,https://api.github.com/repos/fossology/FOSSologyUI/pulls/248,https://github.com/fossology/FOSSologyUI/pull/248,open,564,3,11,1,7,4,1,0,[{'name': 'needs test'}],2022-08-09 09:28:22+00:00,,0.0,,"[{'comment_id': 943431225, 'comment_body': '@dushimsam can be imported directly', 'comment_created': datetime.datetime(2022, 8, 11, 12, 34, 28, tzinfo=datetime.timezone.utc), 'commenter': 'Shruti3004', 'type': 'User'}, {'comment_id': 943433999, 'comment_body': 'Why we have not created the other file for the GroupCreate function?', 'comment_created': datetime.datetime(2022, 8, 11, 12, 37, 29, tzinfo=datetime.timezone.utc), 'commenter': 'Shruti3004', 'type': 'User'}, {'comment_id': 943482642, 'comment_body': 'fixed.', 'comment_created': datetime.datetime(2022, 8, 11, 13, 25, 50, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 943482891, 'comment_body': 'done', 'comment_created': datetime.datetime(2022, 8, 11, 13, 26, 3, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '9cd0e98b3a1e7f63bd98211dcc5eaf041088a2b1', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+971764570,feat(ui): implementation of mantainance page on the admin section,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/FOSSologyUI/blob/main/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+
+## Description
+
+Implemented the maintenance page from the Admin section. The page is on the route `/admin/mantainance`
+
+### Changes
+
+1. Created a new directory ,`src/pages/admin/Mantainance/index.jsx`
+2. Imported and added the new page in the `src/Routes.jsx` as a part of `AdminLayout`
+3. Added a new navigation dropdown Item as a part of the admin dropdowns.
+4.  Added the route and initial field values for the new page in `src/constants/routes.js`.
+
+
+### How to test
+1. Go in the project's main directory.
+2. run command `npm start`
+3. Visit the page at `http://localhost:PORT/admin/mantainance` 
+4. You should see something looking like this 
+
+##Screenshots
+![Selection_006](https://user-images.githubusercontent.com/66276301/174822603-6384ac39-f2ec-48d9-acfd-728a84f3bd3e.png)
+![Selection_007](https://user-images.githubusercontent.com/66276301/174822627-f17f3729-9f25-4cf0-b0c7-6e1b0d8a9692.png)
+
+
+#### Related Issue:
+Fixes #227 
+
+@shaheemazmalmmd @GMishx",True,232,https://api.github.com/repos/fossology/FOSSologyUI/pulls/232,https://github.com/fossology/FOSSologyUI/pull/232,closed,310,0,5,1,3,3,1,0,[{'name': 'ready'}],2022-06-20 05:42:50+00:00,2022-06-23 07:42:43+00:00,266393.0,"3 days, 1:59:53","[{'comment_id': 902294097, 'comment_body': 'Please revert unnecessary changes.', 'comment_created': datetime.datetime(2022, 6, 21, 8, 10, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 902295505, 'comment_body': 'Can these values be exported to `src/constants/constants.js`?', 'comment_created': datetime.datetime(2022, 6, 21, 8, 12, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 902297648, 'comment_body': '```suggestion\r\n              Verbose (turns on debugging output).\r\n```', 'comment_created': datetime.datetime(2022, 6, 21, 8, 14, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '9f05b81a8027cad4e0adc6acb2dc96dd854a9034', 'committer_username': 'dushimsam', 'committer_name': 'Samuel Dushimimana', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 1, 19, 49, 30, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1026628045,feat(integration): Integrated the fossology maintenance page.,"
+## Description
+Integrated the Fossology maintenance page to the REST API in charge of activating the maintenance operations on the backend.
+
+### Changes
+
+1. Added API call functions and services and linked them to the endpoint.
+2. Designed the functions to prepare the user request suitable for the API.
+
+## How to test
+1. Run `npm start` at the project's diretory.
+2. Visit `/admin/mantainance`.
+3. Select operations of your choice.
+4. Press `submit` button
+
+## Example
+
+https://user-images.githubusercontent.com/66276301/184678066-360fc503-8dd6-4746-8848-68f90f31d615.mp4
+
+
+
+",True,252,https://api.github.com/repos/fossology/FOSSologyUI/pulls/252,https://github.com/fossology/FOSSologyUI/pull/252,closed,240,81,11,1,9,0,1,0,[{'name': 'needs test'}],2022-08-15 16:19:02+00:00,2022-09-06 14:32:02+00:00,1894380.0,"21 days, 22:13:00",[],"[{'commit_sha': '47140441b2d5553855886a77c67fb633a31f8233', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1047361164,feat(UI): Import CSV-license file PAGE,"Signed-off-by: dushimsam <dushsam@gmail.com>
+
+## Description
+
+Added a new page for handling the upload of the CSV-license file.
+
+### Changes
+
+1. Added a new file [src/pages/Admin/Group/License/Import/index.jsx]
+3. Introduced a new route in `src/Routes.jsx`
+4. Introduced new API callers for the UI integration.
+
+## How to test
+
+1. Go to the project's main directory.
+2. run command `npm start
+3. Visit the page at `http://localhost:PORT/admin/license/import` 
+4. The page should look as follows
+
+![image](https://user-images.githubusercontent.com/66276301/188610009-73d56e61-e470-4f7c-b50f-10379f930752.png)
+
+## Related Issue 
+Closing #257
+
+cc: @shaheemazmalmmd @GMishx",False,259,https://api.github.com/repos/fossology/FOSSologyUI/pulls/259,https://github.com/fossology/FOSSologyUI/pull/259,open,237,3,9,1,1,0,2,0,"[{'name': 'needs review'}, {'name': 'needs test'}]",2022-09-06 10:17:26+00:00,,0.0,,[],"[{'commit_sha': '4bd5069a158e8c38f99cd0f57a1083f2b09d36e1', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+981463444,feat(API): delete user group,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Added a new API to delete a user group via a particular id.
+
+### Changes
+
+1. Added a new function to handle the deletion of the group in `GroupController`.
+2. Updated  the main file(`index.php`) by adding a new route `/groups/id`.
+3. Updated the `openapi.yaml` file , by introducing a new API.
+
+## How to test
+
+1. Add a new user group 
+
+![new-group](https://user-images.githubusercontent.com/66276301/176197546-df8f6afe-958c-4458-ba73-144fa130783a.png)
+
+2. Keep the new group's Id aside.
+     
+![get_group](https://user-images.githubusercontent.com/66276301/176197804-77dde1a8-67c7-40a4-8529-9e6561842ff0.png)
+
+3. Call Delete API by passing the Id of the new group in params.
+![deleted](https://user-images.githubusercontent.com/66276301/176197987-e2e6ba44-7008-49df-a5b4-d601aacdfb41.png)
+
+### Related Issue:
+Fixes #2241 
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2244""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2244,https://api.github.com/repos/fossology/fossology/pulls/2244,https://github.com/fossology/fossology/pull/2244,closed,221,1,4,1,7,9,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-06-28 14:07:23+00:00,2022-07-19 15:33:04+00:00,1819541.0,"21 days, 1:25:41","[{'comment_id': 912357382, 'comment_body': 'Adding yourself to the author list will not be correct. Please add yourself to the copyright list by adding another copyright (`Copyright (C) 2022 <your details>`)', 'comment_created': datetime.datetime(2022, 7, 2, 12, 21, 6, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912357427, 'comment_body': '```suggestion\r\n      $userId = $this->restHelper->getUserId();\r\n```', 'comment_created': datetime.datetime(2022, 7, 2, 12, 22, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912357764, 'comment_body': '```suggestion\r\n          $returnVal = new Info(400, $e->getMessage(), InfoType::ERROR);\r\n```', 'comment_created': datetime.datetime(2022, 7, 2, 12, 26, 8, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912358063, 'comment_body': ""The API is returning `Info()` object.\r\n\r\n```suggestion\r\n                $ref: '#/components/schemas/Info'\r\n```"", 'comment_created': datetime.datetime(2022, 7, 2, 12, 29, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 914909123, 'comment_body': ""Please add a catch all request to handle invalid parameters. Currently, `DELETE /api/v1/groups/13a` returns a 500 error instead of a 400.\r\n\r\n```suggestion\r\n    $app->delete('/{id:\\\\d+}', GroupController::class . ':deleteGroup');\r\n    $app->any('/{params:.*}', BadRequestController::class);\r\n```"", 'comment_created': datetime.datetime(2022, 7, 6, 14, 27, 45, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920037011, 'comment_body': 'A reminder @dushimsam , please add the function call to `any()`.', 'comment_created': datetime.datetime(2022, 7, 13, 12, 47, 50, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922712150, 'comment_body': 'done', 'comment_created': datetime.datetime(2022, 7, 16, 19, 15, 38, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 922832099, 'comment_body': ""Please remove Siemens' copyright and add yours 😃 "", 'comment_created': datetime.datetime(2022, 7, 17, 13, 13, 54, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922869957, 'comment_body': 'Done, anything else?', 'comment_created': datetime.datetime(2022, 7, 17, 17, 1, 54, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '53b043b19237a0cca4f2c356523a04b70fc83f00', 'committer_username': 'dushimsam', 'committer_name': 'Samuel Dushimimana', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 1, 19, 49, 30, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+983771388,feat(API): list groups that can be deleted,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+To check if the user has any group that is possible to be deleted.
+
+### Changes
+
+1. Added a new function in `GroupController`. to check if the group exists.
+2. Updated  the main file(`index.php`) by adding a new route `/groups/has-deletable-group`.
+3. Updated the `openapi.yaml` file to introduce a new API.
+
+## How to test
+
+1. Open and run the project then visit  the url `http://localhost/repo/api/v1/groups/has-deletable-group`
+2. Response
+
+The following property in the response body called `available` should be marked as **true** if you have any group that is deletable  , else it will always be marked as **false**.
+
+![has-deletable-group](https://user-images.githubusercontent.com/66276301/176673904-ad674f99-45fc-45fc-9e51-e902a898bb87.png)
+
+By default you have group `fossy` , this one is not deletable , the deletable groups are the one you add afterwards.
+In other words , by default you don't have any deletable group , unless you start adding your own groups.
+
+### Related Issue:
+Fixes #2246
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2247""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2247,https://api.github.com/repos/fossology/fossology/pulls/2247,https://github.com/fossology/fossology/pull/2247,closed,65,3,4,1,7,14,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-06-30 12:21:34+00:00,2022-08-12 10:47:15+00:00,3709541.0,"42 days, 22:25:41","[{'comment_id': 912358644, 'comment_body': '```suggestion\r\n    $userId = $this->restHelper->getUserId();\r\n```', 'comment_created': datetime.datetime(2022, 7, 2, 12, 35, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912358755, 'comment_body': 'Please check the comment on issue #2246 as a suggestion for the name change.', 'comment_created': datetime.datetime(2022, 7, 2, 12, 37, 6, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912359074, 'comment_body': 'IMO a more useful response will be a list of groups which the current user can delete (as it is returned by the `getDeletableAdminGroupMap()`).\r\n\r\nBy doing so, the UI can quickly remove groups which can not be deleted from a potential drop-down saving bunch of failing REST API calls.\r\n\r\nAs a suggestion, the response can look something like the following when the user can delete something:\r\n```json\r\n{\r\n  ""groups"": [\r\n      3,\r\n      4,\r\n      ...\r\n    ]\r\n}\r\n```\r\n\r\nOr like following when they can not delete any groups:\r\n```json\r\n{\r\n  ""groups"": []\r\n}\r\n```', 'comment_created': datetime.datetime(2022, 7, 2, 12, 40, 37, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912386560, 'comment_body': 'Noted', 'comment_created': datetime.datetime(2022, 7, 2, 18, 2, 54, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 920008037, 'comment_body': 'Looks like you forgot to import the `ResponseHelper` class.', 'comment_created': datetime.datetime(2022, 7, 13, 12, 17, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920015909, 'comment_body': 'oh sure, done now.', 'comment_created': datetime.datetime(2022, 7, 13, 12, 25, 48, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 920091555, 'comment_body': 'The function called is `getDeletableAdminGroupMap`', 'comment_created': datetime.datetime(2022, 7, 13, 13, 39, 49, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922832200, 'comment_body': ""Please remove Siemens' copyright and add yours 😃 "", 'comment_created': datetime.datetime(2022, 7, 17, 13, 14, 46, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922862731, 'comment_body': 'alright thanks', 'comment_created': datetime.datetime(2022, 7, 17, 16, 36, 59, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 922870507, 'comment_body': 'done', 'comment_created': datetime.datetime(2022, 7, 17, 17, 7, 51, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 939950130, 'comment_body': 'As you are aware, FOSSology is now REUSE compliant, kindly change the comment like following\r\n```suggestion\r\n * SPDX-FileCopyrightText: © 2022 Samuel Dushimimana <dushsam100@gmail.com>\r\n *\r\n * SPDX-License-Identifier: GPL-2.0-only\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 8, 9, 54, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 941422528, 'comment_body': '@dushimsam Looks like during rebase, you removed `testDeleteGroup()` :-|', 'comment_created': datetime.datetime(2022, 8, 9, 14, 35, 32, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 942216987, 'comment_body': 'Oh i messed up , thanks.', 'comment_created': datetime.datetime(2022, 8, 10, 9, 13, 11, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 942217706, 'comment_body': 'hope things are okay now.', 'comment_created': datetime.datetime(2022, 8, 10, 9, 13, 54, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '99aa3624e3f3f6dbf7223daa340b563cbf04b8f5', 'committer_username': 'dushimsam', 'committer_name': 'Samuel Dushimimana', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 1, 19, 49, 30, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+985771252,feat(API): get group members with corresponding roles,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+
+
+## Description
+
+Get all group members with corresponding roles / permissions from the given group via REST API.
+
+### Changes
+
+1. Added a new function in `GroupController`. to get all  group members.
+2. Updated  the main file(`index.php`) by adding a new route `/groups/members/{id}`.
+3. Updated the `openapi.yaml` file to introduce a new API.
+
+## How to test
+
+1. Open and run the project then visit  the url `http://localhost/repo/api/v1/groups/members/{id}`
+2. Response
+
+i. **When the group id is given:**
+
+Getting all the users from the group whose id is 14. 
+
+![group_memebers_with_id](https://user-images.githubusercontent.com/66276301/177048043-55d67901-92c7-4922-bacd-9c48d419a3e7.png)
+
+ii. **When the group Id is not given:**
+
+Since the group id is not specified, we are going to pick the default group which is `Default User` instead.
+
+![group_members_wout_id](https://user-images.githubusercontent.com/66276301/177048200-15942c00-d6c0-4b72-b1b6-2cb2f4c02f93.png)
+
+**_Hence our API can handle both situations, Group Id is given, and the group Id is not given._**
+
+### Related Issue:
+Fixes #2249
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2251""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2251,https://api.github.com/repos/fossology/fossology/pulls/2251,https://github.com/fossology/fossology/pull/2251,closed,322,22,9,1,9,30,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-07-03 16:39:05+00:00,2022-09-02 05:41:31+00:00,5230946.0,"60 days, 13:02:26","[{'comment_id': 912825899, 'comment_body': 'Does it make sense to use the `#/components/schemas/User` object itself here?\r\nhttps://github.com/fossology/fossology/blob/20ca3a482ce18e85859e92842e94fe06bb226237/src/www/ui/api/documentation/openapi.yaml#L1669-L1703', 'comment_created': datetime.datetime(2022, 7, 4, 9, 44, 35, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912826360, 'comment_body': 'This is an internal key and never used by any API. IMO, it should not be exposed by the API as well.', 'comment_created': datetime.datetime(2022, 7, 4, 9, 45, 7, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912828320, 'comment_body': 'Would rather recommend following format as followed by other endpoints as well.\r\n\r\n```suggestion\r\n  /groups/{id}/members:\r\n```\r\n\r\nIf I were to translate the suggested URL, it can be done logically as:\r\nGet me the property ""members"" of an individual ""group"" with an identifier ""{id}""', 'comment_created': datetime.datetime(2022, 7, 4, 9, 47, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912831109, 'comment_body': 'Not sure that will be a valid use case.\r\nIt can, however, be resolved to currently active group id (`$this->restHelper->getGroupId()`).\r\n\r\nBut, with the suggested changes in the URL format, empty id will result in a 404/400 response.', 'comment_created': datetime.datetime(2022, 7, 4, 9, 50, 16, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912831780, 'comment_body': 'Please **always** add `{ }` around a code block.', 'comment_created': datetime.datetime(2022, 7, 4, 9, 50, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912835394, 'comment_body': 'If using `User` model in the response, it can easily be fetched using `$userModel = $this->dbHelper->getUsers($userId)[0]`', 'comment_created': datetime.datetime(2022, 7, 4, 9, 55, 1, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 912836848, 'comment_body': 'Please create a new model in `src/www/ui/api/Models/` for `UserGroupMember` response to keep consistency.', 'comment_created': datetime.datetime(2022, 7, 4, 9, 56, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 913143278, 'comment_body': 'Thanks for the feedback, I shall make sure to comply with those suggestions.', 'comment_created': datetime.datetime(2022, 7, 4, 16, 37, 46, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 914983102, 'comment_body': 'But I think the frontend is going to need it when requesting for the updates on the specific membership .\r\nWhat do you think ? ', 'comment_created': datetime.datetime(2022, 7, 6, 15, 31, 38, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 915002478, 'comment_body': ""I don't see it anywhere being used in the existing code. So for sure it'll not be needed by the UI you are working on.\n\nAnd in case it's ever needed, we can expose it then."", 'comment_created': datetime.datetime(2022, 7, 6, 15, 50, 16, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 915064412, 'comment_body': 'Done , could you review it again sir. ', 'comment_created': datetime.datetime(2022, 7, 6, 16, 55, 18, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 915065029, 'comment_body': ""let me know if there's any other suggestion to be considered."", 'comment_created': datetime.datetime(2022, 7, 6, 16, 56, 2, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 919988272, 'comment_body': ""You can reuse the User object.\r\n```suggestion\r\n        user:\r\n          $ref: '#/components/schemas/User'\r\n```"", 'comment_created': datetime.datetime(2022, 7, 13, 11, 54, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919991482, 'comment_body': 'A much simpler way will be:\r\n```suggestion\r\n        $user = $this->dbHelper->getUsers($usersWithGroup[$key][""user_pk""])[0];\r\n        $userGroupMember = new UserGroupMember($user, $usersWithGroup[$key][""group_perm""]);\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 58, 7, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919996792, 'comment_body': 'If using previous suggestion, the query can also be simplified to:\r\n```suggestion\r\n      $dbManager->prepare($stmt, ""SELECT user_fk, group_perm\r\n         FROM group_user_member WHERE group_fk=$1\r\n         ORDER BY user_fk"");\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 12, 4, 23, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920023017, 'comment_body': 'And use the `user_fk` instead of `user_pk`.', 'comment_created': datetime.datetime(2022, 7, 13, 12, 33, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922110207, 'comment_body': 'Sir what if I need further details about each user like his username and description.\r\nBecause by using that query I can only get the userId. so I think this can only be achieved by using sql JOINs.\r\nElse i am going to run another query for getting userDetails by Id.\r\n\r\nLet me know what you suggest about it ?', 'comment_created': datetime.datetime(2022, 7, 15, 12, 16, 50, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 922829399, 'comment_body': 'You only need userid, other pieces of information can be fetched from DB as needed. And for the user details in JSON, please check the comment https://github.com/fossology/fossology/pull/2251#discussion_r919991482\r\n\r\nIt suggests using `$this->dbHelper->getUsers()` to get those information and it just needs userid to fetch the records.', 'comment_created': datetime.datetime(2022, 7, 17, 12, 54, 21, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922872107, 'comment_body': 'sir I would prefer  using that method, I have tried it multiple times trying to figure out what\'s going wrong, but it keeps on failing while popping up this error ""_**Expected parameter of type \'\\Fossology\\UI\\Api\\Models\\User\', \'\\Fossology\\UI\\Api\\Models\\User[]\' provided**_""\r\nI\'m going to show you more about this in the upcoming UI meeting.\r\n![Selection_013](https://user-images.githubusercontent.com/66276301/179417350-9b87bdeb-eb4f-4366-98cd-fac1a7c844ea.png)\r\n.', 'comment_created': datetime.datetime(2022, 7, 17, 17, 24, 2, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 922872453, 'comment_body': ""i don't know why it's regarding `$user` as an array."", 'comment_created': datetime.datetime(2022, 7, 17, 17, 27, 2, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 939952163, 'comment_body': 'As you are aware, FOSSology is now REUSE compliant, kindly change the comment like following\r\n```suggestion\r\n * SPDX-FileCopyrightText: © 2022 Samuel Dushimimana <dushsam100@gmail.com>\r\n *\r\n * SPDX-License-Identifier: GPL-2.0-only\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 8, 11, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 939953262, 'comment_body': 'Any updates on this @dushimsam ?', 'comment_created': datetime.datetime(2022, 8, 8, 8, 12, 57, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944345888, 'comment_body': 'Since only `user_pk` and `group_perm` as used in the code following, no need to fetch it from DB.\r\n```suggestion\r\n      $dbManager->prepare($stmt, ""SELECT user_pk, group_perm\r\n         FROM users INNER JOIN group_user_member gum ON gum.user_fk=users.user_pk AND gum.group_fk=$1;"");\r\n```', 'comment_created': datetime.datetime(2022, 8, 12, 10, 50, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944349895, 'comment_body': 'The function `changeUserPermission` does not exists in this PR. Please remove it.', 'comment_created': datetime.datetime(2022, 8, 12, 10, 53, 50, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944353031, 'comment_body': 'Irrelevant statement. Please remove.', 'comment_created': datetime.datetime(2022, 8, 12, 10, 57, 35, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944353479, 'comment_body': ""Please fix indentation.\r\n```suggestion\r\n    $this->dbHelper->shouldReceive('getUsers')->withArgs([$userId])\r\n```"", 'comment_created': datetime.datetime(2022, 8, 12, 10, 58, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954044711, 'comment_body': 'Reminder @dushimsam ', 'comment_created': datetime.datetime(2022, 8, 24, 16, 52, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954045204, 'comment_body': 'Reminder @dushimsam ', 'comment_created': datetime.datetime(2022, 8, 24, 16, 53, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954045470, 'comment_body': 'Reminder @dushimsam ', 'comment_created': datetime.datetime(2022, 8, 24, 16, 53, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954045557, 'comment_body': 'Reminder @dushimsam ', 'comment_created': datetime.datetime(2022, 8, 24, 16, 53, 32, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': 'a5d6a18d53629d6d0dbea9e48e9b18b1fad9819f', 'committer_username': 'dushimsam', 'committer_name': 'Samuel Dushimimana', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 1, 19, 49, 30, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+994708924,feat(API): change group member's permission,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+ A rest API to change the member's permission in a group.
+
+### Changes
+
+1. Added a new function to handle the feature in `GroupController`.
+2. Updated  the main file(`index.php`) by adding a new route `PUT` `/groups/id`.
+3. Updated the `openapi.yaml` file  to introduce a new API.
+
+## How to test
+
+1. Choose one existing group.
+2. Select one user from the group.
+3. Run this API as follows
+
+Pass the Group-Id in the path, and the UserId with NewPermission in Headers.
+
+![change_user_permission](https://user-images.githubusercontent.com/66276301/178577169-ac4eae73-c0e0-4466-ac99-d2d8bfd08c54.png)
+
+### Related Issue:
+Fixes #2258
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2244""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2259""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2259,https://api.github.com/repos/fossology/fossology/pulls/2259,https://github.com/fossology/fossology/pull/2259,closed,540,247,18,2,10,35,3,0,"[{'name': 'enhancement'}, {'name': 'ready'}, {'name': 'GSoC-22'}]",2022-07-12 19:27:31+00:00,2023-02-27 06:39:58+00:00,19825947.0,"229 days, 11:12:27","[{'comment_id': 920047758, 'comment_body': 'Would highly recommend to reuse the following function:\r\n\r\nhttps://github.com/fossology/fossology/blob/011573743304b3a56a858fcbb77083c4eebcdfd1/src/www/ui/page/AdminGroupUsers.php#L155-L176', 'comment_created': datetime.datetime(2022, 7, 13, 12, 58, 40, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920054716, 'comment_body': 'Changes required for reuse:\r\n\r\n1. Make the function `updateGUMPermission()` to `public function updateGUMPermission($gum_pk, $perm, $dbManager)`\r\n2. Remove `$dbManager = $this->getObject(\'db.manager\');` as it will be taken as the function\'s argument.\r\n3. Change function call at https://github.com/fossology/fossology/blob/011573743304b3a56a858fcbb77083c4eebcdfd1/src/www/ui/page/AdminGroupUsers.php#L80 to `$this->updateGUMPermission($gum_pk, $perm, $this->getObject(\'db.manager\'));`\r\n\r\nDoing so, will allow us to use the function in `GroupController.php` like:\r\n```php\r\n$gum_pk = """"; // Get gum_pk from database for user_fk and group_fk.\r\n$gumPlugin = $this->restHelper->getPlugin(\'group_manage_users\');\r\n$gumPlugin->updateGUMPermission($gum_pk, $newperm, $dbManager);\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 13, 5, 48, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920055295, 'comment_body': 'Please try to read the parameters in `body` if possible. It will help simplify REST API.', 'comment_created': datetime.datetime(2022, 7, 13, 13, 6, 24, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920056434, 'comment_body': 'Doing so, will also allow removal of user from a group easily :wink:', 'comment_created': datetime.datetime(2022, 7, 13, 13, 7, 38, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920057417, 'comment_body': '```suggestion\r\n        schema:\r\n          type: string\r\n          minimum: 0\r\n          maximum: 2\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 13, 8, 37, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920058252, 'comment_body': '```suggestion\r\n    } else if($newperm > 2) {\r\n      $info = new Info(400, ""ERROR - permission can not be greater than 2"", InfoType::ERROR);\r\n    } else {\r\n```\r\n\r\nto fix error: https://github.com/fossology/fossology/runs/7321278763?check_suite_focus=true#step:4:204', 'comment_created': datetime.datetime(2022, 7, 13, 13, 9, 24, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920422572, 'comment_body': ""absolutely, that's so insightful sir. Thank you "", 'comment_created': datetime.datetime(2022, 7, 13, 19, 18, 37, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 920433615, 'comment_body': 'noted', 'comment_created': datetime.datetime(2022, 7, 13, 19, 34, 4, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 920775375, 'comment_body': 'great i am going to reuse this function but it looks like it is going to require me `group_user_member_pk` in the request which you were advising  me not to expose on the client in the response we give on this \r\n REST API https://github.com/fossology/fossology/pull/2251 . So what do you think? @GMishx ', 'comment_created': datetime.datetime(2022, 7, 14, 5, 52, 23, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 922827808, 'comment_body': 'Can you please explain the change?', 'comment_created': datetime.datetime(2022, 7, 17, 12, 42, 21, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922828243, 'comment_body': 'Can be simplified\r\n```suggestion\r\n      $group_user_member_pk = $dbManager->getSingleRow(""SELECT group_user_member_pk FROM group_user_member WHERE group_fk=$1 AND user_fk=$2"",\r\n        [$group_pk, $user_pk],\r\n        __METHOD__ . "".getByGroupAndUser"")[\'group_user_member_pk\'];\r\n```', 'comment_created': datetime.datetime(2022, 7, 17, 12, 45, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922828574, 'comment_body': 'If the GUM does not exists and a new record is created with new permission, is there a need to call `updateGUMPermission()` on the record?', 'comment_created': datetime.datetime(2022, 7, 17, 12, 47, 47, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922828730, 'comment_body': ""Please use `getPlugin()` to get the object.\r\n```suggestion\r\n      $adminGroupUsers = $this->restHelper->getPlugin('group_manage_users');\r\n```\r\n\r\nMake sure to check for `$adminGroupUsers == null` in case user does not have required permissions."", 'comment_created': datetime.datetime(2022, 7, 17, 12, 49, 1, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922828943, 'comment_body': 'Please get DBManager from the parameters. The containers for UI and REST API are different and can cause issues.\r\n```suggestion\r\n  public function updateGUMPermission($gum_pk, $perm, $dbManager)\r\n  {\r\n```', 'comment_created': datetime.datetime(2022, 7, 17, 12, 50, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922829065, 'comment_body': 'Seems like you solved the problem already using group and user id to find the value from DB.', 'comment_created': datetime.datetime(2022, 7, 17, 12, 51, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954057585, 'comment_body': '@dushimsam can you please do the required changes?', 'comment_created': datetime.datetime(2022, 8, 24, 17, 5, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954101162, 'comment_body': ""sorry sir I don't really know how i missed the change 😂\r\nthanks for reminding me."", 'comment_created': datetime.datetime(2022, 8, 24, 17, 43, 55, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 954101513, 'comment_body': 'hope now everything is fine.', 'comment_created': datetime.datetime(2022, 8, 24, 17, 44, 16, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 961306732, 'comment_body': '@dushimsam , now you need to pass the `dbmanager` where the function is called. Like at following location:\r\nhttps://github.com/fossology/fossology/blob/69ea7f35164245fe4ede460b0caa4864425975b7/src/www/ui/page/AdminGroupUsers.php#L69', 'comment_created': datetime.datetime(2022, 9, 2, 5, 44, 19, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 961307869, 'comment_body': 'Please change parameter name to `userId` to be consistent.', 'comment_created': datetime.datetime(2022, 9, 2, 5, 46, 47, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 961308039, 'comment_body': 'Please change parameter name to `groupId` to be consistent.', 'comment_created': datetime.datetime(2022, 9, 2, 5, 47, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 961308534, 'comment_body': 'I am hoping this removal is due to merge conflicts. Please make sure the endpoint is not removed :-)', 'comment_created': datetime.datetime(2022, 9, 2, 5, 48, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 961341502, 'comment_body': 'sure sir 👍', 'comment_created': datetime.datetime(2022, 9, 2, 6, 46, 24, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 961341591, 'comment_body': 'Done', 'comment_created': datetime.datetime(2022, 9, 2, 6, 46, 33, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 961341624, 'comment_body': 'Done', 'comment_created': datetime.datetime(2022, 9, 2, 6, 46, 37, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962616728, 'comment_body': 'Reminder @dushimsam :-)', 'comment_created': datetime.datetime(2022, 9, 5, 8, 16, 41, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962618816, 'comment_body': '@dushimsam , the `put` operation is still missing in the PR.\r\n\r\nPlease have a look!', 'comment_created': datetime.datetime(2022, 9, 5, 8, 18, 52, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962635814, 'comment_body': ""I think it's there sir , \r\nsee \r\n![image](https://user-images.githubusercontent.com/66276301/188405470-70e37f6b-f82d-4223-ab3f-fef3a15d2c91.png)\r\n"", 'comment_created': datetime.datetime(2022, 9, 5, 8, 34, 12, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962646207, 'comment_body': '> @dushimsam , the `put` operation is still missing in the PR.\r\n> \r\n> Please have a look!\r\n\r\ngot it sorry i messed up', 'comment_created': datetime.datetime(2022, 9, 5, 8, 44, 49, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962693240, 'comment_body': 'Still missing in the commit, please have a look:\r\nhttps://github.com/fossology/fossology/blob/0bebbc8a462edc27b3f90ddf1f489b96617167cb/src/www/ui/page/AdminGroupUsers.php#L69', 'comment_created': datetime.datetime(2022, 9, 5, 9, 26, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962735831, 'comment_body': 'ahhh sorry I just forgot to update where it was being called previously ', 'comment_created': datetime.datetime(2022, 9, 5, 10, 10, 1, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962740783, 'comment_body': 'Resolved, you can check now.', 'comment_created': datetime.datetime(2022, 9, 5, 10, 15, 14, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 983083962, 'comment_body': 'Looks like definition for `components/schemas/NewGroupPermission` is missing in the yaml file.', 'comment_created': datetime.datetime(2022, 9, 29, 5, 39, 25, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 983089353, 'comment_body': 'Something like following will be required:\r\n```diff\r\ndiff --git a/src/www/ui/api/documentation/openapi.yaml b/src/www/ui/api/documentation/openapi.yaml\r\nindex 254f16ebf..8c0612c34 100644\r\n--- a/src/www/ui/api/documentation/openapi.yaml\r\n+++ b/src/www/ui/api/documentation/openapi.yaml\r\n@@ -3007,6 +3007,19 @@ components:\r\n               enum:\r\n                 - OK\r\n                 - ERROR\r\n+    NewGroupPermission:\r\n+      description: User Group permission update\r\n+      type: object\r\n+      properties:\r\n+        perm:\r\n+          type: integer\r\n+          description: |\r\n+            New user permission in the group.\r\n+            0: User\r\n+            1: Admin\r\n+            2: Advisor\r\n+          minimum: 0\r\n+          maximum: 2\r\n   responses:\r\n     defaultResponse:\r\n       description: Some error occured. Check the ""message""\r\n```', 'comment_created': datetime.datetime(2022, 9, 29, 5, 49, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 985232350, 'comment_body': 'Done 👍', 'comment_created': datetime.datetime(2022, 10, 2, 12, 31, 49, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '23ff12e3f11cd809d7703e8f89321e983550af15', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'bd38495bcfd43107c829cadb6dec4270a3bd2e0f', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+999758196,feat(API): remove member from group.,"## Description
+
+Remove a particular user from a specific group.
+
+### Changes
+
+1. Added a new function in `GroupController`. to implement the core functionality.
+2. Updated  the main file(`index.php`) by adding a new route `/groups/{id}/user/{uid}`.
+3. Updated the `openapi.yaml` file to introduce a new API.
+
+## How to test
+
+1. Open and run the project then visit  the url `http://localhost/repo/api/v1/groups/{groupId}/user/{userId}`
+2. Response
+If the groupId and the UserId exist and the user is part of the group, you should see a response as such.
+
+![Selection_014](https://user-images.githubusercontent.com/66276301/179578809-c0359350-83ca-4411-9a9d-4e3eae81d777.png)
+
+Else you should see the message `Not a member !` if the user is not a member of the group.
+
+eg:
+![Selection_015](https://user-images.githubusercontent.com/66276301/179579447-5b558475-2658-45cb-9987-a2379e7ad9d2.png)
+
+
+### Related Issue:
+Fixes #2267
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2269""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2269,https://api.github.com/repos/fossology/fossology/pulls/2269,https://github.com/fossology/fossology/pull/2269,closed,93,2,4,1,1,2,2,0,"[{'name': 'needs test'}, {'name': 'GSoC-22'}]",2022-07-18 18:37:31+00:00,2022-07-25 10:34:24+00:00,575813.0,"6 days, 15:56:53","[{'comment_id': 928267717, 'comment_body': ""Please use `getPlugin()` to get class object.\r\n```suggestion\r\n          $adminGroupUsers = $this->restHelper->getPlugin('group_manage_users');\r\n```"", 'comment_created': datetime.datetime(2022, 7, 24, 14, 35, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928296750, 'comment_body': 'done', 'comment_created': datetime.datetime(2022, 7, 24, 18, 34, 39, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '42e7f0c132ca98baeef818d018ad43f809359dd7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1040118794,feat(API): add user to a group.,"Signed-off-by: dushimsam <dushsam@gmail.com>
+
+## Description
+
+An endpoint to add the user to a group as a new member.
+
+### Changes
+
+1. Added a new controller file and the function to handle the logic in `GroupController`.
+2. Updated  the main file(`index.php`) by adding a new route `POST` `/groups/{id}/user`.
+3. Updated the `openapi.yaml` file  to introduce a new API.
+
+## How to test
+
+Make a POST request on the endpoint to be accessed at ``/groups/{id}/user``
+
+## STEPS TO TEST
+
+ #### 1. DELETE - GROUP MEMBER  
+ 
+Choose one user who was already a member to act as the sample of the following tests.
+
+![delete_member](https://user-images.githubusercontent.com/66276301/187281825-64177134-dfb9-417c-8746-c298f6ffefde.png)
+
+
+
+ #### 2.  GET- GROUP MEMBERS
+Check if he was successfully removed from the group members of that  group.
+
+![get_group_members](https://user-images.githubusercontent.com/66276301/187282172-bc3ca3c6-8820-43c9-b2fa-a2cac5012cdd.png)
+
+
+Great , at this moment it's obviously visible that the member was removed.
+
+#### 3. RE-ADD MEMBER
+
+This is the core API we are currently testing if it works.
+
+![add_user](https://user-images.githubusercontent.com/66276301/187282486-b68ad606-d7bc-4f16-a787-290ca5f23844.png)
+
+
+In this response, we can easily see that the member was successfully re-added again to the group. With his default permission of `2`
+
+#### 4. ATTEMPT TO RE-ADD AN EXISTING MEMBER
+
+![already_member](https://user-images.githubusercontent.com/66276301/187282948-9966e5dd-5ea5-46b8-9973-93ac034f3165.png)
+
+We avoid generating duplicate user-members by checking if the given user in request already exists on the part of the group.
+
+### Related Issue:
+Fixes #2302 
+
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2303""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2303,https://api.github.com/repos/fossology/fossology/pulls/2303,https://github.com/fossology/fossology/pull/2303,closed,182,6,4,1,3,9,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-08-29 19:33:30+00:00,2022-09-05 11:36:04+00:00,576154.0,"6 days, 16:02:34","[{'comment_id': 962482173, 'comment_body': 'If the endpoint is adding a single user to the group at a time, why not add it to the existing endpoint URL `DELETE /groups/{id}/user/{uid}` as a `POST` request?', 'comment_created': datetime.datetime(2022, 9, 5, 5, 10, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962483949, 'comment_body': '```suggestion\r\n          nullable: false\r\n          minimum: 0\r\n          maximum: 2\r\n```', 'comment_created': datetime.datetime(2022, 9, 5, 5, 15, 34, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962485400, 'comment_body': 'Can be simplified as:\r\n```suggestion\r\n        $stmt = __METHOD__ . "".getByGroupAndUser"";\r\n        $sql = ""SELECT group_user_member_pk FROM group_user_member WHERE group_fk=$1 AND user_fk=$2;"";\r\n        $fetchResult = $dbManager->getSingleRow($sql, [$group_pk, $newuser], $stmt);\r\n```', 'comment_created': datetime.datetime(2022, 9, 5, 5, 19, 33, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962485873, 'comment_body': 'Please following coding style guidelines:\r\n```suggestion\r\n            ""INSERT INTO group_user_member (group_fk, user_fk, group_perm) VALUES ($1, $2, $3)"");\r\n```', 'comment_created': datetime.datetime(2022, 9, 5, 5, 20, 37, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962504901, 'comment_body': 'sure done ', 'comment_created': datetime.datetime(2022, 9, 5, 5, 59, 15, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962610699, 'comment_body': 'Thanks', 'comment_created': datetime.datetime(2022, 9, 5, 8, 10, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962611334, 'comment_body': 'Please add the `minimum` and `maximum` as well to the `AddMember.perm` model', 'comment_created': datetime.datetime(2022, 9, 5, 8, 10, 45, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962652890, 'comment_body': 'welcome', 'comment_created': datetime.datetime(2022, 9, 5, 8, 50, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962664235, 'comment_body': 'done', 'comment_created': datetime.datetime(2022, 9, 5, 8, 56, 45, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '41674a5bdf732876900d77bc9f14e91043076901', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1023513923,feat(API): REST-API to initiate FOSSology maintenance,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+## Description
+ A rest API to initiate FOSSology maintenance operations.
+
+### Changes
+
+1. Added a new controller file and the function to handle the logic in `MaintenanceController`.
+2. Updated the file `maintagent.php` to be reusable by the outside callers.
+3. Updated  the main file(`index.php`) by adding a new route `POST` `/maintenance`.
+4. Updated the `openapi.yaml` file  to introduce a new API.
+
+## How to test
+
+1. Design a request as follows. 
+2. The **options** property should contain the list of the keys whose operations are to be executed.
+3. The **logsDate** property is the date from which to remove older gold files from repository (_Free to keep it as null_).
+4. The **goldDate** property is the date from which to remove older log files from repository (_Free to keep it as null_).
+3. Run the API.
+
+![maintenance_operations](https://user-images.githubusercontent.com/66276301/184081603-2550d88c-e0d0-477b-9248-cc0569402def.png)
+
+### Related Issue:
+Fixes #2289
+    
+cc: @shaheemazmalmmd @GMishx
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2290""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2290,https://api.github.com/repos/fossology/fossology/pulls/2290,https://github.com/fossology/fossology/pull/2290,closed,407,29,5,1,3,7,1,0,[{'name': 'GSoC-22'}],2022-08-11 07:12:07+00:00,2022-09-02 10:27:36+00:00,1912529.0,"22 days, 3:15:29","[{'comment_id': 944411091, 'comment_body': 'Please remove undefined namespace.', 'comment_created': datetime.datetime(2022, 8, 12, 12, 24, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944411847, 'comment_body': 'Please store response from `$maintain->getOptions()` in a variable to reduce function calls.', 'comment_created': datetime.datetime(2022, 8, 12, 12, 25, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944412124, 'comment_body': 'It will be better if user knows which key is not found :-)', 'comment_created': datetime.datetime(2022, 8, 12, 12, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944414035, 'comment_body': 'Please add a check here so only admins can run this job.', 'comment_created': datetime.datetime(2022, 8, 12, 12, 28, 29, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 944415198, 'comment_body': 'Please provide all possible options as an `enum`.', 'comment_created': datetime.datetime(2022, 8, 12, 12, 30, 7, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954083347, 'comment_body': 'Please use [401](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) unauthorized request code.', 'comment_created': datetime.datetime(2022, 8, 24, 17, 28, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954091053, 'comment_body': 'yeap , done', 'comment_created': datetime.datetime(2022, 8, 24, 17, 34, 37, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '14aba0a4c0c16119969c1301de3643222000d61a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1027154612,feat(API): import csv-license file,"Signed-off-by: dushimsam <dushsam100@gmail.com>
+
+
+## Description
+
+The controller function to handle the import of a csv license file.
+
+### Changes
+
+1. Added a new controller file and the function to handle the logic in `LicenseController`.
+2. Updated the file `AdminLicenseFromCSV.php` to be reusable by the outside callers.
+3. Updated  the main file(`index.php`) by adding a new route `POST` `/license/import`.
+4. Updated the `openapi.yaml` file  to introduce a new API.
+
+
+## How to test
+
+1. Design a request as follows. 
+2. The **delimiter** property (_Free to keep it as empty_).
+3. The **enclosure** property (_Free to keep it as empty_).
+4. The **file_input** form-data property. 
+3. Run the API.
+
+## Example
+
+#### FIRST SCENARIO 
+
+![body_request](https://user-images.githubusercontent.com/66276301/184801756-01ed75e2-e6ff-4f68-9802-7f2d75233c48.png)
+
+![form_data_file_request](https://user-images.githubusercontent.com/66276301/184801760-21c31c50-99b2-48bc-85f7-b72c66efed20.png)
+
+#### SECOND SCENARIO 
+
+![no_file_selected](https://user-images.githubusercontent.com/66276301/184801946-0680d900-4f83-4431-8470-fce23e6612c7.png)
+
+### Related Issue:
+Fixes #2291
+
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2292""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2292,https://api.github.com/repos/fossology/fossology/pulls/2292,https://github.com/fossology/fossology/pull/2292,closed,158,7,5,1,2,7,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-08-16 05:08:18+00:00,2022-09-05 08:15:28+00:00,1739230.0,"20 days, 3:07:10","[{'comment_id': 954089161, 'comment_body': 'I would prefer adding CSV to the endpoint name signifying import file type.\r\n```suggestion\r\n  /license/import-csv:\r\n```', 'comment_created': datetime.datetime(2022, 8, 24, 17, 32, 57, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954092174, 'comment_body': 'Please note that content type can either be one of 3 provided and not a combination.\r\nThus, if someone is sending data as `application/json`, they can not send the `file_input` file.\r\nSimilarly, if someone is sending data as `multipart/form-data`, they can not send `delimiter` and `enclosure` as per the current schema.\r\n\r\nPlease merge them to `multipart/form-data` to allow file upload along with `delimiter` and `enclosure` parameters.', 'comment_created': datetime.datetime(2022, 8, 24, 17, 35, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954105732, 'comment_body': 'great it makes sense.\r\nOk so then am going to shift enclosure and delimiter properties in the headers instead as we do in the upload API.', 'comment_created': datetime.datetime(2022, 8, 24, 17, 48, 14, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 956766808, 'comment_body': 'Done', 'comment_created': datetime.datetime(2022, 8, 28, 18, 45, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 956766838, 'comment_body': 'done', 'comment_created': datetime.datetime(2022, 8, 28, 18, 45, 10, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}, {'comment_id': 962480595, 'comment_body': 'Content-type `application/json` does not support file uploads. Please revert it back to `multipart/form-data`.\r\n```suggestion\r\n          multipart/form-data:\r\n            schema:\r\n              type: object\r\n              properties:\r\n                enclosure:\r\n                  type: string\r\n                  description: Enclosure for string in CSV\r\n                  default: \'""\'\r\n                  required: false\r\n                delimiter:\r\n                  type: string\r\n                  description: Delimiters for fields in CSV\r\n                  default: \',\'\r\n                  required: false\r\n                file_input:\r\n```', 'comment_created': datetime.datetime(2022, 9, 5, 5, 6, 12, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962486379, 'comment_body': 'yeap done ', 'comment_created': datetime.datetime(2022, 9, 5, 5, 22, 9, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': '7fbbe736c3d39650a9c0116a6af4367f88ef46d6', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1032273872,feat(API): delete admin-license candidate,"Signed-off-by: dushimsam <dushsam@gmail.com>
+
+
+## Description
+
+An endpoint to delete admin-license candidate.
+
+### Changes
+
+1. Added a new controller file and the function to handle the logic in `LicenseController`.
+2. Updated the file `AdminLicenseCandidate.php` to be reusable by the outside callers.
+3. Updated  the main file(`index.php`) by adding a new route `DELETE` `/license/candidates/{id}`.
+4. Updated the `openapi.yaml` file  to introduce a new API.
+
+## How to test
+
+Make a DELETE request on the endpoint accessed at ""/license/candidates/{id}""
+
+## Example
+
+ #### 1. FIRST CASE  
+ 
+ In this case, the Admin-license-candidate exists, and the license-candidate will be deleted successfully.
+
+![license_candidate_delete](https://user-images.githubusercontent.com/66276301/185834159-5ab1fb72-a7a4-4b92-a8e5-a8e2ac621a8c.png)
+
+
+ #### 2. SECOND CASE 
+  In this case, the Admin-license-candidate doesn't exist, so 404 error will be returned instead.
+
+![license_candidate_delete_2](https://user-images.githubusercontent.com/66276301/185834171-348f8264-eeb9-4943-948b-c1d0df0d67d0.png)
+
+#### 3. THIRD CASE 
+   The request is not coming from the Admin.
+   This request can only be run by the admin , else the request will fail returning 400 ERROR.
+
+   ![not_admin](https://user-images.githubusercontent.com/66276301/185834446-8190e34a-3c13-40ca-beaf-2734b48cd781.png)
+
+
+### Related Issue:
+Fixes #2297
+
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2298""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2298,https://api.github.com/repos/fossology/fossology/pulls/2298,https://github.com/fossology/fossology/pull/2298,closed,167,27,5,2,2,2,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-08-22 03:48:20+00:00,2023-02-28 11:39:43+00:00,16444283.0,"190 days, 7:51:23","[{'comment_id': 954637649, 'comment_body': 'Please read the message if the license candidate cannot be deleted. ', 'comment_created': datetime.datetime(2022, 8, 25, 8, 3, tzinfo=datetime.timezone.utc), 'commenter': 'shaheemazmalmmd', 'type': 'User'}, {'comment_id': 964179270, 'comment_body': 'Done 👍', 'comment_created': datetime.datetime(2022, 9, 6, 21, 18, 32, tzinfo=datetime.timezone.utc), 'commenter': 'dushimsam', 'type': 'User'}]","[{'commit_sha': 'a4721ab4a1ca976f7c7baf072cddd7291df1c9f8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '644879dd618de31f99775566707574cf52432158', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+1028421309,feat(API): get admin-license candidates,"Signed-off-by: dushimsam <dushsam@gmail.com>
+
+
+## Description
+
+An endpoint to fetch the list of license candidates.
+
+### Changes
+
+1. Added a new controller file and the function to handle the logic in `LicenseController`.
+2. Updated the file `AdminLicenseCandidate.php` to be reusable by the outside callers.
+3. Updated  the main file(`index.php`) by adding a new route `GET` `/license/candidates`.
+4. Updated the `openapi.yaml` file  to introduce a new API.
+
+
+## How to test
+
+Make a GET request on the end point accessed at ""/license/candidates""
+
+## Example
+
+![license_candidates](https://user-images.githubusercontent.com/66276301/185057399-de03ce12-3d95-4e02-8606-1389daabe48b.png)
+
+
+### Related Issue:
+Fixes #2293 
+
+    
+cc: @shaheemazmalmmd @GMishx
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2295""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2295,https://api.github.com/repos/fossology/fossology/pulls/2295,https://github.com/fossology/fossology/pull/2295,closed,380,17,6,2,4,0,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-08-17 07:13:53+00:00,2023-02-28 09:24:41+00:00,16855848.0,"195 days, 2:10:48",[],"[{'commit_sha': '7ed947d3c34765a70c396e58221dbf9c86e01c91', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '14723b5d32021d03fd43c9160cb9b7f32394aff0', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Samuel Dushimimana,66276301,,User,,79,,95,58
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+15866170,fossology,fossology/fossology,PHP,397,777,64,142,9788,394,76,21,"[{'id': 1484960268, 'number': 2576, 'closed': datetime.datetime(2023, 8, 28, 5, 16, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 22, 15, 14, 38, tzinfo=datetime.timezone.utc), 'time_taken': 482519.0, 'time_delta': '5 days, 14:01:59', 'additions': 51, 'deletions': 5, 'state': 'closed'}, {'id': 1484759754, 'number': 2574, 'closed': datetime.datetime(2023, 10, 6, 9, 32, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 22, 13, 22, 14, tzinfo=datetime.timezone.utc), 'time_taken': 3874237.0, 'time_delta': '44 days, 20:10:37', 'additions': 172, 'deletions': 95, 'state': 'closed'}, {'id': 1459598252, 'number': 2563, 'closed': datetime.datetime(2023, 10, 6, 8, 2, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 2, 11, 11, 53, tzinfo=datetime.timezone.utc), 'time_taken': 5604647.0, 'time_delta': '64 days, 20:50:47', 'additions': 105, 'deletions': 5, 'state': 'closed'}, {'id': 1459562387, 'number': 2562, 'closed': datetime.datetime(2023, 10, 3, 8, 55, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 2, 10, 45, 39, tzinfo=datetime.timezone.utc), 'time_taken': 5350171.0, 'time_delta': '61 days, 22:09:31', 'additions': 75, 'deletions': 0, 'state': 'closed'}, {'id': 1452045701, 'number': 2555, 'closed': datetime.datetime(2023, 10, 3, 7, 54, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 27, 13, 53, tzinfo=datetime.timezone.utc), 'time_taken': 5853673.0, 'time_delta': '67 days, 18:01:13', 'additions': 124, 'deletions': 36, 'state': 'closed'}, {'id': 1449865134, 'number': 2552, 'closed': datetime.datetime(2023, 10, 3, 7, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 26, 9, 25, 44, tzinfo=datetime.timezone.utc), 'time_taken': 5953816.0, 'time_delta': '68 days, 21:50:16', 'additions': 60, 'deletions': 0, 'state': 'closed'}, {'id': 1449781122, 'number': 2551, 'closed': datetime.datetime(2023, 10, 3, 5, 59, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 26, 8, 37, 12, tzinfo=datetime.timezone.utc), 'time_taken': 5952126.0, 'time_delta': '68 days, 21:22:06', 'additions': 97, 'deletions': 2, 'state': 'closed'}, {'id': 1430905766, 'number': 2539, 'closed': datetime.datetime(2023, 9, 28, 7, 32, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 9, 25, 44, tzinfo=datetime.timezone.utc), 'time_taken': 6732422.0, 'time_delta': '77 days, 22:07:02', 'additions': 163, 'deletions': 6, 'state': 'closed'}, {'id': 1426381398, 'number': 2538, 'closed': datetime.datetime(2023, 9, 27, 11, 18, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 17, 31, 37, tzinfo=datetime.timezone.utc), 'time_taken': 6889633.0, 'time_delta': '79 days, 17:47:13', 'additions': 145, 'deletions': 24, 'state': 'closed'}, {'id': 1426360618, 'number': 2537, 'closed': datetime.datetime(2023, 8, 29, 10, 47, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 16, 17, 5, tzinfo=datetime.timezone.utc), 'time_taken': 4386640.0, 'time_delta': '50 days, 18:30:40', 'additions': 69, 'deletions': 2, 'state': 'closed'}, {'id': 1426354222, 'number': 2536, 'closed': datetime.datetime(2023, 9, 26, 11, 52, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 15, 57, 2, tzinfo=datetime.timezone.utc), 'time_taken': 6810946.0, 'time_delta': '78 days, 19:55:46', 'additions': 78, 'deletions': 3, 'state': 'closed'}, {'id': 1426346637, 'number': 2535, 'closed': datetime.datetime(2023, 9, 26, 9, 22, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 15, 32, 14, tzinfo=datetime.timezone.utc), 'time_taken': 6803392.0, 'time_delta': '78 days, 17:49:52', 'additions': 86, 'deletions': 1, 'state': 'closed'}, {'id': 1426341133, 'number': 2534, 'closed': datetime.datetime(2023, 9, 26, 6, 39, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 15, 13, 59, tzinfo=datetime.timezone.utc), 'time_taken': 6794744.0, 'time_delta': '78 days, 15:25:44', 'additions': 128, 'deletions': 2, 'state': 'closed'}, {'id': 1426333209, 'number': 2533, 'closed': datetime.datetime(2023, 9, 27, 9, 46, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 14, 48, 6, tzinfo=datetime.timezone.utc), 'time_taken': 6893901.0, 'time_delta': '79 days, 18:58:21', 'additions': 87, 'deletions': 3, 'state': 'closed'}, {'id': 1424775941, 'number': 2532, 'closed': datetime.datetime(2023, 9, 27, 9, 9, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 14, 33, 33, tzinfo=datetime.timezone.utc), 'time_taken': 7065381.0, 'time_delta': '81 days, 18:36:21', 'additions': 88, 'deletions': 4, 'state': 'closed'}, {'id': 1424748032, 'number': 2530, 'closed': datetime.datetime(2023, 9, 26, 6, 17, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 14, 12, 46, tzinfo=datetime.timezone.utc), 'time_taken': 6969872.0, 'time_delta': '80 days, 16:04:32', 'additions': 118, 'deletions': 1, 'state': 'closed'}, {'id': 1424697664, 'number': 2529, 'closed': datetime.datetime(2023, 9, 26, 6, 10, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 13, 37, 8, tzinfo=datetime.timezone.utc), 'time_taken': 6971607.0, 'time_delta': '80 days, 16:33:27', 'additions': 119, 'deletions': 1, 'state': 'closed'}, {'id': 1424675939, 'number': 2528, 'closed': datetime.datetime(2023, 9, 26, 5, 46, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 13, 21, 15, tzinfo=datetime.timezone.utc), 'time_taken': 6971144.0, 'time_delta': '80 days, 16:25:44', 'additions': 112, 'deletions': 1, 'state': 'closed'}, {'id': 1420795874, 'number': 2524, 'closed': datetime.datetime(2023, 9, 27, 7, 4, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 10, 2, 7, tzinfo=datetime.timezone.utc), 'time_taken': 7246921.0, 'time_delta': '83 days, 21:02:01', 'additions': 171, 'deletions': 29, 'state': 'closed'}, {'id': 1419687147, 'number': 2518, 'closed': datetime.datetime(2023, 9, 5, 13, 18, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 13, 44, 37, tzinfo=datetime.timezone.utc), 'time_taken': 5441627.0, 'time_delta': '62 days, 23:33:47', 'additions': 175, 'deletions': 1, 'state': 'closed'}, {'id': 1419613253, 'number': 2517, 'closed': datetime.datetime(2023, 8, 28, 5, 20, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 12, 54, 56, tzinfo=datetime.timezone.utc), 'time_taken': 4724749.0, 'time_delta': '54 days, 16:25:49', 'additions': 76, 'deletions': 2, 'state': 'closed'}, {'id': 1419359201, 'number': 2516, 'closed': datetime.datetime(2023, 8, 9, 11, 1, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 9, 58, 25, tzinfo=datetime.timezone.utc), 'time_taken': 3114195.0, 'time_delta': '36 days, 1:03:15', 'additions': 157, 'deletions': 0, 'state': 'closed'}, {'id': 1419194867, 'number': 2515, 'closed': datetime.datetime(2023, 7, 4, 10, 9, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 8, 16, 27, tzinfo=datetime.timezone.utc), 'time_taken': 6796.0, 'time_delta': '1:53:16', 'additions': 111, 'deletions': 1, 'state': 'closed'}, {'id': 1418418176, 'number': 2513, 'closed': datetime.datetime(2023, 7, 4, 10, 9, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 3, 16, 51, 29, tzinfo=datetime.timezone.utc), 'time_taken': 62309.0, 'time_delta': '17:18:29', 'additions': 102, 'deletions': 0, 'state': 'closed'}, {'id': 1418392273, 'number': 2512, 'closed': datetime.datetime(2023, 7, 26, 6, 59, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 3, 16, 28, 2, tzinfo=datetime.timezone.utc), 'time_taken': 1953110.0, 'time_delta': '22 days, 14:31:50', 'additions': 88, 'deletions': 0, 'state': 'closed'}, {'id': 1413379449, 'number': 2509, 'closed': datetime.datetime(2023, 8, 9, 11, 1, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 29, 13, 50, 26, tzinfo=datetime.timezone.utc), 'time_taken': 3532253.0, 'time_delta': '40 days, 21:10:53', 'additions': 390, 'deletions': 4, 'state': 'closed'}, {'id': 1410435655, 'number': 2506, 'closed': datetime.datetime(2023, 7, 31, 21, 30, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 27, 18, 54, 56, tzinfo=datetime.timezone.utc), 'time_taken': 2946948.0, 'time_delta': '34 days, 2:35:48', 'additions': 84, 'deletions': 0, 'state': 'closed'}, {'id': 1408284809, 'number': 2502, 'closed': datetime.datetime(2023, 7, 24, 5, 21, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 16, 22, 23, tzinfo=datetime.timezone.utc), 'time_taken': 2379555.0, 'time_delta': '27 days, 12:59:15', 'additions': 106, 'deletions': 0, 'state': 'closed'}, {'id': 1408235634, 'number': 2501, 'closed': datetime.datetime(2023, 7, 26, 10, 22, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 15, 50, 51, tzinfo=datetime.timezone.utc), 'time_taken': 2572321.0, 'time_delta': '29 days, 18:32:01', 'additions': 124, 'deletions': 5, 'state': 'closed'}, {'id': 1408197716, 'number': 2499, 'closed': datetime.datetime(2023, 7, 24, 6, 5, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 15, 27, 43, tzinfo=datetime.timezone.utc), 'time_taken': 2385455.0, 'time_delta': '27 days, 14:37:35', 'additions': 114, 'deletions': 5, 'state': 'closed'}, {'id': 1408126127, 'number': 2498, 'closed': datetime.datetime(2023, 7, 26, 5, 16, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 14, 46, 50, tzinfo=datetime.timezone.utc), 'time_taken': 2557758.0, 'time_delta': '29 days, 14:29:18', 'additions': 90, 'deletions': 1, 'state': 'closed'}, {'id': 1408076468, 'number': 2497, 'closed': datetime.datetime(2023, 7, 11, 4, 32, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 14, 22, 16, tzinfo=datetime.timezone.utc), 'time_taken': 1260628.0, 'time_delta': '14 days, 14:10:28', 'additions': 164, 'deletions': 0, 'state': 'closed'}, {'id': 1407216358, 'number': 2495, 'closed': datetime.datetime(2023, 7, 28, 7, 26, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 5, 57, 15, tzinfo=datetime.timezone.utc), 'time_taken': 2770133.0, 'time_delta': '32 days, 1:28:53', 'additions': 281, 'deletions': 4, 'state': 'closed'}, {'id': 1407185380, 'number': 2494, 'closed': datetime.datetime(2023, 7, 10, 14, 12, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 5, 19, 42, tzinfo=datetime.timezone.utc), 'time_taken': 1241568.0, 'time_delta': '14 days, 8:52:48', 'additions': 136, 'deletions': 6, 'state': 'closed'}, {'id': 1407153691, 'number': 2492, 'closed': datetime.datetime(2023, 7, 26, 5, 15, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 4, 56, 37, tzinfo=datetime.timezone.utc), 'time_taken': 2593145.0, 'time_delta': '30 days, 0:19:05', 'additions': 401, 'deletions': 15, 'state': 'closed'}, {'id': 1398275118, 'number': 2484, 'closed': datetime.datetime(2023, 7, 7, 14, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 19, 13, 46, 28, tzinfo=datetime.timezone.utc), 'time_taken': 1557392.0, 'time_delta': '18 days, 0:36:32', 'additions': 241, 'deletions': 2, 'state': 'closed'}, {'id': 1397976478, 'number': 2483, 'closed': datetime.datetime(2023, 8, 28, 5, 20, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 19, 10, 36, 15, tzinfo=datetime.timezone.utc), 'time_taken': 6029058.0, 'time_delta': '69 days, 18:44:18', 'additions': 291, 'deletions': 3, 'state': 'closed'}, {'id': 1397264115, 'number': 2481, 'closed': datetime.datetime(2023, 7, 5, 15, 29, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 18, 20, 14, 33, tzinfo=datetime.timezone.utc), 'time_taken': 1451726.0, 'time_delta': '16 days, 19:15:26', 'additions': 336, 'deletions': 0, 'state': 'closed'}, {'id': 1397184141, 'number': 2480, 'closed': datetime.datetime(2023, 7, 5, 12, 16, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 18, 15, 38, 54, tzinfo=datetime.timezone.utc), 'time_taken': 1456646.0, 'time_delta': '16 days, 20:37:26', 'additions': 201, 'deletions': 1, 'state': 'closed'}, {'id': 1395664238, 'number': 2477, 'closed': datetime.datetime(2023, 7, 7, 9, 6, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 16, 12, 45, 48, tzinfo=datetime.timezone.utc), 'time_taken': 1801248.0, 'time_delta': '20 days, 20:20:48', 'additions': 385, 'deletions': 2, 'state': 'closed'}, {'id': 1390868956, 'number': 2471, 'closed': datetime.datetime(2023, 6, 30, 5, 37, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 13, 15, 35, 30, tzinfo=datetime.timezone.utc), 'time_taken': 1432900.0, 'time_delta': '16 days, 14:01:40', 'additions': 462, 'deletions': 1, 'state': 'closed'}, {'id': 1390755998, 'number': 2470, 'closed': datetime.datetime(2023, 7, 26, 10, 11, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 13, 14, 34, 21, tzinfo=datetime.timezone.utc), 'time_taken': 3699431.0, 'time_delta': '42 days, 19:37:11', 'additions': 587, 'deletions': 13, 'state': 'closed'}, {'id': 1390648201, 'number': 2469, 'closed': datetime.datetime(2023, 6, 30, 5, 36, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 13, 13, 38, 39, tzinfo=datetime.timezone.utc), 'time_taken': 1439896.0, 'time_delta': '16 days, 15:58:16', 'additions': 345, 'deletions': 17, 'state': 'closed'}, {'id': 1390243335, 'number': 2466, 'closed': datetime.datetime(2023, 6, 30, 5, 34, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 13, 9, 44, 13, tzinfo=datetime.timezone.utc), 'time_taken': 1453830.0, 'time_delta': '16 days, 19:50:30', 'additions': 371, 'deletions': 0, 'state': 'closed'}, {'id': 1390144479, 'number': 2465, 'closed': datetime.datetime(2023, 6, 28, 11, 30, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 13, 8, 48, 43, tzinfo=datetime.timezone.utc), 'time_taken': 1305683.0, 'time_delta': '15 days, 2:41:23', 'additions': 144, 'deletions': 1, 'state': 'closed'}, {'id': 1389384183, 'number': 2463, 'closed': datetime.datetime(2023, 7, 4, 4, 37, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 12, 20, 16, 22, tzinfo=datetime.timezone.utc), 'time_taken': 1844458.0, 'time_delta': '21 days, 8:20:58', 'additions': 134, 'deletions': 16, 'state': 'closed'}, {'id': 1386283882, 'number': 2462, 'closed': datetime.datetime(2023, 7, 3, 4, 54, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 9, 14, 20, 25, tzinfo=datetime.timezone.utc), 'time_taken': 2039627.0, 'time_delta': '23 days, 14:33:47', 'additions': 203, 'deletions': 15, 'state': 'closed'}, {'id': 1382241528, 'number': 2460, 'closed': datetime.datetime(2023, 6, 30, 5, 23, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 7, 9, 6, 11, tzinfo=datetime.timezone.utc), 'time_taken': 1973865.0, 'time_delta': '22 days, 20:17:45', 'additions': 260, 'deletions': 3, 'state': 'closed'}, {'id': 1373747610, 'number': 2456, 'closed': datetime.datetime(2023, 6, 29, 11, 1, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 1, 10, 4, 1, tzinfo=datetime.timezone.utc), 'time_taken': 2422631.0, 'time_delta': '28 days, 0:57:11', 'additions': 273, 'deletions': 3, 'state': 'closed'}, {'id': 1056093548, 'number': 2319, 'closed': datetime.datetime(2023, 3, 20, 6, 26, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 14, 14, 0, 25, tzinfo=datetime.timezone.utc), 'time_taken': 16129563.0, 'time_delta': '186 days, 16:26:03', 'additions': 185, 'deletions': 18, 'state': 'closed'}, {'id': 1040118794, 'number': 2303, 'closed': datetime.datetime(2022, 9, 5, 11, 36, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 29, 19, 33, 30, tzinfo=datetime.timezone.utc), 'time_taken': 576154.0, 'time_delta': '6 days, 16:02:34', 'additions': 182, 'deletions': 6, 'state': 'closed'}, {'id': 1032273872, 'number': 2298, 'closed': datetime.datetime(2023, 2, 28, 11, 39, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 22, 3, 48, 20, tzinfo=datetime.timezone.utc), 'time_taken': 16444283.0, 'time_delta': '190 days, 7:51:23', 'additions': 167, 'deletions': 27, 'state': 'closed'}, {'id': 1028421309, 'number': 2295, 'closed': datetime.datetime(2023, 2, 28, 9, 24, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 17, 7, 13, 53, tzinfo=datetime.timezone.utc), 'time_taken': 16855848.0, 'time_delta': '195 days, 2:10:48', 'additions': 380, 'deletions': 17, 'state': 'closed'}, {'id': 1028307120, 'number': 2294, 'closed': datetime.datetime(2022, 8, 17, 6, 59, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 17, 4, 32, 13, tzinfo=datetime.timezone.utc), 'time_taken': 8850.0, 'time_delta': '2:27:30', 'additions': 61, 'deletions': 5, 'state': 'closed'}, {'id': 1027154612, 'number': 2292, 'closed': datetime.datetime(2022, 9, 5, 8, 15, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 16, 5, 8, 18, tzinfo=datetime.timezone.utc), 'time_taken': 1739230.0, 'time_delta': '20 days, 3:07:10', 'additions': 158, 'deletions': 7, 'state': 'closed'}, {'id': 1023513923, 'number': 2290, 'closed': datetime.datetime(2022, 9, 2, 10, 27, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 11, 7, 12, 7, tzinfo=datetime.timezone.utc), 'time_taken': 1912529.0, 'time_delta': '22 days, 3:15:29', 'additions': 407, 'deletions': 29, 'state': 'closed'}, {'id': 1022313735, 'number': 2287, 'closed': datetime.datetime(2023, 2, 27, 12, 31, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 10, 7, 3, 7, tzinfo=datetime.timezone.utc), 'time_taken': 17386096.0, 'time_delta': '201 days, 5:28:16', 'additions': 212, 'deletions': 110, 'state': 'closed'}, {'id': 999758196, 'number': 2269, 'closed': datetime.datetime(2022, 7, 25, 10, 34, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 18, 18, 37, 31, tzinfo=datetime.timezone.utc), 'time_taken': 575813.0, 'time_delta': '6 days, 15:56:53', 'additions': 93, 'deletions': 2, 'state': 'closed'}, {'id': 994708924, 'number': 2259, 'closed': datetime.datetime(2023, 2, 27, 6, 39, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 12, 19, 27, 31, tzinfo=datetime.timezone.utc), 'time_taken': 19825947.0, 'time_delta': '229 days, 11:12:27', 'additions': 540, 'deletions': 247, 'state': 'closed'}, {'id': 985771252, 'number': 2251, 'closed': datetime.datetime(2022, 9, 2, 5, 41, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 16, 39, 5, tzinfo=datetime.timezone.utc), 'time_taken': 5230946.0, 'time_delta': '60 days, 13:02:26', 'additions': 322, 'deletions': 22, 'state': 'closed'}, {'id': 985768546, 'number': 2250, 'closed': datetime.datetime(2022, 7, 3, 16, 27, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 16, 22, 56, tzinfo=datetime.timezone.utc), 'time_taken': 264.0, 'time_delta': '0:04:24', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 983771388, 'number': 2247, 'closed': datetime.datetime(2022, 8, 12, 10, 47, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 30, 12, 21, 34, tzinfo=datetime.timezone.utc), 'time_taken': 3709541.0, 'time_delta': '42 days, 22:25:41', 'additions': 65, 'deletions': 3, 'state': 'closed'}, {'id': 981463444, 'number': 2244, 'closed': datetime.datetime(2022, 7, 19, 15, 33, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 28, 14, 7, 23, tzinfo=datetime.timezone.utc), 'time_taken': 1819541.0, 'time_delta': '21 days, 1:25:41', 'additions': 221, 'deletions': 1, 'state': 'closed'}]"
+374651287,FOSSologyUI,fossology/FOSSologyUI,HTML,85,47,16,20,406,49,7,19,"[{'id': 1047361164, 'number': 259, 'closed': None, 'created': datetime.datetime(2022, 9, 6, 10, 17, 26, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 237, 'deletions': 3, 'state': 'open'}, {'id': 1026628045, 'number': 252, 'closed': datetime.datetime(2022, 9, 6, 14, 32, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 15, 16, 19, 2, tzinfo=datetime.timezone.utc), 'time_taken': 1894380.0, 'time_delta': '21 days, 22:13:00', 'additions': 240, 'deletions': 81, 'state': 'closed'}, {'id': 1022357358, 'number': 249, 'closed': None, 'created': datetime.datetime(2022, 8, 10, 7, 51, 26, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 392, 'deletions': 163, 'state': 'open'}, {'id': 1021269044, 'number': 248, 'closed': None, 'created': datetime.datetime(2022, 8, 9, 9, 28, 22, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 564, 'deletions': 3, 'state': 'open'}, {'id': 995237560, 'number': 241, 'closed': datetime.datetime(2022, 8, 29, 6, 48, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 9, 12, 50, tzinfo=datetime.timezone.utc), 'time_taken': 4052144.0, 'time_delta': '46 days, 21:35:44', 'additions': 314, 'deletions': 3, 'state': 'closed'}, {'id': 971764570, 'number': 232, 'closed': datetime.datetime(2022, 6, 23, 7, 42, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 20, 5, 42, 50, tzinfo=datetime.timezone.utc), 'time_taken': 266393.0, 'time_delta': '3 days, 1:59:53', 'additions': 310, 'deletions': 0, 'state': 'closed'}]"

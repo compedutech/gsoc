@@ -1,0 +1,55 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1459836916,add Dockerfile & docker-compose.yml,"In preparation to archiving the repository, I'm adding a Dockerfile and docker-compose.yml. This should let the software to run even with the very ancient dependencies it has.
+
+The Dockerfile should setup a fully working environment for kippo, including optional dependencies (mysql, xmpp).
+
+All data and configuration should be kept outside the container by using volumes. The `docker-compose.yml` has these volumes pointing to the usual directories in the main kippo directory.
+
+This is based on the dockerfile by @aristofanischionis in #241 , but I ended up heavily editing it to use alpine and support docker-compose.
+
+## usage with docker
+
+To build:
+
+```
+docker build -t kippo:latest .
+```
+
+To use:
+
+```
+cp kippo.cfg.dist kippo.cfg
+# (and customize kippo.cfg)
+
+docker run \
+    -it \
+    --rm \
+    --name=kippo \
+    -p 2222:2222 \
+    -v $(pwd)/log:/app/log \
+    -v $(pwd)/dl:/app/dl \
+    -v $(pwd)/data:/app/data \
+    -v $(pwd)/kippo.cfg:/app/kippo.cfg \
+    kippo
+```
+
+## usage with docker-compose
+
+With the docker-compose.yml, kippo can be run with a single command:
+
+```
+docker-compose up
+```
+
+To start with the optional mariadb service:
+
+```
+docker-compose --profile with-db up
+```
+
+## Additional notes
+
+This doesn't seem to work too well with `podman`. I think it doesn't support profiles in `docker-compose.yml`, or the volumes pointing to a file (`kippo.cfg`).",True,242,https://api.github.com/repos/desaster/kippo/pulls/242,https://github.com/desaster/kippo/pull/242,closed,114,2,7,1,1,0,1,0,[{'name': 'enhancement'}],2023-08-02 13:54:07+00:00,2023-08-26 17:39:53+00:00,2087146.0,"24 days, 3:45:46",[],"[{'commit_sha': '333a45b66dd26d4468234dc8da1da1af0c3d4517', 'committer_username': 'desaster', 'committer_name': 'Upi Tamminen', 'committer_email': None, 'commit_date': datetime.datetime(2011, 2, 22, 7, 14, 58, tzinfo=datetime.timezone.utc)}]",Upi Tamminen,631441,,User,,43,,0,103
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+20230114,kippo,desaster/kippo,Python,280,1601,84,7,287,83,2,24,"[{'id': 1459836916, 'number': 242, 'closed': datetime.datetime(2023, 8, 26, 17, 39, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 2, 13, 54, 7, tzinfo=datetime.timezone.utc), 'time_taken': 2087146.0, 'time_delta': '24 days, 3:45:46', 'additions': 114, 'deletions': 2, 'state': 'closed'}]"

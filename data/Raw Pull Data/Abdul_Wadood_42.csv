@@ -1,0 +1,80 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1041879769,RISC-V Compressed Extension support,"The support of RISC-V Compressed extension has been added into NucleusRV core as part of Google Summer of Code 2022.
+This project aims to deliver the following milestones.
+
+- Design the hardware in CHISEL to support 25 Compressed instructions.
+- Integrate the design with the NucleusRV core.
+- Verify the NucleusRV for Compressed instructions using the RISC-V Compliance Test suite.
+- Document the project.
+
+## Design and Integration of C extension
+The design and Integration of Compressed extension into NucleusRV - which is a 32-bit architecture core - is divided into the following steps.
+
+### 1. Compressed Decoder
+The first and foremost thing to have support for RISC-V Compressed extension is the design Compressed decoder. Since the NucleusRV is capable of processing 32-bit instructions. In order to process the compressed (16-bit) instructions, we need to have a decoder that takes compressed instruction and gives its 32-bit equivalent instruction.
+The design of the Compressed decoder is based on the Compressed Instruction specification described in Chapter 16 of [RISC-V Unprivileged spec](https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf).
+Compressed Decoder for NucleusRV core is implemented as part of [this](https://github.com/merledu/nucleusrv/pull/42/commits/09b8abbd35fd68017a07e939b04408c9fefeadf3) commit. This decoder is only active when the compressed instruction will encounter, otherwise, it will simply pass the input instruction to the output of the decoder. There is one addition signal `is_comp` that gets set only when compressed instruction is encountered.
+
+### 2. Add support of Misaligned address (pc+2)
+As the instruction memory of the NucleusRV core is byte aligned. In order to fetch the 32-bit instruction word, the Program counter (pc) must be incremented by 4. But with the support of Compressed (16-bit) instruction, the program counter must have the support to get incremented by 2 instead of 4. The increment of PC by 2 may cause misaligned instruction fetch - hence called it misaligned address - with which we will deal later on.
+The support of misaligned instruction address is added into the NucleusRV core as part of [this](https://github.com/merledu/nucleusrv/pull/42/commits/79f6c53790966d35c4e735d412263b217221dd6e) commit. By default, pc will increment by 4 for non-branching and non-jumping instructions. But whenever the compressed instruction will be encountered, the `is_comp` signal will be set and based on this signal, the pc is incremented by 2.
+
+### 3. Realigner: Handling misaligned Instructions
+As discussed in the previous step, the pc+2 causes the misaligned instruction fetch. So, the most important and challenging part of this is handling misaligned instructions and feeding the correct instructions to the core. 
+This `Realigner` module is instantiated in between the InstructionFetch module and the rest of the core. It receives the instruction address (PC) from the core and the corresponding instruction from memory. The support of the Realigner module is integrated as part of [this](https://github.com/merledu/nucleusrv/pull/42/commits/ad32aa60868cf591921cc20306b6c5847ee83cf7) commit.
+If the instruction address is word aligned then Realigner will simply pass the signals between core and memory. If the pc is misaligned (pc%4 != 0), then the state machine of the Realigner module comes into action. State machine performs the following operations:
+
+1. Store the upper half-word of current instruction,
+    Halt the PC for one cycle, and
+    send the address to the next instruction.
+    Meanwhile, NOP will be fed to the core.
+
+2. After one cycle, when the instruction arrives, 
+    the lower half-word of this instruction is concatenated
+    with the previously stored upper-half word. And this new 
+    instruction will be fed to the core.
+
+Implementing these 3 steps successfully concludes the integration of Compressed Extension support in NucleusRV.
+
+## Bug Fixing
+There was a bug in NucleusRV that breaks the `SRAI` instruction. This was fixed as part of [this](https://github.com/merledu/nucleusrv/pull/42/commits/8f00056457407b623361c9cb2b4dc2e090f3559c) commit.
+
+## Verification
+The integrated Compressed instructions are verified using [RISC-V Compliance test suite](https://github.com/riscv-non-isa/riscv-arch-test/tree/main/riscv-test-suite/rv32i_m/C/src). The instructions for running the compliance test are given [here](https://github.com/merledu/nucleusrv/tree/no-deps#:~:text=Running%20Compliance%20Tests).
+All the tests for the required 25 Compressed instructions are passed on NucleusRV. The results are given below.
+```
+Compare to reference files ... 
+
+Check               C-ADDI16SP ... OK
+Check               C-ADDI4SPN ... OK
+Check                   C-ADDI ... OK
+Check                    C-ADD ... OK
+Check                   C-ANDI ... OK
+Check                    C-AND ... OK
+Check                   C-BEQZ ... OK
+Check                   C-BNEZ ... OK
+Check                    C-JAL ... OK
+Check                   C-JALR ... OK
+Check                      C-J ... OK
+Check                     C-JR ... OK
+Check                     C-LI ... OK
+Check                    C-LUI ... OK
+Check                     C-LW ... OK
+Check                   C-LWSP ... OK
+Check                     C-MV ... OK
+Check                     C-OR ... OK
+Check                   C-SLLI ... OK
+Check                   C-SRAI ... OK
+Check                   C-SRLI ... OK
+Check                    C-SUB ... OK
+Check                     C-SW ... OK
+Check                   C-SWSP ... OK
+Check                    C-XOR ... OK
+--------------------------------
+OK: 25/25 RISCV_TARGET=nucleusrv RISCV_DEVICE=rv32i RISCV_ISA=rv32imc
+```
+## Conclusion
+The support of Compressed instruction makes better utilization of memory. Instruction size in the memory is reduced by half but we have to put extra hardware for decoding to support the compressed instruction. [This](https://medium.com/@abdulwadoodd/risc-v-compressed-instructions-for-serv-6065f55158b4) blog explains more about RISC-V Compressed extension.",True,42,https://api.github.com/repos/merledu/nucleusrv/pulls/42,https://github.com/merledu/nucleusrv/pull/42,closed,424,12,5,4,1,0,0,0,[],2022-08-31 04:31:10+00:00,2022-09-13 06:57:45+00:00,1131995.0,"13 days, 2:26:35",[],"[{'commit_sha': '09b8abbd35fd68017a07e939b04408c9fefeadf3', 'committer_username': 'Abdulwadoodd', 'committer_name': 'Abdul Wadood', 'committer_email': None, 'commit_date': datetime.datetime(2021, 4, 7, 9, 1, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': '79f6c53790966d35c4e735d412263b217221dd6e', 'committer_username': 'Abdulwadoodd', 'committer_name': 'Abdul Wadood', 'committer_email': None, 'commit_date': datetime.datetime(2021, 4, 7, 9, 1, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ad32aa60868cf591921cc20306b6c5847ee83cf7', 'committer_username': 'Abdulwadoodd', 'committer_name': 'Abdul Wadood', 'committer_email': None, 'commit_date': datetime.datetime(2021, 4, 7, 9, 1, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8f00056457407b623361c9cb2b4dc2e090f3559c', 'committer_username': 'Abdulwadoodd', 'committer_name': 'Abdul Wadood', 'committer_email': None, 'commit_date': datetime.datetime(2021, 4, 7, 9, 1, 18, tzinfo=datetime.timezone.utc)}]",Abdul Wadood,82087831,,User,,21,,4,19
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+266701840,nucleusrv,merledu/nucleusrv,C,23,60,3,10,223,14,23,0,"[{'id': 1041879769, 'number': 42, 'closed': datetime.datetime(2022, 9, 13, 6, 57, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 31, 4, 31, 10, tzinfo=datetime.timezone.utc), 'time_taken': 1131995.0, 'time_delta': '13 days, 2:26:35', 'additions': 424, 'deletions': 12, 'state': 'closed'}, {'id': 1025186256, 'number': 41, 'closed': datetime.datetime(2022, 8, 30, 15, 2, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 12, 17, 7, 37, tzinfo=datetime.timezone.utc), 'time_taken': 1547711.0, 'time_delta': '17 days, 21:55:11', 'additions': 0, 'deletions': 0, 'state': 'closed'}]"

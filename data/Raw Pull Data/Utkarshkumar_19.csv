@@ -1,0 +1,1800 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+665558814,crypt wsaa,"## Summary
+
+Bring back cryptography branch from GSoC 2019 pyar/pyafipws#25 of @NicolasSandoval 
+Changes from the original PR and after merge against main branch:
+* Removal of M2Crypto legacy library
+* SignTRA (CMS) and other certificate/private key
+* Proper dependencies were updated both for python2 and python3 (new)
+* 2 unit tests were added for sanity (new)
+* GitHub action updated to download crt/key testing credentials (new)
+
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+
+See UTs
+
+`$ python -m pyafipws.wsaa --debug --trace`
+```
+Encodign in UTF-8
+Usando CRT=reingart.crt KEY=reingart.key URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms SERVICE=wsfe TTL=36000
+WSAA Version 3.11c  False
+Creando TRA...
+Firmando TRA...
+Conectando a WSAA...
+Llamando WSAA...
+--------------------------------------------------------------------------------
+POST https://wsaahomo.afip.gov.ar/ws/services/LoginCms
+Content-type: text/xml; charset=""UTF-8""
+Content-length: 2722
+SOAPAction: ""None""
+
+<?xml version=""1.0"" encoding=""UTF-8""?><soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:ser=""https://wsaahomo.afip.gov.ar/ws/services/LoginCms"">
+<soapenv:Header/>
+<soapenv:Body>
+    <ser:loginCms>
+    <in0>MIIG+wYJKo...
+xt71uptvMNqMGydoECL7
+
+</in0></ser:loginCms>
+</soapenv:Body>
+</soapenv:Envelope>
+
+date: Wed, 09 Jun 2021 04:13:37 GMT
+content-type: text/xml;charset=utf-8
+set-cookie: TS01b14f84=0145b27a9751dfe5164a62bb1b25a15f750c7a7f763428b3fd57a8677b6c07e0bdf60cfb3b; Path=/
+transfer-encoding: chunked
+status: 200
+b'<?xml version=""1.0"" encoding=""UTF-8""?><soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""><soapenv:Body><loginCmsResponse xmlns=""https://wsaahomo.afip.gov.ar/ws/services/LoginCms""><loginCmsReturn>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;\n&lt;loginTicketResponse version=&quot;1.0&quot;&gt;\n    &lt;header&gt;\n        &lt;source&gt;CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239&lt;/source&gt;\n        &lt;destination&gt;SERIALNUMBER=CUIT 20267565393, CN=reingart2019pub&lt;/destination&gt;\n        &lt;uniqueId&gt;1103203105&lt;/uniqueId&gt;\n        &lt;generationTime&gt;2021-06-09T01:13:37.152-03:00&lt;/generationTime&gt;\n        &lt;expirationTime&gt;2021-06-09T13:13:37.152-03:00&lt;/expirationTime&gt;\n    &lt;/header&gt;\n    &lt;credentials&gt;\n        &lt;token&gt;PD94bWwgdmVyc2lv...8L3Nzbz4K&lt;/token&gt;\n        &lt;sign&gt;j/dCKthzdFDsMuEMpaeb4D3H0/FbRaAngHHcmnABZdbz62wE7LOaDy4mYD8MYGMTgw6KZ+keBnNIVQRPQUqhyMfZJTx9/f75m1OOYY8H9Io0tREzz9hKQjJYY2wqUVMoENMfNxkMwS64e+KHwo/OHymCY/GGtcO3m2JsaksabLs=&lt;/sign&gt;\n    &lt;/credentials&gt;\n&lt;/loginTicketResponse&gt;\n</loginCmsReturn></loginCmsResponse></soapenv:Body></soapenv:Envelope>'
+================================================================================
+Grabando TA en /mnt/pyafipws/.venv3/lib/python3.8/site-packages/PyAfipWs-3.8.b_2537_-py3.8.egg/pyafipws/cache/TA-2b4277f5962bd2cb0265c0fac4b32304.xml...
+<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<loginTicketResponse version=""1.0"">
+    <header>
+        <source>CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239</source>
+        <destination>SERIALNUMBER=CUIT 20267565393, CN=reingart2019pub</destination>
+        <uniqueId>1103203105</uniqueId>
+        <generationTime>2021-06-09T01:13:37.152-03:00</generationTime>
+        <expirationTime>2021-06-09T13:13:37.152-03:00</expirationTime>
+    </header>
+    <credentials>
+        <token>PD94bWwg....</token>
+        <sign>j/dCKthzdFDsMuEMpaeb4D3H0/FbRaAngHHcm....GGtcO3m2JsaksabLs=</sign>
+    </credentials>
+</loginTicketResponse>
+
+Source: CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239
+UniqueID Time: 1103203105
+Generation Time: 2021-06-09T01:13:37.152-03:00
+Expiration Time: 2021-06-09T13:13:37.152-03:00
+Expiro? False
+```
+",True,53,https://api.github.com/repos/PyAr/pyafipws/pulls/53,https://github.com/PyAr/pyafipws/pull/53,closed,162,90,4,13,0,2,0,0,[],2021-06-09 05:24:46+00:00,2021-06-10 17:22:36+00:00,129470.0,"1 day, 11:57:50",[],"[{'commit_sha': '6f23ac3bbbe4d8892b00b8e4413353a78e68a403', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8c86a5ae349a0630b81005f9ce3a65cbb7da4803', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '35bb4bae167f8e6c170ae03b44eb54dc148b8181', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b688884725fb8fc7d257a8544cd427c3dfb82bec', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '719789b95b4e01395adba8cf4db1b31c4f4902c2', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2bb59aed62a27f19ed93f7aab88a1c393c7ed9e0', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd659edf30a11c8772cf21c436a5a150d77a4abb', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e54aadaec34c3307b372e3cd0c03c1828060b1f', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43df01a5095d87d2c3a3b836da7f5db23322ca29', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21de463004414659ef07b60393b5cc29d16cfc93', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '462556ef072d956b89f7f3e3433d76a8c21d2ecf', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1c479c0f7df8bdcd050f51067073c4cec121a5c', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58383ec65f3d2a040c22867974f5a8fe420ef7d4', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}]",Mariano Reingart,1041385,reingart@gmail.com,User,,65,,1,259
+668060540,pytest-vcr support added,"Signed-off-by: UTKARSH KUMAR <Utkarshdhsbgp@gmail.com>
+
+- enabled pytest-vcr support in dummy test
+- updated requirements-dev.txt for the same
+- updated utils.py for different time-zone support",True,56,https://api.github.com/repos/PyAr/pyafipws/pulls/56,https://github.com/PyAr/pyafipws/pull/56,closed,1000,2,4,1,0,0,0,0,[],2021-06-11 11:56:33+00:00,2021-06-12 01:00:47+00:00,47054.0,13:04:14,[],"[{'commit_sha': '5f1ce7b83790adbbea64af950ccfff02d8ebea28', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+668072933,minor bug fixes for PDF generation,"Signed-off-by: UTKARSH KUMAR <Utkarshdhsbgp@gmail.com>
+
+- fixed issues in setup.py and pyfepdf.py for PDF generation
+- updated utils.py for different time-zone support
+",True,57,https://api.github.com/repos/PyAr/pyafipws/pulls/57,https://github.com/PyAr/pyafipws/pull/57,closed,3,4,3,2,0,0,0,0,[],2021-06-11 12:09:41+00:00,2021-06-12 01:12:04+00:00,46943.0,13:02:23,[],"[{'commit_sha': 'e3727d2c854dfb9b5f2baed2af0192912e9e339a', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae1976f32aa9e29349291b9b87309b1d785e8b1f', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+668192462,fixed wsaa cryptography merge issues,"## Summary
+
+Fixes issues that arose from merging of cryptography changes instead of M2crypto
+ in wsaa.py as per issue #15 and PR #25 and #53.
+
+This also completes issue [13](https://github.com/chazuttu/pyafipws/issues/13#issue-913942956).  
+
+- enabled inline passing of crt/key in wsaa.py
+- enabled passphrase support
+- added more unit tests for wsaa.py
+
+
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+
+`$ python -m pyafipws.wsaa --debug --trace`
+
+```
+Encodign in cp1252
+Usando CRT=reingart.crt KEY=reingart.key URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms SERVICE=wsfe TTL=36000
+WSAA Version 3.11c  False
+Creando TRA...
+Firmando TRA...
+Conectando a WSAA...
+Llamando WSAA...
+--------------------------------------------------------------------------------
+POST https://wsaahomo.afip.gov.ar/ws/services/LoginCms
+Content-type: text/xml; charset=""UTF-8""
+Content-length: 2722
+SOAPAction: ""None""
+
+<?xml version=""1.0"" encoding=""UTF-8""?><soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:ser=""https://wsaahomo.afip.gov.ar/ws/services/LoginCms"">
+<soapenv:Header/>
+<soapenv:Body>
+    <ser:loginCms>
+    <in0>MIIG+.......
+........./hxYPLb3RiAyBYaG6uftAmg5w
+
+</in0></ser:loginCms>
+</soapenv:Body>
+</soapenv:Envelope>
+
+date: Fri, 11 Jun 2021 14:02:28 GMT
+content-type: text/xml;charset=utf-8
+set-cookie: TS01b14f84=0145b27a97364573b480a490667be52c927711119deaebcd548a359bf9df9a52d14f212231; Path=/
+transfer-encoding: chunked
+status: 200
+b'<?xml version=""1.0"" encoding=""UTF-8""?><soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" 
+xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""><soapenv:Body><loginCmsResponse xmlns=""https://wsaahomo.afip.gov.ar/ws/services/LoginCms""><loginCmsReturn>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;\n&lt;loginTicketResponse version=&quot;1.0&quot;&gt;\n    &lt;header&gt;\n        &lt;source&gt;CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239&lt;/source&gt;\n        &lt;destination&gt;SERIALNUMBER=CUIT 20267565393, CN=reingart2019pub&lt;/destination&gt;\n        &lt;uniqueId&gt;3561837960&lt;/uniqueId&gt;\n        &lt;generationTime&gt;2021-06-11T11:02:28.949-03:00&lt;/generationTime&gt;\n        &lt;expirationTime&gt;2021-06-11T23:02:28.949-03:00&lt;/expirationTime&gt;\n    &lt;/header&gt;\n    &lt;credentials&gt;\n        &lt;token&gt;PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iMTk1NDU2NDE2NCIgZ2VuX3RpbWU9IjE2MjM0MjAwODgiIGV4cF90aW1lPSIxNjIzNDYzMzQ4Ii8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzZmUiIHVpZD0iU0VSSUFMTlVNQkVSPUNVSVQgMjAyNjc1NjUzOTMsIENOPXJlaW5nYXJ0MjAxOXB1YiIgYXV0aG1ldGhvZD0iY21zIiByZWdtZXRob2Q9IjIyIj4KICAgICAgICAgICAgPHJlbGF0aW9ucz4KICAgICAgICAgICAgICAgIDxyZWxhdGlvbiBrZXk9IjIwMjY3NTY1MzkzIiByZWx0eXBlPSI0Ii8+CiAgICAgICAgICAgIDwvcmVsYXRpb25zPgogICAgICAgIDwvbG9naW4+CiAgICA8L29wZXJhdGlvbj4KPC9zc28+Cg==&lt;/token&gt;\n        &lt;sign&gt;TQEEM3Y77Uc5uCzXSM926a3pb3CLpN/p+7OMtvfoG7l3xK9XxjcpRhxDZpUWKKggpvVzYOGfqsqr6v6tWwE2mAzJqkyHxdsa4rS6GXXmB/Y8jmWXvhDaTVrGc9+s5yzJnh+rhs0IVivR1qHlCDTrkzNTe8br9oG2VAlOVf7A0SA=&lt;/sign&gt;\n    &lt;/credentials&gt;\n&lt;/loginTicketResponse&gt;\n</loginCmsReturn></loginCmsResponse></soapenv:Body></soapenv:Envelope>'
+================================================================================
+Grabando TA en C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws\venv\lib\site-packages\pyafipws-3.9.b_2457_-py3.9.egg\pyafipws\cache\TA-2b4277f5962bd2cb0265c0fac4b32304.xml...
+<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<loginTicketResponse version=""1.0"">
+    <header>
+        <source>CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239</source>
+        <destination>SERIALNUMBER=CUIT 20267565393, CN=reingart2019pub</destination>
+        <uniqueId>3561837960</uniqueId>
+        <generationTime>2021-06-11T11:02:28.949-03:00</generationTime>
+        <expirationTime>2021-06-11T23:02:28.949-03:00</expirationTime>
+    </header>
+    <credentials>
+        <token>PD94bWw....28+Cg==</token>
+        <sign>TQEE.......oG2VAlOVf7A0SA=</sign>
+    </credentials>
+</loginTicketResponse>
+
+Source: CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239
+UniqueID Time: 3561837960
+Generation Time: 2021-06-11T11:02:28.949-03:00
+Expiration Time: 2021-06-11T23:02:28.949-03:00
+Expiro? False
+```
+
+### Unit tests
+
+`pytest tests\test_wsaa_crypto.py`
+
+```
+=============================================== test session starts ===============================================
+platform win32 -- Python 3.9.2, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws
+plugins: html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 4 items
+
+tests\test_wsaa_crypto.py ....                                                                               [100%]
+
+================================================ warnings summary ================================================= 
+venv\lib\site-packages\past\builtins\misc.py:45
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\venv\lib\site-packages\past\builtins\misc.py:45: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    from imp import reload
+
+venv\lib\site-packages\pysimplesoap\transport.py:140
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\venv\lib\site-packages\pysimplesoap\transport.py:140: DeprecationWarning: inspect.getargspec() is deprecated since Python 3.0, use inspect.signature() or inspect.getfullargspec()
+    if 'timeout' in inspect.getargspec(httplib2.Http.__init__)[0]:
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+========================================== 4 passed, 2 warnings in 0.27s ========================================== 
+```",True,58,https://api.github.com/repos/PyAr/pyafipws/pulls/58,https://github.com/PyAr/pyafipws/pull/58,closed,68,20,4,7,0,0,0,0,[],2021-06-11 14:09:23+00:00,2021-06-12 01:41:43+00:00,41540.0,11:32:20,[],"[{'commit_sha': '76ea8cd951de6c7577d3def23e6f114f63123f3a', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3bfa7fa99409776dc4212324c5fd65b9c6cf498f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '259bbc1aac0f2d70074c62a5517bdce44000ae02', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '199f16e3885193cfb1cfbb8b275315e929e018e6', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '096734d943c6750dcba915d2651d9b4f81c937b9', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd6e6182551d912abc0eff07a55f1744300f050b5', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dbe5ff19f97334c7c0a6eac5c3f2f511420c828a', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+672134465,Bring back GSoC 2019 tests,,True,59,https://api.github.com/repos/PyAr/pyafipws/pulls/59,https://github.com/PyAr/pyafipws/pull/59,closed,3201,4,18,48,0,0,0,0,[],2021-06-17 03:05:09+00:00,2021-06-18 01:21:31+00:00,80182.0,22:16:22,[],"[{'commit_sha': 'f2bbe99864c3029a41ca5b28073dbc38782de1b0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '4aaf88cbd8b50b86a27f23bc20e82128f09bb27c', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ab08702b9102ad336f67b0e0b4aa9167cdff9653', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'edb48edbed14e0d484f6aee90037e3eedc560c5c', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'd70206f724b10c915b5951eaa7269d19eb690ca0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f751fe277c628f38aaa05e5ea2e672e8d4ca566f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f1d96739b4c6f21bce5b9760ef144371f51950f8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f54938817bbf8fcbcd307eb3d1689a8b6b9e91e1', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '5c0bab50d22cbe8af57c9d8c2ad6a0bdd20a3ff6', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '40b916210ae5c5c7d40a27e19a6a1b41ce565043', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '93afcccfaa6887a030f917f3af0cdd9f19013e67', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '0336b8aa3d5f0befa65b64abc1e0092ae2577f62', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '03abf0377c0b6cbec7e6362ce0e8f9fb7a60d8f7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '050ad110a0266bd80381e79b726fec6c5436ae1e', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'c37eaeb71d7b195b744b41c9310f368a8128a933', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '9bcfa0fd751fbe775e49dd1bef8dfc263e9281d6', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '724fcd0774b8fea2b600b5664c1181f93ff8a762', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76c84ad1a0ca91238ec31124fe7da1807ebaa44d', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83ba3d02373d8ba04f9d4be7e4ee547eb0cfc3be', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '31eda4dd2f27091f229a172ae6397778a277e724', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '206ecb26f69ec6882f527fe9d9c1dee316d616ff', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bcf2df9b9d9c60310a28e4117f84c26f3244515a', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de75cf9c0ede91f607fb8de6d1f5e4a1be9f8e58', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5431bfee877715414d15436fdc2808a735dbe343', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a001cd12242b1e13b863a90c48e102a7889a471', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f0a54a2340f80434f2947fe1d14ef3047dbf9e0', 'committer_username': 'NicolasSandoval', 'committer_name': 'Nico Sandoval', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 30, 22, 12, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '11c88008b6aaf20039c6e274d4b68ea2375ad52e', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7301d2846aec3fbb03c063a54948b33206d80bdf', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '99e6d97a538ba77912c22546c7b2a25a9a331aec', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ce65b90a3082fae9d0f52d663c8678169e22fea', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6ca2e4c1b394fe537587b91b54e4412975074fc6', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44c83dd54613c87ca9eefc0ac0d080fa1ef4905d', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fcc8a488cd60fc1ef4dc2c7a284805d22e54b65e', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6682797b7ffa6bfaf55b81f71ba56f905d06d73f', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17a1b38efe821e00183ea65298dacd12042bfdbf', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4c55231873786eca647dde06e8f4253ad6280554', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d877c2b1169e70d45896610464f27b61d959a46', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b8b9767bb948a66a627e88466b6b255b4d801a28', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'faedf8d941ef34aae6fcb5e5522fc8b0e67baf96', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c946ba3fac7185487639666c3e337c3cc16983f', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b1b7cb1c2e479cff216a800057b78900750b915', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8171b800c2294dfc95262691f140a0f266520222', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be36aaa72344a3f96193b6c6d5159ee210114efb', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7f890e01d99a4f8cb3ff8a00cbb0750e6296f0d', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc57cab6e9c387237fcff7fdf752e1f6303ff2de', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '632d2b38da2bc8f3f60175f6fea642ca4d7d17eb', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d34611e01a95c798a3530f2c2e0532ba61b5dfc', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c149745d31b5d6313512931644a4e7cf1d6dfcd3', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Mariano Reingart,1041385,reingart@gmail.com,User,,65,,1,259
+673102871,Fix GSoC unit tests,"## Summary
+
+Fix issues of PR #59 (unit tests from GSoC 2019)
+
+## Checklist
+
+- [ ] Classes, Variables, function and methods logic  ok
+- [ ] Comments written explaining what the code does
+- [ ] All python code is PEP8 compliant (run black .)
+- [ ] No lint issues (run flake8)
+- [ ] Test coverage with pytest implemented
+- [ ] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+
+(attach command-line examples, execution output & logs, etc.)
+",True,60,https://api.github.com/repos/PyAr/pyafipws/pulls/60,https://github.com/PyAr/pyafipws/pull/60,closed,367,1,2,5,0,0,0,0,[],2021-06-18 01:46:30+00:00,2021-06-19 19:16:26+00:00,149396.0,"1 day, 17:29:56",[],"[{'commit_sha': '7b037a5d078a9c903fc7d07ec91335cc4a78ddb6', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '38dd787939cc579184d9d7f2c5448436b38a29da', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6afd00077b15f224613081d23db05642bcbd2bd', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5332e914bcc2d9324d7279b38d4c72fa549b3b45', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b009192c31470ecedf55ec991f35604d74869eb', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Mariano Reingart,1041385,reingart@gmail.com,User,,65,,1,259
+674087610,Fixed tests from gsoc19,"## Summary
+
+fixes the issues that arose from merging the tests from PR #59. 
+This is also in according to issue #6 and issue from [chazuttu/Pyafipws](https://github.com/chazuttu/pyafipws/issues/10). 
+
+There is an update in requirements.txt file and 
+cassettes are generated from recording with pytest-vcr.
+
+
+
+
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+
+`$ pytest`
+
+```
+================================================== test session starts ==================================================
+platform win32 -- Python 3.9.2, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws
+plugins: html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 236 items
+
+tests\test_ws_sr_padron.py s.sx                                                                                    [  1%]
+tests\test_wsaa.py .....                                                                                           [  3%]
+tests\test_wsaa_crypto.py ....                                                                                     [  5%]
+tests\test_wsbfev1.py ..........                                                                                   [  9%]
+tests\test_wscdc.py s.......                                                                                       [ 13%]
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx                                                                [ 26%]
+tests\test_wsfev1.py ......                                                                                        [ 29%]
+tests\test_wsfev1_dummy.py .                                                                                       [ 29%]
+tests\test_wsfexv1.py ..........                                                                                   [ 33%]
+tests\test_wslsp.py ......................................x.                                                       [ 50%]
+tests\test_wsltv.py ............................x.                                                                 [ 63%]
+tests\test_wslum.py ........................x.                                                                     [ 74%]
+tests\test_wsmtx.py ..............x......x..........x                                                              [ 88%]
+tests\test_wsremcarne.py ...........................                                                               [100%]
+
+=================================================== warnings summary ==================================================== 
+finaa\lib\site-packages\pysimplesoap\transport.py:141
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\finaa\lib\site-packages\pysimplesoap\transport.py:141: DeprecationWarning: inspect.getargspec() is deprecated since Python 3.0, use inspect.signature() or inspect.getfullargspec()    
+    if 'timeout' in inspect.getargspec(httplib2.Http.__init__)[0]:
+
+finaa\lib\site-packages\future\standard_library\__init__.py:65
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\finaa\lib\site-packages\future\standard_library\__init__.py:65: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+
+tests/test_ws_sr_padron.py::test_consultar_a5
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\finaa\lib\site-packages\pysimplesoap\simplexml.py:49: Runtimel.py:49: RuntimeWarning: removing unsupported UTC offset
+    warnings.warn('removing unsupported UTC offset', RuntimeWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+================================ 206 passed, 5 skipped, 25 xfailed, 3 warnings in 15.72s ================================ ===============
+```",True,63,https://api.github.com/repos/PyAr/pyafipws/pulls/63,https://github.com/PyAr/pyafipws/pull/63,closed,27349,931,157,13,0,3,0,0,[],2021-06-20 19:38:05+00:00,2021-06-22 01:48:02+00:00,108597.0,"1 day, 6:09:57","[{'comment_id': 655661625, 'comment_body': 'This fixture could be moved to conftest.py, so it is automatically available to all tests\r\nPlease create a ticket to track these improvements (""Reuse VCR cassete dir fixture"")', 'comment_created': datetime.datetime(2021, 6, 21, 19, 51, 37, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 655663789, 'comment_body': 'You could call this fixture just wspa5, or better , using a parameter to specify the business webservice (WSSrPadronA5) so a single fixture for authentication can be reused across tests.\r\nPlease create a ticket to track this improvements (""Review authentication fixture"")', 'comment_created': datetime.datetime(2021, 6, 21, 19, 55, 12, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 655668486, 'comment_body': 'Please create a ticket to move this test to pytest (like you did in the other classes)', 'comment_created': datetime.datetime(2021, 6, 21, 20, 3, 45, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}]","[{'commit_sha': 'e730cdc644ad2fbc9204ed0ca73e299ee1c055a6', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8c10ba3534f84c331803a4f62044945bcd03cf61', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1db9f303c8ea099ddc790f7be2e64101dacb1b4', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5187153b5c3a3ee071e576fa273cb28355f80fa5', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b16e366ec35e79f90bce9e3c313f38a62407196b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '177f42b8ef57dfbce786521f6110178e32313f5c', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c485364cb81101a6f1a3e9a88553cf37663a6eb', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f4cd8023619bf94b8221aa5abaeb2611a933c1b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c576d3885845f148be38011878e7ee1256a3364a', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f1fb72c267c9307cdaf4b9e5338cb8ad9d9ca53', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b72734b2b83f25d91c7f40438f79d77a65e8780', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1657fd45fc188ed8cc8d5709d401ad77ebb6e8ce', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '18a58a8924b79286d15f1d021b3fab56a799da3e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+678086124,Python Version issues fixed,"## Summary
+
+-  Fixed python version issues that were causing some tests to fail on python 2.
+-  Added pytest configuration file to register custom markers.
+- Currently **202** tests pass on both versions.
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+
+### For python 2
+`$ pytest`
+
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.12, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws, inifile: pytest.ini
+plugins: html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 236 items
+
+tests\test_ws_sr_padron.py s.sx                                          [  1%]
+tests\test_wsaa.py ...X.                                                 [  3%]
+tests\test_wsaa_crypto.py ....                                           [  5%]
+tests\test_wsbfev1.py ..........                                         [  9%]
+tests\test_wscdc.py s.......                                             [ 13%]
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx                      [ 26%]
+tests\test_wsfev1.py ...xxx                                              [ 29%]
+tests\test_wsfev1_dummy.py .                                             [ 29%]
+tests\test_wsfexv1.py ..........                                         [ 33%]
+tests\test_wslsp.py ......................................x.             [ 50%]
+tests\test_wsltv.py ............................x.                       [ 63%]
+tests\test_wslum.py ........................x.                           [ 74%]
+tests\test_wsmtx.py ..............x......x..........x                    [ 88%]
+tests\test_wsremcarne.py ...........................                     [100%]
+
+============================== warnings summary ===============================
+tests/test_ws_sr_padron.py::test_consultar_a5
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\py2_7\lib\site-packages\pysimplesoap\simplexml.py:49: RuntimeWarning: removing unsupported UTC offset
+    warnings.warn('removing unsupported UTC offset', RuntimeWarning)
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+== 202 passed, 5 skipped, 28 xfailed, 1 xpassed, 1 warnings in 27.46 seconds ==
+```
+
+### For python 3
+`$ pytest`
+
+```
+============================================== test session starts ==============================================
+platform win32 -- Python 3.9.2, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 236 items
+
+tests\test_ws_sr_padron.py s.sx                                                                            [  1%]
+tests\test_wsaa.py ...X.                                                                                   [  3%]
+tests\test_wsaa_crypto.py ....                                                                             [  5%]
+tests\test_wsbfev1.py ..........                                                                           [  9%]
+tests\test_wscdc.py s.......                                                                               [ 13%]
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx                                                        [ 26%]
+tests\test_wsfev1.py ...xxx                                                                                [ 29%]
+tests\test_wsfev1_dummy.py .                                                                               [ 29%]
+tests\test_wsfexv1.py ..........                                                                           [ 33%]
+tests\test_wslsp.py ......................................x.                                               [ 50%]
+tests\test_wsltv.py ............................x.                                                         [ 63%]
+tests\test_wslum.py ........................x.                                                             [ 74%]
+tests\test_wsmtx.py ..............x......x..........x                                                      [ 88%]
+tests\test_wsremcarne.py ...........................                                                       [100%]
+
+=============================================== warnings summary ================================================ 
+test3\lib\site-packages\pysimplesoap\transport.py:141
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\test3\lib\site-packages\pysimplesoap\transport.py:141: DeprecationWarning: inspect.getargspec() is deprecated since Python 3.0, use inspect.signature() or inspect.getfullargspec()
+    if 'timeout' in inspect.getargspec(httplib2.Http.__init__)[0]:
+
+test3\lib\site-packages\future\standard_library\__init__.py:65
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\test3\lib\site-packages\future\standard_library\__init__.py:65: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp
+
+tests/test_ws_sr_padron.py::test_consultar_a5
+  c:\users\shiva\onedrive\desktop\pyafipaws_utkarsh\pyafipws\test3\lib\site-packages\pysimplesoap\simplexml.py:49: RuntimeWarning: removing unsupported UTC offset
+    warnings.warn('removing unsupported UTC offset', RuntimeWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+====================== 202 passed, 5 skipped, 28 xfailed, 1 xpassed, 3 warnings in 13.97s =======================
+```",True,64,https://api.github.com/repos/PyAr/pyafipws/pulls/64,https://github.com/PyAr/pyafipws/pull/64,closed,59,31,15,10,0,5,0,0,[],2021-06-25 17:53:35+00:00,2021-06-30 01:30:53+00:00,373038.0,"4 days, 7:37:18","[{'comment_id': 658968113, 'comment_body': 'Modified this because was getting error:-\r\n\r\n```\r\npara soporte de WebClient debe instalar httplib2\r\nCreando TRA...\r\nFirmando TRA...\r\nConectando a WSAA...\r\nLlamando WSAA...\r\nGrabando TA en C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\pyafipws-3.9.b_2491_-py3.9.egg\\pyafipws\\cache\\TA-2e45027edec9ede1e93ebaf0f3959988.xml...\r\nTraceback (most recent call last):\r\n  File ""C:\\Users\\shiva\\AppData\\Local\\Programs\\Python\\Python39\\lib\\runpy.py"", line 197, in _run_module_as_main     \r\n    return _run_code(code, main_globals, None,\r\n  File ""C:\\Users\\shiva\\AppData\\Local\\Programs\\Python\\Python39\\lib\\runpy.py"", line 87, in _run_code\r\n    exec(code, run_globals)\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\pyafipws-3.9.b_2491_-py3.9.egg\\pyafipws\\wsfexv1.py"", line 839, in <module>\r\n    ok = wsfexv1.Conectar(cache, wsdl, proxy, wrapper, cacert)\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\pyafipws-3.9.b_2491_-py3.9.egg\\pyafipws\\utils.py"", line 345, in Conectar\r\n    self.client = SoapClient(\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\pysimplesoap\\client.py"", line 151, in __init__\r\n    self.services = wsdl and self.wsdl_parse(wsdl, debug=trace, cache=cache)\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\pysimplesoap\\client.py"", line 473, in wsdl_parse\r\n    xml = fetch(url)\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\pysimplesoap\\client.py"", line 457, in fetch\r\n    response, xml = self.http.request(url, ""GET"", None, {\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\httplib2\\__init__.py"", \r\nline 1561, in request\r\n    conn = self.connections[conn_key] = connection_type(\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\httplib2\\__init__.py"", \r\nline 1080, in __init__\r\n    context = _build_ssl_context(\r\n  File ""C:\\Users\\shiva\\OneDrive\\Desktop\\Pyafipaws_Utkarsh\\pyafipws\\test3\\lib\\site-packages\\httplib2\\__init__.py"", \r\nline 169, in _build_ssl_context\r\n    context.load_verify_locations(ca_certs)\r\nFileNotFoundError: [Errno 2] No such file or directory\r\n```\r\n', 'comment_created': datetime.datetime(2021, 6, 25, 18, 43, 56, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 659381278, 'comment_body': 'This looks a bit ugly, could we use just `future.types.newstr` in both cases, and avoid the if?', 'comment_created': datetime.datetime(2021, 6, 27, 21, 56, 1, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 659388153, 'comment_body': 'using `future.types.newstr` is giving error with python3... I will create an issue to track this.', 'comment_created': datetime.datetime(2021, 6, 27, 23, 0, 11, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 659389921, 'comment_body': 'issue created https://github.com/PyAr/pyafipws/issues/66', 'comment_created': datetime.datetime(2021, 6, 27, 23, 15, 11, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 659393373, 'comment_body': 'issue #66 fixed.', 'comment_created': datetime.datetime(2021, 6, 27, 23, 43, 46, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}]","[{'commit_sha': 'f415be6afcedec891f450611db885516caf761ac', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bfef4f4f1fe62a4b618c8c4f147c8d8f01393390', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b17c6c4843e607438d2c58418329be525fa43da8', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd33783e7ba262caa8ecd5d8c70858084e5bd2766', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5554a444859551ed3cc544f84d85a8b38f807ede', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de05b9fbbf9d7de130c24b4137843b490250f8ff', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '706ae6586f938cf8d69633c21f6b1ba727b007a3', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'acbad74a909f21cec3cf7325264a13565c7f41b3', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'addf48972965b5ebc5166f8a4552c17820c26585', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6778dd6bf08e239ac6ecbd05516e907b516e11df', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+682048008,Added coverage,"# Summary
+
+This PR adds coverage support for the tests.
+
+- added coverage configuration file
+- updated requirements-dev.txt
+- updated python-package.yml file
+
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+",True,67,https://api.github.com/repos/PyAr/pyafipws/pulls/67,https://github.com/PyAr/pyafipws/pull/67,closed,47,1,3,3,0,1,0,0,[],2021-07-01 17:37:11+00:00,2021-07-09 14:28:14+00:00,679863.0,"7 days, 20:51:03","[{'comment_id': 666991064, 'comment_body': 'In the future, both steps that use pytest should be unified in single one \r\nAnyway it is taking less than 10 seconds, so it is ok for now', 'comment_created': datetime.datetime(2021, 7, 9, 14, 27, 7, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}]","[{'commit_sha': 'd4f8b97e554ae4e943e933520ba90f72e855349b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43fff42e76a35dd3e63ad9029d003f260bdf468e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63638d7e06362111bffdbf6b140d3aa4a7be0f3a', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+682192017,Skipped tests fixed,"## Summary
+
+This PR fixes 7 tests that were either failing or were skipped.
+
+
+- fixed 7 tests that were either **_failing_** or were **_skipped_**
+- updated cassettes
+- moved all tests from **test_wsaa_crypto.py** to **test_wsaa.py**
+- number of tests passing now increased from **202** to **209**
+- added **pytest-freezegun** support for tests that were dependent on time
+- updated **requirements.txt**
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+
+#### for python 2
+
+`$ pytest`
+
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.12, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws, inifile: pytest.ini
+plugins: html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 236 items
+
+tests\test_ws_sr_padron.py s.sx                                          [  1%]
+tests\test_wsaa.py .........                                             [  5%]
+tests\test_wsbfev1.py ..........                                         [  9%]
+tests\test_wscdc.py s.......                                             [ 13%]
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx                      [ 26%]
+tests\test_wsfev1.py ......                                              [ 29%]
+tests\test_wsfev1_dummy.py .                                             [ 29%]
+tests\test_wsfexv1.py ..........                                         [ 33%]
+tests\test_wslsp.py ......................................x.             [ 50%]
+tests\test_wsltv.py ............................x.                       [ 63%]
+tests\test_wslum.py ........................x.                           [ 74%]
+tests\test_wsmtx.py .................................                    [ 88%]
+tests\test_wsremcarne.py ...........................                     [100%]
+
+
+======= 209 passed, 5 skipped, 22 xfailed, 1 warnings in 21.75 seconds ========
+```
+
+#### for python 3
+
+`$ pytest`
+
+```
+========================================== test session starts ==========================================
+platform win32 -- Python 3.9.2, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\shiva\OneDrive\Desktop\Pyafipaws_Utkarsh\pyafipws, configfile: pytest.ini
+plugins: html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 236 items
+
+tests\test_ws_sr_padron.py s.sx                                                                    [  1%]
+tests\test_wsaa.py .........                                                                       [  5%]
+tests\test_wsbfev1.py ..........                                                                   [  9%]
+tests\test_wscdc.py s.......                                                                       [ 13%]
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx                                                [ 26%]
+tests\test_wsfev1.py ......                                                                        [ 29%]
+tests\test_wsfev1_dummy.py .                                                                       [ 29%]
+tests\test_wsfexv1.py ..........                                                                   [ 33%]
+tests\test_wslsp.py ......................................x.                                       [ 50%]
+tests\test_wsltv.py ............................x.                                                 [ 63%]
+tests\test_wslum.py ........................x.                                                     [ 74%]
+tests\test_wsmtx.py .................................                                              [ 88%]
+tests\test_wsremcarne.py ...........................                                               [100%]
+
+
+======================== 209 passed, 5 skipped, 22 xfailed, 3 warnings in 13.89s ======================== 
+```",True,68,https://api.github.com/repos/PyAr/pyafipws/pulls/68,https://github.com/PyAr/pyafipws/pull/68,closed,223,227,16,6,0,0,0,0,[],2021-07-01 21:57:00+00:00,2021-07-09 23:04:16+00:00,695236.0,"8 days, 1:07:16",[],"[{'commit_sha': '3c664472ddfc88e95b58fb120bf511845129622e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6fa135f9944d68470eacb764f314616b256acb57', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '55f5fc4d2f5157bdd4e7ae341aaba770581630ed', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9d792d03519d47ce69e6491304f03aca7e50f8a', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d862c5700682f766565107d53a80f04704097d3', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e8b5e594e998c07a2f996790b910affd17a90096', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+686954993,Add entry points,"## Summary
+
+This PR converts scripts into entry points as per [issue-#11](https://github.com/chazuttu/pyafipws/issues/11).
+
+- added entry points in **setup.cfg** 
+- added **main()** methods in scripts so that they can be called from command line just by name
+
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual evidence
+
+`$ wsaa`
+
+```
+para soporte de WebClient debe instalar httplib2
+Encodign in cp1252
+Usando CRT=reingart.crt KEY=reingart.key URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms SERVICE=wsfe TTL=36000
+WSAA Version 3.11c  False
+<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<loginTicketResponse version=""1.0"">
+    <header>
+        <source>CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239</source>
+        <destination>SERIALNUMBER=CUIT 20267565393, CN=reingart2019pub</destination>
+        <uniqueId>657428365</uniqueId>
+        <generationTime>2021-07-09T13:51:57.149-03:00</generationTime>
+        <expirationTime>2021-07-10T01:51:57.149-03:00</expirationTime>
+    </header>
+    <credentials>
+        <token>P+Cg==</token>
+        <sign>s4M0=</sign>
+    </credentials>
+</loginTicketResponse>
+```
+
+
+`$ wsfev1 --prueba`
+
+```
+para soporte de WebClient debe instalar httplib2
+Leyendo TA de C:\Users\pyafipws\py3test\lib\site-packages\pyafipws-3.9.b_2514_-py3.9.egg\pyafipws\cache\TA-2b4277f5962bd2cb0265c0fac4b32304.xml...
+b""FECAESolicitar(Auth=*{'Token': <class 'str'>, 'Sign': <class 'str'>, 'Cuit': <alias 'long' for '<class 'int'>'>}*, FeCAEReq=*{'FeCabReq': 
+*{'CantReg': <class 'int'>, 'PtoVta': <class 'int'>, 'CbteTipo': <class 'int'>}*, 'FeDetReq': [*{'FECAEDetRequest': *{'Concepto': <class 'int'>, 'DocTipo': <class 'sg': <class 'str'>}*}*], 'Errors': [*{'Err': *{'Code': <class 'int'>, 'Msg': <class 'str'>}*}*]}*}**:\n\nSolicitud de C\xf3digo de Autorizaci\xf3n Electr\xf3nico (CAE)\nHeaders: None""
+Nro. Cbte. desde-hasta 493 493
+Resultado A
+Reproceso
+CAE 71283954824423
+Vencimiento 20210719
+Observaciones 10217: El credito fiscal discriminado en el presente comprobante solo podra ser computado a efectos del Procedimiento permanente de transicion al Regimen General.
+71283954824423 == 71283954824423
+3 != 2
+10217 != 10017
+El credito fiscal discriminado en el presente comprobante solo podra ser computado a efectos del Procedimiento permanente de transicion al Regimen General.
+```
+
+`$ pyfepdf --prueba --mostrar`
+
+```
+para soporte de WebClient debe instalar httplib2
+Encodign in cp1252
+Prueba!
+```",True,69,https://api.github.com/repos/PyAr/pyafipws/pulls/69,https://github.com/PyAr/pyafipws/pull/69,closed,180,38,28,8,0,1,0,0,[],2021-07-09 17:59:53+00:00,2021-07-14 00:38:11+00:00,369498.0,"4 days, 6:38:18","[{'comment_id': 667391959, 'comment_body': 'we need all this globals?\r\nif they are not modified, we could omit the global declaration', 'comment_created': datetime.datetime(2021, 7, 10, 22, 26, 15, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}]","[{'commit_sha': '1a6d80cfdd7e510d8e0eb1b63f6e9cc4cce27cc0', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b98ca0e8d9fa954beafc224e541ffe00c871ab0d', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb9453a2d6610fca506955d75a3f49ac64facadc', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9e54dd5408af3c2f9a88ae2994e83c47e831c0aa', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3f81fb95d27506c426e63d9beb34fac2415081e2', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de1335bf542afdaa2246d0e625b7a7a3f746a9d4', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b1ca787ca7b71cf68636e5a1b2997c2eb3d851a', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c051e806a7c277d5f2ecf13c2b5530e0da465b81', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+696791034,Coverage pyfepdf,"## Summary
+
+This PR adds unit tests for the script **pyfepdf.py** and also increase the coverage for this script.
+For the above purpose, some additional files are also modified. 
+
+- added unit tests for pyfepdf.py
+- increased coverage to 80%  on python 3
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+>pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyfepdf.py
+```
+============================ test session starts ======================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\User\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 14 items
+
+tests\test_pyfepdf.py ..............                                                                                                                                                               [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                              Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2500_-py3.9.egg\pyafipws\__init__.py           4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2500_-py3.9.egg\pyafipws\pyfepdf.py          802    162    80%
+
+======================= 14 passed, 2 warnings in 5.86s ============================
+```
+
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyfepdf.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\UsersDesktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 14 items
+
+tests\test_pyfepdf.py ..............                                     [100%]
+
+
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                           Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2500-py2.7.egg\pyafipws\__init__.py           4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2500-py2.7.egg\pyafipws\pyfepdf.py          801    286    64%
+
+
+==================== 14 passed, 1 warnings in 3.67 seconds ====================
+```",True,71,https://api.github.com/repos/PyAr/pyafipws/pulls/71,https://github.com/PyAr/pyafipws/pull/71,closed,520,17,13,11,0,18,0,0,[],2021-07-26 08:06:54+00:00,2021-08-11 01:33:15+00:00,1358781.0,"15 days, 17:26:21","[{'comment_id': 682211643, 'comment_body': 'formatos should be included, please create a new ticket for a new PR\r\n(no need to add coverage in this one)', 'comment_created': datetime.datetime(2021, 8, 4, 1, 3, 32, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682213367, 'comment_body': 'In python 2 the encoding is needed, does this keep working?\r\nYou could use **kwargs and only pass encoding in python2', 'comment_created': datetime.datetime(2021, 8, 4, 1, 9, 5, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682223956, 'comment_body': 'Again, this could fail if the PDF invoice has non-English characters\r\nThis functions should have individual Unit Test for this corner cases (for example: test files with accents áñ etc.)\r\nCreate another ticket to address this separately', 'comment_created': datetime.datetime(2021, 8, 4, 1, 42, 1, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682224944, 'comment_body': '- [ ] Please do not change the default config file path\r\nIn real installation this avoids to overwrite the user file with the default\r\nIf you need, you could copy the file from conf/ to the base directory  in the GitHub Action workflow step', 'comment_created': datetime.datetime(2021, 8, 4, 1, 45, 19, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682225929, 'comment_body': '- [ ] Please do not change the code semantics when testing\r\nHere the file name should come from the configuration\r\nYou could use pytest mock to alter certain parameter in the test', 'comment_created': datetime.datetime(2021, 8, 4, 1, 48, 26, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682230590, 'comment_body': 'Please add a new ticket to compare the invoice generated\r\nFor example you could add the factura.pdf created in your machine and then compare that with the result of this call\r\nYou will need to use freezegun to make the PDF invariant and compare byte for byte', 'comment_created': datetime.datetime(2021, 8, 4, 2, 1, 40, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682231234, 'comment_body': 'Pease check the result of GenerarQR method (an url), with a expected result\r\nExample:\r\n```\r\nassert fepdf.GenerarQR() == ""...""\r\n````', 'comment_created': datetime.datetime(2021, 8, 4, 2, 3, 33, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682231808, 'comment_body': 'In this test, do not use `--prueba` (it will generate a new file)\r\nYou can add a sample expected factura.json to the test directory', 'comment_created': datetime.datetime(2021, 8, 4, 2, 5, 12, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682233230, 'comment_body': 'After calling main, please do a sanity check s\r\nExample:\r\n```\r\nassert pyfpdf.fepdf.factura ==  {...}\r\n```\r\nIf there is no check, the test only assures that the code is executed and no serious error is raised (eg NameError)\r\nIt cannot warranty that the code works as expected', 'comment_created': datetime.datetime(2021, 8, 4, 2, 9, 18, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682233557, 'comment_body': 'do not use `--prueba`, see previous comment ', 'comment_created': datetime.datetime(2021, 8, 4, 2, 10, 23, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682233811, 'comment_body': 'add some sanity check here, at least that the invoice json was loaded correctly (see previous comment)', 'comment_created': datetime.datetime(2021, 8, 4, 2, 11, 8, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682234516, 'comment_body': 'Please check that the saved invoice, factura.txt is complete\r\nYou could compare it with a previous saved file', 'comment_created': datetime.datetime(2021, 8, 4, 2, 13, 8, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682234857, 'comment_body': 'Idem to previous comment, compare the generated factura.json file with the one created by the test.', 'comment_created': datetime.datetime(2021, 8, 4, 2, 14, 2, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682236375, 'comment_body': 'Not sure if thill will fail as evince is not installed or no display is available\r\nYou could use [pytest mock ](https://github.com/pytest-dev/pytest-mock/)to replace real os.system with a dummy function and check it was called', 'comment_created': datetime.datetime(2021, 8, 4, 2, 18, 22, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 682274145, 'comment_body': 'Issue created fir this as requested #90. ', 'comment_created': datetime.datetime(2021, 8, 4, 4, 17, 50, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 682279777, 'comment_body': 'Issue Created --- #91 .', 'comment_created': datetime.datetime(2021, 8, 4, 4, 35, 47, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 682355697, 'comment_body': 'Issue Created #92.', 'comment_created': datetime.datetime(2021, 8, 4, 7, 22, 59, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 683085018, 'comment_body': 'Issue created #93.', 'comment_created': datetime.datetime(2021, 8, 5, 2, 36, 15, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}]","[{'commit_sha': '8f765060c18599b85d6bad66e6135e112e185e5f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e633465276855cb5802db1ad5944ce293063f97f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fb2eebbf67f1283ad36d36aeb47446155a1a243', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b01544bb4fd055a8dd4a43ed3ce242561ebddd49', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '099163d3fc54245872093788bef1787cc68a7b6f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '65caf23bb2113f4998b30963d42c2b1fab7d82f2', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07cbbdd60ad3ee9f520c503e575363ef175230df', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90ec9cb73b2389d87e68ab7742e4b280b6507aeb', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '68b51a7e8db1940bc80a30d30fe42981fb033a73', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b9f253513bf9186608ef39dde76972e2c3d62924', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '19feedbc763ac70853eb49e995f0c7a395bbca9c', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+696991492,Coverage wsaa,"## Summary
+
+This PR adds unit tests for **wsaa.py** script and also increases coverage.
+
+- added unit tests for **wsaa.py**
+- updated cassesttes
+- increased coverage to 72% for both versions
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsaa.py   
+```
+======================= test session starts ================================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 14 items
+
+tests\test_wsaa.py ..............                                                                                                                                                 [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2502_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2502_-py3.9.egg\pyafipws\wsaa.py                      350     99    72%
+
+--------------------------------------------------------------------------------------------------------------
+
+
+=================== 14 passed, 2 warnings in 5.43s ======================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsaa.py
+
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 14 items
+
+tests\test_wsaa.py ..............                                        [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2502-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2502-py2.7.egg\pyafipws\wsaa.py                      349    100    71%
+
+-----------------------------------------------------------------------------------------------------------
+
+
+
+========================== 14 passed in 4.88 seconds ==========================
+```",True,72,https://api.github.com/repos/PyAr/pyafipws/pulls/72,https://github.com/PyAr/pyafipws/pull/72,closed,295,11,7,7,0,1,0,0,[],2021-07-26 12:39:43+00:00,2021-08-11 01:47:21+00:00,1343258.0,"15 days, 13:07:38","[{'comment_id': 676823873, 'comment_body': 'this was done because one of the tests require the certificate and key, the older certificate has expired.', 'comment_created': datetime.datetime(2021, 7, 26, 17, 56, 52, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}]","[{'commit_sha': '7fd7ff3d790f7294f418fb26c1d0cbfd84cc17a5', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '541e05cfdb67d1601abe5718b975d82f09e62d15', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '72906dd7b7c0ea793cafba3851fa0299b3894044', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc42782cd293913866d9ab54da9e9be67e0f26d9', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59dbbc070b46c8d3651a982f4985061a9482a857', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ab56c14a178598adcd4aeacfdb68d8cc327cdfc', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac9c57b43ccf81d666911285c45dcf63e6772111', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697090171,Coverage wsbfev1,"## Summary
+
+This PR add unit tests for **wsbfev1.py** script
+
+- added unit tests for **wsbfev1.py**
+- updated cassettes
+- increased coverage to 86% 
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsbfev1.py 
+```
+============================ test session starts =======================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 15 items
+
+tests\test_wsbfev1.py ...............                                                                                                                                             [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2506_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2506_-py3.9.egg\pyafipws\wsbfev1.py                   382     53    86%
+
+--------------------------------------------------------------------------------------------------------------
+
+
+=========================== 15 passed, 2 warnings in 5.61s =============================
+```
+
+### Python 2
+
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsbfev1.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 15 items
+
+tests\test_wsbfev1.py ...............                                    [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2506-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2506-py2.7.egg\pyafipws\wsbfev1.py                   373     53    86%
+-----------------------------------------------------------------------------------------------------------
+
+
+
+========================== 15 passed in 7.00 seconds ==========================
+```",True,73,https://api.github.com/repos/PyAr/pyafipws/pulls/73,https://github.com/PyAr/pyafipws/pull/73,closed,4230,1,7,2,0,0,0,0,[],2021-07-26 14:38:16+00:00,2021-08-15 01:12:05+00:00,1679629.0,"19 days, 10:33:49",[],"[{'commit_sha': '45e4873ee3eb4253d435e3c0bee21254418e0b5b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2116ccb709b9ec1f7fbc84281a338b0ec37ac011', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697124811,Coverage wscdc,"## Summary
+
+This PR adds unit tests for the script **wscdc.py** and increases its code coverage.
+
+- added unit tests for **wscdc.py**
+- updated cassettes 
+- increased coverage to 85% for **wscdc.py**
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wscdc.py
+```
+=========================== test session starts =======================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 12 items
+
+tests\test_wscdc.py s...........                                                                                                                                                                   [100%]
+
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2507_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2507_-py3.9.egg\pyafipws\wscdc.py                     213     32    85%
+
+--------------------------------------------------------------------------------------------------------------
+
+
+========================= 11 passed, 1 skipped, 7 warnings in 3.30s ====================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wscdc.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 12 items
+
+tests\test_wscdc.py s...........                                         [100%]
+
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2507-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2507-py2.7.egg\pyafipws\wscdc.py                     212     32    85%
+
+-----------------------------------------------------------------------------------------------------------
+
+
+============== 11 passed, 1 skipped, 5 warnings in 3.52 seconds ===============
+```",True,74,https://api.github.com/repos/PyAr/pyafipws/pulls/74,https://github.com/PyAr/pyafipws/pull/74,closed,946,15,7,8,0,0,0,0,[],2021-07-26 15:19:10+00:00,2021-08-15 01:13:48+00:00,1677278.0,"19 days, 9:54:38",[],"[{'commit_sha': 'fd2d1c05a84896625a45fda11e8fde8fba297bdc', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3300c7cbd29b0c317fb06a4e36868fd76954f10', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2fb0feda77c193bc7191da363f27a7e2577f791', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c6c5ecdc8da78c9f8785c77b2bc3ce8e803c43b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bba4ee32119296f9e1b72793c9978e283b47450b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2226f9be3e7cda2395a68a4410700707c0f1761', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '392bba3a07fb96ba48c0131e38138f95d0d889c2', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '946c70826a6f4a8e6f83f85adec43d2c62d26edf', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697191176,Coverage wsct,"## Summary
+
+This PR adds unit tests for the script **wsct.py** and also increases the code coverage for the same.
+
+- added unit tests for **wsct.py**
+- updated cassettes
+- increased code coverage to 59% for **wsct.py** 
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsct.py
+```
+========================= test session starts ====================================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 34 items
+
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx..                                                                                                                                              [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2510_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2510_-py3.9.egg\pyafipws\wsct.py                      429    177    59%
+
+--------------------------------------------------------------------------------------------------------------
+
+
+==================== 14 passed, 2 skipped, 18 xfailed, 2 warnings in 5.32s ========================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsct.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 34 items
+
+tests\test_wsct.py ..........xx..xxxxxxxxxxssxxxxxx..                    [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2510-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2510-py2.7.egg\pyafipws\wsct.py                      417    177    58%
+
+-----------------------------------------------------------------------------------------------------------
+
+
+
+============== 14 passed, 2 skipped, 18 xfailed in 4.77 seconds ===============
+```
+",True,75,https://api.github.com/repos/PyAr/pyafipws/pulls/75,https://github.com/PyAr/pyafipws/pull/75,closed,99,3,4,3,0,0,0,0,[],2021-07-26 16:50:04+00:00,2021-08-15 01:17:34+00:00,1672050.0,"19 days, 8:27:30",[],"[{'commit_sha': '8f765060c18599b85d6bad66e6135e112e185e5f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e633465276855cb5802db1ad5944ce293063f97f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00d20b77a09395aa4285d530ddbbf1205bc03c08', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697257276,Coverage wsfev1,"## Summary
+
+This PR adds unit tests for the script **wsfev1.py** and increases its code coverage.
+
+- added unit tests for **wsfev1.py**
+- updated cassettes
+- increased code coverage to 88% for **wsfev1.py**
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfev1.py        
+```
+============================ test session starts ===========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 26 items
+
+tests\test_wsfev1.py ..........................                                                                                                                                                    [100%]
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2511_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2511_-py3.9.egg\pyafipws\wsfev1.py                    684     83    88%
+--------------------------------------------------------------------------------------------------------------
+
+
+======================== 26 passed, 2 warnings in 3.67s =========================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfev1.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 26 items
+
+tests\test_wsfev1.py ..........................                          [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2511-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2511-py2.7.egg\pyafipws\wsfev1.py                    674     83    88%
+-----------------------------------------------------------------------------------------------------------
+
+
+========================== 26 passed in 5.47 seconds ==========================
+```",True,76,https://api.github.com/repos/PyAr/pyafipws/pulls/76,https://github.com/PyAr/pyafipws/pull/76,closed,3874,5,22,5,0,1,0,0,[],2021-07-26 18:30:35+00:00,2021-08-15 00:34:58+00:00,1663463.0,"19 days, 6:04:23","[{'comment_id': 676851176, 'comment_body': 'Issue #70 \r\n\r\nInternal database error with **error code 501**', 'comment_created': datetime.datetime(2021, 7, 26, 18, 38, 14, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}]","[{'commit_sha': 'e5a3275204a4dd35f6731b14ac12db5a67c01f37', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c6c5ecdc8da78c9f8785c77b2bc3ce8e803c43b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2226f9be3e7cda2395a68a4410700707c0f1761', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2bc9a8eda0eb08396a1488e0366e136f04fc644', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b3a8b9691acadd4f58714a767e9769aa1b8dced4', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697417931,Coverage wsfexv1,"## Summary
+
+This PR adds unit tests for the script **wsfexv1.py** and also increases its code coverage.
+
+- added unit tests for wsfexv1.py
+- updated cassettes
+- increased code coverage to 84%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfexv1.py
+```
+============================== test session starts ==============================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 17 items
+
+tests\test_wsfexv1.py .................                                                                                                                                                            [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2512_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2512_-py3.9.egg\pyafipws\wsfexv1.py                   454     73    84%
+
+--------------------------------------------------------------------------------------------------------------
+
+
+================================ 17 passed, 2 warnings in 4.33s ========================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfexv1.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 17 items
+
+tests\test_wsfexv1.py .................                                  [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2512-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2512-py2.7.egg\pyafipws\wsfexv1.py                   448     73    84%
+
+-----------------------------------------------------------------------------------------------------------
+
+
+========================== 17 passed in 3.88 seconds ==========================
+```",True,77,https://api.github.com/repos/PyAr/pyafipws/pulls/77,https://github.com/PyAr/pyafipws/pull/77,closed,2002,5,9,3,0,0,0,0,[],2021-07-26 23:22:16+00:00,2021-08-15 01:09:51+00:00,1648055.0,"19 days, 1:47:35",[],"[{'commit_sha': '8f765060c18599b85d6bad66e6135e112e185e5f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e633465276855cb5802db1ad5944ce293063f97f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b9306face58eb3f37f1ad158870dcabb3b6f87bd', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697425005,Coverage wslsp,"## Summary
+
+This PR adds unit tests for the script **wslsp.py** and also increases its coverage.
+
+- added unit tests
+- updated cassettes
+- added **wslsp.ini** file
+- increased coverage to 83% for **wslsp.py**
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wslsp.py
+```
+=========================== test session starts ===================================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 59 items
+
+tests\test_wslsp.py ......................................x....................                                                                                                                    [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2513_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2513_-py3.9.egg\pyafipws\wslsp.py                     622    103    83%
+
+--------------------------------------------------------------------------------------------------------------
+
+
+============== 58 passed, 1 xfailed, 21 warnings in 5.45s ==============================   
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wslsp.py  
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 59 items
+
+tests\test_wslsp.py ......................................x............. 
+.......                                                                 
+
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2513-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2513-py2.7.egg\pyafipws\wslsp.py                     618    107    83%
+
+-----------------------------------------------------------------------------------------------------------
+
+
+============== 58 passed, 1 xfailed, 19 warnings in 7.07 seconds ==============
+```",True,78,https://api.github.com/repos/PyAr/pyafipws/pulls/78,https://github.com/PyAr/pyafipws/pull/78,closed,2801,6,23,6,0,0,0,0,[],2021-07-26 23:42:32+00:00,2021-08-15 01:19:44+00:00,1647432.0,"19 days, 1:37:12",[],"[{'commit_sha': '588528621952b8012c12b93caaa28372a745e753', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c6c5ecdc8da78c9f8785c77b2bc3ce8e803c43b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2226f9be3e7cda2395a68a4410700707c0f1761', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41d9e91dde0503f678739bafd27dbe510f0249aa', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '92a828b758389ced624a7b1f53aeef7c8054a713', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8f938a42831b7b6db198d43c5b2bce9af5e24f9c', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697513805,Coverage wsltv,"## Summary
+
+This PR add unit tests for the script **wsltv.py** and also increases its code coverage.
+
+- added unit tests for **wsltv.py**
+- added **wsltv.ini** file
+- renamed test xml file
+- increased coverage to 85%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsltv.py                   
+```
+=============================== test session starts ================================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 46 items
+
+tests\test_wsltv.py ............................x.................                                                                                                                                [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2514_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2514_-py3.9.egg\pyafipws\wsltv.py                     561     84    85%
+--------------------------------------------------------------------------------------------------------------
+
+
+============================ 45 passed, 1 xfailed, 18 warnings in 5.46s ======================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsltv.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 46 items
+
+tests\test_wsltv.py ............................x.................       [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2514-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2514-py2.7.egg\pyafipws\wsltv.py                     548     84    85%
+-----------------------------------------------------------------------------------------------------------
+
+============== 45 passed, 1 xfailed, 16 warnings in 4.67 seconds ==============
+```",True,79,https://api.github.com/repos/PyAr/pyafipws/pulls/79,https://github.com/PyAr/pyafipws/pull/79,closed,812,8,20,7,0,0,0,0,[],2021-07-27 04:02:33+00:00,2021-08-15 01:23:10+00:00,1632037.0,"18 days, 21:20:37",[],"[{'commit_sha': 'e7d31dd197c70de8fa205ca469db0182f42b6776', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0ad03d1b8f046950b102d34e2b416dd8795adffb', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '89a7c6f9a5c636e23324c1922bbb2877efa95eae', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c86093517893e7797023787b57115ad685c57e8', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8d35f44f9dc10a4bdd29b2f6ab04c4df5fe4e67', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b772f4d1a170ef0eb52e985397fb92369e0c735', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3af38a8145c2b69b28a92ddbdf8a27a8ad044ecb', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697566245,Coverage wslum,"## Summary
+
+This PR adds unit tests for the script **wslum.py** and also increases its coverage.
+
+- added unit tests for **wslum.py**
+- updated cassettes
+- added **wslum.ini** file
+- increased coverage to 76%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wslum.py 
+```
+============ test session starts =============================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 36 items
+
+tests\test_wslum.py ........................x...........                                                                                                                                          [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2518_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2518_-py3.9.egg\pyafipws\wslum.py                     461    111    76%
+--------------------------------------------------------------------------------------------------------------
+
+
+=================== 35 passed, 1 xfailed, 12 warnings in 5.21s =====================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wslum.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 36 items
+
+tests\test_wslum.py ........................x...........                 [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2518-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2518-py2.7.egg\pyafipws\wslum.py                     454    112    75%
+-----------------------------------------------------------------------------------------------------------
+
+============== 35 passed, 1 xfailed, 10 warnings in 5.63 seconds ==============
+```",True,80,https://api.github.com/repos/PyAr/pyafipws/pulls/80,https://github.com/PyAr/pyafipws/pull/80,closed,2078,7,13,6,0,1,0,0,[],2021-07-27 06:11:54+00:00,2022-03-24 15:20:37+00:00,20768923.0,"240 days, 9:08:43","[{'comment_id': 689012959, 'comment_body': '```suggestion\r\n            return\r\n```', 'comment_created': datetime.datetime(2021, 8, 15, 1, 24, 16, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}]","[{'commit_sha': 'a16ded4a3d05d9cd0fc30f10be25d0c42db8c323', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40a545779b2265842796fbf43a40f05afa079d03', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f79555b1d21378ad5d27d4eb7f12eb21a59d3524', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c41ff9643aa023b6ddd1246f657dbb578b6f135f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e09e91a835b7b69e68c5f0b3b14521b5b39628ba', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9eb5905f7c7603d7f52daf3678306217a629a6d7', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697581222,Coverage wsmtx,"## Summary
+
+This PR adds unit tests for the script **wsmtx.py** and also increases its coverage.
+
+- added unit tests for **wsmtx.py** script
+- updated cassettes
+- increased coverage to 80%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsmtx.py
+```
+=========================== test session starts ===========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 42 items
+
+tests\test_wsmtx.py ..........................................                                                                                                                                    [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2519_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2519_-py3.9.egg\pyafipws\wsmtx.py                     607    120    80%
+--------------------------------------------------------------------------------------------------------------
+
+
+===================== 42 passed, 2 warnings in 4.30s ========================== 
+```                               
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsmtx.py 
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 42 items
+
+tests\test_wsmtx.py ..........................................           [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2519-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2519-py2.7.egg\pyafipws\wsmtx.py                     587    120    80%
+-----------------------------------------------------------------------------------------------------------
+
+
+========================== 42 passed in 5.90 seconds ==========================
+```",True,81,https://api.github.com/repos/PyAr/pyafipws/pulls/81,https://github.com/PyAr/pyafipws/pull/81,closed,1222,7,12,4,0,0,0,0,[],2021-07-27 06:42:31+00:00,2021-08-15 01:11:23+00:00,1621732.0,"18 days, 18:28:52",[],"[{'commit_sha': '8f765060c18599b85d6bad66e6135e112e185e5f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e633465276855cb5802db1ad5944ce293063f97f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b4bbc2d5b52db6374d8ac6d5e3b92407aa2ddd4', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61106c195e69981d65b1f27e13ce7ff0e2db67bb', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+697593194,Coverage wsremcarne,"## Summary
+
+This PR adds unit tests for the script **wsremcarne.py** and also increases its coverage.
+
+- added unit tests for **wsremcarne.py**
+- updated cassettes
+- added **wsremcarne.ini** file
+- increased coverage to 85 %
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsremcarne.py
+```
+=========================== test session starts ==========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 40 items
+
+tests\test_wsremcarne.py ........................................                                                                                                                                 [100%]
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2520_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2520_-py3.9.egg\pyafipws\wsremcarne.py                432     66    85%
+--------------------------------------------------------------------------------------------------------------
+
+======================== 40 passed, 15 warnings in 5.42s =================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsremcarne.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 40 items
+
+tests\test_wsremcarne.py ........................................        [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2520-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2520-py2.7.egg\pyafipws\wsremcarne.py                430     66    85%
+-----------------------------------------------------------------------------------------------------------
+
+=================== 40 passed, 13 warnings in 5.64 seconds ====================
+```",True,82,https://api.github.com/repos/PyAr/pyafipws/pulls/82,https://github.com/PyAr/pyafipws/pull/82,closed,1530,7,13,6,0,0,0,0,[],2021-07-27 07:05:09+00:00,2022-03-24 15:18:43+00:00,20765614.0,"240 days, 8:13:34",[],"[{'commit_sha': '68020304905f971cc320a35843db7eda6a1a4855', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab02aff340994e225b3b33e581ebcdb9c6a8fa92', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '42ad6c7d3f00080ba0335e682e5479002aee27dc', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f77314fa2b0755d9b0e22a3d2762f5230ecb289', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da5ba84d5c00d51b5dfe558248e10b0bd80315a7', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c79fee6a921b08d9439dccf449d5e382e9097d0a', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+700669720,Coverage rece1,"## Summary
+
+This PR adds unit tests for the script **rece1.py** and also increase its coverage.
+
+- added unit tests for **rece1.py**
+- updated cassettes
+- updated **.coveragerc** file
+- increased coverage to 76%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfev1_rece1.py
+```
+========================== test session starts ====================================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Desktop\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 16 items
+
+tests\test_wsfev1_rece1.py ................                                                                                                                                      [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2521_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2521_-py3.9.egg\pyafipws\rece1.py                     518    123    76%
+--------------------------------------------------------------------------------------------------------------
+
+
+=============================== 16 passed, 2 warnings in 2.39s ==========================
+```
+
+### Python 2
+```
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfev1_rece1.py
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 16 items
+
+tests\test_wsfev1_rece1.py ................                              [100%]
+
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2521-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2521-py2.7.egg\pyafipws\rece1.py                     518    123    76%
+-----------------------------------------------------------------------------------------------------------
+
+==================== 16 passed, 3 warnings in 4.09 seconds ====================
+```",True,86,https://api.github.com/repos/PyAr/pyafipws/pulls/86,https://github.com/PyAr/pyafipws/pull/86,closed,1248,15,20,7,0,3,0,0,[],2021-07-31 07:27:56+00:00,2022-03-24 14:53:10+00:00,20417114.0,"236 days, 7:25:14","[{'comment_id': 686442565, 'comment_body': '- [x] Please change back this to rece.ini, you can copy the file in the GitHub Actions', 'comment_created': datetime.datetime(2021, 8, 11, 2, 18, 52, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 686997604, 'comment_body': 'made the required changes', 'comment_created': datetime.datetime(2021, 8, 11, 16, 36, 46, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 688218242, 'comment_body': '```suggestion\r\n            return\r\n```', 'comment_created': datetime.datetime(2021, 8, 13, 3, 26, 11, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}]","[{'commit_sha': '14fa6ffc9fdf70525a0c1743d7d06b83dc85f95c', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40d3a08db232ea7f4f2d12874a2b48a68c41c777', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d31d98687b8b5555939ab114c95b3371eca8d7f', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '93417d31b53964bd7ac91f9680676c2178a738ea', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f81d87c4f8ea43f15da2d8aedeaa1f1ad4cf39af', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9544fb2b972b22986b94e769b7e1ab3b434e7cb6', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c54ecdbd34ba5d4e2973e134007d55f89f3e36c0', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+700978827,Coverage receb1,"## Summary
+
+This PR adds unit tests for the script **receb1.py** and also increases its coverage.
+
+- added unit tests for **receb1.py**
+- updated cassettes
+- updated **.coveragerc** file
+- increased coverage to 83%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsbfev1_receb1.py
+```
+============================ test session starts ===============================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Week_7_GSOC\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 7 items
+
+tests\test_wsbfev1_receb1.py .......                                                                                                                                             [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2523_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2523_-py3.9.egg\pyafipws\receb1.py                    245     41    83%
+--------------------------------------------------------------------------------------------------------------
+
+
+================== 7 passed, 2 warnings in 2.20s ======================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsbfev1_receb1.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\Week_7_GSOC\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 7 items
+
+tests\test_wsbfev1_receb1.py .......                                     [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2523-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2523-py2.7.egg\pyafipws\receb1.py                    245     41    83%
+-----------------------------------------------------------------------------------------------------------
+
+
+========================== 7 passed in 3.70 seconds ===========================
+```",True,87,https://api.github.com/repos/PyAr/pyafipws/pulls/87,https://github.com/PyAr/pyafipws/pull/87,closed,1810,18,11,7,0,9,0,0,[],2021-08-01 20:26:41+00:00,2022-03-24 15:05:11+00:00,20284710.0,"234 days, 18:38:30","[{'comment_id': 680579190, 'comment_body': 'added this file for support with testing.', 'comment_created': datetime.datetime(2021, 8, 1, 23, 6, 38, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}]","[{'commit_sha': 'eb1346181433c09d0dd8048e197dc9eef486bdc8', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ca72ff841f39882308177e6bd9cdec1d2f8babd', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '764b0fa6418142912dfd1c98b5a21deeecb28811', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '34dd66b4241db8748effb0ceb7390defe2f25cec', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3ffefc1147f6c8a889c79e1035a28c022c6f513', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3f0fb50788850ca08853b33e0092a61415ea0a0', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9000cf801b2049a90af5580f3633e721e4d1d8a2', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+701250664,Coverage recex1,"## Summary
+
+This PR adds units tests for recex1.py and also increases its coverage
+
+- added unit tests for **recex1.py**
+- updated cassettes
+- added **entrada_recex1.txt** file for testing
+- increased coverage to 83%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfexv1_recex1.py
+```
+======================= test session starts ================================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 8 items
+
+tests\test_wsfexv1_recex1.py ........                                                                                                                                            [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2528_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2528_-py3.9.egg\pyafipws\recex1.py                    323     56    83%
+--------------------------------------------------------------------------------------------------------------
+
+======================== 8 passed, 2 warnings in 2.03s ============================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsfexv1_recex1.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 8 items
+
+tests\test_wsfexv1_recex1.py ........                                    [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2528-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2528-py2.7.egg\pyafipws\recex1.py                    323     56    83%
+
+==================== 8 passed, 3 warnings in 3.64 seconds =====================
+```",True,88,https://api.github.com/repos/PyAr/pyafipws/pulls/88,https://github.com/PyAr/pyafipws/pull/88,closed,1037,22,17,12,0,0,0,0,[],2021-08-02 08:25:06+00:00,2022-03-24 14:56:27+00:00,20241081.0,"234 days, 6:31:21",[],"[{'commit_sha': '8f765060c18599b85d6bad66e6135e112e185e5f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e633465276855cb5802db1ad5944ce293063f97f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e4a12aafc831a97211bc7e22b45ab45d6bd922c', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'faef11958bf2dd7c5094f769f917ceedab6d6e63', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '15734711d2e0870c409fbf19341362d12256dabb', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac936cfece9dabf2fad419708db3c24e1846bf93', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a28264a48c07dba699edbebcfc73bcdbee83a0e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6089256771c6cda3352e975e6029f6b70196eb02', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a223eec1ccd35bd1de022aae39ca0c838212005', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3485656e6c69aa35e4512a65564e365d679b4e93', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3541f05bfd2fe39c9d5140ddb86fd89cb31f831d', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bba1b49fd241b0c5bb37a11874fc301ce0fbf91b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+702591398,Coverage recem,"## Summary
+
+This PR adds unit tests for the script **recem.py** and increases its coverage.
+
+- added unit tests for **recem.py**
+- added cassettes
+- updated **.coveragerc** file
+- increased code coverage to 76%
+
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsmtx_recem.py
+```
+============================== test session starts ==============================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, vcr-1.0.2
+collected 13 items
+
+tests\test_wsmtx_recem.py .............                                                                                                                                                           [100%]
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2538_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2538_-py3.9.egg\pyafipws\recem.py                     461    110    76%
+--------------------------------------------------------------------------------------------------------------
+
+
+======================== 13 passed, 2 warnings in 2.73s ==================================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_wsmtx_recem.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, vcr-1.0.2
+collected 13 items
+
+tests\test_wsmtx_recem.py .............                                  [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2538-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2538-py2.7.egg\pyafipws\recem.py                     461    110    76%
+-----------------------------------------------------------------------------------------------------------
+
+==================== 13 passed, 2 warnings in 3.52 seconds ====================
+```",True,89,https://api.github.com/repos/PyAr/pyafipws/pulls/89,https://github.com/PyAr/pyafipws/pull/89,closed,851,27,15,5,0,0,0,0,[],2021-08-03 20:32:06+00:00,2022-03-24 14:59:23+00:00,20111237.0,"232 days, 18:27:17",[],"[{'commit_sha': '8f765060c18599b85d6bad66e6135e112e185e5f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e633465276855cb5802db1ad5944ce293063f97f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83c691bb8a0137b1e15193760dfccb6aef9f6165', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1bcb4b479f57ee26b92c6937d9d7692343c7f6b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '01842ad76f010684fea3092c2f0c3236bf118468', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+706063803,Coverage pyemail,"## Summary
+
+This PR adds unit tests for the script **pyemail.py** and also increases its coverage.
+
+- added unit tests for **pyemail.py**
+- updated .coveragerc file
+- updated workflow file to **copy rece.ini**
+- increased coverage to 78%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyemail.py
+```
+========================== test session starts ========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, mock-3.6.1, vcr-1.0.2
+collected 8 items
+
+tests\test_pyemail.py ........                                                                                                                                                                    [100%]
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2572_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2572_-py3.9.egg\pyafipws\pyemail.py                   173     38    78%
+--------------------------------------------------------------------------------------------------------------
+
+=============================== 8 passed, 4 warnings in 1.41s =====================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyemail.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, mock-2.0.0, vcr-1.0.2
+collected 8 items
+
+tests\test_pyemail.py ........                                           [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2572-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2572-py2.7.egg\pyafipws\pyemail.py                   173     38    78%
+-----------------------------------------------------------------------------------------------------------
+
+==================== 8 passed, 2 warnings in 1.40 seconds =====================
+```",True,94,https://api.github.com/repos/PyAr/pyafipws/pulls/94,https://github.com/PyAr/pyafipws/pull/94,closed,109,11,3,8,0,4,0,0,[],2021-08-08 15:40:10+00:00,2021-08-13 03:10:08+00:00,386998.0,"4 days, 11:29:58","[{'comment_id': 686439949, 'comment_body': '- [ ] Please leave this 2 if for python2 only ', 'comment_created': datetime.datetime(2021, 8, 11, 2, 10, 42, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 686440143, 'comment_body': '- [ ] Please leave this if for python2 only (skip inpython3)', 'comment_created': datetime.datetime(2021, 8, 11, 2, 11, 20, tzinfo=datetime.timezone.utc), 'commenter': 'reingart', 'type': 'User'}, {'comment_id': 686996878, 'comment_body': 'made the required changes', 'comment_created': datetime.datetime(2021, 8, 11, 16, 35, 48, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}, {'comment_id': 686997164, 'comment_body': 'made the required changes', 'comment_created': datetime.datetime(2021, 8, 11, 16, 36, 8, tzinfo=datetime.timezone.utc), 'commenter': 'chazuttu', 'type': 'User'}]","[{'commit_sha': 'b3ed3654127d236e7e0eb94d415b9c967aae786e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cdc090a8bc149da98044e9be5b2856a2434f8432', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45c80325233924d10da763ff6b2946ab5fc80ebf', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48a946dff4dad8c9e73e2dda082960bd1242fb25', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc9f363bfac28f302e075db65ee9b5ef9bbf1d56', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7fdb9326dbc410d1f231418e2d31c30ea7fa89ee', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30c0fee89c1beaf33fb6f4831c0b2db66ed28fa2', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1294792e5988b4df5abfdd14d3dd85c9680a9df3', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+706248209,Coverage pyi25,"## Summary
+
+This PR adds unit tests for the script **pyi25.py** and increased coverage.
+
+- added unit tests for the script **pyi25.py**
+- updated **requirements-dev.txt** file
+- updated **.coveragerc**
+- increased coverage upto 82%
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+>pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyi25.py
+```
+============================= test session starts =========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, mock-3.6.1, vcr-1.0.2
+collected 5 items
+
+tests\test_pyi25.py .....                                                                                                                                                                                        [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2572_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2572_-py3.9.egg\pyafipws\pyi25.py                     111     20    82%
+--------------------------------------------------------------------------------------------------------------
+
+====================== 5 passed, 2 warnings in 3.37s =====================
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyi25.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, mock-2.0.0, vcr-1.0.2
+collected 5 items
+
+tests\test_pyi25.py .....                                                [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2572-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2572-py2.7.egg\pyafipws\pyi25.py                     111     20    82%
+-----------------------------------------------------------------------------------------------------------
+
+
+========================== 5 passed in 3.85 seconds ===========================
+```",True,95,https://api.github.com/repos/PyAr/pyafipws/pulls/95,https://github.com/PyAr/pyafipws/pull/95,closed,88,2,4,7,0,0,0,0,[],2021-08-09 06:13:49+00:00,2021-08-13 03:16:54+00:00,334985.0,"3 days, 21:03:05",[],"[{'commit_sha': '883b5eed9f7ecdca1dd62cb983f4df5b45dd6260', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3832c86d00731bdaab3adc35a51385777a3bec6', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e2a5841a9b3c73977099f04db2bdfab5bc5977b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce8f3d6969be1443895cb39b0366e8a009b15498', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6a5506ec50edcc4df38e3d823b0daca286f451e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6cfa26079937538a4b6374f9c6b3d17966ff6372', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '685551dbf5873dbb7115cccc1de218315d6ac389', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+706824670,Coverage pyqr,"## Summary
+
+This PR adds unit tests for the script pyqr.py and also increases its coverage.
+
+- added unit tests for pyqr.py
+- updated .coveragerc file
+- updated requirements-dev.txt file
+- added sample QR image for testing
+- increased code coverage upto 86% for pyqr.py
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyqr.py       
+```
+================= test session starts ========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, mock-3.6.1, vcr-1.0.2
+collected 6 items
+
+tests\test_pyqr.py .....X                                                                                                                                                                                        [100%]
+
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                                       Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2583_-py3.9.egg\pyafipws\__init__.py                    4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2583_-py3.9.egg\pyafipws\pyqr.py                      104     15    86%
+--------------------------------------------------------------------------------------------------------------
+
+===================== 5 passed, 1 xpassed, 2 warnings in 4.24s ===============
+```
+
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_pyqr.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, mock-2.0.0, vcr-1.0.2
+collected 6 items
+
+tests\test_pyqr.py .....x                                                [100%]
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                                    Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2583-py2.7.egg\pyafipws\__init__.py                    4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2583-py2.7.egg\pyafipws\pyqr.py                      104     15    86%
+-----------------------------------------------------------------------------------------------------------
+
+
+===================== 5 passed, 1 xfailed in 3.87 seconds =====================
+```",True,96,https://api.github.com/repos/PyAr/pyafipws/pulls/96,https://github.com/PyAr/pyafipws/pull/96,closed,117,5,5,7,0,0,0,0,[],2021-08-09 20:41:41+00:00,2021-08-13 03:12:11+00:00,282630.0,"3 days, 6:30:30",[],"[{'commit_sha': '6e036f13245f80388f7eb0daa15668f1f996f42e', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '816645b8ac25d5a8847d8e48263de335c5c2ad0f', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f2af6eb74fddffc28dd7ebb715ccee6ec005719', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '38e9c778da49349997d34de1a2b6f74d411df1e4', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '05b172ef78593eda673fa9daff178fae7fd542c4', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1eb48b403f267ac7c74df4a7269ec7d1d00cf3a7', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c16c7d3082b5814ad328cce0482cd199a184645e', 'committer_username': 'reingart', 'committer_name': 'Mariano Reingart', 'committer_email': 'reingart@gmail.com', 'commit_date': datetime.datetime(2011, 9, 10, 21, 13, 41, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+709171892,Coverage ws_sr_padron,"## Summary
+
+This PR adds some units tests for the script ws_sr_padron.py and also increases its coverage.
+
+- added unit tests for **ws_sr_padron.py**
+- added cassettes
+- added test csv file
+- increased coverage to 67% for this script
+
+## Checklist
+
+- [x] Classes, Variables, function and methods logic  ok
+- [x] Comments written explaining what the code does
+- [x] All python code is PEP8 compliant (run black .)
+- [x] No lint issues (run flake8)
+- [x] Test coverage with pytest implemented
+- [x] Reviewers assigned (at least 1 mentor)
+
+## Manual test evidence
+### Python 3
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_ws_sr_padron.py
+```
+========================== test session starts ==========================
+platform win32 -- Python 3.9.6, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, configfile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-3.1.1, metadata-1.11.0, mock-3.6.1, vcr-1.0.2
+collected 6 items
+
+tests\test_ws_sr_padron.py x.....                                                                                                                                                               [100%]
+
+----------- coverage: platform win32, python 3.9.6-final-0 -----------
+Name                                                                              Stmts   Miss  Cover
+-----------------------------------------------------------------------------------------------------
+test3\Lib\site-packages\PyAfipWs-3.9.b_2593_-py3.9.egg\pyafipws\__init__.py           4      0   100%
+test3\Lib\site-packages\PyAfipWs-3.9.b_2593_-py3.9.egg\pyafipws\ws_sr_padron.py     248     81    67%
+-----------------------------------------------------------------------------------------------------
+
+=================== 5 passed, 1 xfailed, 7 warnings in 2.76s ======================
+```
+### Python 2
+pytest --cov-config=.coveragerc --cov=pyafipws tests/test_ws_sr_padron.py
+```
+============================= test session starts =============================
+platform win32 -- Python 2.7.18, pytest-4.6.11, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\pyafipws, inifile: pytest.ini
+plugins: cov-2.12.1, freezegun-0.4.2, html-1.22.1, metadata-1.11.0, mock-2.0.0, vcr-1.0.2
+collected 6 items
+
+tests\test_ws_sr_padron.py x.....                                        [100%]
+
+
+---------- coverage: platform win32, python 2.7.18-final-0 -----------
+Name                                                                           Stmts   Miss  Cover
+--------------------------------------------------------------------------------------------------
+test2\Lib\site-packages\PyAfipWs-2.7.2593-py2.7.egg\pyafipws\__init__.py           4      0   100%
+test2\Lib\site-packages\PyAfipWs-2.7.2593-py2.7.egg\pyafipws\ws_sr_padron.py     246     80    67%
+--------------------------------------------------------------------------------------------------
+
+=============== 5 passed, 1 xfailed, 1 warnings in 2.96 seconds ===============
+```",True,97,https://api.github.com/repos/PyAr/pyafipws/pulls/97,https://github.com/PyAr/pyafipws/pull/97,closed,288,17,7,5,0,0,0,0,[],2021-08-11 15:47:37+00:00,2021-08-14 23:57:15+00:00,288578.0,"3 days, 8:09:38",[],"[{'commit_sha': '3c6c5ecdc8da78c9f8785c77b2bc3ce8e803c43b', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ccb5424eac87c2a01a46f65db57993fc1ec0f9c7', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2742d9848537ff8d7190bf9cfa44039e0987dc8a', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d1eb2e9770faa1d2d190ff27662cc32a320c365', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63a679ad22ec9674cef3f314848fb7aaf11549c3', 'committer_username': 'chazuttu', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2020, 10, 29, 4, 5, 15, tzinfo=datetime.timezone.utc)}]",Utkarsh,73628133,,User,,108,,13,20
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+169192517,pyafipws,PyAr/pyafipws,Python,14,2,7,23,2982,38,18,19,"[{'id': 1281276827, 'number': 104, 'closed': datetime.datetime(2023, 3, 19, 16, 3, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 18, 19, 34, 37, tzinfo=datetime.timezone.utc), 'time_taken': 73727.0, 'time_delta': '20:28:47', 'additions': 1754, 'deletions': 2513, 'state': 'closed'}, {'id': 673102871, 'number': 60, 'closed': datetime.datetime(2021, 6, 19, 19, 16, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 18, 1, 46, 30, tzinfo=datetime.timezone.utc), 'time_taken': 149396.0, 'time_delta': '1 day, 17:29:56', 'additions': 367, 'deletions': 1, 'state': 'closed'}, {'id': 672134465, 'number': 59, 'closed': datetime.datetime(2021, 6, 18, 1, 21, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 3, 5, 9, tzinfo=datetime.timezone.utc), 'time_taken': 80182.0, 'time_delta': '22:16:22', 'additions': 3201, 'deletions': 4, 'state': 'closed'}, {'id': 667604900, 'number': 54, 'closed': datetime.datetime(2021, 6, 11, 3, 23, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 11, 2, 33, 20, tzinfo=datetime.timezone.utc), 'time_taken': 3031.0, 'time_delta': '0:50:31', 'additions': 13, 'deletions': 3, 'state': 'closed'}, {'id': 665558814, 'number': 53, 'closed': datetime.datetime(2021, 6, 10, 17, 22, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 5, 24, 46, tzinfo=datetime.timezone.utc), 'time_taken': 129470.0, 'time_delta': '1 day, 11:57:50', 'additions': 162, 'deletions': 90, 'state': 'closed'}, {'id': 663043064, 'number': 51, 'closed': datetime.datetime(2021, 6, 6, 20, 30, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 6, 20, 23, 34, tzinfo=datetime.timezone.utc), 'time_taken': 419.0, 'time_delta': '0:06:59', 'additions': 25, 'deletions': 0, 'state': 'closed'}]"

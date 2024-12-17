@@ -1,0 +1,203 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+465463121,Remove redundant `get_custom_colors_dict` method,"`SugarTerminal` defined `get_custom_colors_dict` which remained unused. 
+
+Added in df4557db0efaf477c89daae6870cd1694376ed13
+
+Reported by @shaansubbaiah on https://github.com/sugarlabs/terminal-activity/pull/46#issuecomment-671224680",True,47,https://api.github.com/repos/sugarlabs/terminal-activity/pulls/47,https://github.com/sugarlabs/terminal-activity/pull/47,closed,0,9,1,1,0,0,0,0,[],2020-08-10 12:14:36+00:00,2020-08-11 03:44:30+00:00,55794.0,15:29:54,[],"[{'commit_sha': 'f9e23614ce444bc7701fb2edb43279a563f38188', 'committer_username': 'srevinsaju', 'committer_name': 'Srevin Saju', 'committer_email': 'hello@srev.in', 'commit_date': datetime.datetime(2019, 3, 18, 20, 14, 28, tzinfo=datetime.timezone.utc)}]",Srevin Saju,48695438,hello@srev.in,User,,275,,397,399
+437557015,Fix dark mode is not set on new tabs,"Dark mode was not set on tabs created after it was enabled.
+Fix checks if dark mode is enabled and calls set_dark() after
+ a new tab is created.",True,83,https://api.github.com/repos/sugarlabs/Pippy/pulls/83,https://github.com/sugarlabs/Pippy/pull/83,closed,3,0,1,1,1,0,0,0,[],2020-06-21 15:01:28+00:00,2020-06-24 03:05:32+00:00,216244.0,"2 days, 12:04:04",[],"[{'commit_sha': 'f81140ccc25fb6096aa9b889fc23ff65c0b8f8bf', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+442190782,Fix wrong logging label on highlight,Logging label should be set as 'debug' instead of 'error'.,True,44,https://api.github.com/repos/sugarlabs/read-activity/pulls/44,https://github.com/sugarlabs/read-activity/pull/44,closed,1,1,1,1,1,0,0,0,[],2020-06-30 17:30:36+00:00,2020-08-24 03:35:46+00:00,4701910.0,"54 days, 10:05:10",[],"[{'commit_sha': '8b7dbcb5a10a4a6f36cba0f8304055556211847c', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+446348579,Fix playlist navigation,"Clicking the move-up and move-down buttons when there were no songs in 
+the playlist above or below the selected song, threw errors.
+This fix moves the song only if another song exists at the position it is
+to be moved into.
+ 
+Traceback:
+Clicking MOVE UP when there's no song above:
+```
+Traceback (most recent call last):
+  File ""/usr/share/sugar/activities/Jukebox.activity/activity.py"", line 201, in _move_down_cb
+    self.playlist_widget.move_down()
+  File ""/usr/share/sugar/activities/Jukebox.activity/playlist.py"", line 111, in move_down
+    position = self.treemodel.get_iter(
+  File ""/usr/lib/python3/dist-packages/gi/overrides/Gtk.py"", line 869, in get_iter
+    raise ValueError(""invalid tree path '%s'"" % path)
+ValueError: invalid tree path '1'
+
+```
+Clicking MOVE DOWN when there's no song below:
+```
+(sugar-activity3:1768): Gtk-WARNING **: 15:55:15.881: ../../../../gtk/gtktreemodel.c:646:
+Negative numbers in path -1 passed to gtk_tree_path_new_from_string
+Traceback (most recent call last):
+  File ""/usr/lib/python3/dist-packages/gi/overrides/Gtk.py"", line 1206, in __new__
+    return TreePath.new_from_string(path)
+TypeError: constructor returned NULL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""/usr/share/sugar/activities/Jukebox.activity/activity.py"", line 198, in _move_up_cb
+    self.playlist_widget.move_up()
+  File ""/usr/share/sugar/activities/Jukebox.activity/playlist.py"", line 96, in move_up
+    position = self.treemodel.get_iter(
+  File ""/usr/lib/python3/dist-packages/gi/overrides/Gtk.py"", line 866, in get_iter
+    path = self._coerce_path(path)
+  File ""/usr/lib/python3/dist-packages/gi/overrides/Gtk.py"", line 841, in _coerce_path
+    return TreePath(path)
+  File ""/usr/lib/python3/dist-packages/gi/overrides/Gtk.py"", line 1208, in __new__
+    raise TypeError(""could not parse subscript '%s' as a tree path"" % path)
+TypeError: could not parse subscript '-1' as a tree path
+```
+
+Fixes #30",True,31,https://api.github.com/repos/sugarlabs/jukebox-activity/pulls/31,https://github.com/sugarlabs/jukebox-activity/pull/31,closed,17,4,1,1,9,0,0,0,[],2020-07-08 16:17:57+00:00,2020-07-15 15:09:52+00:00,600715.0,"6 days, 22:51:55",[],"[{'commit_sha': '6644431b53fbb6c66bf4cd95f1aa707eaf0ed824', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+456309443,Fix bundlebuilder not handling empty arguments,"If no arguments are passed, parser.parse_args() returns
+command = None
+
+Traceback:
+```
+$ python2 ./setup.py
+usage: ./setup.py [-h]
+                  {install,check,dist_xo,dist_source,build,fix_manifest,genpot,dev}
+                  ...
+./setup.py: error: too few arguments
+
+$ python3 ./setup.py
+Traceback (most recent call last):
+  File ""./setup.py"", line 5, in <module>
+    bundlebuilder.start()
+  File ""/usr/lib/python3.7/dist-packages/sugar3/activity/bundlebuilder.py"", line 637, in start
+    globals()['cmd_' + options.command](config, options)
+TypeError: can only concatenate str (not ""NoneType"") to str
+```",True,452,https://api.github.com/repos/sugarlabs/sugar-toolkit-gtk3/pulls/452,https://github.com/sugarlabs/sugar-toolkit-gtk3/pull/452,closed,3,3,1,1,3,0,0,0,[],2020-07-24 14:11:05+00:00,2020-07-28 07:45:58+00:00,322493.0,"3 days, 17:34:53",[],"[{'commit_sha': '304e3f0716e3c8dd14e098d99297dac0b5849cd5', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+458521400,Fix TypeError due to Bool arguments in ElementTree,"Caused due to presence of Boolean arguments (False) while writing to
+`game.xml`.
+
+If `speak` is not set, it defaults to `False` in set_speak()
+in `card.py`. The fix changes `False` to an empty String while writing
+to `game.xml`.
+
+Traceback:
+```
+1594050507.412289 ERROR root: Error saving activity object to datastore
+Traceback (most recent call last):
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 1076, in _escape_attrib
+    if ""&"" in text:
+TypeError: argument of type 'bool' is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""/usr/lib/python3/dist-packages/sugar3/activity/activity.py"", line 1277, in _prepare_close
+    self.save()
+  File ""/usr/lib/python3/dist-packages/sugar3/activity/activity.py"", line 978, in save
+    self.write_file(file_path)
+  File ""/usr/share/sugar/activities/Memorize.activity/activity.py"", line 409, in write_file
+    self.game.model.write()
+  File ""/usr/share/sugar/activities/Memorize.activity/model.py"", line 357, in write
+    xml_file.write(tostring(root))
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 1133, in tostring
+    ElementTree(element).write(stream, encoding,
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 772, in write
+    serialize(write, self._root, qnames, namespaces,
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 937, in _serialize_xml
+    _serialize_xml(write, e, qnames, None,
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 930, in _serialize_xml
+    v = _escape_attrib(v)
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 1099, in _escape_attrib
+    _raise_serialization_error(text)
+  File ""/usr/lib/python3.8/xml/etree/ElementTree.py"", line 1053, in _raise_serialization_error
+    raise TypeError(
+TypeError: cannot serialize False (type bool)
+```
+
+Fixes #29",True,30,https://api.github.com/repos/sugarlabs/memorize-activity/pulls/30,https://github.com/sugarlabs/memorize-activity/pull/30,closed,7,16,1,1,5,0,0,0,[],2020-07-29 15:40:15+00:00,2020-08-04 02:31:37+00:00,471082.0,"5 days, 10:51:22",[],"[{'commit_sha': '218b0f6eebae5b5a48db7ee72cdc1c4e98fd050b', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+461810261,Fix issues occured while raising RuntimeError,"eqn was added to RuntimeError, but not passed to the parent
+class ParserError
+Errors occured while ParserError tried subscripting on the missing eqn
+variable
+Fix adds the missing arguments while raising RuntimeError
+
+Traceback:
+```
+1592573782.228379 DEBUG Calculate: Result: RuntimeError(""Variable 'sweetener' not defined"", 0,
+ 5)
+Traceback (most recent call last):
+  File ""/usr/share/sugar/activities/Calculate.activity/layout.py"", line 133, in <lambda>
+    lambda w: self._parent.process()],
+  File ""/usr/share/sugar/activities/Calculate.activity/calculate.py"", line 552, in process
+    self.set_error_equation(eqn)
+  File ""/usr/share/sugar/activities/Calculate.activity/calculate.py"", line 444, in set_err
+or_equation
+    self.set_last_equation(eqn)
+  File ""/usr/share/sugar/activities/Calculate.activity/calculate.py"", line 439, in set_las
+t_equation
+    self.layout.last_eq.set_buffer(eqn.create_lasteq_textbuf())
+  File ""/usr/share/sugar/activities/Calculate.activity/calculate.py"", line 219, in create_
+lasteq_textbuf
+    resstr = str(self.result)
+  File ""/usr/share/sugar/activities/Calculate.activity/astparser.py"", line 110, in __str__
+    {'a': self.eqn[self._range[0] - 1: self._range[1] - 1],
+TypeError: 'NoneType' object is not subscriptable
+```
+
+Fixes #67",True,69,https://api.github.com/repos/sugarlabs/calculate-activity/pulls/69,https://github.com/sugarlabs/calculate-activity/pull/69,closed,14,13,1,1,7,0,0,0,[],2020-08-02 13:57:51+00:00,2020-08-05 01:08:02+00:00,213011.0,"2 days, 11:10:11",[],"[{'commit_sha': '54b0079b1d0cce42cea18ef6130ae5b75ee98ab1', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+465037322,Fix issues in Theme toggling button,"Multiple clicks were required to switch themes using the toggle
+theme button.
+previous_theme was set before theme was changed, causing the theme to
+change only in the next click.
+Through inspection using pdb, found that setting the default bg_color to white,
+has set the _theme_state to `custom` during creation of view_toolbar. The functions
+_toggled_theme() and _update_theme() handled switching of the Theme toggler icon,
+ tooltip incorrectly.
+
+Theme toggler button icon and tooltip always set to the light theme
+when the custom color option was used.
+Now the Theme toggler's theme icon and tooltip aren't changed when a
+custom theme is selected.
+Theme toggler icon and tooltip now correspond to the correct theme.
+
+Regressions introduced in d2d243c",True,44,https://api.github.com/repos/sugarlabs/terminal-activity/pulls/44,https://github.com/sugarlabs/terminal-activity/pull/44,closed,5,5,1,1,4,0,0,0,[],2020-08-08 14:29:24+00:00,2020-08-08 15:58:28+00:00,5344.0,1:29:04,[],"[{'commit_sha': 'b58c88ab0e95cba2bf1f10b1a9b7761dd0f9b564', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+465347400,Fix theme not switching to dark on toggle,"The way the custom colors have been implemented is such that any theme
+ chosen- light/dark/custom overrides the custom colors defined. So after
+ using the dark theme, closing, and opening again the theme is actually
+ 'custom' but with the dark colors applied.
+Pressing <shift><ctrl><I> toggles it to dark mode (from custom) and
+then to light mode (from dark) on the second try.
+
+The fix i toggles to light if the custom colors match the dark colors (or)
+ icon is 'light-theme'.
+
+Regression introduced in 4274006
+
+Fixes #45",False,46,https://api.github.com/repos/sugarlabs/terminal-activity/pulls/46,https://github.com/sugarlabs/terminal-activity/pull/46,closed,7,1,1,1,6,0,0,0,[],2020-08-10 08:12:34+00:00,2020-08-11 03:50:05+00:00,70651.0,19:37:31,[],"[{'commit_sha': '00d62615880ca5b9d8e0decc7672788113b5c623', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+466769525,Fixes,"Fixes the `HTTP 403 Error` due to websites blocking requests with the `urllib` user-agent. Uses the Browse/WebKit2 user-agent.
+
+Also sets the Sugar version in the user-agent to the latest release, and uses `114` as the fallback, in case the `SUGAR_VERSION` env variable is missing.",True,114,https://api.github.com/repos/sugarlabs/browse-activity/pulls/114,https://github.com/sugarlabs/browse-activity/pull/114,closed,8,6,2,2,1,0,0,0,[],2020-08-12 13:24:03+00:00,2020-08-12 22:44:44+00:00,33641.0,9:20:41,[],"[{'commit_sha': 'f5cc4d440c86dfc20e49a32a0df24d285c6cda24', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b4becea4b931a1f12e58c57395a77abb74b7dbc', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+469968643,Fix no source tab on resume of empty file,"The changes in read_file() adds an empty tab if there isn't any data
+loaded from the datastore to create tabs.
+
+Also, when one made changes to the tab now present after the fix,
+it did not save. This is because the session data was empty after
+reading the empty source file from the datastore.
+If the session data is empty, the for loop that iterates through the
+zip in write_file() is skipped.
+
+Fix in write_file() appends a None object to the
+session data if it is empty.
+
+Reproduce:
+Start Pippy -> Stop Pippy -> Resume Pippy -> Source tab is missing
+
+Fixes #67",True,85,https://api.github.com/repos/sugarlabs/Pippy/pulls/85,https://github.com/sugarlabs/Pippy/pull/85,closed,8,2,1,1,2,0,0,0,[],2020-08-19 07:11:58+00:00,2020-08-19 07:29:25+00:00,1047.0,0:17:27,[],"[{'commit_sha': '25c5daa7f67da01585eb0852fa65469e8f3ca9cf', 'committer_username': 'shaansubbaiah', 'committer_name': 'Shaan Subbaiah', 'committer_email': 'shaansubbaiah@yahoo.com', 'commit_date': datetime.datetime(2015, 2, 23, 18, 10, 48, tzinfo=datetime.timezone.utc)}]",Shaan Subbaiah,11163839,shaansubbaiah@yahoo.com,User,,48,,22,52
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+22482347,terminal-activity,sugarlabs/terminal-activity,Python,22,4,9,50,435,4,2,0,"[{'id': 465463121, 'number': 47, 'closed': datetime.datetime(2020, 8, 11, 3, 44, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 10, 12, 14, 36, tzinfo=datetime.timezone.utc), 'time_taken': 55794.0, 'time_delta': '15:29:54', 'additions': 0, 'deletions': 9, 'state': 'closed'}, {'id': 417850062, 'number': 42, 'closed': datetime.datetime(2020, 5, 15, 4, 37, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 14, 8, 55, 13, tzinfo=datetime.timezone.utc), 'time_taken': 70908.0, 'time_delta': '19:41:48', 'additions': 12, 'deletions': 10, 'state': 'closed'}, {'id': 364539178, 'number': 38, 'closed': datetime.datetime(2020, 1, 20, 20, 23, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 19, 14, 20, 10, tzinfo=datetime.timezone.utc), 'time_taken': 108201.0, 'time_delta': '1 day, 6:03:21', 'additions': 815, 'deletions': 98, 'state': 'closed'}]"
+18690389,Pippy,sugarlabs/Pippy,Python,35,11,10,64,919,5,6,1,"[{'id': 353320115, 'number': 71, 'closed': datetime.datetime(2019, 12, 16, 20, 47, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 12, 15, 22, 9, 46, tzinfo=datetime.timezone.utc), 'time_taken': 81471.0, 'time_delta': '22:37:51', 'additions': 86, 'deletions': 42, 'state': 'closed'}, {'id': 350405221, 'number': 70, 'closed': datetime.datetime(2019, 12, 8, 21, 11, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 12, 8, 12, 3, 45, tzinfo=datetime.timezone.utc), 'time_taken': 32844.0, 'time_delta': '9:07:24', 'additions': 2, 'deletions': 2, 'state': 'closed'}]"
+22480305,read-activity,sugarlabs/read-activity,Python,17,1,5,58,901,3,5,0,[]
+22477188,jukebox-activity,sugarlabs/jukebox-activity,Python,14,1,5,38,512,1,10,0,"[{'id': 361128929, 'number': 27, 'closed': datetime.datetime(2020, 1, 10, 2, 43, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 9, 19, 50, 43, tzinfo=datetime.timezone.utc), 'time_taken': 24768.0, 'time_delta': '6:52:48', 'additions': 2, 'deletions': 14, 'state': 'closed'}]"
+10601184,sugar-toolkit-gtk3,sugarlabs/sugar-toolkit-gtk3,Python,80,21,18,136,6161,15,11,1,"[{'id': 785335015, 'number': 460, 'closed': datetime.datetime(2021, 11, 21, 8, 10, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 21, 6, 45, 52, tzinfo=datetime.timezone.utc), 'time_taken': 5069.0, 'time_delta': '1:24:29', 'additions': 11, 'deletions': 1, 'state': 'closed'}, {'id': 785333862, 'number': 459, 'closed': datetime.datetime(2021, 11, 21, 6, 36, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 21, 6, 33, 43, tzinfo=datetime.timezone.utc), 'time_taken': 189.0, 'time_delta': '0:03:09', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 572473253, 'number': 458, 'closed': datetime.datetime(2021, 2, 12, 15, 16, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 12, 12, 4, 54, tzinfo=datetime.timezone.utc), 'time_taken': 11525.0, 'time_delta': '3:12:05', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 550278285, 'number': 455, 'closed': datetime.datetime(2021, 1, 22, 20, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 6, 9, 37, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1421360.0, 'time_delta': '16 days, 10:49:20', 'additions': 89, 'deletions': 0, 'state': 'closed'}, {'id': 364462603, 'number': 439, 'closed': datetime.datetime(2020, 1, 22, 23, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 18, 20, 35, 12, tzinfo=datetime.timezone.utc), 'time_taken': 355308.0, 'time_delta': '4 days, 2:41:48', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 357201179, 'number': 435, 'closed': datetime.datetime(2019, 12, 28, 0, 19, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 12, 27, 11, 0, 1, tzinfo=datetime.timezone.utc), 'time_taken': 47987.0, 'time_delta': '13:19:47', 'additions': 3, 'deletions': 3, 'state': 'closed'}]"
+22483763,memorize-activity,sugarlabs/memorize-activity,Python,15,1,8,38,779,5,9,0,[]
+29254501,calculate-activity,sugarlabs/calculate-activity,Python,30,1,8,47,661,8,4,1,[]
+24715759,browse-activity,sugarlabs/browse-activity,Python,44,9,13,77,1383,20,4,2,"[{'id': 364082757, 'number': 108, 'closed': datetime.datetime(2020, 1, 22, 22, 3, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 17, 10, 51, 59, tzinfo=datetime.timezone.utc), 'time_taken': 472309.0, 'time_delta': '5 days, 11:11:49', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"

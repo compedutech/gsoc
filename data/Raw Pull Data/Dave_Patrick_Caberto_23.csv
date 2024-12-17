@@ -1,0 +1,205 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1380003614,✨ zb: Add a from_bytes constructor for Message ,Closes #326,True,370,https://api.github.com/repos/dbus2/zbus/pulls/370,https://github.com/dbus2/zbus/pull/370,closed,23,0,1,1,1,17,0,0,[],2023-06-06 01:34:06+00:00,2023-06-13 10:49:47+00:00,638141.0,"7 days, 9:15:41","[{'comment_id': 1219842012, 'comment_body': ""Not sure about this being **generally** correct. Not all users will be loading old messages from a file, like is the case for you. I didn't think of this before. Now I'm wondering if the best solution would be to just expose `Message::from_raw_parts`. :thinking: "", 'comment_created': datetime.datetime(2023, 6, 6, 15, 17, 33, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1219844009, 'comment_body': ""> Now I'm wondering if the best solution would be to just expose `Message::from_raw_parts`. thinking\r\n\r\nIf we do that, we should document the method better with all arguments also documented so users know what to pass."", 'comment_created': datetime.datetime(2023, 6, 6, 15, 18, 51, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1221131415, 'comment_body': 'I wonder if it would make sense to also use `MessageSequence` as the type of `recv_seq` as that would be self-descriptive.', 'comment_created': datetime.datetime(2023, 6, 7, 8, 18, 54, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1221399159, 'comment_body': ""Ah yes, definitely. I missed that it's use u64 as type.\r\n\r\nHowever, now that I think of it, this is only useful for messages received on a `zbus::Connection`. Perhaps it'd be better to provide another wrapper method that doesn't take this argument, `from_bytes`.\r\n\r\nBTW, this method should be marked `unsafe` as we can't be sure of `bytes`."", 'comment_created': datetime.datetime(2023, 6, 7, 11, 8, 54, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1221557047, 'comment_body': 'Kudos for documenting this. I think it would be good to:\r\n\r\n1. say why sequence is `0`.\r\n2. document `fds` parameter. @elmarco any suggestions for that?\r\n3. document that the method only has `fds` parameter on unix platforms.', 'comment_created': datetime.datetime(2023, 6, 7, 13, 1, 47, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1221583949, 'comment_body': ""you don't need #[cfg] here?"", 'comment_created': datetime.datetime(2023, 6, 7, 13, 18, 8, tzinfo=datetime.timezone.utc), 'commenter': 'elmarco', 'type': 'User'}, {'comment_id': 1221601431, 'comment_body': 'What about:\r\nfds: array of file descriptors that accompany the message. On the wire, values of the UNIX_FD types store the index to the array.', 'comment_created': datetime.datetime(2023, 6, 7, 13, 26, 47, tzinfo=datetime.timezone.utc), 'commenter': 'elmarco', 'type': 'User'}, {'comment_id': 1221627765, 'comment_body': 'Oops, I forgot too add one.', 'comment_created': datetime.datetime(2023, 6, 7, 13, 43, 30, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1221647448, 'comment_body': ""thanks, that sounds good but i didn't mean just the general description of the paramter but more like what the parameter (could) imply for the user of this API. E.g if they construct a message from old saved message bytes from disk (like is the case for @SeaDve here) then they'll just pass an empty vec here. We need to tell that and when it woudl be empty and when it would be relevant."", 'comment_created': datetime.datetime(2023, 6, 7, 13, 56, 10, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1221651988, 'comment_body': 'I think if you pass an empty vec and have UNIX_FD in the message, it will fail to deserialize. We can\'t really do anything ""correct"" in this case. It depends how the caller use the API.. but they can always pass /dev/null fds....', 'comment_created': datetime.datetime(2023, 6, 7, 13, 59, 13, tzinfo=datetime.timezone.utc), 'commenter': 'elmarco', 'type': 'User'}, {'comment_id': 1221682604, 'comment_body': 'true. The method is marked `unsafe` for good reasons anyway but we should document this.', 'comment_created': datetime.datetime(2023, 6, 7, 14, 17, 55, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1225693502, 'comment_body': ""> Why sequence is 0.\r\n\r\nI'm not sure exactly how to document this"", 'comment_created': datetime.datetime(2023, 6, 11, 3, 40, 6, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1225833425, 'comment_body': '>>  Why sequence is 0.\r\n>\r\n> I\'m not sure exactly how to document this\r\n\r\nLet me do it for you then. :) Add this paragraph:\r\n\r\n```rust\r\n/// **Note:** Since the constructed message is not construct by zbus, the\r\n/// [receive sequence](`Message::recv_position`) is not applicable and hence set to `0`.\r\n```\r\n\r\nand remove the "" with a receive sequence of 0"" part from the summary (it\'s not the most important detail about this method).\r\n\r\nP.S. I\'ve forgotten the rustdoc markdown for linking to an identifier so please do check if the above linking works as expected.', 'comment_created': datetime.datetime(2023, 6, 11, 14, 41, 25, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1225983471, 'comment_body': 'Thanks!', 'comment_created': datetime.datetime(2023, 6, 12, 1, 2, 33, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1226719463, 'comment_body': ""You don't need to hand-write the link. rustdoc does that for you. See my other comment."", 'comment_created': datetime.datetime(2023, 6, 12, 14, 2, 52, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1226722801, 'comment_body': '```suggestion\r\n    /// which can be acquired from [`Message::recv_position`], is not applicable and hence set to\r\n    ///  `0`.\r\n```', 'comment_created': datetime.datetime(2023, 6, 12, 14, 4, 22, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1227334108, 'comment_body': 'Oh, good to know, thanks!', 'comment_created': datetime.datetime(2023, 6, 12, 23, 20, 53, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}]","[{'commit_sha': 'e58c331aa6ee12f5d9da61c84b1ec0bb652c27e1', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}]",Dave Patrick,64297935,,User,,32,,54,135
+1387474946,"✨ zv: impl Display for Value, Array, Structure, Dict & Maybe","Closes #366
+
+~~Marked as a draft since bytestring and str Display implementations are currently broken on edge cases.~~",True,379,https://api.github.com/repos/dbus2/zbus/pulls/379,https://github.com/dbus2/zbus/pull/379,closed,489,14,5,1,4,32,0,0,[],2023-06-11 10:10:11+00:00,2023-07-05 14:34:33+00:00,2089462.0,"24 days, 4:24:22","[{'comment_id': 1225834958, 'comment_body': ""Really appreciate you adding tests. However, I don't think, the display repr is important enough to warrant so many tests and adding to CI. Just a handul (10-15) random simple and complex cases would be more than enough IMO."", 'comment_created': datetime.datetime(2023, 6, 11, 14, 50, 9, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1225835272, 'comment_body': ""I'd rather keep the `Display` impls of each type in their containing file. That's not just a general convention but also consistent with other impls in our crate and repo.\r\n\r\nMoroever, I'd ask you to add impl for each type in a separate commit so it'd be easier to add the changes to separate commits if each impl is added to the appropriate files."", 'comment_created': datetime.datetime(2023, 6, 11, 14, 52, 47, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1225958687, 'comment_body': ""> Moroever, I'd ask you to add impl for each type in a separate commit so it'd be easier to add the changes to separate commits if each impl is added to the appropriate files.\r\n\r\nI think that would not be easy since the Display impl of `Value` depends on the Display impl of `Maybe` etc. and vice versa, i.e., `value_display_fmt` calls on `maybe_display_fmt` etc., and `maybe_display_fmt` etc. calls on `value_display_fmt`."", 'comment_created': datetime.datetime(2023, 6, 11, 23, 41, 11, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1225959038, 'comment_body': ""I'm also a bit confused about the best way to organize these `*_display_fmt` functions. Should I store them all in `value.rs` and just call them on `maybe.rs` etc. or store them in their respective files (e.g., `maybe.rs`) and just call them in `value.rs`?"", 'comment_created': datetime.datetime(2023, 6, 11, 23, 43, 38, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1226731739, 'comment_body': ""> I think that would not be easy since the Display impl of `Value` depends on the Display impl of `Maybe` etc. and vice versa, i.e., `value_display_fmt` calls on `maybe_display_fmt` etc., and `maybe_display_fmt` etc. calls on `value_display_fmt`.\r\n\r\nIs that a problem? You can always have `pub(crate)` API in various modules that you can use from multiple places.\r\n\r\n> I'm also a bit confused about the best way to organize these `*_display_fmt` functions. Should I store them all in `value.rs` and just call them on `maybe.rs` etc. or store them in their respective files (e.g., `maybe.rs`) and just call them in `value.rs`?\r\n\r\nI'd recommend the latter. The more dividided the code, the better. So if I ever want to change the impl only for `Maybe` for example, I can go directly to its module and just focus on the code there. Less cognitive load, that way.\r\n\r\n"", 'comment_created': datetime.datetime(2023, 6, 12, 14, 8, 41, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1226741253, 'comment_body': '> > I think that would not be easy since the Display impl of Value depends on the Display impl of Maybe etc. and vice versa, i.e., value_display_fmt calls on maybe_display_fmt etc., and maybe_display_fmt etc. calls on value_display_fmt.\r\n>\r\n> Is that a problem?\r\n\r\nI meant it with splitting the commit into for each file\r\n', 'comment_created': datetime.datetime(2023, 6, 12, 14, 12, 26, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1226748550, 'comment_body': ""* `just just nothing` seems weird. I think it's easier to just (no pun intended) output `nothing`. i-e if the outer maybe is `None` than that's all the value that you need to know about (especially since we're printing the signature).\r\n* wouldn't `0@mn` be better? It'd also be consistent with Rust's way of adding the type at the end. Also, maybe we just use the Rust syntax? This is afterall a Rust API and most users know Rust a lot more than D-Bus. We can leave the signature then to the `Debug` output."", 'comment_created': datetime.datetime(2023, 6, 12, 14, 16, 56, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1226758085, 'comment_body': ""> I meant it with splitting the commit into for each file\r\n\r\nAh, sorry I didn't get it. I see the problem. Yeah, that's tough then. I guess this is an atomic commit since all modules need to implement `Display` at the same time to be able to build even. Forgot what I said about splitting commits. Sorry, should have thought about the mutual dependencies."", 'comment_created': datetime.datetime(2023, 6, 12, 14, 23, 22, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1227334958, 'comment_body': 'No worries', 'comment_created': datetime.datetime(2023, 6, 12, 23, 22, 37, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1227339465, 'comment_body': ""> * `just just nothing` seems weird. I think it's easier to just (no pun intended) output `nothing`. i-e if the outer maybe is `None` than that's all the value that you need to know about (especially since we're printing the signature).\r\n\r\nI think it would cause a problem if you have something like `Some(None::<Option<i16>>)`. If you only have `nothing` it won't be possible to know where the `nothing` begins unlike in `@mmmn just nothing`.\r\n\r\nEdit: I should probably add a test case for this\r\n\r\n>  * wouldn't `0@mn` be better? It'd also be consistent with Rust's way of adding the type at the end. Also, maybe we just use the Rust syntax? This is afterall a Rust API and most users know Rust a lot more than D-Bus. We can leave the signature then to the `Debug` output.\r\n\r\nI don't have a strong opinion, but I was trying to be consistent with `GVariant` printing.\r\n"", 'comment_created': datetime.datetime(2023, 6, 12, 23, 32, 38, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1227925752, 'comment_body': ""> I think it would cause a problem if you have something like Some(None::<Option<i16>>). If you only have nothing it won't be possible to know where the nothing begins unlike in @mmmn just nothing.\r\n\r\nHmm.. true.\r\n\r\n> I don't have a strong opinion, but I was trying to be consistent with GVariant printing.\r\n\r\nAh, I didn't realize there was prior art. In that case, just follow that. The bonus would be that we don't need to hardcode the strings in gvariant format tests but rather compare the glib's (it's a dev dep) output.\r\n\r\nBTW, I didn't check but please do make sure that all  gvariant feature requiring code is under a `cfg` (didn't check if it is already or not, just a reminder)."", 'comment_created': datetime.datetime(2023, 6, 13, 10, 47, 38, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1227935980, 'comment_body': ""> BTW, I didn't check but please do make sure that all gvariant feature requiring code is under a cfg (didn't check if it is already or not, just a reminder).\r\n\r\nI did check by testing if it compiles with both `unix` and `gvariant` features disabled, though not sure if that was enough and, hopefully, I didn't miss a `cfg`."", 'comment_created': datetime.datetime(2023, 6, 13, 10, 57, 25, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1227957015, 'comment_body': ""Cool. As I wrote, I didn't mean to imply that you missed anything. Just came to my head when I was writing my comment so expressed the thought before I forget it completely. :laughing: "", 'comment_created': datetime.datetime(2023, 6, 13, 11, 17, 51, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1239903229, 'comment_body': ""We already get a lot of angry users for our deps in zbus, so I'd like to play the devil's advocate here and say that for just one small use, let's not add a new dep?"", 'comment_created': datetime.datetime(2023, 6, 23, 14, 38, 46, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1239908092, 'comment_body': 'nit: can easily fit in the 100 chars limit. Same for other comments: break only when needed and at 100 chars limit.', 'comment_created': datetime.datetime(2023, 6, 23, 14, 41, 53, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1239910959, 'comment_body': ""Seems to me, this is the only place where we pass `false` for `type_annotation`. Given that it greatly complicates the code (you don't need separate crate public API if not for this), I wonder if there's a way to avoid this? Perhaps we do always print type annotation? :thinking: "", 'comment_created': datetime.datetime(2023, 6, 23, 14, 44, 34, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1239912094, 'comment_body': 'Strings literals can be broken over multiple lines using `\\` suffix.', 'comment_created': datetime.datetime(2023, 6, 23, 14, 45, 35, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1240710917, 'comment_body': ""It won't be easy though to reimplement the functionality of that library since it does have a lot of hardcoded values: https://docs.rs/unicode-general-category/latest/src/unicode_general_category/tables.rs.html"", 'comment_created': datetime.datetime(2023, 6, 24, 11, 12, 16, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1240713471, 'comment_body': ""We also disable type annotation on subsequent elements after the first element on dicts and arrays. Aside from being more verbose, we would also break compatibility with `GVariant`.\r\n\r\nEdit: I'm not sure there are other cleaner ways to prevent the  aforementioned drawbacks"", 'comment_created': datetime.datetime(2023, 6, 24, 11, 17, 57, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1240718537, 'comment_body': 'Thanks! Did not knew of that', 'comment_created': datetime.datetime(2023, 6, 24, 11, 28, 7, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1241158015, 'comment_body': ""From a quick look it seems that you use this dependency to display special characters inside a string. FYI, `String`'s `Debug` implementation already does this."", 'comment_created': datetime.datetime(2023, 6, 25, 12, 34, 37, tzinfo=datetime.timezone.utc), 'commenter': 'MaxVerevkin', 'type': 'User'}, {'comment_id': 1241494631, 'comment_body': 'Would be indeed nice to exploit that. However, it would have double quotes around them, so we would have to somehow trim that', 'comment_created': datetime.datetime(2023, 6, 26, 4, 18, 48, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1241718618, 'comment_body': 'Is it important to have single quotes?', 'comment_created': datetime.datetime(2023, 6, 26, 7, 5, 38, tzinfo=datetime.timezone.utc), 'commenter': 'MaxVerevkin', 'type': 'User'}, {'comment_id': 1241719949, 'comment_body': 'If we want to consistent with `GVariant`, yeah, otherwise, not', 'comment_created': datetime.datetime(2023, 6, 26, 7, 6, 51, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1241728735, 'comment_body': ""I'm not sure about `GVariant` consistency... but in case you need single quotes, I think you can use https://doc.rust-lang.org/stable/std/primitive.char.html#method.escape_debug"", 'comment_created': datetime.datetime(2023, 6, 26, 7, 13, 40, tzinfo=datetime.timezone.utc), 'commenter': 'MaxVerevkin', 'type': 'User'}, {'comment_id': 1241732711, 'comment_body': 'Gave it a try before, but fell back to including this dependency unfortunately because we need more control for this use case, like not escaping double quotes when we enclose the string in single quotes.', 'comment_created': datetime.datetime(2023, 6, 26, 7, 16, 28, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1241737272, 'comment_body': 'Are you referring to [`str::escape_debug`](https://doc.rust-lang.org/stable/std/primitive.str.html#method.escape_debug)? This is a method on `char`, so you can just choose not to escape the double quotes.', 'comment_created': datetime.datetime(2023, 6, 26, 7, 20, 46, tzinfo=datetime.timezone.utc), 'commenter': 'MaxVerevkin', 'type': 'User'}, {'comment_id': 1241937451, 'comment_body': 'Ah, my bad, I overlooked that you mentioned char.\r\n\r\nI gave it a try. It is consistent with `GVariant` in most cases. However, it differs in more edge cases. I\'m not sure about the decision to make here, whether to maintain the consistency or go with the simpler, rustier? and one less dependency approach.\r\n\r\nIt specifically differs here:\r\n\r\n```rust\r\nassert_eq!(\r\n    Value::new(vec![\r\n        ""\\x07\\x08\\x09\\x0A\\x0B\\x0C\\x0D"",\r\n        ""\\x7F"",\r\n        char::from_u32(0xD8000).unwrap().to_string().as_str()\r\n    ])\r\n    .to_string(),\r\n    r#""[\'\\a\\b\\t\\n\\v\\f\\r\', \'\\u007f\', \'\\U000d8000\']""#\r\n);\r\n```\r\n\r\n current impl (and also `GVariant`\'s): ""[\'\\\\a\\\\b\\\\t\\\\n\\\\v\\\\f\\\\r\', \'\\\\u007f\', \'\\\\U000d8000\']""\r\n`char::escape_debug`: ""[\'\\\\u{7}\\\\u{8}\\\\t\\\\n\\\\u{b}\\\\u{c}\\\\r\', \'\\\\u{7f}\', \'\\\\u{d8000}\']""', 'comment_created': datetime.datetime(2023, 6, 26, 9, 58, 58, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1242636000, 'comment_body': ""> whether to maintain the consistency or go with the simpler, rustier?\r\n\r\nGVariant consistency would be really nice but it's not a big deal at all if we differ in certain places. I'd rather avoid the dep."", 'comment_created': datetime.datetime(2023, 6, 26, 19, 2, 14, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1243712099, 'comment_body': '> if we differ in certain places\r\n\r\nDo you mean by this with the scope of zbus as a whole or this `Display` impl? If you mean the latter, it would be a bug if it differs in some places', 'comment_created': datetime.datetime(2023, 6, 27, 13, 10, 58, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1243861881, 'comment_body': '> Do you mean by this with the scope of zbus as a whole or this `Display` impl? If you mean the latter, it would be a bug if it differs in some places\r\n\r\nNot sure I follow. I mean the entire scope of this PR/issue.', 'comment_created': datetime.datetime(2023, 6, 27, 14, 36, 32, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1243865090, 'comment_body': '> We also disable type annotation on subsequent elements after the first element on dicts and arrays. Aside from being more verbose, we would also break compatibility with `GVariant`.\r\n\r\nhmm.. good point.', 'comment_created': datetime.datetime(2023, 6, 27, 14, 38, 28, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}]","[{'commit_sha': 'ada4d7b39a1a83b93816ebaf7d35834852ee0e23', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}]",Dave Patrick,64297935,,User,,32,,54,135
+1481451622,"🧑‍💻 zv, zn: Improve Str, Owned*Name, BusName Debug impls","This PR reduces Debug impls verbosity but retains possibly useful information.
+
+See also https://github.com/dbus2/zbus/pull/394 
+
+Before:
+
+```
+Str::from_static(""hello"") = Str(
+    Static(
+        ""hello"",
+    ),
+)
+Str::from(""hello"") = Str(
+    Borrowed(
+        ""hello"",
+    ),
+)
+Str::from(String::from(""hello"")) = Str(
+    Owned(
+        ""hello"",
+    ),
+)
+UniqueName::from_static_str_unchecked("":1.2"") = UniqueName(
+    Str(
+        Static(
+            "":1.2"",
+        ),
+    ),
+)
+OwnedUniqueName::from(UniqueName::from_static_str_unchecked("":1.2"")) = OwnedUniqueName(
+    UniqueName(
+        Str(
+            Static(
+                "":1.2"",
+            ),
+        ),
+    ),
+)
+WellKnownName::from_static_str_unchecked(""org.gnome.Console"") = WellKnownName(
+    Str(
+        Static(
+            ""org.gnome.Console"",
+        ),
+    ),
+)
+OwnedWellKnownName::from(WellKnownName::from_static_str_unchecked(""org.gnome.Console"")) = OwnedWellKnownName(
+    WellKnownName(
+        Str(
+            Static(
+                ""org.gnome.Console"",
+            ),
+        ),
+    ),
+)
+BusName::Unique(UniqueName::from_static_str_unchecked("":1.2"")) = Unique(
+    UniqueName(
+        Str(
+            Static(
+                "":1.2"",
+            ),
+        ),
+    ),
+)
+BusName::WellKnown(WellKnownName::from_static_str_unchecked(""org.gnome.Console"")) = WellKnown(
+    WellKnownName(
+        Str(
+            Static(
+                ""org.gnome.Console"",
+            ),
+        ),
+    ),
+)
+OwnedBusName::from(BusName::Unique(UniqueName::from_static_str_unchecked("":1.2""))) = OwnedBusName(
+    Unique(
+        UniqueName(
+            Str(
+                Static(
+                    "":1.2"",
+                ),
+            ),
+        ),
+    ),
+)
+OwnedBusName::from(BusName::WellKnown(WellKnownName::from_static_str_unchecked(""org.gnome.Console""))) = OwnedBusName(
+    WellKnown(
+        WellKnownName(
+            Str(
+                Static(
+                    ""org.gnome.Console"",
+                ),
+            ),
+        ),
+    ),
+)
+ErrorName::from_static_str_unchecked(""org.gnome.Console.Error"") = ErrorName(
+    Str(
+        Static(
+            ""org.gnome.Console.Error"",
+        ),
+    ),
+)
+OwnedErrorName::from(ErrorName::from_static_str_unchecked(""org.gnome.Console.Error"")) = OwnedErrorName(
+    ErrorName(
+        Str(
+            Static(
+                ""org.gnome.Console.Error"",
+            ),
+        ),
+    ),
+)
+InterfaceName::from_static_str_unchecked(""org.gnome.Console.Interface"") = InterfaceName(
+    Str(
+        Static(
+            ""org.gnome.Console.Interface"",
+        ),
+    ),
+)
+OwnedInterfaceName::from(InterfaceName::from_static_str_unchecked(""org.gnome.Console.Interface"")) = OwnedInterfaceName(
+    InterfaceName(
+        Str(
+            Static(
+                ""org.gnome.Console.Interface"",
+            ),
+        ),
+    ),
+)
+MemberName::from_static_str_unchecked(""Member"") = MemberName(
+    Str(
+        Static(
+            ""Member"",
+        ),
+    ),
+)
+OwnedMemberName::from(MemberName::from_static_str_unchecked(""Member"")) = OwnedMemberName(
+    MemberName(
+        Str(
+            Static(
+                ""Member"",
+            ),
+        ),
+    ),
+)
+```
+
+After:
+
+```
+Str::from_static(""hello"") = ""hello""
+Str::from(""hello"") = ""hello""
+Str::from(String::from(""hello"")) = ""hello""
+UniqueName::from_static_str_unchecked("":1.2"") = UniqueName(
+    "":1.2"",
+)
+OwnedUniqueName::from(UniqueName::from_static_str_unchecked("":1.2"")) = OwnedUniqueName(
+    "":1.2"",
+)
+WellKnownName::from_static_str_unchecked(""org.gnome.Console"") = WellKnownName(
+    ""org.gnome.Console"",
+)
+OwnedWellKnownName::from(WellKnownName::from_static_str_unchecked(""org.gnome.Console"")) = OwnedWellKnownName(
+    ""org.gnome.Console"",
+)
+BusName::Unique(UniqueName::from_static_str_unchecked("":1.2"")) = BusName::Unique(
+    "":1.2"",
+)
+BusName::WellKnown(WellKnownName::from_static_str_unchecked(""org.gnome.Console"")) = BusName::WellKnown(
+    ""org.gnome.Console"",
+)
+OwnedBusName::from(BusName::Unique(UniqueName::from_static_str_unchecked("":1.2""))) = OwnedBusName::Unique(
+    "":1.2"",
+)
+OwnedBusName::from(BusName::WellKnown(WellKnownName::from_static_str_unchecked(""org.gnome.Console""))) = OwnedBusName::WellKnown(
+    ""org.gnome.Console"",
+)
+ErrorName::from_static_str_unchecked(""org.gnome.Console.Error"") = ErrorName(
+    ""org.gnome.Console.Error"",
+)
+OwnedErrorName::from(ErrorName::from_static_str_unchecked(""org.gnome.Console.Error"")) = OwnedErrorName(
+    ""org.gnome.Console.Error"",
+)
+InterfaceName::from_static_str_unchecked(""org.gnome.Console.Interface"") = InterfaceName(
+    ""org.gnome.Console.Interface"",
+)
+OwnedInterfaceName::from(InterfaceName::from_static_str_unchecked(""org.gnome.Console.Interface"")) = OwnedInterfaceName(
+    ""org.gnome.Console.Interface"",
+)
+MemberName::from_static_str_unchecked(""Member"") = MemberName(
+    ""Member"",
+)
+OwnedMemberName::from(MemberName::from_static_str_unchecked(""Member"")) = OwnedMemberName(
+    ""Member"",
+)
+```
+
+Fixes #431.",True,450,https://api.github.com/repos/dbus2/zbus/pulls/450,https://github.com/dbus2/zbus/pull/450,closed,98,32,7,3,12,5,0,0,[],2023-08-19 13:21:11+00:00,2023-08-22 12:09:06+00:00,254875.0,"2 days, 22:47:55","[{'comment_id': 1299217899, 'comment_body': '> Before:\r\n> \r\n> Owned*Name(*Name(""foo""))\r\n> \r\n> After:\r\n> \r\n> *Name(""foo"")\r\n\r\nHm.. maybe this should be `Owned*Name(""foo"")`?', 'comment_created': datetime.datetime(2023, 8, 19, 16, 27, 1, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1299218449, 'comment_body': ""I don't have strong opinion about it, but I mirrored it on how the ownership information on `Str` is ignored"", 'comment_created': datetime.datetime(2023, 8, 19, 16, 32, 25, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1299218779, 'comment_body': ""I think it may also mislead users that a `*Name` is not owned just because it doesn't have a `Owned` prefix, but it actually has a `'static` lifetime"", 'comment_created': datetime.datetime(2023, 8, 19, 16, 35, 47, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1299917640, 'comment_body': ""Good point but I don't think that's too relevant an info here. If the lifetime info is important here, we should show that for  `Str` and all its wrappers (which can be done separately later). The point is that we should show the name of the actual Type here."", 'comment_created': datetime.datetime(2023, 8, 21, 10, 20, 33, tzinfo=datetime.timezone.utc), 'commenter': 'zeenix', 'type': 'User'}, {'comment_id': 1300244600, 'comment_body': 'Pushed changes that modifies the second commit to show the name of the actual type', 'comment_created': datetime.datetime(2023, 8, 21, 15, 6, 43, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}]","[{'commit_sha': '7fef7a45d7b373c437d5fe145b7ad0e6dcef44ff', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9d041852ff61523a4b266847eaa2d2fd727b30c', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '813eb7aeb330225bef166b4f50bd4a049cb1fbd3', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}]",Dave Patrick,64297935,,User,,32,,54,135
+1476937580,gdk: Make RGBA::new const and add with_* constructors,"With adding the `with_` constructors, the builder may not be necessary anymore",True,1468,https://api.github.com/repos/gtk-rs/gtk4-rs/pulls/1468,https://github.com/gtk-rs/gtk4-rs/pull/1468,closed,82,4,1,2,0,15,1,0,[{'name': 'backported'}],2023-08-16 06:57:20+00:00,2023-08-16 08:08:04+00:00,4244.0,1:10:44,"[{'comment_id': 1295460871, 'comment_body': ""Can't we make the unsafe_from const itself for all the boxed inline types? cc @sdroege "", 'comment_created': datetime.datetime(2023, 8, 16, 7, 0, 41, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295461752, 'comment_body': ""That needs a separate trait then, and I'm not sure this can actually be const for everything (needs a bit of research)"", 'comment_created': datetime.datetime(2023, 8, 16, 7, 1, 35, tzinfo=datetime.timezone.utc), 'commenter': 'sdroege', 'type': 'User'}, {'comment_id': 1295463006, 'comment_body': ""Actually we can't have const fn in traits so scratch that proposal."", 'comment_created': datetime.datetime(2023, 8, 16, 7, 3, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295463424, 'comment_body': 'https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=cae7ddc92a024a2012edde38110c1bd1', 'comment_created': datetime.datetime(2023, 8, 16, 7, 3, 29, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295464050, 'comment_body': 'just call self.set_red(red); and return self?', 'comment_created': datetime.datetime(2023, 8, 16, 7, 4, 12, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295465511, 'comment_body': ""That's possible, but it can't be const since `set_red` can't be const because it takes `&mut self`"", 'comment_created': datetime.datetime(2023, 8, 16, 7, 5, 41, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1295466640, 'comment_body': 'The following is possible with const, but the current seems more readable?\r\n```rust\r\n#[inline]\r\npub const fn with_green(mut self, green: f32) -> Self {\r\n    self.inner.green = green;\r\n    self\r\n}\r\n```', 'comment_created': datetime.datetime(2023, 8, 16, 7, 6, 53, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1295467491, 'comment_body': 'I am fine with either', 'comment_created': datetime.datetime(2023, 8, 16, 7, 7, 52, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295468661, 'comment_body': 'As in the latter is not clear that it is actually copying the struct, and not just mutating', 'comment_created': datetime.datetime(2023, 8, 16, 7, 8, 57, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1295485607, 'comment_body': 'The commit message mentions constructors but they are more of helpers functions. Also I would be demanding and ask for at least a doc comment about the use case with an example. ', 'comment_created': datetime.datetime(2023, 8, 16, 7, 25, 23, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295490588, 'comment_body': ""They are somewhat constructors since they construct new RGBA structs from selfs' value :thinking: "", 'comment_created': datetime.datetime(2023, 8, 16, 7, 30, 3, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1295494832, 'comment_body': 'Do we btw actually need an example?\r\n\r\nI think it may be as familiar as https://doc.rust-lang.org/std/path/struct.Path.html#method.with_extension', 'comment_created': datetime.datetime(2023, 8, 16, 7, 34, 17, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}, {'comment_id': 1295497635, 'comment_body': 'I would prefer having one yes', 'comment_created': datetime.datetime(2023, 8, 16, 7, 37, 6, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295498180, 'comment_body': 'It would also test that the code keep doing what it says it does', 'comment_created': datetime.datetime(2023, 8, 16, 7, 37, 39, tzinfo=datetime.timezone.utc), 'commenter': 'bilelmoussaoui', 'type': 'User'}, {'comment_id': 1295503206, 'comment_body': 'Makes sense', 'comment_created': datetime.datetime(2023, 8, 16, 7, 42, 26, tzinfo=datetime.timezone.utc), 'commenter': 'SeaDve', 'type': 'User'}]","[{'commit_sha': 'f27af90c0bd33c4cd35e8f84c0c0b48166b0a955', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c6a6771d1cb7975d4561c9f9f85af973c4f6888', 'committer_username': 'SeaDve', 'committer_name': 'Dave Patrick', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 25, 4, 30, 27, tzinfo=datetime.timezone.utc)}]",Dave Patrick,64297935,,User,,32,,54,135
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+639304056,zbus,dbus2/zbus,Rust,74,329,6,100,4763,103,8,5,"[{'id': 1481451622, 'number': 450, 'closed': datetime.datetime(2023, 8, 22, 12, 9, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 19, 13, 21, 11, tzinfo=datetime.timezone.utc), 'time_taken': 254875.0, 'time_delta': '2 days, 22:47:55', 'additions': 98, 'deletions': 32, 'state': 'closed'}, {'id': 1387474946, 'number': 379, 'closed': datetime.datetime(2023, 7, 5, 14, 34, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 11, 10, 10, 11, tzinfo=datetime.timezone.utc), 'time_taken': 2089462.0, 'time_delta': '24 days, 4:24:22', 'additions': 489, 'deletions': 14, 'state': 'closed'}, {'id': 1380003614, 'number': 370, 'closed': datetime.datetime(2023, 6, 13, 10, 49, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 6, 1, 34, 6, tzinfo=datetime.timezone.utc), 'time_taken': 638141.0, 'time_delta': '7 days, 9:15:41', 'additions': 23, 'deletions': 0, 'state': 'closed'}]"
+186402701,gtk4-rs,gtk-rs/gtk4-rs,Rust,167,1788,15,93,3154,95,32,11,"[{'id': 1496461191, 'number': 1483, 'closed': datetime.datetime(2023, 9, 3, 7, 30, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 31, 3, 27, 5, tzinfo=datetime.timezone.utc), 'time_taken': 273800.0, 'time_delta': '3 days, 4:03:20', 'additions': 23, 'deletions': 77, 'state': 'closed'}, {'id': 1496447633, 'number': 1482, 'closed': datetime.datetime(2023, 9, 3, 13, 13, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 31, 3, 2, 55, tzinfo=datetime.timezone.utc), 'time_taken': 295832.0, 'time_delta': '3 days, 10:10:32', 'additions': 61, 'deletions': 0, 'state': 'closed'}, {'id': 1476937580, 'number': 1468, 'closed': datetime.datetime(2023, 8, 16, 8, 8, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 6, 57, 20, tzinfo=datetime.timezone.utc), 'time_taken': 4244.0, 'time_delta': '1:10:44', 'additions': 82, 'deletions': 4, 'state': 'closed'}, {'id': 804224390, 'number': 763, 'closed': datetime.datetime(2021, 12, 16, 10, 49, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 16, 9, 5, 41, tzinfo=datetime.timezone.utc), 'time_taken': 6253.0, 'time_delta': '1:44:13', 'additions': 21, 'deletions': 8, 'state': 'closed'}, {'id': 779995026, 'number': 709, 'closed': datetime.datetime(2021, 11, 14, 7, 26, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 14, 0, 51, 35, tzinfo=datetime.timezone.utc), 'time_taken': 23686.0, 'time_delta': '6:34:46', 'additions': 1, 'deletions': 2, 'state': 'closed'}, {'id': 779337472, 'number': 704, 'closed': datetime.datetime(2021, 11, 12, 15, 28, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 12, 11, 50, 52, tzinfo=datetime.timezone.utc), 'time_taken': 13046.0, 'time_delta': '3:37:26', 'additions': 10, 'deletions': 4, 'state': 'closed'}, {'id': 778982976, 'number': 703, 'closed': datetime.datetime(2021, 11, 12, 8, 8, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 11, 23, 59, 25, tzinfo=datetime.timezone.utc), 'time_taken': 29360.0, 'time_delta': '8:09:20', 'additions': 11, 'deletions': 2, 'state': 'closed'}, {'id': 777449758, 'number': 694, 'closed': datetime.datetime(2021, 11, 12, 17, 14, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 10, 10, 38, 16, tzinfo=datetime.timezone.utc), 'time_taken': 196586.0, 'time_delta': '2 days, 6:36:26', 'additions': 345, 'deletions': 0, 'state': 'closed'}, {'id': 700887339, 'number': 541, 'closed': datetime.datetime(2021, 8, 1, 13, 13, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 1, 11, 21, tzinfo=datetime.timezone.utc), 'time_taken': 6722.0, 'time_delta': '1:52:02', 'additions': 105, 'deletions': 0, 'state': 'closed'}]"

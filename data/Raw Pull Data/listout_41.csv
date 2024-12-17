@@ -1,0 +1,42 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+986758882,dev-util/debugedit: Fix build on musl,"musl doesn't provide error.h as a result debugedit is failing to build on
+musl.
+
+There are a couple of ways of handling missing error.h, one of them being using
+conditionally including err.h and calling err function instead of error for
+musl systems. There are other ways, for example, declaring the error function
+ourselves [1] or creating a error.h[2] header that would NOP the error function
+calls.
+
+[1]: https://www.openembedded.org/pipermail/openembedded-core/2016-February/117528.html
+[2]: https://www.openwall.com/lists/musl/2014/06/29/8
+
+Closes: https://bugs.gentoo.org/714206
+
+Signed-off-by: brahmajit das <brahmajit.xyz@gmail.com>",False,26223,https://api.github.com/repos/gentoo/gentoo/pulls/26223,https://github.com/gentoo/gentoo/pull/26223,closed,51,0,2,1,7,6,2,0,"[{'name': 'assigned'}, {'name': 'bug linked'}]",2022-07-04 19:08:14+00:00,2022-07-18 00:26:31+00:00,1142297.0,"13 days, 5:18:17","[{'comment_id': 913411464, 'comment_body': '@Applewizzy thanks for the feedback', 'comment_created': datetime.datetime(2022, 7, 5, 5, 58, 6, tzinfo=datetime.timezone.utc), 'commenter': 'listout', 'type': 'User'}, {'comment_id': 921733653, 'comment_body': ""I don't think the patch is bad, but it's sooooo big.\r\n\r\n@blueness?"", 'comment_created': datetime.datetime(2022, 7, 15, 1, 33, 37, tzinfo=datetime.timezone.utc), 'commenter': 'thesamesam', 'type': 'User'}, {'comment_id': 921749472, 'comment_body': '(It might be I upload it to devspace, just wondering if we can do something better here.)', 'comment_created': datetime.datetime(2022, 7, 15, 2, 20, 54, tzinfo=datetime.timezone.utc), 'commenter': 'thesamesam', 'type': 'User'}, {'comment_id': 922628586, 'comment_body': '@thesamesam @blueness Is the current implementation alright?', 'comment_created': datetime.datetime(2022, 7, 16, 4, 33, 31, tzinfo=datetime.timezone.utc), 'commenter': 'listout', 'type': 'User'}, {'comment_id': 922894197, 'comment_body': 'looks good', 'comment_created': datetime.datetime(2022, 7, 17, 20, 51, 44, tzinfo=datetime.timezone.utc), 'commenter': 'thesamesam', 'type': 'User'}]","[{'commit_sha': '0cb7ca13ad5bb800fe6f7d1b1e954a6c52f1c2de', 'committer_username': 'listout', 'committer_name': 'Brahmajit Das', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 10, 5, 36, 10, tzinfo=datetime.timezone.utc)}]",Brahmajit Das,66715002,,User,,93,,21,23
+977214707,dev-libs/gjs: Increase stack size on musl profile,"On musl it required that either gjs, pixman or gnome-shell be built
+with a larger stack otherwise, librsvg fails to render a particular SVG,
+as a result, we fail to get gdm or gnome-shell running (greeted with a
+fail whale screen). The bug has been reported to librsvg. For now this
+is just a temporary fix and will be removed later once an actual fix is
+found.
+
+Please refer to these bugs:
+https://gitlab.gnome.org/GNOME/librsvg/-/issues/686
+https://gitlab.gnome.org/GNOME/librsvg/-/issues/874
+
+Signed-off-by: brahmajit das <brahmajit.xyz@gmail.com>",False,26056,https://api.github.com/repos/gentoo/gentoo/pulls/26056,https://github.com/gentoo/gentoo/pull/26056,closed,13,0,1,1,5,0,2,0,"[{'name': 'assigned'}, {'name': 'no bug found'}]",2022-06-23 14:08:59+00:00,2022-06-24 04:58:16+00:00,53357.0,14:49:17,[],"[{'commit_sha': '8d55a65a92ee1584f1e2986e2b8fbfd1f0cc441e', 'committer_username': 'listout', 'committer_name': 'Brahmajit Das', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 10, 5, 36, 10, tzinfo=datetime.timezone.utc)}]",Brahmajit Das,66715002,,User,,93,,21,23
+1025827852,media-gfx/blender: Upstream musl libc fixes backport,"These are some of the patches that I submitted upstream and have been
+accepted. They will be a part of the next blender release. However, this PR
+is a backport of those fixes for blender 3.2.2.
+
+Please refer:
+blender/blender@f197b1a, and
+blender/blender@7be7280
+
+Closes: https://bugs.gentoo.org/739474
+
+Signed-off-by: brahmajit das <listout@protonmail.com>",False,26860,https://api.github.com/repos/gentoo/gentoo/pulls/26860,https://github.com/gentoo/gentoo/pull/26860,closed,209,0,3,1,21,2,2,0,"[{'name': 'assigned'}, {'name': 'bug linked'}]",2022-08-14 15:15:29+00:00,2022-09-01 02:06:34+00:00,1507865.0,"17 days, 10:51:05","[{'comment_id': 945305137, 'comment_body': 'Instead of relying on `__GLIBC__` I could improve it to something like checking for function using cmake. But would like to hear from devs first.', 'comment_created': datetime.datetime(2022, 8, 14, 15, 18, 56, tzinfo=datetime.timezone.utc), 'commenter': 'listout', 'type': 'User'}, {'comment_id': 945314303, 'comment_body': 'yes please (thanks for doing it already)', 'comment_created': datetime.datetime(2022, 8, 14, 16, 36, 57, tzinfo=datetime.timezone.utc), 'commenter': 'thesamesam', 'type': 'User'}]","[{'commit_sha': 'd5d705b89b789236283d155b5ac9020cffeb7420', 'committer_username': 'listout', 'committer_name': 'Brahmajit Das', 'committer_email': None, 'commit_date': datetime.datetime(2020, 6, 10, 5, 36, 10, tzinfo=datetime.timezone.utc)}]",Brahmajit Das,66715002,,User,,93,,21,23
+
+
+

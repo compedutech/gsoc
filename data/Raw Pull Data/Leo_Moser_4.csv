@@ -1,0 +1,136 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1320221861,"Move `SDF INFO`,  `SDF WARNING`, `SDF ERROR` to start of line","This PR moves `SDF INFO`, `SDF WARNING`, `SDF ERROR` to the beginning of the line to make it consistent with existing behavior and for better readability.
+
+The corresponding gold file has been updated, and three empty gold files have been removed that I had mistakenly kept.",True,908,https://api.github.com/repos/steveicarus/iverilog/pulls/908,https://github.com/steveicarus/iverilog/pull/908,closed,41,41,5,2,0,0,0,0,[],2023-04-19 16:41:30+00:00,2023-06-05 04:13:22+00:00,4015912.0,"46 days, 11:31:52",[],"[{'commit_sha': 'a3bf61030d7d2eb4a50f0641f0944ce25ca16ce8', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '691159a8fe43b6a66fd435dd9e72bfc4c41610bd', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1386064404,Documentation Overhaul,"This PR converts most of the text files inside the repository into .rst and integrates them into the new documentation system. This way there is one place for all documentation and there are no duplicate files.
+
+Some of the files were reworked because they contained outdated information or were referring to SourceForge /  the old wiki at https://iverilog.fandom.com.
+
+A new chapter `Developer Guide` was created to provide information about how the internals of Icarus Verilog work. I tried my best to connect everything in a meaningful way.
+
+Feedback is very much welcome.
+
+---
+
+Note: In the future, all remaining useful information could be taken from the Fandom wiki and integrated into the new one. If possible, the Fandom site could then be closed in favor of the new one, as it still ranks very high in search engines.",True,932,https://api.github.com/repos/steveicarus/iverilog/pulls/932,https://github.com/steveicarus/iverilog/pull/932,closed,987,927,55,4,0,0,0,0,[],2023-06-09 11:53:39+00:00,2023-06-11 00:54:33+00:00,133254.0,"1 day, 13:00:54",[],"[{'commit_sha': '265f58509682a24a2911398f7d40d45b7567624c', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41496040e84015d034035129727d8e1ce4fb31ae', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b0c1eab51ed4eb32648ec20b6f07a3917ff07c67', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f4345e2d03b3cde0dd22e750cf6e0297dfea8c66', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1393587098,SDF: Add TIMINGCHECK warning,"This PR adds a warning, to indicate that timing checks are currently not supported.
+
+Additionally there is a cleanup to how some warnings and errors are printed.",True,944,https://api.github.com/repos/steveicarus/iverilog/pulls/944,https://github.com/steveicarus/iverilog/pull/944,closed,9,6,2,2,0,0,0,0,[],2023-06-15 07:32:14+00:00,2023-06-15 15:01:37+00:00,26963.0,7:29:23,[],"[{'commit_sha': 'f1ca97f78faacd4cc9d9580bf6e7dda4d922ed7a', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '340e6fa020aaf367c05e47d12ea0f16ccc69110f', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1393684035,SDF: Implement warning for wildcard cell instanciation,"Currently, using the wildcard character `*` for cell instance specification in an SDF file results in a segfault due to null pointer access.
+
+With this PR, only a warning will be printed instead:
+
+```
+SDF WARNING: top.v:30: Wildcard cell instance specification (*) currently not supported.
+```
+
+Also some cleanup regarding warning/error printing.",True,948,https://api.github.com/repos/steveicarus/iverilog/pulls/948,https://github.com/steveicarus/iverilog/pull/948,closed,15,5,1,1,0,0,0,0,[],2023-06-15 08:36:37+00:00,2023-06-15 15:01:49+00:00,23112.0,6:25:12,[],"[{'commit_sha': '34dc10d7985a0fb2d5ecde891a5512675f797cd4', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1421239813,Handle delayed signals in timing checks as assignments,"Since timing checks are currently not supported in Icarus Verilog, they are ignored. This is an issue for some models:
+
+Both `$setuphold` and `$recrem` have support for negative timing checks. For this to work, delayed versions of the reference and data signals must be created. The model has access to these delayed signals. The current situation is that these signals are never assigned.
+
+This PR does what is proposed under 15.5.4 Option behavior in the standard. When timing checks are disabled (or in the case of Icarus Verilog not yet supported) the delayed reference and data signals become copies of the original reference and data signals.
+
+For example, with the following timing check:
+
+    $setuphold(posedge sig1, negedge sig2 , 0:0:0 , 0:0:0 , notifier , cond1 , cond2 , del_sig1 , del_sig2 ) ;
+
+Internally the simulator does the following:
+
+    assign del_sig1 = sig1;
+    assign del_sig2 = sig2;
+
+Two tests were added to the regression suite:
+
+- `timing_check_delayed_signals` - This test checks what this PR implements
+- `timing_check_syntax` - This test makes sure that all timing checks can still be parsed
+",True,966,https://api.github.com/repos/steveicarus/iverilog/pulls/966,https://github.com/steveicarus/iverilog/pull/966,closed,1038,131,14,9,15,8,0,0,[],2023-07-05 14:39:39+00:00,2023-07-14 13:33:38+00:00,773639.0,"8 days, 22:53:59","[{'comment_id': 1261027336, 'comment_body': '```suggestion\r\n      if (obj == nullptr)\r\n```\r\n\r\nor just `if (!obj)`', 'comment_created': datetime.datetime(2023, 7, 12, 11, 18, 12, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261032252, 'comment_body': '```suggestion\r\n      for (const auto cur : timing_checks) {\r\n\t\t cur->dump(out, indent);\r\n      }\r\n```', 'comment_created': datetime.datetime(2023, 7, 12, 11, 20, 6, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261036123, 'comment_body': 'Since the lifetime of these is bound to the `PRecRem` they are good candidates for using a `std::unique_ptr` then you do not have to worry about calling `delete` (and maybe forgetting it). Same for other fields and also `PSetupHold`', 'comment_created': datetime.datetime(2023, 7, 12, 11, 23, 13, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261038718, 'comment_body': '```suggestion\r\n      for (const auto tc : timing_checks) {\r\n\t    tc->elaborate(des, scope);\r\n      }\r\n```', 'comment_created': datetime.datetime(2023, 7, 12, 11, 25, 52, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261042034, 'comment_body': 'The cast should not be necessary.\r\n```suggestion\r\n\tpform_module_timing_check(recrem);\r\n```', 'comment_created': datetime.datetime(2023, 7, 12, 11, 29, 19, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261042416, 'comment_body': 'Same about the cast here', 'comment_created': datetime.datetime(2023, 7, 12, 11, 29, 42, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261044609, 'comment_body': '```suggestion\r\n      { $$ = nullptr; }\r\n```', 'comment_created': datetime.datetime(2023, 7, 12, 11, 31, 52, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}, {'comment_id': 1261044964, 'comment_body': '```suggestion\r\n      { $$ = nullptr; }\r\n```', 'comment_created': datetime.datetime(2023, 7, 12, 11, 32, 13, tzinfo=datetime.timezone.utc), 'commenter': 'larsclausen', 'type': 'User'}]","[{'commit_sha': '87885dbd9b2abbce3aa10fd21f15340da73a35f3', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21b73eb187b41fabe52dffe1f7bb5a16cb407584', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7aabcc113ed4a7d6c52b24d43fb182e9756c601c', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e54ff22fce9911454e4887528cebe85ec7627707', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd46628b2f2848e21fe64f205f714cf24db980186', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7f5b8d49eba66877b038799af7af843c51f70c9d', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b2990cfec74fe48e0297a28ef0f73d67ad8019f', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0d0dff8d6040089c240f73cf03e8502841203b8', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '13fcf2d844bf0058c6cfe1cc97cc4b05c23aad5a', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1441032284,Implement SDF INTERCONNECT,"This PR implements the SDF INTERCONNECT feature and adds three tests to the test suite. While this base implementation can already correctly simulate interconnection delays for GL designs, some features are still missing for greater usability, namely:
+
+- Support for interconnection delays of input/output vectors
+- Reannotation of already annotated intermodpaths
+
+I would prefer to add these features in a follow-up PR to keep this PR from growing too much. Note that there seems to be some issues with the CI as MINGW32 - i686 sometimes fails during the build process with the error:
+
+```
+mingw32-make: INTERNAL: Exiting with 1 jobserver tokens available; should be 3!
+==> ERROR: A failure occurred in build().
+```
+
+I believe that this is not caused by the changes in this PR.
+
+---
+
+The changes in Icarus Verilog are the following:
+
+SDF VPI Module:
+
+- Implement `sdf_interconnect_delays()`
+  - Find port handles in the correct scope
+  - Get the intermodpath by calling `vpi_handle_multi(vpiInterModPath, port1_handle, port2_handle);`
+  - Place delays via `vpi_put_delays(intermodpath, &delays);`
+
+VVP:
+
+- Implement `__vpiInterModPath` for VPI access
+- Implement `vvp_fun_intermodpath` as net functor
+- Implement `vpi_handle_multi()` to return a `__vpiInterModPath`
+  - Find nets for given ports
+  - Create a `vvp_fun_intermodpath` and `__vpiInterModPath`
+  - Insert intermodpath into netlist
+  - return `__vpiInterModPath`
+
+Three tests were created to exercise the new feature:
+
+- sdf_interconnect1.v - A design with three buffers in series
+- sdf_interconnect2.v - A design with three buffers in parallel
+- sdf_interconnect3.v - A design with various buffers and xor gates
+
+Designs 1 and 2 are trivial and can be checked by hand. Design 3 was checked by hand, but also compared with the CVC simulator and checked via my script in [this repository](https://github.com/mole99/interconnect-tests).
+
+~As soon as #989 is merged I will update the tests to also include IOPATH delays.~ Done
+",True,973,https://api.github.com/repos/steveicarus/iverilog/pulls/973,https://github.com/steveicarus/iverilog/pull/973,closed,1477,114,46,14,12,0,0,0,[],2023-07-19 13:25:29+00:00,2023-09-02 16:08:22+00:00,3897773.0,"45 days, 2:42:53",[],"[{'commit_sha': '78f8976c85c27ca8abd73d3efd6acf32bd4af1a5', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7beadb92f8811b24e4c50e50c2bb807dea9da8d6', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6e4b6d381c54625ba5ae3106b7a7ab00b9fab25', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf19acd8ee94312b7f3e20b2135d9c6afac0c011', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3fe59b0c16557b11afd23bf417970749f3d1b3e4', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'adb40e75725d3a5ae6723027373dd655736ff952', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d3e2bf3448efcdcd55ac9e0aefa6a344abc38c4', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '423f88cce990692912a83cc77eb3dc5c032c6e5d', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'db068aa1370027ecee89a909cd34a1a2d4c1e57b', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37119b15040a5874750498d548517616b99b4d48', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '306e4cfa6b9438aa136af3e3f5ee681faf8adb8e', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '11c944f5e9356c1405115e6a9827e143f7caf9b0', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '665295ba007fa89fe8fcbdeb834477bc07dd69e8', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0c9549379436a6e73b1a89d2a6c1a050e76a5473', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1474452976,Always evaluate `vvp_fun_modpath_src` first,"Fixes #985
+
+This PR ensures that whenever any `vvp_net_t`s are connected via `vvp_net_t::link`, nodes with `vvp_fun_modpath_src` are always inserted at the head of the linked list.
+
+This guarantees that `vvp_fun_modpath_src`  are always evaluated before their respective `vvp_fun_modpath`, without any runtime penalty. ",True,989,https://api.github.com/repos/steveicarus/iverilog/pulls/989,https://github.com/steveicarus/iverilog/pull/989,closed,38,2,1,2,14,0,0,0,[],2023-08-14 13:42:24+00:00,2023-08-23 02:41:03+00:00,737919.0,"8 days, 12:58:39",[],"[{'commit_sha': 'bd2b67961e5da850043d03ed9ec8e73f042cd211', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5a87d2fa38e61d358f30abd659ef39d984754b4b', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1495522230,SDF: Interconnection delays for input/output vectors,"This PR add support for annotation of interconnection delays for input/output vectors. Previously, only single bit inputs/outputs could be annotated with an interconnection delay.
+
+- Adds a testcase with a 3 bit input and 3 bit output vector
+
+~~Note: This PR depends on #973, I will rebase once it is merged.~~ Rebased",True,994,https://api.github.com/repos/steveicarus/iverilog/pulls/994,https://github.com/steveicarus/iverilog/pull/994,closed,499,79,15,7,8,0,0,0,[],2023-08-30 13:20:52+00:00,2023-09-04 14:02:28+00:00,434496.0,"5 days, 0:41:36",[],"[{'commit_sha': 'a1440ced8618159020a0e767e481d2bdf3b24d6e', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '023c5f27545794f97de142ae92e169853c1b8a7b', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f9d658caebd1183df10f5c8c3134087fa90e4782', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b8ae6b1686427059b219cd39f87eb37b926d0622', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd70ad015f218e865bff39a83e4989de83259bdb8', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '18f6dcb6ba050565fe839badc3bbac5bebcf4707', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7c6d7ce760f857a504978cf5a80226f25989793', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+1511768779,Implement $width timing check (only vvp for now),"This PR contains my latest work on implementing the `$width` timing check. It checks that the pulse width of a signal does not fall below a limit.
+
+It is described by a record of type `.tchk_width`, e.g.:
+
+```
+.tchk_width 3 8, ""posedge"", v0x55a707f6d570_0, v0x000000000000_0, 1.0, 0, v0x55a707f6d450_0;
+```
+
+The individual elements:
+
+    .tchk_width <file_idx> <line_num>, ""<starting_edge>"", <reference_signal>, <condition>, <limit>, <threshold>, <notifier_signal>;
+
+Note: The automatic insertion of such a record into the `.vvp` file is not yet implemented, for now this has been tested manually.
+
+The following is supported:
+
+- Both ""posedge"" and ""negedge"" as starting edge
+- Violation message
+- SDF annotation
+- cbTchkViolation VPI callback
+
+The following is not supported:
+
+- Conditions
+
+I have got some tests prepared, but I will commit them only after the record insertion works.
+
+Since my GSoC project is coming to an end and the next few weeks will be busy for me, it may be some time before I get back to finish this, but I do intend to.
+
+However, what has already been implemented could be reviewed in the meantime, thanks!
+",False,999,https://api.github.com/repos/steveicarus/iverilog/pulls/999,https://github.com/steveicarus/iverilog/pull/999,open,884,117,29,4,2,0,0,0,[],2023-09-12 09:50:49+00:00,,0.0,,[],"[{'commit_sha': '46620b6c444e444c910ba6a2723c52af5003b3b3', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fa64ecef905d1cac048c0f8828c06ebdc63ac2c', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58567116c54d05fb61a2d6813d11a015d3fa4e95', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}, {'commit_sha': '94fa601e66f0445a4fceb9a456f97d249ee1ab27', 'committer_username': 'mole99', 'committer_name': 'Leo Moser', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 15, 18, 8, 7, tzinfo=datetime.timezone.utc)}]",Leo Moser,3877395,,User,,53,,31,34
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+16267,iverilog,steveicarus/iverilog,C++,518,2774,135,116,10073,145,22,6,"[{'id': 1511768779, 'number': 999, 'closed': None, 'created': datetime.datetime(2023, 9, 12, 9, 50, 49, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 884, 'deletions': 117, 'state': 'open'}, {'id': 1495522230, 'number': 994, 'closed': datetime.datetime(2023, 9, 4, 14, 2, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 30, 13, 20, 52, tzinfo=datetime.timezone.utc), 'time_taken': 434496.0, 'time_delta': '5 days, 0:41:36', 'additions': 499, 'deletions': 79, 'state': 'closed'}, {'id': 1474452976, 'number': 989, 'closed': datetime.datetime(2023, 8, 23, 2, 41, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 14, 13, 42, 24, tzinfo=datetime.timezone.utc), 'time_taken': 737919.0, 'time_delta': '8 days, 12:58:39', 'additions': 38, 'deletions': 2, 'state': 'closed'}, {'id': 1441032284, 'number': 973, 'closed': datetime.datetime(2023, 9, 2, 16, 8, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 19, 13, 25, 29, tzinfo=datetime.timezone.utc), 'time_taken': 3897773.0, 'time_delta': '45 days, 2:42:53', 'additions': 1477, 'deletions': 114, 'state': 'closed'}, {'id': 1421239813, 'number': 966, 'closed': datetime.datetime(2023, 7, 14, 13, 33, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 14, 39, 39, tzinfo=datetime.timezone.utc), 'time_taken': 773639.0, 'time_delta': '8 days, 22:53:59', 'additions': 1038, 'deletions': 131, 'state': 'closed'}, {'id': 1393684035, 'number': 948, 'closed': datetime.datetime(2023, 6, 15, 15, 1, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 15, 8, 36, 37, tzinfo=datetime.timezone.utc), 'time_taken': 23112.0, 'time_delta': '6:25:12', 'additions': 15, 'deletions': 5, 'state': 'closed'}, {'id': 1393587098, 'number': 944, 'closed': datetime.datetime(2023, 6, 15, 15, 1, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 15, 7, 32, 14, tzinfo=datetime.timezone.utc), 'time_taken': 26963.0, 'time_delta': '7:29:23', 'additions': 9, 'deletions': 6, 'state': 'closed'}, {'id': 1386064404, 'number': 932, 'closed': datetime.datetime(2023, 6, 11, 0, 54, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 9, 11, 53, 39, tzinfo=datetime.timezone.utc), 'time_taken': 133254.0, 'time_delta': '1 day, 13:00:54', 'additions': 987, 'deletions': 927, 'state': 'closed'}, {'id': 1320221861, 'number': 908, 'closed': datetime.datetime(2023, 6, 5, 4, 13, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 19, 16, 41, 30, tzinfo=datetime.timezone.utc), 'time_taken': 4015912.0, 'time_delta': '46 days, 11:31:52', 'additions': 41, 'deletions': 41, 'state': 'closed'}, {'id': 1268380862, 'number': 880, 'closed': datetime.datetime(2023, 4, 15, 1, 14, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 8, 20, 3, 7, tzinfo=datetime.timezone.utc), 'time_taken': 3215457.0, 'time_delta': '37 days, 5:10:57', 'additions': 86, 'deletions': 7, 'state': 'closed'}]"

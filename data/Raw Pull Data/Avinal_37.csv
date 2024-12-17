@@ -1,0 +1,279 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+705700165,feat(buildsystem): add CMake Buildsytem,"<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This pull request adds a new build system based on CMake to this project. This is a big upgrade over decade-old Makefiles. With the new build system, we will be able to build/install/package FOSSology faster and support for many platforms and another build system. 
+
+### Changes
+
+- Added CMake configuration for building, installing, testing, and packaging all the agents
+- Refactored source directories to better integrate with the new build system
+- Reworked the shell scripts and generated source files to make them more compatible with CMake as well as better in terms of overall compatibility with the latest tools.
+- Refactored test source 
+
+## How to test
+
+- Check out the pull request branch 
+
+ ```bash
+    git fetch https://github.com/avinal/fossology avinal/feat/buildsystem:buildsystem
+    git checkout buildsystem
+```
+
+- Make sure you have CMake and Ninja installed
+
+```bash
+  sudo apt install cmake ninja-build
+```
+
+- Configure CMake, you may add additional variables to modify build
+  - `-DOFFLINE=ON` - stops vendor generation
+  - `-DAGENTS=""agent1;agent2;...;<agent>""` - only configure these agents
+  - `-DTESTING=ON` - enables configuring for tests
+  - `-DCMAKE_INSTALL_PREFIX=<path>` - changes install prefix for the project
+  - `-DMONOPACK=ON` - ununpack and adj2nest are packaged seperately
+  - `-GNinja` - uses Ninja Generator instead of  Unix Makefiles
+  - `-DCMAKE_BUILD_TYPE=<build-type>` - choose from `Debug`, `Release`, `RelWithDebInfo`, `MinSizeRel`
+ 
+```bash
+  mkdir build && cd build
+  cmake .. <add-variables-here-if-any>
+```
+
+- Run Make or Ninja
+
+```bash
+  # For Unix Makefiles, by default, runs without parallel build jobs
+  make -j<no-of-parallel-jobs>
+  # For Ninja Generator, by default, runs parallel build jobs
+  ninja -j<no-of-parallel-jobs>
+  # common for all
+  cmake --build .
+```
+
+- Installing, may need to add `sudo` before the commands
+
+```bash
+  # For Unix Makefiles
+  make install
+  # For Ninja Generator
+  ninja install
+```
+
+- Testing, on local please consider switching to `fossy` user before running tests
+
+```bash
+  # For Unix Makefiles
+  make test
+  # For Ninja Generator
+  ninja test
+  # dedicated ctest command *see `ctest --help` for more options*
+  ctest --parallel n
+```
+
+- Packaging
+
+```bash
+  # For Unix Makefiles
+  make package
+  # For Ninja Generator
+  ninja package
+```
+
+- Follow the rest of the installation from [here](https://github.com/fossology/fossology/wiki/Install-from-Source#4-run-the-postinstall-script)
+- To list all the possible targets 
+
+```bash
+  # For Unix Makefiles
+  make help
+  # For Ninja Generator
+  ninja -t targets
+```
+
+## Known Bugs/Issue
+
+- While packaging with `make` symbolic links in the packages are accompanied with dereferenced targets too, prefer `ninja` for packaging
+- Coverage build may fail for some agents
+
+### Issues to create before merge
+- [ ] Fix tests for scheduler, ununpack and delagent units tests.
+- [ ] Add requirements for CMake version > 3.13 in Wiki
+- [ ] Update install from source instructions in Wiki
+- [ ] Add packaging instructions to use `-DCMAKE_INSTALL_PREFIX:PATH=""/usr"" -DFO_SYSCONFDIR:PATH=""/etc/fossology""` before packaging to fix paths.
+
+
+For More Information please see the blog: https://gsoc.avinal.space and [wiki](https://github.com/avinal/fossology/wiki)
+
+Signed-off-by: Avinal Kumar <avinal.xlvii@gmail.com>
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2075""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2075,https://api.github.com/repos/fossology/fossology/pulls/2075,https://github.com/fossology/fossology/pull/2075,closed,6230,9409,425,2,22,13,4,1,"[{'name': 'enhancement'}, {'name': 'needs code review'}, {'name': 'needs test'}, {'name': 'GSOC-21'}]",2021-08-06 19:26:23+00:00,2022-11-28 05:27:27+00:00,41335264.0,"478 days, 10:01:04","[{'comment_id': 685055817, 'comment_body': 'Please change to other wise `postgres` needs permission on `@FO_LIBEXECDIR@/fossologyinit.sql` instead of user executing the script.\r\n\r\n```suggestion\r\n   su postgres -c psql < @FO_LIBEXECDIR@/fossologyinit.sql\r\n```', 'comment_created': datetime.datetime(2021, 8, 9, 9, 50, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685056919, 'comment_body': 'Please add ` PROJECTUSER=@FO_PROJECTUSER@` as well.', 'comment_created': datetime.datetime(2021, 8, 9, 9, 52, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685062908, 'comment_body': 'Please add licensing header.', 'comment_created': datetime.datetime(2021, 8, 9, 10, 1, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685063465, 'comment_body': 'Is it required to move `composer.json` from `src/composer.json`?', 'comment_created': datetime.datetime(2021, 8, 9, 10, 2, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685375744, 'comment_body': 'If testing is sorted out then I have alternate plans for it. For now, it must be moved to the build directory. I can refactor the script to use it from the base directory too. ', 'comment_created': datetime.datetime(2021, 8, 9, 17, 13, 5, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 685376004, 'comment_body': 'Noted\r\n', 'comment_created': datetime.datetime(2021, 8, 9, 17, 13, 27, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 685736509, 'comment_body': 'Is there a specific reason for changing to Bash ?\r\nDefault shell would be Dash, which is lighter and faster, and I do not see Bash specific code in the file.', 'comment_created': datetime.datetime(2021, 8, 10, 6, 47, 21, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685740037, 'comment_body': 'There is a logic inversion here, we should have: ` if ! rm -rf /srv/fossology; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 53, 15, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685740587, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 54, 17, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685740756, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 54, 34, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685741224, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 55, 14, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685741330, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 55, 24, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 686031911, 'comment_body': 'There was some permission issue earlier and I thought this was causing them. I have fixed them now. I will revert it back to `sh`.', 'comment_created': datetime.datetime(2021, 8, 10, 13, 42, 57, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}]","[{'commit_sha': '4b9c941c005c2e3cc8d08f2cd297d7f26bbbac96', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14f8ea382ff75b5a24583e58709cfb686b9badcf', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Avinal Kumar,74113200,opensource@avinal.space,User,,159,,129,496
+705700165,feat(buildsystem): add CMake Buildsytem,"<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This pull request adds a new build system based on CMake to this project. This is a big upgrade over decade-old Makefiles. With the new build system, we will be able to build/install/package FOSSology faster and support for many platforms and another build system. 
+
+### Changes
+
+- Added CMake configuration for building, installing, testing, and packaging all the agents
+- Refactored source directories to better integrate with the new build system
+- Reworked the shell scripts and generated source files to make them more compatible with CMake as well as better in terms of overall compatibility with the latest tools.
+- Refactored test source 
+
+## How to test
+
+- Check out the pull request branch 
+
+ ```bash
+    git fetch https://github.com/avinal/fossology avinal/feat/buildsystem:buildsystem
+    git checkout buildsystem
+```
+
+- Make sure you have CMake and Ninja installed
+
+```bash
+  sudo apt install cmake ninja-build
+```
+
+- Configure CMake, you may add additional variables to modify build
+  - `-DOFFLINE=ON` - stops vendor generation
+  - `-DAGENTS=""agent1;agent2;...;<agent>""` - only configure these agents
+  - `-DTESTING=ON` - enables configuring for tests
+  - `-DCMAKE_INSTALL_PREFIX=<path>` - changes install prefix for the project
+  - `-DMONOPACK=ON` - ununpack and adj2nest are packaged seperately
+  - `-GNinja` - uses Ninja Generator instead of  Unix Makefiles
+  - `-DCMAKE_BUILD_TYPE=<build-type>` - choose from `Debug`, `Release`, `RelWithDebInfo`, `MinSizeRel`
+ 
+```bash
+  mkdir build && cd build
+  cmake .. <add-variables-here-if-any>
+```
+
+- Run Make or Ninja
+
+```bash
+  # For Unix Makefiles, by default, runs without parallel build jobs
+  make -j<no-of-parallel-jobs>
+  # For Ninja Generator, by default, runs parallel build jobs
+  ninja -j<no-of-parallel-jobs>
+  # common for all
+  cmake --build .
+```
+
+- Installing, may need to add `sudo` before the commands
+
+```bash
+  # For Unix Makefiles
+  make install
+  # For Ninja Generator
+  ninja install
+```
+
+- Testing, on local please consider switching to `fossy` user before running tests
+
+```bash
+  # For Unix Makefiles
+  make test
+  # For Ninja Generator
+  ninja test
+  # dedicated ctest command *see `ctest --help` for more options*
+  ctest --parallel n
+```
+
+- Packaging
+
+```bash
+  # For Unix Makefiles
+  make package
+  # For Ninja Generator
+  ninja package
+```
+
+- Follow the rest of the installation from [here](https://github.com/fossology/fossology/wiki/Install-from-Source#4-run-the-postinstall-script)
+- To list all the possible targets 
+
+```bash
+  # For Unix Makefiles
+  make help
+  # For Ninja Generator
+  ninja -t targets
+```
+
+## Known Bugs/Issue
+
+- While packaging with `make` symbolic links in the packages are accompanied with dereferenced targets too, prefer `ninja` for packaging
+- Coverage build may fail for some agents
+
+### Issues to create before merge
+- [ ] Fix tests for scheduler, ununpack and delagent units tests.
+- [ ] Add requirements for CMake version > 3.13 in Wiki
+- [ ] Update install from source instructions in Wiki
+- [ ] Add packaging instructions to use `-DCMAKE_INSTALL_PREFIX:PATH=""/usr"" -DFO_SYSCONFDIR:PATH=""/etc/fossology""` before packaging to fix paths.
+
+
+For More Information please see the blog: https://gsoc.avinal.space and [wiki](https://github.com/avinal/fossology/wiki)
+
+Signed-off-by: Avinal Kumar <avinal.xlvii@gmail.com>
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2075""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2075,https://api.github.com/repos/fossology/fossology/pulls/2075,https://github.com/fossology/fossology/pull/2075,closed,6230,9409,425,2,22,13,4,1,"[{'name': 'enhancement'}, {'name': 'needs code review'}, {'name': 'needs test'}, {'name': 'GSOC-21'}]",2021-08-06 19:26:23+00:00,2022-11-28 05:27:27+00:00,41335264.0,"478 days, 10:01:04","[{'comment_id': 685055817, 'comment_body': 'Please change to other wise `postgres` needs permission on `@FO_LIBEXECDIR@/fossologyinit.sql` instead of user executing the script.\r\n\r\n```suggestion\r\n   su postgres -c psql < @FO_LIBEXECDIR@/fossologyinit.sql\r\n```', 'comment_created': datetime.datetime(2021, 8, 9, 9, 50, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685056919, 'comment_body': 'Please add ` PROJECTUSER=@FO_PROJECTUSER@` as well.', 'comment_created': datetime.datetime(2021, 8, 9, 9, 52, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685062908, 'comment_body': 'Please add licensing header.', 'comment_created': datetime.datetime(2021, 8, 9, 10, 1, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685063465, 'comment_body': 'Is it required to move `composer.json` from `src/composer.json`?', 'comment_created': datetime.datetime(2021, 8, 9, 10, 2, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 685375744, 'comment_body': 'If testing is sorted out then I have alternate plans for it. For now, it must be moved to the build directory. I can refactor the script to use it from the base directory too. ', 'comment_created': datetime.datetime(2021, 8, 9, 17, 13, 5, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 685376004, 'comment_body': 'Noted\r\n', 'comment_created': datetime.datetime(2021, 8, 9, 17, 13, 27, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 685736509, 'comment_body': 'Is there a specific reason for changing to Bash ?\r\nDefault shell would be Dash, which is lighter and faster, and I do not see Bash specific code in the file.', 'comment_created': datetime.datetime(2021, 8, 10, 6, 47, 21, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685740037, 'comment_body': 'There is a logic inversion here, we should have: ` if ! rm -rf /srv/fossology; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 53, 15, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685740587, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 54, 17, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685740756, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 54, 34, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685741224, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 55, 14, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 685741330, 'comment_body': 'Logic inversion, we should have: ` if ! [...]; then`', 'comment_created': datetime.datetime(2021, 8, 10, 6, 55, 24, tzinfo=datetime.timezone.utc), 'commenter': 'NicolasToussaint', 'type': 'User'}, {'comment_id': 686031911, 'comment_body': 'There was some permission issue earlier and I thought this was causing them. I have fixed them now. I will revert it back to `sh`.', 'comment_created': datetime.datetime(2021, 8, 10, 13, 42, 57, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}]","[{'commit_sha': '4b9c941c005c2e3cc8d08f2cd297d7f26bbbac96', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14f8ea382ff75b5a24583e58709cfb686b9badcf', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Avinal Kumar,74113200,opensource@avinal.space,User,,159,,129,496
+591611857,feat(CI): Migrate API docs generation and deployment to GitHub Actions,"<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Migrate API docs generation and deployment to GitHub Actions from Travis CI.
+
+### Changes
+
+List the changes done to fix a bug or introducing a new feature.
+- Added new workflow script for GitHub Actions: pages-deploy.yml
+- Removed pages deployment from Travis CI: .travis.yml
+- Modified pages-deployment script for GHA: pages-deploy.sh
+
+## How to test
+
+Describe the steps required to test the changes proposed in the pull request.
+Check the current deployment at http://avinal.space/checkdeployment/
+
+Please consider using the closing keyword if the pull request is proposed to
+fix an issue already created in the repository
+(https://help.github.com/articles/closing-issues-using-keywords/)
+Fixes part of #1913 ",True,1917,https://api.github.com/repos/fossology/fossology/pulls/1917,https://github.com/fossology/fossology/pull/1917,closed,39,21,2,2,11,0,2,0,"[{'name': 'ready'}, {'name': 'GSOC-21'}]",2021-03-12 11:47:06+00:00,2021-03-23 10:11:11+00:00,944645.0,"10 days, 22:24:05",[],"[{'commit_sha': 'f0603b6e18bb60e82478f8fbd29d68e9f3b8e982', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eded1d7d2b381013a780070f605624a9fc418fdf', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}]",Avinal Kumar,74113200,opensource@avinal.space,User,,159,,129,496
+592300817,feat(CI): Migrate Static Checks and Analysis to GitHub Actions from Travis CI,"<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+This PR migrates the following Checks and Analysis to GitHub Actions from Travis CI
+- Syntax Checks
+- Static Code Analysis
+- Copy/Paste Detector
+- PHP Codesniffer
+
+### Changes
+
+List the changes done to fix a bug or introducing a new feature.
+- Added new workflow configuration for static checks and analysis: static-checks.yml
+- Removed static checks and analysis from Travis CI configuration: .travis.yml
+
+## How to test
+
+Describe the steps required to test the changes proposed in the pull request.
+NA - can only be tested after merging, however, a test run is available here: https://github.com/avinal/fossology/actions/runs/648349454
+
+Please consider using the closing keyword if the pull request is proposed to
+fix an issue already created in the repository
+(https://help.github.com/articles/closing-issues-using-keywords/)
+Fixes parts of issue #1913 ",True,1919,https://api.github.com/repos/fossology/fossology/pulls/1919,https://github.com/fossology/fossology/pull/1919,closed,82,18,3,3,21,7,2,0,"[{'name': 'ready'}, {'name': 'GSOC-21'}]",2021-03-13 05:43:42+00:00,2021-03-24 09:09:53+00:00,962771.0,"11 days, 3:26:11","[{'comment_id': 594127431, 'comment_body': 'It would be nice to run this test on `ubuntu-latest` as well. Are there any difficulties with latest PHP?', 'comment_created': datetime.datetime(2021, 3, 15, 8, 19, 26, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 594281063, 'comment_body': ""The project is based on PHP 7.x and by default `ubuntu-latest` picks PHP 8.x. There have been some major changes(syntax) in PHP 8.0. We can try a workaround by forcing the Action to install PHP 7.x but it doesn't solve any purpose. The project will still be outdated in terms of PHP. \r\n\r\nChanges in PHP 8.0: https://www.php.net/manual/en/migration80.incompatible.php\r\n\r\nYou can see details of the test run here : https://github.com/avinal/fossology/runs/2097843501?check_suite_focus=true#step:4:206\r\n\r\nI would suggest, we should migrate to PHP 8.x, can't say if this is desirable or not."", 'comment_created': datetime.datetime(2021, 3, 15, 12, 10, 5, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 594857798, 'comment_body': 'It will be big of a task to make FOSSology PHP 8 compatible. It will require big effort on migration and testing with 7.0 and 8.x. Lets keep it for a separate PR.\r\n\r\nAs per the documentation, Ubuntu 20.04 image comes with PHP 7.4 and 8.0: https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#php\r\n\r\nCan you please check if you can use the `update-alternatives` to update php to point to php-7.4?\r\n\r\nAlso, now that I think about it, changing the tag from `ubuntu-latest` to `ubuntu-20.04` will be better making sure the pipeline does not break spontaneously in future. What are your thoughts on it?', 'comment_created': datetime.datetime(2021, 3, 16, 4, 44, 33, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 594861102, 'comment_body': ""I tried using `update-alternatives`, it is working on my local machine but not on GitHub Actions for some reasons. I will try once again with some modifications and let you know.\r\n\r\nSince LTS versions are released after every two years, `ubuntu-latest` doesn't change that often, but yeah for assurance `ubuntu-20.04` is surely a better choice. I will update that."", 'comment_created': datetime.datetime(2021, 3, 16, 4, 55, 20, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 594865991, 'comment_body': 'Great, It worked, I might have missed something while testing :)', 'comment_created': datetime.datetime(2021, 3, 16, 5, 11, 35, tzinfo=datetime.timezone.utc), 'commenter': 'avinal', 'type': 'User'}, {'comment_id': 600273085, 'comment_body': 'Just a suggestion, it will be good to add your email to, e.g. `Copyright 2021 Avinal Kumar <185067@nith.ac.in>`', 'comment_created': datetime.datetime(2021, 3, 24, 8, 40, 48, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 600273365, 'comment_body': 'It will be nice to write it as\r\n```suggestion\r\n# SPDX-License-Identifier: GPL-2.0 AND LGPL-2.1\r\n```', 'comment_created': datetime.datetime(2021, 3, 24, 8, 41, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '0886d574fe91c67bf7385894bbb679ea7d1ab43d', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a1fd6163b0eda2774fd0a4ec9fac4451a185a6a', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0dba2364cdd950c1cc2096377b2053fbc2396b31', 'committer_username': 'avinal', 'committer_name': 'Avinal Kumar', 'committer_email': 'opensource@avinal.space', 'commit_date': datetime.datetime(2020, 11, 7, 18, 31, 25, tzinfo=datetime.timezone.utc)}]",Avinal Kumar,74113200,opensource@avinal.space,User,,159,,129,496
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+15866170,fossology,fossology/fossology,PHP,397,778,64,142,9788,395,76,22,"[{'id': 705700165, 'number': 2075, 'closed': datetime.datetime(2022, 11, 28, 5, 27, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 19, 26, 23, tzinfo=datetime.timezone.utc), 'time_taken': 41335264.0, 'time_delta': '478 days, 10:01:04', 'additions': 6230, 'deletions': 9409, 'state': 'closed'}, {'id': 594977350, 'number': 1923, 'closed': datetime.datetime(2022, 6, 6, 11, 3, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 17, 19, 0, 2, tzinfo=datetime.timezone.utc), 'time_taken': 38505799.0, 'time_delta': '445 days, 16:03:19', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 592300817, 'number': 1919, 'closed': datetime.datetime(2021, 3, 24, 9, 9, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 13, 5, 43, 42, tzinfo=datetime.timezone.utc), 'time_taken': 962771.0, 'time_delta': '11 days, 3:26:11', 'additions': 82, 'deletions': 18, 'state': 'closed'}, {'id': 591611857, 'number': 1917, 'closed': datetime.datetime(2021, 3, 23, 10, 11, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 12, 11, 47, 6, tzinfo=datetime.timezone.utc), 'time_taken': 944645.0, 'time_delta': '10 days, 22:24:05', 'additions': 39, 'deletions': 21, 'state': 'closed'}]"

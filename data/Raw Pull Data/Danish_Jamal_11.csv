@@ -1,0 +1,629 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+665977586,Mustache template added to modify the generated code (FINERACT-1356),"## Description
+
+Since the generated sdk uses custom services and utils file, the `http-logging` library is missing in` pom.xml` which is used in `FineractClient.java`, also `Parts,java` uses `4.9.0` version of `okhttp3` library where as open api generator uses older version throwing an error in `RequestBody.create()` function since its older version is now deprecated, hence their are two major changes in generated `build.gradle` and `pom.xml`. 
+For default template file refer [build.gradle.mustache](https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/Java/libraries/retrofit2/build.gradle.mustache) and [pom.mustache](https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/Java/libraries/retrofit2/pom.mustache)
+
+Ignore if these details are present on the associated [FINERACT-1356](https://issues.apache.org/jira/browse/FINERACT-1356).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1764,https://api.github.com/repos/apache/fineract/pulls/1764,https://github.com/apache/fineract/pull/1764,closed,703,0,3,1,9,0,0,0,[],2021-06-09 14:41:04+00:00,2021-11-06 06:21:30+00:00,12930026.0,"149 days, 15:40:26",[],"[{'commit_sha': 'b6fafc1acc15a9f7173b21f6acdce49302a600e0', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+669057335,shared preferences base classes implemented,"**Below are some of the major changes this PR includes**
+- Added `BasePreferenceManager.kt` abstract class consisting of the basic structure to be used for managing app preferences.
+- Added concrete  `UserPreferences.kt` class extending the `BasePreferenceManager`, which consist al the user related preferences methods. (This class is created in reference with [PrefManager.java](https://github.com/openMF/android-client/blob/master/mifosng-android/src/main/java/com/mifos/utils/PrefManager.java) defined in android-client project)
+- Added `PORT` variable in `BaseUrl.kt`, refrenced from [BaseUrl.java](https://github.com/openMF/android-client/blob/master/mifosng-android/src/main/java/com/mifos/api/BaseUrl.java) in android-client project.
+- Added new dependency `com.google.truth:truth:1.1.3`, [checkout here](https://truth.dev).
+- Added instrument test for testing user preferences class.(It uses the above truth dependency).",True,12,https://api.github.com/repos/openMF/fineract-android-sdk/pulls/12,https://github.com/openMF/fineract-android-sdk/pull/12,closed,380,1,9,1,1,0,2,0,"[{'name': 'priority'}, {'name': 'GSoC 2021'}]",2021-06-13 13:54:32+00:00,2021-06-17 00:32:14+00:00,297462.0,"3 days, 10:37:42",[],"[{'commit_sha': '89c1534a8fccee5b3087092f0cd11606c426d80b', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+670478197,[Implementation] api helpers added,"**Below are the major changes**
+- Added `com.github.openMF:fineract-client:1.0.1` dependency.
+- Implemented `DataState` sealed class to be used as a data interface between network calls and business logic.
+- Defined `EntityMapper` interface, to be used for mapping data from api entity model to specific domain model.
+- New file `RequestUtils.kt` consisting of generic function for executing and getting `LiveData` object.
+
+**How to use RequestUtils**
+- It contains two function:
+    -  `apiRequest(call, userMapper)`: Use this for converting data to specific domain model, instead of getting the generic retrofit response.
+    - `apiRequest(call)`: Use this for getting the generic retrofit response.
+
+below is the sample code snippet of how these methods can be use. (These snippets are base on Fineract-1.0.1 version and may look different in actual implementation)
+```kotlin
+    val userMapper = UserMapper()
+    val call = FineractApiClient().authApi.authenticate(""mifos"", ""password"")
+    // in this request the result(it.data) will be of type User, viz a domain model
+    apiRequest(call, userMapper).observeForever {
+        when (it) {
+            is DataState.Error -> {
+                it.exception
+                // TODO: 15/06/21 handle exception cases here
+            }
+            is DataState.Success -> {
+                it.data
+                // TODO: 15/06/21 handle data here
+            }
+        }
+    }
+   // in this case result(it.data) will be of type PostAuthenticationResponse as returned by authenticate api
+    apiRequest(call).observeForever {
+        when (it) {
+            is DataState.Error -> {
+                it.exception
+                // TODO: 15/06/21 handle exception cases here
+            }
+            is DataState.Success -> {
+                it.data
+                // TODO: 15/06/21 handle data here
+            }
+        }
+    }
+```
+
+**UserMapper sample code**
+```kotlin
+class UserMapper : EntityMapper<PostAuthenticationResponse, User> {
+
+    override fun mapFromEntity(entity: PostAuthenticationResponse): User {
+        val role = mutableListOf<Role>()
+        entity.roles.forEach {
+            role.add(Role(it.id.toInt(), it.name, ""test"", false))
+        }
+
+        return User(
+            entity.username,
+            entity.userId.toInt(),
+            entity.base64EncodedAuthenticationKey,
+            entity.isAuthenticated,
+            entity.officeId.toInt(),
+            entity.officeName,
+            entity.staffId.toInt(),
+            entity.staffDisplayName,
+            role,
+            entity.permissions
+        )
+    }
+
+    override fun mapToEntity(domainModel: User): PostAuthenticationResponse {
+        TODO(""Not yet implemented"")
+    }
+}
+```
+
+**Benefit of using this approach**
+- This implementation is based on clean code architecture.
+- Take a look at return type of apiRequest, it is always `DataState`, hence for changing or adding anything in network part we only need to change the network layer without modifying the client side.
+- Supports the mapper hence it is very convenient to define custom mapper and use for chaining data type from one to another at sdk level.",True,13,https://api.github.com/repos/openMF/fineract-android-sdk/pulls/13,https://github.com/openMF/fineract-android-sdk/pull/13,closed,133,2,7,1,2,0,3,0,"[{'name': 'feature'}, {'name': 'priority'}, {'name': 'GSoC 2021'}]",2021-06-15 14:49:08+00:00,2021-06-17 00:40:05+00:00,121857.0,"1 day, 9:50:57",[],"[{'commit_sha': '475712127616a31408189e464bc550c833082e5a', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+672749326,Base data manager implemented,"**Below are the major changes**
+1.  Implemented base api manager.
+2. Model directory moved to data folder.
+3. Gradle plugin update
+4. Fineract-client update to 1.5.0-alpha, for testing.
+5. Deleted al the previous, app code and SDK file, which were manually initiating the SDKs. (Since we are using the pre generated SDK, these are no longer required)",True,14,https://api.github.com/repos/openMF/fineract-android-sdk/pulls/14,https://github.com/openMF/fineract-android-sdk/pull/14,closed,192,772,63,1,0,0,3,0,"[{'name': 'enhancement'}, {'name': 'priority'}, {'name': 'GSoC 2021'}]",2021-06-17 15:26:07+00:00,2021-06-19 11:16:39+00:00,157832.0,"1 day, 19:50:32",[],"[{'commit_sha': '855946dc18dbff46d71ed3aee2ef23a48faf6c99', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+677035370,Stable alpha version of library,"**Below are the major changes**
+- Earlier the library uses Fineract-client:1.5.0-alpha version, now it Is updated to the new versioning convention.
+- Migrated the Call handling to Observable.
+- Downgraded the RxJava to 1.x in order to comply with the android-client project.
+- The current state of library is tested after adding it in the android client project.
+- Library is ready to be released as 2.0.0-alpha, depending upon [fineract-client:2.1.0-alpha](https://github.com/openMF/fineract-client/releases/tag/2.1.0-alpha)",True,15,https://api.github.com/repos/openMF/fineract-android-sdk/pulls/15,https://github.com/openMF/fineract-android-sdk/pull/15,closed,271,188,13,1,0,0,3,0,"[{'name': 'enhancement'}, {'name': 'feature'}, {'name': 'GSoC 2021'}]",2021-06-24 11:38:48+00:00,2021-06-27 17:05:18+00:00,278790.0,"3 days, 5:26:30",[],"[{'commit_sha': '2ad651027f3f81ad187ac1f2cf587903a9dd84bc', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+682485370,Major updates and changes in the library,"#### Below are the changes this PR includes
+1. Removed all the models.
+2. Removed/fixed the model related areas.
+3. Modified BaseApiManager and its implementation.
+    1. Removed the userPreference property from implementation class, since it was only used for getting instance url and tenant viz now passed in create service method itself.
+    2. Modified function signature, now each function returns NonNullable object.
+    3. ConvertorFactory and CallAdapterFactory modified.
+4. Mappers design modified
+    1. Two more methods, `mapFromEntityList` and `mapToEntityList` added in EntityMapper interface.
+    2. Created new class `AbstractMapper`, which implements the above two methods and open rest to be implemented accordingly.
+    3. Now onwards for getting the generic behaviour all the mappers must extend the AbstractMapper and for custom logic implement EntityMapper.
+
+",True,16,https://api.github.com/repos/openMF/fineract-android-sdk/pulls/16,https://github.com/openMF/fineract-android-sdk/pull/16,closed,93,2538,57,1,0,0,3,1,"[{'name': 'enhancement'}, {'name': 'priority'}, {'name': 'GSoC 2021'}]",2021-07-02 09:39:46+00:00,2021-07-03 00:37:30+00:00,53864.0,14:57:44,[],"[{'commit_sha': '6431d6f9312fcae717a5142443cf2c9ccd6dbc63', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+678251505,"mifos-android-sdk-arch dependency added, with major fixes in dependency clashes","**Below are the changes**
+- Added mifos-sdk-arch dependency.
+- Resolved the dependency clash.
+- Added new UserPreferences, BaseApiManager and DataManagerAuth in dependency graph,
+- Injected the DatamanagerAuth instance in `LoginPresenter`.
+- Null asserted call added after altering the version of Kotlin.
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1814,https://api.github.com/repos/openMF/android-client/pulls/1814,https://github.com/openMF/android-client/pull/1814,closed,58,13,12,1,2,1,0,0,[],2021-06-26 01:26:10+00:00,2021-06-30 19:27:55+00:00,410505.0,"4 days, 18:01:45","[{'comment_id': 659100123, 'comment_body': 'This will be changed to `com.github.openMF:mifos-android-sdk-arch:2.0.0-alpha`, soon after merging [mifos-android-sdk-arch#15](https://github.com/openMF/mifos-android-sdk-arch/pull/15)', 'comment_created': datetime.datetime(2021, 6, 26, 1, 29, tzinfo=datetime.timezone.utc), 'commenter': 'danishjamal104', 'type': 'User'}]","[{'commit_sha': '540c79f6c677f3b08bbea5567fcd36cd9ff449e5', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+682541920,Fixes #1815 : pref manager migrated to extend user preferences from mifos-sdk-architecture,"Fixes #1815 
+
+**Below Are the major changes**
+1. `PrefManager.java` converted to kotlin
+2. Updated mifos-sdk-arch dependency to test the updated UserPreferences
+3. Refactored `PrefManager.kt` to extend `UserPreference<T>` and implemented missing functionality.
+4. Refactored the entire code base to support new PrefManager.
+4. Minor fix in sslSocketFactory in `MifosOkHttpClient.java`(This is temporary fix, as this file will be completely removed from client and moved to mifos-sdk-arch""
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1816,https://api.github.com/repos/openMF/android-client/pulls/1816,https://github.com/openMF/android-client/pull/1816,closed,260,325,47,1,0,0,0,0,[],2021-07-02 11:08:12+00:00,2021-07-07 15:04:25+00:00,446173.0,"5 days, 3:56:13",[],"[{'commit_sha': '7035ae323d8c492ff92328325eaf9e9a28a4abe1', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+697794869,client integration and sdk version update,"Description 
+- All the endpoints related to client except the location pin point is migrated to SDK.
+- SDK's client activation is currently having bug, hence the code is commented out check `Line 436` of [DataManagerClient.java](https://github.com/danishjamal104/android-client/blob/client-intg/mifosng-android/src/main/java/com/mifos/api/datamanager/DataManagerClient.java).
+- Implemented various mapper for type conversion of client related models, refer [Mapper package](https://github.com/danishjamal104/android-client/tree/client-intg/mifosng-android/src/main/java/com/mifos/api/mappers).
+- Minor enhancements.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1825,https://api.github.com/repos/openMF/android-client/pulls/1825,https://github.com/openMF/android-client/pull/1825,closed,844,52,34,1,0,0,1,0,[{'name': 'Gsoc2021'}],2021-07-27 11:58:33+00:00,2021-07-28 07:22:35+00:00,69842.0,19:24:02,[],"[{'commit_sha': 'c0436470647c6b642b6aca6a5ef1c9b7ddf2d196', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+699972310,groups endpoint sdk integration,"Description
+Integrated /groups related endpoint using sdk. All the Fineract related areas are commented out with `// todo:` please check them and refer both swagger as well as old html docs for getting better idea of the issues.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1827,https://api.github.com/repos/openMF/android-client/pulls/1827,https://github.com/openMF/android-client/pull/1827,closed,332,14,15,1,0,0,1,0,[{'name': 'Gsoc2021'}],2021-07-30 03:17:54+00:00,2021-08-02 09:44:58+00:00,282424.0,"3 days, 6:27:04",[],"[{'commit_sha': '7b9a53a220c77fcec4ce532b473370ef6801cf79', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+700814787,centers endpoint integrated,"Description
+- list centers integrated
+- fetch centers accounts integrated
+- getCentersGroupAndMeeting remaining see line 128 of DataManagerCenter
+
+Bugs
+- centers/{centerId}?association endpoint missing
+- activationDate,dateFormat,locale etc. fields missing in PostCentersRequest while creating centre
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1828,https://api.github.com/repos/openMF/android-client/pulls/1828,https://github.com/openMF/android-client/pull/1828,closed,252,17,9,1,0,0,1,0,[{'name': 'Gsoc2021'}],2021-08-01 03:33:31+00:00,2021-08-03 06:12:46+00:00,182355.0,"2 days, 2:39:15",[],"[{'commit_sha': '3037032cac1a0971090f711cbde15178d7acd074', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+701918023,"staff, search integration and major bugs fixes in client integration","Changes
+- Note endpoint migrated to SDK.
+- Staff endpoint migrated to SDK.
+- Search endpoint integrated(See todo for more info, DataManagerSearch Line: 37).
+- Client account mapper issue fixed.
+- Client activation work around implemented and tested.
+- Minor code optimisation.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1829,https://api.github.com/repos/openMF/android-client/pulls/1829,https://github.com/openMF/android-client/pull/1829,closed,116,16,9,1,0,0,1,0,[{'name': 'Gsoc2021'}],2021-08-03 03:12:01+00:00,2021-08-03 06:13:48+00:00,10907.0,3:01:47,[],"[{'commit_sha': '29349403e6e02a905ab76b00d522b114ab9d767a', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+706963718,integrated survey endpoints,"Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1831,https://api.github.com/repos/openMF/android-client/pulls/1831,https://github.com/openMF/android-client/pull/1831,closed,164,3,4,1,0,0,0,0,[],2021-08-10 01:39:04+00:00,2021-08-10 10:28:28+00:00,31764.0,8:49:24,[],"[{'commit_sha': '08bfed2ae8534beb35ed97415f5661d04e0747e2', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+706993869,"sdk version updated, and introduced related updates","Updates 
+- Updated fineract-android-sdk version `1.0.0` to `1.0.1`
+- New body payload while authenticating.
+- Client activation fixed.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `MifosStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1832,https://api.github.com/repos/openMF/android-client/pulls/1832,https://github.com/openMF/android-client/pull/1832,closed,56,22,7,1,0,0,0,0,[],2021-08-10 03:12:35+00:00,2021-08-10 10:29:25+00:00,26210.0,7:16:50,[],"[{'commit_sha': '57e82f3502dfe1c61ccd938c9f049e420af0dd93', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+706306880,datatable field added in client swagger resource (FINERACT-1363),"## Description
+
+Added new schema `PostClientsDatatable` which is used while creating the client. Earlier the the client creating model (`PostClientsRequest`) doesn't have a `datatables` field but a List of datable is required incase the entity is associated with any databale.
+
+For more info see [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1363).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1817,https://api.github.com/repos/apache/fineract/pulls/1817,https://github.com/apache/fineract/pull/1817,closed,15,0,1,1,3,2,1,0,[{'name': 'stale'}],2021-08-09 08:10:00+00:00,2021-09-12 07:04:57+00:00,2933697.0,"33 days, 22:54:57","[{'comment_id': 685392745, 'comment_body': 'Instead of HashMap, shouldn\'t be another class having fields such as ""LastName"": string, ""Relationship"": string, ""dateFormat "": string ... etc? ', 'comment_created': datetime.datetime(2021, 8, 9, 17, 38, 27, tzinfo=datetime.timezone.utc), 'commenter': 'rahulg963', 'type': 'User'}, {'comment_id': 685601749, 'comment_body': 'Since we aren\'t pretty sure about fields in in datable and their can be multiple datatable too with different fields, that\'s why HashMap is used. \r\n\r\nFor example, in below request we have `Client Beneficiary information` datatable associated with clients, similiary there can be multiple datable with different data fields based on client. So in order to meet that kind of design I have defined `HashMap<String, Object>` as data type of `data` field.\r\n```\r\n{\r\n""officeId"": 2,\r\n ""fullname"": ""SDK Test Client 6 (No group)"",\r\n ""dateFormat"": ""dd MMMM yyyy"",\r\n ""locale"": ""en"",\r\n ""active"": false,\r\n ""activationDate"": ""28 July 2019"",\r\n""datatables"": [\r\n     {\r\n       ""registeredTableName"": ""Client Beneficiary information"",\r\n        ""data"": {\r\n            ""FirstName"": ""First 1"",\r\n            ""LastName"": ""Last"",\r\n            ""Mobile Number"": ""831"",\r\n            ""locale"": ""en""\r\n           }\r\n       }\r\n    ]\r\n}\r\n```', 'comment_created': datetime.datetime(2021, 8, 10, 0, 10, 59, tzinfo=datetime.timezone.utc), 'commenter': 'danishjamal104', 'type': 'User'}]","[{'commit_sha': '70ca64c706cbb35bacd5985a7ffcc7edb146bc88', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+705603935,groups list and accountNo field data type fixed in swagger resource (FINERACT-1364),"## Description
+- While fetching the client data the list of group(Object) is returned but in swagger resource the List<String> is defined. Hence fixed this issue by changing the type of field groups
+- `accountNo` field in loan/savings account is defined as Long but returned is String. Fixed this issue.
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1810,https://api.github.com/repos/apache/fineract/pulls/1810,https://github.com/apache/fineract/pull/1810,closed,18,4,1,1,2,0,0,0,[],2021-08-06 16:20:14+00:00,2021-08-28 11:33:53+00:00,1883619.0,"21 days, 19:13:39",[],"[{'commit_sha': '5f4e2043e201d5e0d07ba1ae1886f6af8d3de1f0', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+705910199,swagger resource fixed for creating datatable & entries (FINERACT-1365),"## Description
+
+Fixed the `PostDataTablesRequest` in `DatatablesApiResourcesSwagger`, for creating the datable. Also fixed the entry creating endpoint in `createDatatableEntry` in `SatablesApiResource` file.
+
+Fore more info checkout  [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1365).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1813,https://api.github.com/repos/apache/fineract/pulls/1813,https://github.com/apache/fineract/pull/1813,closed,22,7,2,1,0,0,0,0,[],2021-08-07 15:54:45+00:00,2021-09-05 13:44:07+00:00,2497762.0,"28 days, 21:49:22",[],"[{'commit_sha': '7221247c5bc36121531803546f0018731a967f0e', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+705821462,Fixed swagger resource for activating client (FINERACT-1366),"## Description
+
+ClientsApiResourceSwagger.java consist of invalid body payload and response while activating the client.
+
+Refer JIRA for more info [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1366).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1812,https://api.github.com/repos/apache/fineract/pulls/1812,https://github.com/apache/fineract/pull/1812,closed,8,2,1,1,2,0,0,0,[],2021-08-07 02:25:39+00:00,2021-09-05 13:36:13+00:00,2545834.0,"29 days, 11:10:34",[],"[{'commit_sha': 'cbd101cc08a743e46af0a6cac74f6eff54212e9b', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+705965219,PostAuthenticationRequest schema added for auth body payload (FINERACT-1369),"## Description
+
+Added new schema `PostAuthenticationRequest`, which is used as body payload for basic authentication.
+
+Refer for more info [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1369).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1814,https://api.github.com/repos/apache/fineract/pulls/1814,https://github.com/apache/fineract/pull/1814,closed,17,1,2,1,0,0,0,0,[],2021-08-08 00:57:08+00:00,2021-09-05 13:46:11+00:00,2465343.0,"28 days, 12:49:03",[],"[{'commit_sha': '0a6a9ba91c73137dcb325547e377404ea0930bd7', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+705970079,Search response resource fixed (FINERACT-1370),"## Description
+
+Fixed the response for `search/` and `search/advance` endpoints. Earlier it was returning the objects, now changed to lis of respective objects(GetSearchResponse and PostAdhocQuerySearchResponse). 
+
+For more info see [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1370).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1815,https://api.github.com/repos/apache/fineract/pulls/1815,https://github.com/apache/fineract/pull/1815,closed,3,2,1,1,1,0,0,0,[],2021-08-08 01:55:01+00:00,2021-09-05 13:38:44+00:00,2461423.0,"28 days, 11:43:43",[],"[{'commit_sha': '35ab3cbbb1f14969afadb68cac73a2adf55c3a5e', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712859741,invalid field name fixed in GetDataTablesResponse (FINERACT-1372),"## Description
+
+Field renamed to match the api actual response, below are the fields renamed.
+- `appTableName` to `applicationTableName`
+- `datatableName` to `registeredTableName`
+- `column` to `columnHeaderData`
+
+For more info refer [Apache Fineract JIRA ticket #1372](https://issues.apache.org/jira/browse/FINERACT-1372).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1828,https://api.github.com/repos/apache/fineract/pulls/1828,https://github.com/apache/fineract/pull/1828,closed,3,3,1,1,2,0,0,0,[],2021-08-15 01:31:24+00:00,2021-09-05 13:32:57+00:00,1857693.0,"21 days, 12:01:33",[],"[{'commit_sha': '2b2ffb2e67de975f8057d3643b75c53aa67ae8df', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712858473,api response changed to map for {datatable}/{apptableId} (FINERACT-1373),"## Description
+
+Response type for `/datatables/{datatable}/{apptableId}` changed to `HashMap`, this change is made in accordance with the actual JSON response. Since fields vary depending on each table hence the generic Hashmap is used to store key-value pair.
+
+For more info refer [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1373).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1827,https://api.github.com/repos/apache/fineract/pulls/1827,https://github.com/apache/fineract/pull/1827,closed,2,1,1,1,0,0,0,0,[],2021-08-15 01:16:42+00:00,2021-09-05 13:35:00+00:00,1858698.0,"21 days, 12:18:18",[],"[{'commit_sha': '75f4f920f2de93372aeeef09e97fcc1651936de7', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712856497,field renamed in various places of SavingsProductsApiResourceSwagger (FINERACT-1376),"## Description
+
+`description` field renamed to `value` in following classes in `SavingsProductsApiResourceSwagger `.
+- GetSavingsProductsInterestCompoundingPeriodType
+- GetSavingsProductsInterestPostingPeriodType
+- GetSavingsProductsInterestCalculationType
+- GetSavingsProductsInterestCalculationDaysInYearType
+- GetSavingsProductsTemplateAccountingRule
+- GetSavingsProductsLockinPeriodFrequencyTypeOptions
+- GetSavingsProductsWithdrawalFeeTypeOptions
+- GetSavingsProductsTemplateAccountingRule
+
+For more info refer [Apache Fineract JIRA ticket #1376](https://issues.apache.org/jira/browse/FINERACT-1376).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1826,https://api.github.com/repos/apache/fineract/pulls/1826,https://github.com/apache/fineract/pull/1826,closed,8,8,1,1,0,0,0,0,[],2021-08-15 00:51:43+00:00,2021-09-05 13:44:22+00:00,1860759.0,"21 days, 12:52:39",[],"[{'commit_sha': 'feaa367c05fc1a3b8f628424c254660df39aed9d', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712810507,missing field added in GetSavingsProductsPaymentTypeOptions (FINERACT-1377),"## Description
+
+Missing field `isCashPayment` and `description` added in `GetSavingsProductsPaymentTypeOptions`.
+
+For more info refer [Apache Fineract JIRA ticket #1377](https://issues.apache.org/jira/browse/FINERACT-1377).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1825,https://api.github.com/repos/apache/fineract/pulls/1825,https://github.com/apache/fineract/pull/1825,closed,4,0,1,1,0,0,0,0,[],2021-08-14 16:58:09+00:00,2021-09-05 13:42:21+00:00,1889052.0,"21 days, 20:44:12",[],"[{'commit_sha': 'aa64df0cf6e0f7aa966269556c4d6e4c184aba8d', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712803658,type of accountingMappingOptions field changed to GetSavingsProductsAcuntingMappingOptions (FINERACT-1378),"## Description
+
+Type of field `accountingMappingOptions` changed to `GetSavingsProductsAcuntingMappingOptions`, earlier was `Set< GetSavingsProductsAcuntingMappingOptions>`.
+This change is required because the actual returns object bu in generated client class it was defined as list of objects.
+
+For more info refer [Apache Fineract JIRA ticket #1378](https://issues.apache.org/jira/browse/FINERACT-1378).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1824,https://api.github.com/repos/apache/fineract/pulls/1824,https://github.com/apache/fineract/pull/1824,closed,1,1,1,1,0,0,0,0,[],2021-08-14 16:06:28+00:00,2021-09-05 13:44:46+00:00,1892298.0,"21 days, 21:38:18",[],"[{'commit_sha': 'b5928d5eee992f958aa918b94c40a033896d5019', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+705970079,Search response resource fixed (FINERACT-1370),"## Description
+
+Fixed the response for `search/` and `search/advance` endpoints. Earlier it was returning the objects, now changed to lis of respective objects(GetSearchResponse and PostAdhocQuerySearchResponse). 
+
+For more info see [Apache Fineract JIRA ticket](https://issues.apache.org/jira/browse/FINERACT-1370).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1815,https://api.github.com/repos/apache/fineract/pulls/1815,https://github.com/apache/fineract/pull/1815,closed,3,2,1,1,1,0,0,0,[],2021-08-08 01:55:01+00:00,2021-09-05 13:38:44+00:00,2461423.0,"28 days, 11:43:43",[],"[{'commit_sha': '35ab3cbbb1f14969afadb68cac73a2adf55c3a5e', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712757509,description field renamed to value (FINERACT-1381),"## Description
+
+`description` field renamed to `value` as returned by api.
+
+For more info checkout [Apache Fineract JIRA ticket #1381](https://issues.apache.org/jira/browse/FINERACT-1381).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1821,https://api.github.com/repos/apache/fineract/pulls/1821,https://github.com/apache/fineract/pull/1821,closed,5,5,1,1,0,0,0,0,[],2021-08-14 10:30:32+00:00,2021-09-05 13:49:05+00:00,1912713.0,"22 days, 3:18:33",[],"[{'commit_sha': '0ec6c79278ef7884ae3cb18d7b6ac2b590d406cb', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712753999,field name issue fixed FINERACT-1382,"## Description
+
+`unassignedDate` field renamed to `approvedOnDate`, to meet the api expectations.
+
+[JIRA ticket #1382](https://issues.apache.org/jira/browse/FINERACT-1382).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1820,https://api.github.com/repos/apache/fineract/pulls/1820,https://github.com/apache/fineract/pull/1820,closed,100,1,2,1,11,0,0,0,[],2021-08-14 10:00:22+00:00,2021-09-05 22:22:06+00:00,1945304.0,"22 days, 12:21:44",[],"[{'commit_sha': '510e6af397098796f124d4d79ca78b842195902a', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+712688222,SavingsAccountTransactionsApi api service added in client (FINERACT-1383),"## Description
+
+`SavingsAccountTransactionsApi` service added in `FineractClient`.
+
+For more info regarding issue see [Apache Fineract JIRA ticket #1383](https://issues.apache.org/jira/browse/FINERACT-1383).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/api-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,1819,https://api.github.com/repos/apache/fineract/pulls/1819,https://github.com/apache/fineract/pull/1819,closed,3,0,1,1,1,0,0,0,[],2021-08-14 00:58:56+00:00,2021-09-12 07:01:59+00:00,2527383.0,"29 days, 6:03:03",[],"[{'commit_sha': '44ac103d56c49e69150c9a53ce4797c6eb90ca52', 'committer_username': 'danishjamal104', 'committer_name': 'Danish Jamal', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 24, 14, 35, 42, tzinfo=datetime.timezone.utc)}]",Danish Jamal,31315800,,User,,78,,32,56
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+48418599,fineract,apache/fineract,Java,1574,1295,113,266,8024,36,19,36,"[{'id': 716125820, 'number': 1832, 'closed': datetime.datetime(2021, 8, 28, 11, 37, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 19, 17, 24, 22, tzinfo=datetime.timezone.utc), 'time_taken': 756760.0, 'time_delta': '8 days, 18:12:40', 'additions': 24, 'deletions': 1, 'state': 'closed'}, {'id': 715198732, 'number': 1831, 'closed': datetime.datetime(2021, 9, 5, 13, 32, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 18, 15, 26, 26, tzinfo=datetime.timezone.utc), 'time_taken': 1548349.0, 'time_delta': '17 days, 22:05:49', 'additions': 8, 'deletions': 1, 'state': 'closed'}, {'id': 712859741, 'number': 1828, 'closed': datetime.datetime(2021, 9, 5, 13, 32, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 1, 31, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1857693.0, 'time_delta': '21 days, 12:01:33', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 712858473, 'number': 1827, 'closed': datetime.datetime(2021, 9, 5, 13, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 1, 16, 42, tzinfo=datetime.timezone.utc), 'time_taken': 1858698.0, 'time_delta': '21 days, 12:18:18', 'additions': 2, 'deletions': 1, 'state': 'closed'}, {'id': 712856497, 'number': 1826, 'closed': datetime.datetime(2021, 9, 5, 13, 44, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 0, 51, 43, tzinfo=datetime.timezone.utc), 'time_taken': 1860759.0, 'time_delta': '21 days, 12:52:39', 'additions': 8, 'deletions': 8, 'state': 'closed'}, {'id': 712810507, 'number': 1825, 'closed': datetime.datetime(2021, 9, 5, 13, 42, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 16, 58, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1889052.0, 'time_delta': '21 days, 20:44:12', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 712803658, 'number': 1824, 'closed': datetime.datetime(2021, 9, 5, 13, 44, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 16, 6, 28, tzinfo=datetime.timezone.utc), 'time_taken': 1892298.0, 'time_delta': '21 days, 21:38:18', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 712788922, 'number': 1823, 'closed': datetime.datetime(2021, 9, 5, 13, 48, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 14, 54, 50, tzinfo=datetime.timezone.utc), 'time_taken': 1896817.0, 'time_delta': '21 days, 22:53:37', 'additions': 16, 'deletions': 0, 'state': 'closed'}, {'id': 712757509, 'number': 1821, 'closed': datetime.datetime(2021, 9, 5, 13, 49, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 10, 30, 32, tzinfo=datetime.timezone.utc), 'time_taken': 1912713.0, 'time_delta': '22 days, 3:18:33', 'additions': 5, 'deletions': 5, 'state': 'closed'}, {'id': 712753999, 'number': 1820, 'closed': datetime.datetime(2021, 9, 5, 22, 22, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 10, 0, 22, tzinfo=datetime.timezone.utc), 'time_taken': 1945304.0, 'time_delta': '22 days, 12:21:44', 'additions': 100, 'deletions': 1, 'state': 'closed'}, {'id': 712688222, 'number': 1819, 'closed': datetime.datetime(2021, 9, 12, 7, 1, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 14, 0, 58, 56, tzinfo=datetime.timezone.utc), 'time_taken': 2527383.0, 'time_delta': '29 days, 6:03:03', 'additions': 3, 'deletions': 0, 'state': 'closed'}, {'id': 706306880, 'number': 1817, 'closed': datetime.datetime(2021, 9, 12, 7, 4, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 9, 8, 10, tzinfo=datetime.timezone.utc), 'time_taken': 2933697.0, 'time_delta': '33 days, 22:54:57', 'additions': 15, 'deletions': 0, 'state': 'closed'}, {'id': 705970079, 'number': 1815, 'closed': datetime.datetime(2021, 9, 5, 13, 38, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 8, 1, 55, 1, tzinfo=datetime.timezone.utc), 'time_taken': 2461423.0, 'time_delta': '28 days, 11:43:43', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 705965219, 'number': 1814, 'closed': datetime.datetime(2021, 9, 5, 13, 46, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 8, 0, 57, 8, tzinfo=datetime.timezone.utc), 'time_taken': 2465343.0, 'time_delta': '28 days, 12:49:03', 'additions': 17, 'deletions': 1, 'state': 'closed'}, {'id': 705910199, 'number': 1813, 'closed': datetime.datetime(2021, 9, 5, 13, 44, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 7, 15, 54, 45, tzinfo=datetime.timezone.utc), 'time_taken': 2497762.0, 'time_delta': '28 days, 21:49:22', 'additions': 22, 'deletions': 7, 'state': 'closed'}, {'id': 705821462, 'number': 1812, 'closed': datetime.datetime(2021, 9, 5, 13, 36, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 7, 2, 25, 39, tzinfo=datetime.timezone.utc), 'time_taken': 2545834.0, 'time_delta': '29 days, 11:10:34', 'additions': 8, 'deletions': 2, 'state': 'closed'}, {'id': 705603935, 'number': 1810, 'closed': datetime.datetime(2021, 8, 28, 11, 33, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 16, 20, 14, tzinfo=datetime.timezone.utc), 'time_taken': 1883619.0, 'time_delta': '21 days, 19:13:39', 'additions': 18, 'deletions': 4, 'state': 'closed'}, {'id': 665977586, 'number': 1764, 'closed': datetime.datetime(2021, 11, 6, 6, 21, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 14, 41, 4, tzinfo=datetime.timezone.utc), 'time_taken': 12930026.0, 'time_delta': '149 days, 15:40:26', 'additions': 703, 'deletions': 0, 'state': 'closed'}]"
+268524716,fineract-android-sdk,openMF/fineract-android-sdk,Kotlin,12,7,10,6,83,27,25,23,"[{'id': 706949773, 'number': 44, 'closed': datetime.datetime(2021, 8, 10, 0, 57, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 0, 53, 33, tzinfo=datetime.timezone.utc), 'time_taken': 240.0, 'time_delta': '0:04:00', 'additions': 34, 'deletions': 9, 'state': 'closed'}, {'id': 696653280, 'number': 37, 'closed': datetime.datetime(2021, 7, 26, 3, 39, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 26, 3, 32, 56, tzinfo=datetime.timezone.utc), 'time_taken': 405.0, 'time_delta': '0:06:45', 'additions': 9, 'deletions': 0, 'state': 'closed'}, {'id': 696364910, 'number': 36, 'closed': datetime.datetime(2021, 7, 26, 3, 4, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 15, 18, 22, tzinfo=datetime.timezone.utc), 'time_taken': 128777.0, 'time_delta': '1 day, 11:46:17', 'additions': 57, 'deletions': 10, 'state': 'closed'}, {'id': 690878780, 'number': 19, 'closed': datetime.datetime(2021, 7, 15, 17, 31, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 15, 16, 35, 53, tzinfo=datetime.timezone.utc), 'time_taken': 3361.0, 'time_delta': '0:56:01', 'additions': 1051, 'deletions': 3104, 'state': 'closed'}, {'id': 688332673, 'number': 18, 'closed': datetime.datetime(2021, 7, 13, 4, 53, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 13, 2, 38, 11, tzinfo=datetime.timezone.utc), 'time_taken': 8141.0, 'time_delta': '2:15:41', 'additions': 119, 'deletions': 51, 'state': 'closed'}, {'id': 682485370, 'number': 16, 'closed': datetime.datetime(2021, 7, 3, 0, 37, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 2, 9, 39, 46, tzinfo=datetime.timezone.utc), 'time_taken': 53864.0, 'time_delta': '14:57:44', 'additions': 93, 'deletions': 2538, 'state': 'closed'}, {'id': 677035370, 'number': 15, 'closed': datetime.datetime(2021, 6, 27, 17, 5, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 24, 11, 38, 48, tzinfo=datetime.timezone.utc), 'time_taken': 278790.0, 'time_delta': '3 days, 5:26:30', 'additions': 271, 'deletions': 188, 'state': 'closed'}, {'id': 672749326, 'number': 14, 'closed': datetime.datetime(2021, 6, 19, 11, 16, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 15, 26, 7, tzinfo=datetime.timezone.utc), 'time_taken': 157832.0, 'time_delta': '1 day, 19:50:32', 'additions': 192, 'deletions': 772, 'state': 'closed'}, {'id': 670478197, 'number': 13, 'closed': datetime.datetime(2021, 6, 17, 0, 40, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 15, 14, 49, 8, tzinfo=datetime.timezone.utc), 'time_taken': 121857.0, 'time_delta': '1 day, 9:50:57', 'additions': 133, 'deletions': 2, 'state': 'closed'}, {'id': 669057335, 'number': 12, 'closed': datetime.datetime(2021, 6, 17, 0, 32, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 13, 13, 54, 32, tzinfo=datetime.timezone.utc), 'time_taken': 297462.0, 'time_delta': '3 days, 10:37:42', 'additions': 380, 'deletions': 1, 'state': 'closed'}]"
+18864134,android-client,openMF/android-client,Kotlin,572,195,21,105,1321,188,27,8,"[{'id': 736114000, 'number': 1857, 'closed': datetime.datetime(2023, 7, 15, 4, 3, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 17, 6, 58, 11, tzinfo=datetime.timezone.utc), 'time_taken': 57531941.0, 'time_delta': '665 days, 21:05:41', 'additions': 737, 'deletions': 803, 'state': 'closed'}, {'id': 735668938, 'number': 1856, 'closed': datetime.datetime(2023, 7, 6, 15, 57, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 16, 17, 22, 37, tzinfo=datetime.timezone.utc), 'time_taken': 56846119.0, 'time_delta': '657 days, 22:35:19', 'additions': 35, 'deletions': 46, 'state': 'closed'}, {'id': 734773990, 'number': 1855, 'closed': datetime.datetime(2023, 7, 15, 4, 4, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 15, 17, 29, 12, tzinfo=datetime.timezone.utc), 'time_taken': 57666897.0, 'time_delta': '667 days, 10:34:57', 'additions': 148, 'deletions': 159, 'state': 'closed'}, {'id': 734235992, 'number': 1853, 'closed': datetime.datetime(2023, 6, 6, 4, 4, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 15, 5, 38, 39, tzinfo=datetime.timezone.utc), 'time_taken': 54339934.0, 'time_delta': '628 days, 22:25:34', 'additions': 136, 'deletions': 155, 'state': 'closed'}, {'id': 716477090, 'number': 1835, 'closed': datetime.datetime(2023, 7, 31, 17, 51, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 20, 6, 25, 22, tzinfo=datetime.timezone.utc), 'time_taken': 61385174.0, 'time_delta': '710 days, 11:26:14', 'additions': 4252, 'deletions': 819, 'state': 'closed'}, {'id': 706993869, 'number': 1832, 'closed': datetime.datetime(2021, 8, 10, 10, 29, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 3, 12, 35, tzinfo=datetime.timezone.utc), 'time_taken': 26210.0, 'time_delta': '7:16:50', 'additions': 56, 'deletions': 22, 'state': 'closed'}, {'id': 706963718, 'number': 1831, 'closed': datetime.datetime(2021, 8, 10, 10, 28, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 1, 39, 4, tzinfo=datetime.timezone.utc), 'time_taken': 31764.0, 'time_delta': '8:49:24', 'additions': 164, 'deletions': 3, 'state': 'closed'}, {'id': 701918023, 'number': 1829, 'closed': datetime.datetime(2021, 8, 3, 6, 13, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 3, 12, 1, tzinfo=datetime.timezone.utc), 'time_taken': 10907.0, 'time_delta': '3:01:47', 'additions': 116, 'deletions': 16, 'state': 'closed'}, {'id': 700814787, 'number': 1828, 'closed': datetime.datetime(2021, 8, 3, 6, 12, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 1, 3, 33, 31, tzinfo=datetime.timezone.utc), 'time_taken': 182355.0, 'time_delta': '2 days, 2:39:15', 'additions': 252, 'deletions': 17, 'state': 'closed'}, {'id': 699972310, 'number': 1827, 'closed': datetime.datetime(2021, 8, 2, 9, 44, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 3, 17, 54, tzinfo=datetime.timezone.utc), 'time_taken': 282424.0, 'time_delta': '3 days, 6:27:04', 'additions': 332, 'deletions': 14, 'state': 'closed'}, {'id': 697794869, 'number': 1825, 'closed': datetime.datetime(2021, 7, 28, 7, 22, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 27, 11, 58, 33, tzinfo=datetime.timezone.utc), 'time_taken': 69842.0, 'time_delta': '19:24:02', 'additions': 844, 'deletions': 52, 'state': 'closed'}, {'id': 693632750, 'number': 1821, 'closed': datetime.datetime(2021, 7, 22, 8, 10, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 16, 49, 32, tzinfo=datetime.timezone.utc), 'time_taken': 141665.0, 'time_delta': '1 day, 15:21:05', 'additions': 60, 'deletions': 40, 'state': 'closed'}, {'id': 693376450, 'number': 1820, 'closed': datetime.datetime(2021, 7, 20, 16, 5, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 11, 11, 35, tzinfo=datetime.timezone.utc), 'time_taken': 17654.0, 'time_delta': '4:54:14', 'additions': 6, 'deletions': 2, 'state': 'closed'}, {'id': 689512780, 'number': 1818, 'closed': datetime.datetime(2021, 7, 16, 2, 35, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 14, 1, 48, 21, tzinfo=datetime.timezone.utc), 'time_taken': 175622.0, 'time_delta': '2 days, 0:47:02', 'additions': 24, 'deletions': 11, 'state': 'closed'}, {'id': 682541920, 'number': 1816, 'closed': datetime.datetime(2021, 7, 7, 15, 4, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 2, 11, 8, 12, tzinfo=datetime.timezone.utc), 'time_taken': 446173.0, 'time_delta': '5 days, 3:56:13', 'additions': 260, 'deletions': 325, 'state': 'closed'}, {'id': 678251505, 'number': 1814, 'closed': datetime.datetime(2021, 6, 30, 19, 27, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 26, 1, 26, 10, tzinfo=datetime.timezone.utc), 'time_taken': 410505.0, 'time_delta': '4 days, 18:01:45', 'additions': 58, 'deletions': 13, 'state': 'closed'}, {'id': 547240638, 'number': 1697, 'closed': datetime.datetime(2021, 7, 16, 2, 54, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 31, 6, 31, 38, tzinfo=datetime.timezone.utc), 'time_taken': 17007757.0, 'time_delta': '196 days, 20:22:37', 'additions': 7, 'deletions': 1, 'state': 'closed'}, {'id': 547043281, 'number': 1695, 'closed': datetime.datetime(2021, 7, 13, 5, 11, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 30, 18, 25, 5, tzinfo=datetime.timezone.utc), 'time_taken': 16800408.0, 'time_delta': '194 days, 10:46:48', 'additions': 159, 'deletions': 19, 'state': 'closed'}, {'id': 546055413, 'number': 1687, 'closed': datetime.datetime(2023, 6, 8, 18, 1, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 28, 11, 28, 2, tzinfo=datetime.timezone.utc), 'time_taken': 77092413.0, 'time_delta': '892 days, 6:33:33', 'additions': 134, 'deletions': 3, 'state': 'closed'}, {'id': 545852045, 'number': 1686, 'closed': datetime.datetime(2021, 7, 19, 16, 5, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 27, 20, 14, 3, tzinfo=datetime.timezone.utc), 'time_taken': 17610715.0, 'time_delta': '203 days, 19:51:55', 'additions': 92, 'deletions': 18, 'state': 'closed'}, {'id': 545625187, 'number': 1677, 'closed': datetime.datetime(2021, 7, 20, 16, 9, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 25, 19, 30, 41, tzinfo=datetime.timezone.utc), 'time_taken': 17872716.0, 'time_delta': '206 days, 20:38:36', 'additions': 283, 'deletions': 4, 'state': 'closed'}, {'id': 544329173, 'number': 1670, 'closed': datetime.datetime(2021, 7, 8, 13, 45, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 22, 19, 46, 30, tzinfo=datetime.timezone.utc), 'time_taken': 17085564.0, 'time_delta': '197 days, 17:59:24', 'additions': 106, 'deletions': 81, 'state': 'closed'}, {'id': 543262730, 'number': 1655, 'closed': datetime.datetime(2021, 7, 16, 3, 31, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 21, 6, 35, 56, tzinfo=datetime.timezone.utc), 'time_taken': 17873705.0, 'time_delta': '206 days, 20:55:05', 'additions': 18, 'deletions': 3, 'state': 'closed'}, {'id': 542978173, 'number': 1650, 'closed': datetime.datetime(2021, 6, 23, 7, 30, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 19, 21, 5, 45, tzinfo=datetime.timezone.utc), 'time_taken': 16021510.0, 'time_delta': '185 days, 10:25:10', 'additions': 129, 'deletions': 91, 'state': 'closed'}, {'id': 542687099, 'number': 1644, 'closed': datetime.datetime(2024, 2, 3, 14, 37, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 18, 17, 47, 27, tzinfo=datetime.timezone.utc), 'time_taken': 98657413.0, 'time_delta': '1141 days, 20:50:13', 'additions': 0, 'deletions': 9, 'state': 'closed'}, {'id': 542522953, 'number': 1642, 'closed': datetime.datetime(2023, 7, 31, 17, 51, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 18, 12, 46, 33, tzinfo=datetime.timezone.utc), 'time_taken': 82530274.0, 'time_delta': '955 days, 5:04:34', 'additions': 9, 'deletions': 1, 'state': 'closed'}, {'id': 537241535, 'number': 1624, 'closed': datetime.datetime(2023, 7, 15, 4, 5, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 11, 18, 22, 32, tzinfo=datetime.timezone.utc), 'time_taken': 81682990.0, 'time_delta': '945 days, 9:43:10', 'additions': 19, 'deletions': 4, 'state': 'closed'}, {'id': 536815170, 'number': 1616, 'closed': datetime.datetime(2021, 7, 13, 5, 10, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 11, 11, 14, 43, tzinfo=datetime.timezone.utc), 'time_taken': 18467767.0, 'time_delta': '213 days, 17:56:07', 'additions': 65, 'deletions': 0, 'state': 'closed'}, {'id': 535148431, 'number': 1612, 'closed': datetime.datetime(2021, 7, 20, 5, 55, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 9, 12, 35, 6, tzinfo=datetime.timezone.utc), 'time_taken': 19243253.0, 'time_delta': '222 days, 17:20:53', 'additions': 46, 'deletions': 12, 'state': 'closed'}, {'id': 535085391, 'number': 1609, 'closed': datetime.datetime(2023, 6, 20, 17, 32, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 9, 10, 45, 28, tzinfo=datetime.timezone.utc), 'time_taken': 79771627.0, 'time_delta': '923 days, 6:47:07', 'additions': 12, 'deletions': 1, 'state': 'closed'}, {'id': 533718914, 'number': 1605, 'closed': datetime.datetime(2023, 6, 15, 12, 4, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 7, 14, 34, 26, tzinfo=datetime.timezone.utc), 'time_taken': 79478999.0, 'time_delta': '919 days, 21:29:59', 'additions': 104, 'deletions': 5, 'state': 'closed'}, {'id': 533244887, 'number': 1603, 'closed': datetime.datetime(2021, 7, 13, 5, 11, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 6, 18, 36, 45, tzinfo=datetime.timezone.utc), 'time_taken': 18873272.0, 'time_delta': '218 days, 10:34:32', 'additions': 14, 'deletions': 5, 'state': 'closed'}, {'id': 532596763, 'number': 1598, 'closed': datetime.datetime(2021, 7, 12, 8, 5, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 4, 15, 14, 39, tzinfo=datetime.timezone.utc), 'time_taken': 18982244.0, 'time_delta': '219 days, 16:50:44', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 531615439, 'number': 1592, 'closed': datetime.datetime(2021, 7, 16, 3, 31, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 3, 8, 55, 51, tzinfo=datetime.timezone.utc), 'time_taken': 19420561.0, 'time_delta': '224 days, 18:36:01', 'additions': 8, 'deletions': 1, 'state': 'closed'}, {'id': 531594157, 'number': 1589, 'closed': datetime.datetime(2021, 7, 18, 8, 26, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 3, 8, 17, 7, tzinfo=datetime.timezone.utc), 'time_taken': 19613343.0, 'time_delta': '227 days, 0:09:03', 'additions': 9, 'deletions': 1, 'state': 'closed'}, {'id': 530155682, 'number': 1585, 'closed': datetime.datetime(2023, 6, 20, 17, 33, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 1, 9, 24, 42, tzinfo=datetime.timezone.utc), 'time_taken': 80467700.0, 'time_delta': '931 days, 8:08:20', 'additions': 54, 'deletions': 3, 'state': 'closed'}, {'id': 529158995, 'number': 1582, 'closed': datetime.datetime(2023, 6, 15, 12, 2, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 29, 19, 28, 11, tzinfo=datetime.timezone.utc), 'time_taken': 80152484.0, 'time_delta': '927 days, 16:34:44', 'additions': 10, 'deletions': 0, 'state': 'closed'}, {'id': 529151497, 'number': 1581, 'closed': datetime.datetime(2023, 6, 20, 17, 33, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 29, 18, 31, 15, tzinfo=datetime.timezone.utc), 'time_taken': 80607711.0, 'time_delta': '932 days, 23:01:51', 'additions': 12, 'deletions': 2, 'state': 'closed'}, {'id': 528277295, 'number': 1578, 'closed': datetime.datetime(2023, 6, 20, 17, 33, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 26, 21, 51, 3, tzinfo=datetime.timezone.utc), 'time_taken': 80854931.0, 'time_delta': '935 days, 19:42:11', 'additions': 17, 'deletions': 6, 'state': 'closed'}, {'id': 527591578, 'number': 1575, 'closed': datetime.datetime(2021, 7, 13, 4, 56, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 25, 17, 17, 29, tzinfo=datetime.timezone.utc), 'time_taken': 19827556.0, 'time_delta': '229 days, 11:39:16', 'additions': 7, 'deletions': 4, 'state': 'closed'}, {'id': 527320508, 'number': 1574, 'closed': datetime.datetime(2023, 6, 20, 17, 33, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 25, 9, 53, 42, tzinfo=datetime.timezone.utc), 'time_taken': 80984377.0, 'time_delta': '937 days, 7:39:37', 'additions': 20, 'deletions': 5, 'state': 'closed'}, {'id': 525343342, 'number': 1571, 'closed': datetime.datetime(2023, 6, 20, 17, 33, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 22, 19, 30, 13, tzinfo=datetime.timezone.utc), 'time_taken': 81208990.0, 'time_delta': '939 days, 22:03:10', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 525188284, 'number': 1569, 'closed': datetime.datetime(2021, 7, 17, 15, 1, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 21, 20, 52, tzinfo=datetime.timezone.utc), 'time_taken': 20542176.0, 'time_delta': '237 days, 18:09:36', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 524904760, 'number': 1567, 'closed': datetime.datetime(2023, 6, 20, 17, 33, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 20, 19, 21, 59, tzinfo=datetime.timezone.utc), 'time_taken': 81382294.0, 'time_delta': '941 days, 22:11:34', 'additions': 271, 'deletions': 5, 'state': 'closed'}, {'id': 524208001, 'number': 1565, 'closed': datetime.datetime(2024, 2, 3, 14, 35, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 19, 20, 21, 24, tzinfo=datetime.timezone.utc), 'time_taken': 101153636.0, 'time_delta': '1170 days, 18:13:56', 'additions': 33, 'deletions': 0, 'state': 'closed'}, {'id': 523887895, 'number': 1563, 'closed': datetime.datetime(2021, 6, 23, 15, 13, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 19, 11, 46, 2, tzinfo=datetime.timezone.utc), 'time_taken': 18674863.0, 'time_delta': '216 days, 3:27:43', 'additions': 104, 'deletions': 46, 'state': 'closed'}, {'id': 521540017, 'number': 1560, 'closed': None, 'created': datetime.datetime(2020, 11, 16, 9, 42, 9, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 43, 'deletions': 5, 'state': 'open'}]"

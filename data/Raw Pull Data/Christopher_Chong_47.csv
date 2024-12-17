@@ -1,0 +1,84 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+998623387,integrations: Add Azure DevOps webhook integration.,"<!-- Describe your pull request here.-->
+
+Fixes https://github.com/zulip/zulip/issues/22438.
+
+This PR adds a new integration Azure DevOps supporting a few events from Azure DevOps:
+- code pushed
+- PR created
+- PR updated
+- PR merged
+
+P/S: 
+1. There are 4 PR events sent out by Azure DevOps: created, updated, merged, commented.
+2. PR commented is not supported because the webhook data sent does not have the crucial information we need for our integration, i.e. repo name, PR id, PR url.
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->",True,22507,https://api.github.com/repos/zulip/zulip/pulls/22507,https://github.com/zulip/zulip/pull/22507,closed,2378,0,19,1,4,0,2,0,"[{'name': 'size: XL'}, {'name': 'integration review'}]",2022-07-17 11:34:50+00:00,2022-09-01 21:01:40+00:00,4008410.0,"46 days, 9:26:50",[],"[{'commit_sha': 'f1a3cdc4c6b63fab4a465f51ffb54e13c31e80c5', 'committer_username': 'yuroitaki', 'committer_name': 'yuroitaki', 'committer_email': None, 'commit_date': datetime.datetime(2017, 2, 20, 23, 18, 52, tzinfo=datetime.timezone.utc)}]",yuroitaki,25913766,,User,,33,,21,19
+992393098,integrations: Add RhodeCode webhook integration.,"<!-- Describe your pull request here.-->
+
+Fixes https://github.com/zulip/zulip/issues/19627.
+
+This PR adds a new integration RhodeCode supporting a single event from RhodeCode - repository push.
+
+P/S: Radarr and Sonarqube picture were changed because I ran `tools/setup/optimize-svg`.
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->",True,22436,https://api.github.com/repos/zulip/zulip/pulls/22436,https://github.com/zulip/zulip/pull/22436,closed,2050,2,15,1,3,0,1,0,[{'name': 'size: XL'}],2022-07-10 10:18:19+00:00,2022-07-13 21:10:36+00:00,298337.0,"3 days, 10:52:17",[],"[{'commit_sha': '5362a6b555c3435805d504d1144b918c052721d9', 'committer_username': 'yuroitaki', 'committer_name': 'yuroitaki', 'committer_email': None, 'commit_date': datetime.datetime(2017, 2, 20, 23, 18, 52, tzinfo=datetime.timezone.utc)}]",yuroitaki,25913766,,User,,33,,21,19
+971417180,harbor: Update harbor integration based on latest webhook payload for…,"…mat.
+
+<!-- Describe your pull request here.-->
+
+Fixes https://github.com/zulip/zulip/issues/21628
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+",True,22260,https://api.github.com/repos/zulip/zulip/pulls/22260,https://github.com/zulip/zulip/pull/22260,closed,116,79,6,1,4,4,1,0,[{'name': 'size: XL'}],2022-06-19 06:20:14+00:00,2022-07-22 18:44:22+00:00,2895848.0,"33 days, 12:24:08","[{'comment_id': 901153911, 'comment_body': 'We might also want to update other ignored events in this list.', 'comment_created': datetime.datetime(2022, 6, 19, 20, 27, 49, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 901154452, 'comment_body': 'Could you confirm that `""application/vnd.security.vulnerability.report; version=1.1""` is the only possibility here? It seems that [this script](https://github.com/goharbor/harbor/blob/9afe596403e83403024ab40d3c138f88cf4661c2/tests/apitests/python/library/artifact.py#L9-L12) suggests otherwise where it includes `""application/vnd.scanner.adapter.vuln.report.harbor+json; version=1.0""` (probably a format for their legacy scanner). Getting a fixture for that format is not necessary but we should have error handling here if this key does not present in the payload.', 'comment_created': datetime.datetime(2022, 6, 19, 20, 33, 58, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 906630421, 'comment_body': 'Noted. Given that we definitely need `""application/vnd.security.vulnerability.report; version=1.1""` to present as we need the information inside this key, do we raise an error if this key is missing? (perhaps `UnsupportedWebhookEventType`?)', 'comment_created': datetime.datetime(2022, 6, 25, 4, 7, 49, tzinfo=datetime.timezone.utc), 'commenter': 'yuroitaki', 'type': 'User'}, {'comment_id': 906631858, 'comment_body': 'Potentially this will be covered in the `WildValue` refactorings. But yes, for now, we can just fall back to `UnsupportedWebhookEventType`.', 'comment_created': datetime.datetime(2022, 6, 25, 4, 20, 30, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}]","[{'commit_sha': 'abdba439420917e3079cfbf917ec66b8d03e3692', 'committer_username': 'yuroitaki', 'committer_name': 'yuroitaki', 'committer_email': None, 'commit_date': datetime.datetime(2017, 2, 20, 23, 18, 52, tzinfo=datetime.timezone.utc)}]",yuroitaki,25913766,,User,,33,,21,19
+1025768008,usermessage: Use select for update with order by in bulk usermessage update.,"<!-- Describe your pull request here.-->
+
+Fixes https://github.com/zulip/zulip/issues/19054
+
+Was able to reproduce the deadlock situation by 
+1. Increase the number of messages in the database by `./manage.py populate_db -n1000000`
+2. Mark all messages unread by `./manage.py mark_all_messages_unread`
+3. Call `/mark_stream_as_read?stream_id=<foo_stream_id>` — which will take few minutes when stream has ~100k unread messages
+4. While the call above is running, repeatedly call `/messages/flags?messages=[<some messages ids in foo_stream>]&op=add&flag=read` until deadlock is hit
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+",True,22710,https://api.github.com/repos/zulip/zulip/pulls/22710,https://github.com/zulip/zulip/pull/22710,closed,94,62,5,1,2,9,1,0,[{'name': 'size: XL'}],2022-08-14 10:05:01+00:00,2022-09-06 23:06:58+00:00,2034117.0,"23 days, 13:01:57","[{'comment_id': 945309465, 'comment_body': 'What does the `transaction.atomic` here do? This line is just a single query.', 'comment_created': datetime.datetime(2022, 8, 14, 15, 54, 23, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 946921999, 'comment_body': ""Ah I mistakenly thought any db operation after SELECT FOR UPDATE needs to be wrapped inside `transaction.atomic()` — tested that it's fine without `transaction.atomic()`  — will remove it"", 'comment_created': datetime.datetime(2022, 8, 16, 15, 24, 39, tzinfo=datetime.timezone.utc), 'commenter': 'yuroitaki', 'type': 'User'}, {'comment_id': 950614137, 'comment_body': 'Can you add a comment here explaining a bit what this is doing, perhaps including why we need `no_key` here.', 'comment_created': datetime.datetime(2022, 8, 19, 23, 52, 24, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 956564932, 'comment_body': '@timabbott  Actually I discovered that when one uses `select_for_update`, any subsequent operations that evaluate the queryset (ie running the query in the db) will need to be enclosed within `transaction.atomic`, else Python will throw an error like the following:\r\n\r\n```\r\ndjango.db.transaction.TransactionManagementError: select_for_update cannot be used outside of a transaction.\r\n```', 'comment_created': datetime.datetime(2022, 8, 27, 10, 9, 3, tzinfo=datetime.timezone.utc), 'commenter': 'yuroitaki', 'type': 'User'}, {'comment_id': 957834521, 'comment_body': 'OK, thanks for confirming.', 'comment_created': datetime.datetime(2022, 8, 29, 22, 8, 47, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 957835149, 'comment_body': 'This should be annotated as returning a `QuerySet[UserMessage]`.\r\n\r\nAlso, I think `UserMessage.select_for_update_query()` as a class method on the `UserMessage` model would probably be a clearer name.', 'comment_created': datetime.datetime(2022, 8, 29, 22, 9, 53, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 957836490, 'comment_body': ""Let's pass `savepoint=False` to `transaction.atomic`; we don't need these to be outer transactions."", 'comment_created': datetime.datetime(2022, 8, 29, 22, 12, 8, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 957838202, 'comment_body': 'I think this pattern would be more readable if you put the definition inside the transaction block, and we replaced `msgs` with a variable name that suggested its a query that has yet to be lazily evaluated. For example (applying other comments):\r\n```\r\nwith transaction.atomic(savepoint=False):\r\n    query = UserMessage.select_for_update_query().filter(\r\n        user_profile=user_profile\r\n    ).extra(\r\n        where=[UserMessage.where_unread()],\r\n    )\r\n   count = query.update(...)\r\n\r\n```', 'comment_created': datetime.datetime(2022, 8, 29, 22, 15, 28, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 964229841, 'comment_body': ""I'm going to fix this when pushing, but it'd be cleaner to inline these extra unconditional filters into the original `query` definition."", 'comment_created': datetime.datetime(2022, 9, 6, 22, 33, 51, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '71dfb8e0a19db4d2a9f117235b8987c5f35a499d', 'committer_username': 'yuroitaki', 'committer_name': 'yuroitaki', 'committer_email': None, 'commit_date': datetime.datetime(2017, 2, 20, 23, 18, 52, tzinfo=datetime.timezone.utc)}]",yuroitaki,25913766,,User,,33,,21,19
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43160685,zulip,zulip/zulip,Python,7617,21007,375,1133,60276,2477,28,800,"[{'id': 1025768008, 'number': 22710, 'closed': datetime.datetime(2022, 9, 6, 23, 6, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 14, 10, 5, 1, tzinfo=datetime.timezone.utc), 'time_taken': 2034117.0, 'time_delta': '23 days, 13:01:57', 'additions': 94, 'deletions': 62, 'state': 'closed'}, {'id': 998623387, 'number': 22507, 'closed': datetime.datetime(2022, 9, 1, 21, 1, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 17, 11, 34, 50, tzinfo=datetime.timezone.utc), 'time_taken': 4008410.0, 'time_delta': '46 days, 9:26:50', 'additions': 2378, 'deletions': 0, 'state': 'closed'}, {'id': 992393098, 'number': 22436, 'closed': datetime.datetime(2022, 7, 13, 21, 10, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 10, 10, 18, 19, tzinfo=datetime.timezone.utc), 'time_taken': 298337.0, 'time_delta': '3 days, 10:52:17', 'additions': 2050, 'deletions': 2, 'state': 'closed'}, {'id': 971417180, 'number': 22260, 'closed': datetime.datetime(2022, 7, 22, 18, 44, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 19, 6, 20, 14, tzinfo=datetime.timezone.utc), 'time_taken': 2895848.0, 'time_delta': '33 days, 12:24:08', 'additions': 116, 'deletions': 79, 'state': 'closed'}, {'id': 917376674, 'number': 21908, 'closed': datetime.datetime(2022, 4, 28, 21, 45, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 24, 7, 36, 46, tzinfo=datetime.timezone.utc), 'time_taken': 396533.0, 'time_delta': '4 days, 14:08:53', 'additions': 28, 'deletions': 11, 'state': 'closed'}, {'id': 891891561, 'number': 21581, 'closed': datetime.datetime(2022, 5, 10, 20, 50, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 28, 14, 32, 32, tzinfo=datetime.timezone.utc), 'time_taken': 3737869.0, 'time_delta': '43 days, 6:17:49', 'additions': 958, 'deletions': 563, 'state': 'closed'}]"

@@ -1,0 +1,1053 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+766688745,Buddy list: Add two section layout. - work in progress.,"<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+This is discussed at [#design>stream member list](https://chat.zulip.org/#narrow/stream/101-design/topic/Stream.20Member.20list).
+
+Fixes #21285
+
+**Testing plan:** <!-- How have you tested? -->
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",False,20072,https://api.github.com/repos/zulip/zulip/pulls/20072,https://github.com/zulip/zulip/pull/20072,closed,2321,480,37,15,44,23,3,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'chat.zulip.org review'}]",2021-10-26 17:21:48+00:00,2023-09-13 01:18:32+00:00,59299004.0,"686 days, 7:56:44","[{'comment_id': 737015524, 'comment_body': 'This seems like it belongs in a later commit, or should have a set of comments explaining its purpose as an extension of `ListCursor`.', 'comment_created': datetime.datetime(2021, 10, 27, 0, 24, 55, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 737016012, 'comment_body': 'Why the trailing space?', 'comment_created': datetime.datetime(2021, 10, 27, 0, 26, 30, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 737016278, 'comment_body': ""We prefer to avoid inline comments on the line -- best to put this on the line before.  \r\n\r\nIt's also worth talking about why this adds such a constraint; is the issue that `hashchange` now needs to signal to the buddy list module what we're looking at?"", 'comment_created': datetime.datetime(2021, 10, 27, 0, 27, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 737016551, 'comment_body': 'I would expect this go in `narrow.js` in the activate/deactivate functions, not `hashchange.js`, which gets called when you open overlays or navigate around settings as well.  ', 'comment_created': datetime.datetime(2021, 10, 27, 0, 28, 15, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 737016862, 'comment_body': ""Do we have to use `:first-child` selectors?  It's a lot nicer to use named spans/divs for finding things, since otherwise we have to worry about whether a dynamic tooltip span gets inserted in the wrong place."", 'comment_created': datetime.datetime(2021, 10, 27, 0, 29, 15, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 740392726, 'comment_body': ""I have not changed this, as one of the side-effects of squashing was that we didn't need to modify anything for this test to pass."", 'comment_created': datetime.datetime(2021, 11, 1, 17, 25, 6, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 740393143, 'comment_body': 'Moved the `activity.redraw()` call from `hashchange.js` to `narrow.js`.', 'comment_created': datetime.datetime(2021, 11, 1, 17, 25, 41, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 740395491, 'comment_body': '@showell Is this a good case for just updating zjquery?', 'comment_created': datetime.datetime(2021, 11, 1, 17, 28, 48, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 740398799, 'comment_body': 'We need to move this init around because when activity initializes, it defines `get_filter_text`, which we use to draw the buddy_list, which happens (again, since activity just drew it) via hashchange > narrow > narrow.activate > activity.redraw.\r\n\r\nSwitching these around doesn\'t break anything, but leads to the warning ""get_filter_text() is called before initialization"".\r\n\r\nDo we need a comment explaining this?', 'comment_created': datetime.datetime(2021, 11, 1, 17, 33, 24, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 740398982, 'comment_body': 'see https://github.com/zulip/zulip/pull/20072/files#r740398799.', 'comment_created': datetime.datetime(2021, 11, 1, 17, 33, 39, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 740399734, 'comment_body': 'Removed as a result of squashing.', 'comment_created': datetime.datetime(2021, 11, 1, 17, 34, 49, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 740401023, 'comment_body': ""the class extending `ListCursor` has changed a lot, and a comment has been placed explaining it's purpose."", 'comment_created': datetime.datetime(2021, 11, 1, 17, 36, 47, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 848975215, 'comment_body': 'Why the name `row_members` as opposed to something like `presence_rows`?', 'comment_created': datetime.datetime(2022, 4, 13, 0, 40, 46, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 892091007, 'comment_body': 'Why are we using ""specific stream"" @YashRE42? ', 'comment_created': datetime.datetime(2022, 6, 8, 8, 47, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 892710582, 'comment_body': 'Apparently, no reason. I dropped this commit.\r\nThe long answer is probably that there was a point in time when the implementation couldn\'t handle a stream that didn\'t exist (""all"") and so I switched the tests but never dropped the commit when the handling was improved.', 'comment_created': datetime.datetime(2022, 6, 8, 18, 8, 44, tzinfo=datetime.timezone.utc), 'commenter': 'YashRE42', 'type': 'User'}, {'comment_id': 894988235, 'comment_body': 'Bit confused about the code that was commented in [hack: Add ListCursorWithScrollOverride hack.](https://github.com/zulip/zulip/pull/20072/commits/7ae206b1ce28cfe3b2e7a1bf74f45e7fb3f2758a), is uncommented here again. \r\n\r\n@YashRE42 is this because of rebased? ', 'comment_created': datetime.datetime(2022, 6, 11, 7, 9, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 899389480, 'comment_body': 'fixed!', 'comment_created': datetime.datetime(2022, 6, 16, 18, 8, 9, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 899399570, 'comment_body': '@YashRE42 can you please confirm if it is alright to remove this test? ', 'comment_created': datetime.datetime(2022, 6, 16, 18, 21, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 922783008, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/44)', 'comment_created': datetime.datetime(2022, 7, 17, 7, 16, 45, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 922783009, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/45)', 'comment_created': datetime.datetime(2022, 7, 17, 7, 16, 46, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 922783010, 'comment_body': ""## Unsafe jQuery plugin\n\nPotential XSS vulnerability in the ['$.fn.collapse' plugin](1).\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/255)"", 'comment_created': datetime.datetime(2022, 7, 17, 7, 16, 46, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 922783011, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/256)', 'comment_created': datetime.datetime(2022, 7, 17, 7, 16, 46, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}]","[{'commit_sha': '5b12b36ddc677584d89d78d56c9a5b9c880dce61', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '176fb4d2eccf07ab923e4b8f06a318237eb73f78', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c96979f37b9970ad00cf9d30bb386bd9c74482fd', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ac58b6b98168aee42540c06001d4ddbb600cc8d', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '18e14325d389086e00d8f722aed285a107e13c5f', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6c5bd3e6be2aa68fd61bcb8255d6cc0b8f263714', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '162729fcfabe7dc7b3958e760b83406e185db25b', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '130a25be1e184603db9ead6d80a16d5af5af6723', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b86a10383c762cb44a4c6084095676c7b2d74cde', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82ece045e74ffad6974d76171f49fbfc6a07c248', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10fdd545e8fe6bf4fe45498b9a9f9fa1956e7dd7', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '591c3e93007a443ee6ecf480eac6520bfc8dfa2d', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8916f735687e26200def9ff087b02d6112445cf7', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b20effb1c49462fb8592c4c72761544c271a297', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd69d01227c44ca1ac1fa532eac5483a8a2f43717', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}]",Yash Rathore,33805964,,User,,40,,42,28
+991960415,Buddy list: Prep work for adding two section layout ,"<!-- Describe your pull request here.-->
+This PR extracts all the unambiguous commits that we can merge from #20072.
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",False,22426,https://api.github.com/repos/zulip/zulip/pulls/22426,https://github.com/zulip/zulip/pull/22426,closed,275,70,9,3,9,6,3,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'integration review'}]",2022-07-08 19:05:02+00:00,2024-03-23 18:41:07+00:00,53912165.0,"623 days, 23:36:05","[{'comment_id': 920533365, 'comment_body': 'Am I correct that this change will result in our showing, in this corner case, the alphabetically first N users in the sidebar? I worry that this will still look broken, just in a different way, unless we somehow present ""N more users"".', 'comment_created': datetime.datetime(2022, 7, 13, 21, 34, 5, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 922456434, 'comment_body': ""Hey @timabbott, Sorry I didn't get what you are trying to say? What is the corner case?"", 'comment_created': datetime.datetime(2022, 7, 15, 19, 19, 13, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 922786051, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/44)', 'comment_created': datetime.datetime(2022, 7, 17, 7, 42, 58, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 922786052, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/45)', 'comment_created': datetime.datetime(2022, 7, 17, 7, 42, 59, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 922786053, 'comment_body': ""## Unsafe jQuery plugin\n\nPotential XSS vulnerability in the ['$.fn.collapse' plugin](1).\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/255)"", 'comment_created': datetime.datetime(2022, 7, 17, 7, 42, 59, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 922786054, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/256)', 'comment_created': datetime.datetime(2022, 7, 17, 7, 42, 59, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}]","[{'commit_sha': '024784256e967b03a29a42e431681e06667c19c8', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ceecbf049abdecae1e687ed2296edad2b504b47a', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0cb0cf7a7223778777844c1138e0889712f8d707', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+988197749,message_scroll: Hide scroll to bottom button with using keypress.,"<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.--> https://github.com/zulip/zulip/issues/21844
+CZO: https://chat.zulip.org/#narrow/stream/49-development-help/topic/Scroll.20to.20bottom.20button.20flashes.20repeatedly.20after.20scrolling.20.E2.86.91 
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+Updated Animation from jQuery to CSS,
+https://user-images.githubusercontent.com/63820270/177474318-eb43c15e-265f-408d-b813-418c5015fd73.mov
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22393,https://api.github.com/repos/zulip/zulip/pulls/22393,https://github.com/zulip/zulip/pull/22393,closed,37,9,5,2,4,4,5,0,"[{'name': 'bug'}, {'name': 'priority: high'}, {'name': 'size: M'}, {'name': 'area: message feed (display)'}, {'name': 'integration review'}]",2022-07-06 05:27:31+00:00,2022-07-13 20:59:10+00:00,660699.0,"7 days, 15:31:39","[{'comment_id': 914454971, 'comment_body': 'Why would you mess with `z-index` when you can animate `visibility` directly?\r\n\r\n```css\r\nvisibility: hidden;\r\nopacity: 0;\r\ntransition: visibility 500ms, opacity 500ms ease-in-out;\r\n\r\n&.show {\r\n    visibility: visible;\r\n    opacity: 1;\r\n}\r\n```', 'comment_created': datetime.datetime(2022, 7, 6, 6, 21, 27, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 915089220, 'comment_body': 'This is a much better approach. Thanks, Anders!\r\n', 'comment_created': datetime.datetime(2022, 7, 6, 17, 25, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 915185307, 'comment_body': 'You mean `1`, not `100`.', 'comment_created': datetime.datetime(2022, 7, 6, 19, 29, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 916453388, 'comment_body': 'Yeah, Sorry!\r\nFixed!', 'comment_created': datetime.datetime(2022, 7, 8, 4, 29, 51, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}]","[{'commit_sha': '3ba89e777939f33b6f8494e48d4abfd9d7e9c4eb', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5fdd93cf32ca558fafeeeddb2db6bd9b0cb6723c', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1046833589, Stream privacy icon in typeaheads,"<!-- Describe your pull request here.-->
+It adds stream privacy icons in all the places except `Message compose addressee typeahead.` and `Adding streams in SETTINGS / DEFAULT STREAMS.` which are blocked by other PRs.
+
+- [x] Move message typeahead.
+-  [x] Move topic (via left sidebar menu) typeahead.
+- [x] New stream notifications and New user notifications in SETTINGS / ORGANIZATION SETTINGS. Note that the decorator for the selected stream also needs to be modified to indicate the stream privacy setting, rather than always being shown as a #.
+- [x] Stream reference compose box typeahead (i.e. #... typeahead).
+- [x]  Top search bar auto-complete
+
+
+
+
+Fixes: <!-- Issue link, or clear description.--> #22355
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+*Move message*
+![Screenshot 2022-09-24 at 1 24 57 AM](https://user-images.githubusercontent.com/63820270/192047048-fbc0b226-1aa0-43ad-9527-042925113732.png)
+![Screenshot 2022-10-08 at 3 54 35 PM](https://user-images.githubusercontent.com/63820270/194703120-a67abbed-264f-41cc-a138-b3320ce31c6a.png)
+
+
+*Move Topic*
+![Screenshot 2022-09-24 at 1 25 15 AM](https://user-images.githubusercontent.com/63820270/192047162-9d315323-f53d-4b6f-b540-8f704eed1128.png)
+![Screenshot 2022-10-08 at 3 54 43 PM](https://user-images.githubusercontent.com/63820270/194703115-6fe8361d-8caa-406d-8d07-8cf3169aadb2.png)
+
+
+*Settings ORG*
+![settings_org_active_stream](https://user-images.githubusercontent.com/63820270/188557713-8865c1a3-7483-4f3d-92de-e254acdb1cfb.png)
+![Screenshot 2022-09-24 at 1 28 53 AM](https://user-images.githubusercontent.com/63820270/192047591-79f70ad2-5d0d-4129-8894-c6b04ed0e70f.png)
+
+
+*Search*
+![Screenshot 2022-09-06 at 9 59 45 PM](https://user-images.githubusercontent.com/63820270/188689011-67412859-1b95-49dd-ab8f-35d3c0fb9993.png)
+
+
+
+*Stream reference compose box typeahead*
+![Screenshot 2022-09-06 at 9 59 34 PM](https://user-images.githubusercontent.com/63820270/188689092-8daddfc6-1fd5-4560-a8da-c92f71e57e88.png)
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",False,22864,https://api.github.com/repos/zulip/zulip/pulls/22864,https://github.com/zulip/zulip/pull/22864,closed,642,99,23,4,27,0,3,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'chat.zulip.org review'}]",2022-09-05 20:23:16+00:00,2023-04-18 16:44:33+00:00,19426877.0,"224 days, 20:21:17",[],"[{'commit_sha': '107ec987503bc05d425acdcb997c3e140d32dcdb', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b42f7996f093bda189af90192d0c5e5677a19d0', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '35dc3ba613cf1910ea2e5ced8d75eaf5fa2c4145', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '776a1613db6e714215b93e5098ebdd9924121f83', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1051886110,read_receipts: Disable showing read receipts for Notification Bot messages.,"The implementation is simple, we just check if the message sender is a notification bot to decide if we should show the read receipts list.
+
+Fixes #22905
+
+
+
+<!-- Describe your pull request here.-->
+
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+<img width=""450"" alt=""Screenshot 2022-09-23 at 12 54 00 PM"" src=""https://user-images.githubusercontent.com/63820270/191910554-2251dbbb-07fa-4fb9-b5b3-e6d2d7b0dbf7.png"">
+
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22908,https://api.github.com/repos/zulip/zulip/pulls/22908,https://github.com/zulip/zulip/pull/22908,closed,139,118,4,2,17,0,6,0,"[{'name': 'priority: high'}, {'name': 'size: XL'}, {'name': 'release goal'}, {'name': 'area: popovers'}, {'name': 'area: message feed (UI)'}, {'name': 'integration review'}]",2022-09-09 18:27:01+00:00,2022-09-23 23:22:21+00:00,1227320.0,"14 days, 4:55:20",[],"[{'commit_sha': 'ff899e5c31f1019ce0c97f0b769dfbde4be3e547', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '155787512fa19edee8b91d4f132f4518d815e840', 'committer_username': 'timabbott', 'committer_name': 'Tim Abbott', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 7, 21, 18, 39, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1012875896,search: Search Redesign,"<!-- Describe your pull request here.-->
+This PR is still in WIP. 
+~Everything is implemented except [grouping the search filters](https://www.figma.com/proto/jbNOiBWvbtLuHaiTj4CW0G/Zulip-Web-App?page-id=1700%3A137541&node-id=1716%3A126765&viewport=389%2C48%2C0.25&scaling=scale-down-width&starting-point-node-id=1700%3A137588) functionality.~ (we will do this in separate pass)
+
+Fixes: <!-- Issue link, or clear description.--> #21798
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+Desktop View
+
+
+
+
+https://user-images.githubusercontent.com/63820270/195440846-07b9e7e1-85d9-4350-9f4a-a983d34533ee.mov
+
+
+
+
+
+
+---
+Mobile View
+
+
+https://user-images.githubusercontent.com/63820270/188265958-a9369cc1-8163-402e-91a1-3d8d3cfcf573.mov
+
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",False,22635,https://api.github.com/repos/zulip/zulip/pulls/22635,https://github.com/zulip/zulip/pull/22635,closed,480,234,19,7,26,4,2,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}]",2022-07-30 20:12:04+00:00,2023-02-09 21:37:11+00:00,16766707.0,"194 days, 1:25:07",[],"[{'commit_sha': '3cae251a0d42f0075b7507065fa523a3405369c7', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d6cfa398211494085e274ae682e0891cbd9a6a7', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e4143b394c1c0438f480f13458a9b754a7128ec', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5a8eceffb963d2adcceac79f2bb3e9a3e1e4d5ec', 'committer_username': 'YashRE42', 'committer_name': 'Yash Rathore', 'committer_email': None, 'commit_date': datetime.datetime(2017, 11, 19, 13, 49, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44fad743683e00b70d20bb038724c6dc34b068cb', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '777295732c588a62d11371f21da8bf3863ab7833', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83a73721f5ec771bee743b2a0f55f34433d1db09', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1022345403,puppeteer: Fix `test_narrow_public_streams` test  in `message-basics.ts`.,"
+
+It was introduced in
+https://github.com/zulip/zulip/commit/56b2b838ee17cbce191f40704df4cfec710a2ece commit.
+
+It fixes `test_narrow_public_streams` test which checks
+that, there are no bookends in ` /streams/public`. The
+issue was there were no bookends by default when we
+were checking in the Denmark stream. We fix this by
+unsubscribing from the Denmark stream which will
+create a bookend.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22692,https://api.github.com/repos/zulip/zulip/pulls/22692,https://github.com/zulip/zulip/pull/22692,closed,8,1,1,1,1,0,1,0,[{'name': 'size: S'}],2022-08-10 07:38:18+00:00,2022-08-10 23:16:50+00:00,56312.0,15:38:32,[],"[{'commit_sha': '519fd9034eb17b643916fce7a48554986158cb06', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1027442811,puppeteer: Fix `subscribe_toogle.ts` long pending flake.,"The issue with the existing code is that we use the
+`page.waitForSelector` function to detect if the element
+is visible and interactable.
+
+`page.waitForSelector` only ensures that the element is
+visible and doesn't guarantees that the element is
+interactable. Most of the time it is enough but sometimes
+it is too fast and our test fails.
+
+To fix this we change our approach to check the button
+text on the stream settings page (`/#streams/stream_id`).
+Either it could be `Subscribe` or `Unsubscribe`.
+
+Tested the changes by running puppeteer 100 times in the [CI](https://github.com/Riken-Shah/zulip/runs/7854466120?check_suite_focus=true).
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22728,https://api.github.com/repos/zulip/zulip/pulls/22728,https://github.com/zulip/zulip/pull/22728,closed,9,9,1,1,1,0,1,0,[{'name': 'size: S'}],2022-08-16 10:34:32+00:00,2022-08-16 20:01:32+00:00,34020.0,9:27:00,[],"[{'commit_sha': '716ddf9e452c8112e95be3f9e2b6f523e435bf0f', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1028290258,puppeteer: Fix flake in`navigation.ts`.,"The reason for the flake was we were not waiting for the
+settings modal to open completely.
+
+To fix this we now wait until the profile tab is focused to
+detect if the settings modal is open completely (i.e ready
+for the interaction).
+
+Tested the code by running in loop for 100 times in [CI](https://github.com/Riken-Shah/zulip/runs/7870293534?check_suite_focus=true).
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22735,https://api.github.com/repos/zulip/zulip/pulls/22735,https://github.com/zulip/zulip/pull/22735,closed,6,2,1,1,1,0,1,0,[{'name': 'size: S'}],2022-08-17 03:59:08+00:00,2022-08-17 18:38:21+00:00,52753.0,14:39:13,[],"[{'commit_sha': '8f34e79eb108f78961af359cdc5f81f091a9d929', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1028311103,puppeteer: Fix flake in `user-deactivation.ts`.,"The reason for the flake was we were not waiting enough
+time for the deactivation row to render.
+
+To fix this, We are relying on the input from the user
+deactivation screen to focus.
+
+Tested the code by running in loop for 100 times in [CI](https://github.com/Riken-Shah/zulip/runs/7870252352?check_suite_focus=true).
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22736,https://api.github.com/repos/zulip/zulip/pulls/22736,https://github.com/zulip/zulip/pull/22736,closed,8,7,1,1,1,0,1,0,[{'name': 'size: S'}],2022-08-17 04:39:59+00:00,2022-08-17 18:58:17+00:00,51498.0,14:18:18,[],"[{'commit_sha': 'f3d1d09eaf87d14a93c215e697e78b289a6c2e28', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1051543223,puppeteer: Fix dropdown click flake in `admin.ts`.,"The reason for the flake was we were not waiting enough time for the dropdown to render search results when we type `rome`.
+
+To fix this, We are waiting until the dropdown input value evaluates to be `rome`.
+
+We also update variable name from
+`verona_in_dropdown` to correct `rome_in_dropdown`.
+
+Tested the changes by running [100x in CI](https://github.com/Riken-Shah/zulip/runs/8269348475?check_suite_focus=true).
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22901,https://api.github.com/repos/zulip/zulip/pulls/22901,https://github.com/zulip/zulip/pull/22901,closed,9,3,1,1,1,0,1,0,[{'name': 'size: S'}],2022-09-09 12:54:12+00:00,2022-09-09 15:56:49+00:00,10957.0,3:02:37,[],"[{'commit_sha': '4fde91f5b658e5e656ac0c621eb8f46e19c1f6f1', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1082851613,puppeteer: Wait for drafts slide-up animation to finish.,"This fixes a flake in `drafts.ts` where it fails to click on the drafts modal after opening it because we were not waiting for the animation to finish.
+
+We are using the document's active element (which will be the draft element after opening the drafts modal) to ensure that the animation has finished when drats are present in the modal.
+
+Tested by running 100 times in the [CI](https://github.com/Riken-Shah/zulip/actions/runs/3221712910/jobs/5269974521).
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",False,23192,https://api.github.com/repos/zulip/zulip/pulls/23192,https://github.com/zulip/zulip/pull/23192,open,13,5,1,1,1,2,2,0,"[{'name': 'size: S'}, {'name': 'has conflicts'}]",2022-10-11 07:01:50+00:00,,0.0,,"[{'comment_id': 991929089, 'comment_body': 'I don’t see what this has to do with the animation. Nothing waits for the animation before focusing the element either.', 'comment_created': datetime.datetime(2022, 10, 11, 7, 47, 40, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 991999546, 'comment_body': 'Ohh Okay! \r\nSo when we open drafts modal the first draft element is focused already?  \r\nIn the CI it worked 100 times, because of the delay of `waitForFunction`?', 'comment_created': datetime.datetime(2022, 10, 11, 8, 25, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}]","[{'commit_sha': '84e737cdb501bfe63cfbd357bad2c8e3905dd0b0', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1093847770,recent_topics: Presence status and emoji for PMs in recent topics.,"<!-- Describe your pull request here.-->
+Fixes https://github.com/zulip/zulip/issues/23262
+
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+<img width=""872"" alt=""Screenshot 2022-10-27 at 2 25 22 PM"" src=""https://user-images.githubusercontent.com/63820270/198246238-d6ca7ae3-cc05-4d7e-bf00-08577efcea7e.png"">
+<img width=""872"" alt=""Screenshot 2022-10-27 at 2 25 27 PM"" src=""https://user-images.githubusercontent.com/63820270/198246243-21c42604-aa70-4521-b76d-cdafb7bd501b.png"">
+<img width=""872"" alt=""Screenshot 2022-10-27 at 2 25 32 PM"" src=""https://user-images.githubusercontent.com/63820270/198246249-e6a0010d-51e6-44f6-8f85-d27700e369fd.png"">
+<img width=""872"" alt=""Screenshot 2022-10-27 at 2 25 34 PM"" src=""https://user-images.githubusercontent.com/63820270/198246253-63f906ec-10ce-4bae-82ba-4fb4679b3339.png"">
+
+
+
+**Self-review checklist**
+
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,23305,https://api.github.com/repos/zulip/zulip/pulls/23305,https://github.com/zulip/zulip/pull/23305,closed,139,25,5,3,21,3,3,0,"[{'name': 'size: XL'}, {'name': 'area: recent-conversations'}, {'name': 'release goal'}]",2022-10-20 13:54:46+00:00,2022-11-10 20:32:08+00:00,1838242.0,"21 days, 6:37:22","[{'comment_id': 1000915607, 'comment_body': ""Can you explain this change? It seems like it'd apply to _all_ tooltips in the app."", 'comment_created': datetime.datetime(2022, 10, 20, 17, 21, 26, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1006627037, 'comment_body': 'Without it the tooltip content had the bold effect, \r\nI have fixed it by moving it to `recent_topics.css`.', 'comment_created': datetime.datetime(2022, 10, 27, 9, 27, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 1017940701, 'comment_body': '<img width=""440"" alt=""image"" src=""https://user-images.githubusercontent.com/25124304/200843023-b3b9fd2c-69c4-4e8c-8db4-1c96d01320ce.png"">\r\n', 'comment_created': datetime.datetime(2022, 11, 9, 13, 30, 50, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}]","[{'commit_sha': '995243f3715f011d9858d91f837635c9b5fce7e3', 'committer_username': 'amanagr', 'committer_name': 'Aman Agrawal', 'committer_email': 'amanagr@zulip.com', 'commit_date': datetime.datetime(2017, 1, 14, 20, 19, 42, tzinfo=datetime.timezone.utc)}, {'commit_sha': '727242ada1ac04c6781e664c6172c9f8cce3d16c', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f975bfb583abea33ee525050c6fc3c2ea863e2cd', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+1047404478,timepicker: Fix hours and minutes input getting squeeze in safari.,"This issue is probably with the upstream bug in
+`flatpickr` but we can fix it for us by specifying minimum
+height to the input.
+
+Fixes #22698
+
+<!-- Describe your pull request here.-->
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+Before | After
+-- | --
+![Screenshot 2022-09-06 at 4 18 18 PM](https://user-images.githubusercontent.com/63820270/188618180-83ff524f-4128-4260-87b3-9a8355119d67.png) | ![Screenshot 2022-09-06 at 4 26 46 PM](https://user-images.githubusercontent.com/63820270/188618188-13dd9459-aac7-4b12-bcc8-905d15310364.png)
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22867,https://api.github.com/repos/zulip/zulip/pulls/22867,https://github.com/zulip/zulip/pull/22867,closed,1,0,1,1,2,0,4,0,"[{'name': 'bug'}, {'name': 'area: compose (misc)'}, {'name': 'priority: high'}, {'name': 'size: XS'}]",2022-09-06 10:57:58+00:00,2022-09-06 19:57:25+00:00,32367.0,8:59:27,[],"[{'commit_sha': '2d39f12cdb97919e24cb7f5e8df4f31fdb199e55', 'committer_username': 'Riken-Shah', 'committer_name': 'Riken Shah', 'committer_email': None, 'commit_date': datetime.datetime(2020, 4, 16, 21, 34, 43, tzinfo=datetime.timezone.utc)}]",Riken Shah,63820270,,User,,23,,36,41
+909148132,"typeahead, markdown: Update characters allowed before @ and stream mentions.","Now the following characters are allowed before @-mentions, stream references (starting with #) and emojis (starting with :) - space, (, {, [, "", ', /, <, both for autocompleting and rendered markdown.
+
+Earlier only the opening brace type characters and space was allowed.
+
+**Screenshots and screen captures:**
+
+Showing how typeahead is triggered when @ follows the above mentioned list of characters
+https://www.loom.com/share/1e3dca7f5c6742e5bf8a75145b6b48d0
+
+Showing the newly allowed rendered markdown mentions
+![image](https://user-images.githubusercontent.com/68962290/173627511-d20ce7a1-c6e1-486c-a146-2e68e4e78d35.png)
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] Self-reviewed the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,21786,https://api.github.com/repos/zulip/zulip/pulls/21786,https://github.com/zulip/zulip/pull/21786,closed,66,16,5,2,12,5,2,0,"[{'name': 'size: L'}, {'name': 'integration review'}]",2022-04-13 16:48:10+00:00,2022-08-07 02:29:40+00:00,9970890.0,"115 days, 9:41:30","[{'comment_id': 898734066, 'comment_body': 'Why did we remove `,` and `:`? ', 'comment_created': datetime.datetime(2022, 6, 16, 6, 21, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 898737447, 'comment_body': ""That's because we expect there to be a space between `,` or `:` and the stream mention. This was discussed [here](https://chat.zulip.org/#narrow/stream/9-issues/topic/Mention.20after.20.2F)"", 'comment_created': datetime.datetime(2022, 6, 16, 6, 27, 2, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 898748001, 'comment_body': 'Cool, then it seems fine!', 'comment_created': datetime.datetime(2022, 6, 16, 6, 44, 4, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 936093748, 'comment_body': '@N-Shar-ma it looks like you didn\'t apply this change from the STREAM_TOPIC regex; is that an oversight?\r\n\r\nAlso, should we extract `BEFORE_MENTION_ALLOWED_REGEX = r""(?<![^\\s\'""\\(\\{\\[\\/<])""` in `mention.py` and have all of these other regular expressions be constructed using that? Unless I\'m mistaken, we want the same thing in all 4 places, and we should express that in a way that indicates that.', 'comment_created': datetime.datetime(2022, 8, 2, 23, 4, 2, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 938641008, 'comment_body': 'Oops, that was an oversight! Have extracted the variable for re-use as suggested!', 'comment_created': datetime.datetime(2022, 8, 5, 9, 38, 1, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}]","[{'commit_sha': 'bcd93d54d8ceebc9cfff2e0e7c194bd2c293f52c', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a794124bcf5374a1c3b1e95e27a0c370e1dd67b3', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+976771899,message-editing: Immediately show menu.,"Fixes #19196
+
+This immediately shows the menu for which messages to move when
+the user can not edit the content of the message.
+I also changed the visibility so that the menu stays visible once it was shown once, to avoid it getting shown and removed all the time, which would confuse the user.
+
+How it looks when the message is not editable:
+![chrome-capture-2022-5-23](https://user-images.githubusercontent.com/74348920/175246345-a3484b6e-fd28-43c2-97e1-e9f0f13ed50f.gif)
+
+How it looks when the message is editable:
+![chrome-capture-2022-5-23 (1)](https://user-images.githubusercontent.com/74348920/175246414-634e09b5-75aa-43d8-8648-646f3df6ae8a.gif)
+
+",True,22289,https://api.github.com/repos/zulip/zulip/pulls/22289,https://github.com/zulip/zulip/pull/22289,closed,17,2,1,1,9,5,5,0,"[{'name': 'area: message-editing'}, {'name': 'priority: high'}, {'name': 'size: S'}, {'name': 'release goal'}, {'name': 'integration review'}]",2022-06-23 07:54:42+00:00,2022-07-15 22:32:07+00:00,1953445.0,"22 days, 14:37:25","[{'comment_id': 920498021, 'comment_body': ""Can you explain this line? It seems to me that in situations where both the content and the topic are editable, that we'd incorrectly not display the menu."", 'comment_created': datetime.datetime(2022, 7, 13, 20, 48, 30, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 921186695, 'comment_body': '@timabbott you are right, if the content is editable, the menu is not immediately displayed. But this is the expected behavior, since the main goal of editing a message, when the content is still editable, is expected to be editing the content. And because of this it would be confusing to immediately show the menu then, as the user might not know what this refers to.\r\n(See also my previous messages with @alya or the issue description)', 'comment_created': datetime.datetime(2022, 7, 14, 13, 57, 5, tzinfo=datetime.timezone.utc), 'commenter': 'juliaBichler01', 'type': 'User'}, {'comment_id': 921820153, 'comment_body': 'Could you please add a code comment before this line explaining it? Thanks!', 'comment_created': datetime.datetime(2022, 7, 15, 5, 19, 11, tzinfo=datetime.timezone.utc), 'commenter': 'alya', 'type': 'User'}, {'comment_id': 922104297, 'comment_body': '@alya alright, added the comment', 'comment_created': datetime.datetime(2022, 7, 15, 12, 8, 20, tzinfo=datetime.timezone.utc), 'commenter': 'juliaBichler01', 'type': 'User'}, {'comment_id': 922556184, 'comment_body': 'So I\'m glad we spent some extra attention on this line, because it\'s wrong in the case that the user can\'t edit the message at all (aka ""View source""):\r\n\r\n![image](https://user-images.githubusercontent.com/2746074/179319205-5d964d85-033d-4fc3-9f53-6769f5e0150f.png)\r\n\r\nI\'ll fix this before merging, since I think the fix is straightforward.', 'comment_created': datetime.datetime(2022, 7, 15, 22, 32, 10, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '2fcd8d5e2115c9d27c60531bb71546f721ada67f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Julia Bichler,74348920,,User,,3,,0,3
+986133941,polls: Add option for modal to create polls.,"Earlier the `/poll` slash command was the only way to create polls.
+To increase user friendliness with a UI, a button to launch a modal
+to create a poll and send it, has been added to the compose box.
+
+The modal has a form which on submission frames a message using the
+`/poll` syntax and the data input in the form, and sends it directly.
+
+Fixes: #20304.
+
+**Screenshots and screen captures:**
+
+https://www.loom.com/share/c0528232229b450285c0214ea7813e4d
+
+**Self-review checklist**
+
+
+- [X] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [X] Explains differences from previous plans (e.g., issue description).
+- [X] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [X] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [X] Each commit is a coherent idea.
+- [X] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [X] Visual appearance of the changes.
+- [X] Responsiveness and internationalization.
+- [X] Strings and tooltips.
+- [X] End-to-end functionality of buttons, interactions and flows.
+- [X] Corner cases, error conditions, and easily imagined bugs.
+",False,22370,https://api.github.com/repos/zulip/zulip/pulls/22370,https://github.com/zulip/zulip/pull/22370,closed,608,139,24,5,48,34,4,0,"[{'name': 'priority: high'}, {'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'integration review'}]",2022-07-04 08:04:29+00:00,2023-09-11 22:23:55+00:00,37549166.0,"434 days, 14:19:26","[{'comment_id': 914526086, 'comment_body': ""Typo: `dtl`. Let's just use `delete-button-stub`."", 'comment_created': datetime.datetime(2022, 7, 6, 7, 49, 57, tzinfo=datetime.timezone.utc), 'commenter': 'aero31aero', 'type': 'User'}, {'comment_id': 914534747, 'comment_body': 'This comment, and in general, the `display_flag` option could use reworking and some additional explanation.', 'comment_created': datetime.datetime(2022, 7, 6, 7, 59, 6, tzinfo=datetime.timezone.utc), 'commenter': 'aero31aero', 'type': 'User'}, {'comment_id': 914536314, 'comment_body': 'This function looks a bit cryptic. Maybe a comment here would help? As a reviewer I have to go back to the DOM and check a lot of things to assert whether this code is correct.', 'comment_created': datetime.datetime(2022, 7, 6, 8, 0, 47, tzinfo=datetime.timezone.utc), 'commenter': 'aero31aero', 'type': 'User'}, {'comment_id': 914537879, 'comment_body': 'Instead of calling this function, we could use the `create_option_row` and `delete_option_row` functions, sort of end-to-end testing the module.', 'comment_created': datetime.datetime(2022, 7, 6, 8, 2, 34, tzinfo=datetime.timezone.utc), 'commenter': 'aero31aero', 'type': 'User'}, {'comment_id': 914541640, 'comment_body': 'Your existing test could do well by adding a few more mock poll options and then finally calling this function to assert its output.', 'comment_created': datetime.datetime(2022, 7, 6, 8, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'aero31aero', 'type': 'User'}, {'comment_id': 922413803, 'comment_body': 'Maybe adding this change as a prep commit would make more sense? ', 'comment_created': datetime.datetime(2022, 7, 15, 18, 16, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 922415357, 'comment_body': 'Maybe adding a line here that says something like, `This handles a case when the next empty input row is already added and user is updating the above row(s).`  might be more clear. ', 'comment_created': datetime.datetime(2022, 7, 15, 18, 18, 19, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 922417802, 'comment_body': 'Maybe a better name for this function would be `update_delete_btn_visibility`?', 'comment_created': datetime.datetime(2022, 7, 15, 18, 20, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 922425889, 'comment_body': 'Maybe adding test coverage for this can be done in separate PR once this PR gets merged.', 'comment_created': datetime.datetime(2022, 7, 15, 18, 30, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 922674437, 'comment_body': ""That sounds like a good idea, I'll make this a prep commit, thanks!"", 'comment_created': datetime.datetime(2022, 7, 16, 12, 21, 55, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 922674546, 'comment_body': 'agree, will update the name, thanks!', 'comment_created': datetime.datetime(2022, 7, 16, 12, 23, 8, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 922674669, 'comment_body': ""Had a discussion and Tim said this didn't need full test coverage so this should be fine as is"", 'comment_created': datetime.datetime(2022, 7, 16, 12, 24, 27, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 922686817, 'comment_body': 'Not feasible due to limits and unsuitability of zjquery for this case, so current tests will have to do', 'comment_created': datetime.datetime(2022, 7, 16, 14, 37, 21, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 922686867, 'comment_body': 'Not feasible due to limits and unsuitability of zjquery for this case, so current tests will have to do', 'comment_created': datetime.datetime(2022, 7, 16, 14, 37, 53, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 965385378, 'comment_body': 'These strings (""Question"" / ""Options"" / ""Anyone ..."") all need to be tagged for translation. See\r\n\r\nhttps://zulip.readthedocs.io/en/latest/translating/internationalization.html\r\n', 'comment_created': datetime.datetime(2022, 9, 7, 23, 44, 17, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 965386326, 'comment_body': ""We don't use abbreviations in variable names; `no_of_option_row` => `option_row_count` would be clearer."", 'comment_created': datetime.datetime(2022, 9, 7, 23, 46, 40, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 965386961, 'comment_body': ""This logic feels confusing; could we instead just compute the number of rows we expect to be present, and then show/hide based on that? In other words, should we just add 1 to the count if `display_flag` is set (or something like that)?\r\n\r\nI'm also not sure why it's correct to do nothing if the current number of rows is 0 or 2."", 'comment_created': datetime.datetime(2022, 9, 7, 23, 48, 23, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 965387874, 'comment_body': ""What does the `+ i` do here? I'd expect our `fa-ellipsis-v` here to always be an `i` element...\r\n\r\nOh, is this to space two identical icons from each other? I think an `i + i` rule outside this block, with a comment, might be clearer."", 'comment_created': datetime.datetime(2022, 9, 7, 23, 50, 37, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 965388685, 'comment_body': 'Is the purpose of this filter to exclude the empty string? Do we need to trim these first, or will ` ` be here? ', 'comment_created': datetime.datetime(2022, 9, 7, 23, 52, 44, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 965389002, 'comment_body': ""One option is to define an anonymous function that does the `setTimeout` you need here, with a comment, if we decide changing the `post_render` semantics doesn't make sense."", 'comment_created': datetime.datetime(2022, 9, 7, 23, 53, 34, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 965403230, 'comment_body': ""Why is it correct to not clear the compose box after sending the poll?\r\n\r\nIs the idea that there may be some content in the compose box that's unrelated to the poll, and we're trying to not disturb that? \r\n\r\nI worry a bit that the compose box code path may make assumptions that we don't send messages not currently in the compose box, and a different refactor involving saving the current compose state to a draft and then restoring it might be better; not sure; can you start a #frontend thread to discuss this particular detail?\r\n\r\n"", 'comment_created': datetime.datetime(2022, 9, 8, 0, 31, 33, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 979261727, 'comment_body': 'A simpler non-nested logic based on only the final expected row count is possible, but would do more work than necessary. The crux here is that only when the current row count is 1, we may need to change the show / hide status of the 1 row depending on if another will be added right after (`display_flag`). This is also the reason we only do something if the row count is 1, and not 0, or 2 or anything else. (Also, count can never really be 0, since this function is never called in that state)\r\n\r\nIn other words, considering the current number of rows and the display flag separately gives us more fine grained control which allows better performance. Combining the 2 may make for simpler logic but we may do more work than necessary (like showing all rows - which may already be in a show state - when the combined / expected count is over 1)\r\n\r\nFor better clarity, here\'s what the simpler but less performant code would look:\r\n```js\r\nexport function update_option_delete_button_visibility($container, another_row_will_be_added) {\r\n    const current_option_row_count = $container.find("".option-row"").length;\r\n    // Add 1 if another row will be added right after, else let it stay the same as current\r\n    const expected_final_row_count = current_option_row_count + another_row_will_be_added;\r\n\r\n    // When there will be only one option row, we hide its delete button\r\n    if(expected_final_row_count === 1) {\r\n        $container.find("".option-row .delete-option"").hide();\r\n    } else {\r\n        $container.find("".option-row .delete-option"").show();\r\n    }\r\n}\r\n```', 'comment_created': datetime.datetime(2022, 9, 24, 15, 18, 58, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 979263118, 'comment_body': ""Actually, this is to add space after only the second (right side) icon to space it from the option text field. I'll separate it in a new block with a comment!"", 'comment_created': datetime.datetime(2022, 9, 24, 15, 30, 26, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 979264457, 'comment_body': ""Oh, seems like I'd forgotten to trim this, partly since we do trim on the backend so the visible results aren't affected, but yes, the message we compose logically on the frontend did have empty spaces. Thanks for pointing this out, I'll trim the values here too!"", 'comment_created': datetime.datetime(2022, 9, 24, 15, 41, 7, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 979287556, 'comment_body': 'The simplebar issue has been resolved as explained in this [CZO thread](https://chat.zulip.org/#narrow/stream/49-development-help/topic/add.20poll.20modal.20acting.20buggy)', 'comment_created': datetime.datetime(2022, 9, 24, 18, 38, 32, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 979287792, 'comment_body': ""Yes that was the idea, as mentioned by @alya in the linked issue. I'll make a frontend thread regarding this soon.\r\nEdit: here's the [thread](https://chat.zulip.org/#narrow/stream/6-frontend/topic/empty.20compose.20box.20after.20sending.20poll.20through.20GUI)"", 'comment_created': datetime.datetime(2022, 9, 24, 18, 40, 37, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1015784221, 'comment_body': ""We don't expect there to be more than a few dozen rows even for very large polls, so I'm not sure I understand the performance concern? Is this algorithm somehow cubic in the number of rows?"", 'comment_created': datetime.datetime(2022, 11, 7, 18, 51, 18, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1037073270, 'comment_body': ""Hm yes, the performance concerns aren't relevant here then, it's only linear in the row count. I'll update the code to the simpler code proposed above.\r\nEdit: changed and pushed!"", 'comment_created': datetime.datetime(2022, 12, 1, 12, 53, 5, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1149522174, 'comment_body': 'This parameter might be better labeled as `from_compose_box = true` -- since most of the logic will be about whether to access values from the compose box or not?', 'comment_created': datetime.datetime(2023, 3, 27, 16, 42, 45, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1149529365, 'comment_body': ""Can you add some comment documentation here on how this differs from the `user_pill` module? It's not clear to me what the distinction is, and I'm also curious whether it'd make sense to make the special behavior here just a parameter that can be passed when initializing a user pill vs. whether it's appropriate to do a separate class."", 'comment_created': datetime.datetime(2023, 3, 27, 16, 45, 8, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1149531863, 'comment_body': '(Also we may want a name like `direct_message_recipient_pill` for the module and `DirectMessageRecipientPill` for this class given the rename of ""private messages"" and our policy of not using abbreviations)', 'comment_created': datetime.datetime(2023, 3, 27, 16, 46, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1149534555, 'comment_body': 'Finally, it might make sense to make this commit earlier in the branch -- in theory, this is a refactor, and it might be preferable to integrate it before the modal is introduced in what is currently the previous commit.', 'comment_created': datetime.datetime(2023, 3, 27, 16, 47, 11, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1149536571, 'comment_body': ""I think after seeing how this is used in the next commits, probably it's better to stick with this current name."", 'comment_created': datetime.datetime(2023, 3, 27, 16, 48, 31, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1149575303, 'comment_body': ""> Can you add some comment documentation here on how this differs from the user_pill module?\r\n\r\nThis new class just uses `user_pill` as a utils module -- it's not something we can initialise. `PmPill` is mainly a wrapper around `input_pill`, an instance of which it passes to `user_pill` functions for processing for most of the `PmPill` functions... Does that answer your question? (I'm not sure I understood it correctly 😅)"", 'comment_created': datetime.datetime(2023, 3, 27, 17, 22, 54, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}]","[{'commit_sha': '2063f70bca985bb9236ee0a7c5cf993a929ee25e', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '66cd6875eea964496fdbd174724ca87e38067475', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9e506c7a7d05e933242c892656ab8be761716d25', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a69f28b43a0b65c65a5a8cced2dceda9890edf65', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e3894ae9f8167ad08bda344321e2984b2ec2305e', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+992121940,compose: Add format hinting for spoilers.,"Until now, whenever typeahead autocompleted the spoiler syntax, there
+was no indication if and how a visible header to the hidden content
+could be added.
+
+Now when autocompleting, the word ""Header"" is added as a placeholder
+and highlighted, hinting at the format.
+
+Fixes: #20868.
+
+**Screenshots and screen captures:**
+
+https://www.loom.com/share/f867f735e80e4486b4c69a6de956a8cd
+
+**Self-review checklist**
+
+- [X] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [X] Explains differences from previous plans (e.g., issue description).
+- [X] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [X] Each commit is a coherent idea.
+- [X] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [X] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [X] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22428,https://api.github.com/repos/zulip/zulip/pulls/22428,https://github.com/zulip/zulip/pull/22428,closed,36,16,2,3,9,1,4,0,"[{'name': 'area: compose (misc)'}, {'name': 'priority: high'}, {'name': 'size: L'}, {'name': 'integration review'}]",2022-07-09 01:24:25+00:00,2022-09-11 21:11:02+00:00,5600797.0,"64 days, 19:46:37","[{'comment_id': 962459294, 'comment_body': 'This change belongs in a separate commit, otherwise LGTM!', 'comment_created': datetime.datetime(2022, 9, 5, 4, 3, 40, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}]","[{'commit_sha': 'c4d9d1d33ba40b0ae307806d46421a85eb437044', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20620e68a4279ef6b5c195486336c7dbef39a5b5', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca2c0f7e2123a90cefbe71bd6382fce33244dbb6', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+989984890,documentation (user): Document /poll in ? help widget.,"documentation (user): Document `/poll` in `?` help widget.
+
+To make it easier for users to make polls, their syntax is documented
+using an example along with its (non dynamic) rendered version.
+
+Fixes: #18588.
+
+**Screenshots and screen captures:**
+![image](https://user-images.githubusercontent.com/68962290/177752157-76af67e0-ebd0-4e84-9fbd-a8fa40848546.png)
+![image](https://user-images.githubusercontent.com/68962290/177824018-fee1d34e-a202-4d0c-939c-07fc33bbf5b6.png)
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22409,https://api.github.com/repos/zulip/zulip/pulls/22409,https://github.com/zulip/zulip/pull/22409,closed,37,1,2,2,14,0,4,0,"[{'name': 'area: markdown'}, {'name': 'area: documentation (user)'}, {'name': 'priority: high'}, {'name': 'size: M'}]",2022-07-07 10:25:04+00:00,2022-08-16 20:55:56+00:00,3493852.0,"40 days, 10:30:52",[],"[{'commit_sha': '75d84e20c37b5c1d7a71baecc915510951001597', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85a6d8c382ff8cb796d915203c0eb68add0f2001', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+1004547224,todo_widget: Improve its functionality and customizability,"Earlier the tasks in a list were sorted alphabetically and on marking
+one complete, it was pushed under any incomplete tasks. This behaviour
+can be unexpected and confusing, so now each task is appended to the
+bottom of the list on being added, and no shifting takes place on
+marking it completed.
+
+Message readers can now reorder todo tasks in the message view by
+dragging and dropping them. The new order is persisted.
+
+Users can now name task lists by providing the task list title in the
+`/todo` command on the same line. Example: `/todo School Work`. If no
+title is provided by the user, ""Task List Title"" is used as default.
+
+The author of a task list can later edit / update the task list title
+in the todo widget, just like the question in the poll widget.
+
+Fixes part of #20213.
+
+**Screenshots and screen captures:**
+
+https://www.loom.com/share/74415f4ef43043fcadeb00b001f4f323
+
+![image](https://user-images.githubusercontent.com/68962290/181759913-0b8729b4-0199-45a8-ba1c-29a808b34125.png)
+
+![image](https://user-images.githubusercontent.com/68962290/181759082-f8bab0c2-e0c5-4a36-a624-b4dbd237dfa6.png)
+
+![image](https://user-images.githubusercontent.com/68962290/181759265-661f9c46-2511-4d69-ad85-22c4052f1009.png)
+
+![image](https://user-images.githubusercontent.com/68962290/181759380-225dce5d-924c-4d68-b288-4d1a639664df.png)
+
+
+**Self-review checklist**
+
+- [X] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [X] Explains differences from previous plans (e.g., issue description).
+- [X] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [X] Each commit is a coherent idea.
+- [X] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [X] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [X] End-to-end functionality of buttons, interactions and flows.
+- [X] Corner cases, error conditions, and easily imagined bugs.
+",False,22551,https://api.github.com/repos/zulip/zulip/pulls/22551,https://github.com/zulip/zulip/pull/22551,closed,565,73,9,7,19,6,2,1,"[{'name': 'size: XL'}, {'name': 'has conflicts'}]",2022-07-21 18:36:26+00:00,2023-02-07 08:14:41+00:00,17329095.0,"200 days, 13:38:15","[{'comment_id': 928278956, 'comment_body': ""Everything looks and works alright! \r\n\r\nI just didn't understand why are we multiplying `old_pos` and `new_pos` with 2."", 'comment_created': datetime.datetime(2022, 7, 24, 15, 59, 44, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 928296729, 'comment_body': 'the way `idx` is assigned initially makes it so that it starts at 2 for a task list and increments by 2 for each task, so for three tasks their `idx` values would be 2, 4, and 6, while the actual indices in the tasks array would of course be 0, 1 and 2. Hence the addition by 1 and doubling to convert from array index to `idx` (have added this as a comment in the code!)', 'comment_created': datetime.datetime(2022, 7, 24, 18, 34, 20, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1014862556, 'comment_body': 'This adds unnecessary complexity to the code. Can we keep the `idx` values and indices same?', 'comment_created': datetime.datetime(2022, 11, 6, 17, 1, 40, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 1014862687, 'comment_body': 'This adds unnecessary complexity to the code. Can we keep the idx values and indices same?', 'comment_created': datetime.datetime(2022, 11, 6, 17, 2, 52, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 1015023245, 'comment_body': 'Needs a comment of what it is used for.', 'comment_created': datetime.datetime(2022, 11, 7, 5, 45, 48, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 1038340883, 'comment_body': ""Since the idx values being the way they are, seem to have a lot of history and complexity, I've created [this thread](https://chat.zulip.org/#narrow/stream/49-development-help/topic/simplify.20todos.20indexing) to propose potentially changing them to be identical to indices (starting from 0 and incrementing by 1). Would really appreciate your opinions there!"", 'comment_created': datetime.datetime(2022, 12, 2, 16, 57, 21, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}]","[{'commit_sha': '178d91f45f769a1306800bed9b36597e14131ce4', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c501dfa234c5aad45418f2905cdfec4b22fd8eb5', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9453dad1b407c6316614676fba8b032460e160e4', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2a9165c8d07d5c48522aac19e3c3999f4ed3002', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0dea79bc8b53e5a60b0ff907dc1d83318bd55064', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc8841e056b28dc7d06351714ac43821900a0d5c', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a6324679258f8d877a1ef96df3da6cfbac8422a', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+993277445,Make it easier to work with numbered and bulleted lists,"A formatting button below the compose box can format the selected text
+by bulleting or unbulleting the selected (partially or completely)
+lines. The behaviour is modelled closely after how GitHub's bullet
+list format button works.
+
+A formatting button below the compose box can format the selected text
+by numbering or unnumbering the selected (partially or completely)
+lines. The behaviour is modelled closely after how GitHub's numbered
+list format button works.
+    
+When the user is typing a numbered / bulleted list in the compose box,
+on pressing Enter the list syntax will be inserted automatically on
+a new line, and removed if Enter is pressed after an empty line.
+
+Fixes: #20305.
+
+**Screenshots and screen captures:**
+
+Formatting buttons: 
+https://www.loom.com/share/e476156ec1cf4bac8ef641faaad8af92
+
+Automatic insertion / removal of bulleting / numbering:
+https://www.loom.com/share/a63aebbb2d9c464eb5b7a1140fcc364b
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [X] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [X] Explains differences from previous plans (e.g., issue description).
+- [X] Highlights technical choices and bugs encountered.
+- [X] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [X] Each commit is a coherent idea.
+- [X] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [X] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [X] End-to-end functionality of buttons, interactions and flows.
+- [X] Corner cases, error conditions, and easily imagined bugs.
+",True,22445,https://api.github.com/repos/zulip/zulip/pulls/22445,https://github.com/zulip/zulip/pull/22445,closed,410,51,8,3,27,51,2,0,"[{'name': 'size: XL'}, {'name': 'integration review'}]",2022-07-11 15:51:49+00:00,2023-09-28 22:05:34+00:00,38384025.0,"444 days, 6:13:45","[{'comment_id': 939487817, 'comment_body': ""Let's move this change to the previous commit."", 'comment_created': datetime.datetime(2022, 8, 6, 5, 47, 27, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 939487895, 'comment_body': 'Since the logic here is similar to that of `bulleted`, we can extract a common function for both.', 'comment_created': datetime.datetime(2022, 8, 6, 5, 48, 23, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 939488098, 'comment_body': ""Let's create a list `DONT_TRIM_TYPES` and use it here. This will help read the code without reading the comments."", 'comment_created': datetime.datetime(2022, 8, 6, 5, 50, 18, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 939491275, 'comment_body': ""Add a comment to what this does? (I didn't know you could use range like that)"", 'comment_created': datetime.datetime(2022, 8, 6, 6, 26, 56, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 939491549, 'comment_body': 'Can you comment on why deleting this will have no regressions?', 'comment_created': datetime.datetime(2022, 8, 6, 6, 31, 1, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 939510002, 'comment_body': ""Now that we need to check the state of the previous line (if it's bulleted / numbered and take action accordingly) every time enter (or something to the same effect) is used, there are no cases where we just let the native behaviour take over, as we emulate that as part of the `handle_bulleting_or_numbering` function (even in cases where bulleting / numbering isn't needed). Hence, not using the native browser behaviour simplifies the code"", 'comment_created': datetime.datetime(2022, 8, 6, 9, 54, 26, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 957023845, 'comment_body': ""I guess we will need to look for regressions in testing. I couldn't find any when I did."", 'comment_created': datetime.datetime(2022, 8, 29, 8, 17, 18, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 1330823549, 'comment_body': 'We as a practice avoid importing modules with a renaming list this; it makes `git grep` much less effective for finding where something is used.', 'comment_created': datetime.datetime(2023, 9, 20, 0, 18, 53, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330823950, 'comment_body': ""This could really benefit from the comment explaining why this is turned off for list formatting; the fact that it's disabled for those is clear from the code."", 'comment_created': datetime.datetime(2023, 9, 20, 0, 19, 52, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330825571, 'comment_body': 'Why is this at -2 rather than -1?', 'comment_created': datetime.datetime(2023, 9, 20, 0, 23, 56, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330825728, 'comment_body': 'Why is this `.at(1)` rather than `.at(0)`?', 'comment_created': datetime.datetime(2023, 9, 20, 0, 24, 19, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330826035, 'comment_body': ""Which specific behavior -- the toggling if there's already bullets? "", 'comment_created': datetime.datetime(2023, 9, 20, 0, 25, 1, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330826632, 'comment_body': 'Small note: I removed the extra space after `=` in `role= ""button""`.\r\n\r\nThe breakpoints don\'t seem set correctly for this to avoid pushing the send button offscreen in narrow windows.\r\n\r\n![image](https://github.com/zulip/zulip/assets/2746074/76b403c3-5bc0-49fc-be4a-92986f34448b)\r\n', 'comment_created': datetime.datetime(2023, 9, 20, 0, 26, 23, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330828529, 'comment_body': ""This doesn't use the `text-field-edit` modules and thus this feature breaks undo."", 'comment_created': datetime.datetime(2023, 9, 20, 0, 30, 46, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330830405, 'comment_body': 'Fixed in https://github.com/zulip/zulip/pull/22445#issuecomment-1726717296.', 'comment_created': datetime.datetime(2023, 9, 20, 0, 35, 14, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330832488, 'comment_body': 'Oh, can you fix this import too?', 'comment_created': datetime.datetime(2023, 9, 20, 0, 40, 16, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330832797, 'comment_body': 'I think this particular place lacking `text-field-edit` is highly problematic -- it means using `enter` breaks undo every time, not just when using the new formatting buttons.\r\n\r\n', 'comment_created': datetime.datetime(2023, 9, 20, 0, 41, 2, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330833343, 'comment_body': 'Should this be modernized to use the `getSelection` API too?', 'comment_created': datetime.datetime(2023, 9, 20, 0, 42, 24, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330833918, 'comment_body': ""Yeah, I can confirm that this should have no functional impact as long as we implement the emulation correctly, which we need to do. Could likely use a pass on comments though -- I'll push some changes to them."", 'comment_created': datetime.datetime(2023, 9, 20, 0, 43, 48, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1330835214, 'comment_body': '``` diff\r\ndiff --git a/web/src/composebox_typeahead.js b/web/src/composebox_typeahead.js\r\nindex 10ecbf0831..d85a5d6a96 100644\r\n--- a/web/src/composebox_typeahead.js\r\n+++ b/web/src/composebox_typeahead.js\r\n@@ -196,11 +196,17 @@ function handle_bulleting_or_numbering($textarea, e) {\r\n }\r\n \r\n export function handle_enter($textarea, e) {\r\n-    // Used only if Enter doesn\'t send.\r\n-\r\n-    // To properly emulate browser ""Enter"", if the\r\n-    // user had selected something in the textarea,\r\n-    // we need those characters to be cleared.\r\n+    // Used only if Enter doesn\'t send. We need to emulate the\r\n+    // browser\'s native ""Enter"" behavior because this code path\r\n+    // includes `Ctrl+Enter` and other modifier key variants that\r\n+    // should add a newline in the compose box in the enter-sends\r\n+    // configuration.\r\n+    //\r\n+    // And while we\'re at it, we implement some fancy behavior for\r\n+    // bulleted lists.\r\n+\r\n+    // To properly emulate browser ""Enter"", if the user had selected\r\n+    // something in the textarea, clear those characters\r\n     const range = $textarea.range();\r\n     if (range.length > 0) {\r\n         $textarea.range(range.start, range.end).range("""");\r\n```', 'comment_created': datetime.datetime(2023, 9, 20, 0, 46, 18, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1331980366, 'comment_body': ""Changed to use [`setSelectionRange`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange) followed by `text-field-edit`'s `insert` function, which retains undo-ability"", 'comment_created': datetime.datetime(2023, 9, 20, 17, 39, 25, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1331981283, 'comment_body': ""Changed to `text-field-edit`'s `insert`"", 'comment_created': datetime.datetime(2023, 9, 20, 17, 40, 18, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332002606, 'comment_body': ""After some tinkering I realised that using the `getSelection` API would be rather overkill here, and simply used textarea's properties `selectionStart` and `selectionEnd` which do the job well enough."", 'comment_created': datetime.datetime(2023, 9, 20, 18, 1, 35, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332037568, 'comment_body': 'As noted in a comment in the `section_off_selected_lines` function, ""`before_lines` includes the `\\n` character that separates it from `selected_lines`"" and this is at -1 position. The blank line (if any) is the new line character at -2 position, which we check for here.\r\n\r\nDo you think the code will be more intuitive if we strip the last character (`\\n`) from `before_lines` returned from `section_off_selected_lines` @timabbott?', 'comment_created': datetime.datetime(2023, 9, 20, 18, 38, 10, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332038608, 'comment_body': 'This is due to similar logic as the previous comment (`after_lines` always has the separating new line at its start)', 'comment_created': datetime.datetime(2023, 9, 20, 18, 39, 20, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332042177, 'comment_body': ""I actually meant all of it, nothing specific -- the toggling of complete lines even when they are partially selected (and just selecting the newline character too counts as partial selection), the toggling when there's already some bullets and the adding of a blank line before and after the bulleted selection."", 'comment_created': datetime.datetime(2023, 9, 20, 18, 43, 3, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332077704, 'comment_body': ""It's so that we also consider any newline selected at the start / end, to format that line too. In this example, the `|` denotes the start and end of selection, and on formatting this selection, all 3 lines get formatted:\r\n```\r\nselected from end of this line|\r\nthrough this line\r\n|to the start of this line\r\n```\r\n\r\nHave explained this in the comment"", 'comment_created': datetime.datetime(2023, 9, 20, 19, 20, 53, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332248020, 'comment_body': 'Thanks for catching this! Since we use a standard bootstrap breakpoint (`md` - 768px) for this layout shift, changing that is not a good idea. \r\n\r\nMaybe we could reduce the space between the compose control buttons when they start reaching the send button? Getting rid of the dividers might also free up some space. Or we could have all the buttons left of the gif button appear in a popover at this width instead of a narrower one.\r\n\r\nA future proof solution would be nice here, I think, especially because the ""Add poll"" button is also going to crowd this limited width soon, and potentially others too. Thoughts @alya?', 'comment_created': datetime.datetime(2023, 9, 20, 22, 40, 27, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1332274824, 'comment_body': ""Hm, given our compose box redesign plans (which make the buttons scrollable -- see #24878), I'm happy with any solution here that is easy to implement and does not look broken. Perhaps @karlstolley has a specific suggestion."", 'comment_created': datetime.datetime(2023, 9, 20, 23, 15, 24, tzinfo=datetime.timezone.utc), 'commenter': 'alya', 'type': 'User'}, {'comment_id': 1333129731, 'comment_body': ""I don't want to push this too far afield, but I think as a stopgap prior to the scrollable buttons design, we could tune both the breakpoints and the appearance of the vdots menu--the message-edit area introduces vdots under a few more conditions than the compose box does.\r\n\r\nAlternatively, we could use the space needs for the list buttons to be our jumping-off point to try an initial pass at the scrollable design. But I'd be interested to know where best to situate our priorities at this point, especially as we draw closer to 8.0"", 'comment_created': datetime.datetime(2023, 9, 21, 14, 14, 47, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1333432289, 'comment_body': ""I would prefer to go with easy here rather than blocking on the scrollable design -- I'm not at all convinced that the scrollable design will feel better on web than the popover design, and so I'd like that to be its own independent change isolated from other changes. \r\n\r\nI think there's no real problem with using a custom breakpoint for this particular element -- we have at least one custom one defined in `web/src/css_variables.js`, and I don't see any reason this detail would be coupled with anything else from a technical or design perspective; the Bootstrap breakpoints are just conveniences. "", 'comment_created': datetime.datetime(2023, 9, 21, 18, 2, 55, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1333435308, 'comment_body': ""Yeah; I think that would be an improvement. The thing that made me unhappy here is that we're checking `before_lines.length`, which just confirms it's at least one character, and then accessing it in a way that requires that it be at least two characters, which is the kind of thing that really looks like a bug (even if it might not be in practice if `before_lines` is never exactly 1 character)"", 'comment_created': datetime.datetime(2023, 9, 21, 18, 5, 3, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1333436971, 'comment_body': ""OK -- I would replace this with just briefly describing the behavior we are implemented -- GitHub's behavior may change over time, and we're not exactly replicating every detail of it (At least I remember finding at least one bug that they have that we don't!), and it's nice to just have explanation be self-contained (or link to a reference, if say we were implementing some stnadard)."", 'comment_created': datetime.datetime(2023, 9, 21, 18, 6, 33, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1333625146, 'comment_body': '@timabbott What exactly would we like to change at the breakpoint where the send button starts getting pushed off? Should we show the popover vdots at this custom breakpoint instead?', 'comment_created': datetime.datetime(2023, 9, 21, 21, 33, 45, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1333692081, 'comment_body': 'Makes a lot of sense, have elaborated specifics in the comment', 'comment_created': datetime.datetime(2023, 9, 21, 23, 23, 38, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1333693322, 'comment_body': 'Right, it does read as very confusing, thanks for pointing this out!\r\n\r\nThis needed a fair bit of careful refactoring, but I added to the tests which all pass, and have tested manually as thoroughly as I could too', 'comment_created': datetime.datetime(2023, 9, 21, 23, 26, 13, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1335256680, 'comment_body': ""Correct, we just need to change the breakpoints such that we show the `\\vdots` menu when there stops being space for all the items -- the same conceptual rule as before; there's now a couple more items."", 'comment_created': datetime.datetime(2023, 9, 24, 22, 48, 20, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1335259881, 'comment_body': 'Just adding some context: the complexity here is that going from wide to narrow screens, we 1st have a breakpoint at which the left sidebar collapses and compose box takes up all the width (making way for compose control buttons, right when it was getting crowded there). On making the screen even narrower, we then reach a point where we finally need to show the vdots menu.\r\n\r\nIn the current state with these 2 added buttons, we will have to show the vdots menu earlier when things get too cramped with the uncollapsed sidebar. However, at the point where it collapses, we will now have enough space to fit all buttons; should we revert to having them all present in a row then? And again change to vdots menu at the original vdots breakpoint?', 'comment_created': datetime.datetime(2023, 9, 24, 23, 15, 36, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1340235293, 'comment_body': ""@N-Shar-ma I think I solved a very similar issue, and at the same problem dimensions, with one additional breakpoint and some more complicated media queries in 14e9f653492. You might want to study those queries in particular, and we can chat about all of this further either here or on CZO.\r\n\r\nAt some point, we'll be able to use [container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_container_queries) to solve problems like this, but there are still too many legacy browsers around that don't support them."", 'comment_created': datetime.datetime(2023, 9, 28, 14, 22, 42, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340238419, 'comment_body': '(I regret now not putting explanatory comments adjacent [those media queries](https://github.com/zulip/zulip/commit/14e9f653492bce0f408eca269d7d9670ac85fe5d#diff-c8c3e8721bbdc4746a5d69b38b191a91fe81c8c031b046d21b39c1f442e4d479).)', 'comment_created': datetime.datetime(2023, 9, 28, 14, 24, 29, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340427133, 'comment_body': ""Container queries are what struck me 1st too, but we need to wait for better support :/\r\n\r\nI have pushed a commit adding the breakpoint -- the code is not elegant, but might do for now? If it looks good to you @karlstolley, I'll squash this with the 1st commit."", 'comment_created': datetime.datetime(2023, 9, 28, 16, 49, 7, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1340568191, 'comment_body': '```suggestion\r\n        // selected_lines neither includes the `\\n` character that marks its\r\n```', 'comment_created': datetime.datetime(2023, 9, 28, 19, 10, 16, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340568361, 'comment_body': '```suggestion\r\n        // that marks its end (which exists if there are after_lines).\r\n```', 'comment_created': datetime.datetime(2023, 9, 28, 19, 10, 29, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340568686, 'comment_body': ""Tiniest of tiny nits: Possessive _its_ doesn't take an apostrophe"", 'comment_created': datetime.datetime(2023, 9, 28, 19, 10, 54, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340569721, 'comment_body': 'Your comment here has a parenthetical inside a parenthetical, but rather than fixing the punctuation, can you rewrite this so its a little easier to follow?', 'comment_created': datetime.datetime(2023, 9, 28, 19, 12, 11, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340570487, 'comment_body': '```suggestion\r\n    // if previous line was bulleted, automatically add a bullet to the new line\r\n```', 'comment_created': datetime.datetime(2023, 9, 28, 19, 13, 4, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340570936, 'comment_body': '```suggestion\r\n        // if previous line was numbered, continue numbering with the new line\r\n```', 'comment_created': datetime.datetime(2023, 9, 28, 19, 13, 35, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340571848, 'comment_body': '```suggestion\r\n        // behavior for the ""Enter"" key, but also handle automatic\r\n```', 'comment_created': datetime.datetime(2023, 9, 28, 19, 14, 36, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340575904, 'comment_body': ""On second thought, we don't want to risk this comment becoming nonsensical if GitHub changes their behavior. So consider striking this, or rewriting just to explain what the code is doing."", 'comment_created': datetime.datetime(2023, 9, 28, 19, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'karlstolley', 'type': 'User'}, {'comment_id': 1340603048, 'comment_body': ""Thanks for catching this! This is one of those things where I know it's wrong, but by force of habit, I make the mistake anyway :see_no_evil: "", 'comment_created': datetime.datetime(2023, 9, 28, 19, 48, 18, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}, {'comment_id': 1340603906, 'comment_body': 'Retained just the 1st point about considering complete lines even on partial selection, since all other points already have comments explaining them.', 'comment_created': datetime.datetime(2023, 9, 28, 19, 49, 18, tzinfo=datetime.timezone.utc), 'commenter': 'N-Shar-ma', 'type': 'User'}]","[{'commit_sha': 'da85f2bde03fb2ea528250bb133b35aab9b7a178', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '086ac7262ef079abeccc1658877d70ad21afa95e', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2bb90f0f6c1975077d63c4ae9ae707f4ca9b0507', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+1052461327,"puppeteer: add test ""mute_topic"" for recent topics",,False,22916,https://api.github.com/repos/zulip/zulip/pulls/22916,https://github.com/zulip/zulip/pull/22916,closed,77,0,1,8,2,4,1,0,[{'name': 'size: L'}],2022-09-11 09:52:21+00:00,2022-09-27 18:19:35+00:00,1412834.0,"16 days, 8:27:14","[{'comment_id': 970446530, 'comment_body': 'We have to be sure that the `include mute` filter is not enabled; if it\'s enabled, then it will show us muted topics too. \r\n\r\nYou can add something like this,\r\n```ts\r\nconst include_mute_button_selector = \'button[data-filter=""include_muted""]\'\r\n    const isIncludeMuteButtonChecked = await page.evaluate((include_mute_button_selector: string) => $(include_mute_button_selector).attr(""aria-checked"") === ""true"", include_mute_button_selector);\r\n    if (isIncludeMuteButtonChecked){\r\n        await page.click(include_mute_button_selector);\r\n    }\r\nawait page.waitForFunction((include_mute_button_selector: string) => $(include_mute_button_selector).attr(""aria-checked"") === ""false"", {}, include_mute_button_selector);\r\n```', 'comment_created': datetime.datetime(2022, 9, 14, 7, 46, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 970448038, 'comment_body': 'Instead of using `page.evaluate` we can just use `page.$$` to get all the elements,\r\n\r\n```ts\r\nconst topics_quantitiy = (await page.$$(\'#recent_topics_table tr[id^=""recent_topic""]\')).length;\r\n```\r\n\r\n\r\n', 'comment_created': datetime.datetime(2022, 9, 14, 7, 47, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 970455307, 'comment_body': 'Both `waitForFunction` and `waitForSelector` check the same thing so you can keep either one of them. ', 'comment_created': datetime.datetime(2022, 9, 14, 7, 54, 58, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 970465883, 'comment_body': ""We try to avoid JS to trigger click, \r\nCan you rewrite this function to use `page.click` or `element.clicl`?\r\nAnd Is there any particular reason for muting the last topic in the list?\r\nIf you are using `page.click` then you might have to scroll the page, but If we mute the first topic then we don't have to worry about scrolling."", 'comment_created': datetime.datetime(2022, 9, 14, 8, 5, 23, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}]","[{'commit_sha': '8497d5133658c7344adf9977d57289307760714d', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': '245a60392d27acccff4a4b9ac5677cbcbcdc028a', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1a87b3986ad2b580f047651a0cd094fe658b6d1c', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aeb80fb1abbd90b339f3bed9a8627f06de0bb0db', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bbdfb76d60d40b1afd65dc1fe723f484006f6a4', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e3cff40bf8e7bbb82c6ae4df45b2a41ecb53bd05', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6746a62d23426aab0f6c1bf43a1ff7c6eb62c25c', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3100d775f1314d9925ff2aa9d4b5bb5300048aed', 'committer_username': 'dmitrysurkin', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 8, 15, 29, 23, tzinfo=datetime.timezone.utc)}]",,57535916,,User,,22,,0,1
+1029247001,typeahead: 2 highlighting bugs fixed,"Earlier mid word parts matching with the search query were also
+highlighted (made bold), but since actual matching for showing search
+suggestions is based on prefix matching, this highlighting logic is
+now made to be in sync with the search suggestions matching logic.
+
+---------------------------------------------------------------------------
+
+`make_query_highlighter` called `highlight_with_escaping_and_regex`
+once for each word in the phrase, due to which only 1 word searches
+could be highlighted. For example searching for `two wo` resulted
+in no highlighting at all in `two words`.
+
+One call per word in the phrase was also redundant since the called
+function can handle a multi word query. So now the entire phrase is
+passed to the called function just once.
+
+Follow up to https://github.com/zulip/zulip/pull/22307#discussion_r947261493
+
+
+**Screenshots and screen captures:**
+
+Note the mid word `o`s are not highlighted:
+![image](https://user-images.githubusercontent.com/68962290/185229882-81237896-b6cc-4454-a072-5b4adfa8663d.png)
+
+![image](https://user-images.githubusercontent.com/68962290/185229998-c9ff4752-4e61-4982-9fcb-5082ee3bd47b.png)
+
+**Self-review checklist**
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22739,https://api.github.com/repos/zulip/zulip/pulls/22739,https://github.com/zulip/zulip/pull/22739,closed,18,13,2,2,4,2,2,0,"[{'name': 'size: M'}, {'name': 'integration review'}]",2022-08-17 19:52:52+00:00,2023-09-21 18:24:13+00:00,34554681.0,"399 days, 22:31:21","[{'comment_id': 968114825, 'comment_body': ""Would it be better to allow more delimiters than just space, like `'`, `-`,` _`,`,` and `/`?"", 'comment_created': datetime.datetime(2022, 9, 12, 8, 15, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Riken-Shah', 'type': 'User'}, {'comment_id': 969195299, 'comment_body': 'Hm, that seems like a question we should ask in the context of search filtering more so than highlighting? This seems like the desired behavior to me:\r\n\r\n> this highlighting logic is\r\nnow made to be in sync with the search suggestions matching logic.', 'comment_created': datetime.datetime(2022, 9, 13, 6, 21, 7, tzinfo=datetime.timezone.utc), 'commenter': 'alya', 'type': 'User'}]","[{'commit_sha': '51ea47c60e9e503a5fd2227b9f58cbaa5fcc468e', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2c23b656ecac7cd78ab2584dd462d7ed309b3e1', 'committer_username': 'N-Shar-ma', 'committer_name': 'Nehal Sharma', 'committer_email': None, 'commit_date': datetime.datetime(2020, 7, 29, 15, 52, 49, tzinfo=datetime.timezone.utc)}]",Nehal Sharma,68962290,,User,,38,,2,53
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43160685,zulip,zulip/zulip,Python,7616,21005,375,1133,60276,2474,28,798,"[{'id': 1021579770, 'number': 22684, 'closed': datetime.datetime(2022, 8, 17, 19, 9, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 9, 14, 15, 4, tzinfo=datetime.timezone.utc), 'time_taken': 708848.0, 'time_delta': '8 days, 4:54:08', 'additions': 2, 'deletions': 1, 'state': 'closed'}, {'id': 888385772, 'number': 21540, 'closed': datetime.datetime(2023, 10, 2, 5, 2, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 24, 13, 34, 50, tzinfo=datetime.timezone.utc), 'time_taken': 48094043.0, 'time_delta': '556 days, 15:27:23', 'additions': 51, 'deletions': 37, 'state': 'closed'}, {'id': 888370102, 'number': 21538, 'closed': datetime.datetime(2022, 3, 24, 17, 56, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 24, 13, 21, 12, tzinfo=datetime.timezone.utc), 'time_taken': 16510.0, 'time_delta': '4:35:10', 'additions': 13, 'deletions': 10, 'state': 'closed'}, {'id': 887950969, 'number': 21534, 'closed': datetime.datetime(2022, 3, 24, 18, 7, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 24, 5, 34, 27, tzinfo=datetime.timezone.utc), 'time_taken': 45191.0, 'time_delta': '12:33:11', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 844230125, 'number': 21081, 'closed': datetime.datetime(2022, 2, 9, 22, 18, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 9, 19, 0, 19, tzinfo=datetime.timezone.utc), 'time_taken': 11862.0, 'time_delta': '3:17:42', 'additions': 62, 'deletions': 12, 'state': 'closed'}, {'id': 841021593, 'number': 21050, 'closed': datetime.datetime(2023, 10, 2, 5, 9, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 6, 8, 29, 38, tzinfo=datetime.timezone.utc), 'time_taken': 52087215.0, 'time_delta': '602 days, 20:40:15', 'additions': 106, 'deletions': 40, 'state': 'closed'}, {'id': 818225681, 'number': 20743, 'closed': datetime.datetime(2022, 1, 11, 17, 15, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 11, 3, 24, 44, tzinfo=datetime.timezone.utc), 'time_taken': 49865.0, 'time_delta': '13:51:05', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 814325277, 'number': 20688, 'closed': datetime.datetime(2022, 1, 5, 2, 10, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 5, 1, 43, 17, tzinfo=datetime.timezone.utc), 'time_taken': 1625.0, 'time_delta': '0:27:05', 'additions': 6, 'deletions': 8, 'state': 'closed'}, {'id': 812652390, 'number': 20669, 'closed': datetime.datetime(2022, 1, 2, 20, 12, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 1, 23, 9, 32, tzinfo=datetime.timezone.utc), 'time_taken': 75785.0, 'time_delta': '21:03:05', 'additions': 4, 'deletions': 1, 'state': 'closed'}, {'id': 806033836, 'number': 20608, 'closed': datetime.datetime(2021, 12, 28, 19, 12, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 19, 10, 15, 43, tzinfo=datetime.timezone.utc), 'time_taken': 809804.0, 'time_delta': '9 days, 8:56:44', 'additions': 42, 'deletions': 40, 'state': 'closed'}, {'id': 803173961, 'number': 20574, 'closed': datetime.datetime(2022, 1, 5, 1, 6, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 15, 8, 0, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1789567.0, 'time_delta': '20 days, 17:06:07', 'additions': 22, 'deletions': 0, 'state': 'closed'}, {'id': 802402481, 'number': 20565, 'closed': None, 'created': datetime.datetime(2021, 12, 14, 14, 27, 19, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 6, 'deletions': 19, 'state': 'open'}, {'id': 800664485, 'number': 20548, 'closed': datetime.datetime(2021, 12, 12, 19, 14, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 12, 14, 19, 37, tzinfo=datetime.timezone.utc), 'time_taken': 17709.0, 'time_delta': '4:55:09', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 795114918, 'number': 20464, 'closed': None, 'created': datetime.datetime(2021, 12, 4, 15, 12, 28, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 817, 'deletions': 98, 'state': 'open'}, {'id': 795065602, 'number': 20459, 'closed': datetime.datetime(2023, 10, 2, 5, 21, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 4, 8, 58, 50, tzinfo=datetime.timezone.utc), 'time_taken': 57615746.0, 'time_delta': '666 days, 20:22:26', 'additions': 11, 'deletions': 13, 'state': 'closed'}, {'id': 792361986, 'number': 20405, 'closed': datetime.datetime(2021, 12, 1, 19, 29, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 1, 6, 25, 52, tzinfo=datetime.timezone.utc), 'time_taken': 47026.0, 'time_delta': '13:03:46', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 791994577, 'number': 20402, 'closed': datetime.datetime(2021, 12, 1, 20, 3, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 30, 19, 17, 26, tzinfo=datetime.timezone.utc), 'time_taken': 89191.0, 'time_delta': '1 day, 0:46:31', 'additions': 113, 'deletions': 6, 'state': 'closed'}, {'id': 789894242, 'number': 20376, 'closed': datetime.datetime(2021, 12, 4, 0, 20, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 27, 8, 11, 8, tzinfo=datetime.timezone.utc), 'time_taken': 576552.0, 'time_delta': '6 days, 16:09:12', 'additions': 19, 'deletions': 2, 'state': 'closed'}, {'id': 788164677, 'number': 20353, 'closed': datetime.datetime(2021, 11, 24, 18, 39, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 24, 17, 17, 24, tzinfo=datetime.timezone.utc), 'time_taken': 4920.0, 'time_delta': '1:22:00', 'additions': 9, 'deletions': 4, 'state': 'closed'}, {'id': 788126753, 'number': 20351, 'closed': datetime.datetime(2021, 11, 24, 18, 49, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 24, 16, 29, 28, tzinfo=datetime.timezone.utc), 'time_taken': 8402.0, 'time_delta': '2:20:02', 'additions': 1, 'deletions': 3, 'state': 'closed'}, {'id': 786307645, 'number': 20333, 'closed': datetime.datetime(2021, 11, 23, 22, 51, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 22, 18, 16, 36, tzinfo=datetime.timezone.utc), 'time_taken': 102876.0, 'time_delta': '1 day, 4:34:36', 'additions': 108, 'deletions': 112, 'state': 'closed'}, {'id': 784803054, 'number': 20308, 'closed': datetime.datetime(2021, 11, 21, 4, 57, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 19, 15, 24, 25, tzinfo=datetime.timezone.utc), 'time_taken': 135209.0, 'time_delta': '1 day, 13:33:29', 'additions': 152, 'deletions': 63, 'state': 'closed'}, {'id': 782957791, 'number': 20280, 'closed': None, 'created': datetime.datetime(2021, 11, 17, 17, 23, 44, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 88, 'deletions': 27, 'state': 'open'}, {'id': 780895138, 'number': 20257, 'closed': datetime.datetime(2021, 11, 17, 0, 29, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 15, 17, 12, 22, tzinfo=datetime.timezone.utc), 'time_taken': 112633.0, 'time_delta': '1 day, 7:17:13', 'additions': 12, 'deletions': 11, 'state': 'closed'}, {'id': 780668740, 'number': 20255, 'closed': datetime.datetime(2022, 3, 19, 1, 23, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 15, 12, 58, 24, tzinfo=datetime.timezone.utc), 'time_taken': 10671910.0, 'time_delta': '123 days, 12:25:10', 'additions': 30, 'deletions': 4, 'state': 'closed'}, {'id': 778740215, 'number': 20233, 'closed': datetime.datetime(2021, 11, 17, 0, 33, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 11, 16, 46, 27, tzinfo=datetime.timezone.utc), 'time_taken': 460027.0, 'time_delta': '5 days, 7:47:07', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 773599338, 'number': 20161, 'closed': datetime.datetime(2021, 11, 9, 2, 31, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 4, 18, 47, 17, tzinfo=datetime.timezone.utc), 'time_taken': 373460.0, 'time_delta': '4 days, 7:44:20', 'additions': 18, 'deletions': 3, 'state': 'closed'}, {'id': 772551727, 'number': 20150, 'closed': datetime.datetime(2021, 11, 17, 17, 31, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 3, 16, 28, 2, tzinfo=datetime.timezone.utc), 'time_taken': 1213414.0, 'time_delta': '14 days, 1:03:34', 'additions': 45, 'deletions': 12, 'state': 'closed'}, {'id': 771899073, 'number': 20144, 'closed': datetime.datetime(2021, 11, 9, 2, 6, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 2, 23, 34, 9, tzinfo=datetime.timezone.utc), 'time_taken': 527527.0, 'time_delta': '6 days, 2:32:07', 'additions': 38, 'deletions': 35, 'state': 'closed'}, {'id': 771170801, 'number': 20134, 'closed': datetime.datetime(2021, 11, 2, 17, 27, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 2, 7, 58, 19, tzinfo=datetime.timezone.utc), 'time_taken': 34137.0, 'time_delta': '9:28:57', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 769199241, 'number': 20095, 'closed': datetime.datetime(2021, 11, 10, 20, 6, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 29, 12, 31, 44, tzinfo=datetime.timezone.utc), 'time_taken': 1064071.0, 'time_delta': '12 days, 7:34:31', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 768520012, 'number': 20088, 'closed': None, 'created': datetime.datetime(2021, 10, 28, 16, 36, 28, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 296, 'deletions': 15, 'state': 'open'}, {'id': 767714726, 'number': 20078, 'closed': datetime.datetime(2021, 10, 27, 21, 22, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 27, 19, 12, 22, tzinfo=datetime.timezone.utc), 'time_taken': 7788.0, 'time_delta': '2:09:48', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 766688745, 'number': 20072, 'closed': datetime.datetime(2023, 9, 13, 1, 18, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 26, 17, 21, 48, tzinfo=datetime.timezone.utc), 'time_taken': 59299004.0, 'time_delta': '686 days, 7:56:44', 'additions': 2321, 'deletions': 480, 'state': 'closed'}, {'id': 766078927, 'number': 20068, 'closed': datetime.datetime(2021, 10, 27, 20, 28, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 26, 5, 23, 35, tzinfo=datetime.timezone.utc), 'time_taken': 140677.0, 'time_delta': '1 day, 15:04:37', 'additions': 153, 'deletions': 0, 'state': 'closed'}, {'id': 764546449, 'number': 20048, 'closed': datetime.datetime(2021, 10, 27, 1, 15, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 22, 22, 37, 11, tzinfo=datetime.timezone.utc), 'time_taken': 355112.0, 'time_delta': '4 days, 2:38:32', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 760133562, 'number': 19993, 'closed': datetime.datetime(2021, 10, 18, 17, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 18, 7, 8, 14, tzinfo=datetime.timezone.utc), 'time_taken': 37786.0, 'time_delta': '10:29:46', 'additions': 2, 'deletions': 56, 'state': 'closed'}, {'id': 751304160, 'number': 19911, 'closed': datetime.datetime(2021, 10, 7, 17, 29, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 6, 9, 51, 14, tzinfo=datetime.timezone.utc), 'time_taken': 113875.0, 'time_delta': '1 day, 7:37:55', 'additions': 14, 'deletions': 33, 'state': 'closed'}, {'id': 607231091, 'number': 17919, 'closed': datetime.datetime(2021, 4, 1, 14, 38, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 1, 9, 2, 14, tzinfo=datetime.timezone.utc), 'time_taken': 20185.0, 'time_delta': '5:36:25', 'additions': 156, 'deletions': 52, 'state': 'closed'}, {'id': 602828392, 'number': 17864, 'closed': datetime.datetime(2021, 6, 28, 13, 0, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 29, 14, 49, 31, tzinfo=datetime.timezone.utc), 'time_taken': 7855833.0, 'time_delta': '90 days, 22:10:33', 'additions': 86, 'deletions': 1, 'state': 'closed'}, {'id': 597479336, 'number': 17720, 'closed': datetime.datetime(2021, 3, 23, 17, 46, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 21, 12, 50, 23, tzinfo=datetime.timezone.utc), 'time_taken': 190542.0, 'time_delta': '2 days, 4:55:42', 'additions': 53, 'deletions': 3, 'state': 'closed'}, {'id': 597266689, 'number': 17712, 'closed': datetime.datetime(2021, 3, 22, 0, 14, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 20, 11, 49, 11, tzinfo=datetime.timezone.utc), 'time_taken': 131117.0, 'time_delta': '1 day, 12:25:17', 'additions': 20, 'deletions': 1, 'state': 'closed'}, {'id': 597260868, 'number': 17711, 'closed': datetime.datetime(2021, 3, 30, 21, 40, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 20, 11, 3, 56, tzinfo=datetime.timezone.utc), 'time_taken': 902177.0, 'time_delta': '10 days, 10:36:17', 'additions': 147, 'deletions': 4, 'state': 'closed'}, {'id': 595492836, 'number': 17683, 'closed': datetime.datetime(2021, 3, 18, 17, 9, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 18, 12, 4, 44, tzinfo=datetime.timezone.utc), 'time_taken': 18278.0, 'time_delta': '5:04:38', 'additions': 35, 'deletions': 2, 'state': 'closed'}, {'id': 593684619, 'number': 17652, 'closed': datetime.datetime(2021, 7, 28, 18, 29, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 16, 8, 25, 52, tzinfo=datetime.timezone.utc), 'time_taken': 11613796.0, 'time_delta': '134 days, 10:03:16', 'additions': 321, 'deletions': 17, 'state': 'closed'}, {'id': 591577542, 'number': 17590, 'closed': datetime.datetime(2021, 3, 15, 6, 11, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 12, 10, 55, 57, tzinfo=datetime.timezone.utc), 'time_taken': 242124.0, 'time_delta': '2 days, 19:15:24', 'additions': 44, 'deletions': 70, 'state': 'closed'}, {'id': 558044561, 'number': 17087, 'closed': datetime.datetime(2021, 1, 20, 11, 35, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 20, 8, 11, 33, tzinfo=datetime.timezone.utc), 'time_taken': 12249.0, 'time_delta': '3:24:09', 'additions': 6, 'deletions': 10, 'state': 'closed'}, {'id': 556827664, 'number': 17079, 'closed': None, 'created': datetime.datetime(2021, 1, 18, 13, 56, 33, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 10, 'deletions': 0, 'state': 'open'}, {'id': 540928677, 'number': 16905, 'closed': None, 'created': datetime.datetime(2020, 12, 16, 6, 33, 8, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 92, 'deletions': 2, 'state': 'open'}, {'id': 527946483, 'number': 16796, 'closed': None, 'created': datetime.datetime(2020, 11, 26, 9, 31, 9, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 82, 'deletions': 14, 'state': 'open'}, {'id': 522840100, 'number': 16762, 'closed': datetime.datetime(2022, 12, 19, 9, 2, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 18, 2, 2, 58, tzinfo=datetime.timezone.utc), 'time_taken': 65775598.0, 'time_delta': '761 days, 6:59:58', 'additions': 11, 'deletions': 6, 'state': 'closed'}, {'id': 517656578, 'number': 16727, 'closed': datetime.datetime(2020, 11, 9, 11, 1, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 9, 10, 28, 38, tzinfo=datetime.timezone.utc), 'time_taken': 1982.0, 'time_delta': '0:33:02', 'additions': 10, 'deletions': 0, 'state': 'closed'}, {'id': 516247814, 'number': 16711, 'closed': datetime.datetime(2021, 7, 28, 18, 28, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 5, 18, 9, 38, tzinfo=datetime.timezone.utc), 'time_taken': 22897147.0, 'time_delta': '265 days, 0:19:07', 'additions': 86, 'deletions': 2, 'state': 'closed'}, {'id': 513647749, 'number': 16681, 'closed': datetime.datetime(2021, 10, 7, 22, 54, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 1, 16, 4, 58, tzinfo=datetime.timezone.utc), 'time_taken': 29400583.0, 'time_delta': '340 days, 6:49:43', 'additions': 70, 'deletions': 12, 'state': 'closed'}, {'id': 513576953, 'number': 16679, 'closed': None, 'created': datetime.datetime(2020, 11, 1, 7, 54, 23, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 85, 'deletions': 7, 'state': 'open'}, {'id': 513482178, 'number': 16672, 'closed': None, 'created': datetime.datetime(2020, 10, 31, 18, 55, 13, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 32, 'deletions': 1, 'state': 'open'}, {'id': 513462126, 'number': 16671, 'closed': datetime.datetime(2020, 11, 3, 22, 46, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 31, 16, 39, 15, tzinfo=datetime.timezone.utc), 'time_taken': 281245.0, 'time_delta': '3 days, 6:07:25', 'additions': 14, 'deletions': 222, 'state': 'closed'}, {'id': 508974500, 'number': 16613, 'closed': datetime.datetime(2020, 11, 4, 0, 54, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 23, 13, 41, 2, tzinfo=datetime.timezone.utc), 'time_taken': 990788.0, 'time_delta': '11 days, 11:13:08', 'additions': 4, 'deletions': 12, 'state': 'closed'}, {'id': 505870087, 'number': 16570, 'closed': datetime.datetime(2020, 10, 19, 18, 50, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 19, 10, 41, 59, tzinfo=datetime.timezone.utc), 'time_taken': 29321.0, 'time_delta': '8:08:41', 'additions': 7, 'deletions': 7, 'state': 'closed'}, {'id': 505453061, 'number': 16564, 'closed': datetime.datetime(2022, 1, 26, 19, 44, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 18, 11, 0, 28, tzinfo=datetime.timezone.utc), 'time_taken': 40207462.0, 'time_delta': '465 days, 8:44:22', 'additions': 28, 'deletions': 1, 'state': 'closed'}, {'id': 505450629, 'number': 16563, 'closed': datetime.datetime(2020, 10, 18, 21, 5, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 18, 10, 40, 31, tzinfo=datetime.timezone.utc), 'time_taken': 37515.0, 'time_delta': '10:25:15', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 505346266, 'number': 16561, 'closed': datetime.datetime(2020, 10, 18, 21, 9, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 17, 20, 58, 33, tzinfo=datetime.timezone.utc), 'time_taken': 87075.0, 'time_delta': '1 day, 0:11:15', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 503077565, 'number': 16534, 'closed': datetime.datetime(2020, 10, 21, 6, 22, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 14, 3, 17, 45, tzinfo=datetime.timezone.utc), 'time_taken': 615884.0, 'time_delta': '7 days, 3:04:44', 'additions': 42, 'deletions': 15, 'state': 'closed'}, {'id': 449175697, 'number': 15799, 'closed': datetime.datetime(2020, 7, 16, 1, 56, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 15, 0, 19, 52, tzinfo=datetime.timezone.utc), 'time_taken': 92175.0, 'time_delta': '1 day, 1:36:15', 'additions': 10, 'deletions': 13, 'state': 'closed'}, {'id': 448565655, 'number': 15780, 'closed': datetime.datetime(2020, 7, 14, 7, 37, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 13, 23, 55, 33, tzinfo=datetime.timezone.utc), 'time_taken': 27729.0, 'time_delta': '7:42:09', 'additions': 0, 'deletions': 1, 'state': 'closed'}, {'id': 447898168, 'number': 15762, 'closed': datetime.datetime(2020, 9, 21, 7, 13, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 12, 13, 8, 44, tzinfo=datetime.timezone.utc), 'time_taken': 6113058.0, 'time_delta': '70 days, 18:04:18', 'additions': 35, 'deletions': 1, 'state': 'closed'}, {'id': 446508578, 'number': 15725, 'closed': datetime.datetime(2020, 7, 30, 23, 23, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 8, 22, 3, 54, tzinfo=datetime.timezone.utc), 'time_taken': 1905561.0, 'time_delta': '22 days, 1:19:21', 'additions': 100, 'deletions': 97, 'state': 'closed'}, {'id': 440833672, 'number': 15595, 'closed': datetime.datetime(2020, 6, 29, 23, 28, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 27, 0, 23, 45, tzinfo=datetime.timezone.utc), 'time_taken': 255908.0, 'time_delta': '2 days, 23:05:08', 'additions': 3, 'deletions': 1, 'state': 'closed'}, {'id': 437680664, 'number': 15522, 'closed': datetime.datetime(2021, 3, 24, 22, 4, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 4, 56, 3, tzinfo=datetime.timezone.utc), 'time_taken': 23821678.0, 'time_delta': '275 days, 17:07:58', 'additions': 160, 'deletions': 81, 'state': 'closed'}, {'id': 437440027, 'number': 15489, 'closed': datetime.datetime(2020, 6, 21, 17, 14, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 20, 17, 41, 18, tzinfo=datetime.timezone.utc), 'time_taken': 84773.0, 'time_delta': '23:32:53', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 436761749, 'number': 15455, 'closed': datetime.datetime(2020, 7, 13, 22, 39, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 18, 21, 3, 32, tzinfo=datetime.timezone.utc), 'time_taken': 2165753.0, 'time_delta': '25 days, 1:35:53', 'additions': 64, 'deletions': 26, 'state': 'closed'}, {'id': 434864350, 'number': 15399, 'closed': datetime.datetime(2020, 6, 17, 1, 7, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 15, 23, 0, 6, tzinfo=datetime.timezone.utc), 'time_taken': 94066.0, 'time_delta': '1 day, 2:07:46', 'additions': 26, 'deletions': 63, 'state': 'closed'}, {'id': 434780023, 'number': 15393, 'closed': datetime.datetime(2020, 6, 15, 23, 48, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 15, 20, 48, tzinfo=datetime.timezone.utc), 'time_taken': 10825.0, 'time_delta': '3:00:25', 'additions': 57, 'deletions': 16, 'state': 'closed'}, {'id': 433804657, 'number': 15335, 'closed': datetime.datetime(2020, 6, 17, 0, 26, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 12, 17, 31, 23, tzinfo=datetime.timezone.utc), 'time_taken': 370533.0, 'time_delta': '4 days, 6:55:33', 'additions': 61, 'deletions': 44, 'state': 'closed'}, {'id': 433269558, 'number': 15318, 'closed': datetime.datetime(2020, 6, 11, 22, 49, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 11, 18, 51, 30, tzinfo=datetime.timezone.utc), 'time_taken': 14263.0, 'time_delta': '3:57:43', 'additions': 21, 'deletions': 15, 'state': 'closed'}, {'id': 432107428, 'number': 15286, 'closed': datetime.datetime(2020, 6, 10, 21, 25, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 9, 22, 58, 1, tzinfo=datetime.timezone.utc), 'time_taken': 80839.0, 'time_delta': '22:27:19', 'additions': 72, 'deletions': 23, 'state': 'closed'}, {'id': 432081095, 'number': 15283, 'closed': datetime.datetime(2020, 6, 9, 21, 49, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 9, 21, 41, 18, tzinfo=datetime.timezone.utc), 'time_taken': 502.0, 'time_delta': '0:08:22', 'additions': 20, 'deletions': 4, 'state': 'closed'}, {'id': 428446171, 'number': 15219, 'closed': datetime.datetime(2020, 6, 5, 16, 37, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 5, 13, 22, 17, tzinfo=datetime.timezone.utc), 'time_taken': 11713.0, 'time_delta': '3:15:13', 'additions': 3, 'deletions': 5, 'state': 'closed'}, {'id': 427177968, 'number': 15192, 'closed': None, 'created': datetime.datetime(2020, 6, 3, 12, 44, 34, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 16, 'deletions': 1, 'state': 'open'}, {'id': 423188011, 'number': 15094, 'closed': datetime.datetime(2020, 5, 26, 16, 49, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 26, 12, 55, 27, tzinfo=datetime.timezone.utc), 'time_taken': 14020.0, 'time_delta': '3:53:40', 'additions': 0, 'deletions': 4, 'state': 'closed'}, {'id': 422408758, 'number': 15073, 'closed': datetime.datetime(2020, 6, 16, 16, 8, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 24, 12, 51, 53, tzinfo=datetime.timezone.utc), 'time_taken': 1998982.0, 'time_delta': '23 days, 3:16:22', 'additions': 31, 'deletions': 6, 'state': 'closed'}, {'id': 421296566, 'number': 15055, 'closed': datetime.datetime(2020, 6, 6, 3, 12, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 21, 11, 17, 28, tzinfo=datetime.timezone.utc), 'time_taken': 1353320.0, 'time_delta': '15 days, 15:55:20', 'additions': 3, 'deletions': 0, 'state': 'closed'}, {'id': 421179789, 'number': 15053, 'closed': datetime.datetime(2020, 5, 25, 23, 19, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 21, 6, 40, 35, tzinfo=datetime.timezone.utc), 'time_taken': 405556.0, 'time_delta': '4 days, 16:39:16', 'additions': 5, 'deletions': 6, 'state': 'closed'}, {'id': 419580209, 'number': 15012, 'closed': datetime.datetime(2020, 5, 29, 7, 8, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 18, 15, 36, 3, tzinfo=datetime.timezone.utc), 'time_taken': 919936.0, 'time_delta': '10 days, 15:32:16', 'additions': 34, 'deletions': 20, 'state': 'closed'}, {'id': 419250882, 'number': 15009, 'closed': datetime.datetime(2020, 5, 18, 4, 45, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 18, 4, 31, 57, tzinfo=datetime.timezone.utc), 'time_taken': 812.0, 'time_delta': '0:13:32', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 419006520, 'number': 14999, 'closed': datetime.datetime(2020, 6, 5, 18, 22, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 16, 18, 37, 34, tzinfo=datetime.timezone.utc), 'time_taken': 1727073.0, 'time_delta': '19 days, 23:44:33', 'additions': 61, 'deletions': 61, 'state': 'closed'}, {'id': 415810363, 'number': 14932, 'closed': datetime.datetime(2020, 5, 11, 23, 38, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 11, 0, 50, 55, tzinfo=datetime.timezone.utc), 'time_taken': 82055.0, 'time_delta': '22:47:35', 'additions': 7, 'deletions': 12, 'state': 'closed'}, {'id': 407498871, 'number': 14707, 'closed': datetime.datetime(2020, 10, 27, 8, 28, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 22, 19, 37, 57, tzinfo=datetime.timezone.utc), 'time_taken': 16203023.0, 'time_delta': '187 days, 12:50:23', 'additions': 64, 'deletions': 5, 'state': 'closed'}, {'id': 407019922, 'number': 14696, 'closed': datetime.datetime(2020, 4, 22, 22, 11, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 22, 3, 19, 13, tzinfo=datetime.timezone.utc), 'time_taken': 67938.0, 'time_delta': '18:52:18', 'additions': 11, 'deletions': 2, 'state': 'closed'}, {'id': 405481655, 'number': 14627, 'closed': datetime.datetime(2020, 4, 18, 20, 40, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 18, 10, 52, 34, tzinfo=datetime.timezone.utc), 'time_taken': 35301.0, 'time_delta': '9:48:21', 'additions': 12, 'deletions': 15, 'state': 'closed'}, {'id': 405354809, 'number': 14616, 'closed': datetime.datetime(2020, 4, 17, 21, 49, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 17, 21, 45, 28, tzinfo=datetime.timezone.utc), 'time_taken': 252.0, 'time_delta': '0:04:12', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 402769847, 'number': 14569, 'closed': datetime.datetime(2020, 4, 22, 23, 40, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 13, 18, 17, 17, tzinfo=datetime.timezone.utc), 'time_taken': 796968.0, 'time_delta': '9 days, 5:22:48', 'additions': 146, 'deletions': 71, 'state': 'closed'}, {'id': 402567084, 'number': 14561, 'closed': None, 'created': datetime.datetime(2020, 4, 13, 9, 46, 7, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 24, 'deletions': 0, 'state': 'open'}, {'id': 400301091, 'number': 14487, 'closed': datetime.datetime(2020, 5, 1, 6, 13, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 7, 14, 24, 53, tzinfo=datetime.timezone.utc), 'time_taken': 2044089.0, 'time_delta': '23 days, 15:48:09', 'additions': 14, 'deletions': 6, 'state': 'closed'}, {'id': 399981568, 'number': 14485, 'closed': datetime.datetime(2020, 4, 7, 17, 31, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 7, 1, 6, 4, tzinfo=datetime.timezone.utc), 'time_taken': 59116.0, 'time_delta': '16:25:16', 'additions': 5, 'deletions': 3, 'state': 'closed'}, {'id': 397924031, 'number': 14448, 'closed': datetime.datetime(2020, 4, 3, 18, 40, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 3, 4, 7, 35, tzinfo=datetime.timezone.utc), 'time_taken': 52348.0, 'time_delta': '14:32:28', 'additions': 8, 'deletions': 0, 'state': 'closed'}, {'id': 395116634, 'number': 14388, 'closed': datetime.datetime(2020, 3, 30, 19, 59, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 28, 16, 12, 25, tzinfo=datetime.timezone.utc), 'time_taken': 186404.0, 'time_delta': '2 days, 3:46:44', 'additions': 0, 'deletions': 1, 'state': 'closed'}, {'id': 388736397, 'number': 14207, 'closed': datetime.datetime(2020, 3, 17, 19, 27, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 15, 15, 12, 37, tzinfo=datetime.timezone.utc), 'time_taken': 188072.0, 'time_delta': '2 days, 4:14:32', 'additions': 56, 'deletions': 2, 'state': 'closed'}, {'id': 385106488, 'number': 14122, 'closed': datetime.datetime(2020, 3, 30, 22, 19, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 7, 5, 24, 11, tzinfo=datetime.timezone.utc), 'time_taken': 2048124.0, 'time_delta': '23 days, 16:55:24', 'additions': 71, 'deletions': 28, 'state': 'closed'}, {'id': 380974992, 'number': 14056, 'closed': datetime.datetime(2023, 10, 2, 0, 9, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 27, 17, 22, 2, tzinfo=datetime.timezone.utc), 'time_taken': 113381263.0, 'time_delta': '1312 days, 6:47:43', 'additions': 50, 'deletions': 0, 'state': 'closed'}, {'id': 325353638, 'number': 13260, 'closed': datetime.datetime(2019, 10, 7, 18, 58, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 10, 7, 15, 10, 55, tzinfo=datetime.timezone.utc), 'time_taken': 13651.0, 'time_delta': '3:47:31', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 325034142, 'number': 13257, 'closed': datetime.datetime(2019, 10, 6, 18, 43, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 10, 6, 13, 29, 54, tzinfo=datetime.timezone.utc), 'time_taken': 18803.0, 'time_delta': '5:13:23', 'additions': 9, 'deletions': 0, 'state': 'closed'}, {'id': 306258445, 'number': 12978, 'closed': datetime.datetime(2020, 3, 6, 9, 15, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 11, 5, 50, 40, tzinfo=datetime.timezone.utc), 'time_taken': 17983514.0, 'time_delta': '208 days, 3:25:14', 'additions': 29, 'deletions': 2, 'state': 'closed'}, {'id': 305601248, 'number': 12958, 'closed': datetime.datetime(2019, 10, 1, 1, 10, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 8, 14, 20, 6, tzinfo=datetime.timezone.utc), 'time_taken': 4618211.0, 'time_delta': '53 days, 10:50:11', 'additions': 18, 'deletions': 7, 'state': 'closed'}, {'id': 302439564, 'number': 12915, 'closed': datetime.datetime(2019, 7, 31, 17, 20, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 7, 30, 10, 46, 54, tzinfo=datetime.timezone.utc), 'time_taken': 110012.0, 'time_delta': '1 day, 6:33:32', 'additions': 52, 'deletions': 0, 'state': 'closed'}, {'id': 299630252, 'number': 12846, 'closed': datetime.datetime(2021, 10, 8, 11, 21, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 7, 21, 11, 49, 36, tzinfo=datetime.timezone.utc), 'time_taken': 69982285.0, 'time_delta': '809 days, 23:31:25', 'additions': 276, 'deletions': 4, 'state': 'closed'}, {'id': 299590149, 'number': 12839, 'closed': datetime.datetime(2019, 7, 21, 22, 6, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 7, 20, 20, 49, 5, tzinfo=datetime.timezone.utc), 'time_taken': 91057.0, 'time_delta': '1 day, 1:17:37', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 290908002, 'number': 12636, 'closed': datetime.datetime(2019, 7, 3, 23, 40, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 23, 18, 23, 30, tzinfo=datetime.timezone.utc), 'time_taken': 883010.0, 'time_delta': '10 days, 5:16:50', 'additions': 5, 'deletions': 1, 'state': 'closed'}, {'id': 290741149, 'number': 12627, 'closed': datetime.datetime(2019, 7, 18, 0, 48, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 21, 20, 39, 36, tzinfo=datetime.timezone.utc), 'time_taken': 2261331.0, 'time_delta': '26 days, 4:08:51', 'additions': 8, 'deletions': 1, 'state': 'closed'}, {'id': 286761553, 'number': 12549, 'closed': datetime.datetime(2021, 10, 29, 13, 39, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 10, 17, 20, 17, tzinfo=datetime.timezone.utc), 'time_taken': 75327545.0, 'time_delta': '871 days, 20:19:05', 'additions': 404, 'deletions': 42, 'state': 'closed'}, {'id': 286395633, 'number': 12535, 'closed': datetime.datetime(2019, 6, 24, 19, 59, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 8, 10, 42, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1415794.0, 'time_delta': '16 days, 9:16:34', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 286307751, 'number': 12530, 'closed': datetime.datetime(2019, 6, 24, 20, 2, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 7, 19, 29, 35, tzinfo=datetime.timezone.utc), 'time_taken': 1470754.0, 'time_delta': '17 days, 0:32:34', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 285931811, 'number': 12517, 'closed': datetime.datetime(2019, 6, 6, 21, 57, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 6, 19, 6, 56, tzinfo=datetime.timezone.utc), 'time_taken': 10221.0, 'time_delta': '2:50:21', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 285555594, 'number': 12504, 'closed': datetime.datetime(2019, 6, 12, 23, 18, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 6, 5, 21, 20, 38, tzinfo=datetime.timezone.utc), 'time_taken': 611853.0, 'time_delta': '7 days, 1:57:33', 'additions': 16, 'deletions': 21, 'state': 'closed'}, {'id': 283443080, 'number': 12436, 'closed': datetime.datetime(2019, 5, 30, 23, 20, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 5, 29, 21, 45, 37, tzinfo=datetime.timezone.utc), 'time_taken': 92105.0, 'time_delta': '1 day, 1:35:05', 'additions': 35, 'deletions': 58, 'state': 'closed'}, {'id': 282105593, 'number': 12401, 'closed': datetime.datetime(2019, 5, 27, 21, 46, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 5, 24, 17, 50, 28, tzinfo=datetime.timezone.utc), 'time_taken': 273352.0, 'time_delta': '3 days, 3:55:52', 'additions': 65, 'deletions': 38, 'state': 'closed'}, {'id': 279451703, 'number': 12336, 'closed': datetime.datetime(2019, 5, 20, 18, 26, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 5, 16, 10, 52, 41, tzinfo=datetime.timezone.utc), 'time_taken': 372822.0, 'time_delta': '4 days, 7:33:42', 'additions': 0, 'deletions': 1, 'state': 'closed'}, {'id': 270410060, 'number': 12131, 'closed': datetime.datetime(2019, 4, 17, 19, 10, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 4, 15, 8, 2, 13, tzinfo=datetime.timezone.utc), 'time_taken': 212869.0, 'time_delta': '2 days, 11:07:49', 'additions': 1, 'deletions': 2, 'state': 'closed'}, {'id': 270327321, 'number': 12128, 'closed': datetime.datetime(2019, 4, 14, 23, 37, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 4, 14, 21, 7, 51, tzinfo=datetime.timezone.utc), 'time_taken': 8999.0, 'time_delta': '2:29:59', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 270272776, 'number': 12119, 'closed': datetime.datetime(2019, 4, 14, 5, 46, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 4, 14, 5, 19, 13, tzinfo=datetime.timezone.utc), 'time_taken': 1622.0, 'time_delta': '0:27:02', 'additions': 22, 'deletions': 4, 'state': 'closed'}, {'id': 269448573, 'number': 12097, 'closed': datetime.datetime(2019, 6, 4, 0, 26, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 4, 11, 7, 13, 38, tzinfo=datetime.timezone.utc), 'time_taken': 4641145.0, 'time_delta': '53 days, 17:12:25', 'additions': 55, 'deletions': 1, 'state': 'closed'}, {'id': 268342689, 'number': 12083, 'closed': None, 'created': datetime.datetime(2019, 4, 8, 13, 43, 44, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 19, 'deletions': 1, 'state': 'open'}, {'id': 268125933, 'number': 12078, 'closed': datetime.datetime(2019, 7, 8, 19, 31, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 4, 7, 18, 9, 12, tzinfo=datetime.timezone.utc), 'time_taken': 7953724.0, 'time_delta': '92 days, 1:22:04', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 268091576, 'number': 12075, 'closed': None, 'created': datetime.datetime(2019, 4, 7, 8, 54, 27, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 100, 'deletions': 12, 'state': 'open'}, {'id': 262903686, 'number': 11952, 'closed': datetime.datetime(2019, 5, 21, 21, 32, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 3, 20, 15, 0, 42, tzinfo=datetime.timezone.utc), 'time_taken': 5380292.0, 'time_delta': '62 days, 6:31:32', 'additions': 119, 'deletions': 92, 'state': 'closed'}, {'id': 262216456, 'number': 11936, 'closed': datetime.datetime(2019, 6, 24, 20, 16, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 3, 18, 20, 34, 17, tzinfo=datetime.timezone.utc), 'time_taken': 8466109.0, 'time_delta': '97 days, 23:41:49', 'additions': 110, 'deletions': 4, 'state': 'closed'}, {'id': 260943467, 'number': 11894, 'closed': datetime.datetime(2020, 4, 17, 20, 42, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 3, 13, 21, 21, 21, tzinfo=datetime.timezone.utc), 'time_taken': 34644098.0, 'time_delta': '400 days, 23:21:38', 'additions': 409, 'deletions': 317, 'state': 'closed'}, {'id': 260937958, 'number': 11892, 'closed': datetime.datetime(2019, 3, 13, 21, 6, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 3, 13, 21, 2, 49, tzinfo=datetime.timezone.utc), 'time_taken': 226.0, 'time_delta': '0:03:46', 'additions': 275, 'deletions': 157, 'state': 'closed'}, {'id': 253201911, 'number': 11572, 'closed': datetime.datetime(2019, 3, 10, 6, 21, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 2, 14, 19, 54, 55, tzinfo=datetime.timezone.utc), 'time_taken': 2024783.0, 'time_delta': '23 days, 10:26:23', 'additions': 37, 'deletions': 0, 'state': 'closed'}, {'id': 247971393, 'number': 11369, 'closed': datetime.datetime(2019, 2, 13, 21, 28, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 1, 27, 18, 22, 25, tzinfo=datetime.timezone.utc), 'time_taken': 1479955.0, 'time_delta': '17 days, 3:05:55', 'additions': 66, 'deletions': 0, 'state': 'closed'}, {'id': 247945601, 'number': 11367, 'closed': datetime.datetime(2019, 1, 27, 10, 50, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 1, 27, 10, 45, 4, tzinfo=datetime.timezone.utc), 'time_taken': 316.0, 'time_delta': '0:05:16', 'additions': 44, 'deletions': 0, 'state': 'closed'}, {'id': 246206077, 'number': 11326, 'closed': datetime.datetime(2019, 1, 22, 21, 22, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 1, 21, 8, 22, 46, tzinfo=datetime.timezone.utc), 'time_taken': 133198.0, 'time_delta': '1 day, 12:59:58', 'additions': 9, 'deletions': 0, 'state': 'closed'}, {'id': 246031199, 'number': 11314, 'closed': datetime.datetime(2021, 10, 25, 22, 33, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 1, 19, 7, 18, 52, tzinfo=datetime.timezone.utc), 'time_taken': 87318849.0, 'time_delta': '1010 days, 15:14:09', 'additions': 16, 'deletions': 9, 'state': 'closed'}]"

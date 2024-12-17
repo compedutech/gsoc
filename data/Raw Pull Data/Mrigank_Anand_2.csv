@@ -1,0 +1,305 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1037877957,Tests for containers,"
+## Description
+Added test cases to test graceful shutting of modules.
+- Killing the module (using `docker kill module_container_name`)
+- Shutting the module (Sending `Ctrl + C` event to the command line)
+
+## Screenshots (if appropriate):
+
+<img width=""1752"" alt=""Screenshot 2022-08-26 at 5 23 40 PM"" src=""https://user-images.githubusercontent.com/53966291/186898148-4ef4213d-2c75-42b5-944a-2a8b641439dc.png"">
+",False,363,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/363,https://github.com/OWASP/Python-Honeypot/pull/363,open,154,2,4,3,1,9,0,0,[],2022-08-26 11:58:04+00:00,,0.0,,"[{'comment_id': 956567407, 'comment_body': ""what's this doing?"", 'comment_created': datetime.datetime(2022, 8, 27, 10, 36, 45, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 956567420, 'comment_body': 'why do we need this?', 'comment_created': datetime.datetime(2022, 8, 27, 10, 37, 1, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 956567773, 'comment_body': 'if the messaging format changes, tests will start failing \r\nshould we refactor so that messages are in variables and can be reused here?', 'comment_created': datetime.datetime(2022, 8, 27, 10, 40, 46, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 956567794, 'comment_body': 'same comment as below for this.', 'comment_created': datetime.datetime(2022, 8, 27, 10, 40, 59, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 959514103, 'comment_body': 'yes we can', 'comment_created': datetime.datetime(2022, 8, 31, 12, 19, 3, tzinfo=datetime.timezone.utc), 'commenter': 'spiderxm', 'type': 'User'}, {'comment_id': 970190816, 'comment_body': 'for variables lets use = operator\r\n', 'comment_created': datetime.datetime(2022, 9, 14, 0, 32, 43, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 970191019, 'comment_body': ""should we use this statement on the top so that function is exited faster if case isn't satisfied?"", 'comment_created': datetime.datetime(2022, 9, 14, 0, 33, 20, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 973617512, 'comment_body': 'configuration to avoid some test cases ', 'comment_created': datetime.datetime(2022, 9, 17, 18, 58, 43, tzinfo=datetime.timezone.utc), 'commenter': 'spiderxm', 'type': 'User'}, {'comment_id': 973620693, 'comment_body': 'for output we cant use `==` as output is being appended after getting data from the output stream', 'comment_created': datetime.datetime(2022, 9, 17, 19, 36, 9, tzinfo=datetime.timezone.utc), 'commenter': 'spiderxm', 'type': 'User'}]","[{'commit_sha': 'dcff265114563c0e83ae0891a05c67717e76f90d', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f9325b71c7ddb1e311a1e0be6c12072059dd8cc8', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b8a025d7f315efeb0270f6f9483b6a68c79900a0', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+1014615220,fix - kill network capture process if any container is killed,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+<!--- Describe your changes in detail -->
+Fix network thread issue
+
+Issue is network thread is not terminating after an error
+to reproduce the issue, run a module, and then kill the container with docker kill container_name. OHP is expected to exit from working and throw an error, but the network thread stays open and it's not terminating.
+
+
+## Steps to Reproduce
+<!-- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+```sh
+# run the command below
+$ sudo python3 ohp.py -m ftp/weak_password,ftp/strong_password --store-pcap
+# wait until network capture process starts
+```
+```sh
+# on new terminal run the command below
+$ docker kill ohp_ftpserver_strong_password
+# on the terminal where you started the capture process it will not end but it should.
+```
+
+
+
+## Related Issue
+<!--- Please add link to the issue here, if related to a issue -->
+#359 
+
+## Screenshots (if appropriate):
+<img width=""805"" alt=""Screenshot 2022-08-02 at 10 18 45 AM"" src=""https://user-images.githubusercontent.com/53966291/182294493-42311951-5088-4d50-a5c8-8c9dd47bbee1.png"">
+After killing the container the network capture process terminates successfully.
+<img width=""1350"" alt=""Screenshot 2022-08-02 at 10 18 52 AM"" src=""https://user-images.githubusercontent.com/53966291/182294502-392b3d47-f72e-433f-8d79-bea9c2d7cbe4.png"">
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [x] The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+- [x] This Pull Request relates to only one issue or only one feature
+- [x] I have referenced the corresponding issue number in my commit message
+- [x] I have added the relevant documentation.
+- [x] My branch is up-to-date with the Upstream master branch.
+",True,361,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/361,https://github.com/OWASP/Python-Honeypot/pull/361,closed,6,2,1,2,1,5,0,0,[],2022-08-02 04:54:13+00:00,2022-09-17 18:34:00+00:00,4023587.0,"46 days, 13:39:47","[{'comment_id': 939524721, 'comment_body': 'return in a while loop?', 'comment_created': datetime.datetime(2022, 8, 6, 12, 45, 8, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 939524821, 'comment_body': 'this should do the job right without the above changes?', 'comment_created': datetime.datetime(2022, 8, 6, 12, 46, 2, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 942010976, 'comment_body': 'Return error("""") \nIs returning None\n\nSo we need to return True in failing cases\n\nWe can break the while loop and at the end return True\nWhat say @dhirensr ?', 'comment_created': datetime.datetime(2022, 8, 10, 4, 43, 19, tzinfo=datetime.timezone.utc), 'commenter': 'spiderxm', 'type': 'User'}, {'comment_id': 943608855, 'comment_body': ""we can't use break there. sounds like  a use case for break?"", 'comment_created': datetime.datetime(2022, 8, 11, 15, 14, 16, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 955976417, 'comment_body': 'nopes, we need a exit flag value which denotes this has exited ', 'comment_created': datetime.datetime(2022, 8, 26, 12, 8, 14, tzinfo=datetime.timezone.utc), 'commenter': 'spiderxm', 'type': 'User'}]","[{'commit_sha': 'da18fcba6777173c2893e7cb04b8aaef3b949d16', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b38ed0fe1bb09426838e012386efc737f6c275f1', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+1009988535,Api for running modules,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Added an API for getting details of running modules.
+This will work when we run our APIs via `python ohp.py --start-api-server`. But will not work with `docker-compose up`. For that we need to enable docker in docker to run docker commands from running containers. Looking for its solutions
+
+## Motivation and Context
+To add a panel in Python-Honepot UI with details of running modules.
+
+## Reviewers
+@dhirensr 
+
+## How Has This Been Tested?
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
+It has been tested locally.
+
+GET http://localhost:5001/api/core/running/modules
+
+```json
+[
+    {
+        ""Command"": ""\""/bin/sh -c 'service…\"""",
+        ""CreatedAt"": ""2022-07-27 21:49:43 +0530 IST"",
+        ""ID"": ""b5760a5cc113"",
+        ""Image"": ""ohp_ftpserver_weak_password"",
+        ""Labels"": ""desktop.docker.io/binds/0/SourceKind=hostFile,desktop.docker.io/binds/0/Target=/root,desktop.docker.io/binds/0/Source=/Users/mrigankanand/PycharmProjects/Python-Honeypot/tmp/ohp_ftp_weak_container/"",
+        ""LocalVolumes"": ""0"",
+        ""Mounts"": ""/host_mnt/User…"",
+        ""Names"": ""ohp_ftpserver_weak_password"",
+        ""Networks"": ""ohp_internet"",
+        ""Ports"": ""0.0.0.0:21->21/tcp"",
+        ""RunningFor"": ""2 hours ago"",
+        ""Size"": ""3B (virtual 293MB)"",
+        ""State"": ""running"",
+        ""Status"": ""Up 2 hours""
+    }
+]
+```
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+<img width=""1415"" alt=""Screenshot 2022-07-27 at 11 47 26 PM"" src=""https://user-images.githubusercontent.com/53966291/181343887-fa83ffa6-d1ea-4037-be87-6aff61fd2b13.png"">
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [x] The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+- [x] I have added the relevant documentation.
+- [x] My branch is up-to-date with the Upstream master branch.
+",False,360,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/360,https://github.com/OWASP/Python-Honeypot/pull/360,open,377,32,17,6,0,0,0,0,[],2022-07-27 18:24:15+00:00,,0.0,,[],"[{'commit_sha': 'a4cb36c94dee501792e0b275d96354ad1491704d', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a2ec02d969aa1c75b698b8cba5239eb587db4c25', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e54d0b4078341e09d9876d0d8fe8d368a47b7cdb', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab50e4ffdf170d31adb083dae898cf190a7528ce', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c7c57999e588d10f732d1cd53897cc27e582882', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '940fcee8040805ffdbad130f14b684de4a14f23b', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+1003912838,"adding grafana, prometheus dashboard for analysing APIs","<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Adding prometheus and grafana dashboard for API analysis and performance metrics.
+
+![image](https://user-images.githubusercontent.com/53966291/180177452-24d3f916-1ab7-493d-806b-d6136ad37257.png)
+
+
+
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+Better analysis of our backend
+
+## How Has This Been Tested?
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
+
+
+## Screenshots (if appropriate):
+Go to Dashboards and you will see our dashboard listed out there
+<img width=""1775"" alt=""Screenshot 2022-07-21 at 1 35 40 PM"" src=""https://user-images.githubusercontent.com/53966291/180164834-954487b1-8262-4907-a39b-a611c1945cdd.png"">
+
+Click on it and see a dashboard like this with all the necessary metrics
+<img width=""1784"" alt=""Screenshot 2022-07-21 at 1 35 07 PM"" src=""https://user-images.githubusercontent.com/53966291/180177676-225965f0-1e13-4952-9ea9-88a1f2402fca.png"">
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [x] The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+- [x] This Pull Request relates to only one issue or only one feature
+- [x] I have referenced the corresponding issue number in my commit message
+- [x] I have added the relevant documentation.
+- [x] My branch is up-to-date with the Upstream master branch.
+",False,357,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/357,https://github.com/OWASP/Python-Honeypot/pull/357,open,1021,2,7,2,0,1,0,0,[],2022-07-21 09:17:55+00:00,,0.0,,"[{'comment_id': 940639150, 'comment_body': 'did you mean datasource.yaml and datasource.json?', 'comment_created': datetime.datetime(2022, 8, 8, 20, 32, 30, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}]","[{'commit_sha': 'b825164a470bd4d1ab8f8c04b8366a7d1b474731', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3234d05907ea90c92d93775051f2a2fd5bafb924', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+993367778,add sentry monitoring,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Add sentry monitoring
+
+## Motivation and Context
+Sentry helps us to monitor, debug bugs is our code by alerting and providing various details. Example given below - 
+I turned off local elasticsearch server and sentry notified me about the bug:
+
+## Screenshots 
+<img width=""1561"" alt=""Screenshot 2022-07-11 at 10 55 12 PM"" src=""https://user-images.githubusercontent.com/53966291/178322865-b8336a69-74de-451b-938d-d1d09e0eb157.png"">
+<img width=""1568"" alt=""Screenshot 2022-07-11 at 10 55 23 PM"" src=""https://user-images.githubusercontent.com/53966291/178322874-10ae3b41-2644-4695-8ba0-44f2cf51b94f.png"">
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [ x The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+
+",True,356,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/356,https://github.com/OWASP/Python-Honeypot/pull/356,closed,32,1,3,2,0,4,0,0,[],2022-07-11 17:28:53+00:00,2022-09-17 18:33:03+00:00,5879050.0,"68 days, 1:04:10","[{'comment_id': 926098758, 'comment_body': 'this would need to be documented in the wiki too I believe after merging', 'comment_created': datetime.datetime(2022, 7, 20, 22, 19, 25, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 926099123, 'comment_body': 'can you comment it above please?', 'comment_created': datetime.datetime(2022, 7, 20, 22, 20, 9, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 926099308, 'comment_body': 'can you also explain in comment what trace rate would do?', 'comment_created': datetime.datetime(2022, 7, 20, 22, 20, 29, tzinfo=datetime.timezone.utc), 'commenter': 'dhirensr', 'type': 'User'}, {'comment_id': 926250435, 'comment_body': 'yes, will add proper documentation in wiki', 'comment_created': datetime.datetime(2022, 7, 21, 4, 53, 43, tzinfo=datetime.timezone.utc), 'commenter': 'spiderxm', 'type': 'User'}]","[{'commit_sha': 'bcaa1a8c06c957f230d1534883575c2fc01690f0', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a113c3c3e25d94189cca564f9350922836bebaef', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+985551966,enable verbose logging,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Add verbose logging
+
+## How Has This Been Tested?
+Tested Locally
+
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [x] The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+- [x] This Pull Request relates to only one issue or only one feature
+- [x] I have referenced the corresponding issue number in my commit message
+- [x] I have added the relevant documentation.
+- [x] My branch is up-to-date with the Upstream master branch.
+",True,355,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/355,https://github.com/OWASP/Python-Honeypot/pull/355,closed,57,0,2,3,0,0,0,0,[],2022-07-02 16:28:26+00:00,2022-09-17 18:32:40+00:00,6660254.0,"77 days, 2:04:14",[],"[{'commit_sha': 'c377837c6cf95aa0676d14db2617ce9c1773e288', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0b94194f728f141b9d8030a3076b224a2f21d965', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e522fcf11159132ce5fbf48b8fd3f716d27c6230', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+980891505,fix API URL,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+fix the API URL, which was hardcoded
+
+## Steps to Reproduce
+<!-- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+
+## Related Issue
+#351 
+
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+
+## How Has This Been Tested?
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
+
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [x] The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+- [x] This Pull Request relates to only one issue or only one feature
+- [x] I have referenced the corresponding issue number in my commit message
+- [x] I have added the relevant documentation.
+- [x] My branch is up-to-date with the Upstream master branch.
+",True,353,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/353,https://github.com/OWASP/Python-Honeypot/pull/353,closed,3,2,1,1,0,0,0,0,[],2022-06-28 04:25:59+00:00,2022-09-17 18:32:27+00:00,7049188.0,"81 days, 14:06:28",[],"[{'commit_sha': '6a6189ec87f85980604b00644e2573e4448f12d3', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+883219158,remove cyclic dependency,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+There were 4 cyclic dependency, I removed 3 of them
+<!--- Describe your changes in detail -->
+
+## Related Issue
+#346 
+
+
+## How Has This Been Tested?
+I tested it on my machine it is working
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
+
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+#### Checklist
+- [x] I have followed the [Contributor Guidelines](https://github.com/OWASP/Nettacker/wiki/Developers#contribution-guidelines).
+- [x] The code has been thoroughly tested in my local development environment with flake8 and pylint.
+- [x] The code is Python 3 compatible.
+- [x] The code follows the PEP8 styling guidelines with 4 spaces indentation.
+- [x] This Pull Request relates to only one issue or only one feature
+- [x] My branch is up-to-date with the Upstream development branch.
+",True,347,https://api.github.com/repos/OWASP/Python-Honeypot/pulls/347,https://github.com/OWASP/Python-Honeypot/pull/347,closed,69,65,13,3,0,0,0,0,[],2022-03-18 08:34:57+00:00,2022-07-02 23:46:37+00:00,9213100.0,"106 days, 15:11:40",[],"[{'commit_sha': 'f32b537d03b94e4aefbf1cc8834a0e7c2c1e8d42', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b2b238012d114d166b36ddd4bf50b2b5cf81e40', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cbe9da6e1fb09ab022b55a15af20b2babff6c42d', 'committer_username': 'spiderxm', 'committer_name': 'Mrigank Anand', 'committer_email': None, 'commit_date': datetime.datetime(2019, 8, 10, 8, 21, 46, tzinfo=datetime.timezone.utc)}]",Mrigank Anand,53966291,,User,,137,,99,147
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+139342061,Python-Honeypot,OWASP/Python-Honeypot,Python,138,423,24,15,1145,21,53,15,"[{'id': 1059387592, 'number': 364, 'closed': datetime.datetime(2022, 9, 17, 19, 22, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 17, 19, 21, 41, tzinfo=datetime.timezone.utc), 'time_taken': 35.0, 'time_delta': '0:00:35', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 1037877957, 'number': 363, 'closed': None, 'created': datetime.datetime(2022, 8, 26, 11, 58, 4, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 154, 'deletions': 2, 'state': 'open'}, {'id': 1014615220, 'number': 361, 'closed': datetime.datetime(2022, 9, 17, 18, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 2, 4, 54, 13, tzinfo=datetime.timezone.utc), 'time_taken': 4023587.0, 'time_delta': '46 days, 13:39:47', 'additions': 6, 'deletions': 2, 'state': 'closed'}, {'id': 1009988535, 'number': 360, 'closed': None, 'created': datetime.datetime(2022, 7, 27, 18, 24, 15, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 377, 'deletions': 32, 'state': 'open'}, {'id': 1003912838, 'number': 357, 'closed': None, 'created': datetime.datetime(2022, 7, 21, 9, 17, 55, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1021, 'deletions': 2, 'state': 'open'}, {'id': 993367778, 'number': 356, 'closed': datetime.datetime(2022, 9, 17, 18, 33, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 11, 17, 28, 53, tzinfo=datetime.timezone.utc), 'time_taken': 5879050.0, 'time_delta': '68 days, 1:04:10', 'additions': 32, 'deletions': 1, 'state': 'closed'}, {'id': 985551966, 'number': 355, 'closed': datetime.datetime(2022, 9, 17, 18, 32, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 2, 16, 28, 26, tzinfo=datetime.timezone.utc), 'time_taken': 6660254.0, 'time_delta': '77 days, 2:04:14', 'additions': 57, 'deletions': 0, 'state': 'closed'}, {'id': 980891505, 'number': 353, 'closed': datetime.datetime(2022, 9, 17, 18, 32, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 28, 4, 25, 59, tzinfo=datetime.timezone.utc), 'time_taken': 7049188.0, 'time_delta': '81 days, 14:06:28', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 980889667, 'number': 352, 'closed': datetime.datetime(2022, 6, 28, 4, 22, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 28, 4, 22, 33, tzinfo=datetime.timezone.utc), 'time_taken': 19.0, 'time_delta': '0:00:19', 'additions': 73, 'deletions': 67, 'state': 'closed'}, {'id': 980245316, 'number': 350, 'closed': datetime.datetime(2022, 7, 21, 8, 10, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 27, 16, 0, 38, tzinfo=datetime.timezone.utc), 'time_taken': 2045376.0, 'time_delta': '23 days, 16:09:36', 'additions': 9, 'deletions': 1, 'state': 'closed'}, {'id': 883219158, 'number': 347, 'closed': datetime.datetime(2022, 7, 2, 23, 46, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 18, 8, 34, 57, tzinfo=datetime.timezone.utc), 'time_taken': 9213100.0, 'time_delta': '106 days, 15:11:40', 'additions': 69, 'deletions': 65, 'state': 'closed'}, {'id': 776252469, 'number': 343, 'closed': datetime.datetime(2021, 12, 6, 17, 9, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 11, 9, 7, 16, 56, tzinfo=datetime.timezone.utc), 'time_taken': 2368382.0, 'time_delta': '27 days, 9:53:02', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 768528349, 'number': 341, 'closed': datetime.datetime(2021, 10, 28, 21, 27, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 28, 16, 48, 29, tzinfo=datetime.timezone.utc), 'time_taken': 16719.0, 'time_delta': '4:38:39', 'additions': 10, 'deletions': 6, 'state': 'closed'}, {'id': 768512331, 'number': 339, 'closed': datetime.datetime(2021, 10, 29, 12, 23, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 28, 16, 25, 52, tzinfo=datetime.timezone.utc), 'time_taken': 71854.0, 'time_delta': '19:57:34', 'additions': 1, 'deletions': 36, 'state': 'closed'}, {'id': 714991776, 'number': 334, 'closed': datetime.datetime(2021, 9, 4, 11, 14, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 18, 11, 28, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1468000.0, 'time_delta': '16 days, 23:46:40', 'additions': 19, 'deletions': 16, 'state': 'closed'}, {'id': 705701271, 'number': 333, 'closed': datetime.datetime(2021, 8, 18, 7, 26, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 19, 28, 43, tzinfo=datetime.timezone.utc), 'time_taken': 993465.0, 'time_delta': '11 days, 11:57:45', 'additions': 497, 'deletions': 539, 'state': 'closed'}, {'id': 699222441, 'number': 329, 'closed': datetime.datetime(2021, 7, 29, 8, 8, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 29, 5, 32, 17, tzinfo=datetime.timezone.utc), 'time_taken': 9391.0, 'time_delta': '2:36:31', 'additions': 51, 'deletions': 14, 'state': 'closed'}, {'id': 699211919, 'number': 328, 'closed': datetime.datetime(2021, 7, 29, 8, 6, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 29, 5, 6, 53, tzinfo=datetime.timezone.utc), 'time_taken': 10804.0, 'time_delta': '3:00:04', 'additions': 45, 'deletions': 6, 'state': 'closed'}, {'id': 699204169, 'number': 327, 'closed': datetime.datetime(2021, 7, 29, 5, 1, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 29, 4, 53, 14, tzinfo=datetime.timezone.utc), 'time_taken': 507.0, 'time_delta': '0:08:27', 'additions': 10, 'deletions': 6, 'state': 'closed'}, {'id': 699012380, 'number': 325, 'closed': datetime.datetime(2021, 7, 28, 21, 8, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 28, 21, 2, 30, tzinfo=datetime.timezone.utc), 'time_taken': 361.0, 'time_delta': '0:06:01', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 699005946, 'number': 324, 'closed': datetime.datetime(2021, 7, 28, 20, 51, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 28, 20, 51, 1, tzinfo=datetime.timezone.utc), 'time_taken': 51.0, 'time_delta': '0:00:51', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 696537041, 'number': 322, 'closed': datetime.datetime(2021, 7, 27, 9, 20, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 25, 17, 27, 43, tzinfo=datetime.timezone.utc), 'time_taken': 143581.0, 'time_delta': '1 day, 15:53:01', 'additions': 15, 'deletions': 10, 'state': 'closed'}, {'id': 696511135, 'number': 321, 'closed': datetime.datetime(2021, 7, 27, 9, 22, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 25, 14, 29, 14, tzinfo=datetime.timezone.utc), 'time_taken': 154376.0, 'time_delta': '1 day, 18:52:56', 'additions': 17, 'deletions': 9, 'state': 'closed'}, {'id': 694073908, 'number': 320, 'closed': datetime.datetime(2021, 7, 21, 18, 23, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 21, 5, 59, 50, tzinfo=datetime.timezone.utc), 'time_taken': 44625.0, 'time_delta': '12:23:45', 'additions': 48, 'deletions': 36, 'state': 'closed'}, {'id': 689954666, 'number': 315, 'closed': datetime.datetime(2021, 7, 28, 22, 24, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 14, 14, 16, 4, tzinfo=datetime.timezone.utc), 'time_taken': 1238891.0, 'time_delta': '14 days, 8:08:11', 'additions': 676, 'deletions': 155, 'state': 'closed'}, {'id': 689953832, 'number': 314, 'closed': datetime.datetime(2021, 7, 14, 14, 15, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 14, 14, 15, 4, tzinfo=datetime.timezone.utc), 'time_taken': 13.0, 'time_delta': '0:00:13', 'additions': 242, 'deletions': 43, 'state': 'closed'}, {'id': 683629738, 'number': 311, 'closed': datetime.datetime(2021, 7, 20, 16, 58, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 11, 43, 3, tzinfo=datetime.timezone.utc), 'time_taken': 1314905.0, 'time_delta': '15 days, 5:15:05', 'additions': 229, 'deletions': 19, 'state': 'closed'}, {'id': 681002014, 'number': 304, 'closed': datetime.datetime(2021, 7, 20, 16, 57, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 30, 15, 54, 11, tzinfo=datetime.timezone.utc), 'time_taken': 1731780.0, 'time_delta': '20 days, 1:03:00', 'additions': 38, 'deletions': 0, 'state': 'closed'}, {'id': 680872756, 'number': 303, 'closed': datetime.datetime(2021, 7, 20, 16, 55, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 30, 13, 22, 49, tzinfo=datetime.timezone.utc), 'time_taken': 1740758.0, 'time_delta': '20 days, 3:32:38', 'additions': 17, 'deletions': 0, 'state': 'closed'}, {'id': 676456483, 'number': 299, 'closed': datetime.datetime(2021, 7, 20, 16, 56, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 23, 16, 46, 28, tzinfo=datetime.timezone.utc), 'time_taken': 2333392.0, 'time_delta': '27 days, 0:09:52', 'additions': 81, 'deletions': 34, 'state': 'closed'}, {'id': 676059564, 'number': 298, 'closed': datetime.datetime(2021, 6, 23, 16, 44, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 23, 8, 20, 4, tzinfo=datetime.timezone.utc), 'time_taken': 30278.0, 'time_delta': '8:24:38', 'additions': 82, 'deletions': 34, 'state': 'closed'}, {'id': 672427745, 'number': 293, 'closed': datetime.datetime(2021, 7, 20, 16, 55, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 9, 18, 50, tzinfo=datetime.timezone.utc), 'time_taken': 2878571.0, 'time_delta': '33 days, 7:36:11', 'additions': 61, 'deletions': 30, 'state': 'closed'}, {'id': 670314760, 'number': 292, 'closed': datetime.datetime(2021, 7, 27, 15, 41, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 15, 11, 22, 1, tzinfo=datetime.timezone.utc), 'time_taken': 3644382.0, 'time_delta': '42 days, 4:19:42', 'additions': 114, 'deletions': 15, 'state': 'closed'}, {'id': 666983372, 'number': 290, 'closed': datetime.datetime(2021, 6, 11, 19, 44, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 15, 8, 17, tzinfo=datetime.timezone.utc), 'time_taken': 102992.0, 'time_delta': '1 day, 4:36:32', 'additions': 31, 'deletions': 12, 'state': 'closed'}, {'id': 663626060, 'number': 289, 'closed': datetime.datetime(2021, 7, 20, 16, 48, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 7, 14, 38, 23, tzinfo=datetime.timezone.utc), 'time_taken': 3722980.0, 'time_delta': '43 days, 2:09:40', 'additions': 116, 'deletions': 93, 'state': 'closed'}, {'id': 660033768, 'number': 288, 'closed': datetime.datetime(2021, 7, 20, 17, 2, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 2, 12, 45, 48, tzinfo=datetime.timezone.utc), 'time_taken': 4162585.0, 'time_delta': '48 days, 4:16:25', 'additions': 5, 'deletions': 5, 'state': 'closed'}, {'id': 648046172, 'number': 283, 'closed': datetime.datetime(2021, 5, 31, 17, 25, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 19, 20, 58, 6, tzinfo=datetime.timezone.utc), 'time_taken': 1024027.0, 'time_delta': '11 days, 20:27:07', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 647736479, 'number': 282, 'closed': datetime.datetime(2021, 5, 31, 17, 24, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 19, 14, 34, 35, tzinfo=datetime.timezone.utc), 'time_taken': 1047013.0, 'time_delta': '12 days, 2:50:13', 'additions': 25, 'deletions': 22, 'state': 'closed'}, {'id': 603524104, 'number': 260, 'closed': datetime.datetime(2021, 4, 20, 17, 0, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 9, 0, 18, tzinfo=datetime.timezone.utc), 'time_taken': 1843213.0, 'time_delta': '21 days, 8:00:13', 'additions': 47, 'deletions': 0, 'state': 'closed'}, {'id': 603508189, 'number': 259, 'closed': datetime.datetime(2021, 3, 30, 8, 58, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 8, 40, 43, tzinfo=datetime.timezone.utc), 'time_taken': 1094.0, 'time_delta': '0:18:14', 'additions': 47, 'deletions': 0, 'state': 'closed'}]"

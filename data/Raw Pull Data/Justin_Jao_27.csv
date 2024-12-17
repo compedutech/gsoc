@@ -1,0 +1,24 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1509538546,Add preview workflow,"# What?
+Fix #1908
+
+This PR constitutes the work done for the Google Summer of Code project for Justin Jao, as referenced [here](https://github.com/cBioPortal/GSoC/issues/84).
+
+This adds a proposed workflow for automating the deployment of a staging environment upon PR creation to the datahub repo.
+
+In particular:
+* a `preview.yml` workflow file that triggers the automated deployment of the staging environment with the new studies imported
+* a `preview_closed.yml` file that automatically tears down the deployed staging environment upon PR closure or merging.
+* the directory and miscellaneous file infrastructure (located within the added `preview` directory) necessary to support this automated deployment
+* documentation for this proposed workflow, located within the `documentation` directory
+
+-----
+Important Notes:
+* This PR currently must undergo further discussion to determine which account will setup the Okteto infrastructure needed for this workflow to function
+* After this has been determined, the namespace listed in the code will need to be changed accordingly within each of these files
+* Before merging, certain steps, such as adding Okteto secrets, must be undertaken (documented in `Preview_Setup.md`) before the workflow will be fully functional 
+* Currently, not all studies may be imported, as there is a known issue with gene panels IDs not being present in the seeded database. This may be fixed in a future update, but for now, a temporary stopgap has been placed (documented in `Preview_Overview.md`).
+* For more information about this workflow, please see the produced documentation at `Preview_Overview.md`. ",False,1909,https://api.github.com/repos/cBioPortal/datahub/pulls/1909,https://github.com/cBioPortal/datahub/pull/1909,open,322,0,10,4,0,0,0,0,[],2023-09-11 04:05:09+00:00,,0.0,,[],"[{'commit_sha': 'd5b5ce8aa3c3ced9d7fe8f21a98a80bd72732f21', 'committer_username': 'justinjao', 'committer_name': 'Justin Jao', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 2, 44, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e0087febad5764db9d26e58c21f3221d4754615', 'committer_username': 'justinjao', 'committer_name': 'Justin Jao', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 2, 44, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bc8bf2a491c13c8bc6bba4e3578315fc9e1dcbb3', 'committer_username': 'justinjao', 'committer_name': 'Justin Jao', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 2, 44, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bbb4d390d7fca53b587fccedd199794725d4ef9f', 'committer_username': 'justinjao', 'committer_name': 'Justin Jao', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 2, 44, 30, tzinfo=datetime.timezone.utc)}]",Justin Jao,47490085,,User,,22,,4,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+63335718,datahub,cBioPortal/datahub,HTML,119,167,28,55,4438,136,31,20,"[{'id': 1509538546, 'number': 1909, 'closed': None, 'created': datetime.datetime(2023, 9, 11, 4, 5, 9, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 322, 'deletions': 0, 'state': 'open'}, {'id': 1483733456, 'number': 1894, 'closed': datetime.datetime(2023, 8, 21, 23, 29, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 21, 23, 29, 48, tzinfo=datetime.timezone.utc), 'time_taken': 8.0, 'time_delta': '0:00:08', 'additions': 169, 'deletions': 2, 'state': 'closed'}, {'id': 1481933612, 'number': 1891, 'closed': datetime.datetime(2023, 8, 20, 23, 11, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 20, 23, 11, 22, tzinfo=datetime.timezone.utc), 'time_taken': 9.0, 'time_delta': '0:00:09', 'additions': 54, 'deletions': 2, 'state': 'closed'}]"

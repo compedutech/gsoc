@@ -1,0 +1,199 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1407761630,jar and war files creation from root,"## Since these jar files are deprecated you can go through the following steps to start Santé:
+
+1) Instantiate the knowledge base search engine over FOAF ontology by using KBox [https://github.com/AKSW/KBox](https://github.com/AKSW/KBox).
+
+2) Change the directory to sante.main/target and create the index outside the project file on your favorable path.
+
+Again we have to create the jar file using
+
+```
+mvn clean install
+```
+
+```
+java -jar sante-main-*.jar index -endpoint http://localhost:8080/kbox/query -path \foaf_kg
+```
+
+3) Change the directory to sante.smile/src/main/resources to edit the config.properties file and set the Index.
+
+```
+index.dir=/<your-index-path>/foaf_kg
+```
+
+4) Generate your own war file by the following command in the the same directory:
+```
+mvn clean install
+```
+
+5) Lastly, Run the war file that was generated in Step 4.
+
+```
+java -jar sante.smile-*.war
+```
+
+
+### The application will be exposed at ```http://localhost:7070```
+
+---",True,12,https://api.github.com/repos/AKSW/sante/pulls/12,https://github.com/AKSW/sante/pull/12,closed,26,0,1,1,0,0,0,0,[],2023-06-26 11:31:35+00:00,2023-06-26 14:37:13+00:00,11138.0,3:05:38,[],"[{'commit_sha': 'a8c31d77ee2845d0c8ecc9c88a69d9a6ed1f2973', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1444284429,defaultGoal set to install for git pull in dockerfile,"This is added to avoid an error while building this within a Dockerfile.
+
+This change solves the issue. Merge this so that the git pull command can fetch the updated code from github to build in the parent dockerfile.
+
+Here is the error statement which is being fixed:
+
+```
+docker run -p8080:8080 sante/parent        
+```
+```
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.springframework.boot:sante.smile:war:2.5.3
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.json:json:jar -> version 20210307 vs 20200518 @ line 148, column 18
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] parent                                                             [pom]
+[INFO] sante.core                                                         [jar]
+[INFO] sante.smile.2                                                      [war]
+[INFO] sante.main                                                         [jar]
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] parent 0.0.21-SNAPSHOT ............................. SKIPPED
+[INFO] sante.core 0.0.21-SNAPSHOT ......................... SKIPPED
+[INFO] sante.smile.2 2.5.3 ................................ SKIPPED
+[INFO] sante.main 0.0.21-SNAPSHOT ......................... SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.147 s
+[INFO] Finished at: 2023-07-21T10:16:18Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] No goals have been specified for this build. You must specify a valid lifecycle phase or a goal in the format <plugin-prefix>:<goal> or <plugin-group-id>:<plugin-artifact-id>[:<plugin-version>]:<goal>. Available lifecycle phases are: validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy, pre-clean, clean, post-clean, pre-site, site, post-site, site-deploy. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/NoGoalSpecifiedException
+```
+",False,20,https://api.github.com/repos/AKSW/sante/pulls/20,https://github.com/AKSW/sante/pull/20,closed,0,0,0,0,0,0,0,0,[],2023-07-21 10:30:09+00:00,2023-07-23 13:24:16+00:00,183247.0,"2 days, 2:54:07",[],[],Ronit Banerjee,91361382,,User,,88,,56,84
+1445608358,dockerfile added to SANTé,"This closes the issue #14 and #15 
+
+This was made to close issues for GSoC'23.
+
+1) Building the Docker Image:
+```
+docker build -t sante .
+```
+
+2) To run the docker image along with the specified ```index```, here is the command:
+
+```
+docker run -p7070:7070 -e index=/sante/<index-name> sante
+```
+
+After running the image, the application is exposed at ```http://localhost:7070```",True,21,https://api.github.com/repos/AKSW/sante/pulls/21,https://github.com/AKSW/sante/pull/21,closed,66,21,3,2,1,0,0,0,[],2023-07-23 13:37:55+00:00,2023-07-24 20:05:51+00:00,109676.0,"1 day, 6:27:56",[],"[{'commit_sha': 'f23b04685ff719ee6c111d66e08547c564960195', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af331c2e9cbd947eb7835d6e45bfd004c1fec7a3', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1450824116,directory change for Dockerfile,"This closes the issue #14 and #15 
+
+UPDATE : 
+
+[X] - Moved to smile directory
+[X] - Renamed the image as ""sante/smile""
+[X] - Updated doc
+
+1) Building the Docker Image:
+```
+docker build -t sante/smile -f sante.smile/Dockerfile .   
+```
+
+2) To run the docker image along with the specified ```index```, here is the command:
+
+```
+docker run -p7070:7070 -e index=/sante/<index-name> sante/smile
+```
+
+After running the image, the application is exposed at ```http://localhost:7070```",True,22,https://api.github.com/repos/AKSW/sante/pulls/22,https://github.com/AKSW/sante/pull/22,closed,7,5,2,1,0,0,0,0,[],2023-07-26 19:38:35+00:00,2023-07-27 09:10:04+00:00,48689.0,13:31:29,[],"[{'commit_sha': '25a4674bde0e72fc1a80ed51807981c73df7446a', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1460787264,volume mount added to smile dockerfile,"Resolves Issue #23 
+
+1) Building the Docker Image:
+
+```
+docker build -t sante/smile -f sante.smile/Dockerfile .   
+```
+
+2) To run the docker image along with the specified ```index```, here is the command:
+
+```
+docker run -p 7070:7070 -v <YOUR INDEX PATH>:/index -itd sante/smile
+```
+
+After running the image, the application is exposed at ```http://localhost:7070```",True,24,https://api.github.com/repos/AKSW/sante/pulls/24,https://github.com/AKSW/sante/pull/24,closed,2,4,2,1,0,0,0,0,[],2023-08-03 05:31:55+00:00,2023-08-03 09:52:25+00:00,15630.0,4:20:30,[],"[{'commit_sha': '4800881c01c6d443943e1c1775e66ea7eaa06924', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1461437572,dockerfile added to sante.api,"Resolves issue #15 
+
+
+**Alternative way to run API is to build docker image using the given dockerfile**
+
+Make sure you have created the index in the project as instructed above.
+
+1) Building the Docker Image:
+
+```
+docker build -t sante/api -f sante.api/Dockerfile .   
+```
+
+2) To run the docker image along with the specified ```index```, here is the command:
+
+```
+docker run -p 7070:7070 -v <YOUR INDEX PATH>:/index -itd sante/api
+```",True,25,https://api.github.com/repos/AKSW/sante/pulls/25,https://github.com/AKSW/sante/pull/25,closed,33,0,2,1,0,0,0,0,[],2023-08-03 13:04:13+00:00,2023-08-04 08:40:40+00:00,70587.0,19:36:27,[],"[{'commit_sha': '2c04a131cdab504436680867517e8e88a43eb3db', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1465037926,dockerfile added to sante.main,"Resolves Issue #14 
+
+**Creating Endpoint and Index using Docker**
+
+
+1) Run Kbox docker image on Host Network (which is pulled from DockerHub automatically)
+
+```
+docker run --network=host aksw/kbox -server -kb ""http://xmlns.com/foaf/0.1,https://www.w3.org/2000/01/rdf-schema,http://www.w3.org/2002/07/owl,http://www.w3.org/1999/02/22-rdf-syntax-ns,http://purl.org/dc/elements/1.1/,http://purl.org/dc/terms/,http://purl.org/dc/dcam/,http://purl.org/dc/dcmitype/"" -install
+```
+
+2) Create a volume named ```index```. This will help to access the index folder from all the docker images we build in the process.
+
+```
+docker volume create index
+```
+
+3) Build SANTê Main :
+
+```
+docker build -t sante/main -f sante.main/Dockerfile .
+```
+
+4) Run SANTê Main on the same Host Network and pass the Environment Variable ```endpoint``` which is exposed by KBox. It accesses the persistent volume ```index``` to store the required changes.
+
+```
+docker run --network=host -v index:/sante/foaf_kg -e endpoint=http://localhost:8080/kbox/query sante/main
+```
+
+Now, we can use ```index``` volume to run API and SMILE.
+",True,26,https://api.github.com/repos/AKSW/sante/pulls/26,https://github.com/AKSW/sante/pull/26,closed,48,3,2,1,0,0,0,0,[],2023-08-07 11:09:37+00:00,2023-08-07 13:21:42+00:00,7925.0,2:12:05,[],"[{'commit_sha': '6ba92985c84d7a13b9145b748fb9a5599ac5c41f', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1480910797,SANTE Documentation,"Resolves Issue :
+
+https://github.com/AKSW/sante/issues/16
+
+",True,1,https://api.github.com/repos/AKSW/sante-api-docs/pulls/1,https://github.com/AKSW/sante-api-docs/pull/1,closed,769,32,17,2,0,0,0,0,[],2023-08-18 18:03:03+00:00,2023-08-19 13:06:24+00:00,68601.0,19:03:21,[],"[{'commit_sha': 'be5174e270c6159501a7609f4f8690f2e8354c92', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '99e393b0b4970a4d8ee1396c18fa3568a71f08ff', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1481680186,Doc Changes,,True,2,https://api.github.com/repos/AKSW/sante-api-docs/pulls/2,https://github.com/AKSW/sante-api-docs/pull/2,closed,56,46,9,3,0,0,0,0,[],2023-08-20 06:03:36+00:00,2023-08-21 10:56:49+00:00,103993.0,"1 day, 4:53:13",[],"[{'commit_sha': '171454cd6ffd0acfa2fb5e5f2b49cbb53e1c4c96', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d4dc20f6046a0cd5aa5be46fc97207ef0bb12f4', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6470c01ce19ae0831a4c3d41ff73e9ca0d795d95', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1483398600,doc updated,"<img width=""1317"" alt=""Screenshot 2023-08-22 at 12 17 45 AM"" src=""https://github.com/AKSW/sante-api-docs/assets/91361382/0e4e0ea2-0d28-4bc0-8567-fe4edc3ce20e"">
+",True,3,https://api.github.com/repos/AKSW/sante-api-docs/pulls/3,https://github.com/AKSW/sante-api-docs/pull/3,closed,0,2471,20,1,0,0,0,0,[],2023-08-21 18:47:59+00:00,2023-08-22 06:54:08+00:00,43569.0,12:06:09,[],"[{'commit_sha': '542e38d53b856970a2042ccf64b5174d517b8b67', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+1486767244,sante in 5 minutes using docker,,True,4,https://api.github.com/repos/AKSW/sante-api-docs/pulls/4,https://github.com/AKSW/sante-api-docs/pull/4,closed,35,16,1,1,0,0,0,0,[],2023-08-23 17:07:13+00:00,2023-08-23 17:59:55+00:00,3162.0,0:52:42,[],"[{'commit_sha': '1aa82b2a091bd454adc571a50dd584f6a3a67914', 'committer_username': 'ronitblenz', 'committer_name': 'Ronit Banerjee', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 25, 5, 20, 58, tzinfo=datetime.timezone.utc)}]",Ronit Banerjee,91361382,,User,,88,,56,84
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+217257653,sante,AKSW/sante,Java,12,20,22,3,93,4,3,0,"[{'id': 1465037926, 'number': 26, 'closed': datetime.datetime(2023, 8, 7, 13, 21, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 7, 11, 9, 37, tzinfo=datetime.timezone.utc), 'time_taken': 7925.0, 'time_delta': '2:12:05', 'additions': 48, 'deletions': 3, 'state': 'closed'}, {'id': 1461437572, 'number': 25, 'closed': datetime.datetime(2023, 8, 4, 8, 40, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 3, 13, 4, 13, tzinfo=datetime.timezone.utc), 'time_taken': 70587.0, 'time_delta': '19:36:27', 'additions': 33, 'deletions': 0, 'state': 'closed'}, {'id': 1460787264, 'number': 24, 'closed': datetime.datetime(2023, 8, 3, 9, 52, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 3, 5, 31, 55, tzinfo=datetime.timezone.utc), 'time_taken': 15630.0, 'time_delta': '4:20:30', 'additions': 2, 'deletions': 4, 'state': 'closed'}, {'id': 1450824116, 'number': 22, 'closed': datetime.datetime(2023, 7, 27, 9, 10, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 26, 19, 38, 35, tzinfo=datetime.timezone.utc), 'time_taken': 48689.0, 'time_delta': '13:31:29', 'additions': 7, 'deletions': 5, 'state': 'closed'}, {'id': 1445608358, 'number': 21, 'closed': datetime.datetime(2023, 7, 24, 20, 5, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 23, 13, 37, 55, tzinfo=datetime.timezone.utc), 'time_taken': 109676.0, 'time_delta': '1 day, 6:27:56', 'additions': 66, 'deletions': 21, 'state': 'closed'}, {'id': 1444284429, 'number': 20, 'closed': datetime.datetime(2023, 7, 23, 13, 24, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 21, 10, 30, 9, tzinfo=datetime.timezone.utc), 'time_taken': 183247.0, 'time_delta': '2 days, 2:54:07', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1407761630, 'number': 12, 'closed': datetime.datetime(2023, 6, 26, 14, 37, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 26, 11, 31, 35, tzinfo=datetime.timezone.utc), 'time_taken': 11138.0, 'time_delta': '3:05:38', 'additions': 26, 'deletions': 0, 'state': 'closed'}]"
+536662679,sante-api-docs,AKSW/sante-api-docs,SCSS,3,1,2,73,1111,0,1,0,"[{'id': 1499940386, 'number': 5, 'closed': datetime.datetime(2023, 9, 2, 12, 26, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 2, 12, 25, 9, tzinfo=datetime.timezone.utc), 'time_taken': 80.0, 'time_delta': '0:01:20', 'additions': 32, 'deletions': 1, 'state': 'closed'}, {'id': 1486767244, 'number': 4, 'closed': datetime.datetime(2023, 8, 23, 17, 59, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 23, 17, 7, 13, tzinfo=datetime.timezone.utc), 'time_taken': 3162.0, 'time_delta': '0:52:42', 'additions': 35, 'deletions': 16, 'state': 'closed'}, {'id': 1483398600, 'number': 3, 'closed': datetime.datetime(2023, 8, 22, 6, 54, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 21, 18, 47, 59, tzinfo=datetime.timezone.utc), 'time_taken': 43569.0, 'time_delta': '12:06:09', 'additions': 0, 'deletions': 2471, 'state': 'closed'}, {'id': 1481680186, 'number': 2, 'closed': datetime.datetime(2023, 8, 21, 10, 56, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 20, 6, 3, 36, tzinfo=datetime.timezone.utc), 'time_taken': 103993.0, 'time_delta': '1 day, 4:53:13', 'additions': 56, 'deletions': 46, 'state': 'closed'}, {'id': 1480910797, 'number': 1, 'closed': datetime.datetime(2023, 8, 19, 13, 6, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 18, 18, 3, 3, tzinfo=datetime.timezone.utc), 'time_taken': 68601.0, 'time_delta': '19:03:21', 'additions': 769, 'deletions': 32, 'state': 'closed'}]"

@@ -1,0 +1,507 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+892949183,Convert LeNet1989 from Torch to JAX ,"## Description
+
+JAX/Flax [implementation](https://github.com/karpathy/lecun1989-repro) of Andrej Karpathy's implementation of [1989 LeNet paper](http://yann.lecun.com/exdb/publis/pdf/lecun-89e.pdf) using modern methods ([blog post](https://karpathy.github.io/2022/03/14/lecun1989/)).
+
+Related to [pyproblml PR #715](https://github.com/probml/pyprobml/pull/715)
+
+### Colab link
+https://colab.research.google.com/github/peterchang0414/lecun1989-flax/blob/main/lecun1989-flax.ipynb
+
+### Issue 
+
+[#698: convert LeNet1989 from Torch to JAX](https://github.com/probml/pyprobml/issues/698) 
+
+
+### Results
+**1989 Reproduction**:
+```
+epoch 23
+eval: split train. loss 5.265484e-03. error 0.82%. misses: 60
+eval: split test . loss 2.467080e-02. error 3.69%. misses: 74
+```
+**Modern Versions**:
+
+(1) Replace tanh on last layer with FC and use softmax. Lower learning rate to 0.01
+```
+epoch 23
+eval: split train. loss 7.162272e-03. error 0.05%. misses: 4
+eval: split test . loss 1.687743e-01. error 4.14%. misses: 83
+```
+(2) Replace SGD with AdamW (learning rate=3e-4), double epochs to 46, and decay LR to 1e-4 over the course of training.
+```
+epoch 46
+eval: split train. loss 1.890260e-03. error 0.04%. misses: 2
+eval: split test . loss 1.953933e-01. error 4.04%. misses: 81
+```
+(3) Introduce data augmentation, e.g. a shift by at most 1 pixel in both x/y directions, and bump up training time to 60 epochs.
+```
+epoch 60
+eval: split train. loss 5.098452e-02. error 1.65%. misses: 120
+eval: split test . loss 9.166716e-02. error 2.59%. misses: 52
+```
+(4) Add dropout at layer H3, shift activation function to relu, and bring up iterations to 80.
+```
+epoch 80
+eval: split train. loss 3.316079e-02. error 1.06%. misses: 77
+eval: split test . loss 4.969697e-02. error 1.74%. misses: 35
+```
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.
+",True,54,https://api.github.com/repos/probml/probml-notebooks/pulls/54,https://github.com/probml/probml-notebooks/pull/54,closed,855,0,1,1,1,0,0,0,[],2022-03-29 11:53:05+00:00,2022-03-29 23:41:26+00:00,42501.0,11:48:21,[],"[{'commit_sha': '3220b1f0d546f31042f167403def701863de5d48', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+892912200,Convert LeNet1989 from Torch to JAX #,"## Description
+JAX/Flax implementation of Andrej Karpathy's [implementation](https://github.com/karpathy/lecun1989-repro) of  [1989 LeNet paper](http://yann.lecun.com/exdb/publis/pdf/lecun-89e.pdf
+) using modern methods ([blog post](https://karpathy.github.io/2022/03/14/lecun1989/)).
+
+[Colab notebook](https://colab.research.google.com/github/peterchang0414/lecun1989-flax/blob/main/lecun1989-flax.ipynb)
+
+<!-- Please refer to https://github.com/probml/pyprobml/blob/master/CONTRIBUTING.md before opening this PR -->
+
+### Results
+**1989 Reproduction**:
+```
+epoch 23
+eval: split train. loss 5.265484e-03. error 0.82%. misses: 60
+eval: split test . loss 2.467080e-02. error 3.69%. misses: 74
+```
+**Modern Versions**:
+
+(1) Replace tanh on last layer with FC  and use softmax. Lower learning rate to 0.01
+```
+epoch 23
+eval: split train. loss 7.162272e-03. error 0.05%. misses: 4
+eval: split test . loss 1.687743e-01. error 4.14%. misses: 83
+```
+(2) Replace SGD with AdamW (learning rate=3e-4), double epochs to 46, and decay LR to 1e-4 over the course of training.
+```
+epoch 46
+eval: split train. loss 1.890260e-03. error 0.04%. misses: 2
+eval: split test . loss 1.953933e-01. error 4.04%. misses: 81
+```
+(3)  Introduce data augmentation, e.g. a shift by at most 1 pixel in both x/y directions, and bump up training time to 60 epochs.
+```
+epoch 60
+eval: split train. loss 5.098452e-02. error 1.65%. misses: 120
+eval: split test . loss 9.166716e-02. error 2.59%. misses: 52
+```
+(4) Add dropout at layer H3, shift activation function to relu, and bring up iterations to 80.
+```
+epoch 80
+eval: split train. loss 3.316079e-02. error 1.06%. misses: 77
+eval: split test . loss 4.969697e-02. error 1.74%. misses: 35
+```
+
+### Issue 
+#698 
+
+## Steps
+
+<!-- If the task is complicated, you can specify each step using checkboxes so that everyone can understand what you have done and what you are going to complete. -->
+<!-- For example:
+
+- [ ] Step1
+- [ ] Step2 
+
+-->
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.
+
+## Potential problems/Important remarks
+
+<!-- If you have any import remarks  for the reviewers to look at closer,  you can write them in detail here.  -->
+",False,715,https://api.github.com/repos/probml/pyprobml/pulls/715,https://github.com/probml/pyprobml/pull/715,closed,280,0,2,3,4,0,0,0,[],2022-03-29 11:16:39+00:00,2022-04-01 02:25:37+00:00,227338.0,"2 days, 15:08:58",[],"[{'commit_sha': '8c0fc1e3d4158960f717051eba87cb1694e6ab88', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '699b874420eca7c3b807bd1f514f3e6a2c4862cd', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f76d5a89df5fa1e60f7eb25245fa352a24d3516b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+897247036,Translate Ensembles with Random Priors Demo to JAX ,"## Description
+
+Translated [Random Priors Demo](https://www.kaggle.com/code/gdmarmerola/introduction-to-randomized-prior-functions/notebook) from Keras to JAX/Flax.
+
+Additionally implemented [beta-dependence of variance](https://raw.githubusercontent.com/peterchang0414/randomized_priors/main/uncertainty_betas.png) not present in the original notebook.
+
+### Colab link
+[Link to Colab Notebook](https://colab.research.google.com/github/peterchang0414/randomized_priors/blob/main/randomized_priors.ipynb)
+
+### Issue 
+[#708: translate ensembles with random priors demo from keras to JAX](https://github.com/probml/pyprobml/issues/708)
+
+### Figures
+
+[Gist for Figures](https://gist.github.com/peterchang0414/ad6319359d763653bece39561a126cf2)
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.",True,61,https://api.github.com/repos/probml/probml-notebooks/pulls/61,https://github.com/probml/probml-notebooks/pull/61,closed,664,0,1,1,6,0,0,0,[],2022-04-01 10:59:00+00:00,2022-04-04 19:12:16+00:00,288796.0,"3 days, 8:13:16",[],"[{'commit_sha': '9dd48178e97ccc360181ca3861dd6d4000f47373', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+901236006,Update Random Priors Demo,"## Description
+
+Continued from [PR61](https://github.com/probml/probml-notebooks/pull/61).
+
+1. Set the adam optimizer learning rate as a parameter for training functions.
+2. Vectorized `get_ensemble_predictions()` and the code that generates predictions over a range of beta values using `jax.vmap()`.
+3. Fixed an issue in the implementation of `create_train_state()` method that was surreptitiously leaking a Trace of `beta`.
+4. Modified the final plot comparing with/without bootstrap and/or prior to `fill_between` 1 and 2 standard deviations, with a larger `beta=30` value. This resulted in a much more clear distinction among the four types of models that closely matches the description given by the [original Kaggle notebook](https://www.kaggle.com/code/gdmarmerola/introduction-to-randomized-prior-functions/notebook):
+> Generally, turning bootstrapping off will reduce uncertainty the most (upper right corner), as opposed to turning priors off (lower left corner), but it can vary a bit across different seeds. With both bootstrapping and priors off, there's still a little disagreement between ensemble members due to random initialization of weights, but is a lot less compared to the other models.
+
+
+
+### Colab link
+
+https://colab.research.google.com/github/probml/probml-notebooks/blob/main/notebooks/randomized_priors.ipynb
+
+### Issue 
+[#708: translate ensembles with random priors demo from keras to JAX](https://github.com/probml/pyprobml/issues/708) 
+
+### Figures
+
+[Gist for Updated Bootstrap/Prior-Dependence Figure](https://gist.github.com/peterchang0414/b894443d24bae64b72a8e4a572fb8604)
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.
+
+## Potential problems/Important remarks
+
+<!-- If you have any important remarks for the reviewers to look at closer,  you can write them in detail here.  -->
+",True,69,https://api.github.com/repos/probml/probml-notebooks/pulls/69,https://github.com/probml/probml-notebooks/pull/69,closed,168,200,1,7,8,0,0,0,[],2022-04-06 09:05:56+00:00,2022-04-09 02:04:42+00:00,233926.0,"2 days, 16:58:46",[],"[{'commit_sha': '8418aaf505310ed0f8cf6292c57025536f66b9b1', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7df933fed2573dc1930f1872300ea4c108940585', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '28a85779e17f651eaf808a2238df846c2276b73a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '401badb8c0de03d96dad01f1b59919f2f2226918', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c5042a59ff6ea44ec6001ca6c73366342ac18ea', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e47b1a35314c383345b2173b530689554626bcb', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e7b1c0fd3e2460323fbd7bedc9797c9a5568f333', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+910018381,Implement Fixed Lag Smoothing for an HMM,"## Description
+Implemented Fixed Lag Smoothing for an HMM.
+A modern, vectorized, JAX-ified update to [Kevin Murphy's HMM Toolbox for Matlab](https://www.cs.ubc.ca/~murphyk/Software/HMM/hmm.html).
+
+My contributions and modifications to the original implementation are as follows:
+
+1. Fixed ""incompatible shapes for broadcasting"" error for JSL's `normalize` function applied to rectangular matrices with `axis=1` by adding `keepdims=True` to the denominator.
+2. Implemented a vectorized version of `fixed_lag_smoother` in `hmm_lib.py` that computes the smoothed posterior for each state in the lagged window of fixed size.
+3. Added a unit test to `hmm_lib_test.py` that demonstrates that the results of a fully-lagged `fixed_lag_smoother` matches that of JSL's implementation of `hmm-forwards_backwards_jax`.
+
+Note that the implementation differs from the Matlab code in the following ways:
+
+1. The time-step dimension has been changed to `axis=0` for stylistic consistency with JSL (i.e., the shape for `gamma` is now `(win_len, num_states)`)
+2. We no longer compute the intermediate joint distribution `xi(i,j,t)` but instead directly compute the `alpha` values by applying a single forward operation to the previous `alpha` value.
+3. **Instead of iteratively smoothing backwards inside the window, we now apply a single vectorized operation `update_bmatrix`. This is done by passing the backwards transformation operator `bmatrix` itself, rather than its row sum `beta` (since row sum is non-invertible) and after updating the window of `bmatrix_win`, we can apply the vectorized row-sum operator `get_beta` to compute the beta values all at once. This leads to significant speed-up (exponential in the size of window), as demonstrated in the Figures below.**
+4. We use a single instance of the new observation instead of keeping track of past observation likelihoods `obslik`. This is made possible by manipulating the vectorized `bmatrix_win` instead of iterative `beta`.
+5. We assume constant observation likelihood (see Limitations below).
+
+## Colab Link
+In the Colab version, I implemented a more direct, iterative translation of the Matlab version, `fixed_lag_smoother_iterative` for performance comparison.
+
+https://colab.research.google.com/github/peterchang0414/hmm-jax/blob/main/fixed_lag_smoother.ipynb
+
+
+## Issue
+[#736: Implement Fixed Lag Smoothing for an HMM](https://github.com/probml/pyprobml/issues/736)
+
+## Figures
+[Gist for results of timed experiments between iterative vs vectorized implementations](https://gist.github.com/peterchang0414/cae5b7d6597fd077fa8ca875e8e81bfc)
+Uncached speed-up of vectorized vs iterative approach as a function of window size:
+![unjitted_perf_comp_iter_vs_vec_fls](https://raw.githubusercontent.com/peterchang0414/hmm-jax/main/unjitted_performance_comparison.png)
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.
+
+## Limitations:
+Despite the Matlab version's flexibility with the likelihood model, I chose my implementation to work under the simplifying assumption of unchanging, constant likelihood model across the time steps. This was done for consistency with the framework used in the JSL library which directly encodes the observation likelihood matrix into the `HMMJax` dataclass, but if needed, I can, without difficulty, make further adjustments to allow flexible likelihood model. 
+",True,35,https://api.github.com/repos/probml/JSL/pulls/35,https://github.com/probml/JSL/pull/35,closed,102,3,2,3,3,0,0,0,[],2022-04-14 14:19:53+00:00,2022-04-22 04:29:11+00:00,655758.0,"7 days, 14:09:18",[],"[{'commit_sha': '50d58918e1ba8b49daf8f3a705e586edbd73ed13', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b7f44cfaa62c08e7c925da38170b16c09892260', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9c532dff495a94ca053ca94130b47d599596b10', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+945681946,Change scipy.special.logit  into jnp.log,"IIUC, the `logits` argument for `jax.random.categorical` correspond to log probabilities instead of their logit values 
+(defined by log(p/(1-p))),
+and so the usage of `jax.random.categorical` in `hmm_forwards_filtering_backwards_sampling_jax` and `hmm_sample_jax` should be modified to take in
+`jnp.log(.)` instead of `logit(.)`.
+
+From the [documentation](https://jax.readthedocs.io/en/latest/_autosummary/jax.random.categorical.html) for `jax.random.catgegorical`: 
+
+> **logits** - Unnormalized log probabilities of the categorical distribution(s) to sample from, so that _softmax(logits, axis)_ gives the corresponding probabilities.",True,57,https://api.github.com/repos/probml/JSL/pulls/57,https://github.com/probml/JSL/pull/57,closed,4,4,1,1,1,0,0,0,[],2022-05-24 14:05:20+00:00,2022-05-24 21:18:33+00:00,25993.0,7:13:13,[],"[{'commit_sha': '311d559e008d3b3fe06318b0710c8eab8f18f33e', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+951149496,Reimplement hmm_posterior_sample,"## Description
+Fix bugs in `hmm_posterior_sample` and verify correctness using unit test created as `test_hmm_posterior_sample`.
+
+## Detail
+Since `hmm_posterior_sample` returns a random output, there seemed to be no straightforward way to implement its unit test. 
+
+Initially, I considered computing the probabilities of each of the possible state sequences, running `hmm_posterior_sample` many times and comparing the sampled frequencies across the possible sequences with the theoretical probabilities.
+
+This seemed needlessly complicated, and the frequencies tended not to uniformly converge to the theoretical values when performing a reasonable number of random samples.
+
+In the end, I settled on the approach of computing the mode sequence of the generated random samples and comparing it to the posterior mode computed by Viterbi algorithm (using `hmm_posterior_mode`).
+
+## Issue 
+#8 
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+",True,26,https://api.github.com/repos/probml/dynamax/pulls/26,https://github.com/probml/dynamax/pull/26,closed,38,9,2,3,2,0,0,0,[],2022-05-30 16:01:33+00:00,2022-05-31 15:31:03+00:00,84570.0,23:29:30,[],"[{'commit_sha': '61d7b2dbdc0f6dfa003788bf40f07b4a47c130dc', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf0e1dca27c238175a7fe7414724e76987102438', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ffd5c8a9a11ec0784f8640a98ddcb79b2a4971dd', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+952706586,Reimplement test_hmm_posterior_sample to compare with full joint probs,"## Description
+Reimplement `test_hmm_posterior_sample`, the unit test for `hmm_posterior_sample`.
+
+## Detail
+As suggested by @murphyk's [comment](https://github.com/probml/ssm-jax/pull/26#issuecomment-1142354276), I reimplemented the unit test for `hmm_posterior_sample` to do the following:
+
+1. Take `num_samples=1000000` random samples from `hmm_posterior_sample` and compute the relative frequencies of each possible state sequence.
+2. Compute theoretical complete joint probabilities using `big_log_joint`.
+3. Compare the two distributions to absolute tolerance `eps=1e-3`.
+4. Iterate with `num_iterations=5` different random seeds.
+
+With a sample size of 1 million per iteration, the sampled distribution matched the theoretical one to `1e-3` (0.1%) tolerance.
+
+## Issue 
+#8 
+
+## Checklist:
+
+- [x] Performed a self-review of the code
+",True,28,https://api.github.com/repos/probml/dynamax/pulls/28,https://github.com/probml/dynamax/pull/28,closed,8,6,1,2,0,0,0,0,[],2022-06-01 02:30:26+00:00,2022-06-02 04:07:43+00:00,92237.0,"1 day, 1:37:17",[],"[{'commit_sha': '2ac1245ecc7dc5d49e92ecab01513263ce3e8a7e', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2a8f7cbd89b239ff21feab102bfdeaedfa5b54e', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+970733467,Reimplement hmm_fixed_lag_smoother,"## Description
+
+- Reimplement [`fixed_lag_smoother`](https://github.com/probml/JSL/blob/main/jsl/hmm/hmm_lib.py#L378) as `hmm_fixed_lag_smoother` in [inference.py](https://github.com/probml/ssm-jax/blob/main/ssm_jax/hmm/inference.py).
+- Add unit test as `test_hmm_fixed_lag_smoother` in [inference_test](https://github.com/probml/ssm-jax/blob/main/ssm_jax/hmm/inference_test.py)
+- Add Jupyter demo that compares performance of iterative vs vectorized versions as `fixed_lag_smoother.ipynb` and add to [smm_jax/hmm/demos](https://github.com/probml/ssm-jax/blob/main/ssm_jax/hmm/demos)
+
+## Detail
+
+- For consistency with the rest of the API, `hmm_fixed_lag_smoother` naively assumes that we have the complete observations for all timesteps in the form of `log_likelihoods` available (i.e., off-line, rather than on-line smoother), although a modification to allow on-line smoothing would be easily achieved.
+- `hmm_fixed_lag_smoother` outputs an `HMMPosterior` object, with its parameters filled with the corresponding posterior distributions at each timestep. For example, `post.smoothed_probs[t]` gives a (`window_size`, `num_states`) matrix of window of smoothed probabilities at timestep `t`.
+- The unit test, `test_hmm_fixed_lag_smoother`, compares the `marginal_loglik`, `filtered_probs`, `predicted_probs`, and `smoothed_probs` of the full-lag (i.e., `window_size == num_timesteps`) `hmm_fixed_lag_smoother` to those of the naive smoother `core.hmm_smoother`.
+- To create a Jupyter notebook that compares the performances of iterative vs. vectorized versions (iterative: smooths backwards iteratively within the window at each time step, vs. vectorized: carries `bmatrix` that allows a vectorized computation (row-sum) of smoothed probabilities in the window at once), I implemented the iterative version `hmm_fixed_lag_smoother_iterative`, which, instead of carrying the intermediate `bmatrices`, uses the `core.backward_filter` to perform backward filtering at each timestep. However, as can be seen below, the `lax.scan` in both `core.hmm_backward_filter` and `hmm_fixed_lag_smoother_iterative` seems to optimize the iterations such that the performance approximates that of the vectorized version, so the comparison seems almost irrelevant. I can try a more explicit iterative version of backwards filtering instead of using the optimized `core.hmm_backward_filter`, but open to other suggestions!
+
+![perf_comp_iter_vs_vec_fls](https://raw.githubusercontent.com/petergchang/hmm-jax/main/fixed_lag_performance_comparison.png)
+
+## Issue 
+#9
+",True,29,https://api.github.com/repos/probml/dynamax/pulls/29,https://github.com/probml/dynamax/pull/29,closed,661,9,3,4,2,0,0,0,[],2022-06-17 15:22:56+00:00,2022-06-20 14:51:05+00:00,257289.0,"2 days, 23:28:09",[],"[{'commit_sha': '4a4a5288ffd88492b83ce4f4f05914ca1645f1b5', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1306def3dab6474ed405f031cbc53852d28e344c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df0c8688025038c34b670c698ef4624079944103', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cef6577a71f41913a3e7b9453e1031b6c411f65f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+983264672,Implement EKF,"## Description
+- Extended Kalman filter is implemented as `extended_kalman_filter()` in `ekf/inference.py`.
+- Unit tests implemented in `ekf/inference_test.py`
+  - `test_extended_kalman_filter_linear()` verifies EKF-filtered means and covariances using randomly-generated data (using helper function `random_linear_args`) against those of regular Kalman filter (using `lgssm_filter`).
+  - `test_extended_kalman_filter_nonlinear()` verifies the results against EKF implementation from the [Sarkka-jax library](https://github.com/petergchang/sarkka-jax). The Sarkka-jax implementations of various nlgssm algorithms are stored in `nlgssm/sarkka_lib.py`.
+- Extended Kalman smoother is implemented as `extended_kalman_smoother()` in `ekf/inference.py`.
+  - `test_extended_kalman_smoother_linear()` and `test_extended_kalman_smoother_nonlinear()` verify the results.
+- EKF/smoother applied to the pendulum demo (from Sarkka) is implemented in `ekf/demos/ekf_pendulum.py`.
+
+## Issue 
+#40
+",True,42,https://api.github.com/repos/probml/dynamax/pulls/42,https://github.com/probml/dynamax/pull/42,closed,1260,1,15,61,2,21,0,0,[],2022-06-30 01:45:21+00:00,2022-07-11 21:06:42+00:00,1020081.0,"11 days, 19:21:21","[{'comment_id': 910597480, 'comment_body': 'Maybe call this `NLGSSMParams`.\r\nAlso this should probably live in the nlgssm/models.py file, since it will be shared between EKF, UKF, etc.', 'comment_created': datetime.datetime(2022, 6, 30, 4, 36, 21, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 910597807, 'comment_body': ""Maybe call this `NLGSSMPosterior`? (It's actually the same as `LGSSMPosterior` :)\r\nAlso this should probably live in the nlgssm/models.py file, since it will be shared between EKF, UKF, etc."", 'comment_created': datetime.datetime(2022, 6, 30, 4, 37, 8, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 910599886, 'comment_body': 'Should we call this `ekf_filter` or `extended_kalman_filter`?\r\n(I know https://github.com/probml/ssm-jax/blob/main/ssm_jax/lgssm/inference.py#L114 is called `lgssm_filter` but I am not wild about that...)', 'comment_created': datetime.datetime(2022, 6, 30, 4, 42, 23, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 910601108, 'comment_body': 'neat!', 'comment_created': datetime.datetime(2022, 6, 30, 4, 45, 38, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 910601179, 'comment_body': 'very elegant!', 'comment_created': datetime.datetime(2022, 6, 30, 4, 45, 48, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 910894678, 'comment_body': ""Ah, since it's so lightweight I was thinking of having a separate Params dataclass for each nlgssm algorithm b/c each algorithm requires a slightly different combination of parameters (e.g. UKF requires alpha, beta, kappa, etc.), but you're right in that I should maybe factor out the common parameters into nlgssm/models.py and extend the dataclass for each algorithm."", 'comment_created': datetime.datetime(2022, 6, 30, 11, 6, 28, tzinfo=datetime.timezone.utc), 'commenter': 'petergchang', 'type': 'User'}, {'comment_id': 910902892, 'comment_body': ""Interesting. I wonder if we should use the code to reinforce the point that the EKF/UKF also return the same type of posterior as the Kalman smoother? I.e. they're all linear Gaussian chains. The same is true of Laplace approximations to, e.g., Poisson LDS posteriors."", 'comment_created': datetime.datetime(2022, 6, 30, 11, 17, 12, tzinfo=datetime.timezone.utc), 'commenter': 'slinderman', 'type': 'User'}, {'comment_id': 910902968, 'comment_body': 'I like `extended_kalman_filter`!', 'comment_created': datetime.datetime(2022, 6, 30, 11, 17, 20, tzinfo=datetime.timezone.utc), 'commenter': 'petergchang', 'type': 'User'}, {'comment_id': 910903634, 'comment_body': '+1 for `extended_kalman_filter`.\r\n\r\nHappy to revisit the discussion about `lgssm_filter` vs `kalman_fitler`. The latter is certainly more standard.', 'comment_created': datetime.datetime(2022, 6, 30, 11, 18, 13, tzinfo=datetime.timezone.utc), 'commenter': 'slinderman', 'type': 'User'}, {'comment_id': 915350026, 'comment_body': ""I suggest we follow Sarkka's notation and use P for the prior covariance,\r\nso we can define the intermediate variable `S_t = H_t Sigma_{t|t-1} H_t' + R_t` and hence\r\n`K = Sigma_{t|t-1} H_t S_t^{-1}`. \r\nAlso, can we just reuse the following?\r\nhttps://github.com/probml/ssm-jax/blob/main/ssm_jax/lgssm/inference.py#L77\r\n"", 'comment_created': datetime.datetime(2022, 7, 7, 0, 27, 37, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915351976, 'comment_body': 'Can this be factored out into a helper function, similar to `_get_params`?', 'comment_created': datetime.datetime(2022, 7, 7, 0, 33, 26, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915352309, 'comment_body': 'typo', 'comment_created': datetime.datetime(2022, 7, 7, 0, 34, 22, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915353410, 'comment_body': ""Cite Sarkka'13 p74"", 'comment_created': datetime.datetime(2022, 7, 7, 0, 36, 37, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915353987, 'comment_body': 'I think of the hparams (alpha, beta, kappa) as algorithm specific, not part of the model.', 'comment_created': datetime.datetime(2022, 7, 7, 0, 38, 12, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915354723, 'comment_body': ""Model fitting for nonlinear models is quite complex. I don't think return `self.dynamics_function` will be sufficient for SGD training. I propose we omit all functions related to learning (eg `unconstrained_params`)"", 'comment_created': datetime.datetime(2022, 7, 7, 0, 40, 20, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915354885, 'comment_body': 'Omit?', 'comment_created': datetime.datetime(2022, 7, 7, 0, 40, 44, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915354903, 'comment_body': 'Omit?', 'comment_created': datetime.datetime(2022, 7, 7, 0, 40, 48, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 915354922, 'comment_body': 'Omit?', 'comment_created': datetime.datetime(2022, 7, 7, 0, 40, 51, tzinfo=datetime.timezone.utc), 'commenter': 'murphyk', 'type': 'User'}, {'comment_id': 917967719, 'comment_body': 'Sounds good!', 'comment_created': datetime.datetime(2022, 7, 11, 13, 59, 41, tzinfo=datetime.timezone.utc), 'commenter': 'petergchang', 'type': 'User'}, {'comment_id': 917988681, 'comment_body': 'Good idea! Thank you. Implemented as `_process_fn` and `_process_input` now.', 'comment_created': datetime.datetime(2022, 7, 11, 14, 15, 11, tzinfo=datetime.timezone.utc), 'commenter': 'petergchang', 'type': 'User'}, {'comment_id': 917999785, 'comment_body': 'That makes sense, fixed!', 'comment_created': datetime.datetime(2022, 7, 11, 14, 25, 15, tzinfo=datetime.timezone.utc), 'commenter': 'petergchang', 'type': 'User'}]","[{'commit_sha': '970122416df29c1c107d84424e58f4b96dd37ca4', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f5679158bc466dcb33e821abe5cbb4e54f82e27e', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '60f9dc19ace3fae7a5192701d91e7b554fe6f52b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a5f64c295c01489af44703352048d61618ab183', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d8ac5efee9540643bd8c0c48768d2bee76935fd', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '87452d39daae1557fe7421414e8f125117f5d202', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9833516b7a1f513742958f70c0d7103cde790821', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f7b435dd8f9cee2f2d547eefc203c5fbb1831778', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e21db5c019f78df565ee151450150bbf2221566', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae366f1d3d8e45bef2168cb7e4fbfe4ea4ca600d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61140866982206d4e1351fc16c55a52e3c47dd1b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1fbabc9a3ac06f1e7b0e7bf2490c119a3cf9b250', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4081a832dbfba0c3b57bc01f2b13d99bf42350ee', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c672f62bce0890b6855bb7d524943a7c5aa3f91', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4d54b78b5231161f0f29db93e0e58c8cb677e19', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23071cf0cd35bced72a25bfd0dbffb6f6f1d681b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aa114a1d9b9c03c25c67f9174f93b4c88180b5c4', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8448fa55d5b2ec7de7da666deaa774233481fce', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9f6889ef9ebe6cdbabe93cfab9549209eb14db81', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9729d8d1f9aed87cc134bafe5b42a9828d3e4ccf', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d90b9a72aa48db1e4cba93b6070c6dfe6b8041b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a83cd34964800120e04d963270b3c29dc161c325', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd27275647a7b7ebe96ee48dc13c9a85173a94c77', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b9d15cd2380f61bb4448beb149691f90779d083d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d9c5708889a9f27f0e43a7947484864c8636b90', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dddafd7779d3104ac8c916e3c9b1d5f6027abbf7', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1e6e3fbfded605c335ac2bfec234429863713dd', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ffcd4c405bb82fd8f825d1f918ca6463401cf311', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '887a32eeb5ecefaec2fcc944c5aa19083d22e992', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c4cdb89aa9027ed27d255afb8d312917d36b3482', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd002e1a91fb6ec1b25dc334f7484f824265e1bd1', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1be47e760d727d2360964468ddebafa6780d75e3', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7b7725233768a4c4fafdc5e529f5b851b22479c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0f21987ff1ff3f282fe1927eb5c50ad6015af2e4', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ccfbe08a513e2bc1a7dd65ae8cc8591edcb9890d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7133d5a9b39071a762310e7b69eafdfb877a906c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6ba5482af4e0f13d6d445697436af047cfb2719', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf7c27ac0d474da63b4135fcd84e189541dc8b7e', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7477470175667f1db93245cfe16f8343f3fceb80', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bfe89f3071be35cb684819380c235b4b72940408', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a6de6f1bb11f86676a6c19a8c15d20f4e5b8a766', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82ba8e18f210ace6afcd539e071b57270c14fa37', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afa62e986bc95c933ac8a9b3909810d56f2a7b63', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a95dab642ce19ca13e3f71fb279a561424a99e2f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1f7f7e1909b371af76dbe5d6883f7f2353358189', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0416172d62547c0f59b12ab9c80881a420f1881a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43a8b4dc94805f468fe9b21f58374e3c68035477', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '64906204c4d8b197b3e58e654fd23bca5dc99625', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2a1ce2618aa5dae808d10518d647cb9306a6ada', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '091b239538502a6686c0b9885ae0f6b74876b898', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d9ebe75ed1886ba5089fc95f51c095ae9c20d60', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '409b34c0d567f21fe480bd95f8cdc750214e3f30', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e3ef399f0b46278f0dcccc11447a68f390f8e8ba', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21a7bfb3c2f4f03f662ef57cfd0a1441ded133a7', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a5ce5205b0f89a17d015b28394f532167adf0594', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48d3cd797bb7cb92daf6fa6efdc86639d787f960', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '27f7442b4c9faf1d26be02440cf19b0b348ed0d5', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef3fb8de7076cf8c6bb3448f2d497e6c1b632bb9', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0315fbb6ecf8fb9559662fd836151ec04ff2158', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '64cccb0a5a74b3906a905991b642d47bfbc78878', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '476d8e9ee336156cdfbc0000cb56d4108efd381c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+994821321,Implement EKF-MLP,"## Description
+- Reimplemented [JSL Demo](https://github.com/probml/JSL/blob/main/jsl/demos/ekf_mlp.py) using SSM-JAX EKF code.
+- Reorganized portions of code and added comments explaining how EKF is used for readability.
+- Omitted saving figures for consistency with rest of the API.
+
+## Issue 
+#32",True,77,https://api.github.com/repos/probml/dynamax/pulls/77,https://github.com/probml/dynamax/pull/77,closed,299,0,2,7,3,0,0,0,[],2022-07-12 21:48:52+00:00,2022-07-13 15:31:08+00:00,63736.0,17:42:16,[],"[{'commit_sha': 'e231883b25e6d3cf845cb7b7ce8c0b3355485b25', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07a7f4a503a305cc1cd69c8e703263cf1a0a92c7', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4980b7a96f49f05ae4fef02f6554a422583d37a3', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '664024216dd2c1db28bd8aa6287b18925b634db9', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd226be97d2dd88b606578ca8f0b312614e7a89c8', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd422dc247fbf8eb279addb35dd856e599cdd88ef', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eccd7feddf27631ef9dba9cebc9965321ff212a3', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+995763144,Implement ekf_spiral.py,"## Description
+- Implemented 2d spiral tracking demo for EKF in `ekf/demos/ekf_spiral.py`.
+- I included true states in blue in the filtered figure, but it can be omitted by setting flag `show_states=False` in `plot_inference()` function.
+
+## Figures
+![spiral_true](https://user-images.githubusercontent.com/16075389/178793687-5cc1a37c-41a7-4b32-b1b9-ae6f66eaf637.png)
+![spiral_ekf](https://user-images.githubusercontent.com/16075389/178793699-83248877-fcf4-440a-98cd-b0247acc8e5b.png)
+
+
+## Issue 
+#79",True,88,https://api.github.com/repos/probml/dynamax/pulls/88,https://github.com/probml/dynamax/pull/88,closed,62,0,2,6,1,0,0,0,[],2022-07-13 17:26:29+00:00,2022-07-13 17:31:47+00:00,318.0,0:05:18,[],"[{'commit_sha': '360732755e1d0d8fee120a846f4af4e79f26baa1', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80285a3ef44838054ea665159990a106d4fb1fe4', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4dc7743f9aabb503a8da00acf44a3b6f75cf2338', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1026c36034cc65cb0c8ca93cc8c6a7007c8166f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '116793fc1cf1ceedc47e0e53efefc0c9e99e5c3b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c12c85a0c6ea4ef9ebb5905354a3bd44b95217db', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+999369437,Implement UKF,"## Description
+- Unscented Kalman filter is implemented as `unscented_kalman_filter()` in `ukf/inference.py`.
+- Unscented Kalman smoother is implemented as `unscented_kalman_smoother()` in `ukf/inference.py`.
+- Pendulum and spiral demos are implemented in `ukf/demos/ukf_pendulum.py`, `ukf/demos/ukf_spiral.py`.
+
+## Progress
+- Despite the visual verification of the ukf results in `ukf/demos`, the filtered/smoothed results seem to non-trivially diverge from those of `sarkka-jax` library. I am in the process of inspecting the cause of the incongruency.
+![ukf_pendulum](https://user-images.githubusercontent.com/16075389/179818235-7fe216de-2b29-4e45-ad64-f78f81547b0a.png)
+![uks_pendulum](https://user-images.githubusercontent.com/16075389/179818239-10b52558-e043-40a7-add1-fabee5be6a65.png)
+![ukf_spiral](https://user-images.githubusercontent.com/16075389/179818237-24d98b66-5002-4872-9c84-4728b18768b5.png)
+
+## Issue 
+#63
+",True,111,https://api.github.com/repos/probml/dynamax/pulls/111,https://github.com/probml/dynamax/pull/111,closed,630,9,9,13,1,0,0,0,[],2022-07-18 13:04:29+00:00,2022-07-19 19:14:14+00:00,108585.0,"1 day, 6:09:45",[],"[{'commit_sha': '157ea33164d551396fc7e347ccb9a7e6fe4926e7', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '12be5bb0cd6ea8dc39ba7771033252f90c08decb', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14ff0669ac26756984f28acb958321eceef9b8b2', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53db8228e4f07f47769852a77480bba3bcaaa6eb', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '01094ea8af475fadf0c369ae418578cbd8d20459', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5bb2e9652a41a53ea70a7f3e9cc1e589463c3bda', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69b84788c78c3907f1b324c0a44a284bdaa1158f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd857f88cf2cf10892dcd4806a2f4187a84f8102a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f54a56cac76f2c74ff9a866fed276d80c1fb2d6d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '469472d58985ad8bc8cd728c772161fa7419906b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2905d34ef92eab89952bd950b298329bf1127f8f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30d965a782d74e9da7c98a522a0bdeffe04ba841', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce3d5171ca594d2e44f90573b7bb135cf0912e74', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1001238434,Add missing ukf_spiral.py,"## Issue 
+#113 ",True,115,https://api.github.com/repos/probml/dynamax/pulls/115,https://github.com/probml/dynamax/pull/115,closed,50,0,1,2,0,0,0,0,[],2022-07-19 20:59:34+00:00,2022-07-20 06:00:43+00:00,32469.0,9:01:09,[],"[{'commit_sha': '3ebadc97e13a3701ae6a334b16e652c0038f7582', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3bb7879bd812515ae119b983116cb07333ed449f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1001292059,Add ekf_vs_ukf.ipynb,"## Description
+
+A notebook that demonstrates the UKF's capacity to approximate the target distribution that results from a non-linear transformation with greater accuracy than the EKF. This is because while the EKF approximates the distribution locally at the mean, the UKF utilizes the distribution of the  sigma points to more accurately capture the global distribution.
+
+### Figure Number
+
+Adapts (with slightly different non-linear transformation) Sarkka's Figures 5.3, 5.4, and 5.5.
+
+### Figures
+
+![1](https://user-images.githubusercontent.com/16075389/179857555-1eed38c5-8209-4fa2-9106-c68a95d1a0f8.png)![2](https://user-images.githubusercontent.com/16075389/179857556-35026b8b-8ba9-41ff-8374-808381e1a74e.png)![3](https://user-images.githubusercontent.com/16075389/179857557-67bd863a-7165-4c71-8a43-bec012a8d5ef.png)
+![4](https://user-images.githubusercontent.com/16075389/179857558-c71e93e4-4d0a-4b6a-8a16-c7251cecce72.png)![5](https://user-images.githubusercontent.com/16075389/179857559-7e178885-1f5c-4b55-9136-ca36969f7c13.png)![6](https://user-images.githubusercontent.com/16075389/179857560-ed04f839-51c1-422f-8ad5-819a5cda3c86.png)
+
+
+### Issue 
+#1017 
+
+## Checklist
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.
+",True,1018,https://api.github.com/repos/probml/pyprobml/pulls/1018,https://github.com/probml/pyprobml/pull/1018,closed,577,0,1,2,1,0,0,0,[],2022-07-19 22:16:24+00:00,2022-07-19 23:04:25+00:00,2881.0,0:48:01,[],"[{'commit_sha': '67d24e5e5319e0c0c5992eac7cafee73cc02917b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d9b3ac7f953bee119c1a9c5390c595b6182ae7a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1008291351,Implement GGSSM,"## Description
+- General Gaussian filter and smoother are implemented as `general_gaussian_filter()` and `general_gaussian_smoother()` in `ssm_jax/ggssm/inference.py`.
+- Parameter dataclasses to run EKF, UKF, and GHKF on the GGF are implemented in `ssm_jax/ggssm/containers.py`.
+- Unit tests comparing their results against stand-alone EKF, UKF implementations are constructed in `ssm_jax/ggssm/inference_test.py`.
+
+## Issue 
+#118 ",True,122,https://api.github.com/repos/probml/dynamax/pulls/122,https://github.com/probml/dynamax/pull/122,closed,491,6,5,12,0,0,0,0,[],2022-07-26 09:44:26+00:00,2022-07-26 17:58:01+00:00,29615.0,8:13:35,[],"[{'commit_sha': '8eff3779f9bbf040eaad333116be91467e51be72', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8a61ef7557c78c156c8d0b4c9780a51c240f7b5a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c175575d41dc53bd4589528a0c85772b71ae63bc', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7a8be93be04d4d333594e6134e94b72513fc266f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b74989c7303a3b3a21262be00cb8c48bfc42b40d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8cc1e69f1f6111975d31bcee1a243ef21250005', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '648aa4968f771a342ba16f87878510edc0419206', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03ba3f3892dd68147aa1b58a1464513d3c9ec352', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bca63dd70d19b7673bec9ec8b01b4d8bdc27e9d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9f0b6638b50fa84581ae7659f3597b4132f86b7', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7fbdccc6d74f6587cc6c83389e171659e4dc6fbc', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6703e7ec06b46b919521cf426885a0f89279c800', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1010020163,Add GHKF plots to ekf_vs_ukf.ipynb,"## Description
+
+Added GHKF plots to `ekf_vs_ukf.ipynb`.
+
+### Figure Number
+book2 - 8.12
+<!-- Mention figure number with corresponding book (book1 or book2). For example: book1 - 4.18 -->
+
+### Figures
+![ghkf_source](https://user-images.githubusercontent.com/16075389/181349930-e9263e72-7a05-49a5-8ff9-699aaa81b474.png) ![ghkf_target](https://user-images.githubusercontent.com/16075389/181349931-c2241750-8154-44a7-8e64-a810f1d4bcb4.png)
+
+
+### Issue 
+#1082 
+
+
+## Checklist
+
+- [x] Performed a self-review of the code
+- [x] Tested on Google Colab.
+",True,1083,https://api.github.com/repos/probml/pyprobml/pulls/1083,https://github.com/probml/pyprobml/pull/1083,closed,913,609,1,4,2,0,0,0,[],2022-07-27 18:53:38+00:00,2022-07-27 21:34:18+00:00,9640.0,2:40:40,[],"[{'commit_sha': '0eada210cca0004b31a17f38dc7d3a321eaa7a54', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef3e162db69783ee218a8bc840a002e2d595557a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '458af05a770584ce0da9a20305ec9b222576634c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '832586c9b4bb5992d9fd6219a8990db4ad0f90bc', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1021764353,Implement Iterated EKF and Iterated EKS,"## Description
+- Implemented IEKF as `iterated_extended_kalman_filter()` in `ekf/inference.py`. Note that the parameter `num_iter` is the number of **re-linearizations** around the posterior, which means that the regular EKF would correspond to `num_iter=0`.
+- Changed `extended_kalman_smoother()` to take in an optional `filtered_posterior` parameter which the smoother uses as the filtered posterior in carrying out smoothing. This is useful for IEKS.
+- As the current draft of the book does not contain a pseudocode of IEKS, I generated one, as seen in Figure below.
+- Implemented IEKS as `iterated_extended_kalman_smoother()` in `ekf/inference.py`.
+
+## Figure
+<img width=""590"" alt=""Screen Shot 2022-08-12 at 7 42 23 AM"" src=""https://user-images.githubusercontent.com/16075389/184356629-8ae57467-1ee6-43ef-9991-6ba79fb040f8.png"">
+
+
+## Issue 
+#139 ",True,135,https://api.github.com/repos/probml/dynamax/pulls/135,https://github.com/probml/dynamax/pull/135,closed,73,24,2,23,8,0,0,0,[],2022-08-09 17:01:01+00:00,2022-08-15 16:38:15+00:00,517034.0,"5 days, 23:37:14",[],"[{'commit_sha': 'd5e1b842d60ad76ec828d52a0c23db84e0611949', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b248e6d176c56585b4736307c36005e1fed552d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd440ff9b3212ee7e04ac342d45ffcf43daa63f5', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a466afaa3807911df12599afd5330ac5b025266', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d0a1e3011282fc48e0f12177533f9ac6eb5a1ae', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44e3fb38f4f459f6e9bb73e28e0c2ba3d3c36bad', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f4f8517bca73564e6fa0e408a36561549a58631', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f1d76600252ad7ecab911443854fb1694fb5ef5f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e14c0e6dbe109c36a1dd5fb9c8c471b02f500dcb', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8703a097da0f5c393352c4590fb87ae2c8994180', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0750ad85071bf9b0684d72685d2799e62971974', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e614ea5cee20e313a99d5e4821395cf942941e8', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc58806c654b7566d0e731bdce9d86a4c897925c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6a66e94485e7687b684112b79d06d9d4fdf16bc', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cac179775f49274db9b5a67215364bb1e150ec39', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '71e43b2c20543b990faba281433e665e3700bf80', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '65a7ccd67cb343cfdf1675721bda3c404225263f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb09a1bece1d73673f9a564da3db12bc2ac0de1f', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b6782425dbeb36fd36e20b988c7b4f6846338b96', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6ac64796281b980c4678150b795ab40f17185712', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e08dee04ea00acd77d20aff192211f9f47c72f29', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d3ddba58a0b81e4b145a0157a8bee110713ff77', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a9c66b7ef735a13844807d9b8e1af9c4d174f98', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1026723752,Rename Classes,"## Description
+Changed names as follows:
+- `lgssm` to `linear_gaussian_ssm`
+- `nlgssm` to `nonlinear_gaussian_ssm`
+- `ekf` to `extended_kalman_filter`
+- `ukf` to `unscented_kalman_filter`
+- `ggssm` to `generalized_gaussian_filter`
+- `glssm` to `cond_moments_gaussian_filter`
+
+## Issue 
+#144",True,154,https://api.github.com/repos/probml/dynamax/pulls/154,https://github.com/probml/dynamax/pull/154,closed,585,192,62,5,1,0,0,0,[],2022-08-15 18:14:02+00:00,2022-08-15 18:41:09+00:00,1627.0,0:27:07,[],"[{'commit_sha': '8fe851ff8d3eb8a5affbb035f60a010dfcfc860c', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f8479c839fa7f01c713e9b78781edcc83f3b8eb5', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '167c0387f1a6e2c3f3431437151e667596feebde', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '77122dc7d2757c8b6e85a9a6083de9d382055ca8', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1bc83bd806d7c208a3c6d3a086b7d4d565545d38', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1026787012,Implement Conditional Moments Gaussian Filter (CMGF),"## Description
+- Implemented CMGF as `conditional_moments_gaussian_filter()` in `cond_moments_gaussian_filter/inference.py`. 
+- Implemented ICMGF as `iterated_conditional_moments_gaussian_filter()` in `cond_moments_gaussian_filter/inference.py`. 
+- Implemented CMGS as `conditional_moments_gaussian_smoother()` in `cond_moments_gaussian_filter/inference.py`. 
+- Implemented ICMGS as `iterated_conditional_moments_gaussian_smoother()` in `cond_moments_gaussian_filter/inference.py`. 
+- Tested against naive EKF implementation in `test_ekf()` in `cond_moments_gaussian_filter/inference_test.py`. 
+- Tested against naive UKF implementation in `test_ukf()` in `cond_moments_gaussian_filter/inference_test.py`. 
+
+
+## Issue 
+#140 ",True,156,https://api.github.com/repos/probml/dynamax/pulls/156,https://github.com/probml/dynamax/pull/156,closed,122,24,3,3,1,0,0,0,[],2022-08-15 19:18:22+00:00,2022-08-15 23:41:33+00:00,15791.0,4:23:11,[],"[{'commit_sha': '6fbd015769e5adf53891ca8fbb1414427b334aef', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '64571f495ac05e0d2854783b6fc6dd3239312581', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f962a7f3cd30993ecc3a4c669fbc7cf196b4182', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1027905215,Implement CMGF online logistic regression demo,"## Description
+- Implemented CMGF online logistic regression demo as `cmgf_logistic_regression_demo.ipynb`.
+- Will translate it into a `.py` file instead.
+ 
+## Figures
+
+<img width=""490"" alt=""Screen Shot 2022-08-16 at 11 47 43 AM"" src=""https://user-images.githubusercontent.com/16075389/184944010-7ff0ee50-7fea-4821-bf4c-db0efca615b5.png"">
+<img width=""484"" alt=""Screen Shot 2022-08-16 at 11 47 48 AM"" src=""https://user-images.githubusercontent.com/16075389/184944014-0d593c07-1f31-4554-a9de-a77e660d01b1.png"">
+<img width=""490"" alt=""Screen Shot 2022-08-16 at 11 47 57 AM"" src=""https://user-images.githubusercontent.com/16075389/184944016-a2bcbea9-1c14-4fdc-8839-97593099c351.png"">
+<img width=""501"" alt=""Screen Shot 2022-08-16 at 12 41 29 PM"" src=""https://user-images.githubusercontent.com/16075389/184944167-620ecb96-f18e-4a8c-8c12-adf80d897564.png"">
+
+## Issue 
+#158 
+",True,159,https://api.github.com/repos/probml/dynamax/pulls/159,https://github.com/probml/dynamax/pull/159,closed,926,0,1,7,1,0,0,0,[],2022-08-16 17:41:59+00:00,2022-08-30 18:26:00+00:00,1212241.0,"14 days, 0:44:01",[],"[{'commit_sha': '3f0dfb266acd8d2aedb90b4af9cec45c315967e4', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e7f11747e8d21567b325f77d269f72c466aabf1a', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1724c3abf2821b9e816736ec802bf1133042b60', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e816b00f972bdfa451e37120e440c207833a435d', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d2fcb42faf5f5789f385b48f55492b010a766d5', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '319c196494e39c05ad0a03c06c7b4d051bc54550', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7fd91072d0ab08694a80dc56cbf3abb52c2324c2', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1043868813,Fix ADF logistic regression convergence issue,"## Description
+
+- Re-implemented ADF for logistic regression.
+- ADF now uses unscented sigma-point Gaussian quadrature in its update step, as suggested by the [original paper](https://ieeexplore.ieee.org/document/4383733).
+- Standardized the dataset to enable more accurate Bayesian Laplace approximation.
+
+### Figure Number
+
+book2 - 8.18, 8.19
+
+### Figures
+![adf_predictive](https://user-images.githubusercontent.com/16075389/187947717-66c1a9ca-85dc-4b93-97ea-8025abbc4793.png)
+
+![w0](https://user-images.githubusercontent.com/16075389/187947745-5908fd39-3445-4321-9940-c48ff37484dd.png)
+
+![w2](https://user-images.githubusercontent.com/16075389/187947766-a21c05fa-1f9d-4b93-aa12-c61411831120.png)
+
+![w3](https://user-images.githubusercontent.com/16075389/187947785-58c305ca-43e0-40a0-8c6d-034cf03c27b4.png)
+
+### Issue 
+#1104 
+
+## Potential problems/Important remarks
+Although (as verified numerically) the filtered (co)variances are shrinking, they are not shrinking as 
+rapidly as seen by CMGF.",True,1105,https://api.github.com/repos/probml/pyprobml/pulls/1105,https://github.com/probml/pyprobml/pull/1105,closed,793,733,1,5,1,0,0,0,[],2022-09-01 15:06:16+00:00,2022-09-22 22:00:41+00:00,1839265.0,"21 days, 6:54:25",[],"[{'commit_sha': '6be84760cd04bb9b6e01e0da5c9ab064cabdfcd5', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e701060349e371a9b83960a25f13c6a386dec45', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fbf6a6c0311bb967debfbe5109294a752779d986', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '314c1a3db94d81d66761d8db2c0736b50edc6633', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6da0018b563597599efe6c70cf631d8d8cc6a67b', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1052324817,Add cmgf_multiclass_logreg_demo.ipynb,"## Description
+- Implemented CMGF online multi-class logistic regression demo as `cmgf_logistic_regression_demo.ipynb`.
+- Performs more accurate inference than single-pass sgd, near-identical performance to many-pass (`max_iter=100`) sgd
+- 3-repeated 10-fold cross validation results:
+  - 10000 data points, 5 features, 2 classes:
+    - ``EKF-CMGF estimate average accuracy = 0.869``
+    - ``one-pass sag estimate average accuracy = 0.849``
+    - ``many-pass sag estimate average accuracy = 0.869``
+  - 10000 data points, 5 features, 3 classes:
+    - ``EKF-CMGF estimate average accuracy = 0.681``
+    - ``one-pass sag estimate average accuracy = 0.61``
+    - ``many-pass sag estimate average accuracy = 0.681``
+  - 10000 data points, 5 features, 4 classes:
+    - ``EKF-CMGF estimate average accuracy = 0.594``
+    - ``one-pass sag estimate average accuracy = 0.533``
+    - ``many-pass sag estimate average accuracy = 0.594``
+  - 10000 data points, 5 features, 5 classes:
+    - ``EKF-CMGF estimate average accuracy = 0.576``
+    - ``one-pass sag estimate average accuracy = 0.537``
+    - ``many-pass sag estimate average accuracy = 0.576``
+
+
+## Issue 
+#178 
+",True,193,https://api.github.com/repos/probml/dynamax/pulls/193,https://github.com/probml/dynamax/pull/193,closed,355,0,1,2,1,0,0,0,[],2022-09-10 20:22:05+00:00,2022-09-12 03:41:40+00:00,112775.0,"1 day, 7:19:35",[],"[{'commit_sha': '2c9e3d7359e0e6dcee3538def6b229637a7ed257', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91f8e84d8467224a2ba9bba8ffe07a30ec907b30', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1052328662,Add cmgf_poisson_demo.ipynb,"## Description
+- Implemented CMGF poisson-likelihood inference demo as `cmgf_poisson_demo.ipynb`.
+- Performs smoothed inference using ``conditional_moments_gaussian_smoother()``
+
+
+## Figures
+
+![result1](https://user-images.githubusercontent.com/16075389/189501191-5448f8fa-cf97-4478-ae0d-a96fd3673602.png)
+
+![result2](https://user-images.githubusercontent.com/16075389/189501196-5df7e0e0-dd94-4cd2-a88e-a388fbb59826.png)
+
+
+## Issue 
+#190 
+",True,200,https://api.github.com/repos/probml/dynamax/pulls/200,https://github.com/probml/dynamax/pull/200,closed,621,0,1,3,3,0,0,0,[],2022-09-10 20:47:57+00:00,2022-09-16 15:54:20+00:00,500783.0,"5 days, 19:06:23",[],"[{'commit_sha': '43b91db66a8ed824be536d0463afcfc78ffab7ea', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ba52ffcf6199ed5a203ef6fba91635fc5b1c80e', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5e93464a1826157a552f2d1e21bdabeac127ab21', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+1052329780,Add cmgf_mlp_classification_demo.ipy,"## Description
+- Implemented CMGF-one-pass-trained MLP Classifier demo as `cmgf_mlp_classification_demo.ipynb`.
+
+
+## Figures
+https://user-images.githubusercontent.com/16075389/189501338-182f3f11-2c17-4543-9562-f9d266ac8285.mp4
+
+![result1](https://user-images.githubusercontent.com/16075389/189501330-5108dece-69a7-4e96-9fe1-5a718698ce27.png)
+![result2](https://user-images.githubusercontent.com/16075389/189501331-3ba5dc0a-a448-4593-bffb-73bf48fc3b1d.png)
+
+
+
+
+
+## Issue 
+#191 
+",True,201,https://api.github.com/repos/probml/dynamax/pulls/201,https://github.com/probml/dynamax/pull/201,closed,9099,0,1,1,1,0,0,0,[],2022-09-10 20:54:14+00:00,2022-09-12 04:42:06+00:00,114472.0,"1 day, 7:47:52",[],"[{'commit_sha': 'cae83972ec5946e628f231204817925b4ac51ab4', 'committer_username': 'petergchang', 'committer_name': 'Peter G. Chang', 'committer_email': None, 'commit_date': datetime.datetime(2015, 11, 30, 2, 43, tzinfo=datetime.timezone.utc)}]",Peter G. Chang,16075389,,User,,26,,36,23
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+386716686,probml-notebooks,probml/probml-notebooks,Jupyter Notebook,60,200,19,22,437,0,2,0,"[{'id': 901236006, 'number': 69, 'closed': datetime.datetime(2022, 4, 9, 2, 4, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 6, 9, 5, 56, tzinfo=datetime.timezone.utc), 'time_taken': 233926.0, 'time_delta': '2 days, 16:58:46', 'additions': 168, 'deletions': 200, 'state': 'closed'}, {'id': 897247036, 'number': 61, 'closed': datetime.datetime(2022, 4, 4, 19, 12, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 1, 10, 59, tzinfo=datetime.timezone.utc), 'time_taken': 288796.0, 'time_delta': '3 days, 8:13:16', 'additions': 664, 'deletions': 0, 'state': 'closed'}, {'id': 892949183, 'number': 54, 'closed': datetime.datetime(2022, 3, 29, 23, 41, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 29, 11, 53, 5, tzinfo=datetime.timezone.utc), 'time_taken': 42501.0, 'time_delta': '11:48:21', 'additions': 855, 'deletions': 0, 'state': 'closed'}]"
+65924871,pyprobml,probml/pyprobml,Jupyter Notebook,1515,6427,192,66,3036,32,49,0,"[{'id': 1043868813, 'number': 1105, 'closed': datetime.datetime(2022, 9, 22, 22, 0, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 1, 15, 6, 16, tzinfo=datetime.timezone.utc), 'time_taken': 1839265.0, 'time_delta': '21 days, 6:54:25', 'additions': 793, 'deletions': 733, 'state': 'closed'}, {'id': 1010020163, 'number': 1083, 'closed': datetime.datetime(2022, 7, 27, 21, 34, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 27, 18, 53, 38, tzinfo=datetime.timezone.utc), 'time_taken': 9640.0, 'time_delta': '2:40:40', 'additions': 913, 'deletions': 609, 'state': 'closed'}, {'id': 1001292059, 'number': 1018, 'closed': datetime.datetime(2022, 7, 19, 23, 4, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 19, 22, 16, 24, tzinfo=datetime.timezone.utc), 'time_taken': 2881.0, 'time_delta': '0:48:01', 'additions': 577, 'deletions': 0, 'state': 'closed'}, {'id': 892912200, 'number': 715, 'closed': datetime.datetime(2022, 4, 1, 2, 25, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 29, 11, 16, 39, tzinfo=datetime.timezone.utc), 'time_taken': 227338.0, 'time_delta': '2 days, 15:08:58', 'additions': 280, 'deletions': 0, 'state': 'closed'}]"
+434127602,JSL,probml/JSL,Python,13,51,8,8,333,10,5,0,"[{'id': 945681946, 'number': 57, 'closed': datetime.datetime(2022, 5, 24, 21, 18, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 24, 14, 5, 20, tzinfo=datetime.timezone.utc), 'time_taken': 25993.0, 'time_delta': '7:13:13', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 910018381, 'number': 35, 'closed': datetime.datetime(2022, 4, 22, 4, 29, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 14, 14, 19, 53, tzinfo=datetime.timezone.utc), 'time_taken': 655758.0, 'time_delta': '7 days, 14:09:18', 'additions': 102, 'deletions': 3, 'state': 'closed'}]"
+480587737,dynamax,probml/dynamax,Jupyter Notebook,72,653,26,26,1475,53,9,11,"[{'id': 1121160081, 'number': 278, 'closed': datetime.datetime(2022, 11, 14, 15, 20, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 14, 10, 55, 29, tzinfo=datetime.timezone.utc), 'time_taken': 15874.0, 'time_delta': '4:24:34', 'additions': 110, 'deletions': 5, 'state': 'closed'}, {'id': 1110770954, 'number': 250, 'closed': datetime.datetime(2022, 11, 4, 19, 21, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 4, 12, 33, 46, tzinfo=datetime.timezone.utc), 'time_taken': 24440.0, 'time_delta': '6:47:20', 'additions': 20, 'deletions': 397, 'state': 'closed'}, {'id': 1093170566, 'number': 238, 'closed': datetime.datetime(2022, 11, 14, 10, 55, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 20, 4, 17, 5, tzinfo=datetime.timezone.utc), 'time_taken': 2183915.0, 'time_delta': '25 days, 6:38:35', 'additions': 84, 'deletions': 29, 'state': 'closed'}, {'id': 1090044854, 'number': 234, 'closed': datetime.datetime(2022, 11, 2, 2, 49, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 17, 23, 25, 22, tzinfo=datetime.timezone.utc), 'time_taken': 1308246.0, 'time_delta': '15 days, 3:24:06', 'additions': 321, 'deletions': 2, 'state': 'closed'}, {'id': 1087591098, 'number': 228, 'closed': datetime.datetime(2022, 10, 17, 1, 4, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 14, 15, 19, 55, tzinfo=datetime.timezone.utc), 'time_taken': 207879.0, 'time_delta': '2 days, 9:44:39', 'additions': 698, 'deletions': 9, 'state': 'closed'}, {'id': 1083888810, 'number': 226, 'closed': datetime.datetime(2022, 10, 11, 22, 27, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 11, 22, 17, 20, tzinfo=datetime.timezone.utc), 'time_taken': 611.0, 'time_delta': '0:10:11', 'additions': 36, 'deletions': 22, 'state': 'closed'}, {'id': 1080548800, 'number': 223, 'closed': datetime.datetime(2022, 10, 7, 16, 36, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 7, 15, 57, 17, tzinfo=datetime.timezone.utc), 'time_taken': 2364.0, 'time_delta': '0:39:24', 'additions': 748, 'deletions': 0, 'state': 'closed'}, {'id': 1068933593, 'number': 216, 'closed': datetime.datetime(2022, 11, 2, 2, 49, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 27, 17, 26, 44, tzinfo=datetime.timezone.utc), 'time_taken': 3057777.0, 'time_delta': '35 days, 9:22:57', 'additions': 423, 'deletions': 0, 'state': 'closed'}, {'id': 1054138926, 'number': 209, 'closed': datetime.datetime(2022, 9, 13, 18, 1, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 13, 3, 49, 4, tzinfo=datetime.timezone.utc), 'time_taken': 51166.0, 'time_delta': '14:12:46', 'additions': 1041, 'deletions': 85, 'state': 'closed'}, {'id': 1054131651, 'number': 207, 'closed': datetime.datetime(2022, 9, 13, 17, 58, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 13, 3, 34, 55, tzinfo=datetime.timezone.utc), 'time_taken': 51832.0, 'time_delta': '14:23:52', 'additions': 64, 'deletions': 106, 'state': 'closed'}, {'id': 1052329780, 'number': 201, 'closed': datetime.datetime(2022, 9, 12, 4, 42, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 10, 20, 54, 14, tzinfo=datetime.timezone.utc), 'time_taken': 114472.0, 'time_delta': '1 day, 7:47:52', 'additions': 9099, 'deletions': 0, 'state': 'closed'}, {'id': 1052328662, 'number': 200, 'closed': datetime.datetime(2022, 9, 16, 15, 54, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 10, 20, 47, 57, tzinfo=datetime.timezone.utc), 'time_taken': 500783.0, 'time_delta': '5 days, 19:06:23', 'additions': 621, 'deletions': 0, 'state': 'closed'}, {'id': 1052324817, 'number': 193, 'closed': datetime.datetime(2022, 9, 12, 3, 41, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 10, 20, 22, 5, tzinfo=datetime.timezone.utc), 'time_taken': 112775.0, 'time_delta': '1 day, 7:19:35', 'additions': 355, 'deletions': 0, 'state': 'closed'}, {'id': 1027905215, 'number': 159, 'closed': datetime.datetime(2022, 8, 30, 18, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 16, 17, 41, 59, tzinfo=datetime.timezone.utc), 'time_taken': 1212241.0, 'time_delta': '14 days, 0:44:01', 'additions': 926, 'deletions': 0, 'state': 'closed'}, {'id': 1026787012, 'number': 156, 'closed': datetime.datetime(2022, 8, 15, 23, 41, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 15, 19, 18, 22, tzinfo=datetime.timezone.utc), 'time_taken': 15791.0, 'time_delta': '4:23:11', 'additions': 122, 'deletions': 24, 'state': 'closed'}, {'id': 1026723752, 'number': 154, 'closed': datetime.datetime(2022, 8, 15, 18, 41, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 15, 18, 14, 2, tzinfo=datetime.timezone.utc), 'time_taken': 1627.0, 'time_delta': '0:27:07', 'additions': 585, 'deletions': 192, 'state': 'closed'}, {'id': 1021764353, 'number': 135, 'closed': datetime.datetime(2022, 8, 15, 16, 38, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 9, 17, 1, 1, tzinfo=datetime.timezone.utc), 'time_taken': 517034.0, 'time_delta': '5 days, 23:37:14', 'additions': 73, 'deletions': 24, 'state': 'closed'}, {'id': 1008291351, 'number': 122, 'closed': datetime.datetime(2022, 7, 26, 17, 58, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 26, 9, 44, 26, tzinfo=datetime.timezone.utc), 'time_taken': 29615.0, 'time_delta': '8:13:35', 'additions': 491, 'deletions': 6, 'state': 'closed'}, {'id': 1001238434, 'number': 115, 'closed': datetime.datetime(2022, 7, 20, 6, 0, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 19, 20, 59, 34, tzinfo=datetime.timezone.utc), 'time_taken': 32469.0, 'time_delta': '9:01:09', 'additions': 50, 'deletions': 0, 'state': 'closed'}, {'id': 999369437, 'number': 111, 'closed': datetime.datetime(2022, 7, 19, 19, 14, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 18, 13, 4, 29, tzinfo=datetime.timezone.utc), 'time_taken': 108585.0, 'time_delta': '1 day, 6:09:45', 'additions': 630, 'deletions': 9, 'state': 'closed'}, {'id': 995763144, 'number': 88, 'closed': datetime.datetime(2022, 7, 13, 17, 31, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 17, 26, 29, tzinfo=datetime.timezone.utc), 'time_taken': 318.0, 'time_delta': '0:05:18', 'additions': 62, 'deletions': 0, 'state': 'closed'}, {'id': 995680912, 'number': 87, 'closed': datetime.datetime(2022, 7, 13, 15, 58, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 15, 58, 22, tzinfo=datetime.timezone.utc), 'time_taken': 6.0, 'time_delta': '0:00:06', 'additions': 71, 'deletions': 30, 'state': 'closed'}, {'id': 995677703, 'number': 86, 'closed': datetime.datetime(2022, 7, 13, 15, 55, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 15, 55, 13, tzinfo=datetime.timezone.utc), 'time_taken': 5.0, 'time_delta': '0:00:05', 'additions': 2, 'deletions': 1, 'state': 'closed'}, {'id': 995674407, 'number': 85, 'closed': datetime.datetime(2022, 7, 13, 15, 52, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 15, 52, 17, tzinfo=datetime.timezone.utc), 'time_taken': 6.0, 'time_delta': '0:00:06', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 994821321, 'number': 77, 'closed': datetime.datetime(2022, 7, 13, 15, 31, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 12, 21, 48, 52, tzinfo=datetime.timezone.utc), 'time_taken': 63736.0, 'time_delta': '17:42:16', 'additions': 299, 'deletions': 0, 'state': 'closed'}, {'id': 994728966, 'number': 76, 'closed': datetime.datetime(2022, 7, 12, 19, 53, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 12, 19, 53, 30, tzinfo=datetime.timezone.utc), 'time_taken': 11.0, 'time_delta': '0:00:11', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 993620550, 'number': 69, 'closed': datetime.datetime(2022, 7, 12, 3, 15, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 11, 22, 9, 50, tzinfo=datetime.timezone.utc), 'time_taken': 18326.0, 'time_delta': '5:05:26', 'additions': 8, 'deletions': 7, 'state': 'closed'}, {'id': 983264672, 'number': 42, 'closed': datetime.datetime(2022, 7, 11, 21, 6, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 30, 1, 45, 21, tzinfo=datetime.timezone.utc), 'time_taken': 1020081.0, 'time_delta': '11 days, 19:21:21', 'additions': 1260, 'deletions': 1, 'state': 'closed'}, {'id': 970733467, 'number': 29, 'closed': datetime.datetime(2022, 6, 20, 14, 51, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 17, 15, 22, 56, tzinfo=datetime.timezone.utc), 'time_taken': 257289.0, 'time_delta': '2 days, 23:28:09', 'additions': 661, 'deletions': 9, 'state': 'closed'}, {'id': 952706586, 'number': 28, 'closed': datetime.datetime(2022, 6, 2, 4, 7, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 1, 2, 30, 26, tzinfo=datetime.timezone.utc), 'time_taken': 92237.0, 'time_delta': '1 day, 1:37:17', 'additions': 8, 'deletions': 6, 'state': 'closed'}, {'id': 951149496, 'number': 26, 'closed': datetime.datetime(2022, 5, 31, 15, 31, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 30, 16, 1, 33, tzinfo=datetime.timezone.utc), 'time_taken': 84570.0, 'time_delta': '23:29:30', 'additions': 38, 'deletions': 9, 'state': 'closed'}]"

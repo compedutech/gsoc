@@ -1,0 +1,537 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1406794625,Improved Event Management: Relevant backend changes,"This PR addresses all the concerns in the backend as a part of the [Improved Event Management Project](https://github.com/orgs/PalisadoesFoundation/projects/19?pane=issue&itemId=30292419)
+
+### Changes 
+- [X] Migrate the `EventAttendee` schema in the backend
+- [X] Implement all the `EventProject` resolvers as discussed with Peter on Slack
+- [X] Migrate the `Tasks` schema and all the relevant resolvers
+- [X] Introduce a new `Volunteers` table
+- [X] Link the `Volunteers` table to the already existing schema
+- [X] Implement basic resolvers for volunteers
+- [X] Implement all the resolvers for volunteers
+- [X] Add event attendee resolvers
+
+All the files modified/added have 100% test coverage. ",True,1349,https://api.github.com/repos/PalisadoesFoundation/talawa-api/pulls/1349,https://github.com/PalisadoesFoundation/talawa-api/pull/1349,closed,2921,1963,88,28,5,2,0,0,[],2023-06-25 18:29:45+00:00,2023-06-29 16:54:17+00:00,339872.0,"3 days, 22:24:32","[{'comment_id': 1243938055, 'comment_body': ""Use a fixed approach for writing schema definitions. This will create uniformity across the schema and make it easier to traverse through it manually. Graphql has no convention or strict rules for schema design, it is the developer's job to make conventions and strict rules for writing graphql schema for their applications. Here I'm listing some good conventions/patterns for mutations in graphql schema design:-\r\n\r\n1. First you need name of the types/objects the mutation is to be implemented on. Then create mutation names by prefixing the name of those types/objects with action words like create, add, update, delete, remove etc. \r\n\r\n2. Have each mutation accept a single argument named input. Since the input is abstracted away into its own type in the schema it is much more cleaner and much more flexible to extend if needed later on. Make the input for each mutation required, it doesn't make sense to trigger a mutation without the input object. In exceptional cases input might not be needed.\r\n\r\n3. If needed create a custom mutation result type to communicate to the client result and errors in a proper, easy to understand format.\r\n\r\nFixing the already existing resolvers is not as feasible because they've already been implemented on the client side and you'd need to update client side code as well. But the new ones you're created here can be written from the start to follow a good convention.\r\n"", 'comment_created': datetime.datetime(2023, 6, 27, 15, 22, 13, tzinfo=datetime.timezone.utc), 'commenter': 'xoldd', 'type': 'User'}, {'comment_id': 1243989614, 'comment_body': 'I have tried to follow the same as far as possible. In all of the mutations I have added, I have made sure only to use a singular input type for all the inputs as far as possible. The only time I have used two inputs, are when a `id` and some `data` input are required for the same, as it makes sense to take them separately IMO as the `id` is used in resolver in multiple places for auth checks and fetching, while the data is usually destructed in the resolver to populate. \r\n\r\nIf you find any resolvers that differ from this convention, you can let me know and I will fix them.', 'comment_created': datetime.datetime(2023, 6, 27, 15, 57, 33, tzinfo=datetime.timezone.utc), 'commenter': 'EshaanAgg', 'type': 'User'}]","[{'commit_sha': 'f908b86cd7475cfc8340978ac0e85bec13d8be07', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fedf37733b337e45ffa2e735ceff7226e64822a5', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e110fc60491f80caf191892b4eabacfe1dce38e', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0dcde6611ab56d3a60cb26b955fed9025430f3b2', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c83300692fe99f7f8cd5b49cc586c18e6a95a628', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f9bea7eba25629c7d89ffc454f42124d2b9f5ee1', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a55e3c07f677f08d49546b8ac6033d70ffba45f5', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2a5bed79e18db77b894e6b82ff7c3a99a208433', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '27d1db9f773fa39f534adb8a112fe34ce7a159bc', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5413a76d7ae29252c40d9f2795bdacc1e7958494', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e4b2ffd29ab5f63e4efca2cd2032cb5a0ded144', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e15c4acca453864749790785574dd6d90318edeb', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30156f07d6cdd0ef77c3c3771833bc5b15729316', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44d693507c3e7833ea6e4afa8c121bfdd2e28330', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7bd05720413387a9cd66f68ec1828f907bd4f273', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e860ef3e843071b2ad7b8e280755f315022f582b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0c4c0714394eb658dcf32fb7f93d17bb090e393d', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9685b094e3dd1036161a6d768c0403dace8a3c97', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f00bc6595737c39bffa290f1d04b29e10fd093c1', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '88814a06aec6b7e458d494b988510b72771c5570', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a6b9691a5399971c11a022e9977adbe6b996d70', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2068a6f17d445b7ff7f1e4e0d436fe74d8d32156', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f5f643baa1bcd57bb8dc4e2ff9294b82ad6571a', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3cb81836440cd1c21ae3d7cb7fe6154ee07c9e87', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '503260ef9cd58d6dbc4a3b5b6eb37ca72ba6b342', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd53d6eea9a9adfbc46e7d20eb80e765eedacacb', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4bfcd1ff569b4f2ee5d2c4acec98f6aded80e437', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83d9dcc0a124ed5c0a25d1858fe8524cd9bf20e9', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1411154924,Apollo v4 ,"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+This PR upgrades the current version of Apollo Server to v4(latest) from v2. 
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Issue Number:**
+
+Fixes #1350 
+
+**Did you add tests for your changes?**
+Yes.
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+
+<!--Yes or No-->
+",True,1351,https://api.github.com/repos/PalisadoesFoundation/talawa-api/pulls/1351,https://github.com/PalisadoesFoundation/talawa-api/pull/1351,closed,18982,7683,39,25,7,0,0,0,[],2023-06-28 07:31:14+00:00,2023-06-29 20:22:03+00:00,132649.0,"1 day, 12:50:49",[],"[{'commit_sha': 'dd64a79b4838fcfde37a3230a89459ab3c331c44', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '72e8b1bc5aca553efa09778ff045b9682e50219e', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '391216f4294ffcaf1e7c95f6fc936a239068ae7d', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b043502cfe48ba65bb5749cd92a4da24337c4863', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f0209a88f244988c4b669240aebda18273ac8182', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '78c7143069681676bb60ec09b674c0b16e49077b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a7425cbf8564b4ad391679982d5e3fe57c90ef31', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8bf52da72b6bd052a92090f6f675d0eb95111239', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c26ceaafab39c73df6026743bc7f5d1001b3d87a', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3df91ea6b06e5271e20600ca8c0a2fc9c181517', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ab885373230181a21c1701d335a7595992e5cbc', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e34b374bffdce43fcbda98291832e7b7953d956', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'faa824d0a09f3e18f0726e2b76bb5776c0898fe4', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '78026223cdad5f065e13e53bcd734c195fdf4103', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a569f6950c3bf7896e1ab51c2afc9ccb0f53b193', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc6cf296ca24484cf94af7f6332f4512a08c0b3f', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b66cdb0cd5dc12e74407a933ab22924ffbd33cbc', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a7d7a2ef76af2b1b84a267b72446bf6fe87ec1a8', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd506312615a43ae21d0d77d0e58af278632496ac', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '764bfaa78b120d2091208f040fc56fb8d7eb26d7', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3138f1879767d73cacf13f2ec268ca7cbd2fd7a7', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ca8544e92ecaa81a781a1dc02c0142ae9b2eba1', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41ad62ad1db634f0a6550c2c412df85b83957057', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afdb6f6df3fa53bf08e93e17b752ab61c7532cd0', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6f7dce91dd39343a8629d7a64b8db6d464bcc97', 'committer_username': 'kb-0311', 'committer_name': 'Kanishka Bansode', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 12, 18, 32, 29, tzinfo=datetime.timezone.utc)}]",Kanishka Bansode,96020697,,User,,56,,37,36
+1509138810,Introduce Feedback System,"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+This PR introduces the necessary models as well the resolvers need to implement a Feedback system in Talawa API. 
+
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Issue Number:**
+NA
+
+**Did you add tests for your changes?**
+Yes
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+NA
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+NA
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,1387,https://api.github.com/repos/PalisadoesFoundation/talawa-api/pulls/1387,https://github.com/PalisadoesFoundation/talawa-api/pull/1387,closed,909,0,27,5,3,0,0,0,[],2023-09-10 12:51:03+00:00,2023-09-20 14:48:52+00:00,871069.0,"10 days, 1:57:49",[],"[{'commit_sha': 'eb748b7868a74b43c613c270c70b42448ca7cbf4', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df6f864d78eef482350a5064a0ca8b0b31cf83ba', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4365ea031bbd9337a0c56466123f6354c6581df1', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7645e1347c481854be3bfd3e5bf324a45443da5c', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be4aa6f2f1c14c8fcba2a9f6b7f6d22a947007f0', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1523370842,Add field level resolvers for the task modal,"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Bugfix
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Issue Number:**
+NA
+
+**Did you add tests for your changes?**
+Yes
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+NA
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+As @beingnoble03 pointed out, the field level resolver for the Event and Creator fields were missing on the Task model. This PR introduces the same with 100% test coverage. 
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,1389,https://api.github.com/repos/PalisadoesFoundation/talawa-api/pulls/1389,https://github.com/PalisadoesFoundation/talawa-api/pull/1389,closed,94,0,5,1,5,0,0,0,[],2023-09-20 15:50:01+00:00,2023-09-24 13:55:58+00:00,338757.0,"3 days, 22:05:57",[],"[{'commit_sha': '5f56636b2a34678ffab5c6bece819cca17c58305', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1536923470,Introduce resolver composition [Fixes #1352],"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Introduces the paradigm of resolver composition into the repository so that we can compose them so save having to write repetitive tests. 
+
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Issue Number:**
+Fixes #1352 
+
+**Did you add tests for your changes?**
+Yes
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+NA
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+Introduced a `checkCurrentUserExists` middleware and added it to the resolvers which were just checking the existence of the User object from the context, and not using the same in any manner.
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,1397,https://api.github.com/repos/PalisadoesFoundation/talawa-api/pulls/1397,https://github.com/PalisadoesFoundation/talawa-api/pull/1397,closed,184,786,47,3,2,0,0,0,[],2023-10-01 08:55:12+00:00,2023-10-02 16:29:31+00:00,113659.0,"1 day, 7:34:19",[],"[{'commit_sha': '1aa01287867a65b5c426249762f31b1f211e0275', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac649f652c6537bd0e379d5a9e5cc4039c9da91c', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dbcb395077d5e08a8b5ee420b3c9b0edb9d3ebae', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1552444239,Make maximum rating of events in feedback to 5 [Fixes #1405],"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Bugfix
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+Fixes #1405
+
+**Did you add tests for your changes?**
+Yes
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+NA
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+As discussed with @palisadoes, the maximum feedback rating in event management should be `5` to maintain consistency. This PR updates the same to be 5 instead of 10. 
+ 
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,1404,https://api.github.com/repos/PalisadoesFoundation/talawa-api/pulls/1404,https://github.com/PalisadoesFoundation/talawa-api/pull/1404,closed,12,13,5,5,4,0,0,0,[],2023-10-11 15:30:58+00:00,2023-10-14 00:51:48+00:00,206450.0,"2 days, 9:20:50",[],"[{'commit_sha': '534a533cc4d83ba39891bd2fca92ae313805c38b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd93bbb359acc8f0679d36cec9b61ffc56c73d0df', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e94292c9c269a37a6be141ac7a977db1e7b82028', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f5ab775f9827d67219d9966155a1757af915eca', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46d17f2d845dc724a4a33dd607f80894e37bc384', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1298978965,Rename `data` variables to more readable name [Fixes #829],"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Bugfix
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Issue Number:**
+Fixes #829 
+
+**Did you add tests for your changes?**
+NA
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+NA
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+Renamed the `data` variables to move understandable names wherever multiple of them being consumed in the same component. Also fixed the intermittent failing test in Roles.tsx.
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,835,https://api.github.com/repos/PalisadoesFoundation/talawa-admin/pulls/835,https://github.com/PalisadoesFoundation/talawa-admin/pull/835,closed,102,99,12,12,28,4,0,0,[],2023-04-02 03:44:10+00:00,2023-06-11 00:36:15+00:00,6036725.0,"69 days, 20:52:05","[{'comment_id': 1168968989, 'comment_body': 'Why not update the variable name directly instead of giving them an alias for the component.', 'comment_created': datetime.datetime(2023, 4, 17, 16, 9, 19, tzinfo=datetime.timezone.utc), 'commenter': 'TheJoshDotDev', 'type': 'User'}, {'comment_id': 1169797454, 'comment_body': '@Rumone Updating the variable is an option, but the term `data` is too general in my opinion, and leaves ambiguity as to what data we are referring to. Providing an alias gives the same more context, and defines the variable in only the scope that it would be consumed.', 'comment_created': datetime.datetime(2023, 4, 18, 10, 8, 3, tzinfo=datetime.timezone.utc), 'commenter': 'EshaanAgg', 'type': 'User'}, {'comment_id': 1176629502, 'comment_body': 'Yeah I agree, why not change the variable name instead?\n\nInstead of\n```...data: userData...```\nJust use `userData`', 'comment_created': datetime.datetime(2023, 4, 25, 14, 46, 8, tzinfo=datetime.timezone.utc), 'commenter': 'TheJoshDotDev', 'type': 'User'}, {'comment_id': 1176636227, 'comment_body': ""@Rumone It's cause we are using destructing here. By default, the `useQuery` hook returns the `data` object, which we can then alias to `userData`. If we were to access `userData` directly, the same would always be null as the same is never exported by the `useQuery` or analogous hooks."", 'comment_created': datetime.datetime(2023, 4, 25, 14, 50, 10, tzinfo=datetime.timezone.utc), 'commenter': 'EshaanAgg', 'type': 'User'}]","[{'commit_sha': '6becaef41d67d50bccf36797b271ea4b026bc45c', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f7c02d6cfed47d20c23b0150b40d2976a40c3f80', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a67d5793b58b4d342a147c2495e71c620e3c2aa', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1462f721e75ded1a7381ddc931b2f870c61e139f', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f28c31babbbc53ab69163ed192790760fb071825', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1391081a300de80c25c703cc29e19b0cdea4767', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f4566f30848f685c2208defc6c2df85aece0a3d5', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '525eb4a522a11e0fb6b957aeafc160ce54c23c80', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1b01bf0a0a0d55a2ce583c7332e4c6d8fd2da5d9', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f47454c386dea154310e65b2b78a285a2ec42c9e', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '655924ac85ae2a0cbc50b137686de761e521450a', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '87f6e7e5d4cb236f99517c4ce3a63adca8585e21', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1481691116,Add Event Project and Volunteer Management,"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production-ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Add modals and functionality for Event Project Management and Volunteer management in accordance with the Admin UI redesign.
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Did you add tests for your changes?**
+Yes. 100% coverage for all changed files.
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/937cd0eb-47b4-46cb-ab0b-350aa59d132d)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/91deee82-290a-4eac-ac1d-c53e2fd83ae3)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/9563caee-e3c9-4b7e-b695-7d411137c180)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/8362a9a5-1d9c-4a17-a0fd-206689a5ef35)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/3480080d-d2a5-4d65-9a46-46a84a3bce15)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/a192162a-f959-47c1-abbf-fafab081b198)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/bb7ae94e-5192-4f9a-b234-dc1aa567ed8b)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/34f51159-13a6-467f-bcc1-1bbb2e7333ad)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/0d409a1d-4e6f-492e-935f-945cc81ca01d)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/c17e9509-c373-46f5-b39a-1417896ede52)
+
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,961,https://api.github.com/repos/PalisadoesFoundation/talawa-admin/pulls/961,https://github.com/PalisadoesFoundation/talawa-admin/pull/961,closed,7672,20413,50,36,3,0,0,0,[],2023-08-20 06:48:16+00:00,2023-08-21 16:00:27+00:00,119531.0,"1 day, 9:12:11",[],"[{'commit_sha': '7bb3086a238a1cd4805d09f388fd7753a13eb37a', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7069b134e281bcb5e2aefb58cd89588b06241b5a', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '903748d85d613e40c523c01e6bb806a5ca240e4e', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '762aa9c9984412208fa34b16cd648a55b14cc208', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b58f2d3196d2e49367426e1e324ba6e38ab84044', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4de6811fc641f35357b383e58f4f57c20c7ea5ab', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5bfdb4c6809641657ec4fdd26549ee38e9f2c5e5', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2632dcb38fd5c9b405317c45b7ea7e5faa37e127', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e45aa66e0a9bf8311c1dc0bfc03bfe74cde57e38', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bc2526c2948f61f41096c73bca172a2cec58a96', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be97a1a06eb48a9c8f8b435f8b1c8a23acc8f8e4', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9d9fba59abf8ef5af7fff550127e2888b6432946', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73c72ebddec728507df37c45195e5888f2c28408', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '966a16fb84a99d078da95016072b6bcbfa623f1e', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd746de3389afc861af84180a337bbc04a6e53e58', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48547bd2e739186011aad004297806d896485202', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1f29cfb436330c4ff7ee0544a67196021570d76f', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '72e356cf9e73cb9eed12c82509d499b6e2e61994', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '86ae2b1b7dc91aaf330a89422bd7631aa68f71a4', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c289e4360ac545c524482a9000df0b4a256b4543', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8625ddc503ea6a2932f81f91a9f15093b7a005b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7f31cfddfefee3166c56a9a325ed3e142513617a', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5669fd3d2ed09575b8739d76eb78d37ab6c4febd', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f77927a10367a408baf7797c2fc9b4882805672e', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '42bc26ad63c3620e6e75f32ff9f20b3a83a797a9', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1733a377f6f0b9934621bdfebe6c8427e02fabd4', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00eb4783358a0e29f72d5af8113549c268d06a4f', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d2dbbc672c5ecffc2a58fcbb259819e8f42db53', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90c7ee0e8f2f016ac8d9b4f34e106ffc5a5406a9', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc9e7072340a0796e01b7fa84aa704a029811728', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08e34b1ede92d9f3893059bafcbefba50cc484ea', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a1465fae39dd62207828fb5f946a022fc9af360d', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10a95daa9c8a4d6b89c36fcfd4c8738600d6d457', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48daef0739bf073dba2acd6a8b827a6a5b281a37', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f883cd4f37963177842107b312c8e3c88239ecac', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7571b0588b412e175d5c3bbfa5984e615019f540', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1541214748,Add Feedback UI Components to Talawa Admin,"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+This PR introduces multiple UI components that gives the user insights into how the feedback for the organized event has been.
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Did you add tests for your changes?**
+Yes
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/1cef9826-b99e-45f0-94f8-18ac339de6d8)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/4873d986-c654-4094-b764-70351b9f759b)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/3d5b4000-7d23-4322-b60a-929420bbc9d3)
+
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+No
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+Three components have been created as a part of this PR:
+- A pie chart showing the distribution of various feedback ratings provided by the users
+- A components listing all the reviews submitted by the user
+- A component showing the average rating
+
+They have been styled with the help of Material UI. The styles would be upgraded later to match the theme after the designs are finalized in accordance with the Admin UI redesign project.
+
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,980,https://api.github.com/repos/PalisadoesFoundation/talawa-admin/pulls/980,https://github.com/PalisadoesFoundation/talawa-admin/pull/980,closed,1048,61,17,13,3,0,0,0,[],2023-10-04 06:44:25+00:00,2023-10-04 16:17:55+00:00,34410.0,9:33:30,[],"[{'commit_sha': '68d1edf37301e643e61cb2b661c298075032b761', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ba5cc15f65514f75b934cf53ec2bddd048fdd79', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '88610a4cbf412da45889551ca02a78a1adf582d8', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aa2e013054c2fce1461722d1405c7f63f89302cd', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '122ba1a1097d87aca4bae2a2c7134544edd84b3b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c1cf9d5a3af1c0826134b18abe5edd3585c70ef', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd1fa74a5b1851194c085ec64a6227df4dd33078', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '800f9cbcf2a8564748da8945fbf2595c2b95ae2a', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '246b0efffe62d5b44e02d08d95928a69af7e516b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00efe91ccf5253557c63ead94e87db8144a3d6d2', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d83ac33f6e8b68ad4f041ea659dae5d014b384b', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '99d54ac87e71be07f9650dbc7aa4566005ffffbb', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '585499fb08bd426a15a1617f5ef082534e39fa01', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1543240384,Add Side Navigation to Event Dashboard,"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Introduced side navigation to the event dashboard. 
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Did you add tests for your changes?**
+Yes. 100% line coverage for all changed files.
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/d50a0281-ad84-4805-9a69-c14652186d4f)
+![image](https://github.com/PalisadoesFoundation/talawa-admin/assets/96648934/86abe663-3377-41ff-be63-7b165daa9cd6)
+
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+Introduced the side navigation as a means to promote consistency in design across Talawa Admin.
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+- Will be updating the look of the event dashboard after the Event screens are redesigned as a part of Admin UI Redesign to maintain consistency. 
+The introduction of this screen should unify the design scheme to the greatest extent.
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,981,https://api.github.com/repos/PalisadoesFoundation/talawa-admin/pulls/981,https://github.com/PalisadoesFoundation/talawa-admin/pull/981,closed,1170,145,26,8,2,0,0,0,[],2023-10-05 09:21:26+00:00,2023-10-08 20:45:27+00:00,300241.0,"3 days, 11:24:01",[],"[{'commit_sha': 'ad3dbc05355803ed7e994772bf225958a97d9008', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '038d32ac9033f5f36c28447e0869afc702a6d9e7', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '344977fd419479201e8f9bb4f2d628aff721446d', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e7d8e1a750355e8d7da04c3d2135afa40cc539eb', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83ec339d3e5773ed57584db775e22d68770d3a33', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9904d967550c134ffe94adf8e97d0b94f63406ab', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d574811ed974350dd98941ada3fffbff13681b8', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a5039503b5053e2316b158e639520cb1c3497ea0', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+1552464052,Move maximum rating in feedback from 10 to 5 [Fixes #990],"<!--
+This section can be deleted after reading.
+
+We employ the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+
+- `develop`: For unstable code: New features and bug fixes.
+- `alpha-x.x.x`: For stability testing: Only bug fixes accepted.
+- `master`: Where the stable production ready code lies. Only security related bugs.
+
+-->
+
+<!--
+Thanks for submitting a pull request! Please provide enough information so that others can review your pull request.
+-->
+
+**What kind of change does this PR introduce?**
+Bugfix
+Fixes #990 
+<!-- E.g. a bugfix, feature, refactoring, etc… -->
+
+**Did you add tests for your changes?**
+Yes
+<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
+
+**Snapshots/Videos:**
+NA
+<!--Add snapshots or videos wherever possible.-->
+
+**If relevant, did you update the documentation?**
+NA
+<!--Add link to Talawa-Docs.-->
+
+**Summary**
+As discussed with @palisadoes, the maximum feedback rating in event management should be `5` to maintain consistency. This PR updates the same to be 5 instead of 10. 
+ 
+<!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
+<!-- Try to link to an open issue for more information. -->
+
+**Does this PR introduce a breaking change?**
+No
+<!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
+
+**Other information**
+NA
+<!--Add extra information about this PR here-->
+
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+Yes
+<!--Yes or No-->
+",True,987,https://api.github.com/repos/PalisadoesFoundation/talawa-admin/pulls/987,https://github.com/PalisadoesFoundation/talawa-admin/pull/987,closed,7,12,4,2,4,0,0,0,[],2023-10-11 15:39:57+00:00,2023-10-14 00:50:58+00:00,205861.0,"2 days, 9:11:01",[],"[{'commit_sha': 'e6bf83d8a0df46a7a8effc5db444c15082379260', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f4c9ff03f94a115c27d65345576c12af58c96501', 'committer_username': 'EshaanAgg', 'committer_name': 'Eshaan Aggarwal', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 25, 9, 22, 16, tzinfo=datetime.timezone.utc)}]",Eshaan Aggarwal,96648934,,User,,118,,18,124
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+228531332,talawa-api,PalisadoesFoundation/talawa-api,TypeScript,696,207,15,99,1332,39,6,8,"[{'id': 1552444239, 'number': 1404, 'closed': datetime.datetime(2023, 10, 14, 0, 51, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 11, 15, 30, 58, tzinfo=datetime.timezone.utc), 'time_taken': 206450.0, 'time_delta': '2 days, 9:20:50', 'additions': 12, 'deletions': 13, 'state': 'closed'}, {'id': 1536923470, 'number': 1397, 'closed': datetime.datetime(2023, 10, 2, 16, 29, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 1, 8, 55, 12, tzinfo=datetime.timezone.utc), 'time_taken': 113659.0, 'time_delta': '1 day, 7:34:19', 'additions': 184, 'deletions': 786, 'state': 'closed'}, {'id': 1523370842, 'number': 1389, 'closed': datetime.datetime(2023, 9, 24, 13, 55, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 20, 15, 50, 1, tzinfo=datetime.timezone.utc), 'time_taken': 338757.0, 'time_delta': '3 days, 22:05:57', 'additions': 94, 'deletions': 0, 'state': 'closed'}, {'id': 1509138810, 'number': 1387, 'closed': datetime.datetime(2023, 9, 20, 14, 48, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 10, 12, 51, 3, tzinfo=datetime.timezone.utc), 'time_taken': 871069.0, 'time_delta': '10 days, 1:57:49', 'additions': 909, 'deletions': 0, 'state': 'closed'}, {'id': 1406794625, 'number': 1349, 'closed': datetime.datetime(2023, 6, 29, 16, 54, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 25, 18, 29, 45, tzinfo=datetime.timezone.utc), 'time_taken': 339872.0, 'time_delta': '3 days, 22:24:32', 'additions': 2921, 'deletions': 1963, 'state': 'closed'}, {'id': 1332965008, 'number': 1332, 'closed': datetime.datetime(2023, 5, 31, 9, 48, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 30, 8, 1, 42, tzinfo=datetime.timezone.utc), 'time_taken': 2684823.0, 'time_delta': '31 days, 1:47:03', 'additions': 7897, 'deletions': 3928, 'state': 'closed'}, {'id': 1314880240, 'number': 1305, 'closed': datetime.datetime(2023, 4, 21, 13, 55, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 15, 3, 28, 57, tzinfo=datetime.timezone.utc), 'time_taken': 555993.0, 'time_delta': '6 days, 10:26:33', 'additions': 292, 'deletions': 952, 'state': 'closed'}, {'id': 1314456378, 'number': 1304, 'closed': datetime.datetime(2023, 4, 15, 13, 11, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 14, 17, 22, 25, tzinfo=datetime.timezone.utc), 'time_taken': 71329.0, 'time_delta': '19:48:49', 'additions': 0, 'deletions': 1495, 'state': 'closed'}, {'id': 1312031232, 'number': 1295, 'closed': datetime.datetime(2023, 4, 13, 12, 24, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 13, 7, 26, 37, tzinfo=datetime.timezone.utc), 'time_taken': 17857.0, 'time_delta': '4:57:37', 'additions': 0, 'deletions': 200, 'state': 'closed'}, {'id': 1312028227, 'number': 1294, 'closed': datetime.datetime(2023, 4, 13, 15, 51, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 13, 7, 23, 54, tzinfo=datetime.timezone.utc), 'time_taken': 30477.0, 'time_delta': '8:27:57', 'additions': 0, 'deletions': 52, 'state': 'closed'}, {'id': 1310253713, 'number': 1290, 'closed': datetime.datetime(2023, 4, 12, 6, 8, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 12, 5, 51, 57, tzinfo=datetime.timezone.utc), 'time_taken': 1011.0, 'time_delta': '0:16:51', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1309211003, 'number': 1285, 'closed': datetime.datetime(2023, 4, 12, 5, 53, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 11, 15, 0, 5, tzinfo=datetime.timezone.utc), 'time_taken': 53607.0, 'time_delta': '14:53:27', 'additions': 23, 'deletions': 62, 'state': 'closed'}, {'id': 1308365423, 'number': 1282, 'closed': datetime.datetime(2023, 4, 11, 19, 6, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 11, 4, 7, tzinfo=datetime.timezone.utc), 'time_taken': 53985.0, 'time_delta': '14:59:45', 'additions': 152, 'deletions': 63, 'state': 'closed'}, {'id': 1304144081, 'number': 1259, 'closed': datetime.datetime(2023, 4, 6, 12, 19, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 6, 5, 46, 1, tzinfo=datetime.timezone.utc), 'time_taken': 23605.0, 'time_delta': '6:33:25', 'additions': 1, 'deletions': 24, 'state': 'closed'}, {'id': 1301047194, 'number': 1251, 'closed': datetime.datetime(2023, 4, 5, 11, 29, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 4, 5, 6, 12, tzinfo=datetime.timezone.utc), 'time_taken': 109393.0, 'time_delta': '1 day, 6:23:13', 'additions': 7, 'deletions': 22, 'state': 'closed'}, {'id': 1300758547, 'number': 1247, 'closed': datetime.datetime(2023, 4, 11, 3, 36, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 3, 22, 14, 52, tzinfo=datetime.timezone.utc), 'time_taken': 624082.0, 'time_delta': '7 days, 5:21:22', 'additions': 5776, 'deletions': 8, 'state': 'closed'}, {'id': 1300749575, 'number': 1246, 'closed': datetime.datetime(2023, 4, 3, 22, 53, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 3, 22, 5, 26, tzinfo=datetime.timezone.utc), 'time_taken': 2893.0, 'time_delta': '0:48:13', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 1300254894, 'number': 1245, 'closed': datetime.datetime(2023, 4, 3, 18, 57, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 3, 15, 17, 56, tzinfo=datetime.timezone.utc), 'time_taken': 13171.0, 'time_delta': '3:39:31', 'additions': 1697, 'deletions': 1044, 'state': 'closed'}, {'id': 1291695056, 'number': 1234, 'closed': datetime.datetime(2023, 3, 27, 18, 38, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 27, 16, 58, 14, tzinfo=datetime.timezone.utc), 'time_taken': 6009.0, 'time_delta': '1:40:09', 'additions': 66, 'deletions': 1, 'state': 'closed'}, {'id': 1290805034, 'number': 1233, 'closed': datetime.datetime(2023, 3, 27, 12, 8, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 27, 6, 14, 31, tzinfo=datetime.timezone.utc), 'time_taken': 21218.0, 'time_delta': '5:53:38', 'additions': 43, 'deletions': 0, 'state': 'closed'}, {'id': 1286836929, 'number': 1221, 'closed': datetime.datetime(2023, 3, 23, 16, 18, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 23, 5, 40, 40, tzinfo=datetime.timezone.utc), 'time_taken': 38257.0, 'time_delta': '10:37:37', 'additions': 493, 'deletions': 469, 'state': 'closed'}, {'id': 1281498530, 'number': 1198, 'closed': datetime.datetime(2023, 3, 21, 12, 25, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 19, 6, 8, 23, tzinfo=datetime.timezone.utc), 'time_taken': 195426.0, 'time_delta': '2 days, 6:17:06', 'additions': 292, 'deletions': 0, 'state': 'closed'}, {'id': 1281016589, 'number': 1195, 'closed': datetime.datetime(2023, 3, 20, 11, 22, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 18, 9, 21, 20, tzinfo=datetime.timezone.utc), 'time_taken': 180048.0, 'time_delta': '2 days, 2:00:48', 'additions': 861, 'deletions': 13, 'state': 'closed'}, {'id': 1279906944, 'number': 1193, 'closed': datetime.datetime(2023, 3, 17, 20, 46, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 17, 9, 16, 29, tzinfo=datetime.timezone.utc), 'time_taken': 41413.0, 'time_delta': '11:30:13', 'additions': 472, 'deletions': 9, 'state': 'closed'}, {'id': 1279801297, 'number': 1192, 'closed': datetime.datetime(2023, 3, 18, 19, 37, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 17, 7, 37, 2, tzinfo=datetime.timezone.utc), 'time_taken': 129607.0, 'time_delta': '1 day, 12:00:07', 'additions': 335, 'deletions': 0, 'state': 'closed'}, {'id': 1279769720, 'number': 1191, 'closed': datetime.datetime(2023, 3, 18, 16, 46, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 17, 7, 2, 59, tzinfo=datetime.timezone.utc), 'time_taken': 121395.0, 'time_delta': '1 day, 9:43:15', 'additions': 245, 'deletions': 16, 'state': 'closed'}, {'id': 1279383152, 'number': 1189, 'closed': datetime.datetime(2023, 3, 18, 17, 53, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 16, 22, 6, 28, tzinfo=datetime.timezone.utc), 'time_taken': 157614.0, 'time_delta': '1 day, 19:46:54', 'additions': 517, 'deletions': 2, 'state': 'closed'}, {'id': 1279271868, 'number': 1187, 'closed': datetime.datetime(2023, 6, 22, 16, 31, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 16, 20, 40, 20, tzinfo=datetime.timezone.utc), 'time_taken': 8452276.0, 'time_delta': '97 days, 19:51:16', 'additions': 9488, 'deletions': 20883, 'state': 'closed'}, {'id': 1277502549, 'number': 1179, 'closed': datetime.datetime(2023, 3, 17, 6, 40, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 15, 20, 42, 38, tzinfo=datetime.timezone.utc), 'time_taken': 122252.0, 'time_delta': '1 day, 9:57:32', 'additions': 242, 'deletions': 17, 'state': 'closed'}, {'id': 1271122929, 'number': 1158, 'closed': datetime.datetime(2023, 3, 15, 17, 8, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 10, 12, 52, 23, tzinfo=datetime.timezone.utc), 'time_taken': 447352.0, 'time_delta': '5 days, 4:15:52', 'additions': 408, 'deletions': 3, 'state': 'closed'}, {'id': 1263443961, 'number': 1121, 'closed': datetime.datetime(2023, 3, 5, 21, 57, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 5, 15, 17, 52, tzinfo=datetime.timezone.utc), 'time_taken': 23970.0, 'time_delta': '6:39:30', 'additions': 1, 'deletions': 104, 'state': 'closed'}, {'id': 1263130163, 'number': 1112, 'closed': datetime.datetime(2023, 3, 5, 2, 59, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 4, 15, 48, 15, tzinfo=datetime.timezone.utc), 'time_taken': 40249.0, 'time_delta': '11:10:49', 'additions': 17, 'deletions': 7, 'state': 'closed'}, {'id': 1259823096, 'number': 1103, 'closed': datetime.datetime(2023, 3, 2, 15, 16, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 2, 4, 38, 26, tzinfo=datetime.timezone.utc), 'time_taken': 38299.0, 'time_delta': '10:38:19', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 1256659862, 'number': 1098, 'closed': datetime.datetime(2023, 3, 4, 3, 28, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 28, 7, 55, 53, tzinfo=datetime.timezone.utc), 'time_taken': 329535.0, 'time_delta': '3 days, 19:32:15', 'additions': 711, 'deletions': 345, 'state': 'closed'}, {'id': 1251778232, 'number': 1085, 'closed': datetime.datetime(2023, 2, 26, 9, 32, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 23, 14, 20, 54, tzinfo=datetime.timezone.utc), 'time_taken': 241872.0, 'time_delta': '2 days, 19:11:12', 'additions': 270, 'deletions': 153, 'state': 'closed'}, {'id': 1250694135, 'number': 1081, 'closed': datetime.datetime(2023, 2, 23, 6, 5, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 22, 19, 50, 15, tzinfo=datetime.timezone.utc), 'time_taken': 36901.0, 'time_delta': '10:15:01', 'additions': 32, 'deletions': 3, 'state': 'closed'}, {'id': 1237663267, 'number': 1053, 'closed': datetime.datetime(2023, 2, 21, 13, 23, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 11, 10, 37, 27, tzinfo=datetime.timezone.utc), 'time_taken': 873964.0, 'time_delta': '10 days, 2:46:04', 'additions': 772, 'deletions': 416, 'state': 'closed'}, {'id': 1232367973, 'number': 1030, 'closed': datetime.datetime(2023, 2, 10, 18, 10, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 7, 17, 35, 50, tzinfo=datetime.timezone.utc), 'time_taken': 261261.0, 'time_delta': '3 days, 0:34:21', 'additions': 103, 'deletions': 10, 'state': 'closed'}, {'id': 1231373429, 'number': 1026, 'closed': datetime.datetime(2023, 2, 7, 16, 51, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 7, 3, 59, 53, tzinfo=datetime.timezone.utc), 'time_taken': 46272.0, 'time_delta': '12:51:12', 'additions': 193, 'deletions': 208, 'state': 'closed'}, {'id': 1230447903, 'number': 1016, 'closed': datetime.datetime(2023, 2, 11, 9, 32, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 6, 13, 38, 17, tzinfo=datetime.timezone.utc), 'time_taken': 417269.0, 'time_delta': '4 days, 19:54:29', 'additions': 168, 'deletions': 140, 'state': 'closed'}, {'id': 1229571073, 'number': 1011, 'closed': datetime.datetime(2023, 2, 6, 13, 28, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 5, 19, 28, 25, tzinfo=datetime.timezone.utc), 'time_taken': 64830.0, 'time_delta': '18:00:30', 'additions': 171, 'deletions': 143, 'state': 'closed'}, {'id': 1229094554, 'number': 997, 'closed': datetime.datetime(2023, 2, 5, 17, 8, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 4, 12, 36, 32, tzinfo=datetime.timezone.utc), 'time_taken': 102707.0, 'time_delta': '1 day, 4:31:47', 'additions': 126, 'deletions': 64, 'state': 'closed'}, {'id': 1229049636, 'number': 996, 'closed': datetime.datetime(2023, 2, 5, 17, 6, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 4, 10, 25, 22, tzinfo=datetime.timezone.utc), 'time_taken': 110469.0, 'time_delta': '1 day, 6:41:09', 'additions': 4, 'deletions': 41, 'state': 'closed'}, {'id': 1227315662, 'number': 986, 'closed': datetime.datetime(2023, 2, 3, 9, 16, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 2, 22, 25, 18, tzinfo=datetime.timezone.utc), 'time_taken': 39068.0, 'time_delta': '10:51:08', 'additions': 102, 'deletions': 3, 'state': 'closed'}, {'id': 1227239671, 'number': 985, 'closed': datetime.datetime(2023, 2, 5, 19, 29, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 2, 21, 16, 14, tzinfo=datetime.timezone.utc), 'time_taken': 252781.0, 'time_delta': '2 days, 22:13:01', 'additions': 492, 'deletions': 423, 'state': 'closed'}, {'id': 1225959536, 'number': 978, 'closed': datetime.datetime(2023, 2, 2, 18, 24, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 2, 5, 25, 51, tzinfo=datetime.timezone.utc), 'time_taken': 46705.0, 'time_delta': '12:58:25', 'additions': 887, 'deletions': 1196, 'state': 'closed'}, {'id': 1225272370, 'number': 977, 'closed': datetime.datetime(2023, 2, 1, 20, 8, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 1, 18, 4, 4, tzinfo=datetime.timezone.utc), 'time_taken': 7474.0, 'time_delta': '2:04:34', 'additions': 76, 'deletions': 114, 'state': 'closed'}, {'id': 1225227696, 'number': 975, 'closed': datetime.datetime(2023, 2, 1, 20, 33, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 1, 17, 25, 43, tzinfo=datetime.timezone.utc), 'time_taken': 11286.0, 'time_delta': '3:08:06', 'additions': 86, 'deletions': 210, 'state': 'closed'}, {'id': 1224958376, 'number': 974, 'closed': datetime.datetime(2023, 2, 1, 16, 49, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 1, 14, 18, 15, tzinfo=datetime.timezone.utc), 'time_taken': 9058.0, 'time_delta': '2:30:58', 'additions': 86, 'deletions': 210, 'state': 'closed'}, {'id': 1224262452, 'number': 962, 'closed': datetime.datetime(2023, 2, 1, 11, 8, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 1, 4, 36, 26, tzinfo=datetime.timezone.utc), 'time_taken': 23536.0, 'time_delta': '6:32:16', 'additions': 116, 'deletions': 210, 'state': 'closed'}]"
+350087687,talawa-admin,PalisadoesFoundation/talawa-admin,TypeScript,514,124,12,11,110,74,11,19,"[{'id': 1552464052, 'number': 987, 'closed': datetime.datetime(2023, 10, 14, 0, 50, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 11, 15, 39, 57, tzinfo=datetime.timezone.utc), 'time_taken': 205861.0, 'time_delta': '2 days, 9:11:01', 'additions': 7, 'deletions': 12, 'state': 'closed'}, {'id': 1543240384, 'number': 981, 'closed': datetime.datetime(2023, 10, 8, 20, 45, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 5, 9, 21, 26, tzinfo=datetime.timezone.utc), 'time_taken': 300241.0, 'time_delta': '3 days, 11:24:01', 'additions': 1170, 'deletions': 145, 'state': 'closed'}, {'id': 1541214748, 'number': 980, 'closed': datetime.datetime(2023, 10, 4, 16, 17, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 4, 6, 44, 25, tzinfo=datetime.timezone.utc), 'time_taken': 34410.0, 'time_delta': '9:33:30', 'additions': 1048, 'deletions': 61, 'state': 'closed'}, {'id': 1481691116, 'number': 961, 'closed': datetime.datetime(2023, 8, 21, 16, 0, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 20, 6, 48, 16, tzinfo=datetime.timezone.utc), 'time_taken': 119531.0, 'time_delta': '1 day, 9:12:11', 'additions': 7672, 'deletions': 20413, 'state': 'closed'}, {'id': 1298980361, 'number': 836, 'closed': datetime.datetime(2023, 4, 2, 4, 24, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 2, 3, 55, tzinfo=datetime.timezone.utc), 'time_taken': 1765.0, 'time_delta': '0:29:25', 'additions': 6, 'deletions': 19, 'state': 'closed'}, {'id': 1298978965, 'number': 835, 'closed': datetime.datetime(2023, 6, 11, 0, 36, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 2, 3, 44, 10, tzinfo=datetime.timezone.utc), 'time_taken': 6036725.0, 'time_delta': '69 days, 20:52:05', 'additions': 102, 'deletions': 99, 'state': 'closed'}, {'id': 1298875059, 'number': 833, 'closed': datetime.datetime(2023, 4, 1, 23, 53, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 1, 21, 47, 27, tzinfo=datetime.timezone.utc), 'time_taken': 7567.0, 'time_delta': '2:06:07', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1298862879, 'number': 832, 'closed': datetime.datetime(2023, 4, 1, 21, 20, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 1, 21, 9, 28, tzinfo=datetime.timezone.utc), 'time_taken': 688.0, 'time_delta': '0:11:28', 'additions': 9, 'deletions': 45, 'state': 'closed'}, {'id': 1298825783, 'number': 830, 'closed': datetime.datetime(2023, 4, 2, 3, 40, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 1, 19, 44, 23, tzinfo=datetime.timezone.utc), 'time_taken': 28583.0, 'time_delta': '7:56:23', 'additions': 201, 'deletions': 157, 'state': 'closed'}, {'id': 1263445626, 'number': 532, 'closed': datetime.datetime(2023, 3, 6, 11, 31, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 5, 15, 23, 19, tzinfo=datetime.timezone.utc), 'time_taken': 72491.0, 'time_delta': '20:08:11', 'additions': 9, 'deletions': 105, 'state': 'closed'}, {'id': 1259825210, 'number': 523, 'closed': datetime.datetime(2023, 3, 4, 3, 27, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 2, 4, 42, 21, tzinfo=datetime.timezone.utc), 'time_taken': 168298.0, 'time_delta': '1 day, 22:44:58', 'additions': 15, 'deletions': 14, 'state': 'closed'}, {'id': 1258277173, 'number': 520, 'closed': datetime.datetime(2023, 3, 1, 8, 41, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 1, 6, 55, 30, tzinfo=datetime.timezone.utc), 'time_taken': 6384.0, 'time_delta': '1:46:24', 'additions': 9006, 'deletions': 9166, 'state': 'closed'}, {'id': 1258253593, 'number': 519, 'closed': datetime.datetime(2023, 3, 1, 6, 49, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 1, 6, 26, 16, tzinfo=datetime.timezone.utc), 'time_taken': 1412.0, 'time_delta': '0:23:32', 'additions': 38, 'deletions': 15, 'state': 'closed'}, {'id': 1254401561, 'number': 511, 'closed': datetime.datetime(2023, 2, 26, 6, 59, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 26, 6, 28, 45, tzinfo=datetime.timezone.utc), 'time_taken': 1818.0, 'time_delta': '0:30:18', 'additions': 36, 'deletions': 42, 'state': 'closed'}, {'id': 1252245050, 'number': 500, 'closed': datetime.datetime(2023, 2, 25, 20, 10, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 23, 20, 29, 27, tzinfo=datetime.timezone.utc), 'time_taken': 171634.0, 'time_delta': '1 day, 23:40:34', 'additions': 63, 'deletions': 52, 'state': 'closed'}, {'id': 1250698025, 'number': 497, 'closed': datetime.datetime(2023, 2, 23, 8, 34, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 22, 19, 52, 51, tzinfo=datetime.timezone.utc), 'time_taken': 45723.0, 'time_delta': '12:42:03', 'additions': 9, 'deletions': 6, 'state': 'closed'}, {'id': 1231394112, 'number': 447, 'closed': datetime.datetime(2023, 2, 7, 19, 1, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 7, 4, 18, 41, tzinfo=datetime.timezone.utc), 'time_taken': 52960.0, 'time_delta': '14:42:40', 'additions': 15, 'deletions': 4, 'state': 'closed'}, {'id': 1229866028, 'number': 444, 'closed': datetime.datetime(2023, 2, 6, 5, 36, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 6, 5, 9, 55, tzinfo=datetime.timezone.utc), 'time_taken': 1615.0, 'time_delta': '0:26:55', 'additions': 3, 'deletions': 6, 'state': 'closed'}, {'id': 1229579048, 'number': 443, 'closed': datetime.datetime(2023, 2, 5, 20, 18, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 5, 20, 0, 6, tzinfo=datetime.timezone.utc), 'time_taken': 1081.0, 'time_delta': '0:18:01', 'additions': 78, 'deletions': 213, 'state': 'closed'}, {'id': 1228611378, 'number': 437, 'closed': datetime.datetime(2023, 2, 5, 20, 0, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 3, 20, 4, 6, tzinfo=datetime.timezone.utc), 'time_taken': 172596.0, 'time_delta': '1 day, 23:56:36', 'additions': 105, 'deletions': 262, 'state': 'closed'}, {'id': 1228551698, 'number': 435, 'closed': datetime.datetime(2023, 2, 3, 19, 51, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 3, 19, 2, 22, tzinfo=datetime.timezone.utc), 'time_taken': 2944.0, 'time_delta': '0:49:04', 'additions': 45, 'deletions': 43, 'state': 'closed'}]"

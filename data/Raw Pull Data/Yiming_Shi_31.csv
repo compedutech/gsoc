@@ -1,0 +1,501 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+437733870,Add Faster RCNN Resnet V1 FPN Keras feature extractor,"# Description
+
+> :memo: Add faster RCNN Resnet V1 FPN Keras feature extractor
+>  
+> * Add faster RCNN Resnet {50, 101, 152} FPN Keras feature extractor.
+> * Add unit test to ensure the size for proposal and box classifier features are correct.
+> * Add model to model_builder.py
+> * Need to further modify faster_rcnn_meta_arch.py to make the extractor work
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [ ] Other (Specify)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [ ] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8716,https://api.github.com/repos/tensorflow/models/pulls/8716,https://github.com/tensorflow/models/pull/8716,closed,468,0,3,29,0,11,2,0,"[{'name': 'cla: yes'}, {'name': 'stat:awaiting review'}]",2020-06-22 07:12:42+00:00,2020-06-30 21:41:57+00:00,743355.0,"8 days, 14:29:15","[{'comment_id': 446777408, 'comment_body': 'nit: To be consistent with other fpn feature extractors here, change FPN to Fpn ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 19, 13, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446777739, 'comment_body': 'drop `implementation`', 'comment_created': datetime.datetime(2020, 6, 29, 5, 20, 25, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446781136, 'comment_body': ""We will likely need a batchnorm between the two FC layers. We don't need to address it now, but please add a TODO comment here. "", 'comment_created': datetime.datetime(2020, 6, 29, 5, 32, 38, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446782784, 'comment_body': 'drop `min_depth` and `depth_multipler`. No need to support these. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 38, 31, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446784930, 'comment_body': 'remove the depth multiplier feature. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 45, 39, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446786323, 'comment_body': 'This is still missing coarse feature layers from self._base_fnp_max_level + 1 to self._fpn_max_level. Please see ssd_resnet_v1_fpn_keras_feature_extractor.py for reference. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 50, 36, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446786578, 'comment_body': 'Drop this testcase. This is a bit too rigid and pollutes the test output. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 51, 25, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446786730, 'comment_body': 'no need to enable. This is on by default. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 51, 58, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 447313434, 'comment_body': 'Thanks for adding!', 'comment_created': datetime.datetime(2020, 6, 29, 23, 20, 46, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 447314861, 'comment_body': 'In a followup PR add fc_hyperparams and use this to configure batchnorm params for the layer that goes in between two FC layers. ', 'comment_created': datetime.datetime(2020, 6, 29, 23, 24, 56, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 447315202, 'comment_body': 'set the default max level to 6 as in the paper.', 'comment_created': datetime.datetime(2020, 6, 29, 23, 26, 5, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}]","[{'commit_sha': 'f00cc5da85405dbe6a9f26b03a93194eae590f30', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69ce1c457b90bc51fc46c7ef12812f2feb8c7c0d', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1025b3b1e71419669374ae6d1f9ee581f5a84ea', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '33a4c064d432737116a3e101d2a15217d54971a6', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e649274ea724d476cdc76ed01624dd9378d27a08', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc2642a9d6d321b2793e2b0a1216a01914495774', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37b9a1362e348a7e1f9db01c25da02c92f5b7cfc', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e899a6fa13dbe093aedb5aa651bc321424bf710d', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd26ef0e6c0ca69cebc745283042e12a6e1613990', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a2c9932a359c489eff4a8cb35a8372eced7340e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cadd3badf789bfe8786513dcb7374e65c87a2912', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c4969f7ca4f6c46f7e88f9c264061b8f020c0715', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '51e82b3c80461d4f29708cabfdc70553a2d606b4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7a1475141a004f4f525fb5dafdd5ecaec4cc0388', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef68a82699c7b933bc0976a8e4fabc742451e23c', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8db480c918ede02f1235f28252bdabcaee876c79', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7140eede200e06d9f55e0a788d16a7fbea11686b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1cf70ed77c0cbd0b8f7114d86337474ed199f877', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76516b2e3cfc370373a43b4c744744afb6f71dca', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '248dbe7cea53783bbb3c9a6de7c45ddce26d187d', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4244a469ab0c9be3b0458483c2cee2da8c55e92', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d19f98e75d58f25c311bb4b62e9956f5ac0d092', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9dcd43dd244aa2e7c922b649e7daaf7298a2580c', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aef0470534d618114207d39686d8e88a980768b7', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1538da90525a1c194b973e6ca8a206a28b66f71e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d0dc18319c972342e6dc710493cb37787fe4c46', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70c974d36e63955b82f4df23989d5aa902e1d51b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e13b9a71de6b1d5032c755a35cc15e4cf6f08b6', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e59ecc71c88ee98a44b53eb13fb1909b14b6518', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+442495010,Remove extraneous spaces in FasterRCNN Resnet keras fpn feature extractor,"# Description
+
+> :memo: Remove extraneous spaces in FasterRCNN Resnet fpn Keras feature extractor
+
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [x] Other (Format)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8762,https://api.github.com/repos/tensorflow/models/pulls/8762,https://github.com/tensorflow/models/pull/8762,closed,1,1,1,1,0,0,1,0,[{'name': 'cla: yes'}],2020-07-01 07:16:43+00:00,2020-07-01 18:58:17+00:00,42094.0,11:41:34,[],"[{'commit_sha': '408534fc32e78e81747ef19e6c1993d11d30546e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+441099549,Add multilevel crop and resize functions,"# Description
+
+> :memo: Add funtions to perform multilevel crop and resize. 
+>  
+> * Add multilevel_native_crop_and_resize.
+> * Add multilevel_matmul_crop_and_resize
+> * Change faster rcnn meta arch function that use _crop_and_resize_fn
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [x] Other (Add functions support faster rcnn fpn feature extractor)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Simple unittest for both functions.
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8746,https://api.github.com/repos/tensorflow/models/pulls/8746,https://github.com/tensorflow/models/pull/8746,closed,175,10,7,21,1,9,2,0,"[{'name': 'cla: yes'}, {'name': 'ready to pull'}]",2020-06-28 19:02:13+00:00,2020-07-20 20:39:21+00:00,1906628.0,"22 days, 1:37:08","[{'comment_id': 446773382, 'comment_body': 'Leave this as a single tensor in this PR to not break the calling code. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 2, 8, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446773621, 'comment_body': 'Just before this line set \r\nfeatures_to_crop = [features_to_crop]', 'comment_created': datetime.datetime(2020, 6, 29, 5, 3, 7, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446774117, 'comment_body': 'No need to add these symbols here. Directly import spatial_ops in model_builder.py and use these functions. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 5, 15, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446774654, 'comment_body': 'describe input arguments and return values in docstring. ', 'comment_created': datetime.datetime(2020, 6, 29, 5, 7, 28, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446774903, 'comment_body': 'change to MultiLevelMatMulCropAndResize', 'comment_created': datetime.datetime(2020, 6, 29, 5, 8, 27, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 446775083, 'comment_body': 'add a name scope here like in the other function.', 'comment_created': datetime.datetime(2020, 6, 29, 5, 9, 12, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 447307853, 'comment_body': 'remove bfloat16 as this is a cpu only op.', 'comment_created': datetime.datetime(2020, 6, 29, 23, 3, 36, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 447309454, 'comment_body': 'Please update other references of _crop_and_resize_fn in faster_rcnn_meta_arch.py', 'comment_created': datetime.datetime(2020, 6, 29, 23, 8, 31, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 448060893, 'comment_body': 'Hi, I updated _crop_and_resize_fn in both faster_rcnn_meta_arch.py and context_rcnn_meta_arch.py. Currently, all the tests except the ones related to pycocotools/cocoeval.py and used TPU are passed.', 'comment_created': datetime.datetime(2020, 7, 1, 1, 7, 4, tzinfo=datetime.timezone.utc), 'commenter': 'syiming', 'type': 'User'}]","[{'commit_sha': 'b88095dc87055521fd71c687c80f36139eaa0910', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'efe7c3ea6fd4ab3b9b78ff492e652161a748d0b6', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0593dc57f525b821b55b15b2b68eea40e45e3c5', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6291404af8c48b0f9f7993abf5e895ce2de07f29', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb4b727d66c09987ad5c7464f68e7508b3aa0c10', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ce327f82d0b8e075c25513388bffb12135aacb4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3efe242586abbdd359ea1980b954ec8ec9c07d1c', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46cea4f632292f791dac6748470d3ab1ecea5e73', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a2e19754e72dceda52ecb865e92b08ae83420fc', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca0acc9a2cda57501e13f6e9741c6a92d730ad83', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e58d3ccdd2b9403d143faa58b2bc16bd363eeccf', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd41fc8f4437e585656ac50a2d73bcc8146e05579', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2deafd6c40e9357a988c08b01cfcec6fc51ac1e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fda51c28b5556a5768b91ab5587a184d55b5cf4b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c63169b24b051a4e4d7a5241fdb374ca3f5b0da9', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '81bc290f0d131c71c1c9aa6b98ee814035be3c1b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b48046ed341d7b0a92838fef14611a3e11c581a4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8a120d0ea569efdb53651f29b778ccdd390876d3', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd86111510aae9c0ed90db9f3bb4a223b85a23355', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47bc1813ca7b63d4892e22eea126d0665e434c14', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f7d74d68320fdcfcbd6f1de496dbee9b2fee61eb', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+450767372,Move to keraslayers fasterrcnn fpn keras feature extractor,"# Description
+
+> :memo: Return keras layers instead of keras models for fasterrcnn fpn keras feature extractor
+>  
+> * Please also include relevant motivation and context.  
+> * List any dependencies that are required for this change.  
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [x] Other (Fix 'unknow graph' error)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [ ] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8893,https://api.github.com/repos/tensorflow/models/pulls/8893,https://github.com/tensorflow/models/pull/8893,closed,98,41,3,44,0,4,2,0,"[{'name': 'cla: yes'}, {'name': 'ready to pull'}]",2020-07-17 04:43:14+00:00,2020-08-03 18:02:33+00:00,1516759.0,"17 days, 13:19:19","[{'comment_id': 461142679, 'comment_body': 'can you set this to true by default.', 'comment_created': datetime.datetime(2020, 7, 27, 20, 14, 45, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461186919, 'comment_body': 'make this internal -- `_ResnetFPN`', 'comment_created': datetime.datetime(2020, 7, 27, 21, 41, 9, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461196063, 'comment_body': 'add batchnorm layer with `self._conv_hyperparams.build_batch_norm(..)', 'comment_created': datetime.datetime(2020, 7, 27, 22, 1, 43, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461198174, 'comment_body': 'correct output shape is `[batch_size * self.max_num_proposals, 1, 1, 1024]` right ?', 'comment_created': datetime.datetime(2020, 7, 27, 22, 7, 4, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}]","[{'commit_sha': 'f00cc5da85405dbe6a9f26b03a93194eae590f30', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69ce1c457b90bc51fc46c7ef12812f2feb8c7c0d', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1025b3b1e71419669374ae6d1f9ee581f5a84ea', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '33a4c064d432737116a3e101d2a15217d54971a6', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e649274ea724d476cdc76ed01624dd9378d27a08', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc2642a9d6d321b2793e2b0a1216a01914495774', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37b9a1362e348a7e1f9db01c25da02c92f5b7cfc', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e899a6fa13dbe093aedb5aa651bc321424bf710d', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd26ef0e6c0ca69cebc745283042e12a6e1613990', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a2c9932a359c489eff4a8cb35a8372eced7340e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cadd3badf789bfe8786513dcb7374e65c87a2912', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c4969f7ca4f6c46f7e88f9c264061b8f020c0715', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '51e82b3c80461d4f29708cabfdc70553a2d606b4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7a1475141a004f4f525fb5dafdd5ecaec4cc0388', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef68a82699c7b933bc0976a8e4fabc742451e23c', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8db480c918ede02f1235f28252bdabcaee876c79', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7140eede200e06d9f55e0a788d16a7fbea11686b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1cf70ed77c0cbd0b8f7114d86337474ed199f877', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76516b2e3cfc370373a43b4c744744afb6f71dca', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '248dbe7cea53783bbb3c9a6de7c45ddce26d187d', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4244a469ab0c9be3b0458483c2cee2da8c55e92', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d19f98e75d58f25c311bb4b62e9956f5ac0d092', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9dcd43dd244aa2e7c922b649e7daaf7298a2580c', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aef0470534d618114207d39686d8e88a980768b7', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1538da90525a1c194b973e6ca8a206a28b66f71e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d0dc18319c972342e6dc710493cb37787fe4c46', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70c974d36e63955b82f4df23989d5aa902e1d51b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e13b9a71de6b1d5032c755a35cc15e4cf6f08b6', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e59ecc71c88ee98a44b53eb13fb1909b14b6518', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4faea59a79bd6a038b964619560646d56ed66577', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '705dbf33aaceb0ea3b9f6c0a135887583887a8d8', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '086d387398da8e09234c3d53933d25e86660cbf4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '938f102d54bd74cadc2e17df630773b6795037be', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd1d33691cc67acb50d91535b7c499d0a340286e1', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6c5ddd545b874a9119257f28a3004e477417e2c7', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '26f976c1910204d419625c96b0b9ae769b2d172c', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e0f739b965cd99b7cc8c02b810a5c8174294507', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '145ac875399f34e944ff3727742a8e02e41e6410', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e73c76c7a5373dafd71ef9231896dabcb696cc5', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '95d8a879ea2ddc63c48deed3f8e28d55d1b3a2d5', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd27aa70ab64666ee7eb5901c81a08161e7135d7', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17821c0dcdc377bd5ba779b54b3ca49f90d5a6a3', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0cceabfcaa6892a0806c2f6ee477ba17155a4d83', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea8cc8cf69212df23b98333c28e6c4a2c4dcf279', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+450777054,moving fpn message to fpn.proto,"# Description
+
+> :memo: moving fpn message to fpn.proto
+>  
+> * Please also include relevant motivation and context.  
+> * List any dependencies that are required for this change.  
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [x] Other (Adjust proto file for faster rcnn fpn feature extractor)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [ ] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8894,https://api.github.com/repos/tensorflow/models/pulls/8894,https://github.com/tensorflow/models/pull/8894,closed,68,48,3,5,0,2,2,3,"[{'name': 'cla: yes'}, {'name': 'ready to pull'}]",2020-07-17 04:59:07+00:00,2020-08-02 20:35:05+00:00,1438558.0,"16 days, 15:35:58","[{'comment_id': 461191844, 'comment_body': 'please remove `pad_to_multiple` option. It is not needed for this model. ', 'comment_created': datetime.datetime(2020, 7, 27, 21, 52, 2, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461192804, 'comment_body': 'please move BidirectionalFeaturePyramidNetworks to the new file as well.', 'comment_created': datetime.datetime(2020, 7, 27, 21, 54, 16, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}]","[{'commit_sha': 'c41aedff097bf5d4c936e42bd5743a63e30c7426', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4267bf411a800177315e14c56c8c30f4ee6cb5e8', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee4366480f7c888566d2ee1e0ac3836440496d40', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a85c5b9699f1c080dbe7b1a9bf4e721209d6cd1a', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4152a5c73a79624e84c0516e50b9dd1acd856365', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+450798372,Adjust frcnn meta arch to multilevel rpn feature,"# Description
+
+> :memo: Adjust frcnn meta arch to multilevel rpn feature.
+>  
+> * Please also include relevant motivation and context.  
+> * List any dependencies that are required for this change.  
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [ ] Other (Specify)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [ ] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8895,https://api.github.com/repos/tensorflow/models/pulls/8895,https://github.com/tensorflow/models/pull/8895,closed,247,71,7,28,2,17,2,0,"[{'name': 'cla: yes'}, {'name': 'ready to pull'}]",2020-07-17 05:38:16+00:00,2020-08-07 04:22:14+00:00,1809838.0,"20 days, 22:43:58","[{'comment_id': 456823583, 'comment_body': 'should this be `num_levels - 2` instead. ?', 'comment_created': datetime.datetime(2020, 7, 18, 20, 10, 13, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461208511, 'comment_body': 'nit: [batch_size, height_i, width_j, depth]', 'comment_created': datetime.datetime(2020, 7, 27, 22, 33, 55, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461208676, 'comment_body': 'nit: [batch_size, height_i, width_j, depth]\r\n\r\n', 'comment_created': datetime.datetime(2020, 7, 27, 22, 34, 20, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461215329, 'comment_body': 'Can you double check if the paper applies this extra convolution ?', 'comment_created': datetime.datetime(2020, 7, 27, 22, 52, 21, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461216022, 'comment_body': ""We don't have to resolve this now, but, we should make this optional in a following PR it it is not used in the paper. "", 'comment_created': datetime.datetime(2020, 7, 27, 22, 54, 23, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461216218, 'comment_body': 'delete these lines', 'comment_created': datetime.datetime(2020, 7, 27, 22, 54, 56, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461239132, 'comment_body': 'Can you add 1 test that has multiple feature maps for first stage.', 'comment_created': datetime.datetime(2020, 7, 28, 0, 4, 13, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461241037, 'comment_body': 'Add a note here that `num_levels-2` is chosen based on section 4.2 of https://arxiv.org/pdf/1612.03144.pdf and works best for Resnet Based feature extractor. ', 'comment_created': datetime.datetime(2020, 7, 28, 0, 10, 2, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 461785584, 'comment_body': 'I think the head has the same design: one 3x3 followed by two 1x1 sibling convs.', 'comment_created': datetime.datetime(2020, 7, 28, 18, 27, 28, tzinfo=datetime.timezone.utc), 'commenter': 'syiming', 'type': 'User'}, {'comment_id': 464582682, 'comment_body': 'nit: height_i -- single underscore', 'comment_created': datetime.datetime(2020, 8, 3, 18, 15, 51, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 464587110, 'comment_body': 'Instead of this, can we pass `image_shape` to `_compute_second_stage_input_feature_maps ` on line 1062 and reuse it ?', 'comment_created': datetime.datetime(2020, 8, 3, 18, 24, 49, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 464587490, 'comment_body': ""Ah, ok, let's chat about this today. "", 'comment_created': datetime.datetime(2020, 8, 3, 18, 25, 30, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 464588149, 'comment_body': ""If we add `image_shape` as an argument, we don't need `self._resize_shape` member variable"", 'comment_created': datetime.datetime(2020, 8, 3, 18, 26, 46, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 465796235, 'comment_body': 'A list of 4-D', 'comment_created': datetime.datetime(2020, 8, 5, 15, 6, 13, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 465797815, 'comment_body': 'height_i, width_i', 'comment_created': datetime.datetime(2020, 8, 5, 15, 8, 33, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 465797936, 'comment_body': 'height_i, width_i', 'comment_created': datetime.datetime(2020, 8, 5, 15, 8, 44, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}, {'comment_id': 465809023, 'comment_body': 'can this be parameterized now to test with use_static_shapes= {true, false }', 'comment_created': datetime.datetime(2020, 8, 5, 15, 23, 54, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}]","[{'commit_sha': '6ebbfe13afda1d38aaf8183cdd3558620ce8ef6b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '28d7aac1ad338019460ad3e31e085cc41727d8cc', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c4ca26146f88751af35be3c4e7ff566fa2ad44b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c6ba420165be7d24bb59d366961415aef0d08f0', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd7e8be5f0829d79e3ddea1036deb324c2e581d7', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1855f88194d94dff71718431628d783e3179852e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '503cc99cffb04b688966da832c5ff5bb2eb6f4a9', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a836069a92d853fa450b08bfcf88116291eb178e', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '86fe1753b7b3568fb037dc4332b190326cf97532', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90106a40ae1765be80ba14ba49db7772b3b17ecd', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '92700f62c3daf196c05dbd47163324c9b9079b48', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a6f9dad029ff594291cb2f49420e5ca396023a83', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f190597d6d962a2fef7d4711546f0e8bd1ca7738', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9d6d3cfb7d01f7fbd6f777dd3318cb56643fcbeb', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '740ef06bfbba8332e4f6d643e941acfb6ca099a2', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '782d3852e3e66e394b4c6b56029259413de1d54b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e186a9404587781310c2602c0677e912bffb5ad4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4dcc11d1e192277009701b64792a78fb9e4266f2', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd03f4fb6afb477c0661458b4f808258381b0acbc', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '800a4c00fbb5bd1827fc22978e4bc944960c14f6', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3f3135bb5c2413a6b2207e58d523f1f9c44e1849', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eef5dd14611a08691a961360d6fd7adcfb38cd78', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47b575bbfa85f3ee5e787b6c96c1009d89f0b0da', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a4d4d0f4b6b890ef95ea8eaede5e0742efa628a0', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '130786019b6d38681b429c3544bbb5584e21f675', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2dbe7ba00c7a8eb41cb9236179c9c21ca60ab300', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46c80691d0d34ba3cc15da6a11e8d80d856cc93b', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '18d95442b908134c12cbea61504a911baf7bc630', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+463599468,add config file for faster rcnn resnet 50 fpn on dataset coco17 using tpu-8,"# Description
+
+> :memo: add config file for faster rcnn resnet 50 fpn on dataset coco17 using tpu-8
+
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [x] Other (New config file)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,9055,https://api.github.com/repos/tensorflow/models/pulls/9055,https://github.com/tensorflow/models/pull/9055,closed,172,0,1,3,1,1,2,0,"[{'name': 'cla: yes'}, {'name': 'ready to pull'}]",2020-08-05 19:34:12+00:00,2020-08-11 15:23:53+00:00,503381.0,"5 days, 19:49:41","[{'comment_id': 466191149, 'comment_body': 'Were these data augmentation ops critical to get to 31.4 mAP ? If not can we just set this to random_horizontal_flip for now like the other configs ?', 'comment_created': datetime.datetime(2020, 8, 6, 7, 9, 54, tzinfo=datetime.timezone.utc), 'commenter': 'tombstone', 'type': 'User'}]","[{'commit_sha': '707c23b6d5cf7c414e50eeb4816ca951ad12ba38', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '54ba0acbf6071f315a63ba379450a43f8a023fc4', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0f271534cacfbc7df053b768880fddad483b9605', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+465165395,Add fpn to context rcnn,"# Description
+
+> :memo: Add fpn to context rcnn
+>  
+> * Change _compute_second_stage_input_feature_maps
+> * Accept multilevel features, calcualte box levels
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [x] Other (Add fpn to context rcnn)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [ ] I have added tests that prove my fix is effective or that my feature works.
+",False,9078,https://api.github.com/repos/tensorflow/models/pulls/9078,https://github.com/tensorflow/models/pull/9078,open,17,2,1,3,0,0,2,3,"[{'name': 'cla: yes'}, {'name': 'models:research:odapi'}]",2020-08-09 15:26:17+00:00,,0.0,,[],"[{'commit_sha': 'a65819b0011b67f818f2bc36fd7d7fabe414bd75', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9234bcc9f4381363532ee8bf299fb085ba00e268', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed49dea7f56b296f8942d6e678a0e7ec7fb9cfc3', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+457820041,frozen inference graphs tf 1 documentation update,"# Description
+
+> :memo: Update documentation for research/object_detection/g3doc/tf1_detection_zoo.md
+>  
+> * frozen inference graphs are generated using the [v1.12.0](https://github.com/tensorflow/tensorflow/tree/v1.12.0) release
+    version of TensorFlow
+> * remove “we do not guarantee that these will work with other versions”
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [ ] Other (Specify)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",True,8984,https://api.github.com/repos/tensorflow/models/pulls/8984,https://github.com/tensorflow/models/pull/8984,closed,1,2,1,1,0,0,2,0,"[{'name': 'cla: yes'}, {'name': 'ready to pull'}]",2020-07-28 13:46:07+00:00,2020-08-08 22:42:02+00:00,982555.0,"11 days, 8:55:55",[],"[{'commit_sha': '184adec9d0984a72a99cbb57c0996d30a5575339', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+456019403,remove unused import within image_resizer.proto,"# Description
+
+> :memo: remove unused import within image_resizer.proto
+> fix warning: object_detection/protos/input_reader.proto:5:1: warning: Import object_detection/protos/image_resizer.proto is unused.
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [ ] Other (Specify)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [ ] I have added tests that prove my fix is effective or that my feature works.
+",False,8954,https://api.github.com/repos/tensorflow/models/pulls/8954,https://github.com/tensorflow/models/pull/8954,closed,0,2,1,1,1,0,1,0,[{'name': 'cla: yes'}],2020-07-24 00:38:04+00:00,2020-07-25 18:14:24+00:00,149780.0,"1 day, 17:36:20",[],"[{'commit_sha': '8fc7182aaa688538bb056cf1fdae59aab3f4b722', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+457842079,fix links for research/object_detection/colab_tutorials/object_detection_tutorial.ipynb,"# Description
+
+> :memo: fix links for research/object_detection/colab_tutorials/object_detection_tutorial.ipynb  
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [ ] Other (Specify)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",False,8985,https://api.github.com/repos/tensorflow/models/pulls/8985,https://github.com/tensorflow/models/pull/8985,closed,2,2,1,3,2,0,1,0,[{'name': 'cla: yes'}],2020-07-28 14:19:02+00:00,2020-08-02 20:43:29+00:00,455067.0,"5 days, 6:24:27",[],"[{'commit_sha': 'fe10179a557377b3740e89430d1a78e9e9531895', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6c0c0ff51169f5ddf4668f2a82caa1e3f874d3a', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85955fc89a16a85e6734a40a2210b4309f6cb966', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+457385996,fix object_detection_tutorial.ipynb instance segmentation example error,"# Description
+
+> :memo: Fix errors in object_detection_tutorial.ipynb instance segmentation
+>  
+> * error listed in: https://github.com/tensorflow/models/issues/8888
+
+## Type of change
+
+For a new feature or function, please create an issue first to discuss it
+with us before submitting a pull request.
+
+Note: Please delete options that are not relevant.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] Documentation update
+- [ ] TensorFlow 2 migration
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] A new research paper code implementation
+- [ ] Other (Specify)
+
+## Tests
+
+> :memo: Please describe the tests that you ran to verify your changes.
+>  
+> * Provide instructions so we can reproduce.  
+> * Please also list any relevant details for your test configuration.  
+
+**Test Configuration**:
+
+## Checklist
+
+- [x] I have signed the [Contributor License Agreement](https://github.com/tensorflow/models/wiki/Contributor-License-Agreements).
+- [x] I have read [guidelines for pull request](https://github.com/tensorflow/models/wiki/Submitting-a-pull-request).
+- [x] My code follows the [coding guidelines](https://github.com/tensorflow/models/wiki/Coding-guidelines).
+- [x] I have performed a self [code review](https://github.com/tensorflow/models/wiki/Code-review) of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [x] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests that prove my fix is effective or that my feature works.
+",False,8978,https://api.github.com/repos/tensorflow/models/pulls/8978,https://github.com/tensorflow/models/pull/8978,open,3,2,1,1,5,0,2,3,"[{'name': 'cla: yes'}, {'name': 'models:research:odapi'}]",2020-07-27 20:30:26+00:00,,0.0,,[],"[{'commit_sha': '6f6ab9de7a9edf294027098eeeb6068bd91f6326', 'committer_username': 'syiming', 'committer_name': 'Yiming Shi', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 4, 14, 7, 4, tzinfo=datetime.timezone.utc)}]",Yiming Shi,44748569,,User,,13,,43,49
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+51117837,models,tensorflow/models,Python,45812,76906,2732,931,9442,1247,97,180,"[{'id': 465165395, 'number': 9078, 'closed': None, 'created': datetime.datetime(2020, 8, 9, 15, 26, 17, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 17, 'deletions': 2, 'state': 'open'}, {'id': 463599468, 'number': 9055, 'closed': datetime.datetime(2020, 8, 11, 15, 23, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 19, 34, 12, tzinfo=datetime.timezone.utc), 'time_taken': 503381.0, 'time_delta': '5 days, 19:49:41', 'additions': 172, 'deletions': 0, 'state': 'closed'}, {'id': 457842079, 'number': 8985, 'closed': datetime.datetime(2020, 8, 2, 20, 43, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 28, 14, 19, 2, tzinfo=datetime.timezone.utc), 'time_taken': 455067.0, 'time_delta': '5 days, 6:24:27', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 457820041, 'number': 8984, 'closed': datetime.datetime(2020, 8, 8, 22, 42, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 28, 13, 46, 7, tzinfo=datetime.timezone.utc), 'time_taken': 982555.0, 'time_delta': '11 days, 8:55:55', 'additions': 1, 'deletions': 2, 'state': 'closed'}, {'id': 457385996, 'number': 8978, 'closed': None, 'created': datetime.datetime(2020, 7, 27, 20, 30, 26, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 3, 'deletions': 2, 'state': 'open'}, {'id': 456019403, 'number': 8954, 'closed': datetime.datetime(2020, 7, 25, 18, 14, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 24, 0, 38, 4, tzinfo=datetime.timezone.utc), 'time_taken': 149780.0, 'time_delta': '1 day, 17:36:20', 'additions': 0, 'deletions': 2, 'state': 'closed'}, {'id': 450798372, 'number': 8895, 'closed': datetime.datetime(2020, 8, 7, 4, 22, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 17, 5, 38, 16, tzinfo=datetime.timezone.utc), 'time_taken': 1809838.0, 'time_delta': '20 days, 22:43:58', 'additions': 247, 'deletions': 71, 'state': 'closed'}, {'id': 450777054, 'number': 8894, 'closed': datetime.datetime(2020, 8, 2, 20, 35, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 17, 4, 59, 7, tzinfo=datetime.timezone.utc), 'time_taken': 1438558.0, 'time_delta': '16 days, 15:35:58', 'additions': 68, 'deletions': 48, 'state': 'closed'}, {'id': 450767372, 'number': 8893, 'closed': datetime.datetime(2020, 8, 3, 18, 2, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 17, 4, 43, 14, tzinfo=datetime.timezone.utc), 'time_taken': 1516759.0, 'time_delta': '17 days, 13:19:19', 'additions': 98, 'deletions': 41, 'state': 'closed'}, {'id': 442777371, 'number': 8764, 'closed': datetime.datetime(2020, 8, 26, 6, 15, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 1, 15, 31, 24, tzinfo=datetime.timezone.utc), 'time_taken': 4805072.0, 'time_delta': '55 days, 14:44:32', 'additions': 210, 'deletions': 64, 'state': 'closed'}, {'id': 442495010, 'number': 8762, 'closed': datetime.datetime(2020, 7, 1, 18, 58, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 1, 7, 16, 43, tzinfo=datetime.timezone.utc), 'time_taken': 42094.0, 'time_delta': '11:41:34', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 441099549, 'number': 8746, 'closed': datetime.datetime(2020, 7, 20, 20, 39, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 28, 19, 2, 13, tzinfo=datetime.timezone.utc), 'time_taken': 1906628.0, 'time_delta': '22 days, 1:37:08', 'additions': 175, 'deletions': 10, 'state': 'closed'}, {'id': 437733870, 'number': 8716, 'closed': datetime.datetime(2020, 6, 30, 21, 41, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 7, 12, 42, tzinfo=datetime.timezone.utc), 'time_taken': 743355.0, 'time_delta': '8 days, 14:29:15', 'additions': 468, 'deletions': 0, 'state': 'closed'}]"

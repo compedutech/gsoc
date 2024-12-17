@@ -1,0 +1,72 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1466956256,Add Interactive Web Tour for Virtual Studies and Group Comparison,"## Summarize
+- Student Name: [Biqing (Gloria) Su](https://github.com/Beking0912)
+- Mentors: [Jeremy R. Easton-Marks](https://github.com/JREastonMarks), [Ryan Fu](https://github.com/fuzhaoyuan)
+- Organization: [cBioportal for Cancer Genomics](https://www.cbioportal.org/)
+- GSoC Project: [Interactive web tour](https://summerofcode.withgoogle.com/programs/2023/projects/luumPTO5)
+- Related Issue: https://github.com/cBioPortal/GSoC/issues/86.
+- E2E Testing PR: https://github.com/cBioPortal/cbioportal-frontend/pull/4700
+- Related Documentation: [Documentation](https://docs.google.com/document/d/1Xj8ZfcWcv2n_stCM26hMgk63xnxq7s7_W5RUYwBNUoQ/edit#heading=h.f5bc9dunvzs3), [**Detailed Blog**](https://beking0912.github.io/2023/08/21/Open-Source-Journey-Guide-My-GSoC-2023/).
+- Online review: https://deploy-preview-4707--cbioportalfrontend.netlify.app/
+
+## Description
+This pull request introduces an Interactive Web Tour that aims to enhance the user experience and facilitate the exploration of less prominent features on the site. The interactive web tour guides new users through the functionalities of Virtual Studies (**Create a Virtual Study - Not Logged In and Logged In**) as well as Group Comparison (**Compare User-defined Groups of Samples**). The project is one of this year's Google Summer of Code (GSoC) projects.
+
+The tour is implemented using the [reactour](https://github.com/elrumordelaluz/reactour/tree/v1) library to provide an interactive UI, leveraging localStorage for seamless page transitions and TypeScript for robust type definitions. 
+
+## Related Issue
+- e2e testing PR: https://github.com/cBioPortal/cbioportal-frontend/pull/4700
+- Add `show_web_tours` for Interactive Web Tour PR: https://github.com/cBioPortal/cbioportal/pull/10333
+- GSoC project description: https://github.com/cBioPortal/GSoC/issues/86
+- Track suggestions: https://github.com/cBioPortal/icebox/issues/565
+
+## Achievements
+
+- Implemented an extensible tour component, allowing for easy addition of new tour by creating new step file.
+- Created tours for two major features:
+   - Virtual Studies
+      - Create a Virtual Study for Not Logged In users
+      - Create a Virtual Study for Logged In users
+   - Group Comparison
+      - Compare User-defined Groups of Samples
+- Completed end-to-end tests for the above two tour functionalities. 
+
+
+## File Structure
+
+- `src/tours`
+  - `Steps`
+    - `GroupComparison.tsx`   // Steps for group comparison 
+    - `VirtualStudy.tsx`   // Steps for virtual study 
+    - `index.tsx`   // Exports all the steps under the folder 
+  - `Tour`
+    - `index.tsx`   // Main file, the entry for tours and the tour that actually runs 
+    - `types.tsx`   // Types for functions and props
+    - `styles.scss`
+  - `index.tsx`   // Exports all tours here
+
+## Testing
+E2E tests have been completed for the Create a Virtual Study for Logged In users and Compare User-defined Groups of Samples tour. The tests focus on validating the presence and functionality of expected buttons and elements by simulating user interactions. (Note: Test code is not included in this pull request but will be added separately.)
+👉 **See more about e2e testing on PR https://github.com/cBioPortal/cbioportal-frontend/pull/4700.**
+
+## Documentation
+For detailed steps of each tour, test procedures, and instructions on adding new tours, refer to the [detailed documentation](https://docs.google.com/document/d/1Xj8ZfcWcv2n_stCM26hMgk63xnxq7s7_W5RUYwBNUoQ/edit#heading=h.f5bc9dunvzs3) or [**more detailed blog**](https://beking0912.github.io/2023/08/21/Open-Source-Journey-Guide-My-GSoC-2023/).
+
+## Demonstration
+- Create a Virtual Study for Not Logged In users: [video](https://drive.google.com/file/d/175nxZWAI6kkPxEmLnhrfHenKUbVj7M90/view?usp=sharing)
+- Create a Virtual Study for Logged In users: [video](https://drive.google.com/file/d/1BX8Ra42a5h9aPvfby-NJuyRvIK6jgRAX/view?usp=drive_link)
+- Compare User-defined Groups of Samples: [video](https://drive.google.com/file/d/1IL1a67X8SiZ_1-VzzPa9QGlO3IHhLGfs/view?usp=drive_link)
+
+## UI Screenshots
+Tour Entries in on the right bar:
+<img src=""https://s2.loli.net/2023/08/08/SILc6uUJhVmeoTO.png"" alt=""Tour Entries"" width=""50%""/>
+
+Normal Step UI:
+<img src=""https://s2.loli.net/2023/08/08/sEXbSf3ylHjwIut.png"" alt=""Normal Step"" width=""65%""/>
+
+Last Step UI:
+<img src=""https://s2.loli.net/2023/08/08/mCT7tK9GZh8SJF5.png"" alt=""Last Step"" width=""65%""/>
+",True,4687,https://api.github.com/repos/cBioPortal/cbioportal-frontend/pulls/4687,https://github.com/cBioPortal/cbioportal-frontend/pull/4687,closed,951,13,26,4,7,21,2,0,"[{'name': 'feature'}, {'name': 'gsoc'}]",2023-08-08 14:00:47+00:00,2023-08-22 23:06:41+00:00,1242354.0,"14 days, 9:05:54","[{'comment_id': 1293579826, 'comment_body': 'maybe we can add another property for tours specifically?', 'comment_created': datetime.datetime(2023, 8, 14, 14, 51, 48, tzinfo=datetime.timezone.utc), 'commenter': 'inodb', 'type': 'User'}, {'comment_id': 1293637672, 'comment_body': ""Thanks for reminder!! I'll add one."", 'comment_created': datetime.datetime(2023, 8, 14, 15, 32, 40, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1294708104, 'comment_body': 'lets put these in a computed getter of the component', 'comment_created': datetime.datetime(2023, 8, 15, 14, 55, 50, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294708697, 'comment_body': 'we need to check that these are not pending. \r\nseems an odd way to determine number of studies.  ', 'comment_created': datetime.datetime(2023, 8, 15, 14, 56, 18, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294809589, 'comment_body': 'Thanks for your feedback！I apologize for the confusion caused by the naming. Here, I only need to determine if any samples were selected, without needing the specific count.', 'comment_created': datetime.datetime(2023, 8, 15, 15, 53, 40, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1294878434, 'comment_body': ""lets see if there's another attribute we can use besides ```id```.  The reason is that there can be problems if you mistakenly have multiple nodes with same id.  "", 'comment_created': datetime.datetime(2023, 8, 15, 16, 57, 54, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294882287, 'comment_body': 'if possible we should use css modules for this.  it may be precluded by use of react-tour library but we can discuss', 'comment_created': datetime.datetime(2023, 8, 15, 17, 2, 10, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294883786, 'comment_body': 'use lodash for slightly better syntax:\r\n```\r\n_.forIn(toursMap,(val, key)=>{...})\r\n```', 'comment_created': datetime.datetime(2023, 8, 15, 17, 3, 52, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294886189, 'comment_body': 'we should obtain url params from routingStore in calling component.  that already has url parsed. ', 'comment_created': datetime.datetime(2023, 8, 15, 17, 6, 32, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294887887, 'comment_body': 'are you sure you need these?', 'comment_created': datetime.datetime(2023, 8, 15, 17, 8, 32, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294889057, 'comment_body': 'use constant for ""web-tour"" so that we can use it again for retrieval down below.', 'comment_created': datetime.datetime(2023, 8, 15, 17, 9, 48, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294890214, 'comment_body': ""i'm curious what importing and then exporting from this index file achieves.  i know we do this in packages so that you can import from the package but what here?"", 'comment_created': datetime.datetime(2023, 8, 15, 17, 11, 9, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1294893872, 'comment_body': 'missing ```<p>``` tag?', 'comment_created': datetime.datetime(2023, 8, 15, 17, 15, 7, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1296030544, 'comment_body': 'you should use \r\n```\r\ndata-tour=XXXX\r\n```\r\n', 'comment_created': datetime.datetime(2023, 8, 16, 14, 46, 21, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1296032184, 'comment_body': 'then for the selector it would be \r\n```\r\n[data-tour=XXXX]\r\n```', 'comment_created': datetime.datetime(2023, 8, 16, 14, 47, 29, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}, {'comment_id': 1296588787, 'comment_body': ""Thanks! I've tried to use `_.forIn`, but it returns the original object instead of the content I'm returning, so I used `_.map` in this case."", 'comment_created': datetime.datetime(2023, 8, 17, 1, 43, 13, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1296605886, 'comment_body': ""I think so, `e.preventDefault(); e.stopPropagation();` is required in the click event here. \r\nWithout it, it would report `TypeError: Cannot read properties of null (reading 'getBoundingClientRect')` when click 'Skip All' button on the second step of virtual study tour."", 'comment_created': datetime.datetime(2023, 8, 17, 2, 24, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1296609168, 'comment_body': 'I want to organize the import and export of methods and variables related to steps all within a single file. \r\nThis is just my personal preference, and deleting this file is entirely feasible. \r\nHow do you think about? ', 'comment_created': datetime.datetime(2023, 8, 17, 2, 31, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1296610672, 'comment_body': ""I believe that whether to include `<p>` here during frontend rendering doesn't make a difference in this context. \r\nHowever, for the sake of code standardization, I will add it. Thanks!"", 'comment_created': datetime.datetime(2023, 8, 17, 2, 35, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1296646300, 'comment_body': 'Good idea! Doing.', 'comment_created': datetime.datetime(2023, 8, 17, 3, 51, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Beking0912', 'type': 'User'}, {'comment_id': 1300655830, 'comment_body': 'i see.  that makes sense.', 'comment_created': datetime.datetime(2023, 8, 21, 21, 17, 42, tzinfo=datetime.timezone.utc), 'commenter': 'alisman', 'type': 'User'}]","[{'commit_sha': '86e3cdfe0c96fa8b866c28546cc96c6159ad7206', 'committer_username': 'Beking0912', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 16, 5, 5, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '12ca4ac91639319e941179565e9b792db3827dbb', 'committer_username': 'Beking0912', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 16, 5, 5, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eaaf84df377e2722f4a28f2960db98b3518f87af', 'committer_username': 'Beking0912', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 16, 5, 5, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e629e4cf2586cf70ffddb1861c2d6c3b599b51d6', 'committer_username': 'inodb', 'committer_name': 'Ino de Bruijn', 'committer_email': 'ino@ino.bio', 'commit_date': datetime.datetime(2012, 1, 16, 15, 8, 30, tzinfo=datetime.timezone.utc)}]",,37431792,,User,,30,,15,24
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+66571349,cbioportal-frontend,cBioPortal/cbioportal-frontend,TypeScript,249,100,23,113,11710,31,69,31,"[{'id': 1478319332, 'number': 4700, 'closed': datetime.datetime(2023, 9, 1, 16, 40, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 17, 3, 35, 26, tzinfo=datetime.timezone.utc), 'time_taken': 1343122.0, 'time_delta': '15 days, 13:05:22', 'additions': 708, 'deletions': 0, 'state': 'closed'}, {'id': 1466956256, 'number': 4687, 'closed': datetime.datetime(2023, 8, 22, 23, 6, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 8, 14, 0, 47, tzinfo=datetime.timezone.utc), 'time_taken': 1242354.0, 'time_delta': '14 days, 9:05:54', 'additions': 951, 'deletions': 13, 'state': 'closed'}, {'id': 1382788186, 'number': 4640, 'closed': datetime.datetime(2023, 6, 7, 14, 20, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 7, 14, 19, 49, tzinfo=datetime.timezone.utc), 'time_taken': 43.0, 'time_delta': '0:00:43', 'additions': 177, 'deletions': 6, 'state': 'closed'}, {'id': 1300908376, 'number': 4569, 'closed': datetime.datetime(2024, 4, 1, 16, 12, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 4, 1, 31, 48, tzinfo=datetime.timezone.utc), 'time_taken': 31416059.0, 'time_delta': '363 days, 14:40:59', 'additions': 365, 'deletions': 2, 'state': 'closed'}]"

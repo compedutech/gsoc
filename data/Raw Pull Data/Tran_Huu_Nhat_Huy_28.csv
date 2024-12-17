@@ -1,0 +1,42 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+971499784,Add synthetic spectra for large spectrum type,"This pull request is to address #1 which:
+1. Prepares a [synthetic spectrum generator](https://github.com/TranHuuNhatHuy/RADIS-Spectrum-Fitting-Benchmark/commit/343697a6bc16a27e9d713b6b440933986d499caf).
+2. Add [several synthetic large spectra](https://github.com/TranHuuNhatHuy/RADIS-Spectrum-Fitting-Benchmark/commit/2a6e908955260702fc5968dd392f6c5594d73403) which are generated under different conditions. More of them will be added during the second week of dealing with large spectra according to the [project timeline](https://github.com/radis/radis/wiki/GSOC-2022-Application-RADIS-Tran-Huu-Nhat-Huy:-Spectrum-Fitting-Improvement#week-2---3-jun-20---jul-3).
+3. Add [some empty models](https://github.com/TranHuuNhatHuy/RADIS-Spectrum-Fitting-Benchmark/commit/d904b2aa32e1e81fedcabdfe7deedb9312eb3138) which will be heavily modified during benchmarking processes of corresponding spectrum types.
+
+### 1. Synthetic large spectra and JSON
+A unified JSON structure will be used throughout the benchmarking process to store and load spectrum fitting conditions. If possible, I would like to implement this structure to new fitting function for RADIS, **so that in the future RADIS users can simply add their spectrum file (.spec) and state the parameters/conditions in a formatted JSON file**.
+In particular, the file name used for both the spectrum files and JSON files will be like this:
+```python
+""synth-{molecule}-{isotope}-{from_wl}-{to_wl}-{wunit}-{pressure}-t{Tgas}-v{Tvib}-r{Trot}-p{path_length}-sl{slit}{slit_unit}""
+```
+and the JSON structure for stating the ground-truth will be like this, for example:
+```JSON
+{
+  ""fileName"": ""CO2-1-1900-2300-cm-1.01325-t300-v300-r300-p1-sl0.5nm.spec"",
+  ""molecule"": ""CO2"",
+  ""isotope"": ""1"",
+  ""from_wavelength"": 1900,
+  ""to_wavelength"": 2300,
+  ""pressure"": 1.01325,
+  ""mole_fraction"": 0.1,
+  ""path_length"": 1,
+  ""slit"": ""0.5 nm"",
+  ""fit"": {
+    ""Tgas"": 300,
+    ""Tvib"": 300,
+    ""Trot"": 300,
+  }
+}
+```
+This means there are 3 fit parameters: `Tgas`, `Tvib` and `Trot` with their corresponding initial values. 
+About the generator, firstly it will read the initial conditions (stated manually by me, for now), then it generates a spectrum from those conditions. To make it look like an experimental one, noises will be added with scale at 1% of max radiance value. Finally, the noise-added spectrum will be save as `.spec` file and its information will be stored as formatted JSON structure. These files will later be used for benchmarking process to test multiple fitting pipelines, and more files will definitely be added later.
+
+### 2. Several synthetic spectra for large type
+Added. Some of them are inspired from atmospheric components of several planets in Sol System, including Terra.
+
+### 3. Empty model files
+Now just empty. In the end they will contain the best pipeline of each spectrum type.",True,3,https://api.github.com/repos/TranHuuNhatHuy/RADIS-Spectrum-Fitting-Benchmark/pulls/3,https://github.com/TranHuuNhatHuy/RADIS-Spectrum-Fitting-Benchmark/pull/3,closed,300,8,21,5,4,0,0,0,[],2022-06-19 14:30:36+00:00,2022-06-22 05:22:35+00:00,226319.0,"2 days, 14:51:59",[],"[{'commit_sha': '343697a6bc16a27e9d713b6b440933986d499caf', 'committer_username': 'TranHuuNhatHuy', 'committer_name': 'Tran Huu Nhat Huy', 'committer_email': None, 'commit_date': datetime.datetime(2017, 5, 29, 7, 17, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a6e908955260702fc5968dd392f6c5594d73403', 'committer_username': 'TranHuuNhatHuy', 'committer_name': 'Tran Huu Nhat Huy', 'committer_email': None, 'commit_date': datetime.datetime(2017, 5, 29, 7, 17, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd904b2aa32e1e81fedcabdfe7deedb9312eb3138', 'committer_username': 'TranHuuNhatHuy', 'committer_name': 'Tran Huu Nhat Huy', 'committer_email': None, 'commit_date': datetime.datetime(2017, 5, 29, 7, 17, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10c4abc879eadcbc8a6a64b2dd2a3220fab2fe08', 'committer_username': 'TranHuuNhatHuy', 'committer_name': 'Tran Huu Nhat Huy', 'committer_email': None, 'commit_date': datetime.datetime(2017, 5, 29, 7, 17, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9f598eb61730990f9b9494cbd5daa9614bd2b53', 'committer_username': 'TranHuuNhatHuy', 'committer_name': 'Tran Huu Nhat Huy', 'committer_email': None, 'commit_date': datetime.datetime(2017, 5, 29, 7, 17, 58, tzinfo=datetime.timezone.utc)}]",Tran Huu Nhat Huy,29034232,,User,,19,,4,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+499726953,RADIS-Spectrum-Fitting-Benchmark,TranHuuNhatHuy/RADIS-Spectrum-Fitting-Benchmark,Python,0,0,2,1,40,3,2,0,"[{'id': 1044579021, 'number': 13, 'closed': datetime.datetime(2022, 9, 3, 5, 27, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 2, 7, 21, 22, tzinfo=datetime.timezone.utc), 'time_taken': 79580.0, 'time_delta': '22:06:20', 'additions': 255, 'deletions': 16, 'state': 'closed'}, {'id': 1036495128, 'number': 12, 'closed': datetime.datetime(2022, 9, 2, 5, 47, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 25, 9, 24, tzinfo=datetime.timezone.utc), 'time_taken': 678189.0, 'time_delta': '7 days, 20:23:09', 'additions': 123, 'deletions': 36, 'state': 'closed'}, {'id': 1006466897, 'number': 11, 'closed': datetime.datetime(2022, 7, 24, 4, 41, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 24, 4, 41, 46, tzinfo=datetime.timezone.utc), 'time_taken': 9.0, 'time_delta': '0:00:09', 'additions': 30, 'deletions': 57, 'state': 'closed'}, {'id': 1003666994, 'number': 10, 'closed': datetime.datetime(2022, 7, 21, 8, 22, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 21, 5, 39, 51, tzinfo=datetime.timezone.utc), 'time_taken': 9764.0, 'time_delta': '2:42:44', 'additions': 1150, 'deletions': 7771, 'state': 'closed'}, {'id': 996677316, 'number': 8, 'closed': datetime.datetime(2022, 7, 16, 14, 10, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 14, 13, 26, 3, tzinfo=datetime.timezone.utc), 'time_taken': 175467.0, 'time_delta': '2 days, 0:44:27', 'additions': 1045, 'deletions': 586, 'state': 'closed'}, {'id': 996671015, 'number': 7, 'closed': datetime.datetime(2022, 7, 14, 13, 21, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 14, 13, 20, 31, tzinfo=datetime.timezone.utc), 'time_taken': 57.0, 'time_delta': '0:00:57', 'additions': 1185, 'deletions': 0, 'state': 'closed'}, {'id': 985657238, 'number': 6, 'closed': datetime.datetime(2022, 7, 13, 5, 51, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 6, 49, 12, tzinfo=datetime.timezone.utc), 'time_taken': 860510.0, 'time_delta': '9 days, 23:01:50', 'additions': 695, 'deletions': 15328, 'state': 'closed'}, {'id': 985650520, 'number': 5, 'closed': datetime.datetime(2022, 7, 3, 5, 55, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 5, 55, 36, tzinfo=datetime.timezone.utc), 'time_taken': 9.0, 'time_delta': '0:00:09', 'additions': 25, 'deletions': 25, 'state': 'closed'}, {'id': 985615605, 'number': 4, 'closed': datetime.datetime(2022, 7, 3, 0, 31, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 0, 31, 6, tzinfo=datetime.timezone.utc), 'time_taken': 9.0, 'time_delta': '0:00:09', 'additions': 205, 'deletions': 127, 'state': 'closed'}, {'id': 971499784, 'number': 3, 'closed': datetime.datetime(2022, 6, 22, 5, 22, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 19, 14, 30, 36, tzinfo=datetime.timezone.utc), 'time_taken': 226319.0, 'time_delta': '2 days, 14:51:59', 'additions': 300, 'deletions': 8, 'state': 'closed'}]"

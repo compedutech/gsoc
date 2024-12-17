@@ -1,0 +1,389 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1372551795,vvc_sao: Import AVX2 accelerated SAO filters from HEVC,"I have imported the assembly SAO Band and Edge filters from HEVC. There are some issues, which is why I'm marking this as draft for now. 
+
+- ~~The SAO Edge Filter currently does not work as expected~~ (FIXED)
+
+- ~~We currently only have the same accelerated functions as HEVC. We do not have all functions needed to handle all possible CTU sizes for VVC. Locally, I got `vvc_sao_band_80_8_avx2` to pass `checkasm`, but not the 10-bit version, and `checkasm` causes a segfault on adding other CTU sizes~~ (FIXED)
+
+- ~~No 12-bit support.~~ (FIXED)
+
+I did some benchmarks with just the band filter enabled, and the performance the AVX2 and C versions are equal. Further research leads me to believe that this is expected behavior, since more blocks go thru the edge filter rather than the band filter. However, `checkasm` does show pretty significant performance uplift.
+
+EDIT 7 JUNE 2023: All issues have been fixed and code is now ready for review.",True,85,https://api.github.com/repos/ffvvc/FFmpeg/pulls/85,https://github.com/ffvvc/FFmpeg/pull/85,closed,956,6,9,3,6,4,0,0,[],2023-05-31 16:39:35+00:00,2023-06-16 14:33:02+00:00,1374807.0,"15 days, 21:53:27","[{'comment_id': 1225697246, 'comment_body': 'why we not use SAO_EDGE_INIT? \r\ncould we leave some comment here?', 'comment_created': datetime.datetime(2023, 6, 11, 3, 53, 23, tzinfo=datetime.timezone.utc), 'commenter': 'nuomi2021', 'type': 'User'}, {'comment_id': 1225697396, 'comment_body': 'HEVC->VVC\r\nDid you change anything?\r\nIf yes, maybe you can add your name here', 'comment_created': datetime.datetime(2023, 6, 11, 3, 54, 42, tzinfo=datetime.timezone.utc), 'commenter': 'nuomi2021', 'type': 'User'}, {'comment_id': 1225697597, 'comment_body': 'HEVC->VVC\r\n', 'comment_created': datetime.datetime(2023, 6, 11, 3, 57, 14, tzinfo=datetime.timezone.utc), 'commenter': 'nuomi2021', 'type': 'User'}, {'comment_id': 1225699144, 'comment_body': 'why do we need to remove const for sao_left_class, width and height?', 'comment_created': datetime.datetime(2023, 6, 11, 4, 15, 30, tzinfo=datetime.timezone.utc), 'commenter': 'nuomi2021', 'type': 'User'}]","[{'commit_sha': '6bc6027aa2d72c035dfd2140625a5653b98b7ca1', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '78c8bb8eb3135da84e9de14ec082544092b3bc3e', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '178798cffc5a179eb1d376d3d64f0c7d3127fbfa', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}]",Shaun Loo,38077284,,User,,12,,5,8
+1473270706,vvc_sao: Add AArch64 NEON accelerated SAO band and edge filters,"I recently got an M1 Pro MacBook Pro (6x Performance Cores, 2x Efficiency Cores). As a distraction and exercise, I ported the HEVC SAO NEON code to VVC.
+
+```
++++++++++ report +++++++++
+passed files:
+    APSMULT_A_MediaTek_4.bit
+    MTS_LFNST_A_LGE_4.bit
+    IP_A_Huawei_2.bit
+    TILE_F_Nokia_2.bit
+    STILL444_B_ERICSSON_1.bit
+    JCCR_E_Nokia_1.bit
+    OPI_A_Nokia_1.bit
+    10b422_D_Sony_5.bit
+    LFNST_A_LGE_4.bit
+    SbTMVP_A_Bytedance_3.bit
+    APSLMCS_D_Dolby_1.bit
+    CCALF_D_Sharp_3.bit
+    ALF_B_Huawei_3.bit
+    BDOF_A_MediaTek_4.bit
+    SCALING_A_InterDigital_1.bit
+    MERGE_A_Qualcomm_2.bit
+    PDPC_B_Qualcomm_3.bit
+    LMCS_C_Dolby_1.bit
+    DCI_A_Tencent_3.bit
+    DEBLOCKING_B_Sharp_2.bit
+    ENTHIGHTIER_B_Sony_3.bit
+    BCW_A_MediaTek_4.bit
+    QUANT_E_Interdigital_1.bit
+    MRLP_B_HHI_2.bit
+    8b420_A_Bytedance_2.bit
+    MERGE_F_Qualcomm_2.bit
+    8b422_B_Sony_5.bit
+    ACTPIC_A_Huawei_3.bit
+    PDPC_C_Qualcomm_2.bit
+    APSLMCS_A_Dolby_3.bit
+    MERGE_I_Qualcomm_2.bit
+    SCALING_B_InterDigital_1.bit
+    IP_B_Nokia_1.bit
+    AMVR_B_HHI_3.bit
+    POC_A_Nokia_1.bit
+    DCI_B_Tencent_3.bit
+    SDH_A_Dolby_2.bit
+    PSEXT_A_Nokia_2.bit
+    DPB_A_Sharplabs_2.bit
+    TEMPSCAL_B_Panasonic_7.bit
+    DMVR_B_KDDI_4.bit
+    TRANS_C_Chipsnmedia_4.bit
+    JCCR_C_HHI_3.bit
+    LFNST_C_HHI_3.bit
+    TRANS_B_Chipsnmedia_2.bit
+    ENT444MAINTIER_B_Sony_3.bit
+    MERGE_H_Qualcomm_2.bit
+    TILE_C_Nokia_2.bit
+    10b422_A_Sony_5.bit
+    STILL_B_ERICSSON_1.bit
+    CCALF_A_Sharp_3.bit
+    RAP_C_HHI_1.bit
+    AFF_A_HUAWEI_2.bit
+    10b400_A_Bytedance_2.bit
+    QUANT_A_Huawei_2.bit
+    SAO_A_SAMSUNG_3.bit
+    TREE_C_HHI_3.bit
+    ENTROPY_B_Sharp_2.bit
+    APSMULT_B_MediaTek_4.bit
+    MERGE_E_Qualcomm_2.bit
+    10b422_F_Sony_5.bit
+    SMVD_A_HUAWEI_2.bit
+    CCALF_B_Sharp_3.bit
+    MPM_A_LGE_3.bit
+    TRANS_A_Chipsnmedia_2.bit
+    RAP_D_HHI_1.bit
+    PSEXT_B_Nokia_2.bit
+    MIP_A_HHI_3.bit
+    ENT444HIGHTIER_B_Sony_3.bit
+    WP_A_InterDigital_3.bit
+    PQ_A_Dolby_1.bit
+    PROF_B_Interdigital_3.bit
+    MERGE_G_Qualcomm_2.bit
+    TEMPSCAL_C_Panasonic_4.bit
+    8b400_B_Bytedance_2.bit
+    DQ_A_HHI_3.bit
+    PDPC_A_Qualcomm_3.bit
+    8b422_E_Sony_5.bit
+    FILLER_A_Bytedance_1.bit
+    MERGE_B_Qualcomm_2.bit
+    LOSSLESS_A_HHI_3.bit
+    PROF_A_Interdigital_3.bit
+    WP_B_InterDigital_3.bit
+    CodingToolsSets_C_Tencent_2.bit
+    MERGE_J_Qualcomm_2.bit
+    MERGE_C_Qualcomm_2.bit
+    ISP_B_HHI_3.bit
+    BDPCM_A_Orange_2.bit
+    MTS_A_LGE_4.bit
+    CCLM_A_KDDI_2.bit
+    JCCR_D_HHI_3.bit
+    LFNST_D_HHI_3.bit
+    MVCOMP_A_Sharp_2.bit
+    HLG_A_NHK_4.bit
+    STILL444_A_KDDI_1.bit
+    ENTMAINTIER_B_Sony_3.bit
+    MERGE_D_Qualcomm_2.bit
+    JCCR_F_Nokia_1.bit
+    SLICES_A_HUAWEI_3.bit
+    RAP_B_HHI_1.bit
+    SPS_A_Bytedance_1.bit
+    PPS_A_Bytedance_1.bit
+    BUMP_A_LGE_2.bit
+    TILE_E_Nokia_2.bit
+    DEBLOCKING_A_Sharp_3.bit
+    SAO_B_SAMSUNG_3.bit
+    TRANS_D_Chipsnmedia_4.bit
+    10b422_C_Sony_5.bit
+    QUANT_D_Huawei_4.bit
+    DPB_B_Sharplabs_2.bit
+    LTRP_A_ERICSSON_3.bit
+    ENT444HIGHTIER_D_Sony_3.bit
+    QUANT_B_Huawei_2.bit
+    8b422_C_Sony_5.bit
+    PMERGE_D_MediaTek_1.bit
+    CodingToolsSets_B_Tencent_2.bit
+    ENTROPY_C_Qualcomm_1.bit
+    GPM_B_Alibaba_1.bit
+    CST_A_MediaTek_4.bit
+    TILE_B_Nokia_2.bit
+    TREE_B_HHI_3.bit
+    TMVP_B_Chipsnmedia_3.bit
+    CUBEMAP_C_MediaTek_3.bit
+    8b420_B_Bytedance_2.bit
+    PHSH_B_Sharp_1.bit
+    CTU_A_MediaTek_4.bit
+    DEBLOCKING_C_Huawei_3.bit
+    SAO_C_SAMSUNG_3.bit
+    ENTMAINTIER_A_Sony_3.bit
+    JCCR_A_Nokia_2.bit
+    PMERGE_C_MediaTek_1.bit
+    ENT444MAINTIER_C_Sony_3.bit
+    TEMPSCAL_A_Panasonic_4.bit
+    MIP_B_HHI_3.bit
+    PMERGE_B_MediaTek_1.bit
+    GPM_A_Alibaba_3.bit
+    QTBTT_A_MediaTek_4.bit
+    QUANT_C_Huawei_2.bit
+    MTS_B_LGE_4.bit
+    SPS_C_Bytedance_1.bit
+    10b422_E_Sony_5.bit
+    SbTMVP_B_Bytedance_3.bit
+    WPP_B_Sharp_2.bit
+    MMVD_A_SAMSUNG_3.bit
+    HLG_B_NHK_4.bit
+    DEBLOCKING_F_Ericsson_2.bit
+    ENTMAINTIER_D_Sony_3.bit
+    ISP_A_HHI_3.bit
+    TMVP_C_Chipsnmedia_3.bit
+    APSLMCS_E_Dolby_1.bit
+    PMERGE_E_MediaTek_1.bit
+    BUMP_B_LGE_2.bit
+    8b422_F_Sony_5.bit
+    RAP_A_HHI_1.bit
+    PPS_C_Bytedance_1.bit
+    ENT444HIGHTIER_A_Sony_3.bit
+    SUFAPS_A_HHI_1.bit
+    TILE_G_Nokia_2.bit
+    ENTHIGHTIER_C_Sony_3.bit
+    ALF_D_Qualcomm_2.bit
+    CodingToolsSets_A_Tencent_2.bit
+    DQ_B_HHI_3.bit
+    SPS_B_Bytedance_1.bit
+    ALF_C_KDDI_3.bit
+    SCALING_C_InterDigital_1.bit
+    ACTPIC_C_Huawei_3.bit
+    TILE_D_Nokia_2.bit
+    LFNST_B_LGE_4.bit
+    LMCS_A_Dolby_3.bit
+    ENTHIGHTIER_D_Sony_3.bit
+    CUBEMAP_B_MediaTek_3.bit
+    8b422_A_Sony_5.bit
+    MTS_LFNST_B_LGE_4.bit
+    HRD_B_Fujitsu_2.bit
+    SBT_A_HUAWEI_2.bit
+    WPP_A_Sharp_3.bit
+    10b422_B_Sony_5.bit
+    PPS_B_Bytedance_1.bit
+    ALF_A_Huawei_3.bit
+    ENTMAINTIER_C_Sony_3.bit
+    ENT444MAINTIER_A_Sony_3.bit
+    CTU_B_MediaTek_4.bit
+    JCCR_B_Nokia_2.bit
+    CTU_C_MediaTek_4.bit
+    AMVR_A_HHI_3.bit
+    APSALF_A_Qualcomm_2.bit
+    DEBLOCKING_E_Ericsson_3.bit
+    STILL_A_KDDI_1.bit
+    ENT444MAINTIER_D_Sony_3.bit
+    PMERGE_A_MediaTek_1.bit
+    HRD_A_Fujitsu_3.bit
+    TREE_A_HHI_3.bit
+    MRLP_A_HHI_2.bit
+    TMVP_A_Chipsnmedia_3.bit
+    POUT_A_Sharplabs_2.bit
+    ACTPIC_B_Huawei_3.bit
+    APSLMCS_C_Dolby_2.bit
+    RPL_A_ERICSSON_2.bit
+    8b400_A_Bytedance_2.bit
+    AUD_A_Broadcom_3.bit
+    CIIP_A_MediaTek_4.bit
+    TILE_A_Nokia_2.bit
+    ENTHIGHTIER_A_Sony_3.bit
+    AFF_B_HUAWEI_2.bit
+    CCALF_C_Sharp_3.bit
+    BUMP_C_LGE_2.bit
+    10b400_B_Bytedance_2.bit
+    8b422_D_Sony_5.bit
+    ENTROPY_A_Chipsnmedia_2.bit
+    TMVP_D_Chipsnmedia_3.bit
+    CUBEMAP_A_MediaTek_3.bit
+    ENT444HIGHTIER_C_Sony_3.bit
+
+total = 212, passed = 212, failed = 0, skipped = 0
+----------
+```
+
+```
++++++++++ report +++++++++
+passed files:
+    12b444wpp_A_OPPO_1.bit
+    12b444epp_A_Sharp_2.bit
+    12b444errc_C_Qualcomm_2.bit
+    12b400P16_B_Sony_2.bit
+    12b444vvc1_A_Sony_2.bit
+    12b444SPetsrc_C_Kwai_2.bit
+    12b444SPerrc_A_Qualcomm_2.bit
+    12b400P12_D_Sony_2.bit
+    12b444SPetsrc_F_Kwai_2.bit
+    12b400P12_A_Sony_2.bit
+    12b444P16_C_Sony_2.bit
+    12b444SPprrc_A_Qualcomm_2.bit
+    10b444P12_E_Sony_2.bit
+    12b420SPvvc1_A_KDDI_2.bit
+    12b444SPvvc1_A_Alibaba_2.bit
+    10b444P16_C_Sony_2.bit
+    12b444errc_B_Qualcomm_2.bit
+    12b420P12_E_Sony_2.bit
+    12b444vvc1_D_Sony_2.bit
+    12b444P16_A_Sony_2.bit
+    12b420P16_D_Sony_2.bit
+    12b422P16_E_Sony_2.bit
+    12b422P12_C_Sony_2.bit
+    12b444rlscp_A_OPPO_2.bit
+    12b422P12_D_Sony_2.bit
+    12b420P16_C_Sony_2.bit
+    10b444P16_A_Sony_2.bit
+    12b444prrc_A_Qualcomm_2.bit
+    12b444SPetsrc_A_Kwai_2.bit
+    12b444SPepp_A_Sharp_2.bit
+    12b420P12_B_Sony_2.bit
+    12b422P16_B_Sony_2.bit
+    12b444SPetsrc_D_Kwai_2.bit
+    12b444Irlscp_A_OPPO_2.bit
+    12b422P12_A_Sony_2.bit
+    10b444P12_B_Sony_2.bit
+    12b420P16_A_Sony_2.bit
+    10b444P16_D_Sony_2.bit
+    12b444errc_A_Qualcomm_2.bit
+    12b400P12_C_Sony_2.bit
+    12b444SPetsrc_G_Kwai_2.bit
+    12b444P16_D_Sony_2.bit
+    12b444vvc1_C_Sony_2.bit
+    12b444etsrc_A_Kwai_2.bit
+    12b444Iprrc_A_Qualcomm_2.bit
+    12b444SPrlscp_A_OPPO_2.bit
+    12b420P16_B_Sony_2.bit
+    12b420P12_D_Sony_2.bit
+    10b444P12_A_Sony_2.bit
+    12b422P16_D_Sony_2.bit
+    12b400P16_E_Sony_2.bit
+    12b422P12_B_Sony_2.bit
+    12b444Ietsrc_A_Kwai_2.bit
+    12b444P16_B_Sony_2.bit
+    12b444Ierrc_A_Qualcomm_2.bit
+    10b444P12_D_Sony_2.bit
+    12b400P16_C_Sony_2.bit
+    12b444SPetsrc_B_Kwai_2.bit
+    12b420P12_A_Sony_2.bit
+    12b422P16_A_Sony_2.bit
+    12b420Ivvc1_A_InterDigital_2.bit
+    HRD_A_Fujitsu_4.bit
+    10b444P16_B_Sony_2.bit
+    12b444SPetsrc_E_Kwai_2.bit
+    12b444vvc1_E_Sony_2.bit
+    12b400P12_B_Sony_2.bit
+    12b400P12_E_Sony_2.bit
+    12b444Ivvc1_A_Alibaba_2.bit
+    12b400P16_D_Sony_2.bit
+    12b444SPetsrc_H_Kwai_2.bit
+    12b444Iwpp_A_OPPO_1.bit
+    10b444P16_E_Sony_2.bit
+    10b444P12_C_Sony_2.bit
+    12b444Ierrc_B_Qualcomm_2.bit
+    12b444vvc1_B_Sony_2.bit
+    12b420vvc1_A_Alibaba_2.bit
+    12b400P16_A_Sony_2.bit
+    12b444P16_E_Sony_2.bit
+    12b422P12_E_Sony_2.bit
+    12b444Iepp_A_Sharp_2.bit
+    12b420P12_C_Sony_2.bit
+    12b420P16_E_Sony_2.bit
+    12b422P16_C_Sony_2.bit
+
+total = 83, passed = 83, failed = 0, skipped = 0
+----------
+```
+```
+[FFmpeg] tests/checkasm/checkasm --test=vvc_sao --benchmark
+benchmarking with native FFmpeg timers
+nop: 0.0
+checkasm: using random seed 4055973423
+NEON:   
+ - vvc_sao.sao_band [OK]
+ - vvc_sao.sao_edge [OK]
+checkasm: all 18 tests passed
+vvc_sao_band_8_8_c: 1.7
+vvc_sao_band_8_8_neon: 0.0
+vvc_sao_band_16_8_c: 7.7
+vvc_sao_band_16_8_neon: 0.7
+vvc_sao_band_32_8_c: 26.7
+vvc_sao_band_32_8_neon: 2.7
+vvc_sao_band_48_8_c: 55.0
+vvc_sao_band_48_8_neon: 6.2
+vvc_sao_band_64_8_c: 78.0
+vvc_sao_band_64_8_neon: 10.7
+vvc_sao_band_80_8_c: 114.7
+vvc_sao_band_80_8_neon: 17.2
+vvc_sao_band_96_8_c: 142.2
+vvc_sao_band_96_8_neon: 25.0
+vvc_sao_band_112_8_c: 196.0
+vvc_sao_band_112_8_neon: 33.7
+vvc_sao_band_128_8_c: 249.2
+vvc_sao_band_128_8_neon: 44.2
+vvc_sao_edge_8_8_c: 1.7
+vvc_sao_edge_8_8_neon: 0.2
+vvc_sao_edge_16_8_c: 6.5
+vvc_sao_edge_16_8_neon: 0.5
+vvc_sao_edge_32_8_c: 25.5
+vvc_sao_edge_32_8_neon: 2.2
+vvc_sao_edge_48_8_c: 57.0
+vvc_sao_edge_48_8_neon: 5.0
+vvc_sao_edge_64_8_c: 101.0
+vvc_sao_edge_64_8_neon: 8.7
+vvc_sao_edge_80_8_c: 163.0
+vvc_sao_edge_80_8_neon: 13.5
+vvc_sao_edge_96_8_c: 232.2
+vvc_sao_edge_96_8_neon: 19.7
+vvc_sao_edge_112_8_c: 312.0
+vvc_sao_edge_112_8_neon: 26.5
+vvc_sao_edge_128_8_c: 419.0
+vvc_sao_edge_128_8_neon: 505.2
+``` 
+
+This last function seems to take longer than the C version. I don't know why, but I'm not exactly wiling to work more on this for now, I'd rather spend time on the x86 deblocker.
+
+Benchmark on M1 Pro (6x Performance Cores, 2x Efficiency Cores)
+
+| File | C | NEON | Delta |
+|-----|--|-------|-------|
+| Chimera_8bit_1080P_1000_frames.vvc | 154.0 | 155.3 | 0.84% |
+| RitualDance_1920x1080_60_10_420_32_LD.266 | 91.7 | 106.0 | 14.46% |
+| BQTerrace_1920x1080_60_10_420_22_RA.vvc | 55.0 | 53.0 | 3.7% |
+| Tango2_3840x2160_60_10_420_27_LD.266 | 17.7 | 17.7 | 0.0% |
+| RitualDance_1920x1080_60_10_420_37_RA.266 | 108.7 | 129.7 | 17.6% |
+| NovosobornayaSquare_1920x1080.bin | 120.7 | 143.7 | 17.39% |
+
+These numbers seem a little too good to be true, but I ran the benchmark again and I got roughly the same results.",True,122,https://api.github.com/repos/ffvvc/FFmpeg/pulls/122,https://github.com/ffvvc/FFmpeg/pull/122,closed,261,0,5,1,3,0,0,0,[],2023-08-13 07:40:19+00:00,2023-08-13 14:20:28+00:00,24009.0,6:40:09,[],"[{'commit_sha': 'fdda66285c1beb544f03652622c5132440372697', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}]",Shaun Loo,38077284,,User,,12,,5,8
+1490849650,vvc_deblock: Add accelerated luma deblocker,"Unfortunately, this luma deblocker still has issues. I think it's mainly because the way `tc` is stored is different in HEVC than VVC causing this issue. As the GSoC coding period ends, I am including this in my final eval submisison even though it is very much incomplete. I will continue working on this even when GSoC ends and school starts.",False,129,https://api.github.com/repos/ffvvc/FFmpeg/pulls/129,https://github.com/ffvvc/FFmpeg/pull/129,open,1043,10,10,4,0,0,0,0,[],2023-08-27 04:13:09+00:00,,0.0,,[],"[{'commit_sha': 'd80c53eedd398fd580c16d6c6ec42bd1cff6260f', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe34cb470cb7d46cc68539456a609024df5638b7', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f16e8060a75f33367213ede530cbb03e6297409a', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa4a41d8e33d9904ebdd00bc59c26f8e211a12fb', 'committer_username': 'zackerthescar', 'committer_name': 'Shaun Loo', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 4, 14, 42, 14, tzinfo=datetime.timezone.utc)}]",Shaun Loo,38077284,,User,,12,,5,8
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+588874307,FFmpeg,ffvvc/FFmpeg,C,12,50,3,2355,113565,39,8,11,"[{'id': 1490849650, 'number': 129, 'closed': None, 'created': datetime.datetime(2023, 8, 27, 4, 13, 9, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1043, 'deletions': 10, 'state': 'open'}, {'id': 1473270706, 'number': 122, 'closed': datetime.datetime(2023, 8, 13, 14, 20, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 13, 7, 40, 19, tzinfo=datetime.timezone.utc), 'time_taken': 24009.0, 'time_delta': '6:40:09', 'additions': 261, 'deletions': 0, 'state': 'closed'}, {'id': 1473217792, 'number': 121, 'closed': datetime.datetime(2023, 8, 13, 5, 55, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 13, 4, 32, 2, tzinfo=datetime.timezone.utc), 'time_taken': 4993.0, 'time_delta': '1:23:13', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 1473209526, 'number': 120, 'closed': None, 'created': datetime.datetime(2023, 8, 13, 4, 5, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 564, 'deletions': 6, 'state': 'open'}, {'id': 1431015149, 'number': 110, 'closed': datetime.datetime(2023, 8, 13, 4, 5, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 10, 32, 50, tzinfo=datetime.timezone.utc), 'time_taken': 2741551.0, 'time_delta': '31 days, 17:32:31', 'additions': 130369, 'deletions': 47307, 'state': 'closed'}, {'id': 1372551795, 'number': 85, 'closed': datetime.datetime(2023, 6, 16, 14, 33, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 31, 16, 39, 35, tzinfo=datetime.timezone.utc), 'time_taken': 1374807.0, 'time_delta': '15 days, 21:53:27', 'additions': 956, 'deletions': 6, 'state': 'closed'}, {'id': 1291981286, 'number': 53, 'closed': datetime.datetime(2023, 5, 22, 19, 22, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 27, 20, 52, 5, tzinfo=datetime.timezone.utc), 'time_taken': 4833043.0, 'time_delta': '55 days, 22:30:43', 'additions': 0, 'deletions': 0, 'state': 'closed'}]"

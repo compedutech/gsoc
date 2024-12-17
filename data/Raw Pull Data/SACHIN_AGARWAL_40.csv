@@ -1,0 +1,786 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+416158692,[GSoC] Series: Correcting incorrect limit evaluations based on different assumptions of the limit variable,"Fixes: #8481
+Fixes: #9041 
+Fixes: #14556
+Fixes: #16722 
+Fixes: #17792
+Fixes: #18992 
+
+#### Brief description of what is fixed or changed
+
+**Incorrect limit evaluation** takes place based on **different assumptions** of the variable in the limit expression.
+
+The assumption `integer = True` is causing these issues.
+
+As we know, Gruntz algorithm changes a variable to a dummy with `positive=True` if the variable does not possess that property. We can make it define a dummy, if the limit variable has `integer=True` property. 
+So, Gruntz algorithm would not need to work with variables having `integer=True` property and thus this issue won’t occur. 
+The rewrite line can come later, after the dummy variable has been substituted.
+
+Now the limit evaluations take place correctly:
+
+```
+In [6]: b = Symbol('b', positive=True, integer=True)
+In [7]: limit(factorial(b+1)**(1/(b+1)) - factorial(b)**(1/b), b, oo)
+Out[7]:  
+ -1
+e
+
+In [8]: n = Symbol('n',positive=True,integer=True)
+
+In [9]: limit(factorial(n)/sqrt(n)*(E/n)**n,n,oo)
+Out[9]:
+  ___   ____
+\/ 2 *\/ pi
+
+
+In [10]: z = symbols('z', positive=True)
+
+In [11]: limit(binomial(n + z, n)*n**-z, n, oo)
+Out[11]: 1/gamma(z + 1)
+
+In [12]: z = symbols('z', positive=True, integer=True)
+
+In [13]: limit(binomial(n + z, n)*n**-z, n, oo)
+Out[13]: 1/gamma(z + 1)
+```
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* series
+  * Adds a condition to `limitinf() function of gruntz.py` resolving incorrect limit evaluations 
+<!-- END RELEASE NOTES -->",True,19292,https://api.github.com/repos/sympy/sympy/pulls/19292,https://github.com/sympy/sympy/pull/19292,closed,20,5,2,4,7,3,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'limits'}]",2020-05-11 14:56:04+00:00,2020-05-12 05:43:17+00:00,53233.0,14:47:13,"[{'comment_id': 423183932, 'comment_body': '`finite` is redundant here when used with `positive`', 'comment_created': datetime.datetime(2020, 5, 11, 16, 59, 34, tzinfo=datetime.timezone.utc), 'commenter': 'smichr', 'type': 'User'}, {'comment_id': 423184490, 'comment_body': '```suggestion\r\n        # We make sure that x.is_positive is True and x.is_integer is None\r\n```', 'comment_created': datetime.datetime(2020, 5, 11, 17, 0, 23, tzinfo=datetime.timezone.utc), 'commenter': 'smichr', 'type': 'User'}, {'comment_id': 423187723, 'comment_body': ""Alright will just see if it does not break anything (mostly it won't). If it doesn't will make the commit."", 'comment_created': datetime.datetime(2020, 5, 11, 17, 5, 36, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': '8c3d74edf3dde1f63d669035055fa4ac3d7f5816', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f344484ae989aa2299e6efbfedef0115df8ba0eb', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd9ec1c0290a2857d8e60898189df53d90d911eb3', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eef26bb47aa4a1dd3c35acf11e08c6b700b53bc1', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+416570230,[GSoC] Series: Fixing incorrect limit evaluations caused due to bug in rewriting,"Fixes: #18378
+Fixes: #18482 
+Closes #18947
+
+#### Brief description of what is fixed or changed
+
+**Incorrect limit evaluation** takes place because of **bug in rewriting.**
+
+The function `xreplace()` in the `rewrite()` function of `gruntz.py` is not substituting properly.
+As a result, it has been replaced by the `subs()` function which resolves the issue.
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* series
+  * Replaces `xreplace()` with `subs()` in `rewrite() function of gruntz.py` resolving incorrect limit evaluations 
+<!-- END RELEASE NOTES -->",True,19297,https://api.github.com/repos/sympy/sympy/pulls/19297,https://github.com/sympy/sympy/pull/19297,closed,9,1,2,2,3,2,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'limits'}]",2020-05-12 08:29:38+00:00,2020-05-12 16:13:28+00:00,27830.0,7:43:50,"[{'comment_id': 423658616, 'comment_body': 'Why `doit()`?', 'comment_created': datetime.datetime(2020, 5, 12, 11, 24, 59, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 423661620, 'comment_body': 'Yeah actually not needed. Will change it asap. Anything else?', 'comment_created': datetime.datetime(2020, 5, 12, 11, 30, 41, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': '49641ad4938b2ce2d0324732a6d51dc15a6b6f74', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53adee580afb2ce4a31ccd2909d6e272b0c65245', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+420201974,[GSoC] Core: Fixes _eval_nseries() of Mul,"Fixes: #14068
+
+#### Brief description of what is fixed or changed
+
+The series expansion of a product is computed as the product of expansions of the factors.
+
+```
+def _eval_nseries(self, x, n, logx):
+    from sympy import Order, powsimp
+    terms = [t.nseries(x, n=n, logx=logx) for t in self.args]
+    res = powsimp(self.func(*terms).expand(), combine='exp', deep=True)
+    if res.has(Order):
+        res += Order(x**n, x)
+    return res
+```
+This is correct if the leading term of each series is constant but not in general.
+
+For example, to compute the expansion of `f(x)/x**10` at `x = 0` to order `O(x**10)` it is necessary to compute the series of `f(x)` to order `O(x**20)`, the order `O(x**10)` does not suffice.
+
+A working strategy could be the following:
+
+* Compute the order `n0` of the leading term of the product as the sum of the orders of the leading terms of the factors.
+
+* For each factor, compute `n - n0` terms of its series expansion (starting from its leading term of order `n1` and ending at order `n - n0 + n1`).
+
+* Multiply the expansions (truncating at terms of order `n`).
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* core
+  * Fixes `_eval_nseries()` function of `mul.py`
+<!-- END RELEASE NOTES -->",True,19369,https://api.github.com/repos/sympy/sympy/pulls/19369,https://github.com/sympy/sympy/pull/19369,closed,83,42,9,8,4,0,3,0,"[{'name': 'series'}, {'name': 'core'}, {'name': 'GSoC'}]",2020-05-19 15:39:45+00:00,2020-05-24 11:22:00+00:00,416535.0,"4 days, 19:42:15",[],"[{'commit_sha': '8a06c07bad30fe887c868509271f17ece8fccdd6', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47302f6e2861a8118bb50b435f5a404a2c0d453b', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48afbaf13f57df912502e5731b9b0afcc1e18f99', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4db172694083be19cbcbd911b46c1f111c1c2031', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb9dc94757c6abbc846ebf6e19d04a13dc272f4b', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0dad06d9386c9d01f36b08331a1832b23fe47f9a', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '84233019204f8f843e41f60bcb4f514f12f693b0', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d876b3632aa7795dc9d761de36f3affd96c8f2c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+423178415,[GSoC] Series: Using is_meromorphic() for limit evaluations,"Fixes: #9558
+Fixes: #19067 
+
+#### Brief description of what is fixed or changed
+
+This PR adds a functionality which uses `is_meromorphic()` as an attempt to speed up limit evaluations. 
+References: https://github.com/sympy/sympy/issues/8320
+
+#### Other Comments
+Regression Tests have been added.
+
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* series
+  * Adds a functionality to the `doit()` method of `limits.py` which uses `is_meromorphic()` for limit evaluations
+<!-- END RELEASE NOTES -->",True,19432,https://api.github.com/repos/sympy/sympy/pulls/19432,https://github.com/sympy/sympy/pull/19432,closed,78,49,8,4,5,16,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'limits'}]",2020-05-26 12:35:59+00:00,2020-05-29 07:34:07+00:00,241088.0,"2 days, 18:58:08","[{'comment_id': 430396992, 'comment_body': 'Did `e.is_meromorhpic(z, z0)` raise? If not, then this could come before `try` and the `try-except` block would not be always created.', 'comment_created': datetime.datetime(2020, 5, 26, 13, 6, 39, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 430397716, 'comment_body': 'Ok.', 'comment_created': datetime.datetime(2020, 5, 26, 13, 7, 47, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 430397807, 'comment_body': 'This line looks too long.', 'comment_created': datetime.datetime(2020, 5, 26, 13, 7, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 430515863, 'comment_body': 'There is far too much code in between the try and the except here. Use of `try/except` should be limited to precisely the line/call that is expected to raise. Probably there is a better way of handling the exceptional cases here without using try/except at all.', 'comment_created': datetime.datetime(2020, 5, 26, 15, 44, 54, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 430517071, 'comment_body': '`coeff, exp = newe.leadterm(z)` This is the line expected to raise', 'comment_created': datetime.datetime(2020, 5, 26, 15, 46, 42, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 430522316, 'comment_body': 'What would `newe` need to be in order for this to raise?', 'comment_created': datetime.datetime(2020, 5, 26, 15, 54, 5, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 430524338, 'comment_body': ""I don't think it will be easy to generalise, though we might succeed in doing so, but since there can always be new cases, I might avoid this."", 'comment_created': datetime.datetime(2020, 5, 26, 15, 56, 48, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 430538154, 'comment_body': 'Can you give any example?', 'comment_created': datetime.datetime(2020, 5, 26, 16, 16, 29, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 430565366, 'comment_body': 'Terms like `atan(1/x)`.', 'comment_created': datetime.datetime(2020, 5, 26, 16, 56, 1, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 430580517, 'comment_body': 'Isn\'t that a bug?\r\n```python\r\n>>> from sympy import *\r\n>>> x = Symbol(\'x\')\r\n>>> \r\n>>> atan(1/x).series(x)\r\npi/2 - x + x**3/3 - x**5/5 + O(x**6)\r\n>>> atan(1/x).series(x).leadterm(x)\r\n(pi/2, 0)\r\n>>> atan(1/x).leadterm(x)\r\nTraceback (most recent call last):\r\n  File ""<stdin>"", line 1, in <module>\r\n  File ""/Users/enojb/current/sympy/sympy/sympy/core/expr.py"", line 3412, in leadterm\r\n    should have been free of %s but got %s"""""" % (self, x, x, c)))\r\nValueError: \r\ncannot compute leadterm(atan(1/x), x). The coefficient should have\r\nbeen free of x but got atan(1/x)\r\n```', 'comment_created': datetime.datetime(2020, 5, 26, 17, 22, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 430582337, 'comment_body': 'Seems so.', 'comment_created': datetime.datetime(2020, 5, 26, 17, 25, 5, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 431420583, 'comment_body': 'Until these issues get fixed, will have to keep the `try-except` block.', 'comment_created': datetime.datetime(2020, 5, 27, 20, 24, 53, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 431611439, 'comment_body': 'There is a third alternative ""+-"". At this point `exp` is odd so the limit should be `zoo`.', 'comment_created': datetime.datetime(2020, 5, 28, 6, 36, 33, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 431612045, 'comment_body': 'So something like:\r\n```\r\nelse:\r\n    return S.ComplexInfinity\r\n```', 'comment_created': datetime.datetime(2020, 5, 28, 6, 38, 4, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 431616044, 'comment_body': 'This is true when `arg.subs(x, 0)` is not finite. That could be tested directly.', 'comment_created': datetime.datetime(2020, 5, 28, 6, 48, 13, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 431631981, 'comment_body': 'Yes. It seems that `Limit` already checks that there are no other alternatives.', 'comment_created': datetime.datetime(2020, 5, 28, 7, 22, 40, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}]","[{'commit_sha': '267a4fdc881cfb6c9b3ad6db7d41266b94d65692', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a3aa8c6af896c729d30340ba823cc6dab180174', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03bef477d4b133a28cdee87b09f32b822fc482b5', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7566bae7ab8119acdc0d74456e76aec95394317f', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+425266020,[GSoC] Functions: Corrects the _eval_as_leading_term() method of tan and sec functions,"#### Brief description of what is fixed or changed
+This PR corrects the `_eval_as_leading_term()` method of `tan` and `sec` functions.
+
+It also removes the check: `if coeff is S.ComplexInfinity` added in this PR: https://github.com/sympy/sympy/pull/19432, by handling the cases which returned `zoo` and correcting them.
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Corrects the `_eval_as_leading_term()` method of `tan` and `sec` functions
+<!-- END RELEASE NOTES -->",True,19461,https://api.github.com/repos/sympy/sympy/pulls/19461,https://github.com/sympy/sympy/pull/19461,closed,27,19,3,1,5,0,4,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'functions'}, {'name': 'limits'}]",2020-05-29 18:43:44+00:00,2020-05-30 06:05:06+00:00,40882.0,11:21:22,[],"[{'commit_sha': '238943e1215516042ec715c2dada06a359874372', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+430137808,[GSoC] Core: Fixes _eval_nseries() of Power,"Fixes: #9549
+Fixes: #12578
+Fixes: #12769
+Fixes: #15146
+Fixes: #17751 
+Fixes: #18008
+
+#### Brief description of what is fixed or changed
+The series expansion of `b**e` is computed as follows:
+* We express `b` as `f*(1 + g)` where `f` is the leading term of `b`. 
+    `g` has order `O(x**d)` where `d` is strictly positive.
+* Then `b**e` = `(f**e)*((1 + g)**e)`. `(1 + g)**e` is computed using binomial series.
+
+It was very important to rewrite and clean-up `Pow._eval_nseries()` completely, so that many issues get resolved and it becomes easy to debug any further bugs related to series expansions or limit evaluations.
+
+#### Other Comments
+Regression Tests have been added.
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* core
+  * Fixes `_eval_nseries()` function of `power.py`
+<!-- END RELEASE NOTES -->",True,19508,https://api.github.com/repos/sympy/sympy/pulls/19508,https://github.com/sympy/sympy/pull/19508,closed,174,252,11,6,3,0,3,0,"[{'name': 'series'}, {'name': 'core'}, {'name': 'GSoC'}]",2020-06-07 15:09:49+00:00,2020-06-11 07:21:18+00:00,317489.0,"3 days, 16:11:29",[],"[{'commit_sha': '5dc58b715362d9332078fd7560b322d7a7eeddd1', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '560a517c038f2926453d3a20af2e8961226b7346', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5fd69f726af9e4a197185962c2e7a6accdfefb1c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a25467880501c7f9cb1e5e53d69de41e49197ff', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00b8c3e34d48c6695e5fe702ab81478bc1029e99', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59fde3be058a5853c1812af9c8c1582186d4d767', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+431280806,[GSoC] Functions: Fixes incorrect evaluation caused due to subfactorial in limit_seq expression,"Fixes: #9308
+
+#### Brief description of what is fixed or changed
+
+**Incorrect limit_seq evaluation** takes place because of **subfactorial in limit_seq expression.**
+
+Ideally, we should have `_eval_rewrite_as_factorial()` and `_eval_rewrite_as_gamma()`  functionalities for `subfactorial`.
+
+This is implemented using the equation:
+
+![image](https://user-images.githubusercontent.com/46645803/84059488-56a67100-a9d8-11ea-9705-fbea54aece7c.png)
+
+For further details: https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_%E2%88%9E
+
+After this, we can simply rewrite the `subfactorial` term present in `limit_seq expression` to `gamma`, so that the evaluations take place correctly.
+
+#### Other Comments
+Regression Test has been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Adds `_eval_rewrite_as_factorial()` and `_eval_rewrite_as_gamma()`  functionalities for `subfactorial`
+<!-- END RELEASE NOTES -->",True,19515,https://api.github.com/repos/sympy/sympy/pulls/19515,https://github.com/sympy/sympy/pull/19515,closed,19,2,3,4,2,2,3,0,"[{'name': 'GSoC'}, {'name': 'functions'}, {'name': 'limits'}]",2020-06-08 17:10:49+00:00,2020-06-09 11:05:43+00:00,64494.0,17:54:54,"[{'comment_id': 437204149, 'comment_body': 'It looks like `exp_polar(I*pi)` could be `-1`. Then `exp_polar` need not be imported.', 'comment_created': datetime.datetime(2020, 6, 9, 7, 48, 26, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 437256178, 'comment_body': 'Made the changes.', 'comment_created': datetime.datetime(2020, 6, 9, 9, 8, 46, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': '69e958c2efd7448279d38f3ae92fcffaa354180a', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2fce28c922fe06ee5cb601049ebb66af9b9ac778', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd3e38b8161c8c187092052867ce3bb759f80e03', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cffb808541b619db504061247d3753e14219eb3d', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+434179570,[GSoC] Functions: Adds cdir parameter to handle series expansions on branch cuts,"Fixes: #7216
+Fixes: #19586 
+
+#### Brief description of what is fixed or changed
+
+Adds `cdir` parameter to handle `series expansions` on `branch cuts`.
+`cdir` stands for `complex direction`, and indicates the direction from which the expansion needs to be evaluated.
+
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Adds `cdir` parameter to handle `series expansions` on `branch cuts`
+<!-- END RELEASE NOTES -->",True,19555,https://api.github.com/repos/sympy/sympy/pulls/19555,https://github.com/sympy/sympy/pull/19555,closed,667,197,26,9,3,8,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'functions'}]",2020-06-14 17:58:27+00:00,2020-06-24 06:49:18+00:00,823851.0,"9 days, 12:50:51","[{'comment_id': 442230290, 'comment_body': 'It should be checked somewhere, maybe here, that `arg` is not 0 to begin with.', 'comment_created': datetime.datetime(2020, 6, 18, 13, 35, 32, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 442231734, 'comment_body': 'So something like:\r\n```\r\nif arg.is_zero:\r\n    return\r\n```\r\n\r\nBut will returning `None` be fine?', 'comment_created': datetime.datetime(2020, 6, 18, 13, 37, 38, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 442299738, 'comment_body': 'How about retuning 0 which is the default?', 'comment_created': datetime.datetime(2020, 6, 18, 15, 8, 49, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 442304407, 'comment_body': 'should work fine.', 'comment_created': datetime.datetime(2020, 6, 18, 15, 15, 51, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 443997217, 'comment_body': '`logx` and `cdir` should probably be added here.', 'comment_created': datetime.datetime(2020, 6, 23, 6, 47, 29, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 444010901, 'comment_body': 'This is a long(ish) line.', 'comment_created': datetime.datetime(2020, 6, 23, 7, 16, 13, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 444011636, 'comment_body': 'These two long `cbrt` lines should be split.', 'comment_created': datetime.datetime(2020, 6, 23, 7, 17, 34, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 444011655, 'comment_body': 'Will reduce its length using parentheses.', 'comment_created': datetime.datetime(2020, 6, 23, 7, 17, 36, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': 'de64e847f4c79084f9f8ba070d801df158e1242c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd389330192c6d9037f01e8915b32242d3d49deb3', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ccaa64577c32a12b88c5920e8c2237a010542076', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ac8fa14f1aa9bc4e6e28b6e18a4d2da1cd2f8ff', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '87098a8ded034bb4bafbdd3bc6a8904996099dc8', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc0e83c2678a9a69ee7adaac83dd9fb826a24736', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b087f59b838c15ceb38647d1a3df4a5c75f0cd5e', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7fe909176c289b622a1809bf41b81423de9dd74c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9ac115d482480add3b94e58f4922edcd0829dd3', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+440196057,[GSoC] Series: Fixes RecursionError and Timeout in limit evaluations,"Fixes: #8208
+Fixes: #14514
+Fixes: #15202
+Fixes: #15282
+Fixes: #16714
+
+#### Brief description of what is fixed or changed
+
+Changes have been done in `mrv()` function of `gruntz.py` to handle the indeterminant form of `1**oo` more accurately.
+
+Some other changes have been done in `Add._eval_as_leading_term()` to handle cases in a better way, where `leading term` has to be evaluated using `series computation`.
+
+Some major changes have been done in the `cancel()` function of `polytools.py` to speed up the algorithm.
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* series
+  * Changes in `mrv()` function of `gruntz.py` and `cancel()` function of `polytools.py` resolves `RecursionError` and `Timeout` in limit evaluations
+<!-- END RELEASE NOTES -->",True,19646,https://api.github.com/repos/sympy/sympy/pulls/19646,https://github.com/sympy/sympy/pull/19646,closed,112,50,21,6,4,0,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'limits'}]",2020-06-25 18:46:40+00:00,2020-06-28 17:26:16+00:00,254376.0,"2 days, 22:39:36",[],"[{'commit_sha': '14a7d0045f64a29a384ff633e53b1b36e3a96a2d', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '16e2fe4dd6673e9053642c283543b102da16c8df', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '197ac0069b769b28324e47e481bbd90822a5bb65', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3fd9f137a3b7f5e8a0113d5166389cc5d6731ecd', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b287218128ad0e95f89f768220938f509f670d60', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1f53e6e2687d74b2314ad1d7cc920edf2cbc3af9', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+442577362,[GSoC] Series: Fixes Incorrect limit evaluations,"Fixes: #4114
+Fixes: #12398 
+Fixes: #18399 
+
+#### Brief description of what is fixed or changed
+
+Adds `e.is_Pow` heuristic to `limits.py` to handle limit evaluations of `Pow` objects using the help of `meromorphic` check, or by separately evaluating the `limit` of `base` and `exponent` and then determining the final `limit` which needs to be evaluated.
+
+Adds some code to `limits.py` which improves the evaluation of limits having `Abs` expressions.
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* series
+  * Adds `e.is_Pow` heuristic to `limits.py` to improve the limit evaluations of `Pow` objects
+<!-- END RELEASE NOTES -->",True,19680,https://api.github.com/repos/sympy/sympy/pulls/19680,https://github.com/sympy/sympy/pull/19680,closed,87,12,5,5,3,5,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'limits'}]",2020-07-01 09:44:03+00:00,2020-07-03 09:59:17+00:00,173714.0,"2 days, 0:15:14","[{'comment_id': 448271087, 'comment_body': 'These can be combined: `if e.has(S.Infinity, S.NegativeInfinity, ...)`. That will make a single traversal of `e` instead of four.', 'comment_created': datetime.datetime(2020, 7, 1, 10, 31, 6, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 448274193, 'comment_body': 'Will make the necessary change.', 'comment_created': datetime.datetime(2020, 7, 1, 10, 37, 35, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 448809399, 'comment_body': 'This limit does not seem to appear in the role of a coefficient. Maybe a better name could be found.', 'comment_created': datetime.datetime(2020, 7, 2, 7, 42, 47, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 448811027, 'comment_body': 'This could probably be `if coeff.is_extended_real`. That would include `oo` and `-oo` and `AccumBounds`.', 'comment_created': datetime.datetime(2020, 7, 2, 7, 45, 42, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 448813434, 'comment_body': 'This may raise. `if (coeff < 0) == True:` will avoid that.', 'comment_created': datetime.datetime(2020, 7, 2, 7, 50, 11, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}]","[{'commit_sha': 'd41d628068037f05b3737b7e9ba490933e84dd6f', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '88c048b30d28f1758133fe7247f1c78675401bf3', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4fb5fa2d46d30a5df9b693a9673cf5dc57c3f99f', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e10f19e7178237e98efac2eaef2b52c4b2ee396', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17e3701a3bc8fc84a76fa30c7151035734605813', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+443970663,[GSoC] Functions: Fixes limit evaluations involving error functions,"Fixes: #8433
+Fixes: #10976
+Fixes: #11496
+Fixes: #13733
+Fixes: #13750
+
+#### Brief description of what is fixed or changed
+
+Rectifies `_eval_rewrite_as_tractable` method of `class erf`.
+
+Adds `eval` method to `class _erfs` so that `_erfs(0)` evaluates to `1`.
+
+Corrects the `_eval_as_leading_term` method of `class erf`.
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Rectifies `_eval_rewrite_as_tractable` method of `class erf`
+<!-- END RELEASE NOTES -->",True,19697,https://api.github.com/repos/sympy/sympy/pulls/19697,https://github.com/sympy/sympy/pull/19697,closed,49,4,6,2,3,0,3,0,"[{'name': 'GSoC'}, {'name': 'functions'}, {'name': 'limits'}]",2020-07-03 10:01:18+00:00,2020-07-05 11:42:06+00:00,178848.0,"2 days, 1:40:48",[],"[{'commit_sha': 'f857f5007409ec16f51fedf03a05cdaa5a1c2da4', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10cf79674eafdbfeaf08485425967f0cd1ccbb70', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+444746855,[GSoC] Functions: Fixes limit evaluations related to LambertW function,"Fixes: #18969
+
+#### Brief description of what is fixed or changed
+
+Adds `_singularities` to `LambertW` function.
+
+Made minor changes to `Pow._eval_nseries` to have a more general series expansion.
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Adds `_singularities` to `LambertW` function
+<!-- END RELEASE NOTES -->",True,19716,https://api.github.com/repos/sympy/sympy/pulls/19716,https://github.com/sympy/sympy/pull/19716,closed,18,3,5,1,4,0,3,0,"[{'name': 'GSoC'}, {'name': 'functions'}, {'name': 'limits'}]",2020-07-06 12:36:41+00:00,2020-07-08 15:14:47+00:00,182286.0,"2 days, 2:38:06",[],"[{'commit_sha': 'af9cd2aff1324cb5697e188c58a9b9ece77ca88c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+378018266,[GSoC] Functions: Fixes errors in assumptions when rewriting RisingFactorial / FallingFactorial as gamma or factorial,"Fixes: #6878
+Fixes: #13446
+Fixes: #14871
+Fixes: #18686 
+
+
+#### Brief description of what is fixed or changed
+**Previously**: 
+```
+In[1]: ff(5,y).rewrite(gamma)
+Out[1]: 0  #Wrong Answer
+```
+
+**Now**: 
+```
+In[1]: ff(5,y).rewrite(gamma)
+Out[1]: 120/Gamma(6 - y)  #Correct Answer
+```
+
+
+
+
+#### Other Comments
+Regression Tests have been added
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * fixed errors in assumptions when rewriting `RisingFactorial` / `FallingFactorial` as `gamma` or `factorial`
+<!-- END RELEASE NOTES -->
+",True,18696,https://api.github.com/repos/sympy/sympy/pulls/18696,https://github.com/sympy/sympy/pull/18696,closed,201,115,19,14,38,29,2,0,"[{'name': 'GSoC'}, {'name': 'functions'}]",2020-02-20 22:58:49+00:00,2020-07-12 10:50:14+00:00,12311485.0,"142 days, 11:51:25","[{'comment_id': 420329804, 'comment_body': ""Based on our disucussions and work in #18960, I don't think Piecewise should be returned. If the assumptions are insufficient to allow unambiguous rewriting as `gamma` then nothing should be returned:\r\n```python\r\nif x.is_negative:\r\n    return (-1)**k*gamma(k - x) / gamma(-x)\r\nif x.is_nonnegative:\r\n    return gamma(x + 1) / gamma(x - k + 1)\r\n```"", 'comment_created': datetime.datetime(2020, 5, 5, 18, 46, 4, tzinfo=datetime.timezone.utc), 'commenter': 'smichr', 'type': 'User'}, {'comment_id': 421946373, 'comment_body': 'This is failing the **rst doctests in concrete**, everything else is working fine:\r\n\r\n```\r\n**********************************************************************\r\nFile ""sympy\\doc\\src\\modules\\concrete.rst"", line 31, in concrete.rst\r\nFailed example:\r\n    ff(n, k).is_hypergeometric(n)\r\nExpected:\r\n    True\r\nGot:\r\n    False\r\n**********************************************************************\r\nFile ""sympy\\doc\\src\\modules\\concrete.rst"", line 46, in concrete.rst\r\nFailed example:\r\n    ff(n, k).is_hypergeometric(k)\r\nExpected:\r\n    True\r\nGot:\r\n    False\r\n**********************************************************************\r\nFile ""sympy\\doc\\src\\modules\\concrete.rst"", line 58, in concrete.rst\r\nFailed example:\r\n    ff(n-1, k+1).is_hypergeometric(n)\r\nExpected:\r\n    True\r\nGot:\r\n    False\r\n**********************************************************************\r\n1 items had failures:\r\n   3 of  22 in concrete.rst\r\n***Test Failed*** 3 failures.\r\ndoc\\src\\modules\\concrete.rst [22]                                            [3]\r\n```\r\n', 'comment_created': datetime.datetime(2020, 5, 8, 5, 29, 12, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 421985375, 'comment_body': 'The problem is:\r\n\r\n**Earlier:**\r\n```\r\nIn [1]: ff(n, k).rewrite(gamma)\r\nOut[1]: (-1)**k*gamma(k - n) / gamma(-n)\r\n```\r\n\r\n**Now:**\r\n```\r\nIn [1]: ff(n, k).rewrite(gamma)\r\nOut[1]: FallingFactorial(n, k)\r\n```\r\n', 'comment_created': datetime.datetime(2020, 5, 8, 7, 18, 47, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422102886, 'comment_body': 'What if f only has a Piecewise part? Maybe piecewise_fold should be run first.', 'comment_created': datetime.datetime(2020, 5, 8, 11, 58, 33, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 422114604, 'comment_body': 'Got your point, but this is not resolving the issue.', 'comment_created': datetime.datetime(2020, 5, 8, 12, 28, 14, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422123194, 'comment_body': 'I did not expect that. Probably dummy_eq has to be improved.', 'comment_created': datetime.datetime(2020, 5, 8, 12, 47, 55, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 422124405, 'comment_body': 'This was the expected change right?\r\n\r\n```\r\n     if f.has(Piecewise):\r\n+        f = piecewise_fold(f)\r\n         f = f.args[-1][0]\r\n```\r\nThis is not working, will try to improve **dummy_eq** then.', 'comment_created': datetime.datetime(2020, 5, 8, 12, 50, 35, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422131132, 'comment_body': 'This is necessary in general because the whole expression f need not be a Piecewise and then the next line will yield a wrong result.', 'comment_created': datetime.datetime(2020, 5, 8, 13, 5, 30, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 422131972, 'comment_body': 'Yeah true, so what do you think is causing the dummy_eq to break?', 'comment_created': datetime.datetime(2020, 5, 8, 13, 7, 16, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422233205, 'comment_body': ""I second @smichr , returning a Piecewise isn't necessarily a good idea.\r\nreturn a rewrite only when the assumptions are valid.\r\nin this case,\r\n- if both n and k are integers\r\n  - if n is negative\r\n    - (-1)**k*gamma(k - n) / gamma(-n)\r\n  - if n is positive\r\n    - gamma(n + 1)/gamma(-k + n + 1)\r\n- elif any(i.integers is False for i in (n, k))\r\n  - gamma(n + 1)/gamma(-k + n + 1)\r\n\r\nor some version of this, just make sure the assumptions hold"", 'comment_created': datetime.datetime(2020, 5, 8, 16, 14, 11, tzinfo=datetime.timezone.utc), 'commenter': 'iammosespaulr', 'type': 'User'}, {'comment_id': 422234691, 'comment_body': 'He suggested this itself here: https://github.com/sympy/sympy/pull/18696#discussion_r420329804\r\n\r\nBut it is causing some doctests to fail: https://github.com/sympy/sympy/pull/18696#discussion_r421946373', 'comment_created': datetime.datetime(2020, 5, 8, 16, 17, 12, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422235740, 'comment_body': 'Yeah fix those, give the correct assumptions.', 'comment_created': datetime.datetime(2020, 5, 8, 16, 19, 16, tzinfo=datetime.timezone.utc), 'commenter': 'iammosespaulr', 'type': 'User'}, {'comment_id': 422236399, 'comment_body': 'Do you mean we should edit the doctests?', 'comment_created': datetime.datetime(2020, 5, 8, 16, 20, 27, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422237583, 'comment_body': 'Check out \r\nhttps://github.com/sympy/sympy/pull/18960/files?short_path=6f21732#diff-6f217322f241daeecdd5a7605fd45b03', 'comment_created': datetime.datetime(2020, 5, 8, 16, 22, 51, tzinfo=datetime.timezone.utc), 'commenter': 'iammosespaulr', 'type': 'User'}, {'comment_id': 422239787, 'comment_body': 'Yeah, actually I was thinking similarly. \r\nPing @jksuom @smichr. Should we edit the assumptions in the rst doctests?', 'comment_created': datetime.datetime(2020, 5, 8, 16, 27, 15, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422240546, 'comment_body': 'imo Not before you get the implementation correct tho.', 'comment_created': datetime.datetime(2020, 5, 8, 16, 28, 47, tzinfo=datetime.timezone.utc), 'commenter': 'iammosespaulr', 'type': 'User'}, {'comment_id': 422244012, 'comment_body': 'Yeah as I have already mentioned except the rst doctests everything else was working fine, so the implementation seems correct.', 'comment_created': datetime.datetime(2020, 5, 8, 16, 35, 46, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422527479, 'comment_body': '> Yeah true, so what do you think is causing the dummy_eq to break?\r\n\r\nWhy is `dummy_eq` thought to be failing? How is it being used? Can you give the line/test here?', 'comment_created': datetime.datetime(2020, 5, 9, 18, 9, 7, tzinfo=datetime.timezone.utc), 'commenter': 'smichr', 'type': 'User'}, {'comment_id': 422527694, 'comment_body': '> Why is `dummy_eq` thought to be failing? How is it being used? Can you give the line/test here?\r\n\r\nHere: https://github.com/sympy/sympy/pull/18696#issuecomment-625774349', 'comment_created': datetime.datetime(2020, 5, 9, 18, 11, 9, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 422527795, 'comment_body': 'Actually it is not breaking due to the change in hypersimp(). It was breaking even before this change.', 'comment_created': datetime.datetime(2020, 5, 9, 18, 12, 1, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 451620859, 'comment_body': ""I'd suggest you look at the ramifications of including this in here ...\r\nyou've skipped a lot of nuances by setting the second option to `True`\r\nthe options here are simply not one or the other ... \r\ntake the instance of \r\n```python3\r\n(x, k) = (-1, 2.5)\r\n```\r\n[`rf(-1, 2.5) = 0`](https://www.wolframalpha.com/input/?i=rising+factorial+-1%2C2.5)\r\nbut in your direct substitution, you'd get something like ...\r\n```python3\r\n(-1)**k*gamma(1 - x)/gamma(-k - x + 1)\r\n>>> _.subs({x:-1, k:2.5})\r\n-0.282094791773878*I\r\n```\r\nwhich is incorrect"", 'comment_created': datetime.datetime(2020, 7, 8, 15, 11, 16, tzinfo=datetime.timezone.utc), 'commenter': 'iammosespaulr', 'type': 'User'}, {'comment_id': 451624590, 'comment_body': 'Note that `k` must be an integer.', 'comment_created': datetime.datetime(2020, 7, 8, 15, 16, 20, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 451626922, 'comment_body': 'Yeahhh ... I remember making such accommodations here \r\nhttps://github.com/sympy/sympy/blob/9ce3312158638b8fb926100dba03303ec6102c11/sympy/functions/combinatorial/factorials.py#L614-L621', 'comment_created': datetime.datetime(2020, 7, 8, 15, 19, 33, tzinfo=datetime.timezone.utc), 'commenter': 'iammosespaulr', 'type': 'User'}, {'comment_id': 452789104, 'comment_body': 'This could be `combsimp(P1 * P2)`.', 'comment_created': datetime.datetime(2020, 7, 10, 11, 34, 46, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 452799698, 'comment_body': 'Are you sure that in this case the result should not be a `Piecewise` ?\r\nThe variables `a` and `b` have no assumptions, so I am not sure if `1` is the correct result in each case.', 'comment_created': datetime.datetime(2020, 7, 10, 12, 1, 5, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452815720, 'comment_body': 'I think that `a` and `b` should be integers in this context even though there are no assumptions.', 'comment_created': datetime.datetime(2020, 7, 10, 12, 36, 47, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 452840429, 'comment_body': 'It seems that `sin(pi*a)/sin(pi*b)` should simplify to `(-1)**(b - a)` for `a, b` being integers.', 'comment_created': datetime.datetime(2020, 7, 10, 13, 23, 50, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452847090, 'comment_body': 'Using `combsimp`, `P1 * P2` simplifies to `1`, because we have used `piecewise = False` there.\r\nI think this is a limitation of the simplification methods.\r\n\r\n', 'comment_created': datetime.datetime(2020, 7, 10, 13, 35, 15, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452856503, 'comment_body': '`gammasimp()` should return a better result when `Euler reflection formula` is being applied on integers.\r\n```\r\n1) For a, b being symbols with no assumptions:\r\n\r\nIn [110]: y\r\nOut[110]:\r\nGamma(a)*Gamma(1 - a)\r\n---------------------\r\nGamma(b)*Gamma(1 - b)\r\n\r\nIn [111]: y.gammasimp()\r\nOut[111]:\r\nsin(pi*b)\r\n---------\r\nsin(pi*a)\r\n\r\n2) For a1, b1 being integers:\r\n\r\nIn [113]: y1\r\nOut[113]:\r\nGamma(a1)*Gamma(1 - a1)\r\n-----------------------\r\nGamma(b1)*Gamma(1 - b1)\r\n\r\nIn [114]: y1.gammasimp()\r\nOut[114]:\r\nGamma(a1)*Gamma(1 - a1)\r\n-----------------------\r\nGamma(b1)*Gamma(1 - b1)\r\n\r\nThis should be (-1)**(a1 - b1) rather being unevaluated.\r\n```\r\n', 'comment_created': datetime.datetime(2020, 7, 10, 13, 51, 3, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': 'c01994ee96dde73c5e95915b34d40c5ca8636989', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '523547e94c28764c94ae18fbe651d51f5b2a61ab', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07253df7c28362195b15c068de03b080dcb3976f', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2314c1a4aea8244bef6b828c0ca08c0d46fd1b31', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd144651d89ef914c3959aa7beefd3c6d0775f33d', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61772b99c022413eee397313241de508a2bb68d8', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a9d090a9bff89f1aeed5dbc224282a420ca6ff6', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14d90e8cd156f62648479fca5458cd7cec9b9714', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f8026ec6a271777a03528641e8d02ce903af4f60', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f50339ec70a31d77cfd7c9edf4b22405838c1b77', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b06e0b5b96d9a34b6d8e1c7fa259fa8e8253f172', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd043cd48a74264fae80d9fe1cd2c9cb87aff4f1c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3178275a56280525243969965449d91545e6b81', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ec6469f354e2eaec5ca4e4666de72676a7aef2c0', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+447594177,[GSoC] Functions: Fixes periodicity of trigonometric function,"Fixes: #17976
+Closes: #18277
+
+
+#### Brief description of what is fixed or changed
+
+**Previously:**
+```
+In [1]: n = Symbol('n', integer=True)
+In [2]: sin(2*n*pi + 4)
+Out[2]: sin(2*n*pi + 4)
+```
+**Now:**
+```
+In [1]: n = Symbol('n', integer=True)
+In [2]: sin(2*n*pi + 4)
+Out[2]: sin(4)
+```
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * reduced symbolic multiples of pi in trigonometric functions
+<!-- END RELEASE NOTES -->",True,19741,https://api.github.com/repos/sympy/sympy/pulls/19741,https://github.com/sympy/sympy/pull/19741,closed,21,12,3,1,9,24,2,0,"[{'name': 'GSoC'}, {'name': 'functions'}]",2020-07-10 18:53:06+00:00,2020-07-13 21:17:10+00:00,267844.0,"3 days, 2:24:04","[{'comment_id': 453026533, 'comment_body': 'Using `cancel` is potentially very expensive.  We should not use this as part of normal evaluation.', 'comment_created': datetime.datetime(2020, 7, 10, 19, 0, 49, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453027143, 'comment_body': 'See some simplification is required to `cancel` out the terms. `expand` might work, but I think `cancel` is more effective.', 'comment_created': datetime.datetime(2020, 7, 10, 19, 2, 12, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453030069, 'comment_body': ""Both `expand` and `cancel` can be very slow for larger expressions. Unless there is some way to know that this is always a small expression then we should not use either function. The function is written the way it is now is to try and keep it efficient. If we can extend its capability without risking a slowdown then that's fine.\r\n\r\nIf instead this was handled as a simplification function then it could be okay to try slower operations but this routine is called every time we have `sin(expr)` etc."", 'comment_created': datetime.datetime(2020, 7, 10, 19, 9, 7, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453030094, 'comment_body': ""These are the type of expressions:\r\n\r\n```\r\nIn [5]: y\r\nOut[5]: pi*m + 2*pi*n - pi*(m + 2*n)\r\n\r\nIn [6]: y.cancel()\r\nOut[6]: 0\r\n\r\nIn [7]: y.expand()\r\nOut[7]: 0\r\n\r\nIn [11]: y\r\nOut[11]:\r\n       pi*(m - 1)      /m       1\\\r\npi*n + ---------- - pi*|- + n - -| + 1\r\n           2           \\2       2/\r\n\r\nIn [12]: y.expand()\r\nOut[12]: 1\r\n\r\nIn [13]: y.cancel()\r\nOut[13]: 1\r\n```\r\n\r\nThough `expand` is working, but I am not sure it will work if the expressions get too complicated. That's the reason, I chose `cancel`."", 'comment_created': datetime.datetime(2020, 7, 10, 19, 9, 12, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453033052, 'comment_body': '> If instead this was handled as a simplification function then it could be okay to try slower operations but this routine is called every time we have sin(expr) etc.\r\n\r\nI totally agree with you, do we have faster simplification methods for these type of expressions and simplifications? ', 'comment_created': datetime.datetime(2020, 7, 10, 19, 15, 41, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453184585, 'comment_body': 'It is possible that `rest_terms` can end up being an Add with a large number of terms?\r\n\r\nSumming like\r\n```\r\ntotal = S.Zero\r\nfor a in b:\r\n    total += a\r\n```\r\nhas `O(N**2)` asymptotic performance because of repeated calls to `Add.flatten`.\r\n\r\nIf you collect all args and call `Add` once then it is `O(N)`:\r\n```\r\nterms = []\r\nfor a in b:\r\n    terms.append(a)\r\ntotal = Add(*terms)\r\n```', 'comment_created': datetime.datetime(2020, 7, 11, 11, 13, 31, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453188408, 'comment_body': 'This is something new, I was not aware about this. I will make the changes soon.', 'comment_created': datetime.datetime(2020, 7, 11, 12, 4, 59, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453205300, 'comment_body': 'This calls Add.flatten twice. You can make it a single call with `Add(*(rest_terms + [m1]))`\r\n', 'comment_created': datetime.datetime(2020, 7, 11, 15, 24, 33, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453205346, 'comment_body': 'Anything else?', 'comment_created': datetime.datetime(2020, 7, 11, 15, 25, 8, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453224326, 'comment_body': ""I'm not sure this is an improvement. We have:\r\n```julia\r\nIn [20]: cos(1+m*pi)                                                                                                   \r\nOut[20]: \r\n    m       \r\n(-1) ⋅cos(1)\r\n```\r\nOkay that seems reasonable. I do wonder if that should always evaluate though.\r\n\r\nThen we have\r\n```julia\r\nIn [21]: cos(1+m*pi/2)                                                                                                 \r\nOut[21]: \r\n            ⎛π⋅m⎞             ⎛π⋅m⎞\r\n- sin(1)⋅sin⎜───⎟ + cos(1)⋅cos⎜───⎟\r\n            ⎝ 2 ⎠             ⎝ 2 ⎠\r\n```\r\nIn that case I think I prefer the behaviour on master:\r\n```julia\r\nIn [1]: cos(1+m*pi/2)                                                                                                  \r\nOut[1]: \r\n   ⎛π⋅m    ⎞\r\ncos⎜─── + 1⎟\r\n   ⎝ 2     ⎠\r\n```\r\n"", 'comment_created': datetime.datetime(2020, 7, 11, 19, 0, 54, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453224571, 'comment_body': 'Both things can not be made to work simultaneously I guess.', 'comment_created': datetime.datetime(2020, 7, 11, 19, 3, 14, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453225205, 'comment_body': 'On master:\r\n```\r\nIn [3]: from sympy.functions.elementary.trigonometric import _peeloff_pi as peel\r\n\r\nIn [4]: m = symbols(\'m\', integer=True)\r\n\r\nIn [5]: peel(pi*m + 1)\r\nOut[5]: (pi*m + 1, 0)\r\n\r\nIn [6]: peel(1+m*pi/2)\r\nOut[6]:\r\n pi*m\r\n(---- + 1, 0)\r\n  2\r\n```\r\nOn my branch:\r\n```\r\nIn [1]: from sympy.functions.elementary.trigonometric import _peeloff_pi as peel\r\n\r\nIn [2]: m = symbols(\'m\', integer=True)\r\n\r\nIn [3]: peel(pi*m + 1)\r\nOut[3]: (1, pi*m)\r\n\r\nIn [4]: peel(1+m*pi/2)\r\nOut[4]:\r\n    pi*m\r\n(1, ----)\r\n     2\r\n```\r\n\r\nThe behaviour on my branch seems better from the point of view of the description of `_peeloff_pi` as mentioned in the docstrings.\r\n\r\n```\r\n    Split ARG into two parts, a ""rest"" and a multiple of pi/2.\r\n    This assumes ARG to be an Add.\r\n    The multiple of pi returned in the second position is always a Rational.\r\n```\r\n', 'comment_created': datetime.datetime(2020, 7, 11, 19, 10, 37, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453226320, 'comment_body': ""> I'm not sure this is an improvement.\r\n\r\nIn that case, I guess that this should not evaluate automatically at all.\r\nSo, as mentioned on the issue page, the expected simplification happens after applying `trigsimp()` and thus there will be nothing left to resolve in this issue.\r\n\r\nOn master:\r\n```\r\nIn [1]: n = symbols('n', integer=True)\r\n\r\nIn [2]: sin(2*n*pi + 4)\r\nOut[2]: sin(2*pi*n + 4)\r\n\r\nIn [3]: _.trigsimp()\r\nOut[3]: sin(4)\r\n```"", 'comment_created': datetime.datetime(2020, 7, 11, 19, 24, 13, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453240768, 'comment_body': 'There is always a tension in sympy between automatic evaluation on the one hand and preserving the inputs on the other. It would be better in general if we could preserve the inputs a lot more but that isn\'t how things work currently so there is often an expectation that things should ""evaluate"" more if possible. It\'s hard to say what the balance should be but we\'re somewhere in the middle right now which means we have the (dis)advantages of both approaches.', 'comment_created': datetime.datetime(2020, 7, 11, 22, 19, 56, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453266323, 'comment_body': ""```\r\nIn [8]: m = symbols('m', rational=True)\r\n\r\nIn [9]: peel(1+m*pi/2)\r\nOut[9]:\r\n    /m        \\      pi*m      /m        \\\r\n(pi*|- mod 1/2| + 1, ---- - pi*|- mod 1/2|)\r\n    \\2        /       2        \\2        /\r\n\r\n```"", 'comment_created': datetime.datetime(2020, 7, 12, 4, 39, 54, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453266487, 'comment_body': 'There can always be some cases which might cause a `Recursion Error`, possibly because of the result of `mod` remaining unevaluated. \r\nWe should add a check, if the result remains unevaluated then we should return `(arg, S.Zero)`.', 'comment_created': datetime.datetime(2020, 7, 12, 4, 41, 48, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453266922, 'comment_body': ""Secondly, I feel that the problem on the issue page was more highlighting this difference in behaviour:\r\n\r\nOn master:\r\n```\r\nIn [1]: n = symbols('n', integer=True)\r\n\r\nIn [2]: sin(2*n*pi + 4)\r\nOut[2]: sin(2*pi*n + 4)\r\n\r\nIn [3]: _.simplify()\r\nOut[3]: sin(2*pi*n + 4)\r\n\r\nIn [4]: _.trigsimp()\r\nOut[4]: sin(4)\r\n```"", 'comment_created': datetime.datetime(2020, 7, 12, 4, 47, 27, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453266980, 'comment_body': 'I guess, we should rather not focus on making this evaluation happen automatically, but should just make this work through `simplify` as well.', 'comment_created': datetime.datetime(2020, 7, 12, 4, 48, 31, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453373320, 'comment_body': 'Since this function is called by e.g. `sin(expr)` calling `sin` or `cos` again risks infinite recursion.\r\n\r\nWhy are these calls needed? Presumably there is some logic in `sin.eval` that helps out here but it would probably be better to use that logic directly rather than call into `sin` and `cos` again.', 'comment_created': datetime.datetime(2020, 7, 12, 22, 55, 29, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453554812, 'comment_body': ""Can the lines below the added code be removed? I can't think of a situation where `int(r)` would succeed but `r.is_integer` is not True."", 'comment_created': datetime.datetime(2020, 7, 13, 10, 32, 35, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453587902, 'comment_body': 'Is this change required?', 'comment_created': datetime.datetime(2020, 7, 13, 11, 37, 50, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453639479, 'comment_body': ""I'm just asking a question since you have changed the code here. Do the lines that you have added replace the lines below?"", 'comment_created': datetime.datetime(2020, 7, 13, 13, 14, 6, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 453644709, 'comment_body': ""I am not sure. This was a change suggested by you in my previous PR (https://github.com/sympy/sympy/pull/18277#issuecomment-573423619).\r\nYou didn't remove the below lines at that time. So, I guess they might not replace these. "", 'comment_created': datetime.datetime(2020, 7, 13, 13, 22, 10, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453680920, 'comment_body': ""> I can't think of a situation where int(r) would succeed but r.is_integer is not True.\r\n\r\nEven if `r` is not an integer, `int(r)` will try to find the floor of the value:\r\n```\r\nIn [2]: y = sqrt(5)\r\n\r\nIn [3]: int(y)\r\nOut[3]: 2\r\n```\r\n\r\nSo , I guess no changes are required here."", 'comment_created': datetime.datetime(2020, 7, 13, 14, 14, 47, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': '55f138cf41ded9877f52d0d636a5e291a107c027', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+464580438,[GSoC] Functions: Fixes limit evaluations related to trigonometric functions,"Fixes: #19770
+
+#### Brief description of what is fixed or changed
+
+Adds `_eval_nseries` function to `sin` and `cos`.
+Adds a piece of code to `cos.eval` in order to handle the `non-zero` case.
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Adds `_eval_nseries` function to `sin` and `cos`.
+<!-- END RELEASE NOTES -->",True,19916,https://api.github.com/repos/sympy/sympy/pulls/19916,https://github.com/sympy/sympy/pull/19916,closed,36,5,2,3,3,0,3,0,"[{'name': 'GSoC'}, {'name': 'functions'}, {'name': 'limits'}]",2020-08-07 12:35:25+00:00,2020-08-08 05:28:45+00:00,60800.0,16:53:20,[],"[{'commit_sha': '33acfcfce71c64c91375432a9f03c2d9b84cb75c', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4ae26bc34640c9c51680b84baca44d3e3ccb9ec', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6a7c15d94495ac34aefc562cf49a64a91dc98bb', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+468354887,[GSoC] Functions: Adds _eval_is_meromorphic() to bessel function,"#### Brief description of what is fixed or changed
+
+Adds `_eval_is_meromorphic` to `bessel` function.
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Adds `_eval_is_meromorphic` to `bessel` function.
+<!-- END RELEASE NOTES -->",True,19963,https://api.github.com/repos/sympy/sympy/pulls/19963,https://github.com/sympy/sympy/pull/19963,closed,38,0,2,2,3,0,2,0,"[{'name': 'GSoC'}, {'name': 'functions'}]",2020-08-15 19:10:37+00:00,2020-08-16 16:26:12+00:00,76535.0,21:15:35,[],"[{'commit_sha': 'e3d2ea255511124da43b0f7e0733b6dbaad24d60', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c5ca28310d2d5ee7d052a07dfcb180271a4721e', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+375520198,[GSoC] Concrete: Implemented Raabe's Test,"Reference: https://github.com/sympy/sympy/pull/12352
+Fixes: #19379 
+Fixes: #10973 
+
+#### Brief description of what is fixed or changed
+This pull request adds Raabe's Test.  It is an enhancement of ratio test that is intended for the case where it is inconclusive.
+
+#### Other comments
+Regression Test added
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* concrete
+  * Implemented Raabe's Test
+<!-- END RELEASE NOTES -->
+",True,18656,https://api.github.com/repos/sympy/sympy/pulls/18656,https://github.com/sympy/sympy/pull/18656,closed,36,8,2,9,11,13,2,0,"[{'name': 'concrete'}, {'name': 'GSoC'}]",2020-02-14 18:40:33+00:00,2020-08-17 10:29:59+00:00,15954566.0,"184 days, 15:49:26","[{'comment_id': 379651358, 'comment_body': 'There was a discussion in the other pull request about whether or not this is needed. ', 'comment_created': datetime.datetime(2020, 2, 14, 21, 25, 42, tzinfo=datetime.timezone.utc), 'commenter': 'asmeurer', 'type': 'User'}, {'comment_id': 379651875, 'comment_body': 'I think we can check `(lim_val - 1).is_positive` here, to allow it to potentially work for symbols with the proper assumptions. ', 'comment_created': datetime.datetime(2020, 2, 14, 21, 27, 1, tzinfo=datetime.timezone.utc), 'commenter': 'asmeurer', 'type': 'User'}, {'comment_id': 379653487, 'comment_body': 'imo it is necessary... ', 'comment_created': datetime.datetime(2020, 2, 14, 21, 31, 13, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 379653844, 'comment_body': 'OK will change the line if lim_value > 1: ', 'comment_created': datetime.datetime(2020, 2, 14, 21, 32, 4, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 379821399, 'comment_body': '```suggestion\r\n            lim_ratio = None\r\n```\r\nIt should be defined also when the limit does not exist.', 'comment_created': datetime.datetime(2020, 2, 15, 9, 43, 40, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 379822585, 'comment_body': 'Done the required changes.', 'comment_created': datetime.datetime(2020, 2, 15, 10, 11, 11, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 380823729, 'comment_body': 'What about `self.function.simplify()`? IMO, `simplify` is slow.', 'comment_created': datetime.datetime(2020, 2, 18, 17, 29, 4, tzinfo=datetime.timezone.utc), 'commenter': 'czgdp1807', 'type': 'User'}, {'comment_id': 380823917, 'comment_body': 'Why? Can this be removed?', 'comment_created': datetime.datetime(2020, 2, 18, 17, 29, 25, tzinfo=datetime.timezone.utc), 'commenter': 'czgdp1807', 'type': 'User'}, {'comment_id': 381250930, 'comment_body': 'Will make the necessary change... ', 'comment_created': datetime.datetime(2020, 2, 19, 12, 7, 56, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 383052901, 'comment_body': 'Why is it necessary?', 'comment_created': datetime.datetime(2020, 2, 24, 0, 2, 57, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 383053033, 'comment_body': ""Are you talking about raabe's test or the condition?? "", 'comment_created': datetime.datetime(2020, 2, 24, 0, 4, 44, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 383053706, 'comment_body': 'The condition. Your answer above says ""imo it is necessary"". I am sure that I agree but I would prefer it if you write an explicit reason (an opinion is not a reason).', 'comment_created': datetime.datetime(2020, 2, 24, 0, 12, 23, tzinfo=datetime.timezone.utc), 'commenter': 'oscarbenjamin', 'type': 'User'}, {'comment_id': 383054010, 'comment_body': ""We implement Raabe's test only after ratio test fails, and the condition when ratio test fails is when it is 1, so definitely it is necessary, otherwise how will we come to know when to implement raabe's test. "", 'comment_created': datetime.datetime(2020, 2, 24, 0, 16, 18, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': 'c02ece9d64c82e8f938096f5bbffdef08f1bb905', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5c27a419a2f1300bdc679eaa22aa328820a6fac', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '553f35a309281d1d66c4b6ab6d4580a5d9f03c4e', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '531391427cfc97ffde21ced3f9539b1a4a89bb9a', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '32bd957522dfbcae7424b1f4777723c964c0c3d7', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c863b8906653f9152b15a4782da1bec54a57ffe', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91a4b4dae62d1eac6a2b5ebc21e2a64f15ea388f', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1dd2bdaa3b7e700b766647df0dc2a0ed90a1ac3', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5de4028b3cea541542bcbcb9a442313d4063e9d5', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+470714956,[GSoC] Functions: Fixes limit evaluations related to uppergamma and besselk function,"Fixes: #13571 
+Fixes: #14874 
+
+#### Brief description of what is fixed or changed
+
+  1) Adds `_eval_is_meromorphic` method and  `_eval_aseries` to `class lowergamma` 
+  2) Adds  `_eval_is_meromorphic` method and `_eval_rewrite_as_tractable` method to `class uppergamma`
+  3) Rectifies `eval` method of `class besselk`
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Adds `_eval_is_meromorphic` method and  `_eval_aseries` to `class lowergamma` 
+  * Adds  `_eval_is_meromorphic` method and `_eval_rewrite_as_tractable` method to `class uppergamma`
+  * Rectifies `eval` method of `class besselk`
+<!-- END RELEASE NOTES -->",True,19990,https://api.github.com/repos/sympy/sympy/pulls/19990,https://github.com/sympy/sympy/pull/19990,closed,66,3,4,2,3,2,2,0,"[{'name': 'functions'}, {'name': 'limits'}]",2020-08-20 07:14:07+00:00,2020-08-21 17:36:50+00:00,123763.0,"1 day, 10:22:43","[{'comment_id': 473752705, 'comment_body': 'It is not necessary that nu be an integer, the limit at oo is 0 for all nu.', 'comment_created': datetime.datetime(2020, 8, 20, 8, 21, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 473812183, 'comment_body': 'Yeah, will make the required change.', 'comment_created': datetime.datetime(2020, 8, 20, 9, 29, 57, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': 'dfd9c217ddd425e9c23d3ab5c0794c930dd31833', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f7d6d05428df8096d4b0ab56a0c4037067894ff8', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+473668139,[GSoC] Functions: Fixes _eval_nseries() of log,"Fixes: #18842
+
+#### Brief description of what is fixed or changed
+Rewrites `_eval_nseries` method of `log` present in `exponential.py`.
+
+#### Other Comments
+Regression Test has been added.
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Fixes `_eval_nseries` method of `log`
+<!-- END RELEASE NOTES -->",True,20002,https://api.github.com/repos/sympy/sympy/pulls/20002,https://github.com/sympy/sympy/pull/20002,closed,58,10,3,2,3,0,2,0,"[{'name': 'GSoC'}, {'name': 'functions'}]",2020-08-26 06:00:19+00:00,2020-08-26 17:48:32+00:00,42493.0,11:48:13,[],"[{'commit_sha': '2b73ce2245c3846f2e881332f7eb6aad851bab26', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd48ecfe0c9132fbdc6d7e943281f87a6163bd799', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+424074688,[GSoC] Series: Adding required testcases,"#### Brief description of what is fixed or changed
+Adding testcases of issues which were resolved by this PR: https://github.com/sympy/sympy/pull/19292 
+
+
+#### Other Comments
+Regression Tests have been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19447,https://api.github.com/repos/sympy/sympy/pulls/19447,https://github.com/sympy/sympy/pull/19447,closed,14,0,1,1,3,0,3,0,"[{'name': 'series'}, {'name': 'GSoC'}, {'name': 'limits'}]",2020-05-27 19:38:06+00:00,2020-05-28 05:33:45+00:00,35739.0,9:55:39,[],"[{'commit_sha': '7c28cf4d28d12116963d54a13780b585c8ac1c69', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+433264808,Core: Fixes a minor performance issue,"Fixes: #19534 
+
+
+#### Other Comments
+Regression Test has been added.
+
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19537,https://api.github.com/repos/sympy/sympy/pulls/19537,https://github.com/sympy/sympy/pull/19537,closed,48,2,2,1,7,0,2,0,"[{'name': 'series'}, {'name': 'core'}]",2020-06-11 18:40:03+00:00,2020-06-12 06:36:02+00:00,42959.0,11:55:59,[],"[{'commit_sha': '33190996b216b5273a3e29bbd7e7a6908eec9f9a', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+437407375,[Functions]: Fixes AttributeError in limit evaluation,"Addresses #19586 for the 1.6 branch (for 1.6.1)
+
+#### Other Comments
+Regression Test has been added.
+
+#### Release Notes
+
+
+<!-- BEGIN RELEASE NOTES -->
+* functions
+  * Fixes `AttributeError` in limit evaluation
+<!-- END RELEASE NOTES -->",True,19604,https://api.github.com/repos/sympy/sympy/pulls/19604,https://github.com/sympy/sympy/pull/19604,closed,6,2,2,2,8,0,0,0,[],2020-06-20 12:36:50+00:00,2020-06-20 16:41:17+00:00,14667.0,4:04:27,[],"[{'commit_sha': '79ea2a13e0dd2b47c38380301a729c24ac304aea', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29e98f198baa200d08c50d7482a2dea818639072', 'committer_username': 'sachin-4099', 'committer_name': 'Sachin Agarwal', 'committer_email': 'sachinagarwal0499@gmail.com', 'commit_date': datetime.datetime(2019, 1, 13, 10, 47, tzinfo=datetime.timezone.utc)}]",Sachin Agarwal,46645803,sachinagarwal0499@gmail.com,User,,11,,15,35
+434005697,Modified order.py,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+Fixes #19545
+
+#### Brief description of what is fixed or changed
+
+The code `Order(1/n - 3/(3*n +2), (n, oo))` returns `1/n`, which
+is not a sharp result.
+As a consequence `Sum(1/n - 3/(3*n +2), (n, 1, oo)).is_convergent()`
+gives the wrong result `False`.
+In the lines 208-214 of `order.py`, if the number of variables are >= 2,
+then the expression is expanded and is handled in `expr.is_Add` case.
+However in the case of a single variable,
+the alghorithm for the other case seems better.
+Factorizing the expression forces to use the better alghoritm in the case
+of a single variable.
+
+modified:   sympy/concrete/tests/test_sums_products.py
+modified:   sympy/series/order.py
+modified:   sympy/series/tests/test_order.py
+
+#### Other comments
+
+See also   #18340
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+
+- series
+    - modified order.py to better work with Add objects.
+<!-- END RELEASE NOTES -->",True,19546,https://api.github.com/repos/sympy/sympy/pulls/19546,https://github.com/sympy/sympy/pull/19546,closed,5,2,3,2,7,5,2,0,"[{'name': 'series'}, {'name': 'concrete'}]",2020-06-13 13:20:39+00:00,2020-06-17 05:38:45+00:00,317886.0,"3 days, 16:18:06","[{'comment_id': 439976792, 'comment_body': 'It seems that this aims to transform the sum  `1/x - 3/(3*x + 2)` into a product, so it looks like it should only be applied to instances of `Add`. The code would probably be better placed here: https://github.com/sympy/sympy/blob/f7318dbfef2bf61e5ed8bc55f3e374880ec6ea67/sympy/series/order.py#L199-L201\r\n\r\nIt is possible that `expand_multinomial` could be removed and replaced by this. You could also test something like\r\n```\r\n                num, den = expr.as_numer_denom()\r\n                expr = num/den\r\n```\r\ninstead of `expr.factor()` which may be more expensive.', 'comment_created': datetime.datetime(2020, 6, 15, 7, 23, 22, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}, {'comment_id': 440162597, 'comment_body': '> It seems that this aims to transform the sum 1/x - 3/(3*x + 2) into a product, so it looks like it should only be applied to instances of Add. The code would probably be better placed here:\r\n> \r\n> sympy/sympy/series/order.py\r\n> \r\n> Lines 199 to 201 in f7318db\r\n>  if expr.is_Add: \r\n>      from sympy import expand_multinomial \r\n>      expr = expand_multinomial(expr) \r\n\r\nRight. I changed the location of `factor`.\r\n\r\n> It is possible that expand_multinomial could be removed\r\n\r\nYes, I run the tests and they pass also without `expand_multinomial`.\r\n\r\n> You could also test something like\r\n> \r\n>                 num, den = expr.as_numer_denom()\r\n>                 expr = num/den\r\n> \r\n> instead of expr.factor() which may be more expensive.\r\n> \r\n\r\nPutting this instead of `expr.factor()` causes 2 failures in tests. The tests which failure are:\r\n\r\n- `test_wester.py` at lines 2088-2090.\r\n- `test_trigonometric.py` at llines 1224-1225.\r\n\r\n', 'comment_created': datetime.datetime(2020, 6, 15, 13, 8, 40, tzinfo=datetime.timezone.utc), 'commenter': 'maurogaravello', 'type': 'User'}, {'comment_id': 440197537, 'comment_body': '> Putting this instead of `expr.factor()` causes 2 failures in tests. The tests which failure are:\r\n> \r\n> * `test_wester.py` at lines 2088-2090.\r\n> * `test_trigonometric.py` at llines 1224-1225.\r\n\r\nCan you tell what is `expr` in these cases using `num/den` and when you use `expr.factor()` ?\r\n\r\n', 'comment_created': datetime.datetime(2020, 6, 15, 14, 1, 16, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 440271548, 'comment_body': 'For `test_wester`.\r\n\r\n```\r\nexpr = -exp(-_p**2/(_p + 1) + _p)*exp(_p**2/(_p + 1) - _p)/2 - exp(-_p**2/(_p + 1) + _p)*exp(_p**2/(_p + 1) - _p)/(2*_p)\r\nexpr.factor() = -(_p + 1)/(2*_p)\r\nnum = -_p*exp(-_p**2/(_p + 1) + _p)*exp(_p**2/(_p + 1) - _p) - exp(-_p**2/(_p + 1) + _p)*exp(_p**2/(_p + 1) - _p)\r\nden = 2*_p\r\n```\r\nIn this case the test does  not give an error, but it never finishes.\r\n\r\nFor `test_trigonometric`.\r\n```\r\nexpr = -4*_Dummy_69 + (_Dummy_69 + 1)**4 - 4*(_Dummy_69 + 1)**3 + 6*(_Dummy_69 + 1)**2 - 3\r\nexpr.factor() = _Dummy_69**4\r\nnum = -4*_Dummy_69 + (_Dummy_69 + 1)**4 - 4*(_Dummy_69 + 1)**3 + 6*(_Dummy_69 + 1)**2 - 3\r\nden = 1\r\n```\r\n\r\n\r\n', 'comment_created': datetime.datetime(2020, 6, 15, 15, 45, 17, tzinfo=datetime.timezone.utc), 'commenter': 'maurogaravello', 'type': 'User'}, {'comment_id': 440287701, 'comment_body': 'It looks like only `factor` factor will help here.', 'comment_created': datetime.datetime(2020, 6, 15, 16, 9, 45, tzinfo=datetime.timezone.utc), 'commenter': 'jksuom', 'type': 'User'}]","[{'commit_sha': 'b777e4693084cf731595594d5389c5cd7901fbb8', 'committer_username': 'maurogaravello', 'committer_name': 'Mauro Garavello', 'committer_email': None, 'commit_date': datetime.datetime(2016, 7, 10, 18, 55, 37, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7ab97483ca459ed90421e1c92d2d523c421d6a6c', 'committer_username': 'maurogaravello', 'committer_name': 'Mauro Garavello', 'committer_email': None, 'commit_date': datetime.datetime(2016, 7, 10, 18, 55, 37, tzinfo=datetime.timezone.utc)}]",Mauro Garavello,20386091,,User,,14,,10,6
+441051458,Added tests #18452,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+Added tests for #18452 
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19660,https://api.github.com/repos/sympy/sympy/pulls/19660,https://github.com/sympy/sympy/pull/19660,closed,5,0,1,3,6,7,2,0,"[{'name': 'series'}, {'name': 'limits'}]",2020-06-28 12:43:21+00:00,2020-06-29 00:33:34+00:00,42613.0,11:50:13,"[{'comment_id': 446662219, 'comment_body': 'By default the `dir` will be `+` in this case, so the testcase having `dir` explicitly specified as `+` can be removed.', 'comment_created': datetime.datetime(2020, 6, 28, 15, 8, 28, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 446662670, 'comment_body': 'Maintain two line spacing between the testcases.', 'comment_created': datetime.datetime(2020, 6, 28, 15, 12, 19, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 446673133, 'comment_body': 'This without `+` was required.', 'comment_created': datetime.datetime(2020, 6, 28, 16, 55, 24, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 446673329, 'comment_body': '> By default the `dir` will be `+` in this case, so the testcase having `dir` explicitly specified as `+` can be removed.\r\n\r\nAs I have mentioned here.', 'comment_created': datetime.datetime(2020, 6, 28, 16, 57, 39, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 446673611, 'comment_body': 'oh yes, i see. I will change', 'comment_created': datetime.datetime(2020, 6, 28, 17, 0, 35, tzinfo=datetime.timezone.utc), 'commenter': 'akhil-dh1', 'type': 'User'}, {'comment_id': 446673880, 'comment_body': ""Since they are same, that's why `+` is not required. It will be there by default in this case."", 'comment_created': datetime.datetime(2020, 6, 28, 17, 3, 36, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 446674637, 'comment_body': 'I have corrected that.', 'comment_created': datetime.datetime(2020, 6, 28, 17, 11, 21, tzinfo=datetime.timezone.utc), 'commenter': 'akhil-dh1', 'type': 'User'}]","[{'commit_sha': 'f6b2c84b06ab0b8dded3aa5e43021afb45f702b5', 'committer_username': 'akhil-dh1', 'committer_name': 'Akhil Rajput', 'committer_email': None, 'commit_date': datetime.datetime(2018, 9, 16, 13, 18, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a310ab757526dcc9786bd26dc6fa8354ae7ea7c', 'committer_username': 'akhil-dh1', 'committer_name': 'Akhil Rajput', 'committer_email': None, 'commit_date': datetime.datetime(2018, 9, 16, 13, 18, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fba861bf3b616e3ab1113726b923973333b78a3c', 'committer_username': 'akhil-dh1', 'committer_name': 'Akhil Rajput', 'committer_email': None, 'commit_date': datetime.datetime(2018, 9, 16, 13, 18, 19, tzinfo=datetime.timezone.utc)}]",Akhil Rajput,43316490,,User,,13,,6,0
+446891317,Added tests for issue 16735,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+Fixes #16735
+
+#### Brief description of what is fixed or changed
+Adds tests to `concrete/tests/test_sums_products.py` and `series/tests/test_limitseq.py`
+
+#### Other comments
+
+
+#### Release Notes
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19730,https://api.github.com/repos/sympy/sympy/pulls/19730,https://github.com/sympy/sympy/pull/19730,closed,8,0,2,2,4,5,0,0,[],2020-07-09 14:18:55+00:00,2020-07-09 17:41:34+00:00,12159.0,3:22:39,"[{'comment_id': 452269979, 'comment_body': 'This should be removed. This is not a test which fails.', 'comment_created': datetime.datetime(2020, 7, 9, 14, 42, 38, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452270467, 'comment_body': 'There should be a space after comma. ', 'comment_created': datetime.datetime(2020, 7, 9, 14, 43, 19, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452272612, 'comment_body': 'This can be `S.true` rather than `True`.', 'comment_created': datetime.datetime(2020, 7, 9, 14, 46, 5, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452288897, 'comment_body': 'I see that S.true issue. When it is True, the test fails and hence I added `@XFAIL`', 'comment_created': datetime.datetime(2020, 7, 9, 15, 7, 30, tzinfo=datetime.timezone.utc), 'commenter': 'dkodar20', 'type': 'User'}, {'comment_id': 452308664, 'comment_body': 'Please review the changes now.', 'comment_created': datetime.datetime(2020, 7, 9, 15, 35, 45, tzinfo=datetime.timezone.utc), 'commenter': 'dkodar20', 'type': 'User'}]","[{'commit_sha': '8cb7282cf58d1b6f0043850e8df1d6d926ece85a', 'committer_username': 'dkodar20', 'committer_name': 'Rudr Tiwari', 'committer_email': 'rudrtiwari@gmail.com', 'commit_date': datetime.datetime(2020, 4, 9, 14, 54, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2bd9171c226c827ba9f9a4c90da8033ff3f4f68c', 'committer_username': 'dkodar20', 'committer_name': 'Rudr Tiwari', 'committer_email': 'rudrtiwari@gmail.com', 'commit_date': datetime.datetime(2020, 4, 9, 14, 54, 5, tzinfo=datetime.timezone.utc)}]",Rudr Tiwari,63411969,rudrtiwari@gmail.com,User,,13,,13,23
+447430963,series : Added test for issue 14793,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+Added test to series/test_series.py
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+Fixes #14793
+
+#### Brief description of what is fixed or changed
+Added a test in order to close the issue
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19737,https://api.github.com/repos/sympy/sympy/pulls/19737,https://github.com/sympy/sympy/pull/19737,closed,6,0,1,2,4,4,2,0,"[{'name': 'series'}, {'name': 'limits'}]",2020-07-10 13:10:05+00:00,2020-07-11 08:04:24+00:00,68059.0,18:54:19,"[{'comment_id': 452905251, 'comment_body': 'This should be `assert limit(expr, x, oo) == S(1)/360`.', 'comment_created': datetime.datetime(2020, 7, 10, 15, 11, 14, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452907015, 'comment_body': 'I see. Are there any particular disadvantages of the way done previously?', 'comment_created': datetime.datetime(2020, 7, 10, 15, 14, 19, tzinfo=datetime.timezone.utc), 'commenter': 'dkodar20', 'type': 'User'}, {'comment_id': 452909355, 'comment_body': 'The call to `simplify()` function is always costly, it should be avoided as much as possible.', 'comment_created': datetime.datetime(2020, 7, 10, 15, 18, 13, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 452910831, 'comment_body': 'Okay, I will make the required changes.', 'comment_created': datetime.datetime(2020, 7, 10, 15, 20, 47, tzinfo=datetime.timezone.utc), 'commenter': 'dkodar20', 'type': 'User'}]","[{'commit_sha': '2cead643410142b0ad9f270501dc806529415344', 'committer_username': 'dkodar20', 'committer_name': 'Rudr Tiwari', 'committer_email': 'rudrtiwari@gmail.com', 'commit_date': datetime.datetime(2020, 4, 9, 14, 54, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91b98d9824ff7b574e4f18052b37b9b9d9a00016', 'committer_username': 'dkodar20', 'committer_name': 'Rudr Tiwari', 'committer_email': 'rudrtiwari@gmail.com', 'commit_date': datetime.datetime(2020, 4, 9, 14, 54, 5, tzinfo=datetime.timezone.utc)}]",Rudr Tiwari,63411969,rudrtiwari@gmail.com,User,,13,,13,23
+447738179,Add regression test for #19739,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+Fixes #19739 
+<!-- END RELEASE NOTES -->",True,19743,https://api.github.com/repos/sympy/sympy/pulls/19743,https://github.com/sympy/sympy/pull/19743,closed,4,0,1,2,5,2,2,0,"[{'name': 'series'}, {'name': 'limits'}]",2020-07-11 08:14:29+00:00,2020-07-11 14:05:57+00:00,21088.0,5:51:28,"[{'comment_id': 453171360, 'comment_body': 'Please maintain two line spacing.', 'comment_created': datetime.datetime(2020, 7, 11, 8, 20, 21, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 453171528, 'comment_body': 'This should be `assert limit((-S(1)/4)**x, x, oo) == 0`. `x` should be used and not `n`.', 'comment_created': datetime.datetime(2020, 7, 11, 8, 22, 14, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': '96136a985a4b8504ab832ae96dd904bcf3c11d02', 'committer_username': 'aaryandewan', 'committer_name': 'Aaryan Dewan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 22, 3, 31, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b8bbdfdd2488152aa239b2d1f740e0f00a9378f', 'committer_username': 'aaryandewan', 'committer_name': 'Aaryan Dewan', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 22, 3, 31, 18, tzinfo=datetime.timezone.utc)}]",Aaryan Dewan,49852384,,User,,90,,18,18
+448898089,#19766 Fixes incorrect limit,"Fixes partially #19766 
+Added a test case for the limit.
+`limit(2**(-x)*sqrt(4**(x+1)+1), x, oo)`
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19771,https://api.github.com/repos/sympy/sympy/pulls/19771,https://github.com/sympy/sympy/pull/19771,closed,4,0,1,1,9,4,2,0,"[{'name': 'series'}, {'name': 'limits'}]",2020-07-14 13:56:48+00:00,2020-07-16 18:58:42+00:00,190914.0,"2 days, 5:01:54","[{'comment_id': 454376313, 'comment_body': 'Maintain two line spacing.', 'comment_created': datetime.datetime(2020, 7, 14, 13, 58, 3, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 454376624, 'comment_body': 'Add space around `+` signs. ', 'comment_created': datetime.datetime(2020, 7, 14, 13, 58, 31, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 455067954, 'comment_body': 'Why was this testcase added? Testcase should be added only for those cases which are working.', 'comment_created': datetime.datetime(2020, 7, 15, 13, 51, 44, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 455072536, 'comment_body': '#19774', 'comment_created': datetime.datetime(2020, 7, 15, 13, 57, 58, tzinfo=datetime.timezone.utc), 'commenter': 'shivangdubey', 'type': 'User'}]","[{'commit_sha': 'bd3ddd4c71d439c8b623f69a02274dd8a8a82198', 'committer_username': 'shivangdubey', 'committer_name': 'Shivang Dubey', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 8, 11, 13, 7, tzinfo=datetime.timezone.utc)}]",Shivang Dubey,55050487,,User,,29,,28,34
+453700365,add test to close 14037,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+Fixes #14037 
+
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19805,https://api.github.com/repos/sympy/sympy/pulls/19805,https://github.com/sympy/sympy/pull/19805,closed,8,0,2,2,6,0,1,0,[{'name': 'series'}],2020-07-20 18:10:35+00:00,2020-07-24 19:01:29+00:00,348654.0,"4 days, 0:50:54",[],"[{'commit_sha': '3596177892a63e67ce5b226e27a4599889eb7e3e', 'committer_username': 'goddus', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 6, 4, 18, 26, 42, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b6f253c9a0dbdba129b7e9136a841bc5ebe99be9', 'committer_username': 'goddus', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 6, 4, 18, 26, 42, tzinfo=datetime.timezone.utc)}]",,39923708,,User,,4,,1,1
+455288340,add test of issue 11407,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+Fixes #11407 
+
+#### Brief description of what is fixed or changed
+
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19824,https://api.github.com/repos/sympy/sympy/pulls/19824,https://github.com/sympy/sympy/pull/19824,closed,6,0,1,2,5,0,1,0,[{'name': 'series'}],2020-07-22 18:40:14+00:00,2020-07-25 19:23:32+00:00,261798.0,"3 days, 0:43:18",[],"[{'commit_sha': '33b95e7731d5adb33c0743276f2ac2cf608330a8', 'committer_username': '1124816', 'committer_name': 'Elias Basler', 'committer_email': None, 'commit_date': datetime.datetime(2014, 8, 14, 1, 42, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ff3e47390319631c7a4e67094130af02a993b7d', 'committer_username': '1124816', 'committer_name': 'Elias Basler', 'committer_email': None, 'commit_date': datetime.datetime(2014, 8, 14, 1, 42, 58, tzinfo=datetime.timezone.utc)}]",Elias Basler,8444045,,User,,41,,79,13
+461136598,Add test for limit_seq in series,"####References to other Issues or PRs
+Fixes #19868 
+
+#### Brief description of what is fixed or changed
+Added simple test case for limit_seq, to ensure correct output of 0 instead of oo.
+Current master gives 0.
+
+#### Other comments
+NA
+
+#### Release Notes
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19876,https://api.github.com/repos/sympy/sympy/pulls/19876,https://github.com/sympy/sympy/pull/19876,closed,5,1,1,1,9,4,0,0,[],2020-08-01 13:59:49+00:00,2020-08-01 17:23:55+00:00,12246.0,3:24:06,"[{'comment_id': 463965650, 'comment_body': 'Should be like this:\r\n```\r\ndef test_issue_19868():\r\n    assert limit_seq(1/gamma(n + S.One/2), n) == 0\r\n```', 'comment_created': datetime.datetime(2020, 8, 1, 14, 10, 23, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 463965698, 'comment_body': 'Also maintain two line spacing between the testcases.', 'comment_created': datetime.datetime(2020, 8, 1, 14, 11, 6, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 463966096, 'comment_body': 'Gotcha, thanks', 'comment_created': datetime.datetime(2020, 8, 1, 14, 16, 5, tzinfo=datetime.timezone.utc), 'commenter': 'tashakim', 'type': 'User'}, {'comment_id': 463967119, 'comment_body': 'This line contains trailing whitespaces. Line number 138.', 'comment_created': datetime.datetime(2020, 8, 1, 14, 28, 58, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}]","[{'commit_sha': '792c7aa613281bba785ec9c254cc48598b6acef8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Tasha Kim,33438822,tashakim@stanford.edu,User,,40,,82,95
+465056625,Regression test for limit issue,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+Fixes #8229
+
+#### Brief description of what is fixed or changed
+Added a regression test for limit issue.
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19922,https://api.github.com/repos/sympy/sympy/pulls/19922,https://github.com/sympy/sympy/pull/19922,closed,4,0,1,1,5,2,1,0,[{'name': 'limits'}],2020-08-08 17:45:58+00:00,2020-08-10 07:00:24+00:00,134066.0,"1 day, 13:14:26","[{'comment_id': 467489478, 'comment_body': 'There can be spaces around `-` and after `,` inside `Rational`.\r\nSo something like this:\r\n`limit((x**Rational(1, 4) - 2)/(sqrt(x) - 4)**Rational(2, 3), x, 16) == 0`', 'comment_created': datetime.datetime(2020, 8, 8, 18, 3, 47, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 467548670, 'comment_body': 'updated', 'comment_created': datetime.datetime(2020, 8, 9, 7, 31, 2, tzinfo=datetime.timezone.utc), 'commenter': 'dsaw', 'type': 'User'}]","[{'commit_sha': '7f722580d36247879feb24f10ddd58e249a60fd2', 'committer_username': 'dsaw', 'committer_name': 'देवेश (devesh)', 'committer_email': None, 'commit_date': datetime.datetime(2013, 8, 31, 15, 41, 15, tzinfo=datetime.timezone.utc)}]",देवेश (devesh),5353891,,User,,38,,80,7
+468579292,Added test case for series expansion of polynomial/rational expression,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+#12791 
+
+#### Brief description of what is fixed or changed
+Added a test case for the series expansion of polynomial/rational expression in test_series.py
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below. See
+https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information
+on how to write release notes. The bot will check your release notes
+automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+NO ENTRY
+<!-- END RELEASE NOTES -->",True,19974,https://api.github.com/repos/sympy/sympy/pulls/19974,https://github.com/sympy/sympy/pull/19974,closed,17,0,1,2,10,3,0,0,[],2020-08-17 04:59:43+00:00,2020-08-17 16:17:48+00:00,40685.0,11:18:05,"[{'comment_id': 471260002, 'comment_body': 'I think this can be `real=True`. ', 'comment_created': datetime.datetime(2020, 8, 17, 6, 39, 50, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 471260356, 'comment_body': 'I think this can be simply:\r\n`assert expr.series(beta, 0.5, 2) == sol` (without round brackets).', 'comment_created': datetime.datetime(2020, 8, 17, 6, 40, 48, tzinfo=datetime.timezone.utc), 'commenter': 'sachin-4099', 'type': 'User'}, {'comment_id': 471280065, 'comment_body': ""Ok, I'll make the changes suggested by you."", 'comment_created': datetime.datetime(2020, 8, 17, 7, 8, 39, tzinfo=datetime.timezone.utc), 'commenter': 'abhaydhiman', 'type': 'User'}]","[{'commit_sha': '4a4b400e1d3ed151f20185dcc623ab9cf9d1c9d5', 'committer_username': 'abhaydhiman', 'committer_name': 'Abhay Dhiman', 'committer_email': None, 'commit_date': datetime.datetime(2018, 12, 2, 9, 14, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc0c91fd8c4b261e43728de3d135c88e7abef157', 'committer_username': 'abhaydhiman', 'committer_name': 'Abhay Dhiman', 'committer_email': None, 'commit_date': datetime.datetime(2018, 12, 2, 9, 14, 18, tzinfo=datetime.timezone.utc)}]",Abhay Dhiman,45531376,,User,,20,,92,102
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+640534,sympy,sympy/sympy,Python,4370,12719,292,1320,58726,5124,14,714,"[{'id': 537997571, 'number': 20587, 'closed': datetime.datetime(2020, 12, 12, 15, 47, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 12, 10, 38, 6, tzinfo=datetime.timezone.utc), 'time_taken': 18573.0, 'time_delta': '5:09:33', 'additions': 8, 'deletions': 11, 'state': 'closed'}, {'id': 473668139, 'number': 20002, 'closed': datetime.datetime(2020, 8, 26, 17, 48, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 26, 6, 0, 19, tzinfo=datetime.timezone.utc), 'time_taken': 42493.0, 'time_delta': '11:48:13', 'additions': 58, 'deletions': 10, 'state': 'closed'}, {'id': 470714956, 'number': 19990, 'closed': datetime.datetime(2020, 8, 21, 17, 36, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 20, 7, 14, 7, tzinfo=datetime.timezone.utc), 'time_taken': 123763.0, 'time_delta': '1 day, 10:22:43', 'additions': 66, 'deletions': 3, 'state': 'closed'}, {'id': 468354887, 'number': 19963, 'closed': datetime.datetime(2020, 8, 16, 16, 26, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 15, 19, 10, 37, tzinfo=datetime.timezone.utc), 'time_taken': 76535.0, 'time_delta': '21:15:35', 'additions': 38, 'deletions': 0, 'state': 'closed'}, {'id': 464580438, 'number': 19916, 'closed': datetime.datetime(2020, 8, 8, 5, 28, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 7, 12, 35, 25, tzinfo=datetime.timezone.utc), 'time_taken': 60800.0, 'time_delta': '16:53:20', 'additions': 36, 'deletions': 5, 'state': 'closed'}, {'id': 447594177, 'number': 19741, 'closed': datetime.datetime(2020, 7, 13, 21, 17, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 10, 18, 53, 6, tzinfo=datetime.timezone.utc), 'time_taken': 267844.0, 'time_delta': '3 days, 2:24:04', 'additions': 21, 'deletions': 12, 'state': 'closed'}, {'id': 444746855, 'number': 19716, 'closed': datetime.datetime(2020, 7, 8, 15, 14, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 6, 12, 36, 41, tzinfo=datetime.timezone.utc), 'time_taken': 182286.0, 'time_delta': '2 days, 2:38:06', 'additions': 18, 'deletions': 3, 'state': 'closed'}, {'id': 443970663, 'number': 19697, 'closed': datetime.datetime(2020, 7, 5, 11, 42, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 3, 10, 1, 18, tzinfo=datetime.timezone.utc), 'time_taken': 178848.0, 'time_delta': '2 days, 1:40:48', 'additions': 49, 'deletions': 4, 'state': 'closed'}, {'id': 442577362, 'number': 19680, 'closed': datetime.datetime(2020, 7, 3, 9, 59, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 1, 9, 44, 3, tzinfo=datetime.timezone.utc), 'time_taken': 173714.0, 'time_delta': '2 days, 0:15:14', 'additions': 87, 'deletions': 12, 'state': 'closed'}, {'id': 440196057, 'number': 19646, 'closed': datetime.datetime(2020, 6, 28, 17, 26, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 25, 18, 46, 40, tzinfo=datetime.timezone.utc), 'time_taken': 254376.0, 'time_delta': '2 days, 22:39:36', 'additions': 112, 'deletions': 50, 'state': 'closed'}, {'id': 437407375, 'number': 19604, 'closed': datetime.datetime(2020, 6, 20, 16, 41, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 20, 12, 36, 50, tzinfo=datetime.timezone.utc), 'time_taken': 14667.0, 'time_delta': '4:04:27', 'additions': 6, 'deletions': 2, 'state': 'closed'}, {'id': 434179570, 'number': 19555, 'closed': datetime.datetime(2020, 6, 24, 6, 49, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 14, 17, 58, 27, tzinfo=datetime.timezone.utc), 'time_taken': 823851.0, 'time_delta': '9 days, 12:50:51', 'additions': 667, 'deletions': 197, 'state': 'closed'}, {'id': 433264808, 'number': 19537, 'closed': datetime.datetime(2020, 6, 12, 6, 36, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 11, 18, 40, 3, tzinfo=datetime.timezone.utc), 'time_taken': 42959.0, 'time_delta': '11:55:59', 'additions': 48, 'deletions': 2, 'state': 'closed'}, {'id': 431280806, 'number': 19515, 'closed': datetime.datetime(2020, 6, 9, 11, 5, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 8, 17, 10, 49, tzinfo=datetime.timezone.utc), 'time_taken': 64494.0, 'time_delta': '17:54:54', 'additions': 19, 'deletions': 2, 'state': 'closed'}, {'id': 430137808, 'number': 19508, 'closed': datetime.datetime(2020, 6, 11, 7, 21, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 7, 15, 9, 49, tzinfo=datetime.timezone.utc), 'time_taken': 317489.0, 'time_delta': '3 days, 16:11:29', 'additions': 174, 'deletions': 252, 'state': 'closed'}, {'id': 425266020, 'number': 19461, 'closed': datetime.datetime(2020, 5, 30, 6, 5, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 29, 18, 43, 44, tzinfo=datetime.timezone.utc), 'time_taken': 40882.0, 'time_delta': '11:21:22', 'additions': 27, 'deletions': 19, 'state': 'closed'}, {'id': 424074688, 'number': 19447, 'closed': datetime.datetime(2020, 5, 28, 5, 33, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 27, 19, 38, 6, tzinfo=datetime.timezone.utc), 'time_taken': 35739.0, 'time_delta': '9:55:39', 'additions': 14, 'deletions': 0, 'state': 'closed'}, {'id': 423178415, 'number': 19432, 'closed': datetime.datetime(2020, 5, 29, 7, 34, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 26, 12, 35, 59, tzinfo=datetime.timezone.utc), 'time_taken': 241088.0, 'time_delta': '2 days, 18:58:08', 'additions': 78, 'deletions': 49, 'state': 'closed'}, {'id': 420201974, 'number': 19369, 'closed': datetime.datetime(2020, 5, 24, 11, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 19, 15, 39, 45, tzinfo=datetime.timezone.utc), 'time_taken': 416535.0, 'time_delta': '4 days, 19:42:15', 'additions': 83, 'deletions': 42, 'state': 'closed'}, {'id': 416570230, 'number': 19297, 'closed': datetime.datetime(2020, 5, 12, 16, 13, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 12, 8, 29, 38, tzinfo=datetime.timezone.utc), 'time_taken': 27830.0, 'time_delta': '7:43:50', 'additions': 9, 'deletions': 1, 'state': 'closed'}, {'id': 416158692, 'number': 19292, 'closed': datetime.datetime(2020, 5, 12, 5, 43, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 11, 14, 56, 4, tzinfo=datetime.timezone.utc), 'time_taken': 53233.0, 'time_delta': '14:47:13', 'additions': 20, 'deletions': 5, 'state': 'closed'}, {'id': 396361463, 'number': 19037, 'closed': datetime.datetime(2020, 4, 1, 11, 14, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 31, 14, 7, 57, tzinfo=datetime.timezone.utc), 'time_taken': 75967.0, 'time_delta': '21:06:07', 'additions': 20, 'deletions': 2, 'state': 'closed'}, {'id': 395210849, 'number': 19004, 'closed': datetime.datetime(2020, 3, 30, 17, 9, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 29, 7, 15, 28, tzinfo=datetime.timezone.utc), 'time_taken': 122046.0, 'time_delta': '1 day, 9:54:06', 'additions': 1, 'deletions': 7, 'state': 'closed'}, {'id': 394939113, 'number': 18978, 'closed': datetime.datetime(2020, 3, 28, 9, 40, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 27, 19, 43, 58, tzinfo=datetime.timezone.utc), 'time_taken': 50180.0, 'time_delta': '13:56:20', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 394285329, 'number': 18962, 'closed': datetime.datetime(2020, 3, 27, 10, 17, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 26, 16, 39, 41, tzinfo=datetime.timezone.utc), 'time_taken': 63449.0, 'time_delta': '17:37:29', 'additions': 7, 'deletions': 1, 'state': 'closed'}, {'id': 384740498, 'number': 18785, 'closed': datetime.datetime(2020, 3, 8, 13, 7, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 6, 10, 17, 24, tzinfo=datetime.timezone.utc), 'time_taken': 183027.0, 'time_delta': '2 days, 2:50:27', 'additions': 13, 'deletions': 1, 'state': 'closed'}, {'id': 378018266, 'number': 18696, 'closed': datetime.datetime(2020, 7, 12, 10, 50, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 20, 22, 58, 49, tzinfo=datetime.timezone.utc), 'time_taken': 12311485.0, 'time_delta': '142 days, 11:51:25', 'additions': 201, 'deletions': 115, 'state': 'closed'}, {'id': 377422691, 'number': 18688, 'closed': datetime.datetime(2020, 2, 21, 1, 11, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 19, 22, 11, 19, tzinfo=datetime.timezone.utc), 'time_taken': 97201.0, 'time_delta': '1 day, 3:00:01', 'additions': 21, 'deletions': 0, 'state': 'closed'}, {'id': 375891577, 'number': 18671, 'closed': datetime.datetime(2020, 2, 19, 20, 57, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 17, 0, 9, 13, tzinfo=datetime.timezone.utc), 'time_taken': 247687.0, 'time_delta': '2 days, 20:48:07', 'additions': 97, 'deletions': 3, 'state': 'closed'}, {'id': 375520198, 'number': 18656, 'closed': datetime.datetime(2020, 8, 17, 10, 29, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 14, 18, 40, 33, tzinfo=datetime.timezone.utc), 'time_taken': 15954566.0, 'time_delta': '184 days, 15:49:26', 'additions': 36, 'deletions': 8, 'state': 'closed'}, {'id': 375011172, 'number': 18650, 'closed': datetime.datetime(2020, 2, 14, 18, 39, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 13, 18, 1, 4, tzinfo=datetime.timezone.utc), 'time_taken': 88681.0, 'time_delta': '1 day, 0:38:01', 'additions': 7, 'deletions': 1, 'state': 'closed'}, {'id': 363561563, 'number': 18354, 'closed': datetime.datetime(2020, 1, 25, 7, 20, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 16, 10, 11, 47, tzinfo=datetime.timezone.utc), 'time_taken': 767329.0, 'time_delta': '8 days, 21:08:49', 'additions': 105, 'deletions': 0, 'state': 'closed'}, {'id': 363462440, 'number': 18350, 'closed': datetime.datetime(2020, 1, 16, 8, 1, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 16, 5, 25, 55, tzinfo=datetime.timezone.utc), 'time_taken': 9355.0, 'time_delta': '2:35:55', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 363026547, 'number': 18340, 'closed': datetime.datetime(2020, 2, 4, 18, 53, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 15, 9, 2, 41, tzinfo=datetime.timezone.utc), 'time_taken': 1763475.0, 'time_delta': '20 days, 9:51:15', 'additions': 54, 'deletions': 21, 'state': 'closed'}, {'id': 362627063, 'number': 18333, 'closed': datetime.datetime(2020, 1, 14, 20, 41, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 14, 13, 11, 44, tzinfo=datetime.timezone.utc), 'time_taken': 27013.0, 'time_delta': '7:30:13', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 362445339, 'number': 18326, 'closed': datetime.datetime(2020, 1, 15, 11, 6, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 14, 5, 0, 53, tzinfo=datetime.timezone.utc), 'time_taken': 108335.0, 'time_delta': '1 day, 6:05:35', 'additions': 21, 'deletions': 29, 'state': 'closed'}, {'id': 362277684, 'number': 18324, 'closed': datetime.datetime(2020, 2, 5, 18, 9, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 13, 19, 15, 32, tzinfo=datetime.timezone.utc), 'time_taken': 1983246.0, 'time_delta': '22 days, 22:54:06', 'additions': 16, 'deletions': 2, 'state': 'closed'}, {'id': 360993521, 'number': 18277, 'closed': datetime.datetime(2020, 7, 13, 21, 17, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 9, 14, 40, 57, tzinfo=datetime.timezone.utc), 'time_taken': 16094173.0, 'time_delta': '186 days, 6:36:13', 'additions': 15, 'deletions': 2, 'state': 'closed'}, {'id': 360867927, 'number': 18273, 'closed': datetime.datetime(2020, 1, 9, 12, 31, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 9, 9, 53, 53, tzinfo=datetime.timezone.utc), 'time_taken': 9431.0, 'time_delta': '2:37:11', 'additions': 9, 'deletions': 0, 'state': 'closed'}, {'id': 360681994, 'number': 18270, 'closed': datetime.datetime(2020, 1, 9, 14, 21, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 8, 22, 21, 48, tzinfo=datetime.timezone.utc), 'time_taken': 57557.0, 'time_delta': '15:59:17', 'additions': 12, 'deletions': 3, 'state': 'closed'}, {'id': 347206927, 'number': 17983, 'closed': datetime.datetime(2019, 12, 1, 23, 19, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 11, 30, 8, 57, 3, tzinfo=datetime.timezone.utc), 'time_taken': 138160.0, 'time_delta': '1 day, 14:22:40', 'additions': 6, 'deletions': 1, 'state': 'closed'}, {'id': 346277559, 'number': 17973, 'closed': datetime.datetime(2019, 11, 29, 16, 48, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 11, 27, 14, 46, 1, tzinfo=datetime.timezone.utc), 'time_taken': 180142.0, 'time_delta': '2 days, 2:02:22', 'additions': 9, 'deletions': 3, 'state': 'closed'}, {'id': 333134006, 'number': 17814, 'closed': datetime.datetime(2019, 10, 29, 14, 47, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 10, 28, 14, 5, 39, tzinfo=datetime.timezone.utc), 'time_taken': 88885.0, 'time_delta': '1 day, 0:41:25', 'additions': 5, 'deletions': 1, 'state': 'closed'}, {'id': 330152562, 'number': 17767, 'closed': datetime.datetime(2019, 10, 27, 14, 22, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 10, 20, 20, 5, 47, tzinfo=datetime.timezone.utc), 'time_taken': 584183.0, 'time_delta': '6 days, 18:16:23', 'additions': 12, 'deletions': 4, 'state': 'closed'}, {'id': 325074970, 'number': 17707, 'closed': datetime.datetime(2019, 10, 8, 13, 58, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 10, 6, 21, 10, 51, tzinfo=datetime.timezone.utc), 'time_taken': 146884.0, 'time_delta': '1 day, 16:48:04', 'additions': 39, 'deletions': 20, 'state': 'closed'}, {'id': 325050765, 'number': 17705, 'closed': datetime.datetime(2019, 10, 15, 0, 10, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 10, 6, 16, 35, 29, tzinfo=datetime.timezone.utc), 'time_taken': 718518.0, 'time_delta': '8 days, 7:35:18', 'additions': 46, 'deletions': 45, 'state': 'closed'}, {'id': 310640265, 'number': 17505, 'closed': datetime.datetime(2019, 11, 1, 7, 59, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 24, 21, 1, 18, tzinfo=datetime.timezone.utc), 'time_taken': 5914711.0, 'time_delta': '68 days, 10:58:31', 'additions': 7, 'deletions': 6, 'state': 'closed'}, {'id': 310621342, 'number': 17503, 'closed': datetime.datetime(2019, 9, 1, 10, 10, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 24, 15, 16, 19, tzinfo=datetime.timezone.utc), 'time_taken': 672868.0, 'time_delta': '7 days, 18:54:28', 'additions': 18, 'deletions': 0, 'state': 'closed'}, {'id': 310620968, 'number': 17502, 'closed': datetime.datetime(2019, 8, 24, 15, 12, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 24, 15, 10, 43, tzinfo=datetime.timezone.utc), 'time_taken': 116.0, 'time_delta': '0:01:56', 'additions': 18, 'deletions': 0, 'state': 'closed'}, {'id': 310277778, 'number': 17494, 'closed': datetime.datetime(2019, 8, 24, 10, 56, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 23, 8, 12, 19, tzinfo=datetime.timezone.utc), 'time_taken': 96268.0, 'time_delta': '1 day, 2:44:28', 'additions': 13, 'deletions': 1, 'state': 'closed'}, {'id': 310116523, 'number': 17489, 'closed': datetime.datetime(2019, 8, 23, 3, 9, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 8, 22, 19, 57, 46, tzinfo=datetime.timezone.utc), 'time_taken': 25919.0, 'time_delta': '7:11:59', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"

@@ -1,0 +1,45 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+684490135,Changing rubygems link to work with later Maven versions,"Changed the RubyGems link from http://rubygems-proxy.torquebox.org/releases to https://rubygems-proxy.torquebox.org/releases/url, so it is compatible with recent Maven versions. ",True,30,https://api.github.com/repos/openmrs/openmrs-module-appointmentschedulingui/pulls/30,https://github.com/openmrs/openmrs-module-appointmentschedulingui/pull/30,closed,1,1,1,1,0,0,0,0,[],2021-07-06 15:46:02+00:00,2021-07-06 15:51:34+00:00,332.0,0:05:32,[],"[{'commit_sha': 'c81b856816ae3ecaff6f4b90c53b3c8bb7e2aae7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Kate Belson,63152954,,User,,16,,8,10
+686054889,Changing rubygems link to work with later Maven versions,Changed the RubyGems link from _http://rubygems-proxy.torquebox.org/releases_ to _https://rubygems-proxy.torquebox.org/releases/url_ in order for it to work with recent Maven versions. ,False,117,https://api.github.com/repos/openmrs/openmrs-module-registrationapp/pulls/117,https://github.com/openmrs/openmrs-module-registrationapp/pull/117,closed,1,1,1,1,2,0,0,1,[],2021-07-08 14:13:11+00:00,2021-07-12 13:49:12+00:00,344161.0,"3 days, 23:36:01",[],"[{'commit_sha': 'e6b5a3bfa3a5888fa700931e0164997cdfcb644b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Kate Belson,63152954,,User,,16,,8,10
+699038810,Made changes to fix EMPT176,"Hi Team,
+
+Steps to reproduce. Worked together with @kfb19 to achieve this fix.
+
+1) Go to ""Manage Privileges"" and add a new privileged named <script>alert(1);</script> (this is harmless by itself)
+2) Delete that privilege.
+3)Get the alert box.
+
+1) Similarly Create a role named <script>alert(1);</script>.
+2) Delete that role.
+3) Get the alert box.
+
+Will be adding the before and after fix soon.
+
+
+Here's the link to the ticket.
+Link to ticket
+https://issues.openmrs.org/browse/RA-1865
+
+@isears @sherrif10 
+
+Thanks,
+Parth",True,168,https://api.github.com/repos/openmrs/openmrs-module-legacyui/pulls/168,https://github.com/openmrs/openmrs-module-legacyui/pull/168,closed,2,2,2,1,3,0,0,0,[],2021-07-28 21:53:41+00:00,2021-07-30 12:02:17+00:00,137316.0,"1 day, 14:08:36",[],"[{'commit_sha': 'e6f181d26cd173dc216ed7a2fed3439e4d693191', 'committer_username': 'Parth59', 'committer_name': 'Parth Kanakiya', 'committer_email': None, 'commit_date': datetime.datetime(2016, 9, 19, 6, 32, 9, tzinfo=datetime.timezone.utc)}]",Parth Kanakiya,22288099,,User,,117,,10,3
+695982619,Fixing XSS bug in manageAppointments.gsp,"**How to find the XSS bug:** 
+1. Log in to openmrs with admin account
+2. Register a patient, if one doesn't already exist
+3. Click ""Appointment Scheduling""
+4. Click ""Manage Appointments""
+5. Search for a patient
+6. Click on the patient
+7. On the resulting page, modify the breadcrumbOverride url parameter to </script><script>alert(1)</script>
+8. Click enter -- a javascript alert should show
+
+**My fix:** 
+I located the line to fix in manageAppointments.gsp using inspect element, then used the ui.encodeJavaScript() function on the correct breadcrumbOverride parameter which escaped special characters to stop the XSS attack. 
+
+@isears ",False,32,https://api.github.com/repos/openmrs/openmrs-module-appointmentschedulingui/pulls/32,https://github.com/openmrs/openmrs-module-appointmentschedulingui/pull/32,open,2,3,2,4,0,2,0,0,[],2021-07-23 14:24:37+00:00,,0.0,,"[{'comment_id': 676588035, 'comment_body': 'I think this change was part of your other pull request. Try `git pull --rebase master` on your PR branch and then force push with `git push -f` so that we can keep this PR focused on the XSS fix only.', 'comment_created': datetime.datetime(2021, 7, 26, 13, 9, 47, tzinfo=datetime.timezone.utc), 'commenter': 'isears', 'type': 'User'}, {'comment_id': 676597966, 'comment_body': 'When I test this locally, the manageAppointment page loses most of the functionality it had before the patch. Are you getting similar behavior?', 'comment_created': datetime.datetime(2021, 7, 26, 13, 22, 7, tzinfo=datetime.timezone.utc), 'commenter': 'isears', 'type': 'User'}]","[{'commit_sha': 'c81b856816ae3ecaff6f4b90c53b3c8bb7e2aae7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'a92e2aa6196e1cfe7f32d2f330e57b2c6191b157', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b1bd89f1e9a599a20aa5ac73c18856ca62279844', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '52d65b2eeffc154d5c42079bc7645230171fefd3', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Kate Belson,63152954,,User,,16,,8,10
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+15685844,openmrs-module-appointmentschedulingui,openmrs/openmrs-module-appointmentschedulingui,JavaScript,47,3,84,37,662,9,12,9,"[{'id': 695982619, 'number': 32, 'closed': None, 'created': datetime.datetime(2021, 7, 23, 14, 24, 37, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 2, 'deletions': 3, 'state': 'open'}, {'id': 684490135, 'number': 30, 'closed': datetime.datetime(2021, 7, 6, 15, 51, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 6, 15, 46, 2, tzinfo=datetime.timezone.utc), 'time_taken': 332.0, 'time_delta': '0:05:32', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"
+9700409,openmrs-module-registrationapp,openmrs/openmrs-module-registrationapp,Java,133,4,83,49,692,2,10,2,"[{'id': 686054889, 'number': 117, 'closed': datetime.datetime(2021, 7, 12, 13, 49, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 8, 14, 13, 11, tzinfo=datetime.timezone.utc), 'time_taken': 344161.0, 'time_delta': '3 days, 23:36:01', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"
+35045181,openmrs-module-legacyui,openmrs/openmrs-module-legacyui,Java,173,8,78,55,523,9,11,9,[]

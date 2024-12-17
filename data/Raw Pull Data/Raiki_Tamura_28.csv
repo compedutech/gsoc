@@ -1,0 +1,359 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1385386715,Tokenize Unicode identifiers,"Addresses #2287 #418
+
+- [x] add function which checks XID_Start and XID_Continue to libcpp
+- [x] identifiers
+- [x] lifetime token
+
+gcc/rust/ChangeLog:
+```
+	* lex/rust-lex.cc (is_whitespace): add all lacked codepoints valid as whitespaces
+	(is_identifier_start): new function to check XID_Start and underscore
+	(is_identifier_continue): new function to check XID_Continue
+	(Lexer::build_token):tokenize Unicode identifiers
+	(Lexer::parse_partial_string_continue):add comments
+	(Lexer::parse_partial_unicode_escape):add comments
+	(Lexer::parse_raw_identifier):change to use `is_identifier_scontinue`
+	(Lexer::parse_identifier_or_keyword):change to use `is_identifier_continue`
+	(Lexer::parse_char_or_lifetime):change to use `is_identifier_start` and `is_identifier_continue`
+	(Lexer::skip_codepoint_input):do not attempt to skip input when bumping EOF
+	* lex/rust-lex.h:add `current_char32` field
+```
+libcpp/ChangeLog:
+```
+	* charset.cc (check_xid_property):new function to check XID_Start and XID_Continue
+	* include/cpplib.h (check_xid_property):add forward declaration of `check_xid_property`
+```
+",True,2284,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2284,https://github.com/Rust-GCC/gccrs/pull/2284,closed,104,32,4,2,6,14,1,0,[{'name': 'enhancement'}],2023-06-09 02:34:08+00:00,2023-06-20 08:57:12+00:00,973384.0,"11 days, 6:23:04","[{'comment_id': 1226470561, 'comment_body': 'I think this function should return bit flags but how can I do it?\r\n(i.e. None: 0, XID_Start: 1, XID_Continue: 1 << 1)\r\nIs just using `int` (or `unsigned int`) and exporting constants such as `XID_START` and `XID_CONTINUE` good?', 'comment_created': datetime.datetime(2023, 6, 12, 10, 53, 22, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1231672206, 'comment_body': 'Fixed to use `unsigned int` and export consants via enum', 'comment_created': datetime.datetime(2023, 6, 16, 1, 10, 24, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1231673926, 'comment_body': 'Added some codepoints of whitespaces.\r\nBut non-ascii whitespaces are not actually checked during tokenization because this func is called with argument whose type is `char` (1 byte)', 'comment_created': datetime.datetime(2023, 6, 16, 1, 15, 3, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1232027431, 'comment_body': 'Are all of those characters accepted by `rustc` as whitespace?', 'comment_created': datetime.datetime(2023, 6, 16, 9, 41, 33, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1232031058, 'comment_body': 'why are we skipping the codepoint input here but not the char?', 'comment_created': datetime.datetime(2023, 6, 16, 9, 44, 46, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1232033527, 'comment_body': ""That's good - please open an issue for this and put the issue number in the comment :)"", 'comment_created': datetime.datetime(2023, 6, 16, 9, 47, 3, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1232977978, 'comment_body': 'If we skip one byte here, only the first byte of current utf-8 character can be skipped by the lexer, which we do not expect. \r\nFor example, if the lexer tokenizes identifier あああ , it should skip the first utf8 character あ, not its first byte.', 'comment_created': datetime.datetime(2023, 6, 17, 6, 27, 6, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1232978254, 'comment_body': 'Yes. All of these values are defined in the Rust ref.\r\nYou can find URL to this just before the selected lines.', 'comment_created': datetime.datetime(2023, 6, 17, 6, 30, 29, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1233087651, 'comment_body': 'Opend https://github.com/Rust-GCC/gccrs/issues/2306', 'comment_created': datetime.datetime(2023, 6, 17, 16, 23, 11, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1233645600, 'comment_body': 'Oh, I missed this! Sorry! Thanks for pointing it out haha', 'comment_created': datetime.datetime(2023, 6, 19, 7, 37, 26, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1233647485, 'comment_body': 'I see, thank you!', 'comment_created': datetime.datetime(2023, 6, 19, 7, 39, 15, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1233648367, 'comment_body': '```suggestion\r\n\t  // TODO some keywords cannot be used for a lifetime label #2306 \r\n```', 'comment_created': datetime.datetime(2023, 6, 19, 7, 39, 59, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1233897796, 'comment_body': 'Do we want to unify with the `Codepoint` alias in `rust-codepoint.h` ? Also what about specifying an explicit size (eg. `std::uint32_t`, maybe even `wchar_t` ?) ?', 'comment_created': datetime.datetime(2023, 6, 19, 11, 3, 47, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1234008410, 'comment_body': 'Yes, I think `uint32_t` is better. If we unify types for paramters of such functions, other several functions should also use the same type.\r\ne.g. is_x_digit, is_octal_digit, etc.\r\nhttps://github.com/Rust-GCC/gccrs/blob/d535c8259301687e28105105a52e013f138b619e/gcc/rust/lex/rust-lex.cc#L83-L87', 'comment_created': datetime.datetime(2023, 6, 19, 12, 44, 23, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}]","[{'commit_sha': 'eb60755713e9bed1c59d1f2bbff50723a370b8bd', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd535c8259301687e28105105a52e013f138b619e', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1397164721,Refactor lexer to treat all input characters as UTF-8,"Addresses #2287, #2309
+
+In this PR, I have modified `peek_input(int n)`, and `skip_input(int n)` to handle UTF-8 characters.
+To do so, I also dramatically modified `InputSource` to decode utf-8 and buffer its characters.
+
+",True,2307,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2307,https://github.com/Rust-GCC/gccrs/pull/2307,closed,341,411,3,1,1,15,1,1,[{'name': 'enhancement'}],2023-06-18 14:35:16+00:00,2023-06-28 16:31:04+00:00,870948.0,"10 days, 1:55:48","[{'comment_id': 1233343509, 'comment_body': 'modified `InputSource` to check the input string is valid utf-8 and push utf-8 characters to its buffer (`field`) immidiately after an instance of this class is created. (i.e. this method is a post-constructor)\r\nBy this, we do not have to decode each Unicode character more than once.', 'comment_created': datetime.datetime(2023, 6, 18, 17, 15, 1, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1233343690, 'comment_body': 'now `peek_input` returns `Codepoint`', 'comment_created': datetime.datetime(2023, 6, 18, 17, 16, 9, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1233344026, 'comment_body': '`peek_codepoint_input` and `skip_codepoint_input` are no longer needed.\r\nThey are just wrappers of `peek_input` and `skip_input` respetively for now.', 'comment_created': datetime.datetime(2023, 6, 18, 17, 18, 16, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1239306968, 'comment_body': 'I have no idea how to convert(?) `std::string` into `FILE` so only BufferInputSource is tested now.', 'comment_created': datetime.datetime(2023, 6, 23, 4, 25, 45, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1240855359, 'comment_body': 'Added unit tests for `BufferInputSource`. See https://github.com/Rust-GCC/gccrs/pull/2307#discussion_r1240864079', 'comment_created': datetime.datetime(2023, 6, 24, 15, 36, 7, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1240855827, 'comment_body': '`is_valid_utf8`represents whether input string is valid as utf-8 and it is properly decoded by this instance. (Decoded characters are buffered in `chars` field)', 'comment_created': datetime.datetime(2023, 6, 24, 15, 39, 3, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1240859757, 'comment_body': 'So we have to stop the compilation pipeline if this field is set to false.\r\n(TODO in another PR)', 'comment_created': datetime.datetime(2023, 6, 24, 15, 40, 38, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1240863702, 'comment_body': 'These lines are just moved backwards, not changed.', 'comment_created': datetime.datetime(2023, 6, 24, 15, 42, 30, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1240864079, 'comment_body': 'This is one of the tests for `BufferInputSource`, which internally calls `std::tmpfile()`.', 'comment_created': datetime.datetime(2023, 6, 24, 15, 45, 14, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1241284523, 'comment_body': 'We have a token enum that you can implement a switch satement on to figure that out.', 'comment_created': datetime.datetime(2023, 6, 25, 20, 45, 18, tzinfo=datetime.timezone.utc), 'commenter': 'philberty', 'type': 'User'}, {'comment_id': 1241284788, 'comment_body': 'Yeah that should be a separate PR', 'comment_created': datetime.datetime(2023, 6, 25, 20, 46, 50, tzinfo=datetime.timezone.utc), 'commenter': 'philberty', 'type': 'User'}, {'comment_id': 1245421909, 'comment_body': ""Please open an issue so we don't forget :) "", 'comment_created': datetime.datetime(2023, 6, 28, 15, 40, 57, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1245422173, 'comment_body': 'Mention this function in the issue as well', 'comment_created': datetime.datetime(2023, 6, 28, 15, 41, 9, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1245422350, 'comment_body': 'Same here', 'comment_created': datetime.datetime(2023, 6, 28, 15, 41, 18, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1246052828, 'comment_body': 'Already raised in https://github.com/Rust-GCC/gccrs/issues/2309', 'comment_created': datetime.datetime(2023, 6, 29, 3, 26, 37, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}]","[{'commit_sha': '760ed460b5728195782e7746998215ae210ec779', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1406192796,Fix lexing byte literal,"closes #2308
+```
+gcc/rust/ChangeLog:
+
+	* lex/rust-lex.cc (Lexer::parse_byte_char):add check for range of codepoint
+
+gcc/testsuite/ChangeLog:
+
+	* rust/compile/bytecharstring.rs:add test for it
+```
+
+NOTE: this pr depends on (includes commit from) PR https://github.com/Rust-GCC/gccrs/pull/2307
+so please merge this after PR https://github.com/Rust-GCC/gccrs/pull/2307 is merged",True,2320,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2320,https://github.com/Rust-GCC/gccrs/pull/2320,closed,9,2,2,1,4,0,1,0,[{'name': 'bug'}],2023-06-24 14:13:35+00:00,2023-06-30 15:05:35+00:00,521520.0,"6 days, 0:52:00",[],"[{'commit_sha': '3c3f2b2f7c036f3bd38070d43c6f73a05b8f21b1', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1411330665,Missing tests for utf-8 identifiers,"Addresses https://github.com/Rust-GCC/gccrs/issues/2287
+
+This pr is going to be rebased after https://github.com/Rust-GCC/gccrs/pull/2307 is merged
+
+```
+gcc/testsuite/ChangeLog:
+
+	* rust/compile/torture/raw_identifiers.rs: New test.
+	* rust/compile/torture/utf8_identifiers.rs: New test.
+
+Signed-off-by: Raiki Tamura <tamaron1203@gmail.com>
+```",True,2338,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2338,https://github.com/Rust-GCC/gccrs/pull/2338,closed,26,0,2,1,1,0,1,0,[{'name': 'enhancement'}],2023-06-28 09:37:51+00:00,2023-06-29 13:20:15+00:00,99744.0,"1 day, 3:42:24",[],"[{'commit_sha': '68ed3794f6424aca28c4247df4f02270f9903ce7', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1411390209,Fix lexer to skip utf-8 whitespaces,"Addresses https://github.com/Rust-GCC/gccrs/issues/2287
+
+This pr is going to be rebased after https://github.com/Rust-GCC/gccrs/pull/2307 is merged
+
+```
+gcc/rust/ChangeLog:
+
+	* lex/rust-lex.cc (Lexer::build_token):add check for all kinds of whitespaces
+
+gcc/testsuite/ChangeLog:
+
+	* rust/compile/torture/utf8_whitespaces.rs: New test.
+```",True,2339,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2339,https://github.com/Rust-GCC/gccrs/pull/2339,closed,27,2,2,1,1,0,1,0,[{'name': 'enhancement'}],2023-06-28 10:18:02+00:00,2023-06-29 13:07:52+00:00,96590.0,"1 day, 2:49:50",[],"[{'commit_sha': 'cc9e18523da9a7f2ed61eeb5ab86f68d939870ce', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1412786137,Remove unnecessary methods/fields of `Rust::Lexer`,"Addresses #2309
+
+```
+gccrs: Remove unnecessary methods of Rust::Lexer
+gcc/rust/ChangeLog:
+
+	* lex/rust-lex.cc (Lexer::build_token): Replace function call.
+	(Lexer::parse_string): Likewise.
+	(Lexer::parse_identifier_or_keyword): Likewise.
+	(Lexer::parse_raw_string): Likewise.
+	(Lexer::parse_char_or_lifetime): Likewise.
+	(Lexer::get_input_codepoint_length): Deleted.
+	(Lexer::peek_codepoint_input): Deleted.
+	(Lexer::skip_codepoint_input): Deleted.
+	* lex/rust-lex.h: Remove some methods and fields
+```
+",True,2347,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2347,https://github.com/Rust-GCC/gccrs/pull/2347,closed,50,83,2,1,2,3,1,0,[{'name': 'cleanup'}],2023-06-29 06:10:52+00:00,2023-07-03 09:31:06+00:00,357614.0,"4 days, 3:20:14","[{'comment_id': 1246157048, 'comment_body': ""This line should be removed but can't.\r\n`parse_utf8_escape()` seems not to update `current_char` properly."", 'comment_created': datetime.datetime(2023, 6, 29, 6, 14, 31, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1246158477, 'comment_body': 'These functions are unnecessary so deleted in this pr(See https://github.com/Rust-GCC/gccrs/pull/2307)', 'comment_created': datetime.datetime(2023, 6, 29, 6, 16, 19, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1246160943, 'comment_body': 'This field was added to parse Unicode identifiers via https://github.com/Rust-GCC/gccrs/pull/2284 but is unnecessary now.', 'comment_created': datetime.datetime(2023, 6, 29, 6, 19, 27, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}]","[{'commit_sha': '69d0ad003292edd73a40baa9c24a562a9dac552b', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1419439451,Add utf-8 validation for input source,"Addresses https://github.com/Rust-GCC/gccrs/issues/2287
+```
+gcc/rust/ChangeLog:
+
+	* lex/rust-lex.cc (Lexer::input_source_is_valid_utf8): New method of `Lexer`.
+	* lex/rust-lex.h: Likewise.
+	* rust-session-manager.cc (Session::compile_crate): Add error.
+
+gcc/testsuite/ChangeLog:
+
+	* rust/compile/broken_utf8.rs: New test.
+```",True,2374,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2374,https://github.com/Rust-GCC/gccrs/pull/2374,closed,24,7,4,1,1,6,1,0,[{'name': 'enhancement'}],2023-07-04 10:49:53+00:00,2023-07-06 16:57:39+00:00,194866.0,"2 days, 6:07:46","[{'comment_id': 1251866499, 'comment_body': 'Changed `input` from `uint8_t` to `uint32_t` so as to differentiate `0xff` and EOF.', 'comment_created': datetime.datetime(2023, 7, 4, 10, 56, 12, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1251867980, 'comment_body': 'just a bugfix', 'comment_created': datetime.datetime(2023, 7, 4, 10, 57, 14, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1251868152, 'comment_body': 'Added casting to prevend bytes whose MSB is 1 from being sign-extended.\r\nWithout casting , for example, `0xfe` becomes `0xfffffffe`.', 'comment_created': datetime.datetime(2023, 7, 4, 10, 57, 21, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1251869372, 'comment_body': 'Contains a `0xff` in line 2.', 'comment_created': datetime.datetime(2023, 7, 4, 10, 58, 20, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1251873329, 'comment_body': 'bugfix too', 'comment_created': datetime.datetime(2023, 7, 4, 11, 2, 7, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1251876230, 'comment_body': 'Not ÿ (`U+FF`) as we see.', 'comment_created': datetime.datetime(2023, 7, 4, 11, 4, 43, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}]","[{'commit_sha': '2f5ad8e2644b56168b0fc1c68b6e7204a1939a3d', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1434201099,Add header file generator for Unicode normalization and alphanumeric check,"Addresses https://github.com/Rust-GCC/gccrs/issues/2379
+
+This PR adds a header file generator written in python, which creates rust-unicode-data.h.
+Also this PR adds initial implementation of Unicode normalization and is_numeric and is_alphabetic functions.
+
+```
+gcc/rust/ChangeLog:
+
+	* Make-lang.in: Add rust-unicode.o
+	* rust-lang.cc (run_rust_tests): Add test.
+	* util/make-rust-unicode.py: Generater of rust-unicode-data.h.
+	* util/rust-unicode-data.h: Auto-generated file.
+	* util/rust-unicode.cc: New file.
+	* util/rust-unicode.h: New file.
+```
+
+
+Unicode normalization is defined in https://unicode.org/reports/tr15/ (UAX15)
+UAX15's implementation notes: https://unicode.org/reports/tr15/#Implementation_Notes
+I looked at https://www.w3.org/International/charlint/ as reference implementation
+",True,2425,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2425,https://github.com/Rust-GCC/gccrs/pull/2425,closed,5879,0,7,1,2,14,1,0,[{'name': 'enhancement'}],2023-07-14 05:50:51+00:00,2023-07-29 16:55:09+00:00,1335858.0,"15 days, 11:04:18","[{'comment_id': 1270221316, 'comment_body': 'This function performs Unicode normalization of the given string and is going to be ported via `rust-unicode.h`.\r\nCurrently `string_t` aliases `std::vector<uint32_t>`, but it will be replaced with the class `Utf8String`, introduced in PR https://github.com/Rust-GCC/gccrs/pull/2463', 'comment_created': datetime.datetime(2023, 7, 21, 4, 50, 11, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1275951153, 'comment_body': ""I think this is a very good first implementation of the script :) For future maintainability, I think it would be helpful to add types to the script so we can run it with `mypy`. But this is already very good, don't change it in this PR"", 'comment_created': datetime.datetime(2023, 7, 27, 8, 53, 9, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1275959683, 'comment_body': 'Can we maybe use something like https://en.cppreference.com/w/cpp/algorithm/binary_search?', 'comment_created': datetime.datetime(2023, 7, 27, 8, 58, 24, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1275960586, 'comment_body': ""Same here. I've never used `std::binary_search` so it might be completely wrong"", 'comment_created': datetime.datetime(2023, 7, 27, 8, 59, 1, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1275961088, 'comment_body': 'is that an error or is that okay?', 'comment_created': datetime.datetime(2023, 7, 27, 8, 59, 27, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1275962106, 'comment_body': '```suggestion\r\n      for (codepoint_t cp : decomped)\r\n\t  recursive_decomp_cano (cp, buf);\r\n```\r\n\r\nGNU style nit', 'comment_created': datetime.datetime(2023, 7, 27, 9, 0, 5, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1275962738, 'comment_body': 'dead code?', 'comment_created': datetime.datetime(2023, 7, 27, 9, 0, 29, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1275963310, 'comment_body': 'dead code?', 'comment_created': datetime.datetime(2023, 7, 27, 9, 0, 38, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1278532093, 'comment_body': ""I'm not sure because elements of this array represents a range which is unusual\r\nbut added comments in https://github.com/Rust-GCC/gccrs/pull/2463\r\n"", 'comment_created': datetime.datetime(2023, 7, 30, 8, 40, 17, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278532168, 'comment_body': 'Yes! added comments in https://github.com/Rust-GCC/gccrs/pull/2463', 'comment_created': datetime.datetime(2023, 7, 30, 8, 40, 52, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278532713, 'comment_body': 'it is OK.\r\nEach codepoints has a CCC value. CCC of almost all characters is 0 (, meaning Starter property).\r\nTo minimize table size, our table manages only entries whose CCC is not 0.', 'comment_created': datetime.datetime(2023, 7, 30, 8, 45, 24, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278532802, 'comment_body': 'fixed in https://github.com/Rust-GCC/gccrs/pull/2463', 'comment_created': datetime.datetime(2023, 7, 30, 8, 46, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278532818, 'comment_body': 'fixed in https://github.com/Rust-GCC/gccrs/pull/2463', 'comment_created': datetime.datetime(2023, 7, 30, 8, 46, 7, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278532828, 'comment_body': 'fixed in https://github.com/Rust-GCC/gccrs/pull/2463', 'comment_created': datetime.datetime(2023, 7, 30, 8, 46, 11, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}]","[{'commit_sha': '86bfc841a7bc7c015c8d853627a67074bcc03308', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1443890019,Unicode check for crate_name attribute,"depends on PR https://github.com/Rust-GCC/gccrs/pull/2425
+Addresses https://github.com/Rust-GCC/gccrs/issues/2287
+
+Modify the function `validate_crate_name` to check if the crate name contains only Unicode alphabetic and numeric.
+See https://doc.rust-lang.org/reference/crates-and-source-files.html#the-crate_name-attribute
+
+```
+gcc/rust/ChangeLog:
+
+	* lex/rust-codepoint.h: Add comment
+	* lex/rust-lex.h: New method to get decoded characters
+	* rust-session-manager.cc (validate_crate_name): Modify unicode check
+	(rust_crate_name_validation_test): Add testcases
+	* util/rust-unicode.h (RUST_UNICODE_H): New class Utf8String.
+	(class Utf8String): New class.
+
+gcc/testsuite/ChangeLog:
+
+	* rust/compile/bad-crate-name.rs: Moved to...
+	* rust/compile/bad-crate-name1.rs: ...here.
+	* rust/compile/bad-crate-name2.rs: New test.
+
+Signed-off-by: Raiki Tamura <tamaron1203@gmail.com>
+```",True,2463,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2463,https://github.com/Rust-GCC/gccrs/pull/2463,closed,59,29,7,1,2,14,1,0,[{'name': 'enhancement'}],2023-07-21 04:14:43+00:00,2023-07-30 18:13:58+00:00,827955.0,"9 days, 13:59:15","[{'comment_id': 1270212484, 'comment_body': 'I think this class should be moved to rust-unicode.h. \r\nAt least it should not be put in under gcc/rust/lex/.', 'comment_created': datetime.datetime(2023, 7, 21, 4, 28, 7, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1270214121, 'comment_body': 'this original comment is probably wrong.\r\nThe kanji 惊(U+60CA) are not categorized as Alphabetic.\r\n\r\nIn https://www.unicode.org/Public/14.0.0/ucd/DerivedCoreProperties.txt\r\n```\r\n...\r\n30FF          ; Alphabetic # Lo       KATAKANA DIGRAPH KOTO\r\n3105..312F    ; Alphabetic # Lo  [43] BOPOMOFO LETTER B..BOPOMOFO LETTER NN\r\n3131..318E    ; Alphabetic # Lo  [94] HANGUL LETTER KIYEOK..HANGUL LETTER ARAEAE\r\n31A0..31BF    ; Alphabetic # Lo  [32] BOPOMOFO LETTER BU..BOPOMOFO LETTER AH\r\n31F0..31FF    ; Alphabetic # Lo  [16] KATAKANA LETTER SMALL KU..KATAKANA LETTER SMALL RO\r\n3400..4DBF    ; Alphabetic # Lo [6592] CJK UNIFIED IDEOGRAPH-3400..CJK UNIFIED IDEOGRAPH-4DBF\r\n4E00..A014    ; Alphabetic # Lo [21013] CJK UNIFIED IDEOGRAPH-4E00..YI SYLLABLE E\r\nA015          ; Alphabetic # Lm       YI SYLLABLE WU\r\nA016..A48C    ; Alphabetic # Lo [1143] YI SYLLABLE BIT..YI SYLLABLE YYR\r\nA4D0..A4F7    ; Alphabetic # Lo  [40] LISU LETTER BA..LISU LETTER OE\r\n...\r\n```', 'comment_created': datetime.datetime(2023, 7, 21, 4, 32, 11, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1275998099, 'comment_body': 'that seems good to me', 'comment_created': datetime.datetime(2023, 7, 27, 9, 19, 22, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1276000686, 'comment_body': 'maybe it would be clearer to add a temporary variable after the first `if (!uchars.has_value())`? You keep calling `uchars.value()` which maybe hurts readability just a little bit?', 'comment_created': datetime.datetime(2023, 7, 27, 9, 20, 27, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1276001057, 'comment_body': 'So I would rename this variable to `uchars_opt`', 'comment_created': datetime.datetime(2023, 7, 27, 9, 20, 38, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1276001791, 'comment_body': 'and then add this\r\n\r\n```suggestion\r\n    }\r\nauto uchars = uchars_opt.value();\r\n```', 'comment_created': datetime.datetime(2023, 7, 27, 9, 21, 15, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1276002260, 'comment_body': 'thanks for checking haha. did you try it with `rustc` directly?', 'comment_created': datetime.datetime(2023, 7, 27, 9, 21, 39, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1276003730, 'comment_body': ""this function would probably benefit from the new `tl::expected` type we have, but that's a problem for another PR!"", 'comment_created': datetime.datetime(2023, 7, 27, 9, 22, 34, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1278449727, 'comment_body': 'I was about to say a nit here to move the private fields to the bottom of the class declaration but then i realised we do it this style in AST and HIR classes.\r\n\r\nWhat is the GCC style? I think having them at the top like this is probably the best now when i think about it.\r\n\r\n@dkm @CohenArthur @tschwinge any opinions on the style of putting private fields at the top of the class or bottom?', 'comment_created': datetime.datetime(2023, 7, 29, 23, 1, 49, tzinfo=datetime.timezone.utc), 'commenter': 'philberty', 'type': 'User'}, {'comment_id': 1278529711, 'comment_body': 'oh my god.  i just checked and rustc compiles it (@_@)', 'comment_created': datetime.datetime(2023, 7, 30, 8, 22, 6, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278531130, 'comment_body': 'Sounds good. fixed', 'comment_created': datetime.datetime(2023, 7, 30, 8, 33, 13, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1278534577, 'comment_body': 'I overlooked `4E00..A014` containing `0x60CA` haha', 'comment_created': datetime.datetime(2023, 7, 30, 8, 58, 21, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1280182318, 'comment_body': ""hahaha no worries it's all good :D"", 'comment_created': datetime.datetime(2023, 8, 1, 6, 54, 24, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1280183875, 'comment_body': 'I like having private fields at the bottom of my classes personally. I never gave it much attention haha', 'comment_created': datetime.datetime(2023, 8, 1, 6, 56, 4, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}]","[{'commit_sha': '467dc47e9a3c54585272a3964dae39d9f8d2f5fc', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1455847424,fix bootstrap build,Closes #2487,True,2492,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2492,https://github.com/Rust-GCC/gccrs/pull/2492,closed,1,1,1,1,1,0,1,0,[{'name': 'bug'}],2023-07-31 09:06:36+00:00,2023-07-31 13:50:33+00:00,17037.0,4:43:57,[],"[{'commit_sha': '7b18c11752a6668e5bcff15bbd5c9d768c96e0b8', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1464102667,Add type annotation to make-rust-unicode-data.py,"Addresses this comment by @CohenArthur 
+
+> I think this is a very good first implementation of the script :) For future maintainability, I think it would be helpful to add types to the script so we can run it with mypy. But this is already very good, don't change it in this PR
+
+https://github.com/Rust-GCC/gccrs/pull/2425#discussion_r1275951153
+
+Python code was typechecked with mypy 1.4
+
+
+```
+gccrs: Type annotation for make-unicode-data.py
+gcc/rust/ChangeLog:
+
+	* util/make-rust-unicode.py: Add type annotation
+```",True,2529,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2529,https://github.com/Rust-GCC/gccrs/pull/2529,closed,36,32,1,1,0,0,1,0,[{'name': 'cleanup'}],2023-08-06 09:59:49+00:00,2023-08-12 20:20:49+00:00,555660.0,"6 days, 10:21:00",[],"[{'commit_sha': 'd440331e0ce2a3eb3bd2a909e6e6c0aa424d2d90', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1417570778,Add location info to `Rust::Identifier`,"Fixes https://github.com/Rust-GCC/gccrs/issues/2333
+
+```
+gcc/rust/ChangeLog:
+
+	* ast/rust-ast.h: Modify constructors of `Rust::Identifier`
+	* ast/rust-pattern.h: Likewise.
+	* hir/tree/rust-hir-item.h: Likewise.
+	* parse/rust-parse-impl.h (Parser::parse_macro_rules_def): Likewise.
+	(Parser::parse_decl_macro_def): Likewise.
+	(Parser::parse_macro_match_fragment): Likewise.
+	(Parser::parse_module): Likewise.
+	(Parser::parse_use_tree): Likewise.
+	(Parser::parse_function): Likewise.
+	(Parser::parse_type_param): Likewise.
+	(Parser::parse_type_alias): Likewise.
+	(Parser::parse_struct): Likewise.
+	(Parser::parse_struct_field): Likewise.
+	(Parser::parse_enum): Likewise.
+	(Parser::parse_enum_item): Likewise.
+	(Parser::parse_union): Likewise.
+	(Parser::parse_static_item): Likewise.
+	(Parser::parse_trait): Likewise.
+	(Parser::parse_trait_item): Likewise.
+	(Parser::parse_trait_type): Likewise.
+	(Parser::parse_trait_const): Likewise.
+	(Parser::parse_external_item): Likewise.
+	(Parser::parse_generic_args_binding): Likewise.
+	(Parser::parse_method): Likewise.
+	(Parser::parse_maybe_named_param): Likewise.
+	(Parser::parse_identifier_pattern): Likewise.
+	(Parser::parse_struct_expr_field): Likewise.
+	(ResolveItem::visit): Likewise.
+	* typecheck/rust-hir-type-check-implitem.cc (TypeCheckImplItem::visit):Add comments
+	* resolve/rust-ast-resolve-item.cc (ResolveTraitItems::visit): Likewise.
+	* checks/lints/rust-lint-scan-deadcode.h: Fix error location
+```",True,2364,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2364,https://github.com/Rust-GCC/gccrs/pull/2364,closed,64,45,7,1,2,2,1,0,[{'name': 'cleanup'}],2023-07-03 07:58:50+00:00,2023-07-06 11:40:53+00:00,272523.0,"3 days, 3:42:03","[{'comment_id': 1250679978, 'comment_body': 'I fixed error location only in check for unused functions.\r\nOf course, other error location should be fixed in another PR.', 'comment_created': datetime.datetime(2023, 7, 3, 10, 42, 16, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1251492238, 'comment_body': 'Thanks for doing that but you are correct the location info like this is a much bigger issue and outside of scope for your google summer of code project so this PR is more than enough.', 'comment_created': datetime.datetime(2023, 7, 4, 5, 14, 27, tzinfo=datetime.timezone.utc), 'commenter': 'philberty', 'type': 'User'}]","[{'commit_sha': 'cec2b39352822ff42d417d5c9394fda32738482b', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1446276442,Normalize Hangul,"Addresses https://github.com/Rust-GCC/gccrs/issues/2379
+depends on PR https://github.com/Rust-GCC/gccrs/pull/2425
+
+```
+gccrs: Normalize Hangul to NFC
+gcc/rust/ChangeLog:
+
+	* util/rust-unicode.cc (decomp_cano): Decompose Hangul.
+	(sort_cano): Fix bounds check.
+	(recomp): use `compose_hangul`.
+	(compose_hangul): Compose Hangul.
+	(rust_utf8_normalize_test): Add tests.
+
+Signed-off-by: Raiki Tamura <tamaron1203@gmail.com>
+```
+
+More tests will be added in another PR.
+
+See: Sample Code for Hangul Algorithms
+https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf
+",True,2467,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2467,https://github.com/Rust-GCC/gccrs/pull/2467,closed,123,33,1,1,2,2,1,0,[{'name': 'enhancement'}],2023-07-24 08:31:18+00:00,2023-08-02 08:30:12+00:00,777534.0,"8 days, 23:58:54","[{'comment_id': 1276015909, 'comment_body': 'dead code?', 'comment_created': datetime.datetime(2023, 7, 27, 9, 33, 8, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1278535192, 'comment_body': 'fixed in https://github.com/Rust-GCC/gccrs/pull/2463', 'comment_created': datetime.datetime(2023, 7, 30, 9, 3, 34, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}]","[{'commit_sha': 'c9cf8f826ab3c7a902d685518828bfa9e4844e9a', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1464108944,Move Codepoint to gcc/rust/util/,"~~depends on https://github.com/Rust-GCC/gccrs/pull/2489~~
+
+```
+gccrs: Move Codepoint to gcc/rust/util/
+gcc/rust/ChangeLog:
+
+	* lex/rust-codepoint.h: Moved to...
+	* util/rust-codepoint.h: ...here.
+	* lex/rust-input-source.h: Add missing license
+	* util/rust-unicode.cc: Add missing license
+```",True,2530,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2530,https://github.com/Rust-GCC/gccrs/pull/2530,closed,66,26,4,1,2,0,1,0,[{'name': 'enhancement'}],2023-08-06 10:19:28+00:00,2023-08-11 14:37:18+00:00,447470.0,"5 days, 4:17:50",[],"[{'commit_sha': 'ae4d3d21cc3708f01e8a40805c139b98a428c7d5', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1464947067,Implement punycode encoding,"Addresses https://github.com/Rust-GCC/gccrs/issues/2287 , https://github.com/Rust-GCC/gccrs/issues/305
+Depends on https://github.com/Rust-GCC/gccrs/pull/2489
+
+Added an punycode encoding function, which will be used in the v0 mangling scheme.
+Decoder is not necessary because we do not need to demangle symbols.
+
+```
+gcc/rust/ChangeLog:
+
+	* Make-lang.in: Add rust-punycode.o.
+	* rust-lang.cc (run_rust_tests): Add selftest.
+	* util/rust-punycode.cc: New file.
+	* util/rust-punycode.h: New file.
+
+Signed-off-by: Raiki Tamura <tamaron1203@gmail.com>
+```",True,2533,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2533,https://github.com/Rust-GCC/gccrs/pull/2533,closed,229,0,4,1,1,14,1,0,[{'name': 'enhancement'}],2023-08-07 10:06:14+00:00,2023-08-09 13:41:22+00:00,185708.0,"2 days, 3:35:08","[{'comment_id': 1285757528, 'comment_body': 'There are *a lot* of hardcoded values. Would it be possible to give those values a name ? This could be achieved throught `#define`, or even better, with typed const values.\r\n\r\nHere, someone new to unicode (and this code) could not grasp what this condition even test.\r\n\r\nActually you may even want to put those constant in their own separate header ?', 'comment_created': datetime.datetime(2023, 8, 7, 11, 46, 50, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1285763743, 'comment_body': 'Why not changing this to an `InputSource` constructor ? This would allow you to avoid calling it in any derived class.', 'comment_created': datetime.datetime(2023, 8, 7, 11, 53, 47, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1285766138, 'comment_body': ""I'm not sure about this cast. I mean, it doesn't even correspond to the return type. Are you trying to get rid of the upper bits ? Also, I would probably change this to a `static_cast`."", 'comment_created': datetime.datetime(2023, 8, 7, 11, 56, 25, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1285766659, 'comment_body': '`InputSource` default constructor is called implicitely. ', 'comment_created': datetime.datetime(2023, 8, 7, 11, 56, 57, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1285814832, 'comment_body': 'Yes, this cast avoids a value from beign sign-extended.\r\nstatic_cast is better.', 'comment_created': datetime.datetime(2023, 8, 7, 12, 45, 53, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1285826358, 'comment_body': 'I forgot why I did like this. But it is definitely better to change it to constuctor. Thank you.', 'comment_created': datetime.datetime(2023, 8, 7, 12, 54, 16, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1285865287, 'comment_body': 'I just tried moving code inside `void init()` to the ctor of `InputSource`, but segfault happens before or during the ctor of super classes.\r\n`next_byte()` is defined as virtual so, I think, `next_byte` is not initialized when it is called.\r\nhttps://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors\r\n\r\nSo I will leave `init()` as is.\r\n(I might be completely wrong though)', 'comment_created': datetime.datetime(2023, 8, 7, 13, 25, 20, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1285887241, 'comment_body': ""Oh ok, I didn't see that. keep it as is then. Could you please add a comment documenting this behavior ? I'm almost sure someone will ask the same thing in the upcoming years :laughing: "", 'comment_created': datetime.datetime(2023, 8, 7, 13, 43, 14, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1285891323, 'comment_body': 'Thanks. Fixed in https://github.com/Rust-GCC/gccrs/pull/2530', 'comment_created': datetime.datetime(2023, 8, 7, 13, 46, 34, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1285891883, 'comment_body': 'Fixed in https://github.com/Rust-GCC/gccrs/pull/2530', 'comment_created': datetime.datetime(2023, 8, 7, 13, 47, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1285898483, 'comment_body': 'Yes! Added comments in https://github.com/Rust-GCC/gccrs/pull/2530', 'comment_created': datetime.datetime(2023, 8, 7, 13, 52, 18, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1288334919, 'comment_body': ""I'd like some comments here to describe the behavior of this function. Newcomers should be able to understand why and where do these values come from."", 'comment_created': datetime.datetime(2023, 8, 9, 11, 22, 5, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1288379572, 'comment_body': 'This function comes from the reference implementation in the RFC\r\nhttps://datatracker.ietf.org/doc/html/rfc3492\r\n\r\n```\r\n/* encode_digit(d,flag) returns the basic code point whose value      */\r\n/* (when used for representing integers) is d, which needs to be in   */\r\n/* the range 0 to base-1.  The lowercase form is used unless flag is  */\r\n/* nonzero, in which case the uppercase form is used.  The behavior   */\r\n/* is undefined if flag is nonzero and digit d has no uppercase form. */\r\n\r\nstatic char encode_digit(punycode_uint d, int flag)\r\n{\r\n  return d + 22 + 75 * (d < 26) - ((flag != 0) << 5);\r\n  /*  0..25 map to ASCII a..z or A..Z */\r\n  /* 26..35 map to ASCII 0..9         */\r\n}\r\n```\r\n\r\nThese value comes from a bit complicated calculation on parameters specific to Punycode.\r\nI do not completely understand it but I think it is fine as is.', 'comment_created': datetime.datetime(2023, 8, 9, 12, 4, 3, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1288384429, 'comment_body': ""Oh ok. Given you've already provided the link at the top of the file I don't think there's much we can do."", 'comment_created': datetime.datetime(2023, 8, 9, 12, 8, 49, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}]","[{'commit_sha': 'b2e908e2a9942c246f8591e4389a78368e962f77', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1465644628,Add punycode encoding to v0 mangling,"~~Depends on https://github.com/Rust-GCC/gccrs/pull/2533~~
+Please review the last commit
+
+```
+gcc/rust/ChangeLog:
+
+	* backend/rust-mangle.cc (v0_add_identifier): Added punycode encoding
+	(v0_mangle_item): Likewise.
+	* resolve/rust-ast-resolve-toplevel.h: fix typo
+	* rust-session-manager.cc (Session::load_extern_crate): fix typo
+	* util/rust-canonical-path.h: fix typo
+	* util/rust-hir-map.cc (NodeMapping::get_error): fix typo
+	(Mappings::Mappings): fix typo
+	* util/rust-mapping-common.h (UNKNOWN_CREATENUM): fix typo
+	(UNKNOWN_CRATENUM): Change 0 to UINT32_MAX
+```
+
+I manually checked the following cases for `add_v0_identifier`:
+```
+_あ to u5___x7t
+my_crate__ to 10my_crate__
+6foobar
+foobar to 6foobar
+あ to u3l8j
+_あいう to u7___x7tgi
+ああああ to u6l8jaaa
+```",True,2535,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2535,https://github.com/Rust-GCC/gccrs/pull/2535,closed,54,29,7,1,4,13,1,0,[{'name': 'enhancement'}],2023-08-07 17:13:40+00:00,2023-08-18 11:48:25+00:00,930885.0,"10 days, 18:34:45","[{'comment_id': 1286180734, 'comment_body': 'I changed this value because CrateNumItr is initialized to 0, which means a crate compiled first is treated as UNKNOWN_CRATENUM.\r\nref: https://github.com/Rust-GCC/gccrs/pull/894\r\n', 'comment_created': datetime.datetime(2023, 8, 7, 17, 19, 51, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1286182089, 'comment_body': '@philberty ', 'comment_created': datetime.datetime(2023, 8, 7, 17, 20, 49, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1286190335, 'comment_body': 'I am not sure but the same might be also true for UNKNOWN_NODEID, UNKNOWN_HIRID, etc.', 'comment_created': datetime.datetime(2023, 8, 7, 17, 28, 24, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1291080728, 'comment_body': 'Expected vector could be a `const &`', 'comment_created': datetime.datetime(2023, 8, 11, 8, 55, 40, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1291082206, 'comment_body': 'I think we can make this function static', 'comment_created': datetime.datetime(2023, 8, 11, 8, 57, 5, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1291100255, 'comment_body': ""> I changed this value because CrateNumItr is initialized to 0, which means a crate compiled first is treated as UNKNOWN_CRATENUM. ref: #894\r\n\r\nI'm not a fan of putting special values, they should be treated as a completely separate thing (ehehe, rust habits I guess). For now I think this seems mostly ok. At least I can't think of a situation where it break in a realistic scenario. But in the future we might need to handle this properly."", 'comment_created': datetime.datetime(2023, 8, 11, 9, 15, 34, tzinfo=datetime.timezone.utc), 'commenter': 'P-E-P', 'type': 'User'}, {'comment_id': 1291126932, 'comment_body': 'CrateNum field was added to CanonicalPath for the v0 mangling because the field is used as disambiguator in demangled symbols.\r\nActually `CanonicalPath::get_crate_num` internally calls the following assert and fails here:\r\nhttps://github.com/Rust-GCC/gccrs/blob/e55113ea2bf0cec2f8436a576ce6f2bcaacd1c27/gcc/rust/util/rust-canonical-path.h#L174C50-L174C50\r\nSo I have had to modify this value to avoid this assert failure.', 'comment_created': datetime.datetime(2023, 8, 11, 9, 42, 25, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1291141532, 'comment_body': 'Fixed.', 'comment_created': datetime.datetime(2023, 8, 11, 9, 56, 33, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1291146025, 'comment_body': 'Fixed :)', 'comment_created': datetime.datetime(2023, 8, 11, 10, 0, 5, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1292456481, 'comment_body': ""Here thats a good idea @tamaroning raise an issue to do the same with the other ID's"", 'comment_created': datetime.datetime(2023, 8, 12, 19, 28, 9, tzinfo=datetime.timezone.utc), 'commenter': 'philberty', 'type': 'User'}, {'comment_id': 1295990237, 'comment_body': '```suggestion\r\n  rust_assert (uident_opt.has_value());\r\n```', 'comment_created': datetime.datetime(2023, 8, 16, 14, 18, 24, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1295990403, 'comment_body': 'same here', 'comment_created': datetime.datetime(2023, 8, 16, 14, 18, 32, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1295993081, 'comment_body': '```suggestion\r\n    mangled += ""_"";\r\n    \r\n  mangled += punycode;\r\n```\r\n\r\nnitpick', 'comment_created': datetime.datetime(2023, 8, 16, 14, 20, 21, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}]","[{'commit_sha': '443619b923d345c0e7b71b51534c07014434d958', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1472706539,gccrs: Fix legacy mangling to use Unicode escape,"Fix https://github.com/Rust-GCC/gccrs/issues/2545
+
+### Changlog
+```
+gccrs: Fix legacy mangling to use Unicode escape
+gcc/rust/ChangeLog:
+
+	* backend/rust-mangle.cc (legacy_mangle_name): Use Unicode escape
+```
+
+Result of mangling:
+
+input:
+```rust
+pub fn あ() {}
+mod Module {
+    pub fn function_日本語_русский() {}
+}
+fn main() {
+    あ();
+    Module::function_日本語_русский();
+}
+```
+
+output:
+```asm (AMD64)
+...
+_ZN1a7$u3042$17hae3ccdfa81d818e4E:
+	.cfi_startproc
+...
+_ZN1a6Module79function_$u65e5$$u672c$$u8a9e$_$u440$$u443$$u441$$u441$$u43a$$u438$$u438$$u439$17hae3ccdfa81d818e4E:
+	.cfi_startproc
+...
+main:
+.LFB2:
+	.cfi_startproc
+...
+```
+
+Demangle result:
+```
+_ZN1a6Module79function_$u65e5$$u672c$$u8a9e$_$u440$$u443$$u441$$u441$$u43a$$u438$$u438$$u439$17hae3ccdfa81d818e4E
+=> a::Module::function_日本語_русскиий::hae3ccdfa81d818e4
+_ZN1a7$u3042$17hae3ccdfa81d818e4E:
+=> a::あ::hae3ccdfa81d818e4
+```
+Checked with https://online-demangler-iv5u2bxxb-tamaroning.vercel.app/
+",True,2547,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2547,https://github.com/Rust-GCC/gccrs/pull/2547,closed,19,6,1,1,0,0,0,0,[],2023-08-12 07:22:58+00:00,2023-08-12 18:11:09+00:00,38891.0,10:48:11,[],"[{'commit_sha': '49832a4bad4a58cea90c058240a9576eaf4517c9', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+1473291187,`#[no_mangle]` should not be applied to non-ASCII items,"Fixes https://github.com/Rust-GCC/gccrs/issues/2548
+
+```
+gccrs: Check function names with no_mangle.
+gcc/rust/ChangeLog:
+
+	* backend/rust-compile-base.cc (HIRCompileBase::setup_fndecl): Add parameter.
+	* backend/rust-compile-base.h: Likewise.
+	* backend/rust-compile-implitem.cc (CompileTraitItem::visit): Change type of parameter.
+	* backend/rust-compile-item.cc (CompileItem::visit): Likewise.
+	* lex/rust-input-source.h: Move constants to rust-codepoint.h
+	* util/rust-codepoint.h (struct Codepoint): Add is_ascii method.
+	* util/rust-punycode.cc (extract_basic_string): Use it.
+	* lex/rust-lex.cc (Lexer::parse_byte_char): Likewise.
+	* backend/rust-mangle.cc (legacy_mangle_name): Likewise.
+	* util/rust-unicode.cc (is_ascii_only): New function.
+	* util/rust-unicode.h (is_ascii_only): Likewise.
+```
+
+Error diagnostics looks like this:
+```rust
+#[no_mangle]
+pub fn ascii() {}
+
+#[no_mangle]
+pub fn notーascii() {}
+```
+
+```bash
+./gccrs-build/gcc/crab1 a.rs -frust-incomplete-and-experimental-compiler-do-not-use -fdump-tree-gimple
+a.rs:5:8: error: attribute ‘no_mangle’ requires ASCII identifier [E0754]
+    5 | pub fn notーascii() {}
+      |        ^~~~~~~~
+
+```",True,2552,https://api.github.com/repos/Rust-GCC/gccrs/pulls/2552,https://github.com/Rust-GCC/gccrs/pull/2552,closed,39,6,8,1,3,5,0,0,[],2023-08-13 08:46:22+00:00,2023-09-01 13:00:37+00:00,1656855.0,"19 days, 4:14:15","[{'comment_id': 1298309327, 'comment_body': 'will this function be used for anything other than the `#[no_mangle]` attribute? If no, we can skip having the `const char *name` argument. I think it would also be cleaner to have it as a `static void` function in the file rather than a lambda, as C++ lambdas are not super easy to read', 'comment_created': datetime.datetime(2023, 8, 18, 10, 48, 2, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1299168611, 'comment_body': 'Okay. I will fix it later.', 'comment_created': datetime.datetime(2023, 8, 19, 10, 26, 49, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1299671800, 'comment_body': '```suggestion\n\t\t   ""the %<#[no_mangle]%> attribute requires an ASCII identifier"");\n```\n', 'comment_created': datetime.datetime(2023, 8, 21, 6, 41, 20, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}, {'comment_id': 1306321957, 'comment_body': 'Sorry for the late reply! I was busy last week.\r\nThis message comes from this actual rustc\'s message:\r\n```\r\nCompiling playground v0.0.1 (/playground)\r\nerror[[E0754]](https://doc.rust-lang.org/stable/error_codes/E0754.html): `#[no_mangle]` requires ASCII identifier\r\n --> src/main.rs:2:1\r\n  |\r\n2 | pub fn ああ() {}\r\n  | ^^^^^^^^^^^^^\r\n\r\nFor more information about this error, try `rustc --explain E0754`.\r\nerror: could not compile `playground` (bin ""playground"") due to previous error\r\n```', 'comment_created': datetime.datetime(2023, 8, 26, 4, 45, 38, tzinfo=datetime.timezone.utc), 'commenter': 'tamaroning', 'type': 'User'}, {'comment_id': 1308492141, 'comment_body': 'oh, alright!', 'comment_created': datetime.datetime(2023, 8, 29, 9, 33, 59, tzinfo=datetime.timezone.utc), 'commenter': 'CohenArthur', 'type': 'User'}]","[{'commit_sha': 'dbdbd56d4342bde423a5e0793cff0d4d3ccb7798', 'committer_username': 'tamaroning', 'committer_name': 'tamaron', 'committer_email': None, 'commit_date': datetime.datetime(2016, 8, 12, 13, 53, 3, tzinfo=datetime.timezone.utc)}]",tamaron,20992019,,User,,86,,33,53
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+13653100,gccrs,Rust-GCC/gccrs,C++,146,2317,48,3867,213610,449,65,41,"[{'id': 2013230278, 'number': 3125, 'closed': None, 'created': datetime.datetime(2024, 8, 10, 2, 48, 41, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 175, 'deletions': 28, 'state': 'open'}, {'id': 2000661849, 'number': 3115, 'closed': None, 'created': datetime.datetime(2024, 8, 2, 12, 3, 58, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 2216, 'deletions': 0, 'state': 'open'}, {'id': 1995741561, 'number': 3110, 'closed': None, 'created': datetime.datetime(2024, 7, 31, 7, 13, 44, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 76, 'deletions': 25, 'state': 'open'}, {'id': 1656922243, 'number': 2781, 'closed': datetime.datetime(2023, 12, 26, 22, 56, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 26, 5, 27, 45, tzinfo=datetime.timezone.utc), 'time_taken': 62908.0, 'time_delta': '17:28:28', 'additions': 700, 'deletions': 630, 'state': 'closed'}, {'id': 1626695539, 'number': 2769, 'closed': datetime.datetime(2024, 1, 29, 12, 53, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 2, 12, 7, 43, tzinfo=datetime.timezone.utc), 'time_taken': 5013975.0, 'time_delta': '58 days, 0:46:15', 'additions': 280, 'deletions': 82, 'state': 'closed'}, {'id': 1586316171, 'number': 2722, 'closed': datetime.datetime(2023, 11, 15, 10, 27, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 11, 3, 15, 42, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1017903.0, 'time_delta': '11 days, 18:45:03', 'additions': 50, 'deletions': 10, 'state': 'closed'}, {'id': 1526364028, 'number': 2637, 'closed': datetime.datetime(2023, 10, 17, 23, 19, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 22, 10, 40, 52, tzinfo=datetime.timezone.utc), 'time_taken': 2205490.0, 'time_delta': '25 days, 12:38:10', 'additions': 89, 'deletions': 22, 'state': 'closed'}, {'id': 1522336130, 'number': 2633, 'closed': datetime.datetime(2023, 9, 26, 13, 15, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 20, 4, 43, 49, tzinfo=datetime.timezone.utc), 'time_taken': 549081.0, 'time_delta': '6 days, 8:31:21', 'additions': 17, 'deletions': 4, 'state': 'closed'}, {'id': 1509070570, 'number': 2615, 'closed': datetime.datetime(2023, 10, 16, 15, 28, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 10, 8, 34, 33, tzinfo=datetime.timezone.utc), 'time_taken': 3135255.0, 'time_delta': '36 days, 6:54:15', 'additions': 344, 'deletions': 51, 'state': 'closed'}, {'id': 1473291187, 'number': 2552, 'closed': datetime.datetime(2023, 9, 1, 13, 0, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 13, 8, 46, 22, tzinfo=datetime.timezone.utc), 'time_taken': 1656855.0, 'time_delta': '19 days, 4:14:15', 'additions': 39, 'deletions': 6, 'state': 'closed'}, {'id': 1472706539, 'number': 2547, 'closed': datetime.datetime(2023, 8, 12, 18, 11, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 12, 7, 22, 58, tzinfo=datetime.timezone.utc), 'time_taken': 38891.0, 'time_delta': '10:48:11', 'additions': 19, 'deletions': 6, 'state': 'closed'}, {'id': 1465644628, 'number': 2535, 'closed': datetime.datetime(2023, 8, 18, 11, 48, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 7, 17, 13, 40, tzinfo=datetime.timezone.utc), 'time_taken': 930885.0, 'time_delta': '10 days, 18:34:45', 'additions': 54, 'deletions': 29, 'state': 'closed'}, {'id': 1464947067, 'number': 2533, 'closed': datetime.datetime(2023, 8, 9, 13, 41, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 7, 10, 6, 14, tzinfo=datetime.timezone.utc), 'time_taken': 185708.0, 'time_delta': '2 days, 3:35:08', 'additions': 229, 'deletions': 0, 'state': 'closed'}, {'id': 1464108944, 'number': 2530, 'closed': datetime.datetime(2023, 8, 11, 14, 37, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 6, 10, 19, 28, tzinfo=datetime.timezone.utc), 'time_taken': 447470.0, 'time_delta': '5 days, 4:17:50', 'additions': 66, 'deletions': 26, 'state': 'closed'}, {'id': 1464102667, 'number': 2529, 'closed': datetime.datetime(2023, 8, 12, 20, 20, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 6, 9, 59, 49, tzinfo=datetime.timezone.utc), 'time_taken': 555660.0, 'time_delta': '6 days, 10:21:00', 'additions': 36, 'deletions': 32, 'state': 'closed'}, {'id': 1455847424, 'number': 2492, 'closed': datetime.datetime(2023, 7, 31, 13, 50, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 31, 9, 6, 36, tzinfo=datetime.timezone.utc), 'time_taken': 17037.0, 'time_delta': '4:43:57', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1455106329, 'number': 2489, 'closed': datetime.datetime(2023, 8, 9, 11, 5, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 30, 10, 57, 11, tzinfo=datetime.timezone.utc), 'time_taken': 864519.0, 'time_delta': '10 days, 0:08:39', 'additions': 304, 'deletions': 228, 'state': 'closed'}, {'id': 1446276442, 'number': 2467, 'closed': datetime.datetime(2023, 8, 2, 8, 30, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 8, 31, 18, tzinfo=datetime.timezone.utc), 'time_taken': 777534.0, 'time_delta': '8 days, 23:58:54', 'additions': 123, 'deletions': 33, 'state': 'closed'}, {'id': 1443890019, 'number': 2463, 'closed': datetime.datetime(2023, 7, 30, 18, 13, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 21, 4, 14, 43, tzinfo=datetime.timezone.utc), 'time_taken': 827955.0, 'time_delta': '9 days, 13:59:15', 'additions': 59, 'deletions': 29, 'state': 'closed'}, {'id': 1434201099, 'number': 2425, 'closed': datetime.datetime(2023, 7, 29, 16, 55, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 14, 5, 50, 51, tzinfo=datetime.timezone.utc), 'time_taken': 1335858.0, 'time_delta': '15 days, 11:04:18', 'additions': 5879, 'deletions': 0, 'state': 'closed'}, {'id': 1427111587, 'number': 2396, 'closed': datetime.datetime(2023, 7, 21, 4, 44, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 10, 9, 4, 17, tzinfo=datetime.timezone.utc), 'time_taken': 934824.0, 'time_delta': '10 days, 19:40:24', 'additions': 19466, 'deletions': 0, 'state': 'closed'}, {'id': 1419439451, 'number': 2374, 'closed': datetime.datetime(2023, 7, 6, 16, 57, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 10, 49, 53, tzinfo=datetime.timezone.utc), 'time_taken': 194866.0, 'time_delta': '2 days, 6:07:46', 'additions': 24, 'deletions': 7, 'state': 'closed'}, {'id': 1417570778, 'number': 2364, 'closed': datetime.datetime(2023, 7, 6, 11, 40, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 3, 7, 58, 50, tzinfo=datetime.timezone.utc), 'time_taken': 272523.0, 'time_delta': '3 days, 3:42:03', 'additions': 64, 'deletions': 45, 'state': 'closed'}, {'id': 1412786137, 'number': 2347, 'closed': datetime.datetime(2023, 7, 3, 9, 31, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 29, 6, 10, 52, tzinfo=datetime.timezone.utc), 'time_taken': 357614.0, 'time_delta': '4 days, 3:20:14', 'additions': 50, 'deletions': 83, 'state': 'closed'}, {'id': 1411390209, 'number': 2339, 'closed': datetime.datetime(2023, 6, 29, 13, 7, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 28, 10, 18, 2, tzinfo=datetime.timezone.utc), 'time_taken': 96590.0, 'time_delta': '1 day, 2:49:50', 'additions': 27, 'deletions': 2, 'state': 'closed'}, {'id': 1411330665, 'number': 2338, 'closed': datetime.datetime(2023, 6, 29, 13, 20, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 28, 9, 37, 51, tzinfo=datetime.timezone.utc), 'time_taken': 99744.0, 'time_delta': '1 day, 3:42:24', 'additions': 26, 'deletions': 0, 'state': 'closed'}, {'id': 1406192796, 'number': 2320, 'closed': datetime.datetime(2023, 6, 30, 15, 5, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 24, 14, 13, 35, tzinfo=datetime.timezone.utc), 'time_taken': 521520.0, 'time_delta': '6 days, 0:52:00', 'additions': 9, 'deletions': 2, 'state': 'closed'}, {'id': 1397164721, 'number': 2307, 'closed': datetime.datetime(2023, 6, 28, 16, 31, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 18, 14, 35, 16, tzinfo=datetime.timezone.utc), 'time_taken': 870948.0, 'time_delta': '10 days, 1:55:48', 'additions': 341, 'deletions': 411, 'state': 'closed'}, {'id': 1385386715, 'number': 2284, 'closed': datetime.datetime(2023, 6, 20, 8, 57, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 9, 2, 34, 8, tzinfo=datetime.timezone.utc), 'time_taken': 973384.0, 'time_delta': '11 days, 6:23:04', 'additions': 104, 'deletions': 32, 'state': 'closed'}, {'id': 1170410322, 'number': 1708, 'closed': datetime.datetime(2023, 1, 9, 16, 20, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 12, 19, 8, 58, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1840904.0, 'time_delta': '21 days, 7:21:44', 'additions': 301, 'deletions': 80, 'state': 'closed'}, {'id': 1167139961, 'number': 1706, 'closed': datetime.datetime(2022, 12, 16, 13, 31, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 12, 15, 17, 31, 44, tzinfo=datetime.timezone.utc), 'time_taken': 72007.0, 'time_delta': '20:00:07', 'additions': 291, 'deletions': 4, 'state': 'closed'}, {'id': 1124118135, 'number': 1651, 'closed': datetime.datetime(2022, 11, 28, 12, 20, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 16, 9, 15, 4, tzinfo=datetime.timezone.utc), 'time_taken': 1047910.0, 'time_delta': '12 days, 3:05:10', 'additions': 72, 'deletions': 72, 'state': 'closed'}, {'id': 1115846410, 'number': 1633, 'closed': datetime.datetime(2022, 11, 16, 10, 3, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 9, 10, 15, 29, tzinfo=datetime.timezone.utc), 'time_taken': 604077.0, 'time_delta': '6 days, 23:47:57', 'additions': 20, 'deletions': 0, 'state': 'closed'}]"

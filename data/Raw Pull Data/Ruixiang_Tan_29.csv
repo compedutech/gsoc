@@ -1,0 +1,46 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1049019804,MDEV-26182: Implement JSON_INTERSECT(),"<!--
+Thank you for contributing to the MariaDB Server repository!
+
+You can help us review your changes faster by filling this template <3
+
+If you have any questions related to MariaDB or you just want to
+hang out and meet other community members, please join us on
+https://mariadb.zulipchat.com/ .
+-->
+
+<!--
+If you've already identified a https://jira.mariadb.org/ issue
+that seems to track this bug/feature, please add its number below.
+-->
+- [x] *The Jira issue number for this PR is: MDEV-26182*
+
+<!--
+An amazing description should answer some questions like:
+1. What problem is the patch trying to solve?
+2. If some output changed, what was it looking like before
+   the change and how it's looking with this patch applied
+3. Do you think this patch might introduce side-effects in
+   other parts of the server?
+-->
+## Description
+This pr adds JSON_INTERSECT(). This function can get the intersection between two jsons.
+The behavior of intersection of different types is different. Taking the intersection of two objects is taking their common KV pairs. The intersection of array and array is to take their common elements. There is no intersection between scalar and object. An object and a scalar take an intersection with an array. As long as the object or scalar exists in the array, the intersection is the object or the scalar.
+We put a json into the hash, scan another json, and efficiently get the intersection by reading and updating the hash information.
+
+***NOTE: This pr is for the Google Summer of Code 2022.***
+## How can this PR be tested?
+```./mtr func_json```
+```./mtr json_debug_nonembedded```
+<!--
+Tick one of the following boxes [x] to help us understand
+if the base branch for the PR is correct
+-->
+## Basing the PR against the correct MariaDB version
+- [x] *This is a new feature and the PR is based against the latest MariaDB development branch*
+- [ ] *This is a bug fix and the PR is based against the earliest branch in which the bug can be reproduced*
+
+",False,2261,https://api.github.com/repos/MariaDB/server/pulls/2261,https://github.com/MariaDB/server/pull/2261,open,1417,0,8,1,1,0,0,0,[],2022-09-07 17:03:55+00:00,,0.0,,[],"[{'commit_sha': 'dee4c38f5df43a2497cbd92dd04af5ad2e49656a', 'committer_username': 'tanruixiang', 'committer_name': 'Ruixiang Tan', 'committer_email': 'tanruixiang0104@gmail.com', 'commit_date': datetime.datetime(2017, 12, 15, 8, 43, 35, tzinfo=datetime.timezone.utc)}]",Ruixiang Tan,34568378,tanruixiang0104@gmail.com,User,,25,,46,30
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+19816070,server,MariaDB/server,C++,1667,5510,268,1873,201459,240,2613,240,"[{'id': 1049019804, 'number': 2261, 'closed': None, 'created': datetime.datetime(2022, 9, 7, 17, 3, 55, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1417, 'deletions': 0, 'state': 'open'}]"

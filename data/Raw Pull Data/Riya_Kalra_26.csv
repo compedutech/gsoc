@@ -1,0 +1,50 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+717849822,WIP: Convert virtual systems page to ReactJS,"## What does this PR change?
+
+The project was for GSoC 2021. It aimed at conversion of virtual systems page (https://github.com/uyuni-project/uyuni/blob/master/java/code/webapp/WEB-INF/pages/systems/virtuallist.jsp) from JSP to ReactJS. It also involved enhancing the UI of the newly created ReactJS page.
+
+## GUI diff
+
+No difference.
+
+- [ ] **DONE**
+
+## Documentation
+- No documentation needed: only internal and user invisible changes
+
+- [ ] **DONE**
+
+## Test coverage
+- No tests: **add explanation**
+
+- [ ] **DONE**
+
+## Links
+
+- [ ] **DONE**
+
+## Changelogs
+
+If you don't need a changelog check, please mark this checkbox:
+
+- [ ] No changelog needed
+
+If you uncheck the checkbox after the PR is created, you will need to re-run `changelog_test` (see below)
+
+
+## Re-run a test
+
+If you need to re-run a test, please mark the related checkbox, it will be unchecked automatically once it has re-run:
+
+- [ ] Re-run test ""changelog_test""
+- [ ] Re-run test ""backend_unittests_pgsql""
+- [ ] Re-run test ""java_pgsql_tests""
+- [ ] Re-run test ""schema_migration_test_oracle""
+- [ ] Re-run test ""schema_migration_test_pgsql""
+- [ ] Re-run test ""susemanager_unittests""
+- [ ] Re-run test ""javascript_lint""
+- [ ] Re-run test ""spacecmd_unittests""
+",False,4152,https://api.github.com/repos/uyuni-project/uyuni/pulls/4152,https://github.com/uyuni-project/uyuni/pull/4152,closed,694,33,19,11,2,11,9,0,"[{'name': 'java'}, {'name': 'java_lint_checkstyle'}, {'name': 'java_pgsql_tests'}, {'name': 'API'}, {'name': 'ui'}, {'name': 'javascript_lint'}, {'name': 'old-ui'}, {'name': 'webui-templates'}, {'name': 'spark-router'}]",2021-08-23 13:41:41+00:00,2021-12-16 11:44:42+00:00,9928981.0,"114 days, 22:03:01","[{'comment_id': 702725587, 'comment_body': 'This whole class will not be used any more since this was what was behind the old JSP.\r\n\r\nYou should also remove the corresponding `<action>` in `java/code/webapp/WEB-INF/struts-config.xml` and the corresponding jsp page: `/WEB-INF/pages/systems/virtuallist.jsp`', 'comment_created': datetime.datetime(2021, 9, 6, 8, 53, 41, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 702726756, 'comment_body': ""When looking at the PR global diff that name shouldn't change... just the content of the function. I introduced the `virtualSystemsListNew` version only to allow you to have both pages at the same time."", 'comment_created': datetime.datetime(2021, 9, 6, 8, 55, 16, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 702728230, 'comment_body': 'When looking at the PR global diff this query should just replace `virtual_server`: no need to leave the confusing `_new` around since I only introduced it for you to have the two versions of the page at the same time.', 'comment_created': datetime.datetime(2021, 9, 6, 8, 56, 58, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 702728780, 'comment_body': ""Since the query name shouldn't change that hunk would disappear in the end."", 'comment_created': datetime.datetime(2021, 9, 6, 8, 57, 39, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 702729119, 'comment_body': 'Strange import order configuration in your IDE.', 'comment_created': datetime.datetime(2021, 9, 6, 8, 58, 5, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 702730088, 'comment_body': 'The formatting looks weird here.', 'comment_created': datetime.datetime(2021, 9, 6, 8, 59, 24, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 702730903, 'comment_body': 'Clearly unfinished... did you forget to commit some pieces?', 'comment_created': datetime.datetime(2021, 9, 6, 9, 0, 29, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 756851912, 'comment_body': 'This is not a `POST` but a `GET` request. You need to change to the following:\r\n```suggestion\r\n        get(""/manager/systems/csv/virtualSystems"", withUser(CSVDownloadController::virtualSystemsCSV));\r\n```', 'comment_created': datetime.datetime(2021, 11, 25, 12, 35, 12, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 756852588, 'comment_body': 'Please rebase on latest master to get proper import order', 'comment_created': datetime.datetime(2021, 11, 25, 12, 36, 19, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 756852740, 'comment_body': 'still needs to be addressed', 'comment_created': datetime.datetime(2021, 11, 25, 12, 36, 33, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}, {'comment_id': 757524663, 'comment_body': ""Removing that piece of code is not a good idea: the filtered select all wouldn't work with asynchronous data providers anymore. I'll try to come up with a solution"", 'comment_created': datetime.datetime(2021, 11, 26, 14, 8, 4, tzinfo=datetime.timezone.utc), 'commenter': 'cbosdo', 'type': 'User'}]","[{'commit_sha': 'c4e7b7bf5b8e7aa679faba30f100c7041d345eae', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bb2cb1ee98966a9c6542f0ed49aa08ac6780e662', 'committer_username': 'cbosdo', 'committer_name': 'Cedric Bosdonnat', 'committer_email': None, 'commit_date': datetime.datetime(2010, 9, 13, 19, 27, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76884d2dbbd13e3c4e92eeef09070377c64143aa', 'committer_username': 'cbosdo', 'committer_name': 'Cedric Bosdonnat', 'committer_email': None, 'commit_date': datetime.datetime(2010, 9, 13, 19, 27, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4dcbbc6283871e94ccbc1b3f5c7d181922dba266', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c53f74537ae62ae4a27adcbf3b133876f0430ce2', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a57337581f21716d7cb632db8491cd1b7e2e2b1', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f5d3244cc6123d63bbafe550ea1933e3c74fd4a', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2250246c86f4dd32db7d79e717f181a67f9d3f67', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': '372a0a72b9d20ef548a836d9ffdb9526f8b7d139', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d21b6aa2ab4b195485238617bd4eb2c7213f340', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8955d4d141a183fbbcd1d3259ac46da2a66e1fc', 'committer_username': 'riyakalra', 'committer_name': 'Riya Kalra', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 2, 15, 13, 48, tzinfo=datetime.timezone.utc)}]",Riya Kalra,58433724,,User,,9,,0,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+143291989,uyuni,uyuni-project/uyuni,Java,177,427,38,477,87099,506,104,89,"[{'id': 717849822, 'number': 4152, 'closed': datetime.datetime(2021, 12, 16, 11, 44, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 23, 13, 41, 41, tzinfo=datetime.timezone.utc), 'time_taken': 9928981.0, 'time_delta': '114 days, 22:03:01', 'additions': 694, 'deletions': 33, 'state': 'closed'}, {'id': 682443478, 'number': 3935, 'closed': datetime.datetime(2021, 7, 2, 8, 36, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 2, 8, 35, 30, tzinfo=datetime.timezone.utc), 'time_taken': 89.0, 'time_delta': '0:01:29', 'additions': 86, 'deletions': 15, 'state': 'closed'}]"

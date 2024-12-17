@@ -1,0 +1,111 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+465861826,[GSoC] OpenCV.js: WASM SIMD optimization 2.0,"## Overview
+
+* Proposal: [OpenCV.js: WASM SIMD optimization 2.0](https://docs.google.com/document/d/1a59OL-gmlyywRYw2Dui07u_DvsuqqlL9GuBr52hA9YU/edit)
+* Mentor: Vitaly Tuzov @terfendail, Ningxin Hu @huningxin,
+* Student: Kun Liang @lionkunonly
+
+<cut/>
+
+### This pull request changes
+
+1. Update the version of supported emscripten to 1.39.16 and modify the js files in test and perf test to fit it. Add required emscripten version into opencv.js build instructions.<br>
+2. Implement the type 64 intrinsic and add perf test for some kernels.<br>
+3. Optimize the perf test. Remove the redundant code in the perf test and move the functions that play similar roles into the file `perf_helpfunc.js`. Reconstruct current perf tests.<br>
+4. Add more perf tests for kernels. Supported perf tests: `cvtColor`, `resize`, `threshold`, `Sobel`, `filter2D`, `Scharr`, `gaussianBlur`, `blur`, `medianBlur`, `erode`, `dilate`, `remap`, `warpAffine`, `warpPerspective`, `pyrDown`.<br>
+5. Implement a loader that can detect the features of the browser and load the corresponding version of OpenCV.js automatically. It utilizes the help of [WebAssembly Feature Detection](https://github.com/GoogleChromeLabs/wasm-feature-detect).<br>
+
+### The Test
+Test Environment:
+```
+OS: Ubuntu Linux 18.04.4
+Emscripten: 1.39.16, LLVM upstream backend
+Browser: Chrome, Version 85.0.4183.26 dev (64-bit)
+Hardware: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz with 12 logical cores
+```
+* OpenCV.js tests: all passed
+* Universal Intrinsics WASM backend test: all passed
+* All perf tests: all run successfully
+
+### Results
+* Perf test for 64bit intrinsics
+```
+OS: Ubuntu Linux 18.04.4
+Emscripten: 1.39.16, LLVM upstream backend
+Browser: Chrome, Version 85.0.4183.26 dev (64-bit)
+Hardware: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz with 12 logical cores
+```
+
+|  Function  | Before 64bit implementation (ms) |  After 64bit implementation (ms) | Speedup |
+|---|---|---|---|
+| countNonZero()  | 0.5386 | 0.5221  | 1.032x |
+| Mat::dot() | 0.8079 | 0.7960 | 1.015x |
+| split()  | 2.1213 | 2.0483 |  1.036x |
+| merge() | 2.2383 | 2.2264 | 1.005x  |
+
+The performance of kernels after 64-bit implementation is similar to the performance before implementation.
+
+* Performance of resize kernel with widen instructions
+```
+OS: Ubuntu Linux 18.04.4
+Emscripten: 1.39.16, LLVM upstream backend
+Browser: Chrome, Version 85.0.4183.26 dev (64-bit)
+Hardware: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz with 12 logical cores
+```
+|  Parameters   | Mean time of Scalar | Mean time of SIMD with `shift`(ms)| Speedup | Mean time of SIMD with `widen`(ms) | Speedup |
+|---|---|---|---| ---|---|
+| (CV_8UC4, 1280x720, 640x480)  | 5.113 | 2.888  | 1.77x | 4.031  | 1.27x |
+| (CV_8UC1, 1280x720, 640x480) | 1.870 | 1.128 | 1.66x  | 1.249 | 1.50x |
+
+The perform of the implementation with `widen` instructions does not bring improvement. One of the reasons is that the `wasm_v8x16_shuffle` and `widen` instructions have to be used together. The original implementation is left finally.
+
+* Perf tests
+
+|  Supported Kernels now (lines)  | Supported Kernels before (lines) |
+|---|---|
+| cvtColor (421)  | cvtColor (572) |
+| resize (165) | resize (262) |
+| threshold (158)  | threshold (217) |
+| Sobel (170) | - |
+| filter2D (127) | - |
+| Scharr (156) | - |
+| gaussianBlur (126) | - |
+| blur (130) | - |
+| medianBlur (118) | - |
+| erode (117) | - |
+| dilate (117) | - |
+| remap (182) | - |
+| warpAffine (130) | - |
+| warpPerspective (143) | - |
+| pyrDown (116) | - |
+
+**The collected performance data is stored in the Google Drive.** [Performance data](https://docs.google.com/spreadsheets/d/1lVPdlLLSET1WT7yJZquSLcBgDcVtaExAbFk6Boxwjoo/edit?usp=sharing)
+
+* [Final Report](https://gist.github.com/lionkunonly/bbb50a839faf7acd1543f142d45254f6)
+* [Perf tests and loader demo](https://lionkunonly.github.io/opencvjs/index.html)(May need the latest version of Chrome-Dev)
+* [Video](https://youtu.be/fUQofzvh7mM)
+
+### Performance Analysis
+
+Because there are more than ten kernels are tested and some of them are tested with parameters with different data type and channels, the table that records the performance data is large. So I put the performance data in my personal Google drive.
+
+[Performance data](https://docs.google.com/spreadsheets/d/1lVPdlLLSET1WT7yJZquSLcBgDcVtaExAbFk6Boxwjoo/edit?usp=sharing)
+
+Analysis 
+Based on the collected performance data, the SIMD optimization works as we expected in most situations. It can achieve similar performance as the SSE2 optimization for the native OpenCV. For example, for the kernel `blur` with the parameter `(1280x720, CV_8UC1, BORDER_REPLICATE) ksize=3`, the SIMD version has `1.357x`  speed up and the SSE2 has `1.415x` speed up. Sometimes the SIMD optimization is better. For example, for the kernel `pyrDown` with the parameter `(1920x1080, CV_32FC4)`, the SIMD version has `3.094x` speed up and the SSE2 has `1.83` speed up.  The data that achieves similar or better speed up is tagged with the color green.
+
+However, there still exist some bad cases, for example, for the kernel `blur` with `(1280x720, CV_32FC1, BORDER_REPLICATE) ksize=3`, the SIMD version has `0.519` speed up which is 2x slower than the SSE optimization for native OpenCV. Such data is tagged with the color yellow.
+
+The data tagged with color red means that it is unnormal. In my point of view, some yellow data is brought by the red unnormal data like the kernel `medianBlur` with the parameter `(1280x720, CV_16SC1, 5)`.
+
+I hope the collected data can help people know the gap between the SIMD optimization in the OpenCV.js and the optimization in the native OpenCV better.
+
+```
+force_builders_only=linux,docs,Custom
+buildworker:Custom=linux-4
+build_image:Docs=docs-js
+build_image:Custom=javascript-simd:1.39.16
+```",True,18068,https://api.github.com/repos/opencv/opencv/pulls/18068,https://github.com/opencv/opencv/pull/18068,closed,3502,836,36,11,8,26,3,1,"[{'name': 'optimization'}, {'name': 'GSoC'}, {'name': 'category: javascript (js)'}]",2020-08-11 04:48:38+00:00,2020-10-18 20:30:37+00:00,5931719.0,"68 days, 15:41:59","[{'comment_id': 477053477, 'comment_body': 'Please remove the redundant blank line (just need one).', 'comment_created': datetime.datetime(2020, 8, 26, 6, 2, 50, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477053741, 'comment_body': 'Please insert a space between `try` and `{`.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 3, 41, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477054208, 'comment_body': '`judge` sounds not a good name. how about `checkWasm`?', 'comment_created': datetime.datetime(2020, 8, 26, 6, 5, 2, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477054792, 'comment_body': ""actually, you can check `WebAssembly` by \r\n```js\r\nreturn !(typeof WebAssembly === 'undefined')\r\n```"", 'comment_created': datetime.datetime(2020, 8, 26, 6, 6, 36, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477054971, 'comment_body': 'ditto.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 7, 8, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477055066, 'comment_body': ""could you please document what's the content of the `Unit8Array`?"", 'comment_created': datetime.datetime(2020, 8, 26, 6, 7, 24, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477055285, 'comment_body': 'and you need to call `checkWasm` first.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 8, 2, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477055484, 'comment_body': 'ditto.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 8, 38, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477056034, 'comment_body': 'Keep the name consistent, like `threadsSimdPath`', 'comment_created': datetime.datetime(2020, 8, 26, 6, 10, 5, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477056171, 'comment_body': '`return true`?', 'comment_created': datetime.datetime(2020, 8, 26, 6, 10, 27, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477056208, 'comment_body': '`return false`?', 'comment_created': datetime.datetime(2020, 8, 26, 6, 10, 34, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477056518, 'comment_body': 'Please remove this method and merge its implementation into the constructor.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 11, 31, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477057321, 'comment_body': 'I think you can encapsulate all functions into this method. Do you really need a `loader` object?', 'comment_created': datetime.datetime(2020, 8, 26, 6, 13, 44, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477057834, 'comment_body': '```js\r\nfunction loadOpenCV(paths, onloadCallback) {...}\r\n```\r\nIt would have simpler usage.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 15, 7, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477058550, 'comment_body': 'I think in this case, if developer only provides the `threadsPath` or `simdPath`, it should also work.', 'comment_created': datetime.datetime(2020, 8, 26, 6, 16, 57, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 477463518, 'comment_body': 'Please remove trailing whitespaces', 'comment_created': datetime.datetime(2020, 8, 26, 17, 20, 31, tzinfo=datetime.timezone.utc), 'commenter': 'terfendail', 'type': 'User'}, {'comment_id': 477907329, 'comment_body': 'The `loader` object is not necessary. I think I can try to encapsulate all functions in `loadOpenCV`.', 'comment_created': datetime.datetime(2020, 8, 27, 1, 55, 45, tzinfo=datetime.timezone.utc), 'commenter': 'lionkunonly', 'type': 'User'}, {'comment_id': 477912192, 'comment_body': 'By reading the docs of [wasm-feature-detect](https://github.com/GoogleChromeLabs/wasm-feature-detect), I think my implementation for detecting threads feature and simd feature is good enough. Because the browser will update in the future, which may block my implementation. So, I decide to utilize the [wasm-feature-detect](https://github.com/GoogleChromeLabs/wasm-feature-detect) to solve my problem. Do you agree it ?', 'comment_created': datetime.datetime(2020, 8, 27, 1, 59, 17, tzinfo=datetime.timezone.utc), 'commenter': 'lionkunonly', 'type': 'User'}, {'comment_id': 478051673, 'comment_body': 'It sounds good to me.', 'comment_created': datetime.datetime(2020, 8, 27, 3, 39, 52, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478767950, 'comment_body': '`if (simdSupported && threadsSimdPath === """")`?', 'comment_created': datetime.datetime(2020, 8, 28, 0, 36, 55, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478768628, 'comment_body': 'Put a space between `if` and `(`', 'comment_created': datetime.datetime(2020, 8, 28, 0, 39, 43, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478768963, 'comment_body': '`else if (threadsSupported)`?', 'comment_created': datetime.datetime(2020, 8, 28, 0, 41, 3, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478769085, 'comment_body': '`let pathsConfig`?', 'comment_created': datetime.datetime(2020, 8, 28, 0, 41, 35, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478769227, 'comment_body': 'Add a space after `//`', 'comment_created': datetime.datetime(2020, 8, 28, 0, 42, 7, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478769246, 'comment_body': 'ditto.', 'comment_created': datetime.datetime(2020, 8, 28, 0, 42, 12, tzinfo=datetime.timezone.utc), 'commenter': 'huningxin', 'type': 'User'}, {'comment_id': 478806354, 'comment_body': 'Sorry, it is my fault. This choice should be deleted.', 'comment_created': datetime.datetime(2020, 8, 28, 3, 11, 40, tzinfo=datetime.timezone.utc), 'commenter': 'lionkunonly', 'type': 'User'}]","[{'commit_sha': '6bbb2aaf9b388bad00fa730a26e61eb4041a6e03', 'committer_username': 'lionkunonly', 'committer_name': 'Kun Liang', 'committer_email': 'kun.liang@intel.com', 'commit_date': datetime.datetime(2017, 4, 5, 14, 49, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2f02dfc3a512cbd59ab7e35aa3f4c3727bd0ea65', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'faf95a5c7b73a2f2bc46a36a726a249daf329612', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'c3d8bd363266dd003362fbf64acce28d6063d432', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'e7080bedcd391d97417115b3fbc379125fff206f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'fb4291c4d6c5a503ea829991636fb9d69e99d844', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '961336eb8641b0312d6bcfd5d366724196a39295', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '15f96c616b4904e6b94e2c854a99c6ecb5220251', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '6d06647db2c29c0a70c04eb3e49d33bbb911d889', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f8393678becccaf944ce9b205f9c363cfa90ff46', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b201371bdfb10ab6004810ad26f3f40132b91ffe', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Kun Liang,26929797,kun.liang@intel.com,User,,17,,2,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+5108051,opencv,opencv/opencv,C++,55700,77563,2655,2194,34486,2601,6,134,"[{'id': 599498437, 'number': 19771, 'closed': datetime.datetime(2021, 4, 1, 12, 29, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 24, 8, 47, tzinfo=datetime.timezone.utc), 'time_taken': 704568.0, 'time_delta': '8 days, 3:42:48', 'additions': 84, 'deletions': 17, 'state': 'closed'}, {'id': 465861826, 'number': 18068, 'closed': datetime.datetime(2020, 10, 18, 20, 30, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 11, 4, 48, 38, tzinfo=datetime.timezone.utc), 'time_taken': 5931719.0, 'time_delta': '68 days, 15:41:59', 'additions': 3502, 'deletions': 836, 'state': 'closed'}]"

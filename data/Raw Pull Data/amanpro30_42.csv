@@ -1,0 +1,622 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+591865907,Adding Authentication handlers for API and Web Server,"## Description
+Created the API for login, register, and logout functionality. The register API accepts email, password, confirm_password, and name of the new user, and hence I updated the User model to accommodate the same. The login returns the JWT Token on successful login and sets the cookie for the user. I also created a model for API tokens having user_id and api_key fields and API endpoint for creating API tokens which generate an API token for the authenticated user.
+
+Tried implementing the following:
+- [x]  API handlers for the register, login, and logout functionality.
+- [x] Tokens for OWTF REST API (ideally JWT tokens)
+- [x] A way for users to create API tokens.
+- [x] Users, APITokens models, and integration with current DB schema.
+
+## Related Issue
+Fix for #946 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## How Has This Been Tested?
+I have tested all the APIs using PostMan
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/110978807-d60f0980-8389-11eb-948a-89252f16228e.png)
+![image](https://user-images.githubusercontent.com/37950602/110978950-05257b00-838a-11eb-90c8-e5a1ae813085.png)
+![image](https://user-images.githubusercontent.com/37950602/110979103-3140fc00-838a-11eb-9344-b513a316b1a4.png)
+
+
+
+## Types of changes
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1105,https://api.github.com/repos/owtf/owtf/pulls/1105,https://github.com/owtf/owtf/pull/1105,closed,471,36,10,6,0,26,0,0,[],2021-03-12 18:02:43+00:00,2021-06-16 19:33:51+00:00,8299868.0,"96 days, 1:31:08","[{'comment_id': 646707776, 'comment_body': 'can this be defined in settings and imported here? Its a bad practice to hard-code a secret in code.', 'comment_created': datetime.datetime(2021, 6, 7, 15, 34, 40, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646709080, 'comment_body': 'ditto for lines 18-20 - all of this should be in settings', 'comment_created': datetime.datetime(2021, 6, 7, 15, 35, 32, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646710702, 'comment_body': ""in order for this to work correctly, you should catch exceptions gracefully,\r\n\r\n```\r\nemail = body_data.get('email', None)\r\nif email is not None:\r\n```\r\n"", 'comment_created': datetime.datetime(2021, 6, 7, 15, 36, 40, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646711049, 'comment_body': 'same here', 'comment_created': datetime.datetime(2021, 6, 7, 15, 36, 53, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646712275, 'comment_body': 'instead of setting a cookie, is it possible to use `Authorization: Bearer {}` everywhere - this basically mitigates any CSRF attack at all and makes code simpler by not having to manage cookies.', 'comment_created': datetime.datetime(2021, 6, 7, 15, 37, 49, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646712696, 'comment_body': 'catch exceptions - ditto', 'comment_created': datetime.datetime(2021, 6, 7, 15, 38, 18, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646713075, 'comment_body': 'do you have a test that this regex works as expected?', 'comment_created': datetime.datetime(2021, 6, 7, 15, 38, 45, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646716580, 'comment_body': 'why only a 8 byte salt? the correct usage is to use the default `bcrypt.gensalt()`', 'comment_created': datetime.datetime(2021, 6, 7, 15, 42, 39, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646717218, 'comment_body': 'if we do not manage cookies, the only thing we need to do on a log out is invalidate the JWT of the user - its a much simpler state management than cookies.', 'comment_created': datetime.datetime(2021, 6, 7, 15, 43, 27, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 646717692, 'comment_body': 'ditto - you have multiple places where this ""key"" is defined, it should be in a settings file', 'comment_created': datetime.datetime(2021, 6, 7, 15, 44, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 651077991, 'comment_body': 'can we remove the `cookie_id`?', 'comment_created': datetime.datetime(2021, 6, 14, 15, 59, 31, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 651078088, 'comment_body': 'remove cookie_id', 'comment_created': datetime.datetime(2021, 6, 14, 15, 59, 39, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 651078851, 'comment_body': 'add a default one -> something like ""changeme"" and add a comment to add a new secret key after installation?', 'comment_created': datetime.datetime(2021, 6, 14, 16, 0, 36, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 651204790, 'comment_body': '![image](https://user-images.githubusercontent.com/37950602/121945801-ced50e80-cd71-11eb-94f7-5d91aa8f77c6.png)\r\nAfter installation, showing this message to change the default JWT_SECRET_KEY in settings.py', 'comment_created': datetime.datetime(2021, 6, 14, 19, 7, 55, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651209004, 'comment_body': 'Removed.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 14, 8, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651209274, 'comment_body': 'Yes, there is no need for this now. Updated it in the latest commit.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 14, 36, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651211156, 'comment_body': '![image](https://user-images.githubusercontent.com/37950602/121947036-38095180-cd73-11eb-8ad3-758c62f06ffd.png)\r\nAdded it in settings.py itself and imported it in every file wherever needed.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 17, 53, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651211444, 'comment_body': 'Changed.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 18, 21, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651212654, 'comment_body': '![image](https://user-images.githubusercontent.com/37950602/121947338-91718080-cd73-11eb-99fa-07d4f4ad4922.png)\r\nHandled it at all the required locations.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 20, 28, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651212728, 'comment_body': 'Modified.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 20, 35, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651214385, 'comment_body': 'Removed this part as it is no longer required as I had planned to store JWT token in the client-side and sending it in Authorization header as suggested.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 23, 18, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651214602, 'comment_body': 'Handling it now.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 23, 41, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651214838, 'comment_body': 'Corrected.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 24, 4, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651220710, 'comment_body': 'Noted and changed.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 32, 50, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651226277, 'comment_body': 'Added UserLoginToken model for storing the JWT token of the user which gets revoked when the user logs out.', 'comment_created': datetime.datetime(2021, 6, 14, 19, 41, 44, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651239508, 'comment_body': 'Moved this password check regex in settings.py with other such regexes. Also, added another regex for email validation.\r\n![image](https://user-images.githubusercontent.com/37950602/121951139-29716900-cd78-11eb-8c29-52f74d43227a.png)\r\n\r\nPassword validation checks whether the password is strong enough by checking:\r\n- small Letters[a-z]\r\n- Capital letters[A-Z]\r\n- digit[0-9]\r\n- Special Characters(Except Space)\r\n- Atleast 8 chars and almost 20 chars.\r\n\r\nShown below are a few examples I run against this regex at this platform https://regex101.com/.\r\n![image](https://user-images.githubusercontent.com/37950602/121950964-f16a2600-cd77-11eb-9187-9e190433499b.png)\r\n\r\nSimilar test results for email validation regex:\r\n![image](https://user-images.githubusercontent.com/37950602/121952175-84f02680-cd79-11eb-99db-301c7c609c37.png)\r\n', 'comment_created': datetime.datetime(2021, 6, 14, 20, 3, 21, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}]","[{'commit_sha': 'f5ccc87425d8d8870de22e86fe634f2d9e7d9037', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '849b25a083af91fd90a12310206594eff987b945', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1395d64a0fbd44fd67f3d40657564245fd30104', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6507961844d3777b4f2ed86daccb2bc644bb17d1', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41a23c74c01b6c6d747175cd02cb4777dc5c5076', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5dfa0cba14e653edc1691b7fd38f4ef2433fd223', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+596444129,Filter work allowing deleting/resuming/pausing selected work lists.,"## Description
+I have implemented a select functionality that allows the users to select all the worklists after doing a filter by some query in the worklist page. This will allow them to resume/pause/delete only the selected worklists from the complete table of worklists.
+
+## Related Issue
+Fixed #822 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/111770120-0695fc80-88d0-11eb-8c9b-4e172bfafb7f.png)
+![image](https://user-images.githubusercontent.com/37950602/111770170-157caf00-88d0-11eb-8eef-494e386a422c.png)
+![image](https://user-images.githubusercontent.com/37950602/111770219-24636180-88d0-11eb-9cbd-cd25dafec7a0.png)
+
+
+## Types of changes
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1108,https://api.github.com/repos/owtf/owtf/pulls/1108,https://github.com/owtf/owtf/pull/1108,closed,100,18,2,1,1,0,0,0,[],2021-03-19 10:58:49+00:00,2021-08-13 01:48:44+00:00,12667795.0,"146 days, 14:49:55",[],"[{'commit_sha': '836bc01c908584e026e08ea1633b56608ebf7e8b', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+596749750,Fixed Universal Search in Plugins modal,"## Description
+Fixed Universal Search in Plugins modal
+
+## Related Issue
+Fixed #1109 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/111817791-758d4880-8904-11eb-913c-6b3dacb717c4.png)
+
+
+## Types of changes
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1110,https://api.github.com/repos/owtf/owtf/pulls/1110,https://github.com/owtf/owtf/pull/1110,closed,357,242,2,1,1,0,0,0,[],2021-03-19 17:14:34+00:00,2021-07-13 21:54:47+00:00,10039213.0,"116 days, 4:40:13",[],"[{'commit_sha': 'd7fd8f53e30d52ecadcfec0846c4d2d1b58efa7c', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+600857162,Fixed server error while adding multiple targets,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Fixed server error while adding multiple targets. The server was taking the complete list of target ids as one string hence we need to split it across comma.
+
+## Related Issue
+Fixed #1115 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+Before:
+![image](https://user-images.githubusercontent.com/37950602/112502266-f25e6d80-8daf-11eb-929e-7222bd17a52c.png)
+After:
+![image](https://user-images.githubusercontent.com/37950602/112502413-0f933c00-8db0-11eb-8cff-0762e45b9ec9.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1116,https://api.github.com/repos/owtf/owtf/pulls/1116,https://github.com/owtf/owtf/pull/1116,closed,2,0,1,1,0,0,0,0,[],2021-03-25 15:51:48+00:00,2021-04-01 21:28:45+00:00,625017.0,"7 days, 5:36:57",[],"[{'commit_sha': '63973c3f7363380a997917144a958c5dbd065d1b', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+600964068,Clickjacking on WebUI/API,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Adding the header ""X-Frame-Options: SAMEORIGIN"" to the header to prevent Clickjacking.
+
+## Related Issue
+Fixed #1114 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+Before:
+![image](https://user-images.githubusercontent.com/37950602/112523877-3871fc00-8dc5-11eb-9d47-dbc00903af5c.png)
+After:
+![image](https://user-images.githubusercontent.com/37950602/112523367-b550a600-8dc4-11eb-9340-3e48e48df922.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1117,https://api.github.com/repos/owtf/owtf/pulls/1117,https://github.com/owtf/owtf/pull/1117,closed,1,1,1,1,1,0,0,0,[],2021-03-25 18:23:07+00:00,2021-04-01 21:26:07+00:00,615780.0,"7 days, 3:03:00",[],"[{'commit_sha': 'c725e212a75154783408f7de00da3203acb0ac4f', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+667080222,Added different web pages,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Designed the different web pages that are required in the login/signup module
+
+## Reviewers
+@7a @sharmamohit123 @viyatb @Ashrith-Shetty @saganshul 
+
+## Screenshots:
+![2021-06-10_21-49](https://user-images.githubusercontent.com/37950602/121564657-543a8500-ca39-11eb-99ea-bc7d61b2a896.png)
+![2021-06-10_21-48](https://user-images.githubusercontent.com/37950602/121564660-556bb200-ca39-11eb-90b5-a3ec6c9f947d.png)
+![2021-06-10_21-49_2](https://user-images.githubusercontent.com/37950602/121564652-51d82b00-ca39-11eb-8c41-32eac6b465fb.png)
+![2021-06-10_21-49_1](https://user-images.githubusercontent.com/37950602/121564654-53a1ee80-ca39-11eb-9c34-80b9e1ba5a37.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1144,https://api.github.com/repos/owtf/owtf/pulls/1144,https://github.com/owtf/owtf/pull/1144,closed,373,8,8,7,2,12,0,0,[],2021-06-10 16:47:34+00:00,2021-06-17 20:15:31+00:00,617277.0,"7 days, 3:27:57","[{'comment_id': 650558325, 'comment_body': '/signup/otp makes more sense', 'comment_created': datetime.datetime(2021, 6, 13, 18, 3, 10, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 650558737, 'comment_body': 'alignment seems off while testing on my monitor\r\n![Screenshot from 2021-06-13 23-34-30](https://user-images.githubusercontent.com/31919606/121817659-4fc3d580-cca0-11eb-8e93-881205ef7100.png)\r\n', 'comment_created': datetime.datetime(2021, 6, 13, 18, 7, 30, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 650558921, 'comment_body': 'can you center this ""OR"". something like this ->\r\n![Screenshot from 2021-06-13 23-56-19](https://user-images.githubusercontent.com/31919606/121818129-f3ae8080-cca2-11eb-89c6-928f702f7a7b.png)\r\n\r\n\r\n', 'comment_created': datetime.datetime(2021, 6, 13, 18, 9, 5, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 650559184, 'comment_body': 'This is not aligned with the rest of the components.', 'comment_created': datetime.datetime(2021, 6, 13, 18, 11, 47, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 650559277, 'comment_body': 'change email??', 'comment_created': datetime.datetime(2021, 6, 13, 18, 12, 48, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 650560101, 'comment_body': 'If time permits, can you add a functionality that enables the submit buttons only after the form is filled with valid responses.', 'comment_created': datetime.datetime(2021, 6, 13, 18, 21, 9, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 651240614, 'comment_body': 'Modified.', 'comment_created': datetime.datetime(2021, 6, 14, 20, 5, 17, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651243666, 'comment_body': 'Corrected it. The problem was mostly because of the use of **Text** element provided by ""evergreen-ui"" which is defaulted to ""span"" HTML element. Changed it with **Paragraph** element which translates to ""p"" element in HTML and since ""p"" is a block element, it will cover the entire width of the provided space.', 'comment_created': datetime.datetime(2021, 6, 14, 20, 10, 37, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651248586, 'comment_body': 'Centered it by defining a custom CSS class. \r\n![image](https://user-images.githubusercontent.com/37950602/121953903-c08bf000-cd7b-11eb-8178-78cb9643ae2a.png)\r\n', 'comment_created': datetime.datetime(2021, 6, 14, 20, 18, 30, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651249096, 'comment_body': 'Changed the Text element to Paragraph element and made suitable changes as required. Working fine now.', 'comment_created': datetime.datetime(2021, 6, 14, 20, 19, 23, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651249162, 'comment_body': 'Modified.', 'comment_created': datetime.datetime(2021, 6, 14, 20, 19, 32, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 651250969, 'comment_body': 'This PR only defines the basic UI structure of the different pages. Noted it and will add proper form validation and will make button active/disabled suitably in the upcoming PR.', 'comment_created': datetime.datetime(2021, 6, 14, 20, 22, 25, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}]","[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd741d79ff67c3f53473ecef5c01a36b75f36cbfc', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b111ecd3c855a3adc57880d9cdfa407b401063b', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5dcfad52e338a7d6df3045ce8b9a1b578c6826a', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dd73620bd743d4a38c1da9ce49ac4c61b69b20a', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+674061860,Complete signup module,"## Description
+Implemented the various modules needed for the signup of the user. It checks for valid input then sends the email verification link to the user. Upon successful validation, the account of the user gets activated.
+
+## Reviewers
+@viyatb @sharmamohit123 @7a @saganshul @Ashrith-Shetty 
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/122681194-d3397580-d210-11eb-8bce-e28e6471760a.png)
+
+![image](https://user-images.githubusercontent.com/37950602/122681364-830ee300-d211-11eb-833b-21b979c6092e.png)
+
+![image](https://user-images.githubusercontent.com/37950602/122681240-0c71e580-d211-11eb-95bc-6b91458a58e5.png)
+
+![image](https://user-images.githubusercontent.com/37950602/122681379-a33ea200-d211-11eb-9908-3e457c8bb398.png)
+
+![image](https://user-images.githubusercontent.com/37950602/122681385-b0f42780-d211-11eb-9d2a-e1a68613e94b.png)
+
+![image](https://user-images.githubusercontent.com/37950602/122681305-3c20ed80-d211-11eb-86b4-ecaab3caf624.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1148,https://api.github.com/repos/owtf/owtf/pulls/1148,https://github.com/owtf/owtf/pull/1148,closed,994,76,29,8,2,4,0,0,[],2021-06-20 16:23:35+00:00,2021-06-30 17:25:06+00:00,867691.0,"10 days, 1:01:31","[{'comment_id': 658140603, 'comment_body': 'you might want to get the host from settings because someone might be running this on 127.0.0.1', 'comment_created': datetime.datetime(2021, 6, 24, 17, 19, 53, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 658141279, 'comment_body': 'you should not check in your credentials in git!', 'comment_created': datetime.datetime(2021, 6, 24, 17, 20, 52, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 658858569, 'comment_body': 'Removed.', 'comment_created': datetime.datetime(2021, 6, 25, 15, 37, 29, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 658858749, 'comment_body': 'Modified.', 'comment_created': datetime.datetime(2021, 6, 25, 15, 37, 45, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}]","[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cca781cd67ac201db4bdcd41f91301625e1e976c', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '516652c9f5021ec5a94ef008f0906e4e6b29e07a', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6c579fe3e74dd3474abe251bd4261d2ed88e1fe1', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eea2709772d40a0a63b4a4e01e7f81936e097dee', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+682197656,Login and Forgot password module,"## Description
+Contains the various modules required for login of the user and forgot password (setting a new password). Login component hits the backend API for login, gets a JWT token, and stores in the local storage on the client-side (All state managements are also handled accordingly). Forgot Password handles input validations required, sends the OTP, and only verified users can then change their password.
+
+## Reviewers
+@viyatb @sharmamohit123 @7a @saganshul @Ashrith-Shetty 
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/124194127-a2492280-dae5-11eb-9724-d34facb29091.png)
+![image](https://user-images.githubusercontent.com/37950602/124194325-01a73280-dae6-11eb-97f7-d4c51070d9c9.png)
+![image](https://user-images.githubusercontent.com/37950602/124194227-d02e6700-dae5-11eb-9f06-cbdb59c451d0.png)
+![image](https://user-images.githubusercontent.com/37950602/124194291-e9cfae80-dae5-11eb-875f-8e7d4ee20aeb.png)
+![image](https://user-images.githubusercontent.com/37950602/124194448-3ca96600-dae6-11eb-8e48-d475c0694e16.png)
+![image](https://user-images.githubusercontent.com/37950602/124194487-4c28af00-dae6-11eb-95d3-ba5f2e4a4580.png)
+
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1151,https://api.github.com/repos/owtf/owtf/pulls/1151,https://github.com/owtf/owtf/pull/1151,closed,2969,1692,47,7,3,0,0,0,[],2021-07-01 22:06:45+00:00,2021-07-22 17:53:49+00:00,1799224.0,"20 days, 19:47:04",[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc0e7de35b54c47f835348c1da83f772283871cf', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0f80311b301809dd84c796cf944ed67ffad63a16', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+687249056,Security Enhancements preventing unauthenticated access,"## Description
+Added some additional security headers to APIRequestHandler and protected all the backend API routes from unauthenticated access.
+
+## Reviewers
+@7a @viyatb @sharmamohit123 @saganshul @Ashrith-Shetty 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [ ] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1152,https://api.github.com/repos/owtf/owtf/pulls/1152,https://github.com/owtf/owtf/pull/1152,closed,183,174,20,9,0,6,0,0,[],2021-07-10 23:14:13+00:00,2021-08-15 17:43:34+00:00,3090561.0,"35 days, 18:29:21","[{'comment_id': 669135457, 'comment_body': 'I think this will break functionality with https?', 'comment_created': datetime.datetime(2021, 7, 13, 21, 52, 51, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 674211186, 'comment_body': 'Removed.', 'comment_created': datetime.datetime(2021, 7, 21, 17, 59, 54, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 682196368, 'comment_body': 'doesn\'t this have to be in quotes? `""Authorization""`', 'comment_created': datetime.datetime(2021, 8, 4, 0, 37, 53, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 684743342, 'comment_body': 'This is correct and is working fine when tested. The one with quotes is not working and also when I use auto-formatting it is removing the quotes.', 'comment_created': datetime.datetime(2021, 8, 8, 9, 17, 29, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 688648312, 'comment_body': 'Hi @viyatb,\r\nI searched this on google and found this link: https://stackoverflow.com/questions/60790742/vs-code-node-js-prettier-auto-formatting-messing-up-the-dictionary-key\r\nJS object properties **do not need quotes** except when the property name needs to contain normally invalid characters, like spaces, or dashes, etc.', 'comment_created': datetime.datetime(2021, 8, 13, 16, 45, 43, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 689121354, 'comment_body': 'weird 👍 ', 'comment_created': datetime.datetime(2021, 8, 15, 17, 43, 22, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}]","[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7109af46a83d136e5b4cd1b5d8b9389210ee03d', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bda2202ceaf4cfb3ad541b62a020ada196f46a48', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90ae60e10e38de123a6e44a89aa19d39ce51bc87', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '94908100e7f4e9c5fb0e3f750b5c943ff2a02453', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+702528759,Fixed build errors in github actions,"## Description
+Github Actions build was not passing as the npm tests were failing because test snapshots were not updated and also the requirements file was not containing PyOtp module. I have made the changes such that it is running perfectly fine now.
+
+## Reviewers
+@viyatb @7a @sharmamohit123 @saganshul
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/128072338-bb21cead-d6dd-4256-abd0-a7e471f3580e.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [x] I have updated the documentation accordingly.
+",True,1159,https://api.github.com/repos/owtf/owtf/pulls/1159,https://github.com/owtf/owtf/pull/1159,closed,299,231,5,10,1,0,0,0,[],2021-08-03 19:11:42+00:00,2021-08-04 00:35:30+00:00,19428.0,5:23:48,[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45d986e0825e3705600aa055e5cdf4c4bc6cfddc', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00a74e5179003f685f3e5e2d22c31dec244e2d87', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7cb88d9c98ad340d733c7237f6df64f2d52d8c9d', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '65d3794b56f5f0a43e1aebb3d03cc422debaed7a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'e46bef3128e681dd6a7eab03ce809fd3444195cb', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+711716868,Allowing login by username also and small UI changes,"## Description
+Improved the login module by allowing login and forgot password by username instead of just email as earlier. Also, made some minor UI changes for logout button.
+
+## Reviewers
+@7a @viyatb @sharmamohit123 @saganshul 
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/129278414-adb4b29f-5135-4acc-b066-3ba517c833d3.png)
+![image](https://user-images.githubusercontent.com/37950602/129278466-4f460bb4-c282-4211-9add-9e7e44351939.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [ ] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1161,https://api.github.com/repos/owtf/owtf/pulls/1161,https://github.com/owtf/owtf/pull/1161,closed,278,145,23,10,0,3,0,0,[],2021-08-12 22:35:48+00:00,2021-08-15 17:34:02+00:00,241094.0,"2 days, 18:58:14","[{'comment_id': 688190140, 'comment_body': 'are you sure you want this set to `unique=True`? People have same names all the time xD', 'comment_created': datetime.datetime(2021, 8, 13, 1, 47, 26, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 688594372, 'comment_body': 'name here refers to the unique username/ unique handle. It is not like the first or last name of the user. It is important to keep it unique to allow login by both username or email.', 'comment_created': datetime.datetime(2021, 8, 13, 15, 19, 40, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}, {'comment_id': 689120156, 'comment_body': 'ah perfect', 'comment_created': datetime.datetime(2021, 8, 15, 17, 33, 38, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}]","[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45d986e0825e3705600aa055e5cdf4c4bc6cfddc', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00a74e5179003f685f3e5e2d22c31dec244e2d87', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7cb88d9c98ad340d733c7237f6df64f2d52d8c9d', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8de21de77763942c916556f87e2c4040cf939f8f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '1b74b469724c37df70586b0f379d342dc672d277', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+699868573,Test cases coverage for login and signup react components,"## Description
+Added test cases coverage for Login and Signup React components using Enzyme and Jest.
+
+## Reviewers
+@viyatb @7a @sharmamohit123 @saganshul @Ashrith-Shetty
+
+## Screenshots (if appropriate):
+![2021-07-30_03-24](https://user-images.githubusercontent.com/37950602/127571327-cd66f51e-9c17-4114-9896-cce8586c72b7.png)
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1158,https://api.github.com/repos/owtf/owtf/pulls/1158,https://github.com/owtf/owtf/pull/1158,closed,1506,7,14,11,1,0,0,0,[],2021-07-29 22:03:08+00:00,2021-08-04 00:36:32+00:00,441204.0,"5 days, 2:33:24",[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45d986e0825e3705600aa055e5cdf4c4bc6cfddc', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00a74e5179003f685f3e5e2d22c31dec244e2d87', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7cb88d9c98ad340d733c7237f6df64f2d52d8c9d', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '26f8355339316f29fc50b06f01ac837bd9e870a8', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5327b84e77b2f5af28189dcc3655a74b0bbfda1c', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a856d14b097f1fe1683cea2060f37a7d749c3db', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+688020295,Documentation for login and signup module,"## Description
+Added the required documentation for the login and signup module as well as improved the docstring in auth.py API handler.
+
+## Reviewers
+@7a @viyatb @sharmamohit123 @saganshul @Ashrith-Shetty 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [x] I have updated the documentation accordingly.
+",True,1153,https://api.github.com/repos/owtf/owtf/pulls/1153,https://github.com/owtf/owtf/pull/1153,closed,224,70,16,7,1,0,0,0,[],2021-07-12 17:12:55+00:00,2021-07-13 21:46:23+00:00,102808.0,"1 day, 4:33:28",[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3287b12485ed68482ee70ac2357c38b0647e011', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e81916706c70b269e6e37c13b19d035f9bf772c7', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+597534990,Added SSL Support to WebAPI/UI,"## Description
+Implementing the code for SSL Support for WebAPI/UI
+
+## Related Issue
+Fixed #1111 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+![image](https://user-images.githubusercontent.com/37950602/111915947-adc88e80-8a9e-11eb-848b-356156bd86c4.png)
+![image](https://user-images.githubusercontent.com/37950602/111915997-f84a0b00-8a9e-11eb-91dc-2ec33436ed2f.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",False,1112,https://api.github.com/repos/owtf/owtf/pulls/1112,https://github.com/owtf/owtf/pull/1112,closed,105,7,5,1,1,0,0,0,[],2021-03-21 18:12:28+00:00,2021-06-17 20:16:54+00:00,7610666.0,"88 days, 2:04:26",[],"[{'commit_sha': 'b535429a99ab74a59b33ca243103acfe7f233926', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+602266813,Improving sub domain takeover,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Some Subdomain Takeover plugins were not working.
+
+## Related Issue
+Fixed #1120 
+
+## Screenshots
+![image](https://user-images.githubusercontent.com/37950602/112759370-50898b80-9010-11eb-854e-6b0619520e47.png)
+
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1121,https://api.github.com/repos/owtf/owtf/pulls/1121,https://github.com/owtf/owtf/pull/1121,closed,4,2,1,3,0,0,0,0,[],2021-03-28 16:21:05+00:00,2021-04-01 21:25:00+00:00,363835.0,"4 days, 5:03:55",[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '676299ceaff7adc51a68d56f9810834b3dd6984a', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c312d575c3f0cca7c1173ad17c0689db2d0d82db', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+613090565,Fixed Tabnabbing issue in OWTF Dashboard,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+## Description
+Added rel=""noopener noreferrer"" on the tag used to create the link from the parent page to the child page.
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+Fixed #1131  
+
+## Reviewers
+@viyatb @sharmamohit123 @saganshul 
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+![image](https://user-images.githubusercontent.com/37950602/114309429-b42db180-9b04-11eb-8694-448f88e2a7c2.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1132,https://api.github.com/repos/owtf/owtf/pulls/1132,https://github.com/owtf/owtf/pull/1132,closed,168,39,2,4,2,0,0,0,[],2021-04-11 15:04:37+00:00,2021-07-13 21:49:45+00:00,8059508.0,"93 days, 6:45:08",[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2fd07a3dbc5ad702d649672d3890aba77ca0e0a', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e873cf735edb9a03968236f9fa88c38c84054c06', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+644186811,Unable to create issue from 'Report Errors on GitHub' on Dashboard,"When we try to create errors from 'Report Errors on GitHub' button on dashboard, it is taking to issue page with pre-filled values to create an automatic issue.
+
+## Related Issue
+Fixed #1133 
+
+## Reviewers
+@viyatb @7a @sharmamohit123 @saganshul 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [x] I have updated the documentation accordingly.
+",True,1142,https://api.github.com/repos/owtf/owtf/pulls/1142,https://github.com/owtf/owtf/pull/1142,closed,16,11,2,5,0,0,0,0,[],2021-05-13 19:08:57+00:00,2021-07-13 21:50:34+00:00,5280097.0,"61 days, 2:41:37",[],"[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7992bcb5937829bb9edd138e786319133398e0b2', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa8feacb2bc4386546447c23131ee612cdbcfc16', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a765c276a906d542be6e8264340b7657427b4c8', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+598296075,Fixed error running on plugin OWTF-CM-001,"codecs.open() was not able to create file as the filename was containing ""/"", ""("" and "")"". So, I have modified the multi_replace() in utils/strings.py to change these symbols to ""_"" and """".
+
+## Description
+```
+[+] __________ 1 - Target: https://youtube.com -> Plugin: Testing For Ssl-Tls (web/active) __________
+[+] 
+[+] Executing :
+
+cd owtf_review/targets/https__youtube.com/partial/Testing\ For\ Ssl-Tls/active;sh /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/run_tlssled.sh /usr/bin/tlssled youtube.com 443
+
+
+[+] ------> Execution Start Date/Time: 23/03/2021-01:05
+[+] 
+/usr/lib/python3.8/subprocess.py:844: RuntimeWarning: line buffering (buffering=1) isn't supported in binary mode, the default buffer size will be used
+  self.stdout = io.open(c2pread, 'rb', bufsize)
+[+] 
+[+] [*] SSL Handshake Check OK: The host youtube.com appears to speak SSL/TLS on port: 443
+[+] 
+[+] /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/run_tlssled.sh: 50: /usr/bin/tlssled: not found
+[+] Time=0h,  0s,  19ms
+[-] Aborted by Framework: Error when calling 'codecs_open'! [Errno 2] No such file or directory: 'owtf_review/targets/https__youtube.com/partial/Testing For Ssl-Tls/active/TLSSLed_v1.2.sh (openssl/sslscan).txt'.
+```
+
+Corrected:
+```
+[+] __________ 2 - Target: https://youtube.com -> Plugin: Testing For Ssl-Tls (web/active) __________
+[+] 
+[+] Executing :
+
+cd owtf_review/targets/https__youtube.com/partial/Testing_For_Ssl-Tls/active;sh /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/verify_ssl_cipher_check.sh /root/.owtf/tools/restricted/ssl/ssl-cipher-check/ssl-cipher-check.pl youtube.com 443
+
+
+[+] ------> Execution Start Date/Time: 23/03/2021-00:59
+[+] 
+/usr/lib/python3.8/subprocess.py:844: RuntimeWarning: line buffering (buffering=1) isn't supported in binary mode, the default buffer size will be used
+  self.stdout = io.open(c2pread, 'rb', bufsize)
+[+] ------------------------------------------------------
+[+] /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/verify_ssl_cipher_check.sh - (0.1) based on ssl-cipher-check.pl
+[+] Author: Abraham Aranguren @7a_ http://7-a.org
+[+] ------------------------------------------------------
+[+] 
+[+] 
+[+] [*] SSL Handshake Check OK: The host youtube.com appears to speak SSL/TLS on port: 443
+[+] 
+[+] [*] Analyzing SSL/TLS on youtube.com:443 ...
+[+] [*] Step 1 - sslcan-based analysis
+[+] 
+[+] [*] ssl-cipher-check-based analysis (for comparison/assurance purposes)
+[+] [*] NOTE: If you get errors below, try running: ""apt-get install gnutls-bin""
+[+] 
+[+] [*] Running ssl-cipher-check.pl on youtube.com:443...
+[+] 
+[+] [*] Testing for SSLv2 ...
+[+] 
+[+] [*] Testing for NULL cipher ...
+[+] 
+[+] [*] Testing weak ciphers ...
+[+] 
+[+] [*] Testing strong ciphers ...
+[+] 
+[+] [*] Default cipher: ...
+[+] 
+[+] [*] New files created:
+[+] -rw-r--r-- 1 root root 164 Mar 23 00:59 ssl_cipher_check_2021-03-23_00:59:46.err
+[+] -rw-r--r-- 1 root root   0 Mar 23 00:59 ssl_cipher_check_2021-03-23_00:59:46.log
+[+] 
+[+] 
+[+] [*] done
+[+] 
+[+] Time=0h,  0s,  74ms
+[+] 
+[+] Executing :
+
+cd owtf_review/targets/https__youtube.com/partial/Testing_For_Ssl-Tls/active;/root/.owtf/tools/restricted/ssllabs-scan/ssllabs-scan https://youtube.com > SSL_TLS_testing_functionality_from_SSLLabs.json; /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/reporter.py SSL_TLS_testing_functionality_from_SSLLabs.json
+
+
+[+] ------> Execution Start Date/Time: 23/03/2021-00:59
+[+] 
+[+] /bin/sh: 1: /root/.owtf/tools/restricted/ssllabs-scan/ssllabs-scan: not found
+[+] Traceback (most recent call last):
+[+] File ""/home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/reporter.py"", line 11, in <module>
+[+] from owtf.utils.file import FileOperations
+[+] ImportError: No module named owtf.utils.file
+[+] Time=0s,  67ms
+[+] 
+[+] Executing :
+
+cd owtf_review/targets/https__youtube.com/partial/Testing_For_Ssl-Tls/active;/usr/bin/o-saft +cipher --force-openssl youtube.com --port 443
+
+
+[+] ------> Execution Start Date/Time: 23/03/2021-00:59
+[+] 
+[+] /bin/sh: 1: /usr/bin/o-saft: not found
+[+] Time=0s,  28ms
+[+] 
+[+] Executing :
+
+cd owtf_review/targets/https__youtube.com/partial/Testing_For_Ssl-Tls/active;sh /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/run_tlssled.sh /usr/bin/tlssled youtube.com 443
+
+
+[+] ------> Execution Start Date/Time: 23/03/2021-00:59
+[+] 
+[+] 
+[+] [*] SSL Handshake Check OK: The host youtube.com appears to speak SSL/TLS on port: 443
+[+] 
+[+] /home/amanpro30/Desktop/GSoC/owtf/owtf/scripts/ssl/run_tlssled.sh: 50: /usr/bin/tlssled: not found
+[+] Time=0h,  0s,  44ms
+
+```
+## Related Issue
+Fixed #1076 
+
+## Reviewers
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1113,https://api.github.com/repos/owtf/owtf/pulls/1113,https://github.com/owtf/owtf/pull/1113,closed,17,10,1,2,2,2,0,0,[],2021-03-22 19:48:26+00:00,2021-08-21 17:36:02+00:00,13124856.0,"151 days, 21:47:36","[{'comment_id': 669136963, 'comment_body': '`simple_text=False` (remove whitespace)', 'comment_created': datetime.datetime(2021, 7, 13, 21, 56, 2, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 692910864, 'comment_body': 'Changed', 'comment_created': datetime.datetime(2021, 8, 20, 12, 36, 7, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}]","[{'commit_sha': '50bff20a75413c143dd93016e7bbbdbf29c7ac2d', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '614aef4cd91cf90355ec5aff9e7df72a2f24c851', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+713724677,Adding more tests and bug fixes,"## Description
+Increased the test coverage to more React components, made little changes to the documentation, and fixed a small DB issue.
+
+## Reviewers
+@viyatb @7a @sharmamohit123 @Ashrith-Shetty
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [x] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1163,https://api.github.com/repos/owtf/owtf/pulls/1163,https://github.com/owtf/owtf/pull/1163,closed,750,87,30,14,0,2,0,0,[],2021-08-16 20:27:03+00:00,2021-08-21 17:36:43+00:00,421780.0,"4 days, 21:09:40","[{'comment_id': 692250657, 'comment_body': 'string interpolation using backticks might be cleaner\r\n', 'comment_created': datetime.datetime(2021, 8, 19, 15, 44, 3, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 692911271, 'comment_body': 'Changed', 'comment_created': datetime.datetime(2021, 8, 20, 12, 36, 46, tzinfo=datetime.timezone.utc), 'commenter': 'amanpro30', 'type': 'User'}]","[{'commit_sha': '8d9f3d5bcaf48df203a287a97ac319e6a78ada0c', 'committer_username': 'deepsourcebot', 'committer_name': 'DeepSource Bot', 'committer_email': None, 'commit_date': datetime.datetime(2020, 2, 11, 2, 14, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd1ac63fdeb4bd3d8c43e0175651abf11f5561', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260e47f31e0d97f139b289ac6ca6240dec227052', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4017ed56ea04c3ccd5d38d3be2c16223484c73ba', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc558e756630bc6ef804ecc4dc4bc4d4100f4fa6', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45d986e0825e3705600aa055e5cdf4c4bc6cfddc', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00a74e5179003f685f3e5e2d22c31dec244e2d87', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7cb88d9c98ad340d733c7237f6df64f2d52d8c9d', 'committer_username': 'amanpro30', 'committer_name': 'Aman Kumar', 'committer_email': 'aman.k17@iiits.in', 'commit_date': datetime.datetime(2018, 3, 31, 7, 12, 21, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8de21de77763942c916556f87e2c4040cf939f8f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'acc4a23882e91fbd5326ad410b893dfb99ee88a7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f9826fd8605e54320a08921d3c5ec6204e589ac0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '474a698405dbd20000a343eca52d791150552fb0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b960b737360ea310d2a558160dfc33dbafe71590', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '1b888e50a2476cd14efd629f137341d292607a4b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Aman Kumar,37950602,aman.k17@iiits.in,User,,42,,18,8
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+3215654,owtf,owtf/owtf,Python,471,1800,128,71,2227,94,5,19,"[{'id': 1059521770, 'number': 1205, 'closed': datetime.datetime(2022, 9, 19, 3, 46, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 18, 11, 44, 24, tzinfo=datetime.timezone.utc), 'time_taken': 57741.0, 'time_delta': '16:02:21', 'additions': 3070, 'deletions': 3035, 'state': 'closed'}, {'id': 1057865933, 'number': 1204, 'closed': datetime.datetime(2022, 9, 19, 3, 45, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 15, 20, 38, 27, tzinfo=datetime.timezone.utc), 'time_taken': 284813.0, 'time_delta': '3 days, 7:06:53', 'additions': 27300, 'deletions': 3374, 'state': 'closed'}, {'id': 1011341739, 'number': 1202, 'closed': datetime.datetime(2022, 9, 19, 3, 47, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 28, 21, 35, 18, tzinfo=datetime.timezone.utc), 'time_taken': 4515103.0, 'time_delta': '52 days, 6:11:43', 'additions': 1162, 'deletions': 703, 'state': 'closed'}, {'id': 1002878822, 'number': 1201, 'closed': datetime.datetime(2022, 9, 19, 3, 47, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 20, 20, 11, 57, tzinfo=datetime.timezone.utc), 'time_taken': 5211304.0, 'time_delta': '60 days, 7:35:04', 'additions': 26777, 'deletions': 5777, 'state': 'closed'}, {'id': 979368422, 'number': 1191, 'closed': datetime.datetime(2022, 7, 18, 15, 25, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 26, 18, 41, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1889066.0, 'time_delta': '21 days, 20:44:26', 'additions': 116, 'deletions': 6, 'state': 'closed'}, {'id': 713724677, 'number': 1163, 'closed': datetime.datetime(2021, 8, 21, 17, 36, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 20, 27, 3, tzinfo=datetime.timezone.utc), 'time_taken': 421780.0, 'time_delta': '4 days, 21:09:40', 'additions': 750, 'deletions': 87, 'state': 'closed'}, {'id': 711716868, 'number': 1161, 'closed': datetime.datetime(2021, 8, 15, 17, 34, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 12, 22, 35, 48, tzinfo=datetime.timezone.utc), 'time_taken': 241094.0, 'time_delta': '2 days, 18:58:14', 'additions': 278, 'deletions': 145, 'state': 'closed'}, {'id': 702528759, 'number': 1159, 'closed': datetime.datetime(2021, 8, 4, 0, 35, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 19, 11, 42, tzinfo=datetime.timezone.utc), 'time_taken': 19428.0, 'time_delta': '5:23:48', 'additions': 299, 'deletions': 231, 'state': 'closed'}, {'id': 699868573, 'number': 1158, 'closed': datetime.datetime(2021, 8, 4, 0, 36, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 29, 22, 3, 8, tzinfo=datetime.timezone.utc), 'time_taken': 441204.0, 'time_delta': '5 days, 2:33:24', 'additions': 1506, 'deletions': 7, 'state': 'closed'}, {'id': 688020295, 'number': 1153, 'closed': datetime.datetime(2021, 7, 13, 21, 46, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 12, 17, 12, 55, tzinfo=datetime.timezone.utc), 'time_taken': 102808.0, 'time_delta': '1 day, 4:33:28', 'additions': 224, 'deletions': 70, 'state': 'closed'}, {'id': 687249056, 'number': 1152, 'closed': datetime.datetime(2021, 8, 15, 17, 43, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 10, 23, 14, 13, tzinfo=datetime.timezone.utc), 'time_taken': 3090561.0, 'time_delta': '35 days, 18:29:21', 'additions': 183, 'deletions': 174, 'state': 'closed'}, {'id': 682197656, 'number': 1151, 'closed': datetime.datetime(2021, 7, 22, 17, 53, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 1, 22, 6, 45, tzinfo=datetime.timezone.utc), 'time_taken': 1799224.0, 'time_delta': '20 days, 19:47:04', 'additions': 2969, 'deletions': 1692, 'state': 'closed'}, {'id': 674061860, 'number': 1148, 'closed': datetime.datetime(2021, 6, 30, 17, 25, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 20, 16, 23, 35, tzinfo=datetime.timezone.utc), 'time_taken': 867691.0, 'time_delta': '10 days, 1:01:31', 'additions': 994, 'deletions': 76, 'state': 'closed'}, {'id': 667080222, 'number': 1144, 'closed': datetime.datetime(2021, 6, 17, 20, 15, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 16, 47, 34, tzinfo=datetime.timezone.utc), 'time_taken': 617277.0, 'time_delta': '7 days, 3:27:57', 'additions': 373, 'deletions': 8, 'state': 'closed'}, {'id': 644186811, 'number': 1142, 'closed': datetime.datetime(2021, 7, 13, 21, 50, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 13, 19, 8, 57, tzinfo=datetime.timezone.utc), 'time_taken': 5280097.0, 'time_delta': '61 days, 2:41:37', 'additions': 16, 'deletions': 11, 'state': 'closed'}, {'id': 613090565, 'number': 1132, 'closed': datetime.datetime(2021, 7, 13, 21, 49, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 11, 15, 4, 37, tzinfo=datetime.timezone.utc), 'time_taken': 8059508.0, 'time_delta': '93 days, 6:45:08', 'additions': 168, 'deletions': 39, 'state': 'closed'}, {'id': 602266813, 'number': 1121, 'closed': datetime.datetime(2021, 4, 1, 21, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 28, 16, 21, 5, tzinfo=datetime.timezone.utc), 'time_taken': 363835.0, 'time_delta': '4 days, 5:03:55', 'additions': 4, 'deletions': 2, 'state': 'closed'}, {'id': 600964068, 'number': 1117, 'closed': datetime.datetime(2021, 4, 1, 21, 26, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 25, 18, 23, 7, tzinfo=datetime.timezone.utc), 'time_taken': 615780.0, 'time_delta': '7 days, 3:03:00', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 600857162, 'number': 1116, 'closed': datetime.datetime(2021, 4, 1, 21, 28, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 25, 15, 51, 48, tzinfo=datetime.timezone.utc), 'time_taken': 625017.0, 'time_delta': '7 days, 5:36:57', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 598296075, 'number': 1113, 'closed': datetime.datetime(2021, 8, 21, 17, 36, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 22, 19, 48, 26, tzinfo=datetime.timezone.utc), 'time_taken': 13124856.0, 'time_delta': '151 days, 21:47:36', 'additions': 17, 'deletions': 10, 'state': 'closed'}, {'id': 597534990, 'number': 1112, 'closed': datetime.datetime(2021, 6, 17, 20, 16, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 21, 18, 12, 28, tzinfo=datetime.timezone.utc), 'time_taken': 7610666.0, 'time_delta': '88 days, 2:04:26', 'additions': 105, 'deletions': 7, 'state': 'closed'}, {'id': 596749750, 'number': 1110, 'closed': datetime.datetime(2021, 7, 13, 21, 54, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 19, 17, 14, 34, tzinfo=datetime.timezone.utc), 'time_taken': 10039213.0, 'time_delta': '116 days, 4:40:13', 'additions': 357, 'deletions': 242, 'state': 'closed'}, {'id': 596444129, 'number': 1108, 'closed': datetime.datetime(2021, 8, 13, 1, 48, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 19, 10, 58, 49, tzinfo=datetime.timezone.utc), 'time_taken': 12667795.0, 'time_delta': '146 days, 14:49:55', 'additions': 100, 'deletions': 18, 'state': 'closed'}, {'id': 591865907, 'number': 1105, 'closed': datetime.datetime(2021, 6, 16, 19, 33, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 12, 18, 2, 43, tzinfo=datetime.timezone.utc), 'time_taken': 8299868.0, 'time_delta': '96 days, 1:31:08', 'additions': 471, 'deletions': 36, 'state': 'closed'}]"

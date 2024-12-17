@@ -1,0 +1,247 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+666487971,Make Chains objects display only information and not statistical eval,"As suggested on #246, Chains objects now display only information and not statistical evaluations.
+
+Before:
+![MCMCChainsnotmodified](https://user-images.githubusercontent.com/31251575/124703228-86fc5f80-deb7-11eb-9e4e-9ebd8205aafe.png)
+
+After:
+![MCMCChainsmodified](https://user-images.githubusercontent.com/31251575/124703247-924f8b00-deb7-11eb-8f8b-fcce9f2b96f5.png)
+
+Also, the describe function now display both Summary statistics and Quantiles info.
+
+Before:
+![describenotmodified](https://user-images.githubusercontent.com/31251575/124703483-0722c500-deb8-11eb-8461-6cba17f0efea.png)
+
+After:
+![describemodified](https://user-images.githubusercontent.com/31251575/124703515-11dd5a00-deb8-11eb-848a-80b01f2b1c52.png)
+",False,307,https://api.github.com/repos/TuringLang/MCMCChains.jl/pulls/307,https://github.com/TuringLang/MCMCChains.jl/pull/307,open,29,28,3,6,5,6,0,0,[],2021-06-10 04:18:29+00:00,,0.0,,"[{'comment_id': 665664720, 'comment_body': 'This only captures the abstract `Vector{ChainDataFrame}` but not any concretely typed `Vector{<:ChainDataFrame}`. In general, I am a bit worried about changing the display of vectors of `ChainDataFrame`s - it seems wrong to completely opt out of the default display mechanism of vectors in Julia (I also wonder if it causes any problems) just to change the way in which `describe(chain)` is displayed. Maybe rather `describe` should not return a vector of `ChainDataFrame`.', 'comment_created': datetime.datetime(2021, 7, 7, 19, 54, 5, tzinfo=datetime.timezone.utc), 'commenter': 'devmotion', 'type': 'User'}, {'comment_id': 665749864, 'comment_body': ""Yeah, I'm down with this. My understanding of your suggestion is that `describe` should be a pure IO function -- we should make `display(io::IO, chn::Chain)` and the output is all the stuff inside the `Base.show` definition above."", 'comment_created': datetime.datetime(2021, 7, 7, 22, 37, 57, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}, {'comment_id': 665901078, 'comment_body': 'We should not define `display` (it calls `show(io, MIME(""text/plain""), x)` which should be implemented), but we should just implement `DataAPI.describe(io, chain)` if we want to display the summary statistics in a nice way: https://juliastats.org/StatsBase.jl/latest/scalarstats/#Summary-Statistics-1', 'comment_created': datetime.datetime(2021, 7, 8, 6, 20, 24, tzinfo=datetime.timezone.utc), 'commenter': 'devmotion', 'type': 'User'}, {'comment_id': 666597068, 'comment_body': 'Thank you so much for your help! So, to double check that I\'m understanding these suggestions. Instead of returning a `Vector{ChainDataFrame}`,  `describe` should be an implementation of `StatsBase.describe` and return something like this?\r\n\r\n```julia\r\nchn = Chains(rand(100, 2, 2), [:a, :b])\r\nchn_arr = Array(chn)\r\nsections = chn.name_map[:parameters]\r\nfor i in 1:length(sections)\r\n    println(""Parameter $(sections[i])"")\r\n    describe(chn_arr[:,i])\r\n    println()\r\nend\r\n```\r\n![StatsBase _describe](https://user-images.githubusercontent.com/31251575/125004097-600c6d80-e01e-11eb-8af2-4475c52aad98.png)\r\n', 'comment_created': datetime.datetime(2021, 7, 9, 0, 33, 12, tzinfo=datetime.timezone.utc), 'commenter': 'PaulinaMartin96', 'type': 'User'}, {'comment_id': 666738125, 'comment_body': ""I think it's fine if `summarystats` returns different summary statistics (so this method does not have to be changed) but we should make sure that `describe` just prints these summary statistics in a pretty way to be consistent with how `describe` and `summarystats` are defined in StatsBase. I.e., in particular `describe` should not return anything but only print to IO and it should not print the quantiles if they are not part of `summarystats` (here it might actually be better to include them in `summarystats` as well and return two dataframes, possibly as a named tuple)."", 'comment_created': datetime.datetime(2021, 7, 9, 7, 36, 24, tzinfo=datetime.timezone.utc), 'commenter': 'devmotion', 'type': 'User'}, {'comment_id': 667042295, 'comment_body': 'To clarify maybe a little bit, there\'s no need to change to this code you\'ve posted:\r\n\r\n```julia\r\nchn = Chains(rand(100, 2, 2), [:a, :b])\r\nchn_arr = Array(chn)\r\nsections = chn.name_map[:parameters]\r\nfor i in 1:length(sections)\r\n    println(""Parameter $(sections[i])"")\r\n    describe(chn_arr[:,i]) # <- This is not what we want, we want to print the results of `describe(chain)` here instead\r\n    println()\r\nend\r\n```\r\n\r\nBasically we want to change the stuff that is _currently_ in `show` to `describe`, so that `describe` becomes a pure IO function and not a weird `Vector{<:ChainDataFrame}` thing that we have now.\r\n\r\nMaybe one way is to do something like\r\n\r\n```julia\r\nfunction DataAPI.describe(io::IO, chains::Chains)\r\n    print(io, ""Chains "", chains, "":\\n\\n"", header(chains))\r\n\r\n    summstats = summarystats(chains)\r\n    qs = quantiles(chains)\r\n\r\n    println(io)\r\n    show(io, summstats)\r\n\r\n    println(io)\r\n    show(io, qs)\r\nend\r\n```\r\n\r\nwhich won\'t actually return anything, it just prints stuff out to the screen. There\'s probably a way more sane way to do this, but it\'s a rough sketch to get you started.', 'comment_created': datetime.datetime(2021, 7, 9, 15, 39, 12, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}]","[{'commit_sha': '25bc45c087e13b842bb4ecc01f483fc6399494ba', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6e760d8a0ab53e81a42c5a822f75c2144493ea5', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21610f69d8d8084d49d5ae3fd6f0e8c0a303f524', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c68201a12c71afb27d2459b90a56de70cb8257b', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc9b29589cd590dde47db2f66cfc19f27d7adc1d', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41ad4e55448bfdf8e603fadabe233756aec14709', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}]",,31251575,,User,,11,,10,12
+684036400,Violin plot,"A recipe for violin plots was added. Following ArviZ's convetion for violin plots, `kwarg` `combined` was added. If `true`, chains are appended and only one plot per parameter is returned. In this case, `colordim := :chain`. Otherwise, a violin plot is returned for every chain and every parameter. `colordim` can be set to `:chain` or `:parameter` as shown below. Discrete parameters are plotted as defined in `StatsPlots.jl`.
+
+```julia
+using MCMCChains
+using StatsPlots
+
+n_iter = 100
+n_name = 3
+n_chain = 2
+
+val = randn(n_iter, n_name, n_chain) .+ [1, 2, 3]'
+val = hcat(val, rand(1:2, n_iter, 1, n_chain))
+
+chn = Chains(val, [:A, :B, :C, :D])
+```
+
+```julia
+violinplot(chn, size = (200, 1000)) #violinplot(chn, combined = true, colordim = :chain)
+```
+![image](https://user-images.githubusercontent.com/31251575/125378254-07a5da80-e354-11eb-9a0a-0a70e22481e8.png)
+
+```julia
+violinplot(chn, combined =  false, colordim = :chain)
+```
+![image](https://user-images.githubusercontent.com/31251575/125378617-b3e7c100-e354-11eb-8535-07ba14507225.png)
+
+```julia
+violinplot(chn, combined = false, colordim = :parameter, size=(800, 800))
+```
+![image](https://user-images.githubusercontent.com/31251575/125378888-25c00a80-e355-11eb-995a-d492f0cf3e72.png)
+",False,316,https://api.github.com/repos/TuringLang/MCMCChains.jl/pulls/316,https://github.com/TuringLang/MCMCChains.jl/pull/316,open,60,10,3,7,2,0,0,0,[],2021-07-06 03:41:26+00:00,,0.0,,[],"[{'commit_sha': '4293af304f6e31e1105ce4bc368f071174bc8fa1', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4674ea5b2c97eda76e7e39ec723515e385c975c7', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '01d56d52d145e85fbe96444b7b1b96730a46791a', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4c9765f32fef64be15bf7b8051954b525caf5f7', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1eb9c58a0b2ce527c56fe199b16f76063473823b', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf89757b5bbf91c493be4a01deb87803530406c3', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1bb0f93add25d92d772f69c739e1cf298e6b3453', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}]",,31251575,,User,,11,,10,12
+692325113,Prior/posterior predictive check plots,"""ppcplot"" function was added for plotting prior/posterior predictive checks for one or more dependent variables. As `args` this function receives `yobs_data`, the observed data for dependet variables (a vector or matrix), and `ypred_data` , the posterior/prior predictive results (`Chains` object). It plots the observed data, a sample of predictions and the predictions mean.
+
+As kwargs, this function receives:
+- `yvar_name` (vector of `Symbol`) which contains the name of the dependent variables to be plotted, 
+- `plot_type` which can take `:density` , `:cumulative`, and `:histogram` as values,
+- `predictive_check` for plot titles and can be `:prior` or `:posterior` (default value is `:posterior`)
+- `n_samples` which established the number o samples to be plotted (default value is 50, but when plotting it is redefined as the minimum  between 50 and sample size in ypred_data).
+
+For more than one dependet variable in a single model, `yvar_name` must be provided and the order in which names variables appear must be the same as in the observed data matrix. This was done in order to separate predictions for every dependent variable, because `predict` does not return predictions ordered by variable. 
+
+The following is a working example for a model with one dependent variable
+```julia
+using Turing, StatsBase, Statistics, MCMCChains, StatsPlots
+
+@model function linear_reg(x, y, σ = 0.1) 
+            β ~ Normal(1, 0.5) 
+  
+            for i ∈ eachindex(y) 
+                y[i] ~ Normal(β * x[i], σ) 
+            end 
+        end; 
+  
+σ = 0.1; f(x) = 2 * x + 0.1 * randn();   
+Δ = 0.01; xs_train = 0:Δ:10; ys_train = f.(xs_train);   
+xs_test = [10 + i*Δ for i in 1:100]; ys_test = f.(xs_test); 
+m_train = linear_reg(xs_train, ys_train, σ);
+
+#Prior predictive check
+chain_lin_reg = sample(m_train, Prior(), 200);   
+m_test_prior = linear_reg(xs_test, Vector{Union{Missing, Float64}}(undef, length(ys_test)), σ);   
+predictions_prior = predict(m_test_prior, chain_lin_reg) 
+```
+
+```julia
+ppcplot(ys_test, predictions_prior, yvar_name = [:y_var], predictive_check = :prior, plot_type = :density )
+```
+![image](https://user-images.githubusercontent.com/31251575/126724663-f0dfd8af-5947-429d-b007-83e851445446.png)
+
+
+And for posterior predictive check
+```julia
+#Posterior predictive check  
+chain_lin_reg = sample(m_train, NUTS(100, 0.65), 200);   
+m_test = linear_reg(xs_test, Vector{Union{Missing, Float64}}(undef, length(ys_test)), σ);   
+predictions_posterior = predict(m_test, chain_lin_reg) 
+```
+```
+ppcplot(ys_test, predictions_posterior)
+```
+Plot_type = :density
+![image](https://user-images.githubusercontent.com/31251575/126724143-232af321-7cb9-4951-921a-b4e07192aca2.png)
+
+Plot_type = :cumulative
+```julia
+ppcplot(ys_test, predictions_posterior, n_samples = 20, predictive_check = :posterior, plot_type = :cumulative, size = (900, 600))
+```
+![image](https://user-images.githubusercontent.com/31251575/126724320-1780fa91-e5d6-4c17-9fff-c3b5803c699f.png)
+
+Plot_type = :histogram
+![image](https://user-images.githubusercontent.com/31251575/126724451-b6581a76-3d02-4fae-b6aa-846e4ca229cb.png)
+
+
+Aditionally, this is a working example for a model with two dependent variables
+
+```julia
+@model function linear_reg(x, y, z, σ = 0.1) 
+            β ~ Normal(0, 1)
+            γ ~ Normal(0, 1)
+  
+            for i ∈ eachindex(y) 
+                y[i] ~ Normal(β * x[i], σ)
+                z[i] ~ Normal(γ * x[i], σ)    
+            end 
+        end; 
+  
+σ = 0.1; f(x) = 2 * x + 0.1 * randn(); g(x) = 4 * x + 0.4 * randn();  
+Δ = 0.01; xs_train = 0:Δ:10; ys_train = f.(xs_train); zs_train = g.(xs_train); 
+xs_test = [10 + i*Δ for i in 1:100]; ys_test = f.(xs_test); zs_test = g.(xs_test);  
+m_train = linear_reg(xs_train, ys_train, zs_train, σ); 
+  
+chain_lin_reg = sample(m_train, NUTS(100, 0.65), 200); 
+  
+m_test = linear_reg(xs_test, Vector{Union{Missing, Float64}}(undef, length(ys_test)), Vector{Union{Missing, Float64}}(undef, length(zs_test)), σ); 
+  
+predictions = predict(m_test, chain_lin_reg)
+
+var_test = hcat(ys_test, zs_test)
+```
+
+```julia
+ppcplot(var_test, predictions, n_samples = 100, yvar_name = [:y, :z], predictive_check = :posterior, plot_type = :density, size = (900, 400))
+```
+![image](https://user-images.githubusercontent.com/31251575/126735835-b4c92e8e-9fb0-4d9c-ab09-7d642b6319d9.png)
+
+```julia
+ppcplot(var_test, predictions, n_samples = 30, yvar_name = [:y, :z], predictive_check = :posterior, plot_type = :cumulative, size = (900, 400))
+```
+![image](https://user-images.githubusercontent.com/31251575/126736354-216a1c9b-f229-428b-9271-863c3d5149c9.png)
+
+
+```julia
+var_name = [:y, :z]
+ppcplot(var_test, predictions, yvar_name = var_name, n_samples = 10, predictive_check = :posterior, plot_type = :histogram, size = (900, 600))
+```
+![image](https://user-images.githubusercontent.com/31251575/126724816-67977907-09b6-4160-8c62-a8898b15e829.png)
+
+
+",False,319,https://api.github.com/repos/TuringLang/MCMCChains.jl/pulls/319,https://github.com/TuringLang/MCMCChains.jl/pull/319,open,182,3,3,7,2,0,0,0,[],2021-07-19 06:54:10+00:00,,0.0,,[],"[{'commit_sha': '12af4078af9f7f11f259c5b73867264d5871186d', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4473650cbb38257de62a8ef29e623aea4cccfc2f', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d31659a7891e3b331f86e7a3ecad0d288355bea', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '22ba687d45195e59b701fcd9213295ee22f456b5', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd1eaca843fec289850070a0602815203a3344f7', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b363155e21a3cf2d12e883e5805a5b17b7ca0e78', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '420f9b24b74ad15bc4e87c7fb8c197ef6dfa5c5b', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}]",,31251575,,User,,11,,10,12
+700126984,Add ridgeline plot,"This PR includes three plot types: Ridgeline, forest and caterpillar plots. These recipes functions receive
+
+**args**
+- Chains object
+-  par_names: a vector of `Symbol`. This can be a parameter section, a subset of parameters, or only one parameter.
+
+**kwargs**
+- `hpd_val` = [0.05, 0.2]. A n-element vector to calculate the desired HPD intervals. Values are interpreted as in the MCMCChains hdp function. For ridgeline plots, only the smaller value will be taken. For caterpillar and forest plots, all the values in the vector will be used. 
+- `q` = [0.1, 0.9]. A two-element vector to calculate quantiles intervals.
+- `spacer` = 0.4.  Used for determining spacing between plots. This should be modified to adjust
+- `riser` = 0.2. Used for determining spacing between plots. 
+- `show_mean` = true,
+- `show_median` = true,
+- `show_qi` = true
+- `show_hpdi` = false,
+- `fill_q` = false,
+- `fill_hpd` = true
+- `ordered` = false
+
+In order to compute the required data for the plot, an auxiliary function `_compute_plot_data` was defined. As `args`, this function receives a Chains object (`chains`), a vector of `Symbol`  (`par_names`) and a `plot_type` (`:ridge`, `:caterpillar`, `:forest`), and as `kwargs` it receives the ones defined above.
+ 
+Plotting options for each curve are presented below:
+
+**Ridgeline Plot**
+
+**(a) Fill**
+Fill area below the curve can be determined by quantiles interval (`fill_q = true`) or hdpi interval (`fill_hpd = true`). If both `fill_q = false` and  `fill_hpd = false`, then the whole area below the curve will be filled. If no fill color is desired it should be specified with series attributes. These options are mutually exclusive.
+
+**(b) Mean and median**
+ A vertical line can be plotted repesenting the mean (`show_mean = true`) or median (`show_median = true`) of the kde distribution. Both options can be plotted at the same time. 
+
+** (c) Intervals **
+At the bottom of each density plot, a quantile interval ('show_qi = true`) or HPD interval (`show_hdpi = true`) can be plotted. These options are mutually exclusive. To plot quantile intervals, values in `q` will be taken, and for HPD intervals, only the smaller value specified in `hpd_val` will be used.
+
+_Note:_ When one parameters is given, it will be plotted as a density plot with all the elements described above.
+
+
+**Forest and Caterpillar plots**
+
+Both plot type are called using `forestplot` shorthands. If `ordered = false` then a forest plot will be returned, and on the contrary, if `ordered = true` a caterpillar plot will be returned. 
+
+For both plot types the following elemets can be plotted:
+
+-  **HPDI** determined by the number of element of the `hpd_val` kwarg. All the values will be used to construct the intervals with `MCMCChains.hpd`. 
+- **Quantile interval** determined by the 2-element vector `q`
+-**Mean** and/or **median**. Plotted as points with different `markershape`.
+
+Working example:
+
+```julia
+using MCMCChains, StatsPlots, Statistics
+
+n_iter = 100
+n_name = 3
+n_chain = 2
+
+val = randn(n_iter, n_name, n_chain) .+ [1, 5, 10]'
+val = hcat(val, rand(11:12, n_iter, 1, n_chain))
+
+chn = Chains(val, [:A, :B, :C, :D])
+val2 = rand(n_iter, 11, n_chain) .+ ([1, 2, 3, 4, 5, 6, 5.5, 4.5, 3.5, 2.5, 1.5]' .* rand())
+chn2 = Chains(val2) 
+```
+
+```julia
+p1 = ridgelineplot(chn, chn.name_map[:parameters], fill_q = true, fill_hpd = false, legend = :topleft)
+p2 = ridgelineplot(chn, chn.name_map[:parameters], fill_q = false, fill_hpd = true, legend = :topleft)
+p3 = ridgelineplot(chn, chn.name_map[:parameters], fill_q = false, fill_hpd = false, legend = :topleft)
+p4 = ridgelineplot(chn, chn.name_map[:parameters], fill_q = false, fill_hpd = false, fillcolor = :white, legend = :topleft)
+p5 = ridgelineplot(chn, [:A, :B, :C, :D], palette = :summer, legend = :topleft)
+p6 = ridgelineplot(chn, [:A, :B, :C], show_hpdi = false, show_qi = true, palette = :Blues_5, legend = :topleft)
+p7 = ridgelineplot(chn, [:A, :B], show_hpdi = false, show_qi = false, legend = :topleft)
+p8 = ridgelineplot(chn, [:A], show_median = false, show_mean = false, show_hpdi = false, show_qi = true, legend = :topleft)
+plot(p1, p2, p3, p4, p5, p6, p7,p8, layout = (2,4), size = (1400, 600))
+```
+![ridgeline](https://user-images.githubusercontent.com/31251575/128826579-c2379268-ab5d-481e-9995-7ea28ce52741.png)
+
+```julia
+p9 = forestplot(chn2, chn2.name_map[:parameters], hpd_val = [0.05, 0.15, 0.25])
+p10 = forestplot(chn2, chn2.name_map[:parameters], hpd_val = [0.05, 0.15, 0.25], ordered = true)
+plot(p9, p10, layout = (1,2), size = (900, 400), legend = :topleft)
+```
+![forest](https://user-images.githubusercontent.com/31251575/128826628-49ebece0-9233-4089-a2bd-6ad9023c6d31.png)
+
+
+",True,323,https://api.github.com/repos/TuringLang/MCMCChains.jl/pulls/323,https://github.com/TuringLang/MCMCChains.jl/pull/323,closed,232,8,4,17,9,7,0,0,[],2021-07-30 08:58:54+00:00,2021-08-20 05:16:11+00:00,1801037.0,"20 days, 20:17:17","[{'comment_id': 686848095, 'comment_body': '```suggestion\r\n)\r\n```', 'comment_created': datetime.datetime(2021, 8, 11, 13, 47, 19, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}, {'comment_id': 686850301, 'comment_body': '```suggestion\r\n)\r\n```', 'comment_created': datetime.datetime(2021, 8, 11, 13, 49, 38, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}, {'comment_id': 686854018, 'comment_body': '```suggestion\r\n)\r\n```', 'comment_created': datetime.datetime(2021, 8, 11, 13, 53, 34, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}, {'comment_id': 686854319, 'comment_body': '```suggestion\r\n@recipe function f(\r\n    p::RidgelinePlot;\r\n```', 'comment_created': datetime.datetime(2021, 8, 11, 13, 53, 54, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}, {'comment_id': 686854553, 'comment_body': '```suggestion\r\n@recipe function f(\r\n    p::ForestPlot;\r\n```', 'comment_created': datetime.datetime(2021, 8, 11, 13, 54, 10, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}, {'comment_id': 694715829, 'comment_body': ""Why is this version bumped so much and why isn't it registered? @cpfiffer "", 'comment_created': datetime.datetime(2021, 8, 24, 10, 16, 36, tzinfo=datetime.timezone.utc), 'commenter': 'rikhuijzer', 'type': 'User'}, {'comment_id': 695323345, 'comment_body': ""Woops an oversight on my part. The overbump was because there's other PRs that needed to be merged and it wasn't clear which was first. I'll fix and tag this."", 'comment_created': datetime.datetime(2021, 8, 25, 1, 27, 34, tzinfo=datetime.timezone.utc), 'commenter': 'cpfiffer', 'type': 'User'}]","[{'commit_sha': '76f1b9c3c20e54d121c630088cac4f9006cd266d', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f98dc8b1b5a4ffab6383033314375c54c5b051e0', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08d0ccd1b8297ca3d5f2ad8fd938a5d9b867e048', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '571e73fc3b385db1d1bf561b0da184d92eee9e5e', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7ec8167437a9df5e2ff158c7dffa5a3524c9c9d8', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d777975dfd59528be4e61a4d115164f7abcd52f', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46f6b1d9818d01ee8cd8d8daab23335e182ca808', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04fd1c3dacd76f6e7cf3ac61d1cc865708b4031f', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0c993ebab4c8e781f8a9eeee62b3f830a242a328', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c8bf29dccbda250d36fbf37ed1af817871e4cc5', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e16074e765c5f88f4bf99d3db24a8f924bc47dae', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '74c735c895e8d96d8dc3739d1cc0952ee30dde29', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ae7fe7c354f84f2778d3dd07923ff19b136f8e9', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '624d884ba67626353d71cb7c0440e80cafccae4e', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bb908eb56d8913f5d0ad29e929d8e54119c7b2e0', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e18068e56640dd606869402238b8c695a2aee51e', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aa3a8e46ba27122dddba71e434a0a684977416ef', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}]",,31251575,,User,,11,,10,12
+717758301,Energy plots,,False,329,https://api.github.com/repos/TuringLang/MCMCChains.jl/pulls/329,https://github.com/TuringLang/MCMCChains.jl/pull/329,open,136,3,1,1,0,0,0,0,[],2021-08-23 11:45:07+00:00,,0.0,,[],"[{'commit_sha': 'f9dc7bec4b26d8538941d6d6547b892b767465ab', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}]",,31251575,,User,,11,,10,12
+717377586,"Add documentation and docstrings for ridgeline, forest and caterpilar plots",,False,328,https://api.github.com/repos/TuringLang/MCMCChains.jl/pulls/328,https://github.com/TuringLang/MCMCChains.jl/pull/328,open,88,1,2,3,1,1,0,0,[],2021-08-22 21:32:48+00:00,,0.0,,"[{'comment_id': 1095155086, 'comment_body': '```suggestion\r\nforestplot(chn, chn.name_map[:parameters], hpd_val = [0.05, 0.15, 0.25], ordered = true)\r\n```', 'comment_created': datetime.datetime(2023, 2, 2, 22, 24, 49, tzinfo=datetime.timezone.utc), 'commenter': 'yebai', 'type': 'User'}]","[{'commit_sha': '3432b399b263fa1f79cd344117d5baa92a97d5fd', 'committer_username': 'PaulinaMartin96', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 22, 16, 15, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb2ddcf8dc861e5c592f6290b99512d2b2d336bc', 'committer_username': 'yebai', 'committer_name': 'Hong Ge', 'committer_email': None, 'commit_date': datetime.datetime(2013, 1, 15, 21, 53, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee6249a2529f5472515bd0ebb96ec79e272191bd', 'committer_username': 'yebai', 'committer_name': 'Hong Ge', 'committer_email': None, 'commit_date': datetime.datetime(2013, 1, 15, 21, 53, 50, tzinfo=datetime.timezone.utc)}]",,31251575,,User,,11,,10,12
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+145033521,MCMCChains.jl,TuringLang/MCMCChains.jl,Julia,29,260,16,27,508,47,7,9,"[{'id': 720150601, 'number': 330, 'closed': datetime.datetime(2021, 8, 26, 16, 52, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 26, 3, 25, 32, tzinfo=datetime.timezone.utc), 'time_taken': 48394.0, 'time_delta': '13:26:34', 'additions': 10, 'deletions': 6, 'state': 'closed'}, {'id': 717758301, 'number': 329, 'closed': None, 'created': datetime.datetime(2021, 8, 23, 11, 45, 7, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 136, 'deletions': 3, 'state': 'open'}, {'id': 717377586, 'number': 328, 'closed': None, 'created': datetime.datetime(2021, 8, 22, 21, 32, 48, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 88, 'deletions': 1, 'state': 'open'}, {'id': 700126984, 'number': 323, 'closed': datetime.datetime(2021, 8, 20, 5, 16, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 8, 58, 54, tzinfo=datetime.timezone.utc), 'time_taken': 1801037.0, 'time_delta': '20 days, 20:17:17', 'additions': 232, 'deletions': 8, 'state': 'closed'}, {'id': 692325113, 'number': 319, 'closed': None, 'created': datetime.datetime(2021, 7, 19, 6, 54, 10, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 182, 'deletions': 3, 'state': 'open'}, {'id': 684036400, 'number': 316, 'closed': None, 'created': datetime.datetime(2021, 7, 6, 3, 41, 26, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 60, 'deletions': 10, 'state': 'open'}, {'id': 666487971, 'number': 307, 'closed': None, 'created': datetime.datetime(2021, 6, 10, 4, 18, 29, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 29, 'deletions': 28, 'state': 'open'}]"

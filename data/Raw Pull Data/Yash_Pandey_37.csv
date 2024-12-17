@@ -1,0 +1,795 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+590604761,feat: Replaced pragma with include guards,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #80 
+
+**Description**
+Although `#pragma once` is less prone to errors and is supported by a wide range of compliers, they produce some warnings when compiling with Clang or GCC on MacOS and Linux. I carefully replaced `#pragma once` and implemented include guards in each cpp file. Here is a glimpse of what it looks like for a file, say `foo.cpp`: 
+
+```
+// Prelude/License
+
+#include ""pch.h""
+ 
+#ifndef FOO_CPP
+#define FOO_CPP
+
+// The contents of the file
+
+#endif // FOO_CPP
+```
+
+**Note on compilation**
+
+There were no warnings generated on build for all configurations after implementing this.
+
+**Tested on**
+
+OS: Darwin arm64 20.3.0
+Compiler: Clang 12.0.0
+Effective build time: ~12 seconds",True,82,https://api.github.com/repos/casbin/casbin-cpp/pulls/82,https://github.com/casbin/casbin-cpp/pull/82,closed,461,195,67,1,4,0,1,0,[{'name': 'released'}],2021-03-11 07:03:10+00:00,2021-03-11 09:07:54+00:00,7484.0,2:04:44,[],"[{'commit_sha': '5a2807b5974bfa2325edb8f6f6ce4763b16f18e7', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+592542060,feat: Implemented synced enforcer,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #38
+
+Most of the functions of SyncedEnforcer were straight-forward to implement but the `AutoLoadPolicy` needed a workaround since it utilized GoLang's ticker from the ""time"" module and concurrency. For this, I created a custom concurrent ticker that takes in the duration and a `function<void()>` for a callback. Then passed in the following to callback of ticker which is called at every tick:
+```CPP
+[this]() {
+    Enforcer::LoadPolicy();
+    ++n;
+};
+```
+Note that `n` is an `atomic_int` which is thread-safe. 
+When `StopAutoLoad()` is called, the ticker stops all worker threads deployed by the ticker. However, this won't destroy the instance of the ticker. I also created test files to verify everything is implemented correctly. (The test policy won't change in real-time during a test)
+
+**Overheads involved:**
+
+Apart from the futures obtained from ticker threads, ticker also collects futures from callback at each tick since they're called asynchronously as well. This might lead to a pile of useless data given enough uptime of `AutoLoadPolicy()` and scope of `SyncedEnforcer`.
+
+---
+
+**Tasks remaining**
+
+- `BatchEnforcer`, `BatchWithMatcher` yet to be implemented in `Enforcer`.
+- `UpdatePolicy`, `UpdateNamedPolicy`, `UpdatePolicies` and `UpdateNamedPolicies` yet to be implemented in `Enforcer`.
+- `UpdateGroupingPolicy`, `UpdateNamedGroupingPolicy` yet to be implemented in `Enforcer`.
+
+I'll implement this in another PR 'cause this is enormous already.",False,83,https://api.github.com/repos/casbin/casbin-cpp/pulls/83,https://github.com/casbin/casbin-cpp/pull/83,closed,1043,49,11,9,5,3,1,0,[{'name': 'released'}],2021-03-14 13:26:19+00:00,2021-03-30 11:59:12+00:00,1377173.0,"15 days, 22:32:53","[{'comment_id': 595176177, 'comment_body': '@xcaptain I think this would be of some context to https://github.com/casbin/casbin-cpp/issues/38#issuecomment-800147824.', 'comment_created': datetime.datetime(2021, 3, 16, 13, 38, 21, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}, {'comment_id': 595689937, 'comment_body': '@EmperorYP7 Nice, and I think you can also add `SetWatcher` to `enforcer`', 'comment_created': datetime.datetime(2021, 3, 17, 3, 38, 22, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}, {'comment_id': 596101966, 'comment_body': 'Sure thing!\r\n', 'comment_created': datetime.datetime(2021, 3, 17, 15, 2, 15, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}]","[{'commit_sha': '2d21e02ec3c77f15906ffa9d418614abb202710d', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '86353971a3416eb9163f1ec7ae94c6f299455be3', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b59c37741f16ea6508a78906d7195e6709b0dbe', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37007e0e9751410273d6f1e85f47adf658e62b84', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4ebf55ec7f2f60488c8145c35f6cb4633626ae91', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07d862c3dadfb24437a0a760d1263e0b657c15aa', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'acf4b88df8c41d56ebcbe8b3cf7b6b46cb471481', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8329fdde9b7d8193a741bd260d31d3741f046d41', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44fb6c49109364068fdde8a0ad42e1a743ef7822', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+604066690,feat: Added async ticker,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #38
+
+Reference: #89 
+
+**Description**
+
+Most of the functions of SyncedEnforcer are straight-forward to implement but the `AutoLoadPolicy` needed a workaround since it utilized GoLang's ticker from the ""time"" module and concurrency used [here](https://github.com/casbin/casbin/blob/86d48b589606a67f8dc3c51486e8daa1b743f579/enforcer_synced.go#L60).
+```go
+ticker := time.NewTicker(d)
+``` 
+For this, I created a custom concurrent ticker that takes in the `chrono::duration` and a `function<void()>` for callback.
+`Ticker::start()` will start a loop asynchronously (on a new thread). The parametric function will be called asynchronously as well. 
+
+**Overheads involved:**
+
+Apart from the futures obtained from ticker threads, ticker also collects futures from callback at each tick since they're called asynchronously as well. This might lead to a pile of useless data given enough uptime and scope of the Ticker.",True,90,https://api.github.com/repos/casbin/casbin-cpp/pulls/90,https://github.com/casbin/casbin-cpp/pull/90,closed,118,0,4,1,8,0,1,0,[{'name': 'released'}],2021-03-30 16:43:27+00:00,2021-04-01 01:52:00+00:00,119313.0,"1 day, 9:08:33",[],"[{'commit_sha': '0875c60291aa7cf84c7d42fcf039e13172bd65c5', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+604203460,feat: Replaced travis with GitHub Actions,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #91 ",True,92,https://api.github.com/repos/casbin/casbin-cpp/pulls/92,https://github.com/casbin/casbin-cpp/pull/92,closed,60,7,3,2,3,0,1,0,[{'name': 'released'}],2021-03-30 18:17:53+00:00,2021-03-31 12:14:40+00:00,64607.0,17:56:47,[],"[{'commit_sha': '9228a88545f94a096b5806363f0c9df9f27b5f44', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08ce172560ce35d71873dcd6e2ace65a0b7723c8', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+607155342,feat: Added translation unit for synced enforcer,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #38
+
+Reference: #90 
+
+**Description**
+
+Most of the functions of SyncedEnforcer were straight-forward to implement but the AutoLoadPolicy needed a workaround since it utilized GoLang's ticker from the ""time"" module and concurrency. For this, I created a custom concurrent ticker that takes in the duration and a function<void()> for a callback. Then passed in the following to callback of ticker which is called at every tick:
+```cpp
+[this]() {
+    Enforcer::LoadPolicy();
+    ++n;
+};
+```
+Note that `n` is an `atomic_int` which is thread-safe.
+When StopAutoLoad() is called, the ticker stops all worker threads deployed by the ticker. However, this won't destroy the instance of the ticker. I also created test files to verify everything is implemented correctly. (The test policy won't change in real-time during a test)
+
+---
+
+**Tasks remaining**
+
+`BatchEnforcer`, `BatchWithMatcher` yet to be implemented in `Enforcer`.
+`UpdatePolicy`, `UpdateNamedPolicy`, `UpdatePolicies` and `UpdateNamedPolicies` yet to be implemented in `Enforcer`.
+`UpdateGroupingPolicy`, `UpdateNamedGroupingPolicy` yet to be implemented in `Enforcer`.
+I'll implement this in another PR.",True,93,https://api.github.com/repos/casbin/casbin-cpp/pulls/93,https://github.com/casbin/casbin-cpp/pull/93,closed,515,6,3,2,2,8,1,0,[{'name': 'released'}],2021-04-01 08:10:02+00:00,2021-04-02 13:09:44+00:00,104382.0,"1 day, 4:59:42","[{'comment_id': 605596855, 'comment_body': 'What this `n` used for?', 'comment_created': datetime.datetime(2021, 4, 1, 11, 58, 40, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}, {'comment_id': 605597318, 'comment_body': 'why use `LoadPolicy` in the parent class?', 'comment_created': datetime.datetime(2021, 4, 1, 11, 59, 27, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}, {'comment_id': 605656105, 'comment_body': 'This is to track the number of callbacks to LoadPolicy within the scope of `AutoLoadPolicy`.\r\n\r\nRefer [this line](https://github.com/casbin/casbin/blob/86d48b589606a67f8dc3c51486e8daa1b743f579/enforcer_synced.go#L74) in `enforcer_synced.go`', 'comment_created': datetime.datetime(2021, 4, 1, 13, 26, 16, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}, {'comment_id': 605745097, 'comment_body': ""Don't know its usage, but seems reasonable."", 'comment_created': datetime.datetime(2021, 4, 1, 15, 23, 36, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}, {'comment_id': 606006522, 'comment_body': '@EmperorYP7 fixed?', 'comment_created': datetime.datetime(2021, 4, 1, 23, 58, 54, tzinfo=datetime.timezone.utc), 'commenter': 'hsluoyz', 'type': 'User'}, {'comment_id': 606065899, 'comment_body': '@hsluoyz Yes, fixed.', 'comment_created': datetime.datetime(2021, 4, 2, 4, 28, 34, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}, {'comment_id': 606068310, 'comment_body': '@EmperorYP7 click:\r\n\r\n![image](https://user-images.githubusercontent.com/3787410/113381094-a4012e00-93b0-11eb-970c-be8afbd6cfe3.png)\r\n', 'comment_created': datetime.datetime(2021, 4, 2, 4, 40, 49, tzinfo=datetime.timezone.utc), 'commenter': 'hsluoyz', 'type': 'User'}, {'comment_id': 606207313, 'comment_body': '@hsluoyz done!', 'comment_created': datetime.datetime(2021, 4, 2, 12, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}]","[{'commit_sha': '7e214964542811464cc8df1d93356a2bd7e90f4e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9e5dd593e8b9955bd6c391f3cfc5731c3e277a6e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+608055092,feat: Added Tests for SyncedEnforcer,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #38 
+
+Reference: #93 
+
+**Description**
+
+Added tests for `enforcer_synced.cpp` corresponding to `enforcer_synced_test.go`",True,94,https://api.github.com/repos/casbin/casbin-cpp/pulls/94,https://github.com/casbin/casbin-cpp/pull/94,closed,76,0,3,1,2,0,1,0,[{'name': 'released'}],2021-04-02 14:26:46+00:00,2021-04-05 04:24:08+00:00,223042.0,"2 days, 13:57:22",[],"[{'commit_sha': '0a0a48a38c752fa0737a0c11e9911a00475a7926', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+621000334,fix: Build on MS Visual Studio,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This PR fixes #97 
+
+I recently added tests for synced enforcer in #94 and it did not use the namespace introduced in #95.",True,98,https://api.github.com/repos/casbin/casbin-cpp/pulls/98,https://github.com/casbin/casbin-cpp/pull/98,closed,3,0,1,1,1,0,1,0,[{'name': 'released'}],2021-04-22 11:27:10+00:00,2021-04-22 12:17:10+00:00,3000.0,0:50:00,[],"[{'commit_sha': '7c5d5e48e829a61e3c8e12aeb91c2b6ffbf8bcdb', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+649818568,feat: Initiate CMake configuration,"Fixes #99 partially
+
+Extended CMake config so as to add testing and CMake modules seamlessly. This won't change the build output/format we currently have, this is just an initial setup upon which we can add all the builds we want.",True,101,https://api.github.com/repos/casbin/casbin-cpp/pulls/101,https://github.com/casbin/casbin-cpp/pull/101,closed,45,6,2,1,2,0,1,0,[{'name': 'released'}],2021-05-21 09:37:46+00:00,2021-05-21 16:16:20+00:00,23914.0,6:38:34,[],"[{'commit_sha': '475f23b21887c1ba35c14fd053637131405a7cfb', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+658500546,feat: Completion of Enforcer API,"Fixes #96 **partially**
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+**Description**
+
+- This code implements some methods of the enforcer API components from [casbin](https://github.com/casbin/casbin) to be on par with GoLang variant. Some of them includes :
+
+```cpp
+// Public API
+std::vector<bool> BatchEnforce(const std::vector<std::vector<std::string>>& requests);
+std::vector<bool> BatchEnforceWithMatcher(const std::string& matcher, const std::vector<std::vector<std::string>>& requests);
+
+// Management API functions
+bool UpdateGroupingPolicy(const std::vector<std::string>& oldRule, const std::vector<std::string>& newRule);
+bool UpdateNamedGroupingPolicy(const std::string& ptype, const std::vector<std::string>& oldRule, const std::vector<std::string>& newRule);
+bool UpdatePolicy(const std::vector<std::string>& oldPolicy, const std::vector<std::string>& newPolicy);
+bool UpdateNamedPolicy(const std::string& ptype, const std::vector<std::string>& p1, const std::vector<std::string>& p2);
+bool UpdatePolicies(const std::vector<std::vector<std::string>>& oldPolices, const std::vector<std::vector<std::string>>& newPolicies);
+bool UpdateNamedPolicies(const std::string& ptype, const std::vector<std::vector<std::string>>& p1, const std::vector<std::vector<std::string>>& p2);
+
+// RBAC API member functions.
+bool updatePolicy(const std::string& sec, const std::string& p_type, const std::vector<std::string>& oldRule, const std::vector<std::string>& newRule);
+bool updatePolicies(const std::string& sec, const std::string& p_type, const std::vector<std::vector<std::string>>& p1, const std::vector<std::vector<std::string>>& p2);
+```
+
+- It also changes the convention of using `this->privateMember` to access private members of a class to just `m_privateMember`.
+
+- In compliance with const reference for strings and vectors to prevent multiple allocations.
+
+
+
+",True,103,https://api.github.com/repos/casbin/casbin-cpp/pulls/103,https://github.com/casbin/casbin-cpp/pull/103,closed,378,252,18,1,2,4,1,0,[{'name': 'released'}],2021-05-31 20:10:31+00:00,2021-06-08 00:24:10+00:00,620019.0,"7 days, 4:13:39","[{'comment_id': 646840477, 'comment_body': ""It's not implemented yet, Are you preparing to do in the next pull request?"", 'comment_created': datetime.datetime(2021, 6, 7, 18, 25, 14, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}, {'comment_id': 646841802, 'comment_body': 'method not used and not implemented. ', 'comment_created': datetime.datetime(2021, 6, 7, 18, 27, 20, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}, {'comment_id': 646843443, 'comment_body': ""Yes, I left it this way to reduce clutter in the PR. I'll be implementing it along with unit tests in the next PR."", 'comment_created': datetime.datetime(2021, 6, 7, 18, 29, 49, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}, {'comment_id': 646844180, 'comment_body': 'OK', 'comment_created': datetime.datetime(2021, 6, 7, 18, 30, 59, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}]","[{'commit_sha': '47079df2d8662714283ae36fc1e207cd03c5f393', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+661081835,fix: Taking in parameters by const reference,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+**Description**
+
+The internal, RBAC, and Enforcer public APIs contained functions that were copying all the parameters by value. This might result in multiple allocations for logically same data. This code will help in reducing the number of allocations by taking in parameters as const reference.",True,104,https://api.github.com/repos/casbin/casbin-cpp/pulls/104,https://github.com/casbin/casbin-cpp/pull/104,closed,333,333,11,2,2,0,1,0,[{'name': 'released'}],2021-06-03 17:13:51+00:00,2021-06-04 03:44:13+00:00,37822.0,10:30:22,[],"[{'commit_sha': '847efeb11d34287ad8a0bde9d68aff778afefa8a', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6da8f332b064a17c8ede89064059c4328952177f', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+665045896,feat: Added ABAC entity wrapper,"### Fixes #102 Partially
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### **Description**
+
+This code adds a wrapper to represent an ABAC data entity within casbin-cpp's interface. The user can retrieve this entity:
+
+```cpp
+auto subject = casbin::GetData({
+    { ""name"", ""alice"" },
+    { ""age"",  17 },
+    { ""grade"", 3.8f }
+});
+```
+
+This instantiates `casbin::ABACData` where attributes related to the entity are stored as key-value pairs in a hashmap. Key's type can only be `std::string` while value's type can be any one of `std::string`, `int32_t`, and `float`.
+
+---
+### **Plan of action**
+
+In the subsequent PRs, I'll try to integrate `casbin::ABACData` with `casbin::Enforcer`. The desired user experience I aim for is:
+
+```cpp
+auto e = casbin::Enforcer(""path/to/abac_model.conf"", ""path/to/abac_policy.csv"");
+
+auto subject = casbin::GetData({
+    { ""name"", ""alice"" },
+    { ""age"",  17 },
+    { ""grade"", 3.8f }
+});
+
+auto object = casbin::GetData({
+    { ""name"", ""data1"" },
+    { ""owner"", ""katy"" }
+});
+
+// We may create object for action as well or pass only std::string for object/subject
+e.Enforce(subject, object, ""read"");
+```
+
+`casbin::Enforcer` will create `casbin::ABACData` corresponding to the model given to it within its internal API.
+
+Let me know if this approach has some flaws.
+
+---
+
+### Overheads
+
+1. `casbin::ABACData` has a `std::unordered_map` which may consume noticeably large space when scaled up to hundreds of thousands of objects i.e. **they aren't very cheap to make.**
+1. Whenever we call `casbin::GetData(...)`, it stores the reference to the instance of `casbin::ABACData` in a vector which may consume space when scaled up.",True,105,https://api.github.com/repos/casbin/casbin-cpp/pulls/105,https://github.com/casbin/casbin-cpp/pull/105,closed,201,7,5,7,11,2,1,0,[{'name': 'released'}],2021-06-08 15:54:02+00:00,2021-06-20 02:57:18+00:00,990196.0,"11 days, 11:03:16","[{'comment_id': 649343958, 'comment_body': 'This may also be:\r\n\r\n```suggestion\r\n    typedef std::vector<std::pair<std::string, VariantType>> VariantList;\r\n```\r\n\r\nLet me know which one is better.', 'comment_created': datetime.datetime(2021, 6, 10, 16, 27, 59, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}, {'comment_id': 652316246, 'comment_body': 'I think `unordered_map` is better.', 'comment_created': datetime.datetime(2021, 6, 16, 3, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'xcaptain', 'type': 'User'}]","[{'commit_sha': '89d2aea5d299fec76595621451b3527339583dec', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9be4bc75f712defc30fd14d628c0e3940a28e9c8', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e92f140c6ffbc1066e10df517d7f6d34e27c67c1', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e36fdce5ddfd34e928dac8aadd6762285587be1a', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d3278ccdcda00dfc67ee5a1ad47668c737f8a82', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de47a4b4f1b65f69baf2a3e04647843e2f21e56b', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a51590857b0cd8bdd42ba82759ef105e2f3467ec', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+667101367,feat: Added implementation and tests for UpdatePolicy API,"### Fixes #96 and #99 Partially
+
+Signed-off-by: Yash Pandey (YP) yash.btech.cs19@iiitranchi.ac.in
+
+---
+
+### **Description**
+
+- Added implementation of `casbin::Enforcer::updatePolicy(...)` and `casbin::Enforcer::updatePolicies(...)` as per casbin (GoLang) implementation.
+- Added tests for `casbin::Enforcer::UpdatePolicy()`, `casbin::Enforcer::UpdatePolicies()`, `casbin::Enforcer::UpdateGroupingPolicy()`, and `casbin::Enforcer::UpdateGroupingPolicies()` corresponding to tests in casbin (GoLang).
+- Modified GitHub Actions CI to:
+    - Run CMake commands instead of makefile for UNIX
+    - Test build through CMake for Windows
+---
+
+**Important note** - One of the assert tests at the end of `tests/test_management_api.cpp` was failing for some reason.",True,106,https://api.github.com/repos/casbin/casbin-cpp/pulls/106,https://github.com/casbin/casbin-cpp/pull/106,closed,446,193,18,7,2,0,1,0,[{'name': 'released'}],2021-06-10 17:15:35+00:00,2021-06-16 03:04:32+00:00,467337.0,"5 days, 9:48:57",[],"[{'commit_sha': '1f7d811b5dde1e6a4502a661750a3dec36625ba4', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae0f3472b435df04d4eb2ff2d3e0f27233472626', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c684ce676ce7273729c654112a4bc6c71aa6c3b', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5125e2580e51b304b0552ef656843a7e617f40ba', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ae76046a70fbe8e40e61494e4f932c6700650f2', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7f21dfb7fff26998f4309335c963b21b86e58c85', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf260ae6c81110bcec80f8b73a35856a504206f3', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+671704922,feat: Initiated CTest setup,"### Fixes #41 Partially
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+### Description
+
+This code:
+- configures the build system to install [googletest v1.11.0](https://github.com/google/googletest/tree/release-1.11.0) within `build/_deps` directory without any manual setup.
+- Tests `casbin::Enforcer` and `casbin::CachedEnforcer` corresponding to the ones done in MS Unittests.
+- Modifies the CI to run test script on all platforms. (ie. Linux, Windows, and Mac)
+
+---
+### Build instructions for all platforms
+
+(Assuming you have CMake v3.19 or later installed)
+
+1. Clone/checkout to [`EmperorYP7/casbin-cpp:ctest-setup`](https://github.com/EmperorYP7/casbin-cpp/tree/ctest-setup)
+2. Open terminal/cmd in the root directory of the project:
+**Note:** On Windows, this command will also create Visual Studio project files
+```bash
+mkdir build
+cd build
+cmake ..
+```
+
+3. After the project is configured successfully,
+```bash
+cmake --build .
+```
+4. To run the tests:
+```bash
+ctest
+```
+
+---
+### Plan of action
+
+Here's what I am working on:
+
+- Completing all the tests and removing MS Unit Testing completely.
+- Workflow for showing code coverage on pull requests/push.
+- Shifting to GitHub Actions completely for CI/CD.
+
+---
+**Points to note**
+
+- I discovered that GTest is not thread-safe. We need to work around it by joining threads before testing the result for `casbin::SyncedEnforcer` tests.
+
+",True,107,https://api.github.com/repos/casbin/casbin-cpp/pulls/107,https://github.com/casbin/casbin-cpp/pull/107,closed,363,7,12,6,5,0,1,0,[{'name': 'released'}],2021-06-16 17:22:46+00:00,2021-06-24 11:47:24+00:00,671078.0,"7 days, 18:24:38",[],"[{'commit_sha': '7daac09dda0fd20e500ebbae3008c76e41f96646', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bbfdd66229fff5b6446de4bfa5e930b4cd889d6f', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f73b844d58e6db5ca3815edef5941d5a869538d', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fbad4263d9bad180bae389f1d211e1d7da88ae5c', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee306b2b0e69214dc274b94386a0948749663e47', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a5019e160c5cb0b194cc66d2a396e1d2b8ec8b87', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+673660801,"test: Management API, Utility methods and more","### Fixes #41 partially
+
+Signed-off-by: Yash Pandey(YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code adds tests for:
+
+- Management API
+- Utility functions/methods
+- casbin's Config API
+- Build-in functions
+---
+
+**Points to note**
+
+- Tests for `casbin::SyncedEnforcer` are commented out. This is because GTest isn't made for testing multithreaded workloads. I tried multiple workarounds, but it doesn't seem to work out. ",True,108,https://api.github.com/repos/casbin/casbin-cpp/pulls/108,https://github.com/casbin/casbin-cpp/pull/108,closed,599,17,7,1,5,0,1,0,[{'name': 'released'}],2021-06-18 18:40:27+00:00,2021-06-29 10:51:12+00:00,922245.0,"10 days, 16:10:45",[],"[{'commit_sha': 'bf0af681248ad5a4556522f3d759136690cfcef9', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+673769256,"test: Added RBAC, Role Manager and removed MS Unit Tests","### Fixes #41 partially
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+### Description
+
+This code:
+
+- Adds tests for:
+    - `model_enforcer_test`
+    - `model_test`
+    - `rbac_api_with_domains_test`
+    - `rbac_api_test`
+    - `role_manager_test`
+- Remove MS Unit Testing and associated CI
+- Removed MS Visual Studio files. It is completely generated and handled by CMake now.",True,109,https://api.github.com/repos/casbin/casbin-cpp/pulls/109,https://github.com/casbin/casbin-cpp/pull/109,closed,1526,3541,37,4,1,0,1,0,[{'name': 'released'}],2021-06-18 22:56:05+00:00,2021-06-29 11:38:01+00:00,909716.0,"10 days, 12:41:56",[],"[{'commit_sha': '753880b162736e2b8e73f763c4d1f31679fa0916', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dfa478eb5b7540cc5fae1c26eabff8c4b62af19', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '51e01fb67cd85f9cee8f8c7667020f7430fee682', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70efa6faedca8fd7785505447f3f4a60e0439e63', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+677925625,feat: Inherit `std::exception`,"Fix: #111
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+Incorporated changes [suggested](https://github.com/casbin/casbin-cpp/issues/111#issue-928894532) by @klemens-morgenstern 
+",True,112,https://api.github.com/repos/casbin/casbin-cpp/pulls/112,https://github.com/casbin/casbin-cpp/pull/112,closed,150,188,17,1,3,0,1,0,[{'name': 'released'}],2021-06-25 13:43:32+00:00,2021-06-27 11:42:21+00:00,165529.0,"1 day, 21:58:49",[],"[{'commit_sha': 'f2e6355b94e702371f771d85aacfc6c3426c8565', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+679396995,chore: Updated docs for build instructions,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+Updated documentation for build instructions and usage",True,113,https://api.github.com/repos/casbin/casbin-cpp/pulls/113,https://github.com/casbin/casbin-cpp/pull/113,closed,77,34,3,3,3,0,1,0,[{'name': 'released'}],2021-06-28 20:55:32+00:00,2021-06-29 12:20:02+00:00,55470.0,15:24:30,[],"[{'commit_sha': '1e7708e92ca40206ddff1fcb9eb9c22641c7e6f4', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '28db8750e6e30058d8992546beaaa71c8fd9cc57', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b500cc07463730ae1ff54f4c9be7405a217559d', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+679477240,feat: Initiated benchmark workflow,"### Fixes #42
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code will find [google/benchmark v1.5.5](https://github.com/google/benchmark) within the system. If not found, it will fetch it from GitHub and store it in `build/_deps` directory. Here's the workflow to get it running:
+
+1. Checkout to `EmperorYP7/casbin-cpp:benchmark`.
+2. Build the project using the commands stated in docs to be added in #113.
+3. Go to `/build/tests/benchmarks` and run the executable named `casbin_benchmark`
+",True,114,https://api.github.com/repos/casbin/casbin-cpp/pulls/114,https://github.com/casbin/casbin-cpp/pull/114,closed,224,26,24,7,4,6,1,0,[{'name': 'released'}],2021-06-28 23:37:48+00:00,2021-06-30 11:24:56+00:00,128828.0,"1 day, 11:47:08","[{'comment_id': 661344986, 'comment_body': 'Plz use `2021` for newly added source code file.', 'comment_created': datetime.datetime(2021, 6, 30, 10, 49, 48, tzinfo=datetime.timezone.utc), 'commenter': 'hsluoyz', 'type': 'User'}, {'comment_id': 661351448, 'comment_body': ""Don't update year for old files."", 'comment_created': datetime.datetime(2021, 6, 30, 10, 58, 47, tzinfo=datetime.timezone.utc), 'commenter': 'hsluoyz', 'type': 'User'}, {'comment_id': 661351610, 'comment_body': 'Use now year for new files.', 'comment_created': datetime.datetime(2021, 6, 30, 10, 59, 3, tzinfo=datetime.timezone.utc), 'commenter': 'hsluoyz', 'type': 'User'}, {'comment_id': 661351668, 'comment_body': 'Use now year for new files.', 'comment_created': datetime.datetime(2021, 6, 30, 10, 59, 8, tzinfo=datetime.timezone.utc), 'commenter': 'hsluoyz', 'type': 'User'}, {'comment_id': 661366488, 'comment_body': 'Fixed', 'comment_created': datetime.datetime(2021, 6, 30, 11, 20, 54, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}, {'comment_id': 661366606, 'comment_body': 'Fixed', 'comment_created': datetime.datetime(2021, 6, 30, 11, 21, 2, tzinfo=datetime.timezone.utc), 'commenter': 'EmperorYP7', 'type': 'User'}]","[{'commit_sha': '3f2ab6f38b327f64bbf0f56994700687df24f2b6', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ba191f886f678d8f2f877ad1ab4789c2ed663a1', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69c1f6c488625efa004d00a0e8b792f6a674ed1f', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd9d28bbe8103519ae8eb8453455deda904d3c7e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '55e0fe278c43ef10f025a1af619ed6c9ce4113e3', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76999a78cefbfb99a9f65e394bf0c2a84f9407de', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f295dae2267da2a28f9a3869c91bc059ebff6010', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+683024303,test: Benchmarks for `CachedEnforcer`,"### Fixes #42 
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+### Description
+
+This code:
+- Adds benchmarks for analyzing the performance of the project at various scales of usage. This includes:
+    - `BenchmarkCachedRBACModelSmall`
+    - `BenchmarkCachedRBACModelMedium`
+    - `BenchmarkCachedRBACModelLarge` - not executed due to `AddPolicies()` resulting in segmentation fault
+    - `BenchmarkCachedRBACModelWithResourceRoles `
+    - `BenchmarkCachedRBACModelWithDomains`
+    - `BenchmarkCachedKeyMatchModel`
+    - `BenchmarkCachedRBACModelWithDeny`
+    - `BenchmarkCachedPriorityModel` - 
+    - `BenchmarkCachedRBACModelMediumParallel` - undefined hiatus while running this benchmark
+",True,116,https://api.github.com/repos/casbin/casbin-cpp/pulls/116,https://github.com/casbin/casbin-cpp/pull/116,closed,204,2,3,1,2,0,1,0,[{'name': 'released'}],2021-07-03 13:27:18+00:00,2021-07-11 13:41:50+00:00,692072.0,"8 days, 0:14:32",[],"[{'commit_sha': '17cc825047e51634c695f85f7a2b6ea908dd5fb4', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+683212480,test: Benchmarks for ManagementAPI,"### Fixes #42 
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+### Description
+
+This code adds benchmarks for ManagementAPI. This includes:
+- `Enforcer::HasPolicy()`
+- `Enforcer::AddPolicy()`
+- `Enforcer::RemovePolicy()`
+
+for small, medium, and large workflows.
+
+**Note:** This should be merged only after #116 is merged into master.
+
+### Issues detected
+
+The large workflow benchmarks show that the management API functions are dramatically slower than that of GoLang.
+",True,118,https://api.github.com/repos/casbin/casbin-cpp/pulls/118,https://github.com/casbin/casbin-cpp/pull/118,closed,377,2,4,2,5,0,1,0,[{'name': 'released'}],2021-07-04 17:53:46+00:00,2021-07-13 12:57:21+00:00,759815.0,"8 days, 19:03:35",[],"[{'commit_sha': '17cc825047e51634c695f85f7a2b6ea908dd5fb4', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd525b95af37a962219d94cd2af55eca547155b56', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+683858001,test: Benchmarks for `Model` and `RoleManager`,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+### Description
+
+Added Benchmarks for `casbin::Model` and `casbin::RoleManager`.",True,120,https://api.github.com/repos/casbin/casbin-cpp/pulls/120,https://github.com/casbin/casbin-cpp/pull/120,closed,277,4,5,2,5,0,1,0,[{'name': 'released'}],2021-07-05 17:44:00+00:00,2021-07-18 01:35:58+00:00,1065118.0,"12 days, 7:51:58",[],"[{'commit_sha': '5cd74e2921366f3736ec19a33eae9ed758a22835', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0da89581d32a81c6e3c9bc22d4879ca0f6f67c21', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+687651275,chore: Cleanup,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+**Work in progress**",False,121,https://api.github.com/repos/casbin/casbin-cpp/pulls/121,https://github.com/casbin/casbin-cpp/pull/121,closed,510,521,54,2,1,0,0,0,[],2021-07-12 09:07:01+00:00,2021-07-18 14:15:28+00:00,536907.0,"6 days, 5:08:27",[],"[{'commit_sha': '4b0e7056300990a2d4be7a6c37cee9498b3dd89b', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea37d4277441b3d29383563e26958d4c5c873af2', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+688571955,feat: Streamlined types,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+### Description
+
+This code adds type definitions for accomodating `casbin::ABACData` within the entirety of the project.
+
+The definitions are as follows:
+- `AttributeValue`: The type of a value of an attribute
+- `Attribute`: The type of an attribute containing the name and the value as a `std::pair`.
+- `AttributeVector`: Vector of attributes.
+- `AttributeList`: Initializer list of attributes.
+- `AttributeMap`: Unordered map containing name and value of the attributes.
+- `Data`: Type of Data for accomodating `ABACData`
+- `DataVector`: Vector of `casbin::Data`
+- `DataList`: Initializer list of `casbin::Data`
+- `DataMap`: unordered map containing the name and `casbin::Data`
+
+### Noteworthy
+
+The code introduces intrinsic type definitions to casbin. This might affect the overall user-friendliness of the project. However, the type names added here are intuitive and easy to understand, even for a first-time user.",True,122,https://api.github.com/repos/casbin/casbin-cpp/pulls/122,https://github.com/casbin/casbin-cpp/pull/122,closed,271,137,16,2,2,0,1,0,[{'name': 'released'}],2021-07-13 07:17:29+00:00,2021-07-16 07:39:27+00:00,260518.0,"3 days, 0:21:58",[],"[{'commit_sha': '02a54a2a2e6dff36a29dfb8c28fc18b21cdc299e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '27ac2bdc342d47ed1d5b4b6d8cd9db645470c739', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+691630269,feat: Added benchmarks for Casbin-CPP,"### Fixes #255 
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+### Description
+
+Added benchmarks for [casbin-cpp](https://github.com/casbin/casbin-cpp) as per the discussion in casbin/casbin-cpp#118.",True,256,https://api.github.com/repos/casbin/casbin-website/pulls/256,https://github.com/casbin/casbin-website/pull/256,closed,28,1,1,1,1,0,0,0,[],2021-07-16 17:04:27+00:00,2021-07-17 00:36:34+00:00,27127.0,7:32:07,[],"[{'commit_sha': 'e54a811ac5ef43b19fde0ded3de72d71bb92f893', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+693346396,feat: Initiated pybind11 Configuration,"### Fixes #84 partially
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code initiated the configuration of `pybind11` into the project through CMake. 
+- I configured it so that it finds if pybind11 is installed locally. If it's not, the build system fetches version 2.7.0 from GitHub into the `build/_deps` directory and makes it available to our targets.
+- Added a target named `pycasbin` which compiles to a dynamic library i.e. a python module which can be imported in Python code.
+- Added an option `CASBIN_BUILD_BINDINGS` to specify whether to build language bindings, and `CASBIN_BUILD_PYTHON_BINDINGS` to toggle builds specific to python bindings.
+- When disabled, `CASBIN_BUILD_BINDINGS` and `CASBIN_BUILD_PYTHON_BINDINGS` won't fetch anything from GitHub adding modularity to our build system.
+- Added a mock binding for
+    ```cpp
+    int sum(int a, int b);
+    [](int i, int j){ return i - j; }
+    ```
+    referring to pybind11's docs.
+- Removed the `makefile` since it is now auto-generated through CMake.
+
+### Noteworthy
+
+- Although the build system works well and needs minimal configuration from the user's standpoint, I encountered many errors related to C++ standard used when trying to link `pycasbin` with the `casbin` target.
+
+- Vital template definitions like `std::variant` were undefined. This is becuase `pycasbin` is built with C++11 standard while `casbin` is compiled with C++17 standard.
+
+- I **referred** (no copy-pasting) to the build system config for pybind11 from [AcademySoftwareFoundation/OpenColorIO](https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/bindings/python/CMakeLists.txt) for this as I think it was suitable for our use case.",True,123,https://api.github.com/repos/casbin/casbin-cpp/pulls/123,https://github.com/casbin/casbin-cpp/pull/123,closed,184,83,10,1,3,0,1,0,[{'name': 'released'}],2021-07-20 10:22:32+00:00,2021-07-29 12:34:53+00:00,785541.0,"9 days, 2:12:21",[],"[{'commit_sha': '6d1c0e2c782878a8f7208953932280d4c81a6428', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+693703446,chore: Util cleanup,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Replaces some of the `const std::string&` parameters to `std::string_view` to allow direct manipulations of strings.
+- Reserves space/memory for heap-allocated arrays beforehand to use `std::vector<T>::push_back()` without reallocations.
+- Reserves space for hashmaps as well in a similar fashion.
+- Uses range-based for loops for better code readability.
+- Converts raw type casts to `static_cast`/`dynamic_cast` to facilitate long-term debugging.
+- Revises the implementation of `casbin::JoinSlice()`, `casbin::ArrayEquals()` and other utlity functions.
+
+### Important Note
+
+The revised implementation of `casbin::ArrayEquals()` is showing ambiguous behavior. This caused many tests to fail, which I commented out in this PR. This shall not propagate to `casbin::master`, so I am reverting back those changes.",True,124,https://api.github.com/repos/casbin/casbin-cpp/pulls/124,https://github.com/casbin/casbin-cpp/pull/124,closed,62,86,15,3,2,0,1,0,[{'name': 'released'}],2021-07-20 18:35:55+00:00,2021-08-05 16:23:40+00:00,1374465.0,"15 days, 21:47:45",[],"[{'commit_sha': '615f473294a13a663f1de7108cc344e07a46d2b5', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a6fe06be570e5202ebaec215999c29c1ddf003a', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0337fccb6ac2ab2853acf003ec5e14f528f3b8a', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+693705411,chore: Model Cleanup,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+### Description
+
+With reference to casbin/casbin-website#255, I tried to clean up the implementation of the model by reducing the numbers of constructor calls for `std::vector`, structured bindings and more.
+
+### Points to note
+
+This might not affect the actual performance of the enforcer directly, but is a valid and necessary cleanup.",True,125,https://api.github.com/repos/casbin/casbin-cpp/pulls/125,https://github.com/casbin/casbin-cpp/pull/125,closed,98,95,5,1,2,0,1,0,[{'name': 'released'}],2021-07-20 18:37:59+00:00,2021-07-23 11:41:16+00:00,234197.0,"2 days, 17:03:17",[],"[{'commit_sha': 'a1d2ed60bbebba84dd7b07bb9df466011c028d4a', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+696240815,chore: Config and enforcer cleanup,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Replaces the use of raw pointers to `shared_ptr`
+- Uses `std::string_view` at appropriate places instead of `std::string`
+- Changes the parameters to const reference instead of constructing multiple copies of the same data
+- Removes unnecessary `pch.h` file from several directories. The entire project should rely on a single `pch.h`
+- Takes in `std::shared_ptr` as references in utility functions where we don't intend to increase the reference count of the object (we don't need the ownership of the object).",True,127,https://api.github.com/repos/casbin/casbin-cpp/pulls/127,https://github.com/casbin/casbin-cpp/pull/127,closed,221,432,55,5,2,0,1,0,[{'name': 'released'}],2021-07-23 22:32:23+00:00,2021-08-10 13:03:23+00:00,1521060.0,"17 days, 14:31:00",[],"[{'commit_sha': 'c30c4179d7b92b65796a447cc59a2833d3b335ee', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2daf343edeb2e7b88664e14d1cb9c4499244575f', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca7b130b5eab3f3dcd5183f86c926e8e8654552e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ebba0aede126ae696d479299b2448e9c47e3fc0', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de809c62788ea6e02493df72be57826cb8628f0f', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+697150365,feat: Added python bindings for `casbin::Enforcer`,"## Fixes #84 partially
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Adds `casbin::Enforcer` definitions in python bindings.
+    - The bindings are compiled into `pycasbin.so` file in UNIX and `pycasbin.pyd` in Windows.
+    - This file can now be added into the PATH variable and can be imported directly in Python.
+- Configures the build system to compile targets with `-fPIC` flag",True,128,https://api.github.com/repos/casbin/casbin-cpp/pulls/128,https://github.com/casbin/casbin-cpp/pull/128,closed,203,43,6,2,1,0,1,0,[{'name': 'released'}],2021-07-26 15:52:24+00:00,2021-07-30 13:39:55+00:00,337651.0,"3 days, 21:47:31",[],"[{'commit_sha': '4d750ac6ab6659db9b239ad546324a51e6c85d53', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd543655d4a825db9ab7f5b7144782fc5cb582a91', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+698038029,feat: Added bindings for `CachedEnforcer`,"## Fixes #84 partially
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+- Adds bindings for `casbin::CachedEnforcer`
+    - The methods added are only the constructors and overrides
+    - The rest of the methods are inherited from `casbin::Enforcer` just like the C++ implementation.
+- Adds versioning to `pycasbin` module through CMake configuration.
+- Refactors the workflow by passing the reference of the `py::module` object to functions.
+    - Each function then defines a binding for all the methods present in the corresponding C++ translation unit.
+
+### Important Note
+
+When I try to build the `pycasbin` target, it throws an error wherever there is an occurrence of `casbin::Scope` in the binding definition. Considering the fact that pycasbin is a client-centric interface, exposing `casbin::Scope` is redundant, so I dropped the support for Scope in pycasbin.
+",True,129,https://api.github.com/repos/casbin/casbin-cpp/pulls/129,https://github.com/casbin/casbin-cpp/pull/129,closed,138,22,7,2,1,0,1,0,[{'name': 'released'}],2021-07-27 17:13:55+00:00,2021-07-30 15:24:48+00:00,252653.0,"2 days, 22:10:53",[],"[{'commit_sha': 'd19c674c9b876690c0695d27e2d705b37eeafea0', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c09cbf149c513b5cf13a3601f0f0d102c2110c09', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+698068770,feat: Added bindings for `casbin::ABACData`,"## Fixes #84 partially
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+### Note
+
+This is intended to be merged after #129 is merged into `casbin:master`
+",True,130,https://api.github.com/repos/casbin/casbin-cpp/pulls/130,https://github.com/casbin/casbin-cpp/pull/130,closed,86,0,4,2,1,0,1,0,[{'name': 'released'}],2021-07-27 17:56:45+00:00,2021-08-06 01:56:30+00:00,806385.0,"9 days, 7:59:45",[],"[{'commit_sha': '4b519ed2b8570865b5b6f265e152ad1b7fe41602', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6cc4926abe9a13df6623e43ff4633158239012e9', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+700079779,feat: Added tests for Python Bindings,"## Fixes #134 
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Configures the build system to incorporate testing of python bindings
+- Creates unit tests for bindings using `unittest` module
+    - The unit tests correspond to the tests done in C++
+    - I've currently added tests for `Enforcer` namely: `ThreeParams`, `VectorParam`, and `FourParams` test.
+- Adds a CI workflow for testing python bindings through GitHub Actions
+
+<img width=""1095"" alt=""Screenshot 2021-07-30 at 9 14 30 PM"" src=""https://user-images.githubusercontent.com/62606998/127678250-aea76842-b4ad-450b-95cd-bf46aec899fc.png"">
+",True,133,https://api.github.com/repos/casbin/casbin-cpp/pulls/133,https://github.com/casbin/casbin-cpp/pull/133,closed,254,3,10,2,2,0,1,0,[{'name': 'released'}],2021-07-30 07:43:26+00:00,2021-08-04 05:54:23+00:00,425457.0,"4 days, 22:10:57",[],"[{'commit_sha': '5fdba95767fa9bb173783af38251316e99e4c32e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd0ebbee23e56963b3a86a062f25ee3a737d9c805', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+704867063,feat: Added bindings for `casbin::Model`,"## Fixes #84
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Adds python bindings for `casbin::Model`.
+- Adds the support for calling static member functions of `casbin::Model` in python.
+- Adds unit tests in python for the bindings.
+- Configures the build system and pybind workflow to include `py_model.cpp`",True,135,https://api.github.com/repos/casbin/casbin-cpp/pulls/135,https://github.com/casbin/casbin-cpp/pull/135,closed,94,1,7,1,1,0,1,0,[{'name': 'released'}],2021-08-05 16:51:45+00:00,2021-08-06 11:35:01+00:00,67396.0,18:43:16,[],"[{'commit_sha': 'fde0b931f9a2f8d6bd5b75692a64b42ad5295536', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+704888228,feat: Added `config_path` for test entities,"## Fixes #136 
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Removes the relative paths used in `config_path`.
+- Modifies `config_path` so as to abstract the absolute path to the `CMAKE_SOURCE_DIR` and use it to get the path to test entities.
+
+### Screenshot
+
+<img width=""1440"" alt=""Screenshot 2021-08-05 at 10 40 06 PM"" src=""https://user-images.githubusercontent.com/62606998/128393593-d9fe87e1-2a4c-43a5-9844-fc145af84225.png"">
+",True,137,https://api.github.com/repos/casbin/casbin-cpp/pulls/137,https://github.com/casbin/casbin-cpp/pull/137,closed,146,117,13,1,3,0,1,0,[{'name': 'released'}],2021-08-05 17:21:19+00:00,2021-08-06 10:14:32+00:00,60793.0,16:53:13,[],"[{'commit_sha': '6a4d1f149820f0cdba6fb70281e2101a2e861ead', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+706028438,refactor: Exported targets for easy access,"## Fixes #99 completely
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Refactors the headers in the source code into their respective directories
+
+- Exports the `casbin::casbin` and `casbin::pycasbin`(optionally) targets for the library to be used directly by the client's build system likewise :
+```cmake
+find_package(casbin 1.35.0 REQUIRED)
+``` 
+- Cleans up the build configurations and installation paths
+
+- Adds an `include` directory to package the library in a compact bundle for the client.
+    - This contains a few headers which have all the definitions required for the casbin library.
+
+### Usage
+
+The client may include casbin directly into their CMake build system through `find_package()` as demonstrated above.
+Suppose we have a directory structure as follows:
+```bash
+.
+└── project-root/
+    ├── cmake/
+    │   └── modules/
+    │       ├── FindExtPackages.cmake
+    │       └── Findcasbin.cmake
+    ├── CMakeLists.txt
+    └── src/
+        ├── main.cpp
+        └── app.h
+```
+
+```cmake
+# FindExtPackages.cmake
+
+find_package(casbin 1.36.0 REQUIRED)
+```
+
+```cmake
+# Findcasbin.cmake
+
+include(FetchContent)
+
+FetchContent_Declare(
+  casbin
+  URL https://github.com/casbin/casbin-cpp/archive/refs/tags/v1.36.0.zip
+)
+
+FetchContent_MakeAvailable(casbin)
+
+set(CASBIN_BUILD_TEST OFF)
+set(CASBIN_BUILD_BENCHMARK OFF)
+set(CASBIN_BUILD_BINDINGS OFF)       # If you don't need language bindings provided by casbin-cpp
+```
+
+```cmake
+# CMakeLists.txt
+
+cmake_minimum_required(VERSION 3.19)
+
+set(CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    ${CMAKE_SOURCE_DIR}/cmake/modules
+)
+
+project(Example)
+
+include(FindExtPackages)
+
+add_executable(example src/main.cpp src/app.h)
+
+target_link_libraries(example PRIVATE casbin::casbin)
+```
+
+### Note
+
+The large LOC is due to duktape files being copied over to the include directory.",True,138,https://api.github.com/repos/casbin/casbin-cpp/pulls/138,https://github.com/casbin/casbin-cpp/pull/138,closed,8983,148,24,5,1,0,1,0,[{'name': 'released'}],2021-08-08 11:37:49+00:00,2021-08-11 01:39:08+00:00,223279.0,"2 days, 14:01:19",[],"[{'commit_sha': '016794f8322271dfa0d9758d5863df472a63a717', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac0f3ffae3038230eda9a997932e6e3ac22fb3ef', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6646a446c2a5ffb0a5888fceefa24b8e8f8861ad', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1de52c49d61ba70c8f9fb357185ca05be6de5f1e', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a5a4e77e03a6927b0d6cb4e0517dea167d7ed610', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+707463847,feat: Added python bindings for `casbin::Config`,"## Fixes #84 partially
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description
+
+This code:
+
+- Implements python bindings for `casbin::Config`
+- Modified the API to facilitate the bindings
+- Added python tests for `pycasbin.Config` and `pycasbin.Model`
+
+The workflow enabled by the API exposed to the python side can be abstracted as follows:
+
+```python
+import pycasbin as casbin
+
+# For casbin.Config
+config = casbin.Config.NewConfig('path/to/config/file.ini')
+config = casbin.Config.NewConfigFromText('<contents of the config>')
+ok = config.GetBool('<key>')
+num_value = config.GetInt('<key')
+
+# ... and so on
+
+# For casbin.Model
+model = casbin.Model.NewModel() # empty model
+model = casbin.Model.NewModelFromFile('path/to/model.conf')
+model = casbin.Model.NewModelFromString('<contents of the model>')
+
+# Demonstrating casbin.Model.LoadModelFromConfig
+config = casbin.Config.NewConfig('path/to/model.conf')
+model = casbin.Model.NewModel()
+model.LoadModelFromConfig(config)
+```
+
+### Screenshots
+
+<img width=""538"" alt=""Screenshot 2021-08-10 at 9 59 06 PM"" src=""https://user-images.githubusercontent.com/62606998/128897276-23d98d24-65be-4dd6-9b08-44932904604f.png"">
+",True,139,https://api.github.com/repos/casbin/casbin-cpp/pulls/139,https://github.com/casbin/casbin-cpp/pull/139,closed,255,78,17,4,2,0,1,0,[{'name': 'released'}],2021-08-10 16:27:57+00:00,2021-08-15 02:25:42+00:00,381465.0,"4 days, 9:57:45",[],"[{'commit_sha': '5afd18f14f9f30702c46352d58a67f5ebca68ed0', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd681384fca9229df4591848e4cb82af058e2fbf', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0ea8a0a3c75de721571a06ab0aa66d09ace7463f', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1365d9757e9a586e4303b465569c5120ad3dcdf9', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+712996121,chore: Updated project config,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+This code:
+
+- Changes the `CMAKE_PROJECT_NAME` to casbin and `CMAKE_PROJECT_VERSION` to 1.37.1
+- Removes unnecessary installations
+- Properly installs `pycasbin.so`/`pycasbin.pyd` to its desired path
+- Configures include paths to be inline with the [intended client-side configuration](https://github.com/EmperorYP7/casbin-CMake-setup)
+",True,141,https://api.github.com/repos/casbin/casbin-cpp/pulls/141,https://github.com/casbin/casbin-cpp/pull/141,closed,46,40,8,2,7,0,1,0,[{'name': 'released'}],2021-08-15 20:21:17+00:00,2021-08-16 16:13:59+00:00,71562.0,19:52:42,[],"[{'commit_sha': '3ae905a3ece7c8119a2a88da05addf446adee1d6', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b0f5a8b4703f79746cec1343a41f506ca4fc877', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+713322162,feat: Added bindings for `casbin::SyncedEnforcer`,"## Fixes #84
+
+Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+---
+
+### Description 
+
+This code:
+
+- Adds bindings for `SyncedEnforcer`
+- Adds Unit tests for python bindings of `SyncedEnforcer` and `CachedEnforcer`
+- Makes adjustments in the API which are necessary for the bindings to work properly
+
+### Concerns
+
+The synced enforcer tests seem to freeze the console which is not expected. This shall be addressed in the future.",True,142,https://api.github.com/repos/casbin/casbin-cpp/pulls/142,https://github.com/casbin/casbin-cpp/pull/142,closed,356,25,14,1,1,0,1,0,[{'name': 'released'}],2021-08-16 10:46:33+00:00,2021-08-16 13:03:43+00:00,8230.0,2:17:10,[],"[{'commit_sha': 'edde0509431c87523dc6c47e458869becb57dea8', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+713462563,docs: Updated documentation and version,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+### Description
+
+Updated documentation for the project, including:
+
+- Integrating Casbin to your project through CMake
+
+- Informing contributor about semantic PR in `CONTRIBUTING.md`
+
+- Pull request and issue templates",True,145,https://api.github.com/repos/casbin/casbin-cpp/pulls/145,https://github.com/casbin/casbin-cpp/pull/145,closed,91,4,6,1,1,0,1,0,[{'name': 'released'}],2021-08-16 13:58:06+00:00,2021-08-16 16:00:04+00:00,7318.0,2:01:58,[],"[{'commit_sha': '78d48d41a04e8d90caf00f2290d0c59aca081013', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+714382953,docs: Added documentation for python bindings,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+<!--
+    We follow semantic pull requests. Make sure you sign-off and format every commit message
+    as well as the PR title as specified in 
+    https://github.com/commitizen/conventional-commit-types/blob/master/index.json
+
+    Eg. feat: New feature name,
+    fix: Some error, etc.
+-->
+
+### Description
+
+Added documentation for:
+
+- Python bindings
+   - Building from source
+   - Installing from source
+   - Usage in python
+
+- Integrating the project
+  - Without building from source
+  - Installing the project locally from the source
+
+- Fixing CMake config
+- Final cleanups",True,146,https://api.github.com/repos/casbin/casbin-cpp/pulls/146,https://github.com/casbin/casbin-cpp/pull/146,closed,315,60,11,2,3,0,1,0,[{'name': 'released'}],2021-08-17 16:06:25+00:00,2021-08-18 13:29:10+00:00,76965.0,21:22:45,[],"[{'commit_sha': '62db7bd9e41888b8b98e4aef46bfefa224fa4cb0', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8fe2bc63c03ecc1d87b2d6f7798362699ebc588d', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+714382953,docs: Added documentation for python bindings,"Signed-off-by: Yash Pandey (YP) <yash.btech.cs19@iiitranchi.ac.in>
+
+<!--
+    We follow semantic pull requests. Make sure you sign-off and format every commit message
+    as well as the PR title as specified in 
+    https://github.com/commitizen/conventional-commit-types/blob/master/index.json
+
+    Eg. feat: New feature name,
+    fix: Some error, etc.
+-->
+
+### Description
+
+Added documentation for:
+
+- Python bindings
+   - Building from source
+   - Installing from source
+   - Usage in python
+
+- Integrating the project
+  - Without building from source
+  - Installing the project locally from the source
+
+- Fixing CMake config
+- Final cleanups",True,146,https://api.github.com/repos/casbin/casbin-cpp/pulls/146,https://github.com/casbin/casbin-cpp/pull/146,closed,315,60,11,2,3,0,1,0,[{'name': 'released'}],2021-08-17 16:06:25+00:00,2021-08-18 13:29:10+00:00,76965.0,21:22:45,[],"[{'commit_sha': '62db7bd9e41888b8b98e4aef46bfefa224fa4cb0', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8fe2bc63c03ecc1d87b2d6f7798362699ebc588d', 'committer_username': 'EmperorYP7', 'committer_name': 'Yash Pandey', 'committer_email': 'emperoryp.dev@gmail.com', 'commit_date': datetime.datetime(2020, 3, 24, 14, 24, 31, tzinfo=datetime.timezone.utc)}]",Yash Pandey,62606998,emperoryp.dev@gmail.com,User,,91,,50,150
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+243148805,casbin-cpp,casbin/casbin-cpp,C++,61,221,11,26,311,13,2,0,"[{'id': 1502460335, 'number': 236, 'closed': datetime.datetime(2023, 9, 5, 12, 4, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 5, 9, 29, 6, tzinfo=datetime.timezone.utc), 'time_taken': 9320.0, 'time_delta': '2:35:20', 'additions': 55, 'deletions': 179, 'state': 'closed'}, {'id': 714382953, 'number': 146, 'closed': datetime.datetime(2021, 8, 18, 13, 29, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 17, 16, 6, 25, tzinfo=datetime.timezone.utc), 'time_taken': 76965.0, 'time_delta': '21:22:45', 'additions': 315, 'deletions': 60, 'state': 'closed'}, {'id': 713462563, 'number': 145, 'closed': datetime.datetime(2021, 8, 16, 16, 0, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 13, 58, 6, tzinfo=datetime.timezone.utc), 'time_taken': 7318.0, 'time_delta': '2:01:58', 'additions': 91, 'deletions': 4, 'state': 'closed'}, {'id': 713322162, 'number': 142, 'closed': datetime.datetime(2021, 8, 16, 13, 3, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 10, 46, 33, tzinfo=datetime.timezone.utc), 'time_taken': 8230.0, 'time_delta': '2:17:10', 'additions': 356, 'deletions': 25, 'state': 'closed'}, {'id': 712996121, 'number': 141, 'closed': datetime.datetime(2021, 8, 16, 16, 13, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 20, 21, 17, tzinfo=datetime.timezone.utc), 'time_taken': 71562.0, 'time_delta': '19:52:42', 'additions': 46, 'deletions': 40, 'state': 'closed'}, {'id': 707463847, 'number': 139, 'closed': datetime.datetime(2021, 8, 15, 2, 25, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 16, 27, 57, tzinfo=datetime.timezone.utc), 'time_taken': 381465.0, 'time_delta': '4 days, 9:57:45', 'additions': 255, 'deletions': 78, 'state': 'closed'}, {'id': 706028438, 'number': 138, 'closed': datetime.datetime(2021, 8, 11, 1, 39, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 8, 11, 37, 49, tzinfo=datetime.timezone.utc), 'time_taken': 223279.0, 'time_delta': '2 days, 14:01:19', 'additions': 8983, 'deletions': 148, 'state': 'closed'}, {'id': 704888228, 'number': 137, 'closed': datetime.datetime(2021, 8, 6, 10, 14, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 5, 17, 21, 19, tzinfo=datetime.timezone.utc), 'time_taken': 60793.0, 'time_delta': '16:53:13', 'additions': 146, 'deletions': 117, 'state': 'closed'}, {'id': 704867063, 'number': 135, 'closed': datetime.datetime(2021, 8, 6, 11, 35, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 5, 16, 51, 45, tzinfo=datetime.timezone.utc), 'time_taken': 67396.0, 'time_delta': '18:43:16', 'additions': 94, 'deletions': 1, 'state': 'closed'}, {'id': 700079779, 'number': 133, 'closed': datetime.datetime(2021, 8, 4, 5, 54, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 7, 43, 26, tzinfo=datetime.timezone.utc), 'time_taken': 425457.0, 'time_delta': '4 days, 22:10:57', 'additions': 254, 'deletions': 3, 'state': 'closed'}, {'id': 698068770, 'number': 130, 'closed': datetime.datetime(2021, 8, 6, 1, 56, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 27, 17, 56, 45, tzinfo=datetime.timezone.utc), 'time_taken': 806385.0, 'time_delta': '9 days, 7:59:45', 'additions': 86, 'deletions': 0, 'state': 'closed'}, {'id': 698038029, 'number': 129, 'closed': datetime.datetime(2021, 7, 30, 15, 24, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 27, 17, 13, 55, tzinfo=datetime.timezone.utc), 'time_taken': 252653.0, 'time_delta': '2 days, 22:10:53', 'additions': 138, 'deletions': 22, 'state': 'closed'}, {'id': 697150365, 'number': 128, 'closed': datetime.datetime(2021, 7, 30, 13, 39, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 26, 15, 52, 24, tzinfo=datetime.timezone.utc), 'time_taken': 337651.0, 'time_delta': '3 days, 21:47:31', 'additions': 203, 'deletions': 43, 'state': 'closed'}, {'id': 696240815, 'number': 127, 'closed': datetime.datetime(2021, 8, 10, 13, 3, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 22, 32, 23, tzinfo=datetime.timezone.utc), 'time_taken': 1521060.0, 'time_delta': '17 days, 14:31:00', 'additions': 221, 'deletions': 432, 'state': 'closed'}, {'id': 693705411, 'number': 125, 'closed': datetime.datetime(2021, 7, 23, 11, 41, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 18, 37, 59, tzinfo=datetime.timezone.utc), 'time_taken': 234197.0, 'time_delta': '2 days, 17:03:17', 'additions': 98, 'deletions': 95, 'state': 'closed'}, {'id': 693703446, 'number': 124, 'closed': datetime.datetime(2021, 8, 5, 16, 23, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 18, 35, 55, tzinfo=datetime.timezone.utc), 'time_taken': 1374465.0, 'time_delta': '15 days, 21:47:45', 'additions': 62, 'deletions': 86, 'state': 'closed'}, {'id': 693346396, 'number': 123, 'closed': datetime.datetime(2021, 7, 29, 12, 34, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 10, 22, 32, tzinfo=datetime.timezone.utc), 'time_taken': 785541.0, 'time_delta': '9 days, 2:12:21', 'additions': 184, 'deletions': 83, 'state': 'closed'}, {'id': 688571955, 'number': 122, 'closed': datetime.datetime(2021, 7, 16, 7, 39, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 13, 7, 17, 29, tzinfo=datetime.timezone.utc), 'time_taken': 260518.0, 'time_delta': '3 days, 0:21:58', 'additions': 271, 'deletions': 137, 'state': 'closed'}, {'id': 687651275, 'number': 121, 'closed': datetime.datetime(2021, 7, 18, 14, 15, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 12, 9, 7, 1, tzinfo=datetime.timezone.utc), 'time_taken': 536907.0, 'time_delta': '6 days, 5:08:27', 'additions': 510, 'deletions': 521, 'state': 'closed'}, {'id': 683858001, 'number': 120, 'closed': datetime.datetime(2021, 7, 18, 1, 35, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 17, 44, tzinfo=datetime.timezone.utc), 'time_taken': 1065118.0, 'time_delta': '12 days, 7:51:58', 'additions': 277, 'deletions': 4, 'state': 'closed'}, {'id': 683212480, 'number': 118, 'closed': datetime.datetime(2021, 7, 13, 12, 57, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 4, 17, 53, 46, tzinfo=datetime.timezone.utc), 'time_taken': 759815.0, 'time_delta': '8 days, 19:03:35', 'additions': 377, 'deletions': 2, 'state': 'closed'}, {'id': 683024303, 'number': 116, 'closed': datetime.datetime(2021, 7, 11, 13, 41, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 3, 13, 27, 18, tzinfo=datetime.timezone.utc), 'time_taken': 692072.0, 'time_delta': '8 days, 0:14:32', 'additions': 204, 'deletions': 2, 'state': 'closed'}, {'id': 679477240, 'number': 114, 'closed': datetime.datetime(2021, 6, 30, 11, 24, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 28, 23, 37, 48, tzinfo=datetime.timezone.utc), 'time_taken': 128828.0, 'time_delta': '1 day, 11:47:08', 'additions': 224, 'deletions': 26, 'state': 'closed'}, {'id': 679396995, 'number': 113, 'closed': datetime.datetime(2021, 6, 29, 12, 20, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 28, 20, 55, 32, tzinfo=datetime.timezone.utc), 'time_taken': 55470.0, 'time_delta': '15:24:30', 'additions': 77, 'deletions': 34, 'state': 'closed'}, {'id': 677925625, 'number': 112, 'closed': datetime.datetime(2021, 6, 27, 11, 42, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 25, 13, 43, 32, tzinfo=datetime.timezone.utc), 'time_taken': 165529.0, 'time_delta': '1 day, 21:58:49', 'additions': 150, 'deletions': 188, 'state': 'closed'}, {'id': 675643437, 'number': 110, 'closed': datetime.datetime(2021, 7, 13, 10, 35, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 22, 17, 53, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1788101.0, 'time_delta': '20 days, 16:41:41', 'additions': 108, 'deletions': 110, 'state': 'closed'}, {'id': 673769256, 'number': 109, 'closed': datetime.datetime(2021, 6, 29, 11, 38, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 18, 22, 56, 5, tzinfo=datetime.timezone.utc), 'time_taken': 909716.0, 'time_delta': '10 days, 12:41:56', 'additions': 1526, 'deletions': 3541, 'state': 'closed'}, {'id': 673660801, 'number': 108, 'closed': datetime.datetime(2021, 6, 29, 10, 51, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 18, 18, 40, 27, tzinfo=datetime.timezone.utc), 'time_taken': 922245.0, 'time_delta': '10 days, 16:10:45', 'additions': 599, 'deletions': 17, 'state': 'closed'}, {'id': 671704922, 'number': 107, 'closed': datetime.datetime(2021, 6, 24, 11, 47, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 16, 17, 22, 46, tzinfo=datetime.timezone.utc), 'time_taken': 671078.0, 'time_delta': '7 days, 18:24:38', 'additions': 363, 'deletions': 7, 'state': 'closed'}, {'id': 667101367, 'number': 106, 'closed': datetime.datetime(2021, 6, 16, 3, 4, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 17, 15, 35, tzinfo=datetime.timezone.utc), 'time_taken': 467337.0, 'time_delta': '5 days, 9:48:57', 'additions': 446, 'deletions': 193, 'state': 'closed'}, {'id': 665045896, 'number': 105, 'closed': datetime.datetime(2021, 6, 20, 2, 57, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 8, 15, 54, 2, tzinfo=datetime.timezone.utc), 'time_taken': 990196.0, 'time_delta': '11 days, 11:03:16', 'additions': 201, 'deletions': 7, 'state': 'closed'}, {'id': 661081835, 'number': 104, 'closed': datetime.datetime(2021, 6, 4, 3, 44, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 3, 17, 13, 51, tzinfo=datetime.timezone.utc), 'time_taken': 37822.0, 'time_delta': '10:30:22', 'additions': 333, 'deletions': 333, 'state': 'closed'}, {'id': 658500546, 'number': 103, 'closed': datetime.datetime(2021, 6, 8, 0, 24, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 31, 20, 10, 31, tzinfo=datetime.timezone.utc), 'time_taken': 620019.0, 'time_delta': '7 days, 4:13:39', 'additions': 378, 'deletions': 252, 'state': 'closed'}, {'id': 649818568, 'number': 101, 'closed': datetime.datetime(2021, 5, 21, 16, 16, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 21, 9, 37, 46, tzinfo=datetime.timezone.utc), 'time_taken': 23914.0, 'time_delta': '6:38:34', 'additions': 45, 'deletions': 6, 'state': 'closed'}, {'id': 621000334, 'number': 98, 'closed': datetime.datetime(2021, 4, 22, 12, 17, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 22, 11, 27, 10, tzinfo=datetime.timezone.utc), 'time_taken': 3000.0, 'time_delta': '0:50:00', 'additions': 3, 'deletions': 0, 'state': 'closed'}, {'id': 608055092, 'number': 94, 'closed': datetime.datetime(2021, 4, 5, 4, 24, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 2, 14, 26, 46, tzinfo=datetime.timezone.utc), 'time_taken': 223042.0, 'time_delta': '2 days, 13:57:22', 'additions': 76, 'deletions': 0, 'state': 'closed'}, {'id': 607155342, 'number': 93, 'closed': datetime.datetime(2021, 4, 2, 13, 9, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 1, 8, 10, 2, tzinfo=datetime.timezone.utc), 'time_taken': 104382.0, 'time_delta': '1 day, 4:59:42', 'additions': 515, 'deletions': 6, 'state': 'closed'}, {'id': 604203460, 'number': 92, 'closed': datetime.datetime(2021, 3, 31, 12, 14, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 18, 17, 53, tzinfo=datetime.timezone.utc), 'time_taken': 64607.0, 'time_delta': '17:56:47', 'additions': 60, 'deletions': 7, 'state': 'closed'}, {'id': 604066690, 'number': 90, 'closed': datetime.datetime(2021, 4, 1, 1, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 16, 43, 27, tzinfo=datetime.timezone.utc), 'time_taken': 119313.0, 'time_delta': '1 day, 9:08:33', 'additions': 118, 'deletions': 0, 'state': 'closed'}, {'id': 603697361, 'number': 89, 'closed': datetime.datetime(2021, 3, 30, 16, 15, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 12, 18, 32, tzinfo=datetime.timezone.utc), 'time_taken': 14209.0, 'time_delta': '3:56:49', 'additions': 298, 'deletions': 1, 'state': 'closed'}, {'id': 592542060, 'number': 83, 'closed': datetime.datetime(2021, 3, 30, 11, 59, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 14, 13, 26, 19, tzinfo=datetime.timezone.utc), 'time_taken': 1377173.0, 'time_delta': '15 days, 22:32:53', 'additions': 1043, 'deletions': 49, 'state': 'closed'}, {'id': 590604761, 'number': 82, 'closed': datetime.datetime(2021, 3, 11, 9, 7, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 11, 7, 3, 10, tzinfo=datetime.timezone.utc), 'time_taken': 7484.0, 'time_delta': '2:04:44', 'additions': 461, 'deletions': 195, 'state': 'closed'}]"
+144433662,casbin-website,casbin/casbin-website,JavaScript,132,39,4,102,852,0,3,0,"[{'id': 958231757, 'number': 347, 'closed': datetime.datetime(2022, 6, 21, 17, 24, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 4, 15, 48, 2, tzinfo=datetime.timezone.utc), 'time_taken': 1474568.0, 'time_delta': '17 days, 1:36:08', 'additions': 62, 'deletions': 30, 'state': 'closed'}, {'id': 725869451, 'number': 274, 'closed': datetime.datetime(2021, 9, 2, 13, 34, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 2, 12, 55, 46, tzinfo=datetime.timezone.utc), 'time_taken': 2299.0, 'time_delta': '0:38:19', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 691630269, 'number': 256, 'closed': datetime.datetime(2021, 7, 17, 0, 36, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 16, 17, 4, 27, tzinfo=datetime.timezone.utc), 'time_taken': 27127.0, 'time_delta': '7:32:07', 'additions': 28, 'deletions': 1, 'state': 'closed'}]"

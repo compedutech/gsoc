@@ -1,0 +1,91 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+696046902,Simple event-based profiling tool using chrome://tracing utility,"**Notice:** Only has been tested on Linux as it uses `unistd.h`
+
+Inspired by @ko1
+
+He advised me to use chrome://tracing to profile MRI's C Level behaviors
+
+## How to use
+
+Enable it
+
+```c
+/* In event_profiling.h */
+#define USE_EVENT_PROFILING 1
+```
+
+Setup your configuration or just use the default
+
+```c
+/* In main.c */
+    ruby_sysinit(&argc, &argv);
+    {
+        RB_SETUP_EVENT_PROFILING_DEFAULT(); // Or RB_SETUP_EVENT_PROFILING()
+        RB_SYSTEM_EVENT_PROFILING_BEGIN();
+
+        RUBY_INIT_STACK;
+        ruby_init();
+        int ret = ruby_run_node(ruby_options(argc, argv));
+
+        RB_SYSTEM_EVENT_PROFILING_END();
+        RB_FINALIZE_EVENT_PROFILING_DEFAULT(); // Or RB_FINALIZE_EVENT_PROFILING()
+
+        return ret;
+    }
+```
+
+Profile a part of MRI
+
+```c
+/* In array.c */
+#include ""event_profiling.h""
+static VALUE
+rb_ary_collect(VALUE ary)
+{
+    RB_EVENT_PROFILING_BEGIN(); // B Event
+
+    long i;
+    VALUE collect;
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    collect = rb_ary_new2(RARRAY_LEN(ary));
+
+   RB_EVENT_PROFILING_SNAPSHOT(""Example Snapshot""); // O Event
+
+    for (i = 0; i < RARRAY_LEN(ary); i++) {
+        rb_ary_push(collect, rb_yield(RARRAY_AREF(ary, i)));
+    }
+
+    RB_EVENT_PROFILING_END(); // E Event
+
+    return collect;
+}
+
+```
+
+Test it (this case is provided by @dsh0416 )
+
+```ruby
+# test.rb
+THREADS = 8
+LCM = 72072000
+t = []
+
+(0...THREADS).each do |i|
+  r = Ractor.new i do |j|
+    dat = (((LCM/THREADS)*j)...((LCM/THREADS)*(j+1))).to_a
+    dat.map{ |a| a ** 2 }.reduce(:+)
+  end
+  t << r
+end
+
+p t.map { |t| t.take }.reduce(:+)
+```
+
+`make run` will produce a file named `event_trace_out.json` by default, then open [chrome://tracing](chrome://tracing) and load it.
+
+Result:
+![image](https://user-images.githubusercontent.com/21669981/126807982-cdfdcf88-3c19-45f6-b659-93cae35875dd.png)
+",False,4673,https://api.github.com/repos/ruby/ruby/pulls/4673,https://github.com/ruby/ruby/pull/4673,open,857,0,8,1,8,30,0,0,[],2021-07-23 16:02:19+00:00,,0.0,,"[{'comment_id': 675914686, 'comment_body': 'This is an old K&R style.\r\n\r\n```suggestion\r\nstatic inline int get_total_events(void)\r\n```\r\n', 'comment_created': datetime.datetime(2021, 7, 23, 23, 55, 46, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 675915907, 'comment_body': 'Global symbols need to be prefixed to get rid of possible conflicts.', 'comment_created': datetime.datetime(2021, 7, 24, 0, 2, 14, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 675945178, 'comment_body': ""I don't think we need to expose these global symbols for now so I just removed them from `event_profiling.h`"", 'comment_created': datetime.datetime(2021, 7, 24, 4, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676095270, 'comment_body': 'I mean all symbols in this header file.', 'comment_created': datetime.datetime(2021, 7, 25, 6, 53, 21, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676096839, 'comment_body': 'Do these macros have to be placed in `main`, not `ruby_init`, `ruby_cleanup` and so on?', 'comment_created': datetime.datetime(2021, 7, 25, 7, 6, 10, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676096978, 'comment_body': 'Adding a header needs new dependencies.', 'comment_created': datetime.datetime(2021, 7, 25, 7, 7, 29, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676155591, 'comment_body': ""I've moved them into `ruby.c:ruby_sysinit()` and `eval.c:rb_ec_cleanup()`"", 'comment_created': datetime.datetime(2021, 7, 25, 14, 35, 2, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676156734, 'comment_body': ""Sorry I don't understand well, could you please explain? Thank you."", 'comment_created': datetime.datetime(2021, 7, 25, 14, 43, 31, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676157054, 'comment_body': ""I've got them done. Could you please check again? I think they should be prefixed with `rb_`."", 'comment_created': datetime.datetime(2021, 7, 25, 14, 45, 56, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676159896, 'comment_body': '```suggestion\r\n    event->file = file;\r\n    event->function = func;\r\n```', 'comment_created': datetime.datetime(2021, 7, 25, 15, 8, 18, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676159958, 'comment_body': '```suggestion\r\n    event->file = file;\r\n    event->function = func;\r\n```', 'comment_created': datetime.datetime(2021, 7, 25, 15, 8, 44, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676160046, 'comment_body': '```suggestion\r\n    event->file = file;\r\n    event->function = func;\r\n```', 'comment_created': datetime.datetime(2021, 7, 25, 15, 9, 21, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676160071, 'comment_body': '```suggestion\r\n    event->snapshot_reason = reason;\r\n```', 'comment_created': datetime.datetime(2021, 7, 25, 15, 9, 33, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676160187, 'comment_body': '```suggestion\r\n    const char *file;\r\n    const char *function;\r\n```', 'comment_created': datetime.datetime(2021, 7, 25, 15, 10, 19, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676160236, 'comment_body': '```suggestion\r\n    const char *snapshot_reason;\r\n```', 'comment_created': datetime.datetime(2021, 7, 25, 15, 10, 42, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676160892, 'comment_body': 'The dependencies on event_profiling.[ch] files will be needed in ""AUTOGENERATED DEPENDENCIES"" at the bottom of common.mk file.', 'comment_created': datetime.datetime(2021, 7, 25, 15, 15, 28, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676161463, 'comment_body': ""Looks fine, `static` symbols didn't need though."", 'comment_created': datetime.datetime(2021, 7, 25, 15, 19, 50, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676162319, 'comment_body': ""The usage of this macro seems the check against a runtime configuration, and doesn't feel appropriate to assert/abort.\r\nI think it's better to raise an exception or just ignore."", 'comment_created': datetime.datetime(2021, 7, 25, 15, 26, 52, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676162962, 'comment_body': 'https://github.com/ruby/ruby/pull/4673/checks?check_run_id=3155279692#step:10:1', 'comment_created': datetime.datetime(2021, 7, 25, 15, 31, 32, tzinfo=datetime.timezone.utc), 'commenter': 'nobu', 'type': 'User'}, {'comment_id': 676164556, 'comment_body': 'Oh I see', 'comment_created': datetime.datetime(2021, 7, 25, 15, 43, 41, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676165823, 'comment_body': 'I decide to remove all assertions', 'comment_created': datetime.datetime(2021, 7, 25, 15, 53, 24, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676167351, 'comment_body': ""Shall I add it manually? Or it can be **auto generated** as it said? I don't know this part."", 'comment_created': datetime.datetime(2021, 7, 25, 16, 6, 14, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 676229659, 'comment_body': 'Oh I understood. Thank you.', 'comment_created': datetime.datetime(2021, 7, 26, 0, 50, 16, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}, {'comment_id': 683234785, 'comment_body': 'This definitions should be in `RUBY_EVENT_PROFILING_H` guard.', 'comment_created': datetime.datetime(2021, 8, 5, 8, 19, 7, tzinfo=datetime.timezone.utc), 'commenter': 'ko1', 'type': 'User'}, {'comment_id': 683235466, 'comment_body': 'why do you need vm_core.h?', 'comment_created': datetime.datetime(2021, 8, 5, 8, 20, 9, tzinfo=datetime.timezone.utc), 'commenter': 'ko1', 'type': 'User'}, {'comment_id': 683237339, 'comment_body': 'How about to provide a macro `RB_RACTOR_INIT_...`\r\n\r\nBTW, the subject should be profiling, so `RB_EVENT_PROFILING_RACTOR_INIT` is one idea.\r\n', 'comment_created': datetime.datetime(2021, 8, 5, 8, 22, 32, tzinfo=datetime.timezone.utc), 'commenter': 'ko1', 'type': 'User'}, {'comment_id': 683239852, 'comment_body': ""The file (component) name is `event_profiling`, so the prefix can be `rb_event_profiling_`.\r\n\r\n`rb_profiling_event_phase_t` -> `rb_event_profiling_phase_t`.\r\n\r\nBTW, `rb_profiling_event_phase_t` is used only once in this patch, so you don't need to make new type."", 'comment_created': datetime.datetime(2021, 8, 5, 8, 25, 48, tzinfo=datetime.timezone.utc), 'commenter': 'ko1', 'type': 'User'}, {'comment_id': 683241976, 'comment_body': 'How to use them?', 'comment_created': datetime.datetime(2021, 8, 5, 8, 28, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ko1', 'type': 'User'}, {'comment_id': 683242922, 'comment_body': 'all above include except `event_profiling.h` should be in this `#if` block.', 'comment_created': datetime.datetime(2021, 8, 5, 8, 29, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ko1', 'type': 'User'}, {'comment_id': 683289271, 'comment_body': 'To use `GET_RACTOR()` \r\n\r\nhttps://github.com/ruby/ruby/blob/d77de609bea15703b8b63cb285c6dbe1fc032ad1/vm_core.h#L1777\r\n\r\nin `select_profiling_event_list` and `get_a_profiling_event_slot`\r\n', 'comment_created': datetime.datetime(2021, 8, 5, 9, 30, 12, tzinfo=datetime.timezone.utc), 'commenter': 'DarkKowalski', 'type': 'User'}]","[{'commit_sha': 'fcbc45316a0c715067e388ad623716cfb3ec0e6b', 'committer_username': 'DarkKowalski', 'committer_name': 'Kowalski', 'committer_email': 'github@akenonet.com', 'commit_date': datetime.datetime(2016, 9, 1, 12, 51, 56, tzinfo=datetime.timezone.utc)}]",Kowalski,21669981,github@akenonet.com,User,,67,,136,168
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+538746,ruby,ruby/ruby,Ruby,5302,21852,1099,924,86889,431,27,431,"[{'id': 696046902, 'number': 4673, 'closed': None, 'created': datetime.datetime(2021, 7, 23, 16, 2, 19, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 857, 'deletions': 0, 'state': 'open'}]"

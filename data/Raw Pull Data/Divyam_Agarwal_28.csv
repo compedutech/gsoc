@@ -1,0 +1,63 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1109620995,GSoC Final Submission - Merging Calcus 2.0 with the flowchart version of CalcUS,"**Pull Request for the final submission of the GSoC’22 Project with CalcUS (Open Chemistry)**
+
+**About CalcUS**
+
+CalcUS aims to democratize access to computational chemistry by providing a user-friendly web interface to simplify running and analyzing quantum mechanical calculations. These calculations allow the researchers to understand better the properties of molecules or the underlying mechanisms of chemical reactions. Multiple distinct calculations have to be performed to calculate the molecular geometry, energy, possible vibrations and optical properties, etc, of the molecules. But, Quantum chemistry projects often involve the same series of sequential calculations. Currently, each calculation has to be launched manually, which is often not necessary. This project aims to add the feature to create custom multi-step calculation protocols as well as the underlying mechanics which make the protocols run smoothly.
+
+**About my project**
+
+My project aimed to implement a multi-step calculation protocol to create the data structures to store these protocols and their progress, integrate the automated launch of subsequent steps using the current calculation handling code, add simple verifications after each step completion, and write relevant unit and/or integration tests.
+This project aimed to add a way to chain multiple calculations with different parameters. It will enable interfaces with flowchart-like processes. 
+
+![image](https://user-images.githubusercontent.com/65958420/200138878-81f5fc0e-51cc-4d8c-8a4e-22543ccf1b93.png)
+
+
+The user creates the above workflow in some web plugin and can then be used on multiple input files at wish. CalcUS will generate two calculations per input, execute them, and will perform additional calculations on them. The motivation to add this is to save time for the user and automatically queue the next steps he would do anyway before analysis. It can also reduce mistakes by automatically tracking the progress of each input and applying the exact same parameters to all inputs. 
+
+**Some important links**
+
+CalcUS GitHub - https://github.com/cyllab/CalcUS
+My GitHub - https://github.com/div-yam
+CalcUS Installation Guide - https://calcus.readthedocs.io/en/latest/installation.html
+
+My mentor - [Raphaël Robidas](https://github.com/RaphaelRobidas)
+
+**This pull request contains all the progress during my contribution period in Google Summer of Code. All my commits got squashed into this single [commit](https://github.com/cyllab/CalcUS/pull/15/commits/37a3c5b043a4c3e56998d51d0f29c320f3755138), due to re-reverting my changes. All my original commits can be seen in this branch [FlowchartxCalcus2.0](https://github.com/div-yam/CalcUS/tree/FlowchartxCalcus2.0).** 
+
+**Goals**
+
+- Modify the frontend part to create the flowcharts as easily as possible.
+- Modify some pages to indicate the workflow linked to each result.
+- Create new database models to save and load these flowcharts.
+- Write and modify code to handle the calculation creation and execution.
+- Automatic detection of incorrect calculation termination or crash, and either handling it automatically or asking the user to choose an action to take.
+- Write code to launch the next steps of the workflow when a calculation finishes successfully.
+- Write unit and integration tests to make sure this feature keeps working. The integration tests will use the Selenium WebDriver.
+
+
+**Work done in the PR**
+
+- Created the web interface for creating flowcharts, using Flowy library, and modifying the library to make it suitable for CalcUS and our purpose. After trying many libraries, we finalised that [Flowy](https://github.com/alyssaxuu/flowy) would be best suited for the purpose as it was open-source, MIT licensed, we could export the flowcharts as a JSON file, and it was not difficult to implement. 
+- Created the “Flowchart” model to save the flowchart into the database.
+- Made arrangements for saving the flowchart thus created in JSON format to the database, along with all the necessary data sets.
+- Wrote code for retrieving those flowcharts saved in the database.
+- Integrated the parameters formed with each node of the flowchart and made sure that the flowcharts and parameters were linked to each other and could be properly retrieved in the frontend as well. 
+- Took the common input for the calculations (molecule structure, name etc.) and made sure the submitted input was getting submitted without any errors.
+- Linked the submitted input with all the calculations of a given flowchart. 
+- The next step was linking the output of one calculation to the input of the next input, that is, implementing the multiple calculations to launch simultaneously. 
+- Made sure that the generated output was correct and threw errors in case of any ambiguity. 
+- Wrote some tests to ensure that the code ran and passed all real-life scenarios. 
+- Integrated the code with the cloud version of CalcUS (CalcUS 2.0), which require some critical changes to be made in the code. 
+
+**Additional improvements that could be made to the code**
+
+- Improving the workflow of the calculation submission. 
+- Automatic detection and handling of calculation crashes.
+- Visualization of results on the web interface. 
+- Creating all the global variables used in one place in flowchart.html. 
+- Writing some more tests for the code written recently.
+- Improving the front end of the “flowchart” page.",True,15,https://api.github.com/repos/cyllab/CalcUS/pulls/15,https://github.com/cyllab/CalcUS/pull/15,closed,2735,891,14,12,1,0,0,0,[],2022-11-03 13:47:15+00:00,2022-11-03 17:26:18+00:00,13143.0,3:39:03,[],"[{'commit_sha': 'c3cde2898635553b889562bc5bf355145cc71376', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9cff75b8ced7ca296c7df09d73add49e8b2c8ab1', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd765fc931e6a3172176f0537af9909530e72291', 'committer_username': 'lint-action', 'committer_name': 'Lint Action', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 11, 57, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': '559a8645d062fffee16fba7d78946b5fe8ca0129', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6403bb082a1fe0d4a8dfe1ebfed644a4d06dd16a', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '15ee6f202d61d4599af5b833dde5e997f57b6f1f', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a86b90df75f789731e610a36c25a39818ca22d2', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7472942bc97e1c808ee28a109c82b9e6f2864949', 'committer_username': 'lint-action', 'committer_name': 'Lint Action', 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 11, 57, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': '51435c8f77c3109b1990da1618738c7c05e1630b', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37a3c5b043a4c3e56998d51d0f29c320f3755138', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '00b15bf01deb85329c49ca1b641167d46f1197f3', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b5c5f105aca037a98b825f2dc59ce396218e9bb', 'committer_username': 'div-yam', 'committer_name': 'Divyam Agarwal', 'committer_email': None, 'commit_date': datetime.datetime(2020, 5, 26, 12, 48, 2, tzinfo=datetime.timezone.utc)}]",Divyam Agarwal,65958420,,User,,11,,1,2
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+416006489,CalcUS,cyllab/CalcUS,JavaScript,19,65,3,7,1455,8,3,2,"[{'id': 1109620995, 'number': 15, 'closed': datetime.datetime(2022, 11, 3, 17, 26, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 3, 13, 47, 15, tzinfo=datetime.timezone.utc), 'time_taken': 13143.0, 'time_delta': '3:39:03', 'additions': 2735, 'deletions': 891, 'state': 'closed'}, {'id': 1099306610, 'number': 13, 'closed': datetime.datetime(2022, 10, 26, 12, 44, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 25, 18, 42, 4, tzinfo=datetime.timezone.utc), 'time_taken': 64930.0, 'time_delta': '18:02:10', 'additions': 2785, 'deletions': 848, 'state': 'closed'}, {'id': 962437673, 'number': 11, 'closed': datetime.datetime(2022, 6, 12, 16, 49, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 9, 5, 55, tzinfo=datetime.timezone.utc), 'time_taken': 298466.0, 'time_delta': '3 days, 10:54:26', 'additions': 23, 'deletions': 4, 'state': 'closed'}, {'id': 960190460, 'number': 10, 'closed': datetime.datetime(2022, 6, 7, 12, 12, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 7, 10, 26, 24, tzinfo=datetime.timezone.utc), 'time_taken': 6355.0, 'time_delta': '1:45:55', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 953144162, 'number': 9, 'closed': datetime.datetime(2022, 6, 1, 12, 50, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 1, 7, 12, 7, tzinfo=datetime.timezone.utc), 'time_taken': 20298.0, 'time_delta': '5:38:18', 'additions': 1, 'deletions': 0, 'state': 'closed'}]"

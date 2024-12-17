@@ -1,0 +1,302 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1388711584,ENSDF to HDF demo through JSON and CSV outputs,"### :pencil: Description
+
+**Type:** :rocket: `feature` 
+
+This PR demonstrates the usage of NNDC [radlist](https://www.nndc.bnl.gov/radlist/) parser to create a nuclear decay dataset from the ENSDF archives. The HDF output can be obtained by using either the JSON or CSV responses from radlist.
+
+The benefit of using JSON to create the dataframes is that we can use keys like ""radiation"", ""daughter"", ""parent"" to filter the kind of data required in the dataframes. 
+
+The benefit of using CSV is that the entire data is directly converted into a dataframe and one can then filter out whichever columns are required. 
+
+A few questions that arise at this point are:
+1) Should we aim for a single unified dataframe for all the available nuclides in the ENSDF archives or would it be better to have a separate dataframe for each isotope or mass number.
+
+2) Should the final HDF dataset resemble the one that was produced by tardis-nuclear or does it need modifications? (refer to the snapshot below for tardis-nuclear output)
+![image](https://github.com/tardis-sn/carsus/assets/125031481/04c5040c-e0d0-45df-9f30-8b3efee5e4ef)
+
+
+### :pushpin: Resources
+
+-  [ENSDF Archives](https://www.nndc.bnl.gov/ensdfarchivals/)
+
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [ ] Testing pipeline
+- [ ] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+
+### :ballot_box_with_check: Checklist
+
+- [ ] I requested two reviewers for this pull request
+- [ ] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+> **Note:** If you are not allowed to perform any of these actions, ping (@) a contributor.
+",False,343,https://api.github.com/repos/tardis-sn/carsus/pulls/343,https://github.com/tardis-sn/carsus/pull/343,closed,282716,0,1,5,4,0,1,0,[{'name': 'feature'}],2023-06-12 13:23:48+00:00,2023-07-20 13:09:35+00:00,3282347.0,"37 days, 23:45:47",[],"[{'commit_sha': 'ef3f1a00f14988d40378fd60d32a3581e8faf13a', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd53ae5a3b84aa937dd8f1ca2e30d672080e6ccb4', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ff5abe65569621f421b8675bc7255a5f954716aa', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dffa0d4e402b012188ae518768361179e9a8e0f2', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6385e05512780446803467c3affb143885fd5800', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1404816029,Create NNDCReader Class to produce HDF from CSV decay data,"### :pencil: Description
+
+**Type:** :rocket: `feature`
+This PR adds a basic skeleton for an NNDCReader class that produces a decay dataset in HDF format using the CSV decay data from [carsus-nndc-data](https://github.com/tardis-sn/carsus-data-nndc). For now, it skips the empty files (5 in number).
+
+It also adds a boolean 'Metastable' column by extracting the combination of columns ‘Parent E-Level’, ‘Isotope’, and ‘T ½’ from the IT decay branch of a particular isotope and setting them to ‘True’. It then finds the other decay branch of the same isotope and the same combination of the above three columns and sets them to True as well.
+
+![image](https://github.com/tardis-sn/carsus/assets/125031481/5d852435-1670-4d70-85f3-03f302a7cf3d)
+![image](https://github.com/tardis-sn/carsus/assets/125031481/e27610d4-ebae-4b11-8d9e-b640cb13c794)
+![image](https://github.com/tardis-sn/carsus/assets/125031481/30233058-035d-49ea-b3af-6df0e392d264)
+
+
+
+### :pushpin: Resources
+
+PR #343 
+
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [ ] Testing pipeline
+- [x] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+The snippet that would produce the HDF file could be something like:
+```
+from carsus.io.nuclear import NNDCReader
+
+nndc_reader = NNDCReader()
+nndc_reader.to_hdf()
+```
+
+### :ballot_box_with_check: Checklist
+
+- [x] I requested two reviewers for this pull request
+- [ ] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+> **Note:** If you are not allowed to perform any of these actions, ping (@) a contributor.
+",True,345,https://api.github.com/repos/tardis-sn/carsus/pulls/345,https://github.com/tardis-sn/carsus/pull/345,closed,338,0,8,12,5,8,1,0,[{'name': 'feature'}],2023-06-23 10:03:58+00:00,2023-07-18 13:03:50+00:00,2170792.0,"25 days, 2:59:52","[{'comment_id': 1245075282, 'comment_body': 'It would be great to set a more sensible default. I think Carsus has a default download directory you can use.', 'comment_created': datetime.datetime(2023, 6, 28, 11, 28, 48, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}, {'comment_id': 1245075877, 'comment_body': 'Private methods are typically set with ""dunder"", a double underscore `__`', 'comment_created': datetime.datetime(2023, 6, 28, 11, 29, 23, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}, {'comment_id': 1245076208, 'comment_body': 'Same for private properties', 'comment_created': datetime.datetime(2023, 6, 28, 11, 29, 40, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}, {'comment_id': 1245076581, 'comment_body': 'I do not see where `_set_group_true` is defined.', 'comment_created': datetime.datetime(2023, 6, 28, 11, 30, 2, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}, {'comment_id': 1245115625, 'comment_body': ""I understand. I used the single underscore based on the methods in other classes in Carsus which are used to indicate to the developer that a method is supposed to be used internally but no enforcement is carried out from Python's side.\r\n\r\nWould you suggest changing them to dunder?"", 'comment_created': datetime.datetime(2023, 6, 28, 12, 9, 41, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}, {'comment_id': 1245125694, 'comment_body': 'It is a method defined in line 42 of the same file.\r\n\r\nhttps://github.com/tardis-sn/carsus/blob/424b05dc58e18c2cca5dd6e79744a6d84bb4ce45/carsus/io/nuclear/nndc.py#L42-L46', 'comment_created': datetime.datetime(2023, 6, 28, 12, 19, 36, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}, {'comment_id': 1245163262, 'comment_body': 'If they are single underscore in Carsus then you can maintain that style. Clearly that is something we should discuss as a possible style change to Carsus!', 'comment_created': datetime.datetime(2023, 6, 28, 12, 53, 1, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}, {'comment_id': 1245163525, 'comment_body': 'ahah! Thank you.', 'comment_created': datetime.datetime(2023, 6, 28, 12, 53, 14, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}]","[{'commit_sha': '5e8bb63b4b799ec605273ff78bd7b3fa2898c038', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7b639e0fa2cc515781a0986c9e56743bc65d1001', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69d22297fa2977f8758445e45f879ed1bac760c7', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a192ba64d24aeafe1b51b6f91d6706473864da0e', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6368abdae56074aac33e41b863720199fe8a6186', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb9e1fd0fc44e8ad2c86d563ef9696d945ac746c', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0c01dd9132a9fe514f963f7925a9d7cac723bcb8', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d46c4310708870225c6ff18dab43462f65b07ba', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2fd3247f507ac3c3c5cda62d444905607bd91760', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b05ec39a225e1f3824cd6a9561b17002bd2dec1e', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8f315ebb1cf5e97483ba218733d2e7a81b6adbd', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '174ca42577cbddc330b6c62fcbc3ec95aafd72d8', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1444491014,Include NNDC decay data in the final Carsus HDF output,"### :pencil: Description
+
+**Type:** :rocket: `feature`
+
+This PR uses the NNDC decay-data created in #345 and merges it into the final HDF output produced by Carsus.
+
+The test-notebook should run successfully once the changes in carsus-refdata have been made as per the [PR 13](https://github.com/tardis-sn/carsus-refdata/pull/13).
+",True,350,https://api.github.com/repos/tardis-sn/carsus/pulls/350,https://github.com/tardis-sn/carsus/pull/350,closed,25,1,2,3,5,0,0,0,[],2023-07-21 13:22:43+00:00,2023-08-17 15:27:55+00:00,2340312.0,"27 days, 2:05:12",[],"[{'commit_sha': 'dc365b30a8a9d35d7fc189ec871624ca255702fd', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '534da7979cfe435907587ed1e7eefa791a7368b4', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7259c79302f98abdf890273c560f8b78ded99aac', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1457799513,Add carsus-data-nndc github URL,"### :pencil: Description
+
+**Type:** :rocket: `feature`
+
+This clones the [carsus-data-nndc](https://github.com/tardis-sn/carsus-data-nndc) when there is no local source of the NNDC CSV data present. The `NNDCReader` class gets another attribute `remote` which needs to be set to `True` when the github mirror is to be used.
+
+The test includes cloning the repository and deleting it at the end of the test.
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [x] Testing pipeline
+- [ ] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+
+### :ballot_box_with_check: Checklist
+
+- [x] I requested two reviewers for this pull request
+- [ ] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+",True,354,https://api.github.com/repos/tardis-sn/carsus/pulls/354,https://github.com/tardis-sn/carsus/pull/354,closed,49,15,2,3,0,2,0,0,[],2023-08-01 10:13:46+00:00,2023-08-08 13:40:10+00:00,617184.0,"7 days, 3:26:24","[{'comment_id': 1283259123, 'comment_body': 'Could we use `pathlib` for this instead?', 'comment_created': datetime.datetime(2023, 8, 3, 14, 6, 4, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}, {'comment_id': 1285822221, 'comment_body': 'Can use pathlib here too?', 'comment_created': datetime.datetime(2023, 8, 7, 12, 50, 25, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}]","[{'commit_sha': '5c0232765ce32f2eb738ef8e99e106b12561d4b8', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1a9ba5a7629b89ae3f7c45cedb29c9b361d838a7', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4169bbbc0a3628189a7afaf162c61fe8c2b0d44', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1467189888,Logging the local NNDC data source and remote data source,"### :pencil: Description
+
+**Type:** :rocket: `feature`
+
+Logging the source path for the NNDC data and the remote repo URL when downloading from [carsus-data-nndc](https://github.com/tardis-sn/carsus-data-nndc).
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [ ] Testing pipeline
+- [x] Other method (describe)
+Ran the NNDCReader in command line with the following snippet:
+```
+from carsus.io.nuclear import NNDCReader
+nndc_reader = NNDCReader(remote=True) # and one when remote = False
+nndc_reader.to_hdf()
+``` 
+- [ ] My changes can't be tested (explain why)
+
+
+### :ballot_box_with_check: Checklist
+
+- [x] I requested two reviewers for this pull request
+- [ ] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+",True,359,https://api.github.com/repos/tardis-sn/carsus/pulls/359,https://github.com/tardis-sn/carsus/pull/359,closed,7,0,1,1,0,0,0,0,[],2023-08-08 16:34:47+00:00,2023-08-10 15:12:41+00:00,167874.0,"1 day, 22:37:54",[],"[{'commit_sha': 'edb6ff74356f971b64f3eaf631d9cfccb065d61a', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1481161605,Add nuclear decay data to the quickstart notebook,"### :pencil: Description
+
+**Type:** :memo: `documentation`
+
+Adding the nuclear radiation data obtained from NNDC to the [Quickstart notebook](https://tardis-sn.github.io/carsus/quickstart.html). 
+
+
+### :pushpin: Resources
+
+PR #350, PR #354 
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [x] Testing pipeline
+- [ ] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+
+### :ballot_box_with_check: Checklist
+
+- [x] I requested two reviewers for this pull request
+- [x] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+",True,365,https://api.github.com/repos/tardis-sn/carsus/pulls/365,https://github.com/tardis-sn/carsus/pull/365,closed,34,1,1,2,1,0,1,0,[{'name': 'documentation'}],2023-08-18 22:51:00+00:00,2023-08-23 14:16:53+00:00,401153.0,"4 days, 15:25:53",[],"[{'commit_sha': '825a2355b51800f656a309fb8e96d39a53d42053', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '34d79a53aeae263b632e5e7bf165ee7ca33bce0b', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1486523745,Make NNDC Reader optional,"### :pencil: Description
+
+**Type:** :beetle: `bugfix` 
+
+This PR makes having the NNDCReader object optional while creating the atomic data HDF output.
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [x] Testing pipeline
+- [ ] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+
+### :ballot_box_with_check: Checklist
+
+- [x] I requested two reviewers for this pull request
+- [ ] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+",True,369,https://api.github.com/repos/tardis-sn/carsus/pulls/369,https://github.com/tardis-sn/carsus/pull/369,closed,3,1,1,1,0,0,0,0,[],2023-08-23 14:20:07+00:00,2023-08-23 14:33:34+00:00,807.0,0:13:27,[],"[{'commit_sha': 'b6d706c222152ae4d0c35e3472621f85b834bc8b', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1270136952,MonteCarlo packet progress bar completes to 100%,"### :pencil: Description
+
+**Type:** :beetle: `bugfix` 
+
+The Monte-Carlo packet progress bar used to update during every iteration but did not complete to 100% once it was over. An update call needed to be included at the end of each iteration.
+
+`resolves` #2216 
+
+### :pushpin: Resources
+
+[tqdm Docs
+](https://tqdm.github.io/docs/tqdm/)
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [ ] Testing pipeline
+- [x] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+Before:
+![Before](https://user-images.githubusercontent.com/125031481/224123009-9c8b7392-d6c4-40fb-bbb1-e7afd803c723.png)
+
+After:
+![After](https://user-images.githubusercontent.com/125031481/224123126-fc46dd0f-8d24-4e52-82a5-2037d5c50e18.png)
+
+
+
+### :ballot_box_with_check: Checklist
+
+- [ ] I requested two reviewers for this pull request
+- [x] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+> **Note:** If you are not allowed to perform any of these actions, ping (@) a contributor.
+",True,2237,https://api.github.com/repos/tardis-sn/tardis/pulls/2237,https://github.com/tardis-sn/tardis/pull/2237,closed,17,1,3,3,4,8,0,0,[],2023-03-09 18:40:13+00:00,2023-03-20 14:57:05+00:00,937012.0,"10 days, 20:16:52","[{'comment_id': 1132335893, 'comment_body': 'I suggest not making a function altogether here. Doing the usual `packet_pbar.refresh()` may be better. You may need to check where exactly this can be referenced and changed but doing so would make it easier and not complex.', 'comment_created': datetime.datetime(2023, 3, 10, 12, 53, 56, tzinfo=datetime.timezone.utc), 'commenter': 'DhruvSondhi', 'type': 'User'}, {'comment_id': 1132337196, 'comment_body': 'Moving this inside the above function may do the trick. Please let me know if that works. Also add a single line comment for the same instead of having a function.', 'comment_created': datetime.datetime(2023, 3, 10, 12, 55, 6, tzinfo=datetime.timezone.utc), 'commenter': 'DhruvSondhi', 'type': 'User'}, {'comment_id': 1132767582, 'comment_body': 'I agree that refreshing the progress bar after every packet makes the most logical sense. \r\n\r\nHowever, the bar is indeed updated automatically after every packet is sent. The issue arises at the end of any given iteration when `packet_pbar.update()` is called to update the packet but the change is not reflected. This can be solved by refreshing the bar at the end of every iteration (not just the final one).\r\n', 'comment_created': datetime.datetime(2023, 3, 10, 18, 56, 7, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}, {'comment_id': 1132777859, 'comment_body': 'Since the update/refresh does not occur only at the end of each iteration, I decided to call it when the iteration ends. Adding the `packet_pbar.refresh()` at every packet would increase the simulation time severely (around 1 min/iteration) in contrast to refreshing only at the end (70s for 20 iterations on my system).\r\n\r\nThis is why I could not find a suitable place to add the refresh anywhere in the function above  (in `update_packet_pbar()`). Also because one cannot conclude when the final packet is sent (probably because it is numba jitted in parallel mode).\r\n\r\nThus, the only remaining solution was to either add the `packet_bar.refresh()` within the `update_iterations_pbar()` function as it is called at the end of every iteration, or have a function of its own.\r\n\r\n\r\n', 'comment_created': datetime.datetime(2023, 3, 10, 19, 9, 17, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}, {'comment_id': 1133044343, 'comment_body': '> Thus, the only remaining solution was to either add the `packet_bar.refresh()` within the `update_iterations_pbar()` function as it is called at the end of every iteration, or have a function of its own.\r\n\r\nI suppose it is better to have just this line `packet_bar.refresh()` after the `update_iterations_pbar(1)` as having a function just for this is not good, in my opinion, and is just overhead with a call within a functional call. \r\n\r\n\r\n\r\n', 'comment_created': datetime.datetime(2023, 3, 11, 7, 2, 13, tzinfo=datetime.timezone.utc), 'commenter': 'DhruvSondhi', 'type': 'User'}, {'comment_id': 1133045459, 'comment_body': '> I suppose it is better to have just this line `packet_bar.refresh()` after the `update_iterations_pbar(1)` as having a function just for this is not good, in my opinion, and is just overhead with a call within a functional call.\r\n\r\nThe packet_pbar and iterations_pbar instances of the progress bars are initialized and processed in `tardis/utility/base.py`. So, `packet_bar.refresh()` after `update_iterations_pbar(1)` would require instantiating the progress bars in `montecarlo_numba/base.py` as well, which may not be the best approach.\r\n\r\nI agree that it is an avoidable overhead, in which case I can just add it in the `update_iterations_pbar()` method after `iterations_pbar.update(i)`. It would look something like:\r\n\r\n```\r\ndef update_iterations_pbar(i):\r\n    iterations_pbar.update(i)\r\n    packet_bar.refresh()\r\n```\r\n\r\n', 'comment_created': datetime.datetime(2023, 3, 11, 7, 13, 19, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}, {'comment_id': 1133046747, 'comment_body': ""This would be inefficient as the current implementation updates the progress bar by 1 per cent after a specific increase in the progress as the packets are propagated. What this may do is that after every 1 per cent, the progress bar will get refreshed and updated. For this, I suppose you can look into making something like this: (pseudo code here)\r\n```\r\nIf the progress is above, let's say, 95% (it would be good if this is as close to 100 as possible or maybe even 100):\r\n(This could also be by iteration number, like after iteration, maybe 19 (if we are running for 20 iterations))\r\n  Refresh the bar for each iteration until it reaches the end,\r\nElse:\r\n  Keep doing what it initially was doing,\r\n```\r\nWhat happens with the `numba jitted` functions is that the information is present with the compiler (machine level compiler) but is not actually passed onto into Python runtime (Python interpreter), which causes loss of information as hence it doesn't understand how to add all the multithreaded information together from different cores. \r\n\r\nAnother possible solution could be to update the progress bar by returning the instance of the progress bar from the `update_iterations_pbar()` function and then updating it when all the progress is finished. What I mean by this is that even when running TARDIS in multithreaded mode, the progress bar considers all the progress made on all the cores. And in the end, please correct me; it is still compiled on a single core. So a single call for refreshing the progress bar at the end after completing all the propagated packets may do the trick. It works for all other iterations except the last one. This would be more efficient. \r\n\r\n\r\n"", 'comment_created': datetime.datetime(2023, 3, 11, 7, 26, 49, tzinfo=datetime.timezone.utc), 'commenter': 'DhruvSondhi', 'type': 'User'}, {'comment_id': 1133050181, 'comment_body': ""> This would be inefficient as the current implementation updates the progress bar by 1 per cent after a specific increase in the progress as the packets are propagated. What this may do is that after every 1 per cent, the progress bar will get refreshed and updated. \r\n\r\nThe `update_iterations_pbar()` is called to update the _iterations_ progress bar (`iterations_pbar`) at the end of each iteration, only after the _packet_ progress bar (`packet_pbar`) has finished updating for that iteration, i.e., after all the packets for that iteration have been sent. So I think this refresh would not interfere with the `packet_pbar` while the packets are being sent and only update it after sending 100% of the packets.\r\n\r\n> What happens with the numba jitted functions is that the information is present with the compiler (machine level compiler) but is not actually passed onto into Python runtime (Python interpreter), which causes loss of information as hence it doesn't understand how to add all the multithreaded information together from different cores.\r\n\r\nThank you for the clear description. This may be why there is no possible way to fetch the completion percentage as the number of packets sent through different cores is not trackable. \r\n\r\n> So a single call for refreshing the progress bar at the end after the completion of all the propagated packets may do the trick.\r\n\r\nMy intention with the code block mentioned in the previous reply was precisely this. Since  `update_iterations_pbar()` is called at the end of every iteration, adding the refresh part within it would also be subject to a call at the end of each iteration when all the packets have propagated. Please correct me if I've misunderstood."", 'comment_created': datetime.datetime(2023, 3, 11, 7, 59, 8, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}]","[{'commit_sha': '46a0f2eaee8b8f89cfbf6c6c318e71e827269f1f', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6c0d7784820423cf790f83efb23182148f393894', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '348994a53be1f6337481ab725b63d36100f0e529', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1277316041,Fix relative atom data path to eliminate use of configuration directory,"### :pencil: Description
+
+**Type:** :beetle: `bugfix` 
+
+`resolves` #2102 
+
+This PR aims to solve the Atom Data relative path issue that arises when the configuration file is not in the same directory as the notebook/file calling `run_tardis()`. The issue arises because we currently use `config.config_dirname` in `standard_plasmas.py` to find the path to the atom data file which seems counter-intuitive because config and atom data are quite unrelated.
+
+The solution proposed in this PR:
+
+1. Moves all logic that handles `atom_data_fname` from `standard_plasmas.py` to `tardis/io/atom_data/util.py`, with the rationale that resolution of the file path is more appropriate for the `resolve_atom_data_fname()` method in the latter.
+
+2. Eliminates the usage of `config.config_dirname` altogether and instead relies on `data_dir` to find the atom data file.
+
+
+
+
+### :pushpin: Resources
+
+Examples, notebooks, and links to useful references.
+
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [x] Testing pipeline
+- [ ] Other method (describe)
+- [ ] My changes can't be tested (explain why)
+
+
+### :ballot_box_with_check: Checklist
+
+- [ ] I requested two reviewers for this pull request
+- [ ] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+> **Note:** If you are not allowed to perform any of these actions, ping (@) a contributor.
+",False,2240,https://api.github.com/repos/tardis-sn/tardis/pulls/2240,https://github.com/tardis-sn/tardis/pull/2240,closed,80,11,4,6,7,1,2,0,"[{'name': 'atomic'}, {'name': 'bugfix :beetle:'}]",2023-03-15 18:29:12+00:00,2024-04-12 14:14:59+00:00,34026347.0,"393 days, 19:45:47","[{'comment_id': 1137753826, 'comment_body': 'Would be more clear to say ""Atomic data exists...""', 'comment_created': datetime.datetime(2023, 3, 15, 20, 45, 11, tzinfo=datetime.timezone.utc), 'commenter': 'andrewfullard', 'type': 'User'}]","[{'commit_sha': '40c7c2b9407742d690ed5d4cb6532896fb1f6e62', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '27d0d23ed0f956c1a5f4a5078192887160af27b9', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab9edbc54c1efa6bd8816e69ee5562aef856ddbf', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '139e8e3038f60d163df4e8509e78140989a4e82e', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1106a00ed06840e5923e906a942e259842c5dff1', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0cb26b26cfae476e812e285745e636687574ec9e', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+1286515220,Fix for widgets displaying code in commandline,"### :pencil: Description
+
+**Type:** :beetle: `bugfix`
+
+`resolves` #1976 
+
+The widgets displayed code when called from the command-line as shown in the issue above. This PR adds a check so that the `display()` methods in the widgets run only for notebooks. When called from command-line, a message ""Please use a notebook to display the widget"" is printed.
+
+For the tests, I have used a pytest.Monkeypatch context manager to use a session-scoped fixture and mock the `is_notebook()` response.
+
+### :pushpin: Resources
+
+[Monkeypatch.context](https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.MonkeyPatch.context)
+
+### :vertical_traffic_light: Testing
+
+How did you test these changes?
+
+- [x] Testing pipeline
+- [x] Other method - Ran the widgets in the command-line
+- [ ] My changes can't be tested (explain why)
+
+![image](https://user-images.githubusercontent.com/125031481/227041445-a6d19706-62f0-4807-861a-93829290f1d1.png)
+
+
+### :ballot_box_with_check: Checklist
+
+- [x] I requested two reviewers for this pull request
+- [x] I updated the documentation according to my changes
+- [ ] I built the documentation by applying the `build_docs` label
+
+@wkerzendorf @atharva-2001 ",True,2253,https://api.github.com/repos/tardis-sn/tardis/pulls/2253,https://github.com/tardis-sn/tardis/pull/2253,closed,285,216,9,5,3,3,2,1,"[{'name': 'bugfix :beetle:'}, {'name': 'visualization'}]",2023-03-22 21:23:18+00:00,2024-03-15 14:12:23+00:00,30991745.0,"358 days, 16:49:05","[{'comment_id': 1172695598, 'comment_body': 'Was the issue for Convergence plots or for the custom abundance widget?\r\nAlso, I think we should raise an error but I also would like to hear what others say about this. If we do so, maybe then we would want a test that mimics the command line and see if it raises an error?', 'comment_created': datetime.datetime(2023, 4, 20, 14, 37, 36, tzinfo=datetime.timezone.utc), 'commenter': 'atharva-2001', 'type': 'User'}, {'comment_id': 1173325214, 'comment_body': ""> Was the issue for Convergence plots or for the custom abundance widget?\r\n\r\nYou're right. I just noticed that the issue was created for the convergence plots. But the code was also visible for the three Widgets, so I made the changes. \r\n\r\nI will add the checks for command-line in the Convergence plots.\r\n\r\n> Also, I think we should raise an error but I also would like to hear what others say about this. If we do so, maybe then we would want a test that mimics the command line and see if it raises an error?\r\n\r\nRaising an error would definitely be a more prudent way to handle it."", 'comment_created': datetime.datetime(2023, 4, 21, 5, 45, 46, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}, {'comment_id': 1174563796, 'comment_body': ""@atharva-2001 I have added a check where RuntimeError is raised if `run_tardis` is called from the command line and if `show_convergence_plots` is set to True (which was the only case where the code was being printed). \r\n\r\nThe default value of `show_convergence_plots` was set to True in `simulation/base.py` but False in `tardis/base.py`. I changed the former to False as well, otherwise the tests which simply call `Simulation.from_config` using the default as True would've failed."", 'comment_created': datetime.datetime(2023, 4, 23, 11, 39, 29, tzinfo=datetime.timezone.utc), 'commenter': 'shreyas3156', 'type': 'User'}]","[{'commit_sha': 'd02eef983588d9c832e4459794d5d28b1dbacbb4', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2e1637862d7a7cb0be81337613a34bcbd93984e', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5e16805463a643aecce28da8295a2a80dc04b0f9', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed823716a4d843514eee13cd6b5dc16e8c254f15', 'committer_username': 'shreyas3156', 'committer_name': 'Shreyas Singh', 'committer_email': None, 'commit_date': datetime.datetime(2023, 2, 10, 11, 43, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6adf924808d81247ad4b19583b4edf9c60d37aa0', 'committer_username': 'atharva-2001', 'committer_name': 'Atharva Arya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 9, 27, 18, 30, 11, tzinfo=datetime.timezone.utc)}]",Shreyas Singh,125031481,,User,,13,,1,5
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+53023332,carsus,tardis-sn/carsus,Python,43,21,11,19,747,48,15,1,"[{'id': 1491084729, 'number': 374, 'closed': datetime.datetime(2023, 9, 11, 13, 25, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 27, 22, 3, 34, tzinfo=datetime.timezone.utc), 'time_taken': 1264935.0, 'time_delta': '14 days, 15:22:15', 'additions': 68, 'deletions': 0, 'state': 'closed'}, {'id': 1489257411, 'number': 373, 'closed': datetime.datetime(2023, 8, 29, 17, 29, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 25, 7, 39, 18, tzinfo=datetime.timezone.utc), 'time_taken': 381027.0, 'time_delta': '4 days, 9:50:27', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1486523745, 'number': 369, 'closed': datetime.datetime(2023, 8, 23, 14, 33, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 23, 14, 20, 7, tzinfo=datetime.timezone.utc), 'time_taken': 807.0, 'time_delta': '0:13:27', 'additions': 3, 'deletions': 1, 'state': 'closed'}, {'id': 1481161605, 'number': 365, 'closed': datetime.datetime(2023, 8, 23, 14, 16, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 18, 22, 51, tzinfo=datetime.timezone.utc), 'time_taken': 401153.0, 'time_delta': '4 days, 15:25:53', 'additions': 34, 'deletions': 1, 'state': 'closed'}, {'id': 1472087701, 'number': 361, 'closed': datetime.datetime(2023, 9, 14, 15, 21, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 11, 16, 46, 21, tzinfo=datetime.timezone.utc), 'time_taken': 2932526.0, 'time_delta': '33 days, 22:35:26', 'additions': 7, 'deletions': 3, 'state': 'closed'}, {'id': 1467189888, 'number': 359, 'closed': datetime.datetime(2023, 8, 10, 15, 12, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 8, 16, 34, 47, tzinfo=datetime.timezone.utc), 'time_taken': 167874.0, 'time_delta': '1 day, 22:37:54', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 1457799513, 'number': 354, 'closed': datetime.datetime(2023, 8, 8, 13, 40, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 1, 10, 13, 46, tzinfo=datetime.timezone.utc), 'time_taken': 617184.0, 'time_delta': '7 days, 3:26:24', 'additions': 49, 'deletions': 15, 'state': 'closed'}, {'id': 1444491014, 'number': 350, 'closed': datetime.datetime(2023, 8, 17, 15, 27, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 21, 13, 22, 43, tzinfo=datetime.timezone.utc), 'time_taken': 2340312.0, 'time_delta': '27 days, 2:05:12', 'additions': 25, 'deletions': 1, 'state': 'closed'}, {'id': 1404816029, 'number': 345, 'closed': datetime.datetime(2023, 7, 18, 13, 3, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 23, 10, 3, 58, tzinfo=datetime.timezone.utc), 'time_taken': 2170792.0, 'time_delta': '25 days, 2:59:52', 'additions': 338, 'deletions': 0, 'state': 'closed'}, {'id': 1388711584, 'number': 343, 'closed': datetime.datetime(2023, 7, 20, 13, 9, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 12, 13, 23, 48, tzinfo=datetime.timezone.utc), 'time_taken': 3282347.0, 'time_delta': '37 days, 23:45:47', 'additions': 282716, 'deletions': 0, 'state': 'closed'}, {'id': 1290445027, 'number': 334, 'closed': datetime.datetime(2023, 11, 9, 16, 26, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 26, 18, 59, 4, tzinfo=datetime.timezone.utc), 'time_taken': 19690065.0, 'time_delta': '227 days, 21:27:45', 'additions': 13, 'deletions': 0, 'state': 'closed'}]"
+2938270,tardis,tardis-sn/tardis,Python,404,198,32,104,4654,189,76,25,"[{'id': 1286515220, 'number': 2253, 'closed': datetime.datetime(2024, 3, 15, 14, 12, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 22, 21, 23, 18, tzinfo=datetime.timezone.utc), 'time_taken': 30991745.0, 'time_delta': '358 days, 16:49:05', 'additions': 285, 'deletions': 216, 'state': 'closed'}, {'id': 1277316041, 'number': 2240, 'closed': datetime.datetime(2024, 4, 12, 14, 14, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 15, 18, 29, 12, tzinfo=datetime.timezone.utc), 'time_taken': 34026347.0, 'time_delta': '393 days, 19:45:47', 'additions': 80, 'deletions': 11, 'state': 'closed'}, {'id': 1270136952, 'number': 2237, 'closed': datetime.datetime(2023, 3, 20, 14, 57, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 9, 18, 40, 13, tzinfo=datetime.timezone.utc), 'time_taken': 937012.0, 'time_delta': '10 days, 20:16:52', 'additions': 17, 'deletions': 1, 'state': 'closed'}, {'id': 1261255182, 'number': 2231, 'closed': datetime.datetime(2023, 5, 3, 18, 23, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 2, 23, 38, 47, tzinfo=datetime.timezone.utc), 'time_taken': 5337906.0, 'time_delta': '61 days, 18:45:06', 'additions': 2152, 'deletions': 0, 'state': 'closed'}, {'id': 1260147175, 'number': 2230, 'closed': datetime.datetime(2023, 5, 3, 18, 24, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 2, 9, 38, 48, tzinfo=datetime.timezone.utc), 'time_taken': 5388366.0, 'time_delta': '62 days, 8:46:06', 'additions': 867, 'deletions': 0, 'state': 'closed'}, {'id': 1255527624, 'number': 2224, 'closed': datetime.datetime(2023, 8, 18, 13, 51, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 27, 14, 1, 8, tzinfo=datetime.timezone.utc), 'time_taken': 14860224.0, 'time_delta': '171 days, 23:50:24', 'additions': 9, 'deletions': 6, 'state': 'closed'}]"

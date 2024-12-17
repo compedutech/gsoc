@@ -1,0 +1,680 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+427468146,Retrieve sub providers within Flickr,"## Fixes
+<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Fixes #419 by @ChariniNana, Related to #392 
+Fixed #414 by @kgodey 
+
+## Description
+This addresses the requirement of retrieving sub providers within Flickr. For the time being, it only considers the _nasa_ and _bio diversity_ sub providers. There are seven users currently considered under _nasa_ which may need to be extended/modified later on. The list of sub-providers considered too may be expanded in the future. There are two aspects to this requirement which are as follows:
+
+1. Retrieve sub-providers at the API level, as and when pulling data from Flickr API.
+2. Update the existing Flickr related information present in the database to reflect the sub-provider information.
+
+## Technical details
+We maintain a mapping of the sub providers and the IDs of the users (what is contained in the _owner_ field of the API response) that come under each sub provider. 
+
+1. At the API script level, when an image is processed, we check whether the user ID (_owner_) has a corresponding sub provider in the mapping, and set the _source_ field in the Image Store to the relevant sub provider. Otherwise, the default sub provider _Flickr_ is used.
+2. At the DB level, we initially create a temporary table with the creator URLs (which is the field containing the user ID) and the corresponding sub provider value (such as 'nasa'). Then a join with the _image_ table (where the provider image data is stored) is performed on the _creator URL_ field. Subsequently, the _source_ field is set to the sub provider value from the temporary table, where the creator URLs match, or value 'flickr' otherwise.
+
+## Tests
+
+1. API script level sub provider retrieval: The function `test_process_image_data_with_sub_provider` within `test_flickr` test suite checks whether the source is properly set when a sub provider from our mapping is encountered.
+2. DB level sub provider update: The functions `test_create_temp_sub_provider_table` and `test_update_sub_providers` within `test_sql` checks the creation of the temporary table (to help with the DB update) and the successful updating of the _image_ table respectively.
+3. Test for the workflow created for DB sub-provider update is `test_sub_provider_update_workflow`
+
+I locally tested that the update of the table happens successfully via the `sub_provider_update_workflow`. The ID, PROVIDER and SOURCE fields of the table look as follows before and after the update.
+**Before**:
+```
+  id   | provider | source 
+-------+----------+--------
+ 14335 | flickr   | flickr
+ 14341 | flickr   | flickr
+ 14344 | flickr   | flickr
+ 14351 | flickr   | flickr
+ 14355 | flickr   | flickr
+ 14357 | flickr   | flickr
+ 14361 | flickr   | flickr
+ 14364 | flickr   | flickr
+ 14366 | flickr   | flickr
+ 14369 | flickr   | flickr
+ 14372 | flickr   | flickr
+ 14375 | flickr   | flickr
+ 14378 | flickr   | flickr
+ 14382 | flickr   | flickr
+ 40784 | flickr   | flickr
+ 47237 | flickr   | flickr
+ 47242 | flickr   | flickr
+ 47244 | flickr   | flickr
+ 47245 | flickr   | flickr
+```
+**After**:
+```
+  id   | provider |    source     
+-------+----------+---------------
+ 14335 | flickr   | bio_diversity
+ 14341 | flickr   | bio_diversity
+ 14344 | flickr   | bio_diversity
+ 14351 | flickr   | bio_diversity
+ 14355 | flickr   | bio_diversity
+ 14357 | flickr   | bio_diversity
+ 14361 | flickr   | bio_diversity
+ 14364 | flickr   | bio_diversity
+ 14366 | flickr   | bio_diversity
+ 14369 | flickr   | bio_diversity
+ 14372 | flickr   | bio_diversity
+ 14375 | flickr   | bio_diversity
+ 14378 | flickr   | bio_diversity
+ 14382 | flickr   | bio_diversity
+ 40784 | flickr   | nasa
+ 47237 | flickr   | nasa
+ 47242 | flickr   | nasa
+ 47244 | flickr   | nasa
+ 47245 | flickr   | nasa
+```
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository.
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [ ] ~~I added or updated documentation (if applicable).~~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,420,https://api.github.com/repos/cc-archive/cccatalog/pulls/420,https://github.com/cc-archive/cccatalog/pull/420,closed,380,5,9,27,1,14,0,1,[],2020-06-03 21:33:50+00:00,2020-06-22 14:13:17+00:00,1615167.0,"18 days, 16:39:27","[{'comment_id': 437759632, 'comment_body': ""This is probably unnecessary at the DB level because I noticed that even though we originally don't set the `source` value in Flickr API script, in the `_get_image` function in ImageStore, the `source` is set to the default provider value (which is 'flickr'). Therefore, the Source column is not null in the table, but already set to 'Flickr'. Maybe this is safe to have though because it makes the functionality more fail-safe (but also a bit more slow because there are two updates now)"", 'comment_created': datetime.datetime(2020, 6, 9, 22, 35, 10, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}, {'comment_id': 439966657, 'comment_body': 'After thinking about this a bit, I think we should avoid this, since in the case of Flickr, it will update more than 99% of the rows in the DB, but no change is needed (in that case).\r\n\r\nI suggest removing that step.', 'comment_created': datetime.datetime(2020, 6, 15, 7, 0, 15, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 439980361, 'comment_body': ""I don't think we should include this user in the `nasa` provider, since SpaceX is a separate organization.  Perhaps we could also have a SpaceX provider, though, since the most popular CC-licensed image on Flickr is from that user."", 'comment_created': datetime.datetime(2020, 6, 15, 7, 30, 39, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 439994567, 'comment_body': ""I think we could create this as a temporary table, since there's no data in it that's irrecoverable in the case something goes wrong."", 'comment_created': datetime.datetime(2020, 6, 15, 7, 58, 6, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 440002364, 'comment_body': ""We will have to test this at scale to see whether we need an index to make this workable.  However, we could always add the index within this function, use it, then drop it (to avoid slowing down other things.  If the index is added concurrently, that wouldn't block too much.  I think it might be worth it, since we're looping through a number of creator URLs (and that number is expected to grow); we'd get to reuse the index."", 'comment_created': datetime.datetime(2020, 6, 15, 8, 12, 32, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 440031750, 'comment_body': 'Something I forgot in my earlier review:\r\n\r\nPlease pass `SUB_PROVIDERS` and `PROVIDER` in as parameters. It will make it easier to experiment with other sub-provider sets down the road, and makes testing more robust, since you can pass in precisely the subprovider list you want to test against.', 'comment_created': datetime.datetime(2020, 6, 15, 9, 2, 46, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 440101335, 'comment_body': ""You mean pass them in as parameters to `_process_image_data`? Then we need to decide how far up the parameter passing should go. Should it be from where the `_process_interval` method is called from within the main method because that's the starting point of the flow?"", 'comment_created': datetime.datetime(2020, 6, 15, 11, 11, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}, {'comment_id': 441451050, 'comment_body': 'the postgres hook seems to create a new connection with every call and therefore the temporary table is non-existent at the time we try to insert values to it through a seperate call. Therefore we may have to retain the existing implementation.  ', 'comment_created': datetime.datetime(2020, 6, 17, 10, 38, 14, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}, {'comment_id': 442397115, 'comment_body': 'This will need to be concurrent to avoid locking\r\n```suggestion\r\n                CREATE INDEX CONCURRENTLY IF NOT EXISTS {image_table}_{col.CREATOR_URL}_idx\r\n```', 'comment_created': datetime.datetime(2020, 6, 18, 17, 43, 45, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 442403539, 'comment_body': ""The way the index is set up means this won't use it, but my suggestion will:\r\n```suggestion\r\n                    {image_table}.{col.PROVIDER} = '{default_provider}'\r\n                    AND\r\n                    MD5({image_table}.{col.FOREIGN_ID}) = MD5('{foreign_id}');\r\n```\r\nThe switch in order and adding of md5s aligns with the precise index so that the planner will set up a complete index scan, which will be as fast as possible."", 'comment_created': datetime.datetime(2020, 6, 18, 17, 55, 10, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 442404857, 'comment_body': ""```suggestion\r\n            {image_table}.{col.PROVIDER} = '{default_provider}'\r\n            AND\r\n            MD5({image_table}.{col.FOREIGN_ID}) = MD5('{foreign_id}');\r\n```"", 'comment_created': datetime.datetime(2020, 6, 18, 17, 57, 39, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 442407750, 'comment_body': 'You could parameterize this to check all three methods', 'comment_created': datetime.datetime(2020, 6, 18, 18, 3, 1, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 442422818, 'comment_body': ""I was thinking of making them defaults in `_process_image_data.  That is, the signature would be:\r\n```python\r\ndef _process_image_data(image_data, sub_providers=SUB_PROVIDERS, provider=PROVIDER):\r\n```\r\nThen the further up functions don't need to know about them.  The point would be to enable passing different values for testing, and if someone wants to use the function in a not-yet-thought-of manner, but avoid having functions that are already using it needing more info than necessary to call the function."", 'comment_created': datetime.datetime(2020, 6, 18, 18, 30, 35, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 442522831, 'comment_body': 'Looks like this is not supported. I get the following error: `psycopg2.errors.ActiveSqlTransaction: CREATE INDEX CONCURRENTLY cannot run inside a transaction block.`\r\nThe suggestion I see for this issue on forums is to create the index on the empty table which is not possible in our case', 'comment_created': datetime.datetime(2020, 6, 18, 21, 52, 46, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}]","[{'commit_sha': '6f410216e351dfaed33c0f077a084322efd33089', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '43010cb147f0f7d6c2e1e004c2ded5820288da43', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2c394c290bdd97c53ee27e5c48e1e11d8f91b503', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '67ed635311e975ce0a7dc7342e37b9fa3d09fae5', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '12441607334504cf32fad2ea2618442fbfae7d91', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '52eb5dadbb5262e987f83d29c2e35f6ef6978fe5', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '63186baeb0deb29dba8d77c56eb8061eddf4243b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '30eb7cb134240edf638c44d7a6f379ff09eaaabf', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '923a67b8ca4c9e110f2b271caf2825a6ccdf1970', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '69738bf3d315f706c9baee6afc8dcb4697e746f2', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'd3e5ee156eaf0d32bb8f5f18ce14c422a0ada237', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'e87818a3d1edad4cf3e7a17d4205e8e4afe7e446', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '28df08e9afddfae6fdf1507b5e56db7d94e751e6', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '137d0898fdb1d3a8df48ed7608c38778e7a831ce', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'aa29b18e76b88c5992f95a4c6e982f677fd8e0bd', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'eb2dbda0144f0aceae71fc31d17565b58d19845f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '35b95d3e8e7c431dd2146f95c84877c699c5f67a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '9f4aa6733be3399e7cdd9403c285054d1e827cf0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '640c22aa2eedc4e3c48045f1c88446138c009291', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ea5ad96c3c847ca30f695267856bf6739e82c791', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'c1331035c5ba47d4c1bca0ea4cf63515b353cbdd', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '86f6db8791301142c3d598be14f3e36e0582b472', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '4d599de23796d4afd5c6c6a3425372b62563bbb3', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'dfdf125ce86e8b530014fb8c1f82582c377d3f74', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8097c36dea95ad4c417c24a6b8ec1720a7bbc2d9', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '41c4e8f34129194efb96f30283d090189ca204a8', 'committer_username': 'mathemancer', 'committer_name': 'Brent Moran', 'committer_email': 'brentmoran@gmail.com', 'commit_date': datetime.datetime(2014, 3, 2, 7, 55, 26, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b86f1c565a0521f0bb2eb03bb35f185c0ec316f', 'committer_username': 'mathemancer', 'committer_name': 'Brent Moran', 'committer_email': 'brentmoran@gmail.com', 'commit_date': datetime.datetime(2014, 3, 2, 7, 55, 26, tzinfo=datetime.timezone.utc)}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+439583723,Retrieve sub providers within Europeana,"## Fixes
+<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Fixes #441 by @ChariniNana, Related to #392 
+
+## Description
+This addresses the requirement of retrieving sub providers within Europeana. For the time being, it only considers the 'Wellcome Collection' sub provider. The list of sub-providers considered may be expanded in the future. There are two aspects to this requirement which are as follows:
+
+Retrieve sub-providers at the API level, as and when pulling data from the Europeana API.
+Update the existing Europeana related information present in the database to reflect the sub-provider information
+
+## Technical details
+The content of the 'data provider' field of the Europeana API response helps to identify the sub providers uniquely. We maintain a mapping of the sub provider name to the 'data provider' value (which is a 1 to 1 mapping) to help with the sub provider retrieval. The 'data provider' value is stored as meta data in the image store.
+
+The content of the 'data provider' field in the API response is a list of values. We expect this list to contain only one sub provider of interest. If in case it contains more than one sub provider value, we throw an error and terminate the program execution.
+
+1. At the API script level, when an image is processed, we check whether the 'data provider' has a corresponding sub provider in the mapping, and set the source field in the Image Store to the relevant sub provider. Otherwise, the default sub provider 'europeana' is used.
+2. At the DB level, we initially execute a select query to retrieve the foreign identifier and the 'data provider' values for all images from Europeana. Next, we process the output row by row, and if the 'data provider' value reflects a sub provider of interest, we update the corresponding row's _source_ value in the DB, to reflect the sub provider.
+
+## Tests
+
+1. API script level sub provider retrieval: The function `test_process_image_data_with_sub_provider` within `test_europeana` test suite checks whether the source is properly set when a sub provider from our mapping is encountered.
+2. DB level sub provider update: The function `test_update_europeana_sub_providers` within `test_sql` checks the successful updating of the image table.
+3. Test for the workflow created for DB sub-provider update is: `test_europeana_dag_loads_with_no_errors` within the `test_sub_provider_update_workflow` test suite.
+
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository.
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [ ]  ~~I added or updated documentation (if applicable).~~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,442,https://api.github.com/repos/cc-archive/cccatalog/pulls/442,https://github.com/cc-archive/cccatalog/pull/442,closed,400,11,9,10,0,5,0,0,[],2020-06-25 00:15:38+00:00,2020-07-10 07:30:14+00:00,1322076.0,"15 days, 7:14:36","[{'comment_id': 445326101, 'comment_body': 'I can probably do the update in the first for loop itself rather than filtering into a new `filtered_records` list. ', 'comment_created': datetime.datetime(2020, 6, 25, 6, 6, 33, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}, {'comment_id': 447529153, 'comment_body': 'I think it would be better to use `json.loads` for this.  `ast.literal_eval` will throw an Exception if a null appears in any result array, whereas `json.loads` will correctly translate it into a `Nonetype`', 'comment_created': datetime.datetime(2020, 6, 30, 9, 3, 51, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 447559149, 'comment_body': ""I think we should create a temporary table as in the Flickr version of this and join with it to further restrict the results.  The reason is that over time (and relatively soon) Europeana will be growing significantly in volume, and I'd rather not pull 20 million results down over the network to modify 10,000 of them.\r\n\r\nIt's possible to join on array membership using the `?` operator in PostgreSQL:\r\n```SQL\r\nCREATE TABLE public.eur_sources (data_provider varchar(108), source varchar(108));\r\nINSERT INTO eur_sources\r\n  (data_provider, source) \r\nVALUES\r\n  ('Wellcome Collection', 'wellcome_collection');\r\n\r\nSELECT L.identifier, L.source, L.meta_data, R.data_provider, R.source\r\nFROM (\r\n  SELECT identifier, source, meta_data \r\n  FROM image\r\n  WHERE provider='europeana'\r\n) L INNER JOIN\r\n  eur_sources R ON\r\n  L.meta_data->'dataProvider' ? R.data_provider;\r\n```"", 'comment_created': datetime.datetime(2020, 6, 30, 9, 51, 44, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 447559927, 'comment_body': ""This select will only pull down results with 'Wellcome Collection' in the `dataProvider` field of `meta_data`."", 'comment_created': datetime.datetime(2020, 6, 30, 9, 53, 4, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 447561288, 'comment_body': 'That would be preferable to save memory consumption.', 'comment_created': datetime.datetime(2020, 6, 30, 9, 55, 7, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}]","[{'commit_sha': '3741d15cb2f3ffc4a80fed99006c0af2ccf2559e', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '10bb83fc8e4d9e732e68f29951a39f722836fe81', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '96badcd2f17940a1c8dc8ecb5d121701112f83b0', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '9f8d035fdafead155f9e44d733383cc699852f6a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'afe2c293ea7e8ac46b07c90d46f40e624665f0c8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '6672be4a19d8211db2bde65a2e8a81f3d873a4bc', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '7be2fe58b41b36dd63de59ad9d01f742a4ef2276', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'eaf76e48e3e959d57938e23acd6faef98c023a29', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2ed77c650f68a8fd688480138154baa17afa7f2f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'cffa5b40e34c0ebbed0cbdc252a7dbed0f3a518a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+445764649,Retrieve sub providers within Smithsonian,"## Fixes
+Fixes #454 by @ChariniNana, Related to #392, Related to #451
+
+## Description
+This addresses the requirement of retrieving all sub providers within Smithsonian. There are two aspects to this requirement which are as follows:
+
+Retrieve sub-providers at the API level, as and when pulling data from the Smithsonian API.
+Update the existing Smithsonian related information present in the database to reflect the sub-provider information
+
+## Technical details
+The content of the 'unit_code' field of the Smithsonian API response helps to identify the sub providers uniquely. We maintain a mapping of the sub provider name to the 'unit_code' value(s) to help with the sub provider retrieval. The 'unit_code' value is stored as meta data in the image store.
+
+Since our requirement is to categorise every image under unique sub providers, we expect the 'unit_code' value of each image to correspond to some sup provider in our mapping. If we happen to encounter an unknown 'unit_code' we throw an error and terminate the program execution. Since the 'unit_code' values supported by Smithsonian can change over time, we need to have a mechanism of frequently checking whether our known set of unit code values is up to date. If such a mechanism is available, we can update the unit code, sub provider mapping prior to executing Smithsonian sub-provider retrieval, and avoid raising errors. This is monitored in a seperate ticket #451 
+
+1. At the API script level, when an image is processed, we get the sub provider corresponding to the 'unit_code' value and set the source field in the Image Store to the relevant sub provider. If the 'unit_code' is unknown we throw an error.
+2. At the DB level, we initially execute a select query to retrieve the foreign identifier and the 'unit_code' values for all images from Smithsonian where the source values are not yet updated. Next, we process the output row by row, and if the 'unit_code' value is known, we set the corresponding row's source value to the relevant sub-provider value in the DB. If the 'unit_code' value is unknown we throw an error.
+
+The workflow `smithsonian_sub_provider_update_workflow` allows triggering the DB update related to Smithsonian sub-provider retrieval.
+
+## Tests
+1. API script level sub provider retrieval: The function `test_process_image_data_with_sub_provider` within `test_smithsonian` test suite checks whether the source is properly set when a sub provider from our mapping is encountered.
+2. DB level sub provider update: The function `test_update_smithsonian_sub_providers` within test_sql checks the successful updating of the image table.
+3. Test for the workflow created for DB sub-provider update is: `test_smithsonian_dag_loads_with_no_errors` within the `test_sub_provider_update_workflow` test suite.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository.
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [ ]  ~~I added or updated documentation (if applicable).~~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,455,https://api.github.com/repos/cc-archive/cccatalog/pulls/455,https://github.com/cc-archive/cccatalog/pull/455,closed,504,13,9,6,0,1,0,0,[],2020-07-07 23:31:05+00:00,2020-07-29 12:28:42+00:00,1861057.0,"21 days, 12:57:37",[],"[{'commit_sha': '62f710dce9f898cc43bc497580aca23f9ecd4a8d', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '83c08809ff807826e29af1e546d9d5ef06c58399', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '1341dd03f8d87441f4ba3e7aa8ad7310ad6be600', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '9e9ba965bd8eab972bea6954488c3b84371fa8a1', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '88914f30da863acf071251f70b9a0d5512088707', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'abc038255856f6bf6634b6cb23ff0c5e8e9e5b14', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+448573796,Add the Women of Colour in Tech (WOCinTech) Flickr account as a sub-provider,"## Fixes
+Fixes #443  by @annatuma 
+
+## Description
+This pull request adds WOCinTech as a sub-provider of Flickr, such that it has its own source on CC Search
+
+## Technical details
+Simply added the user ID of WOCinTech to the `provider_details.py` file such that the source of the corresponding images are set to the WOCinTech sub-provider value `woc_tech`.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the *default* branch of the repository (`main` or `master`).
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [ ]  ~I added tests for the changes I made (if applicable).~
+- [ ]  ~I added or updated documentation (if applicable).~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,461,https://api.github.com/repos/cc-archive/cccatalog/pulls/461,https://github.com/cc-archive/cccatalog/pull/461,closed,3,0,1,1,0,0,0,0,[],2020-07-14 00:26:27+00:00,2020-07-16 16:37:38+00:00,231071.0,"2 days, 16:11:11",[],"[{'commit_sha': 'abc533d0ef29305c3adb22ed327254c17f51a7de', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+450595026,Retrieve new Smithsonian unit codes,"## Fixes
+Fixes #451  by @ChariniNana 
+
+## Description
+This implementation helps keep all the the Smithsonian unit codes maintained in the `SMITHSONIAN_SUB_PROVIDERS` dictionary of the `provider_details.py` file up-to-date. The dictionary `SMITHSONIAN_SUB_PROVIDERS` maintains all known unit codes associated with Smithsonian images to help with the retrieval of corresponding sub-provider values. However, if there's an update to the unit code values at the Smithsonian API level, if we are unaware of them, issues would arise when we attempt to retrieve Smithsonian sub provider values. Therefore, we have implemented a workflow which can be used to frequently check for potential changes to unit codes at the Smithsonian API level, and manually update the `SMITHSONIAN_SUB_PROVIDERS` dictionary to reflect those changes.
+
+## Technical details
+The latest unit codes maintained at the Smithsonian API level for images can be retrieved by calling the following end point: https://api.si.edu/openaccess/api/v1.0/terms/unit_code?q=online_media_type:Images&api_key=REDACTED
+We retrieve the latest unit codes by calling this endpoint, and any unit code that is currently not seen in the `SMITHSONIAN_SUB_PROVIDERS` dictionary is stored in a table called `smithsonian_new_unit_codes`. The logic appears in the `smithsonian_unit_codes.py` program. The logic can be executed by triggering the `check_new_smithsonian_unit_codes_workflow` via the Airflow UI, and you will see the `smithsonian_new_unit_codes` table getting updated with the latest unit codes we need to add to the `SMITHSONIAN_SUB_PROVIDERS` dictionary. If no new unit codes are seen, the `smithsonian_new_unit_codes` table would be empty. Please not that a person who maintains the CC repo is expected to do the actual update in the  `SMITHSONIAN_SUB_PROVIDERS` dictionary.
+
+## Tests
+
+1. The `test_smithsonian_unit_codes.py` test suite checks that the new unit code retrieval logic works correctly
+2. The `test_check_new_smithsonian_unit_codes_workflow.py` test suite verifies that the corresponding workflow dag is loaded properly
+
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the *default* branch of the repository (`main` or `master`).
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [ ]  ~I added or updated documentation (if applicable).~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,465,https://api.github.com/repos/cc-archive/cccatalog/pulls/465,https://github.com/cc-archive/cccatalog/pull/465,closed,306,1,5,9,0,3,0,0,[],2020-07-16 23:24:17+00:00,2020-08-04 09:14:22+00:00,1590605.0,"18 days, 9:50:05","[{'comment_id': 464308786, 'comment_body': 'Please either read this from the Smithsonian Provider API Script, or extract it to a common location and read from that in both places.  ', 'comment_created': datetime.datetime(2020, 8, 3, 9, 46, 20, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 464309158, 'comment_body': ""Please read this from the `sql.py` file (or avoid it.  The table will have the correct username by default, since the Hook uses the 'deploy' user.)"", 'comment_created': datetime.datetime(2020, 8, 3, 9, 47, 4, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 464309967, 'comment_body': 'In the case where there are new or outdated unit codes, please raise an exception at the end of the function.  That way, a light will turn red on the dashboard (alerting me that human intervention is required)', 'comment_created': datetime.datetime(2020, 8, 3, 9, 48, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}]","[{'commit_sha': '94f2840cd63f7409c3895ecf4680075ed989f60b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'd6cbb9b2ed458940e044cb8f4eddad38d7728938', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'e022048e942b6a2df8dcb90b535a1fd2e56be139', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '0294a2693fedbe7f2a7ec9cd40033488aca60270', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '80692c9cb93734830f45feadbbfb27a737e6cda2', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b70799e4f8b0937f9cfacaa51bbdcaa408be4e46', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ee020e42fc7af275336a6b37a42810c45e01fc26', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'cfa8246e5ee9980712b74ed59e46dbd9278fe6f8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8c2cb4d01b8ab7d8c894e00acb8b8ac302c80c05', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+459108398,Smithsonian NMNH improvements related to creator and description fields,"## Fixes
+Fixes #470  by @ChariniNana 
+
+## Description
+With this fix, we reduce the percentage of missing creators related to NMNH data from 100.00% to 3.34% and the percentage of missing descriptions is reduced from 99.60% to 96.96%
+
+## Technical details
+The creator value is retrieved from the `freetext -> name -> Collector` field in the JSON response and the description is taken from the `freetext -> notes -> Notes` field. Furthermore, we now concatenate all creator values with the same level of preference (as specified in the `CREATOR_TYPES` dictionary) whereas earlier only one value among all identified as most preferred were taken. Currently, the lowest preference is given to the creator value being retrieved from the `Collector` field since better fields exist of images corresponding to other unit codes.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the *default* branch of the repository (`main` or `master`).
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [ ] ~I added tests for the changes I made (if applicable).~
+- [ ] ~I added or updated documentation (if applicable).~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,474,https://api.github.com/repos/cc-archive/cccatalog/pulls/474,https://github.com/cc-archive/cccatalog/pull/474,closed,17,5,1,5,1,6,0,0,[],2020-07-30 11:54:12+00:00,2020-08-14 13:56:28+00:00,1303336.0,"15 days, 2:02:16","[{'comment_id': 464415205, 'comment_body': ""Did you mean to add a comma instead of a semicolon?\r\n```suggestion\r\n        creator = ', '.join(creators_list[:-1]) + ' and ' + creators_list[-1] \\\r\n```"", 'comment_created': datetime.datetime(2020, 8, 3, 13, 32, 23, tzinfo=datetime.timezone.utc), 'commenter': 'allen505', 'type': 'User'}, {'comment_id': 464418038, 'comment_body': 'I think this variable here can be given a more apt name as there is another variable `c` on line 289 in the for loop which can cause some confusion', 'comment_created': datetime.datetime(2020, 8, 3, 13, 37, 21, tzinfo=datetime.timezone.utc), 'commenter': 'allen505', 'type': 'User'}, {'comment_id': 464940928, 'comment_body': ""Thanks heaps for the comments @allen505 ! In fact I changed the delimiter from comma to semicolon since sometimes a single creator value too contains commas within the string. Using a semicolon is not ideal, however I'm unsure how else we can make a distinction between the seperate creator values and the comma separation within a single creator string."", 'comment_created': datetime.datetime(2020, 8, 4, 10, 1, 54, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}, {'comment_id': 464946773, 'comment_body': 'Thanks @allen505 ! Made the requested change', 'comment_created': datetime.datetime(2020, 8, 4, 10, 13, 19, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}, {'comment_id': 464960987, 'comment_body': ""That's interesting. Do we know why a single creator value has commas within it?\r\nIf it's because of multiple creators, then do we need to make a distinction between the separate creator values and the comma separation within a single creator string?"", 'comment_created': datetime.datetime(2020, 8, 4, 10, 42, 53, tzinfo=datetime.timezone.utc), 'commenter': 'allen505', 'type': 'User'}, {'comment_id': 464987752, 'comment_body': ""It's not necessarily multiple creators. For example creators appearing for the SIL unit code may look like 'Greenawald, John L' where the value coming before the comma is the surname."", 'comment_created': datetime.datetime(2020, 8, 4, 11, 39, 18, tzinfo=datetime.timezone.utc), 'commenter': 'ChariniNana', 'type': 'User'}]","[{'commit_sha': 'b12f26269dec0fcbea10fcbe460014291a23e367', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8926d817b5c7884b597609f1a4907ec788c4a486', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '969bee472b745183a2c88b4fd5c0da8cbb515c2b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ccd228ca0234c0e12559c77f680dd802e14443ae', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b7f6f29379b19667551f938266f11d3abf1c4f32', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+464289800,Smithsonian discrepancy fix - improve creator and description availability,"## Fixes
+Related to #397 by @annatuma 
+
+## Description
+With this fix, we reduce the number of missing creators and descriptions for Smithsonian data
+
+## Technical details
+The content of the different fields available at the `freetext -> name` path were analysed to decide which of those could be used to retrieve the creator value from.  The `CREATOR_TYPES`  dictionary (contained in the Smithsonian script) was likewise extended with those selected fields such that the completeness of the creator field was improved for Smithsonian data. Unlike in the previous implementation, here we concatenate all 'creator' values with an equal importance (as indicated in the `CREATOR_TYPES`  dictionary) to obtain the full creator value to be stored. 
+
+Similarly, the content of the different fields available at the `freetext -> notes` path were analysed to decide which of those could be used to retrieve the description value from. The `DESCRIPTION_TYPES`  set (contained in the Smithsonian script) was likewise extended with those selected fields such that the completeness of the descriptions (within mete data field) was improved for Smithsonian data
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the *default* branch of the repository (`main` or `master`).
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [ ]  ~~I added tests for the changes I made (if applicable).~~
+- [ ]  ~~I added or updated documentation (if applicable).~~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,476,https://api.github.com/repos/cc-archive/cccatalog/pulls/476,https://github.com/cc-archive/cccatalog/pull/476,closed,48,5,1,6,1,0,0,0,[],2020-08-06 22:16:32+00:00,2020-08-14 14:23:23+00:00,662811.0,"7 days, 16:06:51",[],"[{'commit_sha': 'b12f26269dec0fcbea10fcbe460014291a23e367', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8926d817b5c7884b597609f1a4907ec788c4a486', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '969bee472b745183a2c88b4fd5c0da8cbb515c2b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ccd228ca0234c0e12559c77f680dd802e14443ae', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b7f6f29379b19667551f938266f11d3abf1c4f32', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '5b72166777bc85a1005ba97e82da3d7b75ef62eb', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+467671357,Expiration of outdated images in the database,"## Fixes
+Fixes #482  by @ChariniNana 
+
+## Description
+This pull request handles the image expiration logic, where the `updated_on` value associated with an image is older than what it can be as per the re-ingestion logic of the corresponding provider.
+
+## Technical details
+We specify the oldest possible value the `updated_on` attribute can take per each provider (based on the re-ingestion strategy) in a dictionary. If certain images in the database are deemed to be outdated as per this logic, we set the corresponding `removed_from_source` value to True.
+
+## Tests
+The `test_image_expiration` function in the `test_sql` test suite checks whether the image expiration logic works as expected.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the *default* branch of the repository (`main` or `master`).
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [ ]  ~~I added or updated documentation (if applicable).~~
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,483,https://api.github.com/repos/cc-archive/cccatalog/pulls/483,https://github.com/cc-archive/cccatalog/pull/483,closed,245,13,13,10,0,1,0,0,[],2020-08-13 22:52:59+00:00,2020-08-25 08:14:47+00:00,984108.0,"11 days, 9:21:48","[{'comment_id': 474534353, 'comment_body': ""```suggestion\r\n        run_task_list = [\r\n            operators.get_image_expiration_operator(\r\n                dag,\r\n                postgres_conn_id,\r\n                provider\r\n            )\r\n            for provider in sql.OLDEST_PER_PROVIDER\r\n        ]\r\n        end_task = ops.get_log_operator(dag, dag.dag_id, 'Finished')\r\n\r\n        start_task >> run_task_list >> end_task\r\n```\r\n\r\nI'd prefer a list comprehension here."", 'comment_created': datetime.datetime(2020, 8, 21, 8, 44, 49, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}]","[{'commit_sha': 'b451473b66db999b7f6cc4e8a3cb90d20c3ef6cc', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8927ba6a8a805d5f215c3cbca8d71e093616078b', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'b4b2d0acea607667cc96e114230acd9a31007eaf', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '9965948a5145d3cc3ff58f6d0f39e9895b5ece0f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '96562359f5cfe8512d0b47ed2fcf437a32696c65', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '16a1438a93a52763820393ffbdf127d39cd10c89', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '984bde4c87fe56288aed0dbb0c703b814366fdf9', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2c0d87eec78559eb55b22d98aeab3ae7822b7b43', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '31b872b5340582dd7d72081d3d6824bcd94ff122', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '994a85428735d3ac5b91d18df632ceae8fc9760c', 'committer_username': 'ChariniNana', 'committer_name': 'Charini Nanayakkara', 'committer_email': 'charini.nanayakkara@gmail.com', 'commit_date': datetime.datetime(2016, 4, 22, 3, 9, 3, tzinfo=datetime.timezone.utc)}]",Charini Nanayakkara,18607143,charini.nanayakkara@gmail.com,User,,46,,0,2
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+97037973,cccatalog,cc-archive/cccatalog,Python,60,63,21,33,924,0,6,0,"[{'id': 467671357, 'number': 483, 'closed': datetime.datetime(2020, 8, 25, 8, 14, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 13, 22, 52, 59, tzinfo=datetime.timezone.utc), 'time_taken': 984108.0, 'time_delta': '11 days, 9:21:48', 'additions': 245, 'deletions': 13, 'state': 'closed'}, {'id': 464289800, 'number': 476, 'closed': datetime.datetime(2020, 8, 14, 14, 23, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 6, 22, 16, 32, tzinfo=datetime.timezone.utc), 'time_taken': 662811.0, 'time_delta': '7 days, 16:06:51', 'additions': 48, 'deletions': 5, 'state': 'closed'}, {'id': 459108398, 'number': 474, 'closed': datetime.datetime(2020, 8, 14, 13, 56, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 30, 11, 54, 12, tzinfo=datetime.timezone.utc), 'time_taken': 1303336.0, 'time_delta': '15 days, 2:02:16', 'additions': 17, 'deletions': 5, 'state': 'closed'}, {'id': 450595026, 'number': 465, 'closed': datetime.datetime(2020, 8, 4, 9, 14, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 16, 23, 24, 17, tzinfo=datetime.timezone.utc), 'time_taken': 1590605.0, 'time_delta': '18 days, 9:50:05', 'additions': 306, 'deletions': 1, 'state': 'closed'}, {'id': 448573796, 'number': 461, 'closed': datetime.datetime(2020, 7, 16, 16, 37, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 14, 0, 26, 27, tzinfo=datetime.timezone.utc), 'time_taken': 231071.0, 'time_delta': '2 days, 16:11:11', 'additions': 3, 'deletions': 0, 'state': 'closed'}, {'id': 448534905, 'number': 460, 'closed': datetime.datetime(2020, 7, 14, 0, 14, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 13, 22, 35, 35, tzinfo=datetime.timezone.utc), 'time_taken': 5956.0, 'time_delta': '1:39:16', 'additions': 507, 'deletions': 13, 'state': 'closed'}, {'id': 445764649, 'number': 455, 'closed': datetime.datetime(2020, 7, 29, 12, 28, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 7, 23, 31, 5, tzinfo=datetime.timezone.utc), 'time_taken': 1861057.0, 'time_delta': '21 days, 12:57:37', 'additions': 504, 'deletions': 13, 'state': 'closed'}, {'id': 439583723, 'number': 442, 'closed': datetime.datetime(2020, 7, 10, 7, 30, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 25, 0, 15, 38, tzinfo=datetime.timezone.utc), 'time_taken': 1322076.0, 'time_delta': '15 days, 7:14:36', 'additions': 400, 'deletions': 11, 'state': 'closed'}, {'id': 427468146, 'number': 420, 'closed': datetime.datetime(2020, 6, 22, 14, 13, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 3, 21, 33, 50, tzinfo=datetime.timezone.utc), 'time_taken': 1615167.0, 'time_delta': '18 days, 16:39:27', 'additions': 380, 'deletions': 5, 'state': 'closed'}, {'id': 399008432, 'number': 354, 'closed': datetime.datetime(2020, 5, 28, 15, 1, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 5, 10, 15, 19, tzinfo=datetime.timezone.utc), 'time_taken': 4596351.0, 'time_delta': '53 days, 4:45:51', 'additions': 122, 'deletions': 2, 'state': 'closed'}, {'id': 386599773, 'number': 314, 'closed': datetime.datetime(2020, 3, 19, 10, 57, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 11, 10, 20, 16, tzinfo=datetime.timezone.utc), 'time_taken': 693435.0, 'time_delta': '8 days, 0:37:15', 'additions': 172, 'deletions': 220, 'state': 'closed'}, {'id': 380226541, 'number': 285, 'closed': datetime.datetime(2020, 3, 6, 15, 32, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 26, 12, 46, 5, tzinfo=datetime.timezone.utc), 'time_taken': 787614.0, 'time_delta': '9 days, 2:46:54', 'additions': 24, 'deletions': 2, 'state': 'closed'}]"

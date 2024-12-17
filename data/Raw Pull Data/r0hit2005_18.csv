@@ -1,0 +1,102 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1031905097,VoIP v1 implementation,"# Improved Signalling for 1:1 VoIP
+Implementation to support VoIP version 1, as specified by [MSC2746](https://github.com/matrix-org/matrix-spec-proposals/blob/dbkr/msc2746/proposals/2746-reliable-voip.md)
+
+## To-Do List (tentative)
+
+- #### Change version fields to ""1""
+   - [x] Add v1 to call events
+   - [x] Change methods to allow v0 compatible calling
+- #### Add invitee field to m.call.invite
+   - [x] Add to mtxclient
+   - [x] Send invite 
+   - [x] Handle invite events
+- #### Add party_id to all VoIP events
+   - [x] Add to mtxclient
+   - [x] Generate party_id for every call session
+- #### Introduce m.call.select_answer
+   - [x] Add call select struct
+   - [x] Handle event (Local user is callee)
+   - [x] Send select answer event when reject is accepted (Local user is caller)
+   - [x] Send select answer event when answer is accepted (Local user is caller)
+- #### Introduce m.call.reject
+   - [x] Send reject
+   - [x] Handle reject event
+- #### Clarify what actions a client may take in response to an invite
+   - [x] Accept the call
+   - [x] Reject the call - Reject on every device if one device rejects the call. In case two device have conflicting responses (one device chooses to accept while the other rejects), the caller selects an answer and call continues or ends based on which answer is selected
+   - [x] Ignore call - Mute ringtone.
+- #### Reason codes for m.call.hangup
+   - [x] Add new reason codes to hangup struct
+   - [x] Send reasonable reason for respective hangup events
+- #### Introduce m.call.negotiate
+   - [x] Add struct for call negotiation 
+   - [ ] Send offer negotiation 
+   - [ ] Accept offer by sending answer
+- #### Changes to m.call.candidate
+   - [x] Change handle events to appoint correct candidates to their respective invites
+- #### Add explicit recommendations for call event liveness
+   - [ ] Check invite event validity against lifetime by using the age field in sync response.
+   - [ ] Send signal on valid invite only after processing sync response
+- [x] Define the configurations of WebRTC streams and tracks
+- [x] Designate one party as polite
+- [ ] Introduce recommendations for batching of ICE candidates
+- [ ] Mandate the end-of-candidates candidate
+- [ ] Add DTMF
+- [x] Specify exact grammar for VoIP IDs
+- [x] Specify behavior on room leave 
+- [x] Clarify that supported codecs should follow the WebRTC spec
+
+### Testing Matrix
+- Call Accept
+  - [x] Nheko to Nheko
+  - [ ] Nheko to Nheko(old)
+  - [ ] Nheko to Element
+  - [x] Nheko to Element Android
+  - [x] Nheko to Element Browser 
+- Call Decline 
+  - [x] Nheko to Nheko
+  - [ ] Nheko to Nheko(old)
+  - [ ] Nheko to Element
+  - [x] Nheko to Element Android
+  - [x] Nheko to Element Browser
+- Call Ignore 
+  - [ ] Nheko to Nheko
+  - [ ] Nheko to Nheko(old)
+  - [ ] Nheko to Element
+  - [x] Nheko to Element Android
+  - [x] Nheko to Element Browser
+- Glare 
+  - Caller is polite 
+     - [x] Nheko to Nheko
+     - [ ] Nheko to Nheko(old)
+     - [ ] Nheko to Element
+     - [x] Nheko to Element Android
+     - [x] Nheko to Element Browser
+  - Callee is polite 
+     - [x] Nheko to Nheko
+     - [ ] Nheko to Nheko(old)
+     - [ ] Nheko to Element
+     - [x] Nheko to Element Android
+     - [x] Nheko to Element Browser
+- Multiple Callers, Single Callee 
+    - [x] Nheko to Nheko
+    - [ ] Nheko to Nheko(old)
+    - [ ] Nheko to Element
+    - [x] Nheko to Element Android
+    - [x] Nheko to Element Browser
+- Single Caller, Multiple Callee 
+    - [x] Nheko to Nheko
+    - [ ] Nheko to Nheko(old)
+    - [ ] Nheko to Element
+    - [x] Nheko to Element Android
+    - [x] Nheko to Element Browser
+- Multiple Caller, Multiple Callee
+    - [x] Nheko to Nheko
+    - [ ] Nheko to Nheko(old)
+    - [ ] Nheko to Element
+    - [x] Nheko to Element Android
+    - [x] Nheko to Element Browser",True,1161,https://api.github.com/repos/Nheko-Reborn/nheko/pulls/1161,https://github.com/Nheko-Reborn/nheko/pull/1161,closed,583,79,19,13,5,7,1,0,[{'name': 'hacktoberfest-accepted'}],2022-08-20 22:34:11+00:00,2022-10-14 13:49:05+00:00,4720494.0,"54 days, 15:14:54","[{'comment_id': 957834965, 'comment_body': 'While there is no handling for this, maybe disallow placing the call?', 'comment_created': datetime.datetime(2022, 8, 29, 22, 9, 38, tzinfo=datetime.timezone.utc), 'commenter': 'deepbluev7', 'type': 'User'}, {'comment_id': 957835483, 'comment_body': 'So you decided to only support the newer protocol or do you intend to still handle v0 calls when they are incoming?', 'comment_created': datetime.datetime(2022, 8, 29, 22, 10, 26, tzinfo=datetime.timezone.utc), 'commenter': 'deepbluev7', 'type': 'User'}, {'comment_id': 957837224, 'comment_body': 'How about you just initialize this here to be the random id?', 'comment_created': datetime.datetime(2022, 8, 29, 22, 13, 38, tzinfo=datetime.timezone.utc), 'commenter': 'deepbluev7', 'type': 'User'}, {'comment_id': 959603020, 'comment_body': 'Should I keep the version the call is based on in a variable and do both accordingly?', 'comment_created': datetime.datetime(2022, 8, 31, 13, 41, 54, tzinfo=datetime.timezone.utc), 'commenter': 'r0hit05', 'type': 'User'}, {'comment_id': 984509427, 'comment_body': 'I think you should handle that on the c++ side, since the leave can be triggered in multiple ways.', 'comment_created': datetime.datetime(2022, 9, 30, 11, 50, 37, tzinfo=datetime.timezone.utc), 'commenter': 'deepbluev7', 'type': 'User'}, {'comment_id': 984512406, 'comment_body': 'Hm, that might not make much sense :D\r\n\r\nI think we should either always show that event or hide it without giving the user an option to unhide it.', 'comment_created': datetime.datetime(2022, 9, 30, 11, 54, 44, tzinfo=datetime.timezone.utc), 'commenter': 'deepbluev7', 'type': 'User'}, {'comment_id': 984558593, 'comment_body': ""I actually meant for that variable to hold a bool based on whether the message is sent by the local user on local device or otherwise and not an option the user can manually toggle. I'll remove it as of now."", 'comment_created': datetime.datetime(2022, 9, 30, 12, 50, 9, tzinfo=datetime.timezone.utc), 'commenter': 'r0hit05', 'type': 'User'}]","[{'commit_sha': '275beb20baf887f326b0a4f6b79388750449ff30', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9330962b0c3dd565b7713d754ec0f60abb501f7f', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09cc06daa9a0f7aba6ebf7ca5a87f18b7625c230', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c08de778ac3d9483579016e5f5bcee065159316f', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dcd45ff1e5b34cb0f15c6b28d3e2710b75e5b08e', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2fcedf3688429e2cb01c3156603688ae8f2eb1aa', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f746f0cf4593305e53fcf731c96d86dff71eaff6', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9218edf7b69b42108361fd7c5b6a487d92e43a51', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03ca360ae484b8df65158ea94994cb77c2a6b073', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '22145f7022d67079266ae429e40174e629c302fa', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '92ef153a7b3423a2f3b428dfb1d13071df1bb024', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1289047e9ec0551e4580b6c6866d4dd32494301', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6bbbf29fc6c284607c55816bcd4ea012286db5cc', 'committer_username': 'r0hit05', 'committer_name': 'Rohit Sutradhar', 'committer_email': 'rohitsutradhar311@gmail.com', 'commit_date': datetime.datetime(2018, 6, 7, 16, 2, 12, tzinfo=datetime.timezone.utc)}]",Rohit Sutradhar,40035473,rohitsutradhar311@gmail.com,User,,18,,8,10
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+165144850,nheko,Nheko-Reborn/nheko,C++,199,1867,36,179,5828,374,62,19,"[{'id': 1031905097, 'number': 1161, 'closed': datetime.datetime(2022, 10, 14, 13, 49, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 20, 22, 34, 11, tzinfo=datetime.timezone.utc), 'time_taken': 4720494.0, 'time_delta': '54 days, 15:14:54', 'additions': 583, 'deletions': 79, 'state': 'closed'}, {'id': 980259731, 'number': 1110, 'closed': datetime.datetime(2022, 7, 15, 14, 27, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 27, 16, 13, 19, tzinfo=datetime.timezone.utc), 'time_taken': 1548842.0, 'time_delta': '17 days, 22:14:02', 'additions': 98, 'deletions': 79, 'state': 'closed'}, {'id': 969181475, 'number': 1100, 'closed': datetime.datetime(2022, 6, 17, 20, 8, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 16, 10, 55, 31, tzinfo=datetime.timezone.utc), 'time_taken': 119579.0, 'time_delta': '1 day, 9:12:59', 'additions': 5, 'deletions': 3, 'state': 'closed'}]"

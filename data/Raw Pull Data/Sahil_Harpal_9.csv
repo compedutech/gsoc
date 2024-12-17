@@ -1,0 +1,115 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1490947512,GUI representation of the system's activity using the 'system_stats' extension.,"
+
+## Description
+
+This pull request contains changes to enhance the GUI representation of the system's activity using the 'system_stats' extension.
+
+## Changes Made
+
+- **Added tab to toggle between general (existing dashboard) and system statistics.**
+
+	![image](https://github.com/pgadmin-org/pgadmin4/assets/56965873/86f2fb65-3d57-4cd2-8986-d67e43aa8591)
+
+- **Updated StreamingChart**
+	- Secondary Y-axis support (Different scale on the right hand side). Set `showSecondAxis=True` to enable this.
+	- It is currently not formatting the axis values and takes much space in case of larger values (eg. memory_usage, &nbsp; handle_count etc.). So added custom formatter for y-axis values. `suffixes = ['', 'k', 'M', 'B', 'T']`
+
+		![image](https://github.com/pgadmin-org/pgadmin4/assets/56965873/552b4c37-cb0e-481b-a20c-21d21df6080a)
+
+	- Tooltip issue: When the container's size changes, tooltips continues to accumulate without being properly removed. This bug is also present in the current stable version of pgAdmin4 application.
+Current method that is used to display tooltips involves inserting a new element into the DOM with the class name ""uplot-tooltip"". So, to resolve this issue, I have added method to remove all the existing tooltip elements before inserting a new one.
+
+        ![tooltip-issue-on-container-resize](https://github.com/pgadmin-org/pgadmin4/assets/56965873/96bd9c67-ddda-4f75-ba23-1b501312b258)
+        ![tooltip-issue-on-screen-resize](https://github.com/pgadmin-org/pgadmin4/assets/56965873/987251d5-db61-48ee-a4df-bc53a89edb7c)
+
+- **If the System Stats extension does not exist, display the appropriate message**
+    
+    ![image](https://github.com/pgadmin-org/pgadmin4/assets/56965873/be706bae-75f1-4178-9beb-20811238d147)
+
+- **System statistics features covered** 
+  All the features are split into 4 different tabs with the following grouping:
+	1. **Summary**
+		  - OS information
+			 Tabular representation of the following OS properties.
+		    > - Name
+			> - Version
+			> - Host name
+			> - Domain name
+			> - Architecture
+			> - OS up since seconds
+		  - Handle & process count graph
+		     Streaming line chart to show changes in handle and process count over time.
+		     > - Handle count: Number of object handles that are currently open in the operating system. 
+		     > - Process count: Number of processes that are currently running on the operating system.
+		  - CPU Information
+		      Tabular representation of the following CPU properties.
+		      > - Vendor
+		      > - Description
+		      > - Model name
+		      > - No of cores
+		      > - Architecture
+		      > - Clock speed Hz
+		      > - L1 dcache size
+		      > - L1 icache size
+		      > - L2 cache size
+		      > - L3 cache size
+   2. **CPU**
+         - CPU Usage Information
+	         Streaming line chart to show changes in CPU usage over time. Values are a percentage of time spent by CPUs for all operations.
+	         Following modes are covered:
+	         > - User mode normal
+	         > - User mode niced
+	         > - Kernal mode
+	         > - Idle mode
+         - Load Avg Information
+	         Streaming line chart to show changes in the average load of the system over 1, 5, 10 and 15 minute intervals over time. 
+         - Process CPU usage
+	         Tabular representation of the CPU usage per process with the options to filter and sort.
+	         > - Process ID
+	         > - Process name
+	         > - CPU usage value
+    3. **Memory**
+         - Memory Information
+	         Streaming line chart to show changes in the memory usage.
+	         Both Main and Swap memory are covered with following categories.
+	         > - Total memory available
+	         > - Used memory
+	         > - Free memory
+         - Process memory usage
+	         Tabular representation of the memory usage per process with the options to filter and sort.
+	          > - Process ID
+	         > - Process name
+	         > - Memory usage in bytes
+	         > - Total memory used in bytes
+    4. **Storage**
+         - Disk Information
+	         Tabular representation of the following properties for all the drive partitions.
+	         > - File system
+	         > - File system type
+	         > - Mount point
+	         > - Drive letter
+	         > - Total space
+	         > - Used space
+	         > - Free space
+	         > - Total inodes
+	         > - Used inodes
+	         > - Free inodes
+	         
+	         Graphical representation of Total space using a Pie chart and Stacked Bar chart for Used and Available space
+         - I/O Analysis Information
+	         Streaming line chart to show changes in the total number of operations, bytes transferred, and time spent in milliseconds for reading and writing over time for each disk. 
+- **Provided option to configure the refresh rates for the API calls** `(File > Preferences > Dashboards > Refresh rates)`
+
+- **SQL queries**
+    All the required queries are present in the `pgadmin4\web\pgadmin\dashboard\templates\dashboard\sql\default\system_statistics.sql`
+
+## Demo
+A small demonstration of the work can be found [here](https://drive.google.com/file/d/1gfTYx4u-G21hWCeh70UfkpcVNROHyT17/view?usp=sharing).",True,6721,https://api.github.com/repos/pgadmin-org/pgadmin4/pulls/6721,https://github.com/pgadmin-org/pgadmin4/pull/6721,closed,2099,92,9,2,1,29,0,0,[],2023-08-27 12:11:33+00:00,2023-09-27 10:34:48+00:00,2672595.0,"30 days, 22:23:15","[{'comment_id': 1308348089, 'comment_body': '`cu_stats_refresh` should `cpu_stats_refresh`', 'comment_created': datetime.datetime(2023, 8, 29, 7, 35, 20, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308349435, 'comment_body': '`pcu_stats_refresh` should be `pcpu_stats_refresh`', 'comment_created': datetime.datetime(2023, 8, 29, 7, 36, 30, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308351790, 'comment_body': '`setmainTabVal` should be `setMainTabVal`', 'comment_created': datetime.datetime(2023, 8, 29, 7, 38, 38, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308352915, 'comment_body': '`ss_extension_check_url` should be `ssExtensionCheckUrl`', 'comment_created': datetime.datetime(2023, 8, 29, 7, 39, 31, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308471366, 'comment_body': 'refresh is applicable to System stats only.', 'comment_created': datetime.datetime(2023, 8, 29, 9, 17, 39, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308474841, 'comment_body': ""Please don't keep padding in decimal. Make it 8px."", 'comment_created': datetime.datetime(2023, 8, 29, 9, 20, 22, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308475445, 'comment_body': 'cpu_stats', 'comment_created': datetime.datetime(2023, 8, 29, 9, 20, 52, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308476271, 'comment_body': 'use gettext, same for other.', 'comment_created': datetime.datetime(2023, 8, 29, 9, 21, 31, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308479696, 'comment_body': 'probably use gettext here and for others.', 'comment_created': datetime.datetime(2023, 8, 29, 9, 24, 13, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308492263, 'comment_body': 'do not use hardcoded colors, use from theme. Why do want to customise table css? It should not be required I think. We have defined table styles which are used everywhere - `const tableClasses = commonTableStyles();`', 'comment_created': datetime.datetime(2023, 8, 29, 9, 34, 3, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308500078, 'comment_body': 'Use gettext everywhere.', 'comment_created': datetime.datetime(2023, 8, 29, 9, 38, 52, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308503065, 'comment_body': ""I don't see any react code in this file. Why is it named like a component. It should be something like `utility.js` or `common.js`"", 'comment_created': datetime.datetime(2023, 8, 29, 9, 41, 13, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1308505879, 'comment_body': 'We already have a function for this - `toPrettySize` in utils.js', 'comment_created': datetime.datetime(2023, 8, 29, 9, 43, 31, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1313789077, 'comment_body': '@adityatoshniwal Should I remove RefreshButton from here?', 'comment_created': datetime.datetime(2023, 9, 2, 9, 14, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1313795910, 'comment_body': ""@adityatoshniwal gettext for keys? eg User Normal, User Niced? \r\nor for the value? eg 'User Normal': gettext(data[...])"", 'comment_created': datetime.datetime(2023, 9, 2, 9, 48, 20, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1314455768, 'comment_body': 'accessor should not be in gettext, it is used internally. gettext is basically used for language translation, so whatever text is visible to the user should wrap in gettext.', 'comment_created': datetime.datetime(2023, 9, 4, 5, 38, 25, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314456353, 'comment_body': 'gettext will not work on variables. it works on plain strings.', 'comment_created': datetime.datetime(2023, 9, 4, 5, 39, 35, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314456707, 'comment_body': ""don't use gettext for icons. explained above."", 'comment_created': datetime.datetime(2023, 9, 4, 5, 40, 13, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314457144, 'comment_body': 'What is it used for?', 'comment_created': datetime.datetime(2023, 9, 4, 5, 41, 2, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314457478, 'comment_body': ""If they're used to display text on the UI then yes."", 'comment_created': datetime.datetime(2023, 9, 4, 5, 41, 43, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314617244, 'comment_body': 'No actually they are numeric values. We are passing them in the StreamingChart. ', 'comment_created': datetime.datetime(2023, 9, 4, 8, 37, 48, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1314618735, 'comment_body': 'So, basically I should wrap all the text data that we are displaying on the UI with gettext function right?', 'comment_created': datetime.datetime(2023, 9, 4, 8, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1314623334, 'comment_body': 'Right. But, it will work on direct strings not variables.', 'comment_created': datetime.datetime(2023, 9, 4, 8, 42, 24, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314624878, 'comment_body': ""Okay understood, I'll correct it!"", 'comment_created': datetime.datetime(2023, 9, 4, 8, 43, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1314628001, 'comment_body': ""Little confused here, both empty string `''` and `null` are string only. "", 'comment_created': datetime.datetime(2023, 9, 4, 8, 46, 29, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1314659490, 'comment_body': 'null is not string - null is null. And icon is used internally. not every string should be wrapped. only visible on the UI.', 'comment_created': datetime.datetime(2023, 9, 4, 9, 13, 36, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1314830455, 'comment_body': ""okay, I got it for icon, but as you can see currently I'm setting value as null string `'null'`, so should I change it to null object?\r\nused_inodes: di_info_obj[key]['used_inodes']?di_info_obj[key]['used_inodes']:null,\r\n\r\nor just keep it like this:\r\nused_inodes: di_info_obj[key]['used_inodes']?di_info_obj[key]['used_inodes']:'null',"", 'comment_created': datetime.datetime(2023, 9, 4, 11, 32, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}, {'comment_id': 1314842273, 'comment_body': ""`null` doesn't mean anything. I would rather keep it blank. You can use empty string instead of null."", 'comment_created': datetime.datetime(2023, 9, 4, 11, 45, 28, tzinfo=datetime.timezone.utc), 'commenter': 'adityatoshniwal', 'type': 'User'}, {'comment_id': 1319007206, 'comment_body': ""Sorry, I think we can remove it. Actually I used the tab component which is used for the server's activity, to toggle between General and System Stats. I just forgot to remove it."", 'comment_created': datetime.datetime(2023, 9, 7, 19, 2, 24, tzinfo=datetime.timezone.utc), 'commenter': 'Sahil1479', 'type': 'User'}]","[{'commit_sha': '21bc1482063c619603aa1c84fdc0d7f1f57d7d52', 'committer_username': 'Sahil1479', 'committer_name': 'Sahil Harpal', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 24, 13, 8, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '351fa07b653f27879a1bf2ed7f46328a3873d0aa', 'committer_username': 'Sahil1479', 'committer_name': 'Sahil Harpal', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 24, 13, 8, 4, tzinfo=datetime.timezone.utc)}]",Sahil Harpal,56965873,,User,,39,,8,28
+1544325389,Fixed UI issues,"- Resolved following UI related issues.
+
+![image](https://github.com/pgadmin-org/pgadmin4/assets/56965873/1f863a70-fc33-4e8c-85bb-30dbd88e222e)
+- Added label (in header) to the table for Memory and CPU tabs.",True,6833,https://api.github.com/repos/pgadmin-org/pgadmin4/pulls/6833,https://github.com/pgadmin-org/pgadmin4/pull/6833,closed,38,29,5,2,6,8,0,0,[],2023-10-05 20:36:42+00:00,2023-10-11 05:57:21+00:00,465639.0,"5 days, 9:20:39","[{'comment_id': 1348274213, 'comment_body': '```suggestion\r\n              di_info_list.push({\r\n```', 'comment_created': datetime.datetime(2023, 10, 6, 5, 59, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348274327, 'comment_body': ""```suggestion\r\n                icon: '',\r\n```"", 'comment_created': datetime.datetime(2023, 10, 6, 5, 59, 12, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348274426, 'comment_body': '```suggestion\r\n            <ChartContainer\r\n```', 'comment_created': datetime.datetime(2023, 10, 6, 5, 59, 24, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348274551, 'comment_body': ""```suggestion\r\n              id='t-space-graph'\r\n```"", 'comment_created': datetime.datetime(2023, 10, 6, 5, 59, 34, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348274638, 'comment_body': ""```suggestion\r\n              title={gettext('')}\r\n```"", 'comment_created': datetime.datetime(2023, 10, 6, 5, 59, 43, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348274746, 'comment_body': '```suggestion\r\n              errorMsg={props.errorMsg}\r\n```', 'comment_created': datetime.datetime(2023, 10, 6, 5, 59, 52, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348274860, 'comment_body': '```suggestion\r\n                {\r\n```', 'comment_created': datetime.datetime(2023, 10, 6, 6, 0, 3, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}, {'comment_id': 1348275261, 'comment_body': '```suggestion\r\n \r\n```', 'comment_created': datetime.datetime(2023, 10, 6, 6, 0, 49, tzinfo=datetime.timezone.utc), 'commenter': 'khushboovashi', 'type': 'User'}]","[{'commit_sha': '8ae6ef827d13af7b7a94697ab39b3954c107350d', 'committer_username': 'Sahil1479', 'committer_name': 'Sahil Harpal', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 24, 13, 8, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afaee9cf9c57ff1e43b3468831275b15bb0e1617', 'committer_username': 'Sahil1479', 'committer_name': 'Sahil Harpal', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 24, 13, 8, 4, tzinfo=datetime.timezone.utc)}]",Sahil Harpal,56965873,,User,,39,,8,28
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+82552640,pgadmin4,pgadmin-org/pgadmin4,Python,622,2349,47,168,7245,365,14,12,"[{'id': 1544325389, 'number': 6833, 'closed': datetime.datetime(2023, 10, 11, 5, 57, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 5, 20, 36, 42, tzinfo=datetime.timezone.utc), 'time_taken': 465639.0, 'time_delta': '5 days, 9:20:39', 'additions': 38, 'deletions': 29, 'state': 'closed'}, {'id': 1490947512, 'number': 6721, 'closed': datetime.datetime(2023, 9, 27, 10, 34, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 27, 12, 11, 33, tzinfo=datetime.timezone.utc), 'time_taken': 2672595.0, 'time_delta': '30 days, 22:23:15', 'additions': 2099, 'deletions': 92, 'state': 'closed'}]"

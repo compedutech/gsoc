@@ -1,0 +1,260 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1388297516,Clarification on the MAX_MODULUS of float matrices modulo `n`,"<!-- Please provide a concise, informative and self-explanatory title. -->
+<!-- Don't put issue numbers in the title. Put it in the Description below. -->
+<!-- For example, instead of ""Fixes #12345"", use ""Add a new method to multiply two integers"" -->
+
+### :books: Description
+
+<!-- Describe your changes here in detail. --> 
+Improves the documentation to give more precisions on the upper limit MAX_MODULUS of `matrix_modn_dense_float.pyx` for performances sake.
+<!-- Why is this change required? What problem does it solve? -->
+<!-- If this PR resolves an open issue, please link to it here. For example ""Fixes #12345"". --> Fixes #35365 
+<!-- If your change requires a documentation PR, please link it appropriately. -->
+
+### :memo: Checklist
+
+<!-- Put an `x` in all the boxes that apply. It should be `[x]` not `[x ]`. -->
+
+- [x] The title is concise, informative, and self-explanatory.
+- [x] The description explains in detail what this PR is about.
+- [x] I have linked a relevant issue or discussion.
+- [ ] I have created tests covering the changes.
+- [x] I have updated the documentation accordingly.
+
+### :hourglass: Dependencies
+
+<!-- List all open PRs that this PR logically depends on
+- #12345: short description why this is a dependency
+- #34567: ...
+-->
+
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+",True,35752,https://api.github.com/repos/sagemath/sage/pulls/35752,https://github.com/sagemath/sage/pull/35752,closed,8,6,2,1,2,0,3,1,"[{'name': 't: enhancement'}, {'name': 'p: minor / 4'}, {'name': 'c: linear algebra'}]",2023-06-12 09:20:02+00:00,2023-06-21 21:21:59+00:00,820917.0,"9 days, 12:01:57",[],"[{'commit_sha': 'a6d92ef44c81e87f6cc652e840892a87e4ee8f1b', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}]",Marie Bonboire,96301497,,User,,3,,3,4
+1412723921,Extend `MAX_MODULUS` of `matrix_modn_dense_double.pyx`,"<!-- Please provide a concise, informative and self-explanatory title. -->
+<!-- Don't put issue numbers in the title. Put it in the Description below. -->
+<!-- For example, instead of ""Fixes #12345"", use ""Add a new method to multiply two integers"" -->
+
+### :books: Description
+
+<!-- Describe your changes here in detail. -->
+Assign to `MAX_MODULUS` of `matrix_modn_dense_double.pyx` the actual limit for LinBox `Modular<double>` (Givaro's `maxCardinality`)
+<!-- Why is this change required? What problem does it solve? -->
+It allows better speed performances for matrices over the integers mod N, for N having 24 to 27 bits.
+<!-- If this PR resolves an open issue, please link to it here. For example ""Fixes #12345"". -->
+Fixes #35806 
+<!-- If your change requires a documentation PR, please link it appropriately. -->
+
+### :memo: Checklist
+
+<!-- Put an `x` in all the boxes that apply. It should be `[x]` not `[x ]`. -->
+
+- [x] The title is concise, informative, and self-explanatory.
+- [x] The description explains in detail what this PR is about.
+- [x] I have linked a relevant issue or discussion.
+- [x] I have created tests covering the changes.
+- [x] I have updated the documentation accordingly.
+
+### :hourglass: Dependencies
+
+<!-- List all open PRs that this PR logically depends on
+- #12345: short description why this is a dependency
+- #34567: ...
+-->
+
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+",True,35855,https://api.github.com/repos/sagemath/sage/pulls/35855,https://github.com/sagemath/sage/pull/35855,closed,8,7,2,3,3,2,1,0,[{'name': 'c: linear algebra'}],2023-06-29 04:47:01+00:00,2023-07-01 21:11:45+00:00,231884.0,"2 days, 16:24:44","[{'comment_id': 1246197100, 'comment_body': 'There is trailing whitespace here', 'comment_created': datetime.datetime(2023, 6, 29, 6, 59, 20, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}, {'comment_id': 1246197523, 'comment_body': 'And trailing whitespace here as well', 'comment_created': datetime.datetime(2023, 6, 29, 6, 59, 40, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}]","[{'commit_sha': '5afd4bbadf5cef9493d0e45e5523bb391e0fc9aa', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9537d3fe761ebd38bbf2aec4b4cc08439fbdcbfb', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '413f251a8ebfe04138eb25f5bd1a6cf48a5a1d7c', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}]",Marie Bonboire,96301497,,User,,3,,3,4
+1470914176,Speed-up matrix construction by ensuring MatrixArgs type MA_ENTRIES_ZERO,"There are many ways to specify entries when creating a matrix, which are handled in `args.pyx` with `MatrixArgs` class. It has been discussed before why allowing `entries=None` in the matrix creation methods can be beneficial in terms of performance (https://github.com/sagemath/sage/issues/11589 , https://github.com/sagemath/sage/issues/12020). This input `entries=None` is required to yield the zero matrix. For example: `matrix(QQ, 4, 4)` creates the zero matrix. This corresponds to the type `MA_ENTRIES_ZERO` in `args.pyx`. When one passes a value, e.g. `matrix(QQ, 4, 4, 2)`, then one gets a diagonal matrix with `2` on the diagonal; this corresponds to the type `MA_ENTRIES_SCALAR` in `args.pyx`.
+
+Currently, doing something like `matrix(QQ, 4, 4, 0)` will pick `MA_ENTRIES_SCALAR`, and therefore will build the matrix and fill the diagonal with zero. [Behind the scenes, there is still some acknowledgement that this is not the usual scalar matrix case, since this will not fail if the matrix is not square (`matrix(QQ, 4, 5, 0)` will not fail, but `matrix(QQ, 4, 5, 1)` will). But this is still not seen as `MA_ENTRIES_ZERO`.] This PR ensures the type `MA_ENTRIES_ZERO` is picked in this situation. This improves performance and solves some issues, as noted below.  This PR also fixes the related issue https://github.com/sagemath/sage/issues/36065 .
+
+In fact, `entries=None` is the default in the `__init__` of all matrix subclasses presently implemented. It also used to be the default when constructing a matrix by ""calling"" a matrix space, until https://github.com/sagemath/sage/issues/31078 and https://github.com/sagemath/sage/commit/cef613a0a57b85c1ebc5747185213ae4f5ec35f2 which changed this default value from `None` to `0`, bringing some performance regression.
+
+Regarding this ""calling the matrix space"", this PR also solves the performance issue noted in https://github.com/sagemath/sage/issues/35961#issuecomment-1662191679 , where it was observed that in the following piece of code:
+```
+sage: space = MatrixSpace(GF(9001), 10000, 10000)
+sage: %timeit zmat = space.matrix()
+18.3 µs ± 130 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+sage: %timeit zmat = space()
+12.1 ms ± 65.8 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+```
+the called default is not the same. `space.matrix()` directly initializes the matrix through `entries=None`, but on the other hand `space()` actually calls the constructor with `entries=0`. This performance regression comes from https://github.com/sagemath/sage/issues/31078 and https://github.com/sagemath/sage/commit/cef613a0a57b85c1ebc5747185213ae4f5ec35f2 , where the default for construction from the matrix space was changed from `None` to `0`. This cannot be easily reverted: this is now the default in the `__call__` of the `Parent` class. So this PR does not directly revert the call default to `None`  somehow, but the result is very close in effect (read: the overhead is small). Unchanged: through the parent call, `0` is converted to the base ring zero, which is passed to the constructor's `entries` which is then analyzed as `MA_ENTRIES_SCALAR`. Changed: the code modifications ensure that soon enough it will be detected that this is in fact `MA_ENTRIES_ZERO`. The small overhead explains why, despite the improvements, construction with `None` is still sometimes slightly faster than with `0`.
+
+Below are some timings showing the improvements for some fields. Also, this PR merged with the improvements discussed in https://github.com/sagemath/sage/issues/35961 will make the above timings of `space.matrix()` and `space()` be the same (which means a speed-up of a factor >500 for this call `space()`...). The measurement is for construction via calling the matrix space: `None` is `space(None)`, `Empty` is `space()`, `Zero` is `space(0)`, and `Nonzero` is `space(some nonzero value)`.
+
+```
+NEW TIMES
+
+field   dim     None    Empty   Zero    Nonzero
+GF(2)   5       2.3e-06 3.2e-06 3.6e-06 3.2e-06
+GF(2)   50      2.4e-06 3.3e-06 3.6e-06 5.8e-06
+GF(2)   500     3.6e-06 4.5e-06 4.8e-06 3.1e-05
+GF(512) 5       2.6e-05 2.8e-05 2.9e-05 2.9e-05
+GF(512) 50      2.6e-05 2.9e-05 2.9e-05 4.0e-05
+GF(512) 500     3.7e-05 3.8e-05 3.9e-05 1.6e-04
+QQ      5       2.2e-06 3.3e-06 3.4e-06 3.2e-06
+QQ      50      8.0e-06 9.2e-06 9.4e-06 1.2e-05
+QQ      500     6.1e-04 6.3e-04 6.4e-04 6.7e-04
+
+OLD TIMES
+
+field   dim     None    Empty   Zero    Nonzero
+GF(2)   5       2.3e-06 3.5e-06 3.6e-06 3.7e-06
+GF(2)   50      2.4e-06 6.0e-06 6.1e-06 6.0e-06
+GF(2)   500     3.6e-06 3.0e-05 3.0e-05 3.0e-05
+GF(512) 5       2.5e-05 2.8e-05 2.9e-05 2.9e-05
+GF(512) 50      2.5e-05 3.9e-05 4.0e-05 4.0e-05
+GF(512) 500     3.5e-05 1.5e-04 1.5e-04 1.6e-04
+QQ      5       2.2e-06 3.5e-06 3.7e-06 3.7e-06
+QQ      50      7.9e-06 1.2e-05 1.2e-05 1.2e-05
+QQ      500     6.4e-04 6.9e-04 6.9e-04 6.9e-04
+```
+
+Code used for the timings:
+```
+time_kwds = dict(seconds=True, number=20000, repeat=7)
+
+fields = [GF(2), GF(2**9), QQ]
+names = [""GF(2)"", ""GF(512)"", ""QQ""]
+vals = [GF(2)(1), GF(2**9).gen(), 5/2]
+
+print(f""field\tdim\tNone\tEmpty\tZero\tNonzero"")
+for field,name,val in zip(fields,names,vals):
+    for dim in [5, 50, 500]:
+        space = MatrixSpace(field, dim, dim)
+        tnone = timeit(""mat = space(None)"", **time_kwds)
+        tempty = timeit(""mat = space()"", **time_kwds)
+        tzero = timeit(""mat = space(0)"", **time_kwds)
+        tnonz = timeit(""mat = space(1)"", **time_kwds)
+        print(f""{name}\t{dim}\t{tnone:.1e}\t{tempty:.1e}\t{tzero:.1e}\t{tnonz:.1e}"")
+```
+
+### :memo: Checklist
+
+- [x] The title is concise, informative, and self-explanatory.
+- [x] The description explains in detail what this PR is about.
+- [x] I have linked a relevant issue or discussion.
+- [x] I have created tests covering the changes.
+- [x] I have updated the documentation accordingly.
+
+### :hourglass: Dependencies
+",True,36068,https://api.github.com/repos/sagemath/sage/pulls/36068,https://github.com/sagemath/sage/pull/36068,closed,35,7,2,2,2,2,2,0,"[{'name': 'c: linear algebra'}, {'name': 't: performance'}]",2023-08-10 20:03:36+00:00,2023-08-13 11:57:58+00:00,230062.0,"2 days, 15:54:22","[{'comment_id': 1290807172, 'comment_body': ""what's special about these 4 types?"", 'comment_created': datetime.datetime(2023, 8, 11, 0, 57, 18, tzinfo=datetime.timezone.utc), 'commenter': 'mkoeppe', 'type': 'User'}, {'comment_id': 1291050511, 'comment_body': 'This part was only modified by adding the integer.Integer type, which looks basic enough to be put beside the three others (typical sage code is probably using Integer more often than int, I think?). So for the original motivation for this piece of code, I can only guess the author\'s aim. Comments help: just above this block is written:\r\n```\r\n        # Check basic Python types. This is very fast, so it doesn\'t\r\n        # hurt to do these first.\r\n```\r\nSo I suppose that the idea was that in any case, these checks ""take no time"", so why not doing them first even though some of them may be redundant with the rest of the `get_type` process. This can speed up the matrix args process a bit (in fact, the difference is not that small, but since in most reasonable cases `get_type` is only a minor part of the time of an actual matrix creation...):\r\n```\r\nsage: space = MatrixSpace(GF(2), 50, 50)\r\nsage: izero = int(0)\r\nsage: fzero = GF(2)(0)\r\nsage: Izero = 0\r\nsage: %timeit ma = MatrixArgs_init(space, fzero)\r\n885 ns ± 8.95 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\r\nsage: %timeit ma = MatrixArgs_init(space, izero)\r\n585 ns ± 3.31 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\r\nsage: %timeit ma = MatrixArgs_init(space, Izero)\r\n597 ns ± 5.6 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\r\n```\r\n', 'comment_created': datetime.datetime(2023, 8, 11, 8, 26, 59, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}]","[{'commit_sha': 'b1dae92c9b17c51fdf138538598415f8564f2f89', 'committer_username': 'vneiger', 'committer_name': 'Vincent Neiger', 'committer_email': None, 'commit_date': datetime.datetime(2015, 5, 30, 14, 45, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d476ed42136881c1118fad85190803a19c6a86b', 'committer_username': 'vneiger', 'committer_name': 'Vincent Neiger', 'committer_email': None, 'commit_date': datetime.datetime(2015, 5, 30, 14, 45, 3, tzinfo=datetime.timezone.utc)}]",Vincent Neiger,12673560,,User,,7,,9,7
+1477520433,Speed-up the creation of a zero matrix of type `Matrix_modn_dense_template` ,"<!-- ^^^^^
+Please provide a concise, informative and self-explanatory title.
+Don't put issue numbers in there, do this in the PR body below.
+For example, instead of ""Fixes #1234"" use ""Introduce new method to calculate 1+1""
+-->
+<!-- Describe your changes here in detail -->
+
+<!-- Why is this change required? What problem does it solve? -->
+<!-- If this PR resolves an open issue, please link to it here. For example ""Fixes #12345"". -->
+<!-- If your change requires a documentation PR, please link it appropriately. -->
+Fixes #35961
+
+For example, creating the zero matrix over `GF(9001)` is currently much slower than over the rationals:
+```
+sage: space = MatrixSpace(GF(9001), 50, 50)
+sage: %time zmat = space.zero_matrix()
+CPU times: user 131 µs, sys: 16 µs, total: 147 µs
+Wall time: 150 µs
+sage: space = MatrixSpace(GF(9001), 10000, 10000)
+sage: %time zmat = space.zero_matrix()
+CPU times: user 1.54 s, sys: 208 ms, total: 1.75 s
+Wall time: 1.75 s
+```
+```
+sage: space = MatrixSpace(QQ, 50, 50)
+sage: %time zmat = space.zero_matrix()
+CPU times: user 85 µs, sys: 9 µs, total: 94 µs
+Wall time: 97 µs
+sage: space = MatrixSpace(QQ, 10000, 10000)
+sage: %time zmat = space.zero_matrix()
+CPU times: user 167 ms, sys: 417 ms, total: 584 ms
+Wall time: 582 ms
+```
+
+This can be improved by considering the iterator as `sparse=True` in the constructor `__init__`:
+```
+sage: space = MatrixSpace(GF(9001), 50,50)
+sage: %time zmat = space.zero_matrix()
+CPU times: user 104 µs, sys: 9 µs, total: 113 µs
+Wall time: 114 µs
+sage: space = MatrixSpace(GF(9001), 10000, 10000)
+sage: %time zmat = space.zero_matrix()
+CPU times: user 135 µs, sys: 14 µs, total: 149 µs
+Wall time: 152 µs
+```
+
+However, it involves to calloc the memory as `zero_matrix` will only fill the diagonal coefficients of the new matrix. To avoid unnecessary computing for other methods calling the constructor `__cinit__` that don't need to be zeroed beforehand, the parameter `zeroed_alloc` allows to choose between calling `check_calloc` or `check_allocarray` with a `malloc` currently implemented.
+
+This also substantially improves `identity_matrix()` from `special.py`:
+```
+sage: %timeit dmat = identity_matrix(GF(9001), 10000, sparse=False)
+1.81 s ± 3.69 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+```
+```
+sage: %timeit imat = identity_matrix(field, 10000,10000)
+2.53 ms ± 5.24 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+```
+### :memo: Checklist
+
+<!-- Put an `x` in all the boxes that apply. -->
+<!-- If your change requires a documentation PR, please link it appropriately -->
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+<!-- Feel free to remove irrelevant items. -->
+
+- [x] The title is concise, informative, and self-explanatory.
+- [x] The description explains in detail what this PR is about.
+- [x] I have linked a relevant issue or discussion.
+- [x] I have created tests covering the changes.
+- [ ] I have updated the documentation accordingly.
+
+### :hourglass: Dependencies
+
+<!-- List all open PRs that this PR logically depends on
+- #12345: short description why this is a dependency
+- #34567: ...
+-->
+
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+",True,36093,https://api.github.com/repos/sagemath/sage/pulls/36093,https://github.com/sagemath/sage/pull/36093,closed,36,32,2,10,9,1,2,0,"[{'name': 'c: linear algebra'}, {'name': 't: performance'}]",2023-08-16 13:44:25+00:00,2023-08-27 20:08:58+00:00,973473.0,"11 days, 6:24:33","[{'comment_id': 1299399897, 'comment_body': '`_matrix` never needs `calloc` since it is filled with values just after this allocation', 'comment_created': datetime.datetime(2023, 8, 20, 16, 2, 16, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}]","[{'commit_sha': '832be74b1489be0afc9e14145681618915ffe023', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ae6a7dd3303673cc6a7a9d16aa464f6a3cf5b0ad', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '3596abbe6f4b6def0954ce468811b421f368c482', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f724b2127140a57a2afe481b9a68f46025dfc522', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '91b58eece8d9a91b239832a17d70d7a033e2d9fa', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '7b6c79e308f1f2613e352523ea6e5fac055ed8f0', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd431d36bb30066b007d2cd192e91bf17a3c74c6', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '78846ca23a2b6bd094cd8fb62c5a2e4a747dcd0d', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '6db8d9fac59fc65aa5a3f573b8d73a391e85e725', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '513a5b54dfb1367e21a1c8b16a35737685ebd22d', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}]",Marie Bonboire,96301497,,User,,3,,3,4
+1470105358,Speed up the creation of submatrices of `Matrix_modn_dense_template` matrices,"<!-- ^^^^^
+Please provide a concise, informative and self-explanatory title.
+Don't put issue numbers in there, do this in the PR body below.
+For example, instead of ""Fixes #1234"" use ""Introduce new method to calculate 1+1""
+-->
+<!-- Describe your changes here in detail -->
+Modified the method `submatrix()` to do a systematic call to `memcpy()`.
+Overrode  methods `matrix_from_rows()`, `matrix_from_columns()` and `matrix_from_rows_and_columns()`.
+<!-- Why is this change required? What problem does it solve? -->
+In the current version of `submatrix()`, only the case when the submatrix has as many columns as the matrix,  relies on the contiguous memory storage of `Matrix_modn_dense_template` and call `memcpy()`.
+In fact, this can be applied to any set of arguments given to the method and enables better performances.
+
+Overriding the other methods mentioned above allows to avoid calling `get_unsafe()` and `set_unsafe()` that are doing time-consuming casts/conversions that are unnecessary in this case.
+<!-- If this PR resolves an open issue, please link to it here. For example ""Fixes #12345"". -->
+<!-- If your change requires a documentation PR, please link it appropriately. -->
+
+### :memo: Checklist
+
+<!-- Put an `x` in all the boxes that apply. -->
+<!-- If your change requires a documentation PR, please link it appropriately -->
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+<!-- Feel free to remove irrelevant items. -->
+
+- [x] The title is concise, informative, and self-explanatory.
+- [x] The description explains in detail what this PR is about.
+- [ ] I have linked a relevant issue or discussion.
+- [x] I have created tests covering the changes.
+- [ ] I have updated the documentation accordingly.
+
+### :hourglass: Dependencies
+
+<!-- List all open PRs that this PR logically depends on
+- #12345: short description why this is a dependency
+- #34567: ...
+-->
+
+<!-- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+",True,36059,https://api.github.com/repos/sagemath/sage/pulls/36059,https://github.com/sagemath/sage/pull/36059,closed,165,40,3,24,7,5,3,0,"[{'name': 't: enhancement'}, {'name': 'c: linear algebra'}, {'name': 't: performance'}]",2023-08-10 10:40:13+00:00,2023-08-27 20:08:58+00:00,1502925.0,"17 days, 9:28:45","[{'comment_id': 1299443565, 'comment_body': 'These two lines could be kept, under a condition `if col == 0 and ncols == self._ncols`. This would make the copying a bit faster (singly memcpy) in this situation where one wants to retrieve a (contiguous) block of complete rows.', 'comment_created': datetime.datetime(2023, 8, 20, 22, 20, 57, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}, {'comment_id': 1299443704, 'comment_body': 'This should be, on a single line, `this 3 times::` . This should also be fixed in `matrix1.pyx`.', 'comment_created': datetime.datetime(2023, 8, 20, 22, 22, 13, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}, {'comment_id': 1299443896, 'comment_body': 'I suggest to use `_matrix`: \r\n```\r\nmemcpy(A._matrix[i], self._matrix[row], sizeof(celement)*self._ncols)\r\n```', 'comment_created': datetime.datetime(2023, 8, 20, 22, 23, 58, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}, {'comment_id': 1299808839, 'comment_body': '`_matrix` could be used here as well, probably with\r\n```\r\nmemcpy(M._matrix[i], self._matrix[r]+col, sizeof(celement)*ncols)\r\n```', 'comment_created': datetime.datetime(2023, 8, 21, 8, 45, 23, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}, {'comment_id': 1299809736, 'comment_body': 'using `_matrix` : \r\n```\r\nmemcpy(M._entries, self._matrix[row], sizeof(celement)*ncols*nrows)\r\n```', 'comment_created': datetime.datetime(2023, 8, 21, 8, 46, 6, tzinfo=datetime.timezone.utc), 'commenter': 'vneiger', 'type': 'User'}]","[{'commit_sha': '832be74b1489be0afc9e14145681618915ffe023', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ae6a7dd3303673cc6a7a9d16aa464f6a3cf5b0ad', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '19608a6a45d59f3fabaa9b018e178adc7978f7b7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '3596abbe6f4b6def0954ce468811b421f368c482', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f724b2127140a57a2afe481b9a68f46025dfc522', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '91b58eece8d9a91b239832a17d70d7a033e2d9fa', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '6701ef4c2f12eb50fafe6039fa1f64aa6dbf3175', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b24dffba10a0a929429dcdaa9dc3abee7719b51', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'af0de6b541450c2c174d625560f73714499149b4', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f3bcb788c37ea48498715f3860b81fab8727b48a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'ae2fca648fbc9f62dbff00f33da6671812a301a8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '7b6c79e308f1f2613e352523ea6e5fac055ed8f0', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd431d36bb30066b007d2cd192e91bf17a3c74c6', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '78846ca23a2b6bd094cd8fb62c5a2e4a747dcd0d', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '6db8d9fac59fc65aa5a3f573b8d73a391e85e725', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '2deabdd1ccf884baec95731de81299cd25163ab3', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '513a5b54dfb1367e21a1c8b16a35737685ebd22d', 'committer_username': 'marizee', 'committer_name': 'Marie Bonboire', 'committer_email': None, 'commit_date': datetime.datetime(2021, 12, 17, 14, 35, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3f81fd85290ba11bf91d09a677af4b8deab096c', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'c9a2550c0702464c725c37fd2ef46a0971e8f1ff', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f28b6c245bf39c55274626a6ee8af5255142fa27', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '3ab7db87424492227079490dc11af646f9c8f4ab', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '02def1139e86cb341ed7823a3f036f1a7576537f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'f42998b660cff10f81fbb660172197cabefe95cd', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'a52a33f9dc3383ff98e7e81c8cf6dcc233588c22', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Marie Bonboire,96301497,,User,,3,,3,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+597660615,sage,sagemath/sage,Python,438,1279,9,1432,126033,5315,9,371,"[{'id': 1477520433, 'number': 36093, 'closed': datetime.datetime(2023, 8, 27, 20, 8, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 13, 44, 25, tzinfo=datetime.timezone.utc), 'time_taken': 973473.0, 'time_delta': '11 days, 6:24:33', 'additions': 36, 'deletions': 32, 'state': 'closed'}, {'id': 1470105358, 'number': 36059, 'closed': datetime.datetime(2023, 8, 27, 20, 8, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 10, 10, 40, 13, tzinfo=datetime.timezone.utc), 'time_taken': 1502925.0, 'time_delta': '17 days, 9:28:45', 'additions': 165, 'deletions': 40, 'state': 'closed'}, {'id': 1412723921, 'number': 35855, 'closed': datetime.datetime(2023, 7, 1, 21, 11, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 29, 4, 47, 1, tzinfo=datetime.timezone.utc), 'time_taken': 231884.0, 'time_delta': '2 days, 16:24:44', 'additions': 8, 'deletions': 7, 'state': 'closed'}, {'id': 1388297516, 'number': 35752, 'closed': datetime.datetime(2023, 6, 21, 21, 21, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 12, 9, 20, 2, tzinfo=datetime.timezone.utc), 'time_taken': 820917.0, 'time_delta': '9 days, 12:01:57', 'additions': 8, 'deletions': 6, 'state': 'closed'}, {'id': 1300760084, 'number': 35431, 'closed': datetime.datetime(2023, 4, 23, 11, 38, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 3, 22, 16, 49, tzinfo=datetime.timezone.utc), 'time_taken': 1689727.0, 'time_delta': '19 days, 13:22:07', 'additions': 16, 'deletions': 5, 'state': 'closed'}]"

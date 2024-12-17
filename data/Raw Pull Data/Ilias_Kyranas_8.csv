@@ -1,0 +1,64 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+672755146,Add Keycloak deployment artifacts and authentication,"The Keycloak solution is used to authenticate users with the OpenIDC protocol.
+The Sastix CMS server module is using the keycloak adapter to use the features.
+More specifically:
+
+- The commons-io dependency is upgraded due to known vulnerabilities.
+- The keycloak-spring-boot-2-starter dependency is used.
+- The security configuration of the server is changed to use Keycloak's adapter.
+- Integration tests are provided to be used on a staging server.
+- Docs are provided in Markdown form.
+- Kubernetes and docker-compose artifacts are provided for Keycloak.
+- Development environment setup with docker-compose is provided.
+- Default configuration of MariaDB and Keycloak is provided for the development environment.
+
+This pull request closes #1 , #2 .",True,32,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/32,https://github.com/eellak/gsoc2021-sastixcms/pull/32,closed,2431,2,19,1,2,0,2,1,"[{'name': 'User management (S2)'}, {'name': 'Extension of backend features (S3)'}]",2021-06-17 15:32:12+00:00,2021-07-09 07:07:14+00:00,1870502.0,"21 days, 15:35:02",[],"[{'commit_sha': '9d3d22e19626abbb3c1ceb849a11f7883c10af6e', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+687004789,Add monitoring and authentication deployment artifacts,"The purpose of this commit is to add the monitoring and authentication deployment scripts. The monitoring of the
+application is performed using the Grafana-Prometheus stack.
+
+More specifically:
+
+- Keycloak is added and provisioned to the deployment scripts.
+- Prometheus, Grafana, NGINX, nginx-prometheus-exporter are added.
+- Two general scripts are added to install and uninstall the deployment (install-default-setup.sh, uninstall-default-setup.sh).
+- The option to issue TLS certificates using Let's Encrypt is added.
+
+This pull request fixes #3 , #4 , #5 , #6 , #9.",True,33,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/33,https://github.com/eellak/gsoc2021-sastixcms/pull/33,closed,6189,49,33,1,0,0,0,0,[],2021-07-09 19:47:53+00:00,2021-07-12 06:23:27+00:00,210934.0,"2 days, 10:35:34",[],"[{'commit_sha': '82567c8dff675593d00f6e792b4a2dd261ec4e1d', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+702160032,Initialize Flutter client with Keycloak,"The Flutter client is initialized using the default boilerplate. Authentication
+is provided using Keycloak. Some noteworthy points are:
+
+- Openid_client library is used for authentication.
+- Routing is done using onGenerateRoute practice.
+- Environment variables are used with the dotenv library.
+- Jenkinsfile is added to run tests and build the app for the web.
+
+This pull request resolves Issues #7 , #8 , #10 .",True,34,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/34,https://github.com/eellak/gsoc2021-sastixcms/pull/34,closed,2051,2,79,1,0,0,0,1,[],2021-08-03 10:33:46+00:00,2021-08-07 09:13:01+00:00,340755.0,"3 days, 22:39:15",[],"[{'commit_sha': '70acf5079dd99f12431ea11f8248481aa4203cb8', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+702587959,Add search functionality to CMS server with authorization option.,"The CMS server will now have the ability to search for resources with some basic fields. The content API will have the option to authorize requests per method. Specifically:
+
+- The resources can be listed and paged.
+- The resources can be searched via name or author fields.
+- The access to Content API endpoints is managed per controller method using Sping Security expressions.
+- The integration tests for authentication are now disabled if keycloak is disabled.
+- The authentication principal uses realm roles per user.
+
+This pull request resolves #11 , #12 .",True,35,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/35,https://github.com/eellak/gsoc2021-sastixcms/pull/35,closed,243,5,15,1,0,0,0,1,[],2021-08-03 20:26:52+00:00,2021-08-07 09:14:04+00:00,305232.0,"3 days, 12:47:12",[],"[{'commit_sha': '766c6dfc522bf577b31f7edb56276f1923aead01', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+705573311,Add benchmarking capabilities to CMS repo,"This commit provides a benchmarking process. The wrk project is used to produce an HTTP benchmarking report. The tool is
+built with docker and needs no prerequisites installed except for this.
+
+This issue resolves #16 .",True,36,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/36,https://github.com/eellak/gsoc2021-sastixcms/pull/36,closed,45,0,7,1,0,0,0,1,[],2021-08-06 15:31:56+00:00,2021-08-07 09:14:51+00:00,63775.0,17:42:55,[],"[{'commit_sha': 'f7494642292a8f14dcbf43c749927d277ef6b4a8', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+713014455,"Add theming, internationalization, bloc state management","These changes provide theming, internationalization and state management changes. The internationalization is done
+with i10n (the default of Flutter), the theming is provided both to the admin by changing theming files and to simple
+users by using their settings page. The BLoC pattern is used to keep track of the state of the application.
+
+This pull request resolves #13 , #14 , #15 , #19 , #20 , #21 .",True,37,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/37,https://github.com/eellak/gsoc2021-sastixcms/pull/37,closed,1886,205,52,1,0,0,0,1,[],2021-08-15 22:52:00+00:00,2021-08-17 06:13:46+00:00,112906.0,"1 day, 7:21:46",[],"[{'commit_sha': '067853e785d3b0a32df5e873a31c2002002b1b02', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+714629020,Refactor the installation scripts and add documentation,"This pull request contains changes in the installation scripts to support the added frontend functionality and to the documentation site to add new information. More specifically:
+
+- Minor changes were made to the delete resource endpoint of the CMS server.
+- The installation scripts were modified to support the new frontend functionality.
+- Flutter components for the resource page were refactored to comply with the teams preferences.
+- Documentation referring to the new functionality and to the GSoC final review was added.
+
+This pull request will close #17 , #26 , #28 , #30 .",True,39,https://api.github.com/repos/eellak/gsoc2021-sastixcms/pulls/39,https://github.com/eellak/gsoc2021-sastixcms/pull/39,closed,564,291,40,1,0,0,2,1,"[{'name': 'documentation'}, {'name': 'Performance improvement and deployment (S5)'}]",2021-08-17 23:30:52+00:00,2021-08-18 06:09:50+00:00,23938.0,6:38:58,[],"[{'commit_sha': 'fdd980712494d2f102752bbebb038b97c388bfcd', 'committer_username': 'ikyranas', 'committer_name': 'Ilias Kyranas', 'committer_email': None, 'commit_date': datetime.datetime(2020, 11, 16, 19, 14, 39, tzinfo=datetime.timezone.utc)}]",Ilias Kyranas,74564552,,User,,2,,0,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+368468895,gsoc2021-sastixcms,eellak/gsoc2021-sastixcms,Java,1,7,9,6,75,0,11,0,"[{'id': 714629020, 'number': 39, 'closed': datetime.datetime(2021, 8, 18, 6, 9, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 17, 23, 30, 52, tzinfo=datetime.timezone.utc), 'time_taken': 23938.0, 'time_delta': '6:38:58', 'additions': 564, 'deletions': 291, 'state': 'closed'}, {'id': 713788612, 'number': 38, 'closed': datetime.datetime(2021, 8, 17, 6, 54, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 22, 36, 43, tzinfo=datetime.timezone.utc), 'time_taken': 29874.0, 'time_delta': '8:17:54', 'additions': 34855, 'deletions': 7548, 'state': 'closed'}, {'id': 713014455, 'number': 37, 'closed': datetime.datetime(2021, 8, 17, 6, 13, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 22, 52, tzinfo=datetime.timezone.utc), 'time_taken': 112906.0, 'time_delta': '1 day, 7:21:46', 'additions': 1886, 'deletions': 205, 'state': 'closed'}, {'id': 705573311, 'number': 36, 'closed': datetime.datetime(2021, 8, 7, 9, 14, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 15, 31, 56, tzinfo=datetime.timezone.utc), 'time_taken': 63775.0, 'time_delta': '17:42:55', 'additions': 45, 'deletions': 0, 'state': 'closed'}, {'id': 702587959, 'number': 35, 'closed': datetime.datetime(2021, 8, 7, 9, 14, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 20, 26, 52, tzinfo=datetime.timezone.utc), 'time_taken': 305232.0, 'time_delta': '3 days, 12:47:12', 'additions': 243, 'deletions': 5, 'state': 'closed'}, {'id': 702160032, 'number': 34, 'closed': datetime.datetime(2021, 8, 7, 9, 13, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 10, 33, 46, tzinfo=datetime.timezone.utc), 'time_taken': 340755.0, 'time_delta': '3 days, 22:39:15', 'additions': 2051, 'deletions': 2, 'state': 'closed'}, {'id': 687004789, 'number': 33, 'closed': datetime.datetime(2021, 7, 12, 6, 23, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 9, 19, 47, 53, tzinfo=datetime.timezone.utc), 'time_taken': 210934.0, 'time_delta': '2 days, 10:35:34', 'additions': 6189, 'deletions': 49, 'state': 'closed'}, {'id': 672755146, 'number': 32, 'closed': datetime.datetime(2021, 7, 9, 7, 7, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 15, 32, 12, tzinfo=datetime.timezone.utc), 'time_taken': 1870502.0, 'time_delta': '21 days, 15:35:02', 'additions': 2431, 'deletions': 2, 'state': 'closed'}]"

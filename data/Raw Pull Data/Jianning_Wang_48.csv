@@ -1,0 +1,100 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1006391968,test: update the benchmark tests,"Part of: https://github.com/casbin/casbin/issues/1049
+
+Command:
+```bash
+mkdir build & cd build
+cmake .. -DCMAKE_BUILD_TYPE:STRING=Release -DINTENSIVE_BENCHMARK:BOOL=ON
+cmake --build . --config Release
+```
+
+
+Notes:
+1. Without the support for `KeyMatch4` and `ABAC` model in `Casbin-cpp` , some test cases are missing. 
+
+2. As for `BenchmarkCachedRBACModelMediumParallel`, there are no routines in C++ so it is not enabled.
+Implementation in Golang version:
+![image](https://user-images.githubusercontent.com/20621784/180615920-123bf957-0607-4bc9-8a8a-116449501702.png)
+![image](https://user-images.githubusercontent.com/20621784/180615871-bcc6c4cd-29c9-4701-baf1-bba5baabc8ac.png)
+
+3. I have tested on Windows, WSL, and Ubuntu. However, I encounter some errors triggered by the existing codes(only works well on Windows). I'm not sure whether it should be cared about or not.
+WSL:
+![image](https://user-images.githubusercontent.com/20621784/180615618-d46f9150-bad8-42e8-beb7-536a6b49aa10.png)
+Ubuntu, compiled locally:
+![image](https://user-images.githubusercontent.com/20621784/180615665-29f9b560-ca30-4c13-b21f-5b9e371376fe.png)
+Ubuntu, compiled on WSL:
+![image](https://user-images.githubusercontent.com/20621784/180615693-2f988df3-ac6c-42d6-9a82-f782c086f4d3.png)
+Caused by:
+```cpp
+static const std::vector<std::vector<std::string>> s_policy = {{""alice"", ""data1"", ""read""}, {""bob"", ""data2"", ""write""}};
+
+static bool rawEnforce(const std::string& sub, const std::string& obj, const std::string& act) {
+    for (const auto& rule : s_policy) {
+        if (rule[0] == sub && rule[1] == obj && rule[2] == act)
+            return true;
+    }
+    return false;
+}
+
+static void BenchmarkRaw(benchmark::State& state) {
+    for (auto _ : state) rawEnforce(""alice"", ""data1"", ""read"");
+}
+
+BENCHMARK(BenchmarkRaw);
+```
+4.  In `BenchmarkRBACModelSizesLarge`, it takes nearly an hour to construct the test case
+```cpp
+    for (int i = 0; i < 100000; ++i) {
+        e.AddGroupingPolicy({""user-has-a-very-long-name-"" + std::to_string(i), ""group-has-a-very-long-name-"" + std::to_string(i % num_roles)});
+    }
+```
+Any way to speed up?
+Result on my Windows PC:(intel i7- 1170K) with `O2` flags
+```
+BenchmarkRaw                                   0.249 ns        0.250 ns   1000000000
+BenchmarkBasicModel                            11225 ns        11230 ns        64000
+BenchmarkRBACModel                             13586 ns        13602 ns        44800
+BenchmarkRBACModelSizesSmall                 2199895 ns      2197266 ns          320
+BenchmarkRBACModelSizesMedium               20465481 ns     20507812 ns           32
+BenchmarkRBACModelSizesLarge               206378200 ns    203125000 ns            3
+BenchmarkRBACModelSmall                       117624 ns       117188 ns         5600
+BenchmarkRBACModelMedium                     1077327 ns      1066767 ns          747
+BenchmarkRBACModelLarge                     12209357 ns     12276786 ns           56
+BenchmarkRBACModelWithResourceRoles            14148 ns        14125 ns        49778
+BenchmarkRBACModelWithDomains                  19812 ns        19671 ns        37333
+BenchmarkKeyMatchModel                         27553 ns        26995 ns        24889
+BenchmarkRBACModelWithDeny                     16195 ns        16044 ns        44800
+BenchmarkPriorityModel                         21735 ns        21484 ns        32000
+BenchmarkCachedRaw                              1416 ns         1413 ns       497778
+BenchmarkCachedBasicModel                        114 ns          112 ns      4480000
+BenchmarkCachedRBACModel                         111 ns          112 ns      6400000
+BenchmarkCachedRBACModelSmall                    114 ns          115 ns      6400000
+BenchmarkCachedRBACModelMedium                   113 ns          115 ns      6400000
+BenchmarkCachedRBACModelLarge                    118 ns          117 ns      6400000
+BenchmarkCachedRBACModelWithResourceRoles        130 ns          129 ns      6400000
+BenchmarkCachedRBACModelWithDomains              137 ns          138 ns      4977778
+BenchmarkCachedKeyMatchModel                     185 ns          186 ns      3446154
+BenchmarkCachedRBACModelWithDeny                 120 ns          120 ns      6400000
+BenchmarkCachedPriorityModel                     115 ns          114 ns      5600000
+BenchmarkVectorOperations                        114 ns          114 ns      5600000
+BenchmarkHasPolicySmall                        13753 ns        13811 ns        49778
+BenchmarkHasPolicyMedium                      137839 ns       138108 ns         4978
+BenchmarkHasPolicyLarge                      1448342 ns      1474649 ns          498
+BenchmarkAddPolicySmall                       118275 ns       115792 ns        11200
+BenchmarkAddPolicyMedium                      370239 ns       371401 ns         2987
+BenchmarkAddPolicyLarge                      1398158 ns      1382373 ns          373
+BenchmarkRemovePolicySmall                       288 ns          285 ns      2357895
+BenchmarkRemovePolicyMedium                   136928 ns       138108 ns         4978
+BenchmarkRemovePolicyLarge                   1419196 ns      1411898 ns          498
+BenchmarkRoleManagerSmall                       8964 ns         9068 ns        89600
+BenchmarkRoleManagerMedium                     97200 ns        96257 ns         7467
+BenchmarkRoleManagerLarge                    1063917 ns      1088170 ns          560
+```
+",True,210,https://api.github.com/repos/casbin/casbin-cpp/pulls/210,https://github.com/casbin/casbin-cpp/pull/210,closed,3914,18,6,1,9,1,1,0,[{'name': 'released'}],2022-07-23 17:34:49+00:00,2022-09-03 06:58:12+00:00,3590603.0,"41 days, 13:23:23",[],"[{'commit_sha': 'ac01004d2d0b765847c14826a972c251181256c7', 'committer_username': 'JalinWang', 'committer_name': 'Jalin Wang', 'committer_email': 'JalinWang@outlook.com', 'commit_date': datetime.datetime(2016, 7, 24, 7, 11, 4, tzinfo=datetime.timezone.utc)}]",Jalin Wang,20621784,JalinWang@outlook.com,User,,50,,33,39
+992246455,test: update the benchmark test cases,"fix https://github.com/casbin/casbin/issues/1049
+
+The names of the benchmark cases are the snake case of corresponding ones in Casbin-core.",True,266,https://api.github.com/repos/casbin/pycasbin/pulls/266,https://github.com/casbin/pycasbin/pull/266,closed,4152,6,6,1,7,0,1,0,[{'name': 'released'}],2022-07-09 14:12:13+00:00,2022-07-11 10:23:52+00:00,159099.0,"1 day, 20:11:39",[],"[{'commit_sha': 'e235d2ddcd70c62b63826785b7617c77bae97102', 'committer_username': 'JalinWang', 'committer_name': 'Jalin Wang', 'committer_email': 'JalinWang@outlook.com', 'commit_date': datetime.datetime(2016, 7, 24, 7, 11, 4, tzinfo=datetime.timezone.utc)}]",Jalin Wang,20621784,JalinWang@outlook.com,User,,50,,33,39
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+243148805,casbin-cpp,casbin/casbin-cpp,C++,61,221,11,26,311,13,2,0,"[{'id': 1006391968, 'number': 210, 'closed': datetime.datetime(2022, 9, 3, 6, 58, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 23, 17, 34, 49, tzinfo=datetime.timezone.utc), 'time_taken': 3590603.0, 'time_delta': '41 days, 13:23:23', 'additions': 3914, 'deletions': 18, 'state': 'closed'}]"
+149631013,pycasbin,casbin/pycasbin,Python,191,1339,27,64,405,8,4,1,"[{'id': 992246455, 'number': 266, 'closed': datetime.datetime(2022, 7, 11, 10, 23, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 9, 14, 12, 13, tzinfo=datetime.timezone.utc), 'time_taken': 159099.0, 'time_delta': '1 day, 20:11:39', 'additions': 4152, 'deletions': 6, 'state': 'closed'}]"

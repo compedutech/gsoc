@@ -1,0 +1,829 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1416303683,[plotly.js] Add missing data property on PlotlyHTMLElement.,"According to an example from the [`plotly.js/src/plot_api/plot_api.js`](https://github.com/plotly/plotly.js/blob/32b6fec5d271c44440edaddc376c59e9d9d2ad48/src/plot_api/plot_api.js#L113-L117), this [reference](https://github.com/plotly/plotly.js/blob/32b6fec5d271c44440edaddc376c59e9d9d2ad48/src/plot_api/plot_api.js#L561C1-L569C2), and [documentation](https://plotly.com/javascript/plotlyjs-function-reference/#:~:text=After%20plotting%2C%20the%20data%20or%20layout%20can%20always%20be%20retrieved%20from%20the%20%3Cdiv%3E%20element%20in%20which%20the%20plot%20was%20drawn%3A), a `PlotlyHTMLElement` object should be able to access `data` property. Such `data` property is currently not supported. This PR fixes this.
+
+Testing and the rest of checklist are WIP. 
+
+- [x] Use a meaningful title for the pull request. Include the name of the package modified.
+- [x] Test the change in your own code. (Compile and run.)
+- [x] [Add or edit tests](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#my-package-teststs) to reflect the change.
+- [x] Follow the advice from the [readme](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#make-a-pull-request).
+- [x] Avoid [common mistakes](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#common-mistakes).
+- [x] [Run `npm test <package to test>`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#running-tests).
+
+If changing an existing definition:
+- [x] Provide a URL to documentation or source code which provides context for the suggested changes: <<url here>>
+- [x] If this PR brings the type definitions up to date with a new version of the JS library, update the version number in the header.
+
+",True,65953,https://api.github.com/repos/DefinitelyTyped/DefinitelyTyped/pulls/65953,https://github.com/DefinitelyTyped/DefinitelyTyped/pull/65953,closed,3,0,2,1,6,0,3,0,"[{'name': 'Popular package'}, {'name': 'Self Merge'}, {'name': 'Maintainer Approved'}]",2023-07-01 18:42:34+00:00,2023-07-02 18:06:19+00:00,84225.0,23:23:45,[],"[{'commit_sha': '7409a8a0a3c61c06ccc370e8231906bae50fbbdb', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1444147649,ts: Migrate `bot_data.js` to TypeScript,"Add type annotations. Create custom types for Bot and Service.
+Add zod data validation for incoming bot data from server.
+Based on `zerver/openapi/zulip.yaml` description, `add` operation
+(`op`) carries data that follows `Bot` structure. So taking
+reference from `bot` structure, I create `ServerAddBotData` zod
+schema and infer its type. Similarly, `update` operation carries
+data that follows `BasicBot`, so I create `ServerUpdateBotData`.
+Note that `Bot` inherits from `BasicBot`.
+
+`zerver/openapi/zulip.yaml` describes that `services` in `BasicBot`
+can be one of two objects, one with `{base_url, token, interface}`,
+another with `{service_name, config_data}`. Therefore, I create
+two corresponding schema and infer their types.
+
+Fix two test cases `bot_data.test.js` and `settings_bots.test.js`
+whose synthetic objects should have had followed the schema.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26315,https://api.github.com/repos/zulip/zulip/pulls/26315,https://github.com/zulip/zulip/pull/26315,closed,230,114,4,1,2,8,3,0,"[{'name': 'size: XL'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-07-21 08:48:19+00:00,2023-08-14 23:06:50+00:00,2125111.0,"24 days, 14:18:31","[{'comment_id': 1272854945, 'comment_body': 'Maybe we can use `CleanBot` here when we have the schema.', 'comment_created': datetime.datetime(2023, 7, 24, 23, 35, 33, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1272855753, 'comment_body': '`bot_update` should be unknown.', 'comment_created': datetime.datetime(2023, 7, 24, 23, 37, 20, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1282571657, 'comment_body': '`Partial<Bot>` is more informative.', 'comment_created': datetime.datetime(2023, 8, 3, 2, 19, 40, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 1289573250, 'comment_body': 'I agree. I have integrated these keys with zod. Please check.', 'comment_created': datetime.datetime(2023, 8, 10, 5, 35, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1289573490, 'comment_body': 'Addressed, thanks!', 'comment_created': datetime.datetime(2023, 8, 10, 5, 35, 36, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1291098720, 'comment_body': 'I narrowed it down to `ServerUpdateBotData` with the help of `zerver/openapi/zulip.yaml`. It seems that `update` operation carries `BasicBot` data so I created this type. Yaml description:\r\n\r\n```yaml\r\n                            - type: object\r\n                              description: |\r\n                                Event sent to users who can administer a bot user when the bot is\r\n                                configured. Clients may also receive a `realm_user` event that\r\n                                for changes in public data about the bot (name, etc.).\r\n\r\n                                The `realm_user` events are sufficient for clients that\r\n                                only need to interact with the bot; this `realm_bot` event\r\n                                type is relevant only for administering bots.\r\n\r\n                                Only organization administrators and the user who owns the bot will\r\n                                receive this event.\r\n                              additionalProperties: false\r\n                              properties:\r\n                                id:\r\n                                  $ref: ""#/components/schemas/EventIdSchema""\r\n                                type:\r\n                                  allOf:\r\n                                    - $ref: ""#/components/schemas/EventTypeSchema""\r\n                                    - enum:\r\n                                        - realm_bot\r\n                                op:\r\n                                  type: string\r\n                                  enum:\r\n                                    - update\r\n                                bot:\r\n                                  allOf:\r\n                                    - description: |\r\n                                        Object containing details about the changed bot.\r\n                                        It contains two properties: the user ID of the bot and\r\n                                        the property to be changed. The changed property is one\r\n                                        of the remaining properties listed below.\r\n                                    - $ref: ""#/components/schemas/BasicBot""\r\n                              example:\r\n                                {\r\n                                  ""type"": ""realm_bot"",\r\n                                  ""op"": ""update"",\r\n                                  ""bot"":\r\n                                    {\r\n                                      ""user_id"": 37,\r\n                                      ""services"":\r\n                                        [\r\n                                          {\r\n                                            ""base_url"": ""http://hostname.domain2.com"",\r\n                                            ""interface"": 2,\r\n                                            ""token"": ""grr8I2APXRmVL0FRTMRYAE4DRPQ5Wlaw"",\r\n                                          },\r\n                                        ],\r\n                                    },\r\n                                  ""id"": 0,\r\n                                }\r\n```', 'comment_created': datetime.datetime(2023, 8, 11, 9, 13, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1293821431, 'comment_body': 'Should we use snake case here and above as well?', 'comment_created': datetime.datetime(2023, 8, 14, 18, 22, 15, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1294044635, 'comment_body': 'Yes, we use sake case in our codebase.', 'comment_created': datetime.datetime(2023, 8, 14, 23, 1, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '71401493738e28ea90203a667b307816a5e4feed', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1411155442,ts: Migrate `stats.js` to TypeScript,"This PR focuses on migrating `stats.js` to `stats.ts`. Commits done earlier are prep commits such as refactoring the code structure a bit, fixing the wrong code, and installing type packages.
+
+In migration, I created custom types for type annotations throughout helper functions (all functions in front of `populate_*` functions are helpers). For `populate_*` functions parameters, I add `zod` schemas to valdiate the raw data coming from backend. Use `blueslip` error reporting utility to throw errors if data from backend does not match the schema.
+
+<details> <summary>Self-review Checklist</summary>
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26140,https://api.github.com/repos/zulip/zulip/pulls/26140,https://github.com/zulip/zulip/pull/26140,closed,513,202,7,7,10,24,3,0,"[{'name': 'size: XL'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-06-28 07:31:43+00:00,2023-08-17 18:35:00+00:00,4359797.0,"50 days, 11:03:17","[{'comment_id': 1252365175, 'comment_body': 'Maybe we should change this from `else if` to `else`, and add `assert(aggregation === ""week"")` here.\r\nSetting defaults for `start` and `is_boundary` suppresses potential programming errors.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 18, 58, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252366946, 'comment_body': 'Same here. We can avoid using the defaults.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 25, 34, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252368761, 'comment_body': '`T[]` is more appropriate for this property.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 28, 27, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252373296, 'comment_body': ""This can be committed separately in a prep commit. Let's move this link to the commit message instead with some explanations."", 'comment_created': datetime.datetime(2023, 7, 4, 21, 34, 50, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252373881, 'comment_body': 'We can remove this inline type annotation and rely on type inference for this one.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 37, 18, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252375540, 'comment_body': 'We can extract some quick Zod schemas for these literals.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 42, 58, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252375704, 'comment_body': 'With the zod schema mentioned earlier, we can parse the value without compromising type safety.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 43, 38, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1257545140, 'comment_body': ""I believe `values` is maps. For example, `values = {everyone:[], me:[]}`. While the values of `values` are arrays, the `values` itself can't be unifiable with `T[]`."", 'comment_created': datetime.datetime(2023, 7, 9, 21, 33, 11, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1263150934, 'comment_body': 'Ideally yes except one variable, `x` . `x` is supposed to be  `Plotly.Datum[]`, a union type of `Date[]`, because by definition `type Datum = string | number | Date | null;`. Either we need to cast type using `as` keyword, or we keep inline type annotation to avoid type inference.', 'comment_created': datetime.datetime(2023, 7, 14, 0, 3, 5, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1263161584, 'comment_body': 'Actually, we can still use type annotation but in a simpler way like [previous lines](https://github.com/zulip/zulip/blob/040d686961aae32a80bbd3fe6228a3d35026efba/web/src/stats/stats.ts#L270-L276) have done:\r\n```\r\ncommon: Partial<Plotly.PlotData> = {\r\n            x: dates,\r\n            type,\r\n            hoverinfo: ""none"",\r\n            text,\r\n            textposition: ""none"",\r\n        };\r\n```', 'comment_created': datetime.datetime(2023, 7, 14, 0, 29, 41, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1264738482, 'comment_body': 'Do we still need this after the DefinitelyTyped change?', 'comment_created': datetime.datetime(2023, 7, 16, 19, 47, 51, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1264738715, 'comment_body': 'This might also be affected by DT?', 'comment_created': datetime.datetime(2023, 7, 16, 19, 49, 55, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1264738779, 'comment_body': 'The comment here can be removed.', 'comment_created': datetime.datetime(2023, 7, 16, 19, 50, 41, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1264740466, 'comment_body': '`null` is incompabitle with the types provided by `Plotly` library. Only `number | undefined` is accepted. So thats why here I changed from `null` to undefined. Same reason for `xaxis: {range: undefined}` three lines below', 'comment_created': datetime.datetime(2023, 7, 16, 20, 6, 16, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1264743683, 'comment_body': 'Not resolved by upgrading DT.  `plotDiv.data[0]` is a `Plotly.Data` type infered by TS compiler. However, from `.visible` field I infer that `plotDiv.data[0]` should be a narrower type, `Plotly.PlotData`, a children class of `Plotly.Data`.  So type casting is still needed at this point. ', 'comment_created': datetime.datetime(2023, 7, 16, 20, 34, 31, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1264743703, 'comment_body': 'reasoning as above', 'comment_created': datetime.datetime(2023, 7, 16, 20, 34, 46, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1266018024, 'comment_body': 'Looks like this change and the one above belong to a previous commit.', 'comment_created': datetime.datetime(2023, 7, 17, 23, 50, 57, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1266020252, 'comment_body': 'There are some linter errors for this commit.\r\n\r\n```diff\r\ndiff --git a/web/src/stats/stats.js b/web/src/stats/stats.js\r\nindex bf5fd3ef1f..6ea2325f2e 100644\r\n--- a/web/src/stats/stats.js\r\n+++ b/web/src/stats/stats.js\r\n@@ -210,7 +210,7 @@ function set_guest_users_statistic(guest_users) {\r\n // PLOTLY CHARTS\r\n function populate_messages_sent_over_time(data) {\r\n     // Content rendered by this method is titled as ""Messages sent over time"" on the webpage\r\n-    \r\n+\r\n     if (data.end_times.length === 0) {\r\n         // TODO: do something nicer here\r\n         return;\r\n@@ -519,7 +519,7 @@ function compute_summary_chart_data(time_series_data, num_steps, labels_) {\r\n \r\n function populate_messages_sent_by_client(data) {\r\n     // Content rendered by this method is titled as ""Messages sent by client"" on the webpage\r\n-    \r\n+\r\n     const layout = {\r\n         width: 750,\r\n         height: null, // set in draw_plot()\r\n@@ -661,7 +661,7 @@ function populate_messages_sent_by_client(data) {\r\n \r\n function populate_messages_sent_by_message_type(data) {\r\n     // Content rendered by this method is titled as ""Messages sent by recipient type"" on the webpage\r\n-    \r\n+\r\n     const layout = {\r\n         margin: {l: 90, r: 0, b: 10, t: 0},\r\n         width: 750,\r\n@@ -881,7 +881,7 @@ function populate_number_of_users(data) {\r\n \r\n function populate_messages_read_over_time(data) {\r\n     // Content rendered by this method is titled as ""Messages read over time"" on the webpage\r\n-    \r\n+\r\n     if (data.end_times.length === 0) {\r\n         // TODO: do something nicer here\r\n         return;\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 23, 54, 26, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1270421111, 'comment_body': ""Did. That's a great suggestion"", 'comment_created': datetime.datetime(2023, 7, 21, 8, 55, 12, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1291110386, 'comment_body': 'Fixed!', 'comment_created': datetime.datetime(2023, 8, 11, 9, 25, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1291137913, 'comment_body': ""that's nuanced. Fixed, thanks!"", 'comment_created': datetime.datetime(2023, 8, 11, 9, 52, 56, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296290174, 'comment_body': ""I don't think this is correct -- `stats.ts` is a separate page and its `page_params` has a totally different type."", 'comment_created': datetime.datetime(2023, 8, 16, 18, 33, 24, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1296292609, 'comment_body': ""OK I think the fix for this is something like to create a create a `web/src/stats/stats_page_params.ts` that is a copy of `page_params.ts` but with the appropriate types for that page's own parameters."", 'comment_created': datetime.datetime(2023, 8, 16, 18, 35, 57, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1296735411, 'comment_body': 'Added `web/src/stats/page_params.ts` for `stat.js` as [`billing` ](https://github.com/zulip/zulip/pull/24559/commits/083d63eb51f90dac9299bff91e1a393a9e6d37ac) and [`portico`](https://github.com/zulip/zulip/pull/25864/commits/fc2808839a1a7ecfdaea2414904ccb687edb6480) modules did for their page_params.', 'comment_created': datetime.datetime(2023, 8, 17, 6, 31, 34, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': 'bcf03890c8ab9a61bb5a04e79ff9c91b942a3285', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bc04c847b104eaf5ba43445d7c184bc802146005', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8e1726c77e09c45da1509eec7021dbb0fa983063', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c7d0fe966356b255ee9d064863576fc2d3c896d', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4978a2101033f84eaabbb22111b8f0eab17033d', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd0c85c32e3f1e521d5b777ad52853d2e1eba9a8c', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7554e47b44dda4ce80c9567372b0b849890617fb', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1483821445,bot_data: Fix `owner_id` field to allow null value.,"According to zulip [`/register` API doc](https://zulip.com/api/register-queue#:~:text=owner_id%3A%20integer%20%7C%20null), `realm_bots[].owner_id` should be nullalbe.
+Fixes commit [71401493738e28ea90203a667b307816a5e4feed](https://github.com/zulip/zulip/commit/71401493738e28ea90203a667b307816a5e4feed).
+
+
+[CZO discussion](https://chat.zulip.org/#narrow/stream/9-issues/topic/bot_data.2Eowner_id.20type)
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26544,https://api.github.com/repos/zulip/zulip/pulls/26544,https://github.com/zulip/zulip/pull/26544,closed,3,3,1,1,1,0,1,0,[{'name': 'size: S'}],2023-08-22 01:58:21+00:00,2023-08-22 18:24:40+00:00,59179.0,16:26:19,[],"[{'commit_sha': '4069e9814923019e5d4cf91552461ddfd419127e', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1476761816,bot_data: Eliminate `owner` field.,"`owner` is a legacy key in one of bot data field. We would like to remove this field as it's not used in the codebase. `owner_id` is the identifier to find the owner of a bot.
+
+CZO discussion: https://chat.zulip.org/#narrow/stream/6-frontend/topic/Can.20we.20mark.20.60owner.60.20field.20in.20bot.20data.20optional.3F/near/1625968
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26502,https://api.github.com/repos/zulip/zulip/pulls/26502,https://github.com/zulip/zulip/pull/26502,closed,0,6,2,1,1,0,1,0,[{'name': 'size: S'}],2023-08-16 03:04:18+00:00,2023-08-17 18:53:34+00:00,143356.0,"1 day, 15:49:16",[],"[{'commit_sha': 'c7f715d15ee771c8ed091b2543a1cac235cf2dcd', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1462504120,ts: Migrate `settings_ui.js` to TypeScript.,"<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26418,https://api.github.com/repos/zulip/zulip/pulls/26418,https://github.com/zulip/zulip/pull/26418,closed,23,14,2,1,2,4,2,0,"[{'name': 'size: M'}, {'name': 'area: typescript migration'}]",2023-08-04 07:59:29+00:00,2023-08-16 00:17:40+00:00,1009091.0,"11 days, 16:18:11","[{'comment_id': 1285055270, 'comment_body': 'We could also type this parameter like this, since we are directly passing data to the `request_method`.\r\n```suggestion\r\n    data: Parameters<AjaxRequestHandler>[0][""data""],\r\n```', 'comment_created': datetime.datetime(2023, 8, 5, 13, 22, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1289493553, 'comment_body': 'Right, I also this in dialog_widget.ts. I was not wonder how would you be sure that `data` will be one of the keys in `Parameters<AjaxRequestHandler>[0]`?', 'comment_created': datetime.datetime(2023, 8, 10, 3, 14, 44, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1294280657, 'comment_body': 'We have `data` key in the `args` parameter of `AjaxRequestHandler` that should be enough for ts compiler to infer that `data` will always be a key in `Parameters<AjaxRequestHandler>[0]`', 'comment_created': datetime.datetime(2023, 8, 15, 7, 34, 8, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1295055265, 'comment_body': 'fixed that, thanks!', 'comment_created': datetime.datetime(2023, 8, 15, 20, 3, 4, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': '896de30fe7d6a5940e445b7f7344295a889c6b2b', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1462410262,ts: Migrate `stream_create_subscribers_data.js` and `user_group_create_members_data.js` to TypeScript.,"`stream_create_subscribers_data.js` and `user_group_create_members_data.js`  are very similar.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26417,https://api.github.com/repos/zulip/zulip/pulls/26417,https://github.com/zulip/zulip/pull/26417,closed,29,21,4,3,3,21,4,0,"[{'name': 'size: M'}, {'name': 'integration review'}, {'name': 'mentor review'}, {'name': 'area: typescript migration'}]",2023-08-04 06:35:05+00:00,2023-08-17 18:38:14+00:00,1166589.0,"13 days, 12:03:09","[{'comment_id': 1285056722, 'comment_body': 'We can omit generic type for `Set` here since we have already specified it above when declaring `user_id_set`.\r\n\r\nAlso I think we should conditionally add `current_user_id` to `user_id_set` to avoid `undefined` type.\r\n```ts\r\nexport function initialize_with_current_user(): void {\r\n    const current_user_id = page_params.user_id;\r\n    user_id_set = new Set();\r\n    if (current_user_id !== undefined) {\r\n        user_id_set.add(current_user_id);\r\n    }\r\n}\r\n```', 'comment_created': datetime.datetime(2023, 8, 5, 13, 32, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1285056993, 'comment_body': ""Also once we don't have undefined value in `user_id_set`, this function can just return `number[]`."", 'comment_created': datetime.datetime(2023, 8, 5, 13, 33, 50, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1289496131, 'comment_body': 'Looks like the `undefined` user id is never expected to appear when the functions in this file are called? If so we can remove the `undefined` annotation in the set.\r\n\r\nRegarding to the generic type annotation, i think either is fine.', 'comment_created': datetime.datetime(2023, 8, 10, 3, 19, 23, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1289496453, 'comment_body': 'thats true ', 'comment_created': datetime.datetime(2023, 8, 10, 3, 19, 59, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1289497240, 'comment_body': 'Do you think we should give a blueslip error or warning when an undefined user id is encountered?', 'comment_created': datetime.datetime(2023, 8, 10, 3, 21, 41, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1294266308, 'comment_body': 'What I did is that I traced all the way back to verify `page_params.user_id` will not be `undefined` at the point that the function is being called. This is because when user is able to create and initialize a stream, this user is authenticated and thus a `user_id` is always available. Therefore, adding an assertion when undefined user id is detected to handle a confirmed error.', 'comment_created': datetime.datetime(2023, 8, 15, 7, 14, 6, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1294276808, 'comment_body': 'Yeah an assert statement sounds good 👍', 'comment_created': datetime.datetime(2023, 8, 15, 7, 29, 9, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296148383, 'comment_body': ""Since we are sure now that `user_id_set` won't have an undefined value, so why are we using this `filter` here?"", 'comment_created': datetime.datetime(2023, 8, 16, 16, 15, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296150149, 'comment_body': 'It seems like `people.get_users_from_ids` method is incorrectly typed it should have return value of `User[]` and not `(User | undefined)[]` we should fix that and remove this `filter` call here. ', 'comment_created': datetime.datetime(2023, 8, 16, 16, 17, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296152186, 'comment_body': 'Just use `User[]` here instead of `people.User[]`.', 'comment_created': datetime.datetime(2023, 8, 16, 16, 19, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296154996, 'comment_body': 'After fixing return type for `people.get_users_from_ids` we can omit this filter call here as well.', 'comment_created': datetime.datetime(2023, 8, 16, 16, 21, 31, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296155534, 'comment_body': 'Just use `User[]` here as well.', 'comment_created': datetime.datetime(2023, 8, 16, 16, 22, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296172954, 'comment_body': 'How do you know `people.get_users_from_ids` method is incorrectly typed?\r\n\r\nBefore the changes from `people.ts` gets merge, we should keep the filter in this PR.', 'comment_created': datetime.datetime(2023, 8, 16, 16, 38, 28, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296175658, 'comment_body': ""okay, i see your point for `people.get_users_from_ids`. but can you make sure whether is the input param's type gets wrong or  return value's param?"", 'comment_created': datetime.datetime(2023, 8, 16, 16, 41, 6, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296563385, 'comment_body': 'Yep, fixed', 'comment_created': datetime.datetime(2023, 8, 17, 0, 43, 54, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296563595, 'comment_body': 'Fixed `people.ts` and removed filtering here as well.', 'comment_created': datetime.datetime(2023, 8, 17, 0, 44, 24, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296563633, 'comment_body': 'Fixed!', 'comment_created': datetime.datetime(2023, 8, 17, 0, 44, 31, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296564682, 'comment_body': ""I looked into `people.ts` and believe that it's safe to change the return type of `people.get_users_from_ids` from `(User | undefined)[]`  to `User[]`with the rest of the `people.ts` unchanged. For convenience, this change is implemented in the first commit in this PR."", 'comment_created': datetime.datetime(2023, 8, 17, 0, 47, 18, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296564765, 'comment_body': ""yeah, some code from previous haven't not been fixed. Now fixed."", 'comment_created': datetime.datetime(2023, 8, 17, 0, 47, 29, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1297469992, 'comment_body': 'Yeah `get_users_from_ids` internally uses a type safe version for mapping user id to `User` objects to it should be safe to change return type here.', 'comment_created': datetime.datetime(2023, 8, 17, 16, 32, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1297603032, 'comment_body': 'It may be worth discussing in a new #frontend thread the idea of using a fake `user_id` like `-1` rather than` undefined` for spectators to avoid the need to od this sort of assert.', 'comment_created': datetime.datetime(2023, 8, 17, 18, 37, 55, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '212e37ae8ecc380c99c2a25fa0df7a0ffcc4b5e4', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a19df060430b148c5651edb2e5f4215c09c92459', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a75eb0ef6fd018cfcb1e818b889de29cd8803754', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1447459731,ts: Migrate `huddle_data.js` to TypeScript.,"Added type annotations.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26344,https://api.github.com/repos/zulip/zulip/pulls/26344,https://github.com/zulip/zulip/pull/26344,closed,5,4,1,1,2,0,3,0,"[{'name': 'size: S'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-07-24 22:28:35+00:00,2023-07-24 23:45:30+00:00,4615.0,1:16:55,[],"[{'commit_sha': '8aabe3244d93970849d5384a86c76154b2073021', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1446109116,ts: Migrate `alert_words.js` to TypeScript.,"Added type annotations for function params, return values and local variables.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26335,https://api.github.com/repos/zulip/zulip/pulls/26335,https://github.com/zulip/zulip/pull/26335,closed,20,11,1,1,3,2,3,0,"[{'name': 'size: M'}, {'name': 'mentor review'}, {'name': 'area: typescript migration'}]",2023-07-24 06:23:16+00:00,2023-08-03 01:38:58+00:00,846942.0,"9 days, 19:15:42","[{'comment_id': 1272847502, 'comment_body': 'The return type seems to be more like `void` to me', 'comment_created': datetime.datetime(2023, 7, 24, 23, 19, 45, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1272868823, 'comment_body': 'oops. revised.', 'comment_created': datetime.datetime(2023, 7, 25, 0, 7, 25, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': 'b89e25b1b8b21552c5296e703390514c77d73cb8', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1444147649,ts: Migrate `bot_data.js` to TypeScript,"Add type annotations. Create custom types for Bot and Service.
+Add zod data validation for incoming bot data from server.
+Based on `zerver/openapi/zulip.yaml` description, `add` operation
+(`op`) carries data that follows `Bot` structure. So taking
+reference from `bot` structure, I create `ServerAddBotData` zod
+schema and infer its type. Similarly, `update` operation carries
+data that follows `BasicBot`, so I create `ServerUpdateBotData`.
+Note that `Bot` inherits from `BasicBot`.
+
+`zerver/openapi/zulip.yaml` describes that `services` in `BasicBot`
+can be one of two objects, one with `{base_url, token, interface}`,
+another with `{service_name, config_data}`. Therefore, I create
+two corresponding schema and infer their types.
+
+Fix two test cases `bot_data.test.js` and `settings_bots.test.js`
+whose synthetic objects should have had followed the schema.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26315,https://api.github.com/repos/zulip/zulip/pulls/26315,https://github.com/zulip/zulip/pull/26315,closed,230,114,4,1,2,8,3,0,"[{'name': 'size: XL'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-07-21 08:48:19+00:00,2023-08-14 23:06:50+00:00,2125111.0,"24 days, 14:18:31","[{'comment_id': 1272854945, 'comment_body': 'Maybe we can use `CleanBot` here when we have the schema.', 'comment_created': datetime.datetime(2023, 7, 24, 23, 35, 33, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1272855753, 'comment_body': '`bot_update` should be unknown.', 'comment_created': datetime.datetime(2023, 7, 24, 23, 37, 20, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1282571657, 'comment_body': '`Partial<Bot>` is more informative.', 'comment_created': datetime.datetime(2023, 8, 3, 2, 19, 40, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 1289573250, 'comment_body': 'I agree. I have integrated these keys with zod. Please check.', 'comment_created': datetime.datetime(2023, 8, 10, 5, 35, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1289573490, 'comment_body': 'Addressed, thanks!', 'comment_created': datetime.datetime(2023, 8, 10, 5, 35, 36, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1291098720, 'comment_body': 'I narrowed it down to `ServerUpdateBotData` with the help of `zerver/openapi/zulip.yaml`. It seems that `update` operation carries `BasicBot` data so I created this type. Yaml description:\r\n\r\n```yaml\r\n                            - type: object\r\n                              description: |\r\n                                Event sent to users who can administer a bot user when the bot is\r\n                                configured. Clients may also receive a `realm_user` event that\r\n                                for changes in public data about the bot (name, etc.).\r\n\r\n                                The `realm_user` events are sufficient for clients that\r\n                                only need to interact with the bot; this `realm_bot` event\r\n                                type is relevant only for administering bots.\r\n\r\n                                Only organization administrators and the user who owns the bot will\r\n                                receive this event.\r\n                              additionalProperties: false\r\n                              properties:\r\n                                id:\r\n                                  $ref: ""#/components/schemas/EventIdSchema""\r\n                                type:\r\n                                  allOf:\r\n                                    - $ref: ""#/components/schemas/EventTypeSchema""\r\n                                    - enum:\r\n                                        - realm_bot\r\n                                op:\r\n                                  type: string\r\n                                  enum:\r\n                                    - update\r\n                                bot:\r\n                                  allOf:\r\n                                    - description: |\r\n                                        Object containing details about the changed bot.\r\n                                        It contains two properties: the user ID of the bot and\r\n                                        the property to be changed. The changed property is one\r\n                                        of the remaining properties listed below.\r\n                                    - $ref: ""#/components/schemas/BasicBot""\r\n                              example:\r\n                                {\r\n                                  ""type"": ""realm_bot"",\r\n                                  ""op"": ""update"",\r\n                                  ""bot"":\r\n                                    {\r\n                                      ""user_id"": 37,\r\n                                      ""services"":\r\n                                        [\r\n                                          {\r\n                                            ""base_url"": ""http://hostname.domain2.com"",\r\n                                            ""interface"": 2,\r\n                                            ""token"": ""grr8I2APXRmVL0FRTMRYAE4DRPQ5Wlaw"",\r\n                                          },\r\n                                        ],\r\n                                    },\r\n                                  ""id"": 0,\r\n                                }\r\n```', 'comment_created': datetime.datetime(2023, 8, 11, 9, 13, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1293821431, 'comment_body': 'Should we use snake case here and above as well?', 'comment_created': datetime.datetime(2023, 8, 14, 18, 22, 15, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1294044635, 'comment_body': 'Yes, we use sake case in our codebase.', 'comment_created': datetime.datetime(2023, 8, 14, 23, 1, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '71401493738e28ea90203a667b307816a5e4feed', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1436840835,ts: Migrate `vdom.js` to TypeScript,"Added type annotations for variables, function params, and return values. Created custom types that help with clean type annotations.
+
+Notes on `attrs` field in custom `Option` type:
+ `attrs` is an `Iterable` where each element is a pair of string, i.e a string array with two elements. `attrs` is tranformed into a `Map` at some point. `Map` constructor takes in `Iterable` object so has no problem unifying with `attrs`. However, at some point `attrs` is transfomed using `.map(...)` which is an array method, and `Iterable` does not support `.map(...)`. So at this point, I cast `attrs` into array before using `.map(...)` by this syntax:
+`[..attrs].map(...)`
+
+
+Much inference is inspired by `vdom.test.js`.
+ 
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26272,https://api.github.com/repos/zulip/zulip/pulls/26272,https://github.com/zulip/zulip/pull/26272,closed,36,10,1,1,2,4,3,0,"[{'name': 'size: M'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-07-17 08:14:23+00:00,2023-07-24 23:49:53+00:00,660930.0,"7 days, 15:35:30","[{'comment_id': 1266006768, 'comment_body': 'We can probably avoid this by typing `opts.attrs` as `[string, string][]`. Could you verify that the callers are already passing arrays for `Options`?', 'comment_created': datetime.datetime(2023, 7, 17, 23, 34, 35, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1266009355, 'comment_body': ""`eq` for `Node` takes 1 argument, `eq` for `eq_array` takes 2 arguments. Let's type them separately to be more precise."", 'comment_created': datetime.datetime(2023, 7, 17, 23, 39, 3, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1266011073, 'comment_body': '`old_dom` can be `undefined`', 'comment_created': datetime.datetime(2023, 7, 17, 23, 41, 30, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1271814616, 'comment_body': 'Function `update_attrs` requires `Iterable<[string, string]>` because `Map()` constructure requires it. Thats why I was making `Option.attrs` itererable as well. I just tested it and I can make `Option.attrs` as you suggested while keep type compatible in `update_attrs` function. Resolved!  ', 'comment_created': datetime.datetime(2023, 7, 24, 6, 40, 48, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': '8913c713b023274a4b7049ca2913f7e4a8d63f91', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1411155442,ts: Migrate `stats.js` to TypeScript,"This PR focuses on migrating `stats.js` to `stats.ts`. Commits done earlier are prep commits such as refactoring the code structure a bit, fixing the wrong code, and installing type packages.
+
+In migration, I created custom types for type annotations throughout helper functions (all functions in front of `populate_*` functions are helpers). For `populate_*` functions parameters, I add `zod` schemas to valdiate the raw data coming from backend. Use `blueslip` error reporting utility to throw errors if data from backend does not match the schema.
+
+<details> <summary>Self-review Checklist</summary>
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26140,https://api.github.com/repos/zulip/zulip/pulls/26140,https://github.com/zulip/zulip/pull/26140,closed,513,202,7,7,10,24,3,0,"[{'name': 'size: XL'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-06-28 07:31:43+00:00,2023-08-17 18:35:00+00:00,4359797.0,"50 days, 11:03:17","[{'comment_id': 1252365175, 'comment_body': 'Maybe we should change this from `else if` to `else`, and add `assert(aggregation === ""week"")` here.\r\nSetting defaults for `start` and `is_boundary` suppresses potential programming errors.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 18, 58, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252366946, 'comment_body': 'Same here. We can avoid using the defaults.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 25, 34, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252368761, 'comment_body': '`T[]` is more appropriate for this property.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 28, 27, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252373296, 'comment_body': ""This can be committed separately in a prep commit. Let's move this link to the commit message instead with some explanations."", 'comment_created': datetime.datetime(2023, 7, 4, 21, 34, 50, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252373881, 'comment_body': 'We can remove this inline type annotation and rely on type inference for this one.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 37, 18, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252375540, 'comment_body': 'We can extract some quick Zod schemas for these literals.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 42, 58, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1252375704, 'comment_body': 'With the zod schema mentioned earlier, we can parse the value without compromising type safety.', 'comment_created': datetime.datetime(2023, 7, 4, 21, 43, 38, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1257545140, 'comment_body': ""I believe `values` is maps. For example, `values = {everyone:[], me:[]}`. While the values of `values` are arrays, the `values` itself can't be unifiable with `T[]`."", 'comment_created': datetime.datetime(2023, 7, 9, 21, 33, 11, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1263150934, 'comment_body': 'Ideally yes except one variable, `x` . `x` is supposed to be  `Plotly.Datum[]`, a union type of `Date[]`, because by definition `type Datum = string | number | Date | null;`. Either we need to cast type using `as` keyword, or we keep inline type annotation to avoid type inference.', 'comment_created': datetime.datetime(2023, 7, 14, 0, 3, 5, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1263161584, 'comment_body': 'Actually, we can still use type annotation but in a simpler way like [previous lines](https://github.com/zulip/zulip/blob/040d686961aae32a80bbd3fe6228a3d35026efba/web/src/stats/stats.ts#L270-L276) have done:\r\n```\r\ncommon: Partial<Plotly.PlotData> = {\r\n            x: dates,\r\n            type,\r\n            hoverinfo: ""none"",\r\n            text,\r\n            textposition: ""none"",\r\n        };\r\n```', 'comment_created': datetime.datetime(2023, 7, 14, 0, 29, 41, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1264738482, 'comment_body': 'Do we still need this after the DefinitelyTyped change?', 'comment_created': datetime.datetime(2023, 7, 16, 19, 47, 51, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1264738715, 'comment_body': 'This might also be affected by DT?', 'comment_created': datetime.datetime(2023, 7, 16, 19, 49, 55, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1264738779, 'comment_body': 'The comment here can be removed.', 'comment_created': datetime.datetime(2023, 7, 16, 19, 50, 41, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1264740466, 'comment_body': '`null` is incompabitle with the types provided by `Plotly` library. Only `number | undefined` is accepted. So thats why here I changed from `null` to undefined. Same reason for `xaxis: {range: undefined}` three lines below', 'comment_created': datetime.datetime(2023, 7, 16, 20, 6, 16, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1264743683, 'comment_body': 'Not resolved by upgrading DT.  `plotDiv.data[0]` is a `Plotly.Data` type infered by TS compiler. However, from `.visible` field I infer that `plotDiv.data[0]` should be a narrower type, `Plotly.PlotData`, a children class of `Plotly.Data`.  So type casting is still needed at this point. ', 'comment_created': datetime.datetime(2023, 7, 16, 20, 34, 31, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1264743703, 'comment_body': 'reasoning as above', 'comment_created': datetime.datetime(2023, 7, 16, 20, 34, 46, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1266018024, 'comment_body': 'Looks like this change and the one above belong to a previous commit.', 'comment_created': datetime.datetime(2023, 7, 17, 23, 50, 57, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1266020252, 'comment_body': 'There are some linter errors for this commit.\r\n\r\n```diff\r\ndiff --git a/web/src/stats/stats.js b/web/src/stats/stats.js\r\nindex bf5fd3ef1f..6ea2325f2e 100644\r\n--- a/web/src/stats/stats.js\r\n+++ b/web/src/stats/stats.js\r\n@@ -210,7 +210,7 @@ function set_guest_users_statistic(guest_users) {\r\n // PLOTLY CHARTS\r\n function populate_messages_sent_over_time(data) {\r\n     // Content rendered by this method is titled as ""Messages sent over time"" on the webpage\r\n-    \r\n+\r\n     if (data.end_times.length === 0) {\r\n         // TODO: do something nicer here\r\n         return;\r\n@@ -519,7 +519,7 @@ function compute_summary_chart_data(time_series_data, num_steps, labels_) {\r\n \r\n function populate_messages_sent_by_client(data) {\r\n     // Content rendered by this method is titled as ""Messages sent by client"" on the webpage\r\n-    \r\n+\r\n     const layout = {\r\n         width: 750,\r\n         height: null, // set in draw_plot()\r\n@@ -661,7 +661,7 @@ function populate_messages_sent_by_client(data) {\r\n \r\n function populate_messages_sent_by_message_type(data) {\r\n     // Content rendered by this method is titled as ""Messages sent by recipient type"" on the webpage\r\n-    \r\n+\r\n     const layout = {\r\n         margin: {l: 90, r: 0, b: 10, t: 0},\r\n         width: 750,\r\n@@ -881,7 +881,7 @@ function populate_number_of_users(data) {\r\n \r\n function populate_messages_read_over_time(data) {\r\n     // Content rendered by this method is titled as ""Messages read over time"" on the webpage\r\n-    \r\n+\r\n     if (data.end_times.length === 0) {\r\n         // TODO: do something nicer here\r\n         return;\r\n```', 'comment_created': datetime.datetime(2023, 7, 17, 23, 54, 26, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1270421111, 'comment_body': ""Did. That's a great suggestion"", 'comment_created': datetime.datetime(2023, 7, 21, 8, 55, 12, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1291110386, 'comment_body': 'Fixed!', 'comment_created': datetime.datetime(2023, 8, 11, 9, 25, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1291137913, 'comment_body': ""that's nuanced. Fixed, thanks!"", 'comment_created': datetime.datetime(2023, 8, 11, 9, 52, 56, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296290174, 'comment_body': ""I don't think this is correct -- `stats.ts` is a separate page and its `page_params` has a totally different type."", 'comment_created': datetime.datetime(2023, 8, 16, 18, 33, 24, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1296292609, 'comment_body': ""OK I think the fix for this is something like to create a create a `web/src/stats/stats_page_params.ts` that is a copy of `page_params.ts` but with the appropriate types for that page's own parameters."", 'comment_created': datetime.datetime(2023, 8, 16, 18, 35, 57, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1296735411, 'comment_body': 'Added `web/src/stats/page_params.ts` for `stat.js` as [`billing` ](https://github.com/zulip/zulip/pull/24559/commits/083d63eb51f90dac9299bff91e1a393a9e6d37ac) and [`portico`](https://github.com/zulip/zulip/pull/25864/commits/fc2808839a1a7ecfdaea2414904ccb687edb6480) modules did for their page_params.', 'comment_created': datetime.datetime(2023, 8, 17, 6, 31, 34, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': 'bcf03890c8ab9a61bb5a04e79ff9c91b942a3285', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bc04c847b104eaf5ba43445d7c184bc802146005', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8e1726c77e09c45da1509eec7021dbb0fa983063', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c7d0fe966356b255ee9d064863576fc2d3c896d', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e4978a2101033f84eaabbb22111b8f0eab17033d', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd0c85c32e3f1e521d5b777ad52853d2e1eba9a8c', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7554e47b44dda4ce80c9567372b0b849890617fb', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1389529703,ts: Convert `signup.js` to TypeScript,"Not only did typescript conversion, but also did some preliminary commits to allow adding type annotations and allow type check.",True,25999,https://api.github.com/repos/zulip/zulip/pulls/25999,https://github.com/zulip/zulip/pull/25999,closed,52,33,8,4,2,6,4,0,"[{'name': 'size: L'}, {'name': 'integration review'}, {'name': 'mentor review'}, {'name': 'area: typescript migration'}]",2023-06-12 22:05:56+00:00,2023-08-14 23:00:20+00:00,5446464.0,"63 days, 0:54:24","[{'comment_id': 1227295167, 'comment_body': '## Client-side URL redirect\n\nUntrusted URL redirection depends on a [user-provided value](1).\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/328)', 'comment_created': datetime.datetime(2023, 6, 12, 22, 15, 45, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 1227295168, 'comment_body': '## DOM text reinterpreted as HTML\n\n[DOM text](1) is reinterpreted as HTML without escaping meta-characters.\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/329)', 'comment_created': datetime.datetime(2023, 6, 12, 22, 15, 46, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 1235044588, 'comment_body': 'This will require a minor provision bump.', 'comment_created': datetime.datetime(2023, 6, 20, 10, 8, 45, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1235103231, 'comment_body': 'I think you can use non-null assertion here safely because this only returns undefined when called on an empty JQuery collection. I think just to be safe you can also probably use `expectOne` here. So it will be like this -\r\n```typescript\r\nconst name_val = $(""#id_team_name"").expectOne().val()!\r\n```', 'comment_created': datetime.datetime(2023, 6, 20, 11, 4, 3, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1292788065, 'comment_body': ""`expectOne()` is a good hint.  `expectOne` and non-null assertion are equivalent here. `expectOne` fails only when the other non-null assertion fails; conversely it's true as well. From another perspective it's redundant"", 'comment_created': datetime.datetime(2023, 8, 13, 13, 17, 43, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1292789660, 'comment_body': 'fixed!', 'comment_created': datetime.datetime(2023, 8, 13, 13, 27, 1, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': '4b0ab04f1f9e09032b5a6ef88714b7c0f7cd12b5', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dfc915ded0dab3eb6acba2d15d8be38f07cb8c8', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b930e4aaf2012e740af25478f93fec52f23ac94', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3fb7b0cf1a21d1226ed61714341705dbf818ef07', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1385210552,ts: Convert `stream_settings_containers.js` to TypeScript.,"Added assertion to enforce `sub` is not `undefined` and thus type safe for the rest.
+Added type annotation to function parameter and return value.
+",True,25948,https://api.github.com/repos/zulip/zulip/pulls/25948,https://github.com/zulip/zulip/pull/25948,closed,14,10,3,1,3,4,3,0,"[{'name': 'size: S'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-06-08 22:58:23+00:00,2023-07-18 00:24:16+00:00,3374753.0,"39 days, 1:25:53","[{'comment_id': 1224917620, 'comment_body': 'In what situation will `sub` be `undefined`?', 'comment_created': datetime.datetime(2023, 6, 10, 0, 27, 42, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1225634008, 'comment_body': 'That\'s what I\'m not sure about. I checked every usage of `get_edit_container` and where their parameter `sub` come from. Theoratically if all the code works successfuly before reaching to `get_edit_container`, then `sub` should not be `undefined`. However, I\'m not sure that ""theoratically"" part is correct, or is it too conservative to check `undefined` here? ', 'comment_created': datetime.datetime(2023, 6, 10, 22, 42, 20, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1228407537, 'comment_body': 'I think you are correct. `get_edit_container` itself always expects `sub` to be non-`undefined` because it will fail otherwise.', 'comment_created': datetime.datetime(2023, 6, 13, 16, 28, 21, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1265176185, 'comment_body': 'ok, removed the `undefined` annotation as suggested. ', 'comment_created': datetime.datetime(2023, 7, 17, 10, 47, 29, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': '00130d21cd94f102dfd6f54bc92ba91598406984', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1490474468,ts: Migrate `poll_widget.js` to TypeScript,"Added type annotations for `poll_widget.js`.
+
+Did some prep-commits:
+poll_data: Define outbound data types for each message type
+keydown_util: Extend event type for `is_enter_event` function.
+poll_widget: Use `.prop()` but not `.attr()` for button disabled state.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",False,26585,https://api.github.com/repos/zulip/zulip/pulls/26585,https://github.com/zulip/zulip/pull/26585,closed,59,27,4,4,2,5,3,0,"[{'name': 'size: L'}, {'name': 'has conflicts'}, {'name': 'area: typescript migration'}]",2023-08-26 03:21:21+00:00,2023-10-23 16:30:33+00:00,5058552.0,"58 days, 13:09:12","[{'comment_id': 1320608484, 'comment_body': 'Should we move this to `global.d.ts`? Since all of the type definitions for custom functions on JQuery resides there?', 'comment_created': datetime.datetime(2023, 9, 9, 16, 57, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1320608888, 'comment_body': 'Yeah, I think accepting `undefined` here is valid since for `question.outbound` function in `poll_data` we indeed have a code path that returns undefined and not an event.\r\nhttps://github.com/zulip/zulip/blob/31b58792422bbd07286897fbfa347e29f9647d0d/web/shared/src/poll_data.ts#L164-L174', 'comment_created': datetime.datetime(2023, 9, 9, 17, 0, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1320609583, 'comment_body': 'Instead of typecasting it to `string` we should use `.toString()` here.', 'comment_created': datetime.datetime(2023, 9, 9, 17, 3, 30, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1320609688, 'comment_body': 'Same here we should use `.toString()`', 'comment_created': datetime.datetime(2023, 9, 9, 17, 3, 53, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1320609888, 'comment_body': '`Event` I think is a generic name we should maybe use `WidgetEvent` here?', 'comment_created': datetime.datetime(2023, 9, 9, 17, 5, 5, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}]","[{'commit_sha': 'a9f7df88be81beb560f3971950e49f1ecdaa0b5f', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f9743a055a6a6e5db2ada1c16dedbbe8950fe3b', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '575c873f2b6f89b0bc06e0de7376c7b453d7be0d', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9aedcfaced81bc53c46342e3b0025a2f663becd7', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1476989603,"ts: Migrate `compose_fade_helper.js` , `compose_fade_users.js`, and `recent_topics_util.js` to TypeScript.","This PR consists of 5 commits:
+
+1. sub_store: Move PartialBy to util.
+This aids reusability of this utility type in the codebase.
+
+2. util: Redefine Recipient type.
+Redefined `Recipient` type by spliting it into `DirectRecipient`
+and `StreamRecipient`. Splitting makes each of sub-type reusable. 
+This is a prep-commit for migrating `compose_fade_helpers`.
+
+3. ts: Migrate `compose_fade_helper.js` to TypeScript.
+ 
+4. ts: Migrate `compose_fade_users.js` to TypeScript.
+Created a type `Configuration` in `compose_fade_users.ts` that very likely will be re-used in `compose_fade.js`, `buddy_data.js`,  `buddy_list.js`, etc.
+
+5. ts: Migrate `recent_topics_util.js`  to TypeScript.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",False,26505,https://api.github.com/repos/zulip/zulip/pulls/26505,https://github.com/zulip/zulip/pull/26505,closed,72,17,5,4,2,8,4,0,"[{'name': 'size: L'}, {'name': 'buddy review'}, {'name': 'mentor review'}, {'name': 'area: typescript migration'}]",2023-08-16 07:41:36+00:00,2023-09-22 16:27:12+00:00,3228336.0,"37 days, 8:45:36","[{'comment_id': 1295569052, 'comment_body': ""Removing `throw new Error` is what I'm particularly not sure about - we may need caution when muting an error. Some paths to think about:\r\n1. The function param `msg` might not be annotated with a comprehensive type (currently `msg: Recipient` whose type is only `private` or `stream`)\r\n2. Error (if happens) should be reported earlier at the caller (i.e before entering `get_key_from_message` function)"", 'comment_created': datetime.datetime(2023, 8, 16, 8, 37, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296181749, 'comment_body': 'Can we make this field here optional instead of using `PartialBy` later when defining `Recipient` type?', 'comment_created': datetime.datetime(2023, 8, 16, 16, 47, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296182719, 'comment_body': 'Should we export this type and reuse it in `compose_fade_helper` ?', 'comment_created': datetime.datetime(2023, 8, 16, 16, 48, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1296568516, 'comment_body': '`Recipient` in `util.ts` is slightly different from `compose_fade_helper`. `Recipient` in `util.ts` might expect `to_user_ids` to be undefined for reasons pointed in [this discussion](https://github.com/zulip/zulip/pull/23032#discussion_r1038480596).\r\n\r\n`Recipient` in `compose_fade_users.js` expects a valid `to_user_ids` though.', 'comment_created': datetime.datetime(2023, 8, 17, 0, 56, 49, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296569112, 'comment_body': 'We can. But not sure which one is better. `DirectRecipient` and `StreamRecipient` are re-usable in other files like `compose_fade.js` too.', 'comment_created': datetime.datetime(2023, 8, 17, 0, 58, 22, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1298364317, 'comment_body': 'What makes it guaranteed that the `to_user_ids` will not be undefined for `focused_recipient` in `compose_fade_helper`?\r\n\r\nThis is where we set the `focused_recipient` for `compose_fade_helper`:-\r\nhttps://github.com/zulip/zulip/blob/170a857bc13bdb902133950cd1476c3effe18fcb/web/src/compose_fade.js#L38-L42\r\n\r\nBut it looks like that `people.reply_to_to_user_ids_string` can return `undefined` as well so we might add an assertion here in case we are sure that here in this particular case this function will not return `undefined` value.', 'comment_created': datetime.datetime(2023, 8, 18, 11, 53, 47, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1299088476, 'comment_body': 'Adding an assertion when setting its value makes sense. Fixed. Thanks for tracking it down', 'comment_created': datetime.datetime(2023, 8, 19, 4, 40, 23, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1333983743, 'comment_body': 'This is called with a message, not with a recipient, so we need to fix `Message` to be a supertype of `Recipient`. Fixed in #26812.', 'comment_created': datetime.datetime(2023, 9, 22, 7, 24, 38, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}]","[{'commit_sha': 'e53f5f15a10309a1da3d167de307514992bf079b', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a623c27263f18b43133835d7889c9305c50df687', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9bebeaf72b99ed851b2a9475b8f84e873aa4dc02', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '290a9c6da3f93879e06a552b704ba5db28201ade', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1445893923,ts: Migrate `message_store.js` to TypeScript.,"Added type annotations for function params, return values and local variables. Moved temporary types from `./web/src/types.ts` to `message_store.ts`. Refactored the imports in other files affected by types move.
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",False,26333,https://api.github.com/repos/zulip/zulip/pulls/26333,https://github.com/zulip/zulip/pull/26333,closed,309,289,18,3,6,9,5,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'buddy review'}, {'name': 'mentor review'}, {'name': 'area: typescript migration'}]",2023-07-24 02:23:01+00:00,2023-11-16 02:04:39+00:00,9934898.0,"114 days, 23:41:38","[{'comment_id': 1282559673, 'comment_body': 'Every `RawMessage` has `flags: string[]`, so this shouldn’t be necessary, right?', 'comment_created': datetime.datetime(2023, 8, 3, 1, 51, 56, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 1282569374, 'comment_body': '`info` is already an object wrapping named arguments for this function; we don’t need two levels of these wrappers.\r\n\r\nThis function is just a `case` statement and every caller hits a specific known branch, so it would be simpler to split this into four functions `update_sender_name`, `update_small_avatar_url`, `update_stream_name`, `update_status_emoji_info`. Then we don’t need a complicated type that combines them into one interface.', 'comment_created': datetime.datetime(2023, 8, 3, 2, 14, 51, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 1283967972, 'comment_body': 'thank you for the guidance! I will modify correspondingly', 'comment_created': datetime.datetime(2023, 8, 4, 4, 30, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1292666910, 'comment_body': ""Yes, right. We shouldn't change this place. It took me a while to realize what was my incentive to make this change. It should be those test cases with synthetic `raw_essage` to have a `flags` field, while at this point they don't, which fails a lot of test case and I found fixing here make tests passed. I think I should modify the test cases instead."", 'comment_created': datetime.datetime(2023, 8, 13, 5, 42, 2, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1295258298, 'comment_body': ""Yeah, let's fix the tests."", 'comment_created': datetime.datetime(2023, 8, 16, 0, 18, 58, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1295263764, 'comment_body': 'Fixed the test cases but now facing puppeteer issues. Stuck at debugging at this moment. Will update when I have progress. ', 'comment_created': datetime.datetime(2023, 8, 16, 0, 32, 18, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1299149018, 'comment_body': 'I think the puppeteer tests are failing due to the same reasons as node tests, the dummy message objects we are using in puppeteer tests does not have `flags` field, so you might just need to add `flags` field in `common.send_message` function to make sure every raw message has a `flag` field.\r\n\r\nhttps://github.com/zulip/zulip/blob/113ac6eb98ffe192580ba0e25a7958346daeebf8/web/e2e-tests/compose.test.ts#L33C1-L36.', 'comment_created': datetime.datetime(2023, 8, 19, 7, 42, 26, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}]","[{'commit_sha': '3176bac81a35318d881d7cee7188e7ea526c7753', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21152f4de38792214277145694fb05981c1026f1', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bbbe95ff4b6ed4660d3b87e0a8ee2896e008923c', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1372984086,ts: Convert part of `web/src/portico` module to TypeScript ,"This PR continues the work on #24931, and converts some files not involved in import cycles in `portico` module together. I also created a `page_params.ts` for this particular module. In order to address the problem that the page params (`web/src/page_params.ts`) for entire `web` module will be removed once imported, I have made `web/src/portico/page_params.ts` imported at the very begining  of `web/src/bundles/portico.ts`, on which many entry points depend, according to `webpack.assets.json`.
+
+Files being converted are
+
+```
+portico/help.ts
+portico/google_analytics.ts
+portico/landing-pages.ts
+portico/desktop-login.ts
+portico/integrations.ts
+```",False,25864,https://api.github.com/repos/zulip/zulip/pulls/25864,https://github.com/zulip/zulip/pull/25864,open,306,143,14,8,7,35,4,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-05-31 21:54:26+00:00,,0.0,,"[{'comment_id': 1214843784, 'comment_body': '## Client-side URL redirect\n\nUntrusted URL redirection depends on a [user-provided value](1).\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/327)', 'comment_created': datetime.datetime(2023, 6, 2, 21, 10, 7, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 1215231664, 'comment_body': ""We probably don't want to include this dependency (https://www.npmjs.com/package/gtag)"", 'comment_created': datetime.datetime(2023, 6, 3, 5, 26, 8, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1215232724, 'comment_body': '`@types/gtag.js` should be added as a `devDependency`. You can do that by using `pnpm install --save-dev @types/gtag.js` (shorthand `pnpm i -D @types/gtag.js`)', 'comment_created': datetime.datetime(2023, 6, 3, 5, 27, 29, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1215236062, 'comment_body': 'This comment can be removed now. I think it was referring to the type annotation of `const gtag`, which is now pretty complete as `Gtag.Gtag`.', 'comment_created': datetime.datetime(2023, 6, 3, 5, 31, 7, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1215238247, 'comment_body': 'We can use `minimalistic-assert` in place of `throw new Error` for here and the following checks.', 'comment_created': datetime.datetime(2023, 6, 3, 5, 37, 49, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1218510313, 'comment_body': 'Adjusted accordingly. Please check.', 'comment_created': datetime.datetime(2023, 6, 5, 19, 38, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1218510432, 'comment_body': 'Adjusted accordingly. Please check! ', 'comment_created': datetime.datetime(2023, 6, 5, 19, 38, 46, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1218510569, 'comment_body': 'Make sense. Adjusted accordingly. Please check! ', 'comment_created': datetime.datetime(2023, 6, 5, 19, 38, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1219227099, 'comment_body': 'Can we use minimalistic-assert here as well to be consistent?', 'comment_created': datetime.datetime(2023, 6, 6, 8, 57, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1219228135, 'comment_body': 'We should use assert statement here as well.', 'comment_created': datetime.datetime(2023, 6, 6, 8, 58, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1219238231, 'comment_body': 'Same here, we should assert here.', 'comment_created': datetime.datetime(2023, 6, 6, 9, 4, 47, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1219238276, 'comment_body': 'We should use assert statement here as well.', 'comment_created': datetime.datetime(2023, 6, 6, 9, 4, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1219242638, 'comment_body': 'Probably a nit but we currently kind of follows a convention of putting all the type definitions at the top of the file, so maybe we should follow it here as well.', 'comment_created': datetime.datetime(2023, 6, 6, 9, 7, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1219251183, 'comment_body': 'Can we probably change this to a simple variable like `current_loading_path: string | null` instead of an object given it has only one property `name` ?', 'comment_created': datetime.datetime(2023, 6, 6, 9, 11, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1219297553, 'comment_body': 'This is coming from `web/third/bootstrap` so we should move this field up. Currently it looks like that this is coming from `jquery-caret-plugin` which is not true.', 'comment_created': datetime.datetime(2023, 6, 6, 9, 41, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1223656461, 'comment_body': 'I agree. good spot!', 'comment_created': datetime.datetime(2023, 6, 9, 0, 2, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1223658069, 'comment_body': ""don't really know why the previous authors wrote a single var in local loading object years ago. Let me try to research on this and see if it's possible to flatten it."", 'comment_created': datetime.datetime(2023, 6, 9, 0, 6, 51, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1223667585, 'comment_body': 'yeah, seems no obvious reason to make that const complicated. Changed it to a simple string as suggested in a separate commit, thanks !', 'comment_created': datetime.datetime(2023, 6, 9, 0, 22, 45, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1224896378, 'comment_body': 'Looks like an accidental formatting change?', 'comment_created': datetime.datetime(2023, 6, 9, 23, 40, 38, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1224897263, 'comment_body': 'This also looks like an unintentional formatting change.', 'comment_created': datetime.datetime(2023, 6, 9, 23, 43, 53, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1224899849, 'comment_body': 'We can use `document.querySelector<HTMLInputElement>(""#token"")!;` here.', 'comment_created': datetime.datetime(2023, 6, 9, 23, 47, 10, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1224901354, 'comment_body': 'We can use `document.querySelectorAll<HTMLIFrameElement>("".twitter-tweet iframe"");` here.', 'comment_created': datetime.datetime(2023, 6, 9, 23, 50, 58, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1227263726, 'comment_body': 'We will need a minor version bump for this', 'comment_created': datetime.datetime(2023, 6, 12, 21, 29, 50, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1228921806, 'comment_body': 'oh, ok', 'comment_created': datetime.datetime(2023, 6, 14, 3, 3, 17, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1228923304, 'comment_body': ""Just confirm, I think you're talking about \r\n\r\n> \\# * adding a dependency only requires a minor version bump;\r\n\r\nA comment in `version.py`?"", 'comment_created': datetime.datetime(2023, 6, 14, 3, 7, 3, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1229001102, 'comment_body': 'Just did, may you please check again. Thank you Zixuan!!', 'comment_created': datetime.datetime(2023, 6, 14, 5, 25, 42, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1270425863, 'comment_body': 'Did!', 'comment_created': datetime.datetime(2023, 7, 21, 8, 59, 31, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1292808691, 'comment_body': 'fixed!', 'comment_created': datetime.datetime(2023, 8, 13, 15, 9, 12, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1295276026, 'comment_body': ""What does this do? I don't quite understand the commit message."", 'comment_created': datetime.datetime(2023, 8, 16, 1, 2, 11, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1295277093, 'comment_body': 'We should be extra sure to test that analytics still work.', 'comment_created': datetime.datetime(2023, 8, 16, 1, 5, 12, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1295277737, 'comment_body': ""@jychen630 have you tested that the Zulip desktop app's Google auth login process still works well with this change?\r\n\r\nIf not we should be sure to verify that on chat.zulip.org as soon as this is test-deployed there."", 'comment_created': datetime.datetime(2023, 8, 16, 1, 7, 2, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1295277866, 'comment_body': 'In any case @andersk can you review this commit as its maintainer?', 'comment_created': datetime.datetime(2023, 8, 16, 1, 7, 23, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1295278392, 'comment_body': ""Let's move this commit to a separate PR; we're deleteing the carousel in https://github.com/zulip/zulip/pull/24301 and I'd prefer to merge that before this commit."", 'comment_created': datetime.datetime(2023, 8, 16, 1, 8, 30, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1295364626, 'comment_body': 'Yeah, I am not sure how to test it as well.', 'comment_created': datetime.datetime(2023, 8, 16, 4, 25, 1, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 1299551180, 'comment_body': 'Did in a separate commit. Please check.', 'comment_created': datetime.datetime(2023, 8, 21, 3, 19, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': 'e1a3118f0bb3ec533e027ad99ee7faeced8bd8e0', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c8abe8152dc836eea3b74bb124d78ed037ec5f1', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1902eb2ee1b0165a5a3e6a6f672303f746de7aa', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dcf00eb796c617117c7b5a86079a9a50088888ca', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '315fc205d8d5cbb7a6c7d02702cc53c4e559d8d2', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0f4a1ee04ec4cb4cdee7b82fc5083a43d5612904', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '413890506e388044fd8cf9f00928c4c92651ef8d', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8520d90eafc75b3c6861f24f9ccdc99be34a42d9', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1315300473,realm: Replace occurences of uri with url.,"In #23380 we want to change all occurences of uri with url in order to follow the URL [standard](https://url.spec.whatwg.org/#goals). Previous PRs #25038 and #25045 has replaces the occurences of uri that has no direct relation with realm. This PR focuses on changing `uri` that relates to realm. 
+
+As discussed in #23380:
+> The one thing that will hard will be this line: zerver/lib/events.py:        state[""realm_uri""] = realm.uri, which is an API change; we should save that for last (as it'll likely require adding a new realm_url, leaving the old name available for mobile clients and other API tools that we don't want to break compatibility for), after we've renamed all the smaller uses that don't require this API change.
+
+This PR is consisted of multiple commits: I will change the internal usage of `uri` to `url` first, then move on changing the uri that affects the endpoint by creating an alias `realm_url = realm_uri`. Per `zulip.yaml`, two endpoints that use `realm_uri` are `/server_settings` and `/register`.
+
+The first commit 891feedff211291471e310a8b1ace3c06cc568c1 starts from changing a Realm model's property `uri` to `url` in `/zerver/models.py`. With help mypy type checker, I then changed all occurences of `uri` that are affected - most of them are used in form of `get_realm(string_id).uri` and `realm.uri`.
+
+The changes happen in many backend files (.py) and some html templates that directly uses the uri-related variables received from backend. For templates in `/zerver/email/..` directory, the changes are also made for the plaintext templates.
+
+
+<!-- Describe your pull request here.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [ ] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",False,25141,https://api.github.com/repos/zulip/zulip/pulls/25141,https://github.com/zulip/zulip/pull/25141,closed,258,197,84,4,12,20,4,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'integration review'}, {'name': 'completion candidate'}]",2023-04-16 02:03:10+00:00,2024-06-03 17:07:51+00:00,35823881.0,"414 days, 15:04:41","[{'comment_id': 1167680072, 'comment_body': '## URL redirection from remote source\n\nUntrusted URL redirection depends on a [user-provided value](1).\n\n[Show more details](https://github.com/zulip/zulip/security/code-scanning/323)', 'comment_created': datetime.datetime(2023, 4, 16, 2, 12, 3, tzinfo=datetime.timezone.utc), 'commenter': 'github-advanced-security[bot]', 'type': 'Bot'}, {'comment_id': 1178165317, 'comment_body': ""Cool, this is helpful: it's adding `realm_url` to the notification payloads, as an alias of `realm_uri`.\r\n\r\nUnlike most of this commit, it's changing the server's behavior as seen by clients. So let's put it in its own commit, with its own commit message. That will help us track what server version this change happened in.\r\n\r\nI'd also like to have this mentioned in the API changelog, which also means bumping the feature level for it. The notification payloads as a whole aren't yet documented in the API docs — that's one of the handful of notable areas that's still missing from the API docs — but even without overall documentation for them, it's useful to document the changes.\r\n"", 'comment_created': datetime.datetime(2023, 4, 26, 17, 3, 25, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1178167220, 'comment_body': 'This looks like an API change. So it should also go in its own commit, with a feature-level bump. Should also get mentioned in `#api design` before we commit to it.\r\n', 'comment_created': datetime.datetime(2023, 4, 26, 17, 5, 24, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1178169326, 'comment_body': 'This should mention both of the endpoints that changed.', 'comment_created': datetime.datetime(2023, 4, 26, 17, 7, 33, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1178170009, 'comment_body': ""This feature level doesn't seem to match the changelog."", 'comment_created': datetime.datetime(2023, 4, 26, 17, 8, 16, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1251384865, 'comment_body': 'Conflict marker here.', 'comment_created': datetime.datetime(2023, 7, 4, 1, 39, 52, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1251397947, 'comment_body': 'My bad. I will fix this!', 'comment_created': datetime.datetime(2023, 7, 4, 2, 7, 32, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1267442318, 'comment_body': 'I have a commit that addresses all the api endpoint changes. To address what you suggest, I have merge [the change of this api](https://github.com/zulip/zulip/blob/407b4b4172580c8ded9d181514d888089f43eb9d/zerver/lib/push_notifications.py#L779) into this commit as well. I also document this mobile notification API change in `/api_docs/changelog.md` ([here](https://github.com/zulip/zulip/blob/407b4b4172580c8ded9d181514d888089f43eb9d/api_docs/changelog.md?plain=1#L30-L31)).', 'comment_created': datetime.datetime(2023, 7, 19, 1, 37, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1267446826, 'comment_body': 'Please let me know if the change is appropriate - thanks!', 'comment_created': datetime.datetime(2023, 7, 19, 1, 44, 8, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1267447869, 'comment_body': 'Similar as the last comment above, I have merge this [API endpoint change](\r\nhttps://github.com/zulip/zulip/blob/407b4b4172580c8ded9d181514d888089f43eb9d/zerver/views/realm.py#L345) (`PATCH /realm`) into an existing commit for api related changed. Also documented the change in [changelog](https://github.com/zulip/zulip/blob/407b4b4172580c8ded9d181514d888089f43eb9d/api_docs/changelog.md?plain=1#L27).\r\n', 'comment_created': datetime.datetime(2023, 7, 19, 1, 46, 36, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1267448396, 'comment_body': 'Yes, I have added [`[POST /server_settings](/api/get-server-settings)`](https://github.com/zulip/zulip/blob/407b4b4172580c8ded9d181514d888089f43eb9d/api_docs/changelog.md?plain=1#L26)', 'comment_created': datetime.datetime(2023, 7, 19, 1, 47, 51, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1267448801, 'comment_body': 'Adjusted 7.0 to 8.0 and the corresponding feature level.', 'comment_created': datetime.datetime(2023, 7, 19, 1, 48, 42, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1297909887, 'comment_body': ""Why does this line change? Does something else in the commit cause it to need to change? That'd be a surprising interaction.\r\n\r\n"", 'comment_created': datetime.datetime(2023, 8, 18, 2, 3, 30, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1297910310, 'comment_body': '```suggestion\r\n* Mobile push notifications now include a `realm_url` field as an alias\r\n  of `realm_uri` in all notification payloads.\r\n```\r\n', 'comment_created': datetime.datetime(2023, 8, 18, 2, 4, 36, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1297910705, 'comment_body': 'feature levels in this file need to be in sync with elsewhere', 'comment_created': datetime.datetime(2023, 8, 18, 2, 5, 36, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1297910975, 'comment_body': 'Needs a blank line so that the ""Changes:"" heading is the start of a new paragraph:\r\n```suggestion\r\n                          The organization\'s canonical URL.\r\n\r\n                          **Changes**: New in Zulip 8.0 (feature level 192). The name `realm_url`\r\n```\r\n', 'comment_created': datetime.datetime(2023, 8, 18, 2, 6, 19, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1297911651, 'comment_body': '""The name `realm_url` is preferred over `realm_uri` as the latter is deprecated.""\r\n\r\nThough actually perhaps better:\r\n```suggestion\r\n                          **Changes**: New in Zulip 8.0 (feature level 192), replacing the deprecated `realm_uri`.\r\n```\r\n', 'comment_created': datetime.datetime(2023, 8, 18, 2, 8, 8, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1297912919, 'comment_body': '```suggestion\r\n                          **Changes**: Deprecated in Zulip 8.0 (feature level 192).\r\n                          The term ""URI"" is deprecated in web standards (https://url.spec.whatwg.org/#goals).\r\n```\r\n\r\nIn particular I prefer to reserve code font (Markdown backticks) for fragments of code, like exact identifiers. Fragments of English, including individual words that are part of how we made up a given identifier, appear in normal non-code font.\r\n\r\nHere, there\'s nothing in sight that\'s called `uri` at a code level; rather there\'s an identifier `realm_uri`, and its name is made from the words ""realm"" and ""URI"". So ""URI"" gets non-code font. (And it also gets the capitalization that it normally gets in English prose, instead of the one it got as part of the identifier.)\r\n', 'comment_created': datetime.datetime(2023, 8, 18, 2, 11, 19, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 1305401217, 'comment_body': ""At that time taking advice from [CZO discussion ](https://chat.zulip.org/#narrow/stream/58-translation/topic/Changing.20context.20variable.20names.20breaks.20translation/near/1549667),  I fixed the German translation test by removing the comparison string. Now I re-read the conversations and realized I misinterpreted the `German translation` mentioned in that conversation. I shouldn't change the test; instead, I think I should change the related lines in `locale/de/LC_MESSAGES/django.po`. Later on after merge, we should go to Transifex to sync our change with it. \r\n\r\nI have fixed these lines and `django.po` mentioned above. Also mentioned this translation change in the commit message. Thanks for pointing out!"", 'comment_created': datetime.datetime(2023, 8, 25, 9, 6, 16, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1305401919, 'comment_body': 'Just did! A bit messy when tracking all the level numbers..', 'comment_created': datetime.datetime(2023, 8, 25, 9, 6, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}]","[{'commit_sha': '8e2cf3e7c4bc6c78fe50cc0ad583d2e47f1d621f', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6b737738e5ca38e2004a876a76626cb4a4d692be', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a4394cef80ecc74923580f88bd0bac7148ff45c1', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ed72fbaa0491626a88c4cd069c511ea03591ccd', 'committer_username': 'jychen630', 'committer_name': 'Junyao Chen', 'committer_email': None, 'commit_date': datetime.datetime(2018, 2, 12, 2, 56, 35, tzinfo=datetime.timezone.utc)}]",Junyao Chen,36392136,,User,,20,,75,32
+1375245615,ts: Migrates `web/shared/poll_data` to typescript.,"Migrates `poll_data` to TypeScript.
+- I used zod schemas for validating incoming/inbound data types.
+- Refactored to declare `handle` object inside the constructor of the class.
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,25874,https://api.github.com/repos/zulip/zulip/pulls/25874,https://github.com/zulip/zulip/pull/25874,closed,308,236,3,2,15,10,3,0,"[{'name': 'size: XL'}, {'name': 'integration review'}, {'name': 'area: typescript migration'}]",2023-06-02 07:24:15+00:00,2023-07-06 23:21:53+00:00,2995058.0,"34 days, 15:57:38","[{'comment_id': 1214893174, 'comment_body': '`idx` won\'t be non-Number now so I think the error message can be tailored to something like ""idx out of boud""', 'comment_created': datetime.datetime(2023, 6, 2, 22, 16, 1, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1215553020, 'comment_body': 'Yeah agreed, Changed it!', 'comment_created': datetime.datetime(2023, 6, 3, 14, 10, 47, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1224911349, 'comment_body': 'Is it possible to get a `string` for `user_id`?', 'comment_created': datetime.datetime(2023, 6, 10, 0, 16, 17, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1224912235, 'comment_body': 'Since it comes from `event.sender_id`, could you confirm that it will always be a `number`?', 'comment_created': datetime.datetime(2023, 6, 10, 0, 18, 8, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1224912375, 'comment_body': ""This might need an update if `sender_id` can't be a `string`"", 'comment_created': datetime.datetime(2023, 6, 10, 0, 18, 29, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1224915058, 'comment_body': 'Looks like ""canned"" is arbitrary. If this is where the `string` `sender_id` comes from, we may as well change it to something that is compliant with the type.', 'comment_created': datetime.datetime(2023, 6, 10, 0, 23, 22, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1225830526, 'comment_body': 'It\'s coming from passing ""canned"" manually.', 'comment_created': datetime.datetime(2023, 6, 11, 14, 27, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1225830592, 'comment_body': 'Yeah agreed! Should I change it to maybe -1?', 'comment_created': datetime.datetime(2023, 6, 11, 14, 28, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1228349277, 'comment_body': 'Yeah, `-1` should work.', 'comment_created': datetime.datetime(2023, 6, 13, 15, 42, 4, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1247416451, 'comment_body': 'An assertion is preferred here. Since we expect the key to exist.', 'comment_created': datetime.datetime(2023, 6, 30, 4, 34, 36, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}]","[{'commit_sha': '5cb636d6624d95a3b3ff3527aadb6d7827a7d1db', 'committer_username': 'Lalit3716', 'committer_name': 'Lalit', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 16, 13, 15, 41, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1913294afc7abb6fc5f5e5a33b7dc1ea575795af', 'committer_username': 'Lalit3716', 'committer_name': 'Lalit', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 16, 13, 15, 41, tzinfo=datetime.timezone.utc)}]",Lalit,84276404,,User,,33,,16,48
+1477250992,ts: Migrate `channel.js` module to TypeScript.,"Migrates `channel.js` module to TypeScript.
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<details>
+<summary>Self-review checklist</summary>
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+</details>
+",True,26507,https://api.github.com/repos/zulip/zulip/pulls/26507,https://github.com/zulip/zulip/pull/26507,closed,44,32,6,1,6,23,5,0,"[{'name': 'size: L'}, {'name': 'integration review'}, {'name': 'buddy review'}, {'name': 'mentor review'}, {'name': 'area: typescript migration'}]",2023-08-16 10:47:28+00:00,2023-08-28 16:19:07+00:00,1056699.0,"12 days, 5:31:39","[{'comment_id': 1296656896, 'comment_body': 'Maybe a typo - sounds like ""its data"" more than ""it\'s data"" ', 'comment_created': datetime.datetime(2023, 8, 17, 4, 18, 26, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296657420, 'comment_body': 'I wonder why only `success` is omitted but not `url` and `error`? `url` and `error` are original fields from `JQuery.AjaxSettings` as well.', 'comment_created': datetime.datetime(2023, 8, 17, 4, 19, 41, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296657724, 'comment_body': 'Maybe we can re-use: `error?: JQuery.Ajax.ErrorCallback<unknown>`', 'comment_created': datetime.datetime(2023, 8, 17, 4, 20, 28, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296657977, 'comment_body': 'for `textStatus` we may re-use `textStatus: JQuery.Ajax.SuccessTextStatus`', 'comment_created': datetime.datetime(2023, 8, 17, 4, 21, 12, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1296676525, 'comment_body': ""Seems when `data` is `FormData`, we run `if` statement, while when `data` is `Record<string, unknown>`, we run `else` statement. Played around with the types of `option` a bit and I figured out if we write \r\n```\r\noptions: AjaxRequestHandlerOptions &({processData: false, data: FormData} | {processData?: true, data: Record<string, unknown>}) \r\n```\r\nthen we won't need to casting `options.data` to `Record<string, unknown>`, though the annotation is much messier."", 'comment_created': datetime.datetime(2023, 8, 17, 5, 1, 19, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1298260880, 'comment_body': ""This does look a little messier but also I tried this type definition and it seems it isn't working here, not completely sure why though."", 'comment_created': datetime.datetime(2023, 8, 18, 9, 54, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1298263706, 'comment_body': 'Yeah tweaked it a little let me know how does it sound now?', 'comment_created': datetime.datetime(2023, 8, 18, 9, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1298270683, 'comment_body': 'So, `JQuery.AjaxSettings` types `url` as `string | undefined` and when we take intersection of it with `{ url: string }`, we are left with just `string` so omitting `url` here will not make any difference. Similarly you can see the pattern for the `error` parameter.\r\n\r\nBut things are different for the `success` paramter, this is how `JQuery.AjaxSettings` types it - \r\n```\r\n(data: any, textStatus: SuccessTextStatus, jqXHR: jqXHR) => void;\r\n```\r\nAnd when we take intersection of it with our defined type with `(data: unknown)`, we will still have the `data` parameter typed as `any` because `any & unknown = any` and hence we should omit the original `success` parameter here to enforce the `unknown` type.\r\n\r\nHope that made some sense let me know if anything is unclear to you.', 'comment_created': datetime.datetime(2023, 8, 18, 10, 3, 28, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1299113274, 'comment_body': 'Now I understand the mechanism better. Thank you!!', 'comment_created': datetime.datetime(2023, 8, 19, 5, 37, 15, tzinfo=datetime.timezone.utc), 'commenter': 'jychen630', 'type': 'User'}, {'comment_id': 1299443608, 'comment_body': 'Looks like this doesn\'t work:\r\n```diff\r\ndiff --git a/web/src/channel.ts b/web/src/channel.ts\r\nindex 246aa4dd9e..20c405c5ad 100644\r\n--- a/web/src/channel.ts\r\n+++ b/web/src/channel.ts\r\n@@ -188,7 +188,7 @@ export function del(options: AjaxRequestHandlerOptions): JQuery.jqXHR<unknown> |\r\n }\r\n \r\n export function patch(\r\n-    options: AjaxRequestHandlerOptions & {data: FormData | Record<string, unknown>},\r\n+    options: AjaxRequestHandlerOptions & ({processData: false, data: FormData} | {processData?: true, data: Record<string, unknown>}) \r\n ): JQuery.jqXHR<unknown> | undefined {\r\n     // Send a PATCH as a POST in order to work around QtWebkit\r\n     // (Linux/Windows desktop app) not supporting PATCH body.\r\n@@ -197,7 +197,8 @@ export function patch(\r\n         // method this way\r\n         options.data.append(""method"", ""PATCH"");\r\n     } else {\r\n-        options.data = {...(options.data as Record<string, unknown>), method: ""PATCH""};\r\n+        const data: (string & Record<string, unknown>) | (JQuery.PlainObject & Record<string, unknown>) = options.data;\r\n+        options.data = {...data, method: ""PATCH""}; // Spread types may only be created from object types.\r\n     }\r\n     return post(options);\r\n }\r\n```', 'comment_created': datetime.datetime(2023, 8, 20, 22, 21, 35, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1299443721, 'comment_body': 'But this works:\r\n```diff\r\ndiff --git a/web/src/channel.ts b/web/src/channel.ts\r\nindex 246aa4dd9e..59c304e819 100644\r\n--- a/web/src/channel.ts\r\n+++ b/web/src/channel.ts\r\n@@ -188,7 +188,7 @@ export function del(options: AjaxRequestHandlerOptions): JQuery.jqXHR<unknown> |\r\n }\r\n \r\n export function patch(\r\n-    options: AjaxRequestHandlerOptions & {data: FormData | Record<string, unknown>},\r\n+    options: AjaxRequestHandlerOptions & ({processData: false, data: FormData} | {processData?: true, data: Record<string, unknown>}) \r\n ): JQuery.jqXHR<unknown> | undefined {\r\n     // Send a PATCH as a POST in order to work around QtWebkit\r\n     // (Linux/Windows desktop app) not supporting PATCH body.\r\n@@ -197,7 +197,8 @@ export function patch(\r\n         // method this way\r\n         options.data.append(""method"", ""PATCH"");\r\n     } else {\r\n-        options.data = {...(options.data as Record<string, unknown>), method: ""PATCH""};\r\n+        const data: Record<string, unknown> = options.data;\r\n+        options.data = {...data, method: ""PATCH""};\r\n     }\r\n     return post(options);\r\n }\r\n```', 'comment_created': datetime.datetime(2023, 8, 20, 22, 22, 26, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1299443974, 'comment_body': 'This probably is simpler though, unless we have a reason to avoid mutating the original `options`:\r\n```diff\r\ndiff --git a/web/src/channel.ts b/web/src/channel.ts\r\nindex 246aa4dd9e..87fe34f743 100644\r\n--- a/web/src/channel.ts\r\n+++ b/web/src/channel.ts\r\n@@ -188,7 +188,7 @@ export function del(options: AjaxRequestHandlerOptions): JQuery.jqXHR<unknown> |\r\n }\r\n \r\n export function patch(\r\n-    options: AjaxRequestHandlerOptions & {data: FormData | Record<string, unknown>},\r\n+    options: AjaxRequestHandlerOptions & ({processData: false, data: FormData} | {processData?: true, data: Record<string, unknown>}) \r\n ): JQuery.jqXHR<unknown> | undefined {\r\n     // Send a PATCH as a POST in order to work around QtWebkit\r\n     // (Linux/Windows desktop app) not supporting PATCH body.\r\n@@ -197,7 +197,7 @@ export function patch(\r\n         // method this way\r\n         options.data.append(""method"", ""PATCH"");\r\n     } else {\r\n-        options.data = {...(options.data as Record<string, unknown>), method: ""PATCH""};\r\n+        options.data.method = ""PATCH"";\r\n     }\r\n     return post(options);\r\n }\r\n```', 'comment_created': datetime.datetime(2023, 8, 20, 22, 24, 19, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1299445917, 'comment_body': 'We can fix these scoping issues without the assertions:\r\n```diff\r\ndiff --git a/web/src/channel.ts b/web/src/channel.ts\r\nindex 246aa4dd9e..c51d3ba3bd 100644\r\n--- a/web/src/channel.ts\r\n+++ b/web/src/channel.ts\r\n@@ -75,7 +75,7 @@ function call(args: AjaxRequestHandlerOptions): JQuery.jqXHR<unknown> | undefine\r\n     if (orig_error === undefined) {\r\n         orig_error = function () {};\r\n     }\r\n-    args.error = function wrapped_error(xhr, error_type, xhn) {\r\n+    args.error = ((orig_error) => function wrapped_error(xhr, error_type, xhn) {\r\n         if (span !== undefined) {\r\n             span.setHttpStatus(xhr.status);\r\n             span.finish();\r\n@@ -132,13 +132,13 @@ function call(args: AjaxRequestHandlerOptions): JQuery.jqXHR<unknown> | undefine\r\n                 reload_state.csrf_failed_handler();\r\n             }\r\n         }\r\n-        orig_error!(xhr, error_type, xhn);\r\n-    };\r\n+        orig_error(xhr, error_type, xhn);\r\n+    })(orig_error);\r\n     let orig_success = args.success;\r\n     if (orig_success === undefined) {\r\n         orig_success = function () {};\r\n     }\r\n-    args.success = function wrapped_success(data, textStatus, jqXHR) {\r\n+    args.success = ((orig_success) => function wrapped_success(data, textStatus, jqXHR) {\r\n         if (span !== undefined) {\r\n             span.setHttpStatus(jqXHR.status);\r\n             span.finish();\r\n@@ -152,8 +152,8 @@ function call(args: AjaxRequestHandlerOptions): JQuery.jqXHR<unknown> | undefine\r\n             return;\r\n         }\r\n \r\n-        orig_success!(data, textStatus, jqXHR);\r\n-    };\r\n+        orig_success(data, textStatus, jqXHR);\r\n+    })(orig_success);\r\n \r\n     try {\r\n         const scope = Sentry.getCurrentHub().pushScope();\r\n```', 'comment_created': datetime.datetime(2023, 8, 20, 22, 38, 36, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1299446612, 'comment_body': 'Do we want `JQuery.jqXHR<unknown>` here too?', 'comment_created': datetime.datetime(2023, 8, 20, 22, 44, 39, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1299447077, 'comment_body': 'Maybe an `assert` is more appropriate here?', 'comment_created': datetime.datetime(2023, 8, 20, 22, 48, 38, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1301537013, 'comment_body': ""Yeah, I don't see any reason to not mutate `options` here and this works.\r\n\r\nBut can we maybe omit `data` field entirely from `AjaxRequestHandlerOptions` and take it's intersection with `({processData: false, data: FormData} | {processData?: true, data: Record<string, unknown>})`?\r\n\r\nThat way the `data` field will only have `FormData` and `Record<string, unknown>` as acceptable data type for `patch` request and I have checked that every patch request does indeed use only these two types. It makes sense to drop the `string` type entirely here?"", 'comment_created': datetime.datetime(2023, 8, 22, 12, 1, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1301571221, 'comment_body': 'I have done this change in the latest changes, let me know if this approach works for you.', 'comment_created': datetime.datetime(2023, 8, 22, 12, 28, 37, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1301579337, 'comment_body': 'Right, we can do this to avoid non-null assertion here.\r\n\r\nBut I found that we can simply declare `orig_success` and `orig_error` in this way to avoid undefined values - \r\n```\r\n    const orig_success = args.success ?? (() => {});\r\n```\r\n\r\nSo did this instead!', 'comment_created': datetime.datetime(2023, 8, 22, 12, 35, 32, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1306150997, 'comment_body': 'Yeah this looks good!', 'comment_created': datetime.datetime(2023, 8, 25, 21, 6, 1, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1306152919, 'comment_body': 'I just checked this again. I think I was wrong. We should change the return type to `string | undefined` instead and remove the assertion. The compose banner (which uses `xhr_error_message` return value) does handle the case when the message is `undefined`. This means that the type annotation of this function also needs to be adjusted: https://github.com/zulip/zulip/blob/ada2991f1c3330c59347b1bdc5ec60b13a71dc24/web/src/compose_banner.ts#L121-L146', 'comment_created': datetime.datetime(2023, 8, 25, 21, 9, 24, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1306407760, 'comment_body': 'Oh, thanks for spotting that! Just to be clear this is the one code path which might have `null` message right?\r\n\r\nhttps://github.com/zulip/zulip/blob/ada2991f1c3330c59347b1bdc5ec60b13a71dc24/web/src/message_edit.js#L1034-L1043', 'comment_created': datetime.datetime(2023, 8, 26, 11, 18, 10, tzinfo=datetime.timezone.utc), 'commenter': 'Lalit3716', 'type': 'User'}, {'comment_id': 1306895842, 'comment_body': 'Yeah, that appears to be the case.', 'comment_created': datetime.datetime(2023, 8, 28, 4, 32, 3, tzinfo=datetime.timezone.utc), 'commenter': 'PIG208', 'type': 'User'}, {'comment_id': 1307600152, 'comment_body': ""This change seems to be not commented on in the commit message, and I don't see why it would be necessary or correct as part of this change -- going to revert this hunk and see if CI passes after doing so."", 'comment_created': datetime.datetime(2023, 8, 28, 15, 47, 45, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '38149a70fba7db5c9585270f7a17106976b7bfb7', 'committer_username': 'Lalit3716', 'committer_name': 'Lalit', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 16, 13, 15, 41, tzinfo=datetime.timezone.utc)}]",Lalit,84276404,,User,,33,,16,48
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+6093316,DefinitelyTyped,DefinitelyTyped/DefinitelyTyped,TypeScript,30006,48074,651,21051,87507,718,7,168,"[{'id': 1416303683, 'number': 65953, 'closed': datetime.datetime(2023, 7, 2, 18, 6, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 1, 18, 42, 34, tzinfo=datetime.timezone.utc), 'time_taken': 84225.0, 'time_delta': '23:23:45', 'additions': 3, 'deletions': 0, 'state': 'closed'}]"
+43160685,zulip,zulip/zulip,Python,7618,21025,375,1134,60349,2460,28,795,"[{'id': 1490474468, 'number': 26585, 'closed': datetime.datetime(2023, 10, 23, 16, 30, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 26, 3, 21, 21, tzinfo=datetime.timezone.utc), 'time_taken': 5058552.0, 'time_delta': '58 days, 13:09:12', 'additions': 59, 'deletions': 27, 'state': 'closed'}, {'id': 1483821445, 'number': 26544, 'closed': datetime.datetime(2023, 8, 22, 18, 24, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 22, 1, 58, 21, tzinfo=datetime.timezone.utc), 'time_taken': 59179.0, 'time_delta': '16:26:19', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 1476989603, 'number': 26505, 'closed': datetime.datetime(2023, 9, 22, 16, 27, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 7, 41, 36, tzinfo=datetime.timezone.utc), 'time_taken': 3228336.0, 'time_delta': '37 days, 8:45:36', 'additions': 72, 'deletions': 17, 'state': 'closed'}, {'id': 1476761816, 'number': 26502, 'closed': datetime.datetime(2023, 8, 17, 18, 53, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 3, 4, 18, tzinfo=datetime.timezone.utc), 'time_taken': 143356.0, 'time_delta': '1 day, 15:49:16', 'additions': 0, 'deletions': 6, 'state': 'closed'}, {'id': 1462504120, 'number': 26418, 'closed': datetime.datetime(2023, 8, 16, 0, 17, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 4, 7, 59, 29, tzinfo=datetime.timezone.utc), 'time_taken': 1009091.0, 'time_delta': '11 days, 16:18:11', 'additions': 23, 'deletions': 14, 'state': 'closed'}, {'id': 1462410262, 'number': 26417, 'closed': datetime.datetime(2023, 8, 17, 18, 38, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 4, 6, 35, 5, tzinfo=datetime.timezone.utc), 'time_taken': 1166589.0, 'time_delta': '13 days, 12:03:09', 'additions': 29, 'deletions': 21, 'state': 'closed'}, {'id': 1447524610, 'number': 26345, 'closed': datetime.datetime(2023, 8, 3, 1, 35, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 23, 58, 5, tzinfo=datetime.timezone.utc), 'time_taken': 783426.0, 'time_delta': '9 days, 1:37:06', 'additions': 22, 'deletions': 5, 'state': 'closed'}, {'id': 1447459731, 'number': 26344, 'closed': datetime.datetime(2023, 7, 24, 23, 45, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 22, 28, 35, tzinfo=datetime.timezone.utc), 'time_taken': 4615.0, 'time_delta': '1:16:55', 'additions': 5, 'deletions': 4, 'state': 'closed'}, {'id': 1446109116, 'number': 26335, 'closed': datetime.datetime(2023, 8, 3, 1, 38, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 6, 23, 16, tzinfo=datetime.timezone.utc), 'time_taken': 846942.0, 'time_delta': '9 days, 19:15:42', 'additions': 20, 'deletions': 11, 'state': 'closed'}, {'id': 1445893923, 'number': 26333, 'closed': datetime.datetime(2023, 11, 16, 2, 4, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 2, 23, 1, tzinfo=datetime.timezone.utc), 'time_taken': 9934898.0, 'time_delta': '114 days, 23:41:38', 'additions': 309, 'deletions': 289, 'state': 'closed'}, {'id': 1444147649, 'number': 26315, 'closed': datetime.datetime(2023, 8, 14, 23, 6, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 21, 8, 48, 19, tzinfo=datetime.timezone.utc), 'time_taken': 2125111.0, 'time_delta': '24 days, 14:18:31', 'additions': 230, 'deletions': 114, 'state': 'closed'}, {'id': 1436840835, 'number': 26272, 'closed': datetime.datetime(2023, 7, 24, 23, 49, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 17, 8, 14, 23, tzinfo=datetime.timezone.utc), 'time_taken': 660930.0, 'time_delta': '7 days, 15:35:30', 'additions': 36, 'deletions': 10, 'state': 'closed'}, {'id': 1411155442, 'number': 26140, 'closed': datetime.datetime(2023, 8, 17, 18, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 28, 7, 31, 43, tzinfo=datetime.timezone.utc), 'time_taken': 4359797.0, 'time_delta': '50 days, 11:03:17', 'additions': 513, 'deletions': 202, 'state': 'closed'}, {'id': 1389529703, 'number': 25999, 'closed': datetime.datetime(2023, 8, 14, 23, 0, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 12, 22, 5, 56, tzinfo=datetime.timezone.utc), 'time_taken': 5446464.0, 'time_delta': '63 days, 0:54:24', 'additions': 52, 'deletions': 33, 'state': 'closed'}, {'id': 1385210552, 'number': 25948, 'closed': datetime.datetime(2023, 7, 18, 0, 24, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 8, 22, 58, 23, tzinfo=datetime.timezone.utc), 'time_taken': 3374753.0, 'time_delta': '39 days, 1:25:53', 'additions': 14, 'deletions': 10, 'state': 'closed'}, {'id': 1379885757, 'number': 25894, 'closed': datetime.datetime(2023, 6, 6, 14, 34, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 5, 23, 0, 34, tzinfo=datetime.timezone.utc), 'time_taken': 56057.0, 'time_delta': '15:34:17', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1372984086, 'number': 25864, 'closed': None, 'created': datetime.datetime(2023, 5, 31, 21, 54, 26, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 306, 'deletions': 143, 'state': 'open'}, {'id': 1324251397, 'number': 25243, 'closed': datetime.datetime(2023, 4, 26, 23, 37, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 23, 5, 36, 32, tzinfo=datetime.timezone.utc), 'time_taken': 324045.0, 'time_delta': '3 days, 18:00:45', 'additions': 56, 'deletions': 56, 'state': 'closed'}, {'id': 1315410035, 'number': 25142, 'closed': datetime.datetime(2023, 4, 17, 16, 59, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 16, 8, 21, 8, tzinfo=datetime.timezone.utc), 'time_taken': 117514.0, 'time_delta': '1 day, 8:38:34', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1315300473, 'number': 25141, 'closed': datetime.datetime(2024, 6, 3, 17, 7, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 16, 2, 3, 10, tzinfo=datetime.timezone.utc), 'time_taken': 35823881.0, 'time_delta': '414 days, 15:04:41', 'additions': 258, 'deletions': 197, 'state': 'closed'}, {'id': 1306684827, 'number': 25048, 'closed': datetime.datetime(2023, 4, 10, 15, 12, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 9, 8, 0, 36, tzinfo=datetime.timezone.utc), 'time_taken': 112324.0, 'time_delta': '1 day, 7:12:04', 'additions': 20, 'deletions': 5, 'state': 'closed'}, {'id': 1306647008, 'number': 25045, 'closed': datetime.datetime(2023, 4, 10, 17, 26, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 9, 3, 35, 23, tzinfo=datetime.timezone.utc), 'time_taken': 136286.0, 'time_delta': '1 day, 13:51:26', 'additions': 66, 'deletions': 66, 'state': 'closed'}, {'id': 1306619320, 'number': 25043, 'closed': datetime.datetime(2023, 9, 29, 20, 51, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 9, 1, 26, 11, tzinfo=datetime.timezone.utc), 'time_taken': 15017100.0, 'time_delta': '173 days, 19:25:00', 'additions': 93, 'deletions': 12, 'state': 'closed'}, {'id': 1306403935, 'number': 25038, 'closed': datetime.datetime(2023, 4, 8, 23, 27, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 8, 5, 13, 10, tzinfo=datetime.timezone.utc), 'time_taken': 65685.0, 'time_delta': '18:14:45', 'additions': 167, 'deletions': 167, 'state': 'closed'}, {'id': 1290170699, 'number': 24870, 'closed': datetime.datetime(2023, 4, 26, 22, 40, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 25, 22, 56, 20, tzinfo=datetime.timezone.utc), 'time_taken': 2763843.0, 'time_delta': '31 days, 23:44:03', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 1290138463, 'number': 24868, 'closed': datetime.datetime(2023, 4, 24, 18, 59, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 25, 20, 29, 23, tzinfo=datetime.timezone.utc), 'time_taken': 2586579.0, 'time_delta': '29 days, 22:29:39', 'additions': 81, 'deletions': 30, 'state': 'closed'}, {'id': 1289655355, 'number': 24860, 'closed': datetime.datetime(2023, 4, 6, 20, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 24, 21, 35, 29, tzinfo=datetime.timezone.utc), 'time_taken': 1120891.0, 'time_delta': '12 days, 23:21:31', 'additions': 19, 'deletions': 7, 'state': 'closed'}, {'id': 1281452925, 'number': 24764, 'closed': datetime.datetime(2023, 10, 2, 1, 10, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 19, 2, 11, 41, tzinfo=datetime.timezone.utc), 'time_taken': 17017106.0, 'time_delta': '196 days, 22:58:26', 'additions': 6, 'deletions': 5, 'state': 'closed'}]"

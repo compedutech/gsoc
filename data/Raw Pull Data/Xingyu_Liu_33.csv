@@ -1,0 +1,652 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+637825932,BENCH: add benchmark for f_oneway,"#### What does this implement/fix?
+Add benchmark for ANOVA Functions stats.f_oneway. The results on my local machine:
+
+```
+· Running 1 total benchmarks (1 commits * 1 environments * 1 benchmarks)
+[  0.00%] ·· Benchmarking existing-py_Users_charlotte_anaconda3_envs_scipydev_bin_python
+[ 50.00%] ··· Running (stats.ANOVAFunction.time_f_oneway--).
+[100.00%] ··· stats.ANOVAFunction.time_f_oneway                        254±3μs
+```",True,14018,https://api.github.com/repos/scipy/scipy/pulls/14018,https://github.com/scipy/scipy/pull/14018,closed,15,3,1,3,1,3,2,0,"[{'name': 'scipy.stats'}, {'name': 'Benchmarks'}]",2021-05-10 15:14:49+00:00,2021-05-21 11:50:51+00:00,938162.0,"10 days, 20:36:02","[{'comment_id': 629453820, 'comment_body': 'We should use the new-style numpy random API:\r\n\r\n```python\r\nrng = np.random.default_rng(12345678)\r\nself.a, self.b, self.c = rng.random((3, 6, 3)) * 10\r\n```', 'comment_created': datetime.datetime(2021, 5, 10, 15, 22, 43, tzinfo=datetime.timezone.utc), 'commenter': 'perimosocordiae', 'type': 'User'}, {'comment_id': 629465608, 'comment_body': 'Thanks! I found in this file all the functions used the old style, will we modify them all to the new-style? If so, I can help do the modification :)', 'comment_created': datetime.datetime(2021, 5, 10, 15, 37, 43, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 636858684, 'comment_body': ""I think modifying all `numpy.random` usage to the new API in a follow up PR would be nice. If we leave it as a mix or mostly old-style, others are going to copy that old style.\r\n\r\nThere's a very minor issue that for some benchmarks, changing the exact set of random numbers that is generated may affect the timing. This can be detected by using `--bench-compare`, to see that the results didn't change significantly after making the change. In case there's one or two benchmarks where changed timings are significant, those could then be left as old-style."", 'comment_created': datetime.datetime(2021, 5, 21, 11, 53, 39, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}]","[{'commit_sha': '23dbbc6b110fe99a0feceef1f13d07b4de638278', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2461c28d10ff1c6f1b62b67abc44be6da6837f7f', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '99c654c5ba0a1bc82e38162f55dd5be8d75793be', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+659153087,BENCH: add benchmark for energy_distance and wasserstein_distance,"#### What does this implement/fix?
+Add benchmark for energy_distance and wasserstein_distance.",True,14163,https://api.github.com/repos/scipy/scipy/pulls/14163,https://github.com/scipy/scipy/pull/14163,closed,24,0,1,5,1,3,2,0,"[{'name': 'scipy.stats'}, {'name': 'Benchmarks'}]",2021-06-01 16:14:45+00:00,2021-06-07 21:46:03+00:00,538278.0,"6 days, 5:31:18","[{'comment_id': 645953699, 'comment_body': 'Could you break this line to make it fit in 80 char line length? And same for the `energy_distance` call above?', 'comment_created': datetime.datetime(2021, 6, 5, 7, 2, 42, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 645954561, 'comment_body': ""It looks to me like the array sizes are so small here that you're only measuring function overhead. If I change it to:\r\n```python\r\n        size = 4000\r\n        rng = np.random.default_rng(12345678)\r\n        self.u_values = rng.random(size) * 10\r\n        self.u_weights = rng.random(size) * 10\r\n        self.v_values = rng.random(size // 2) * 10\r\n        self.v_weights = rng.random(size // 2) * 10\r\n```\r\nthen I see that for size `4` or `40` the benchmark takes about 40 us, for `400` it takes ~100 us, and for `4000` it takes ~800 us. So you may want to make this a lot larger (maybe ~10,000?). \r\n\r\nYou'll also want to check that the size is such that the performance improvements with Pythran you're trying to show actually show up - in gh-14154 it looks like for very small arrays the gain is ~3x, but what about large arrays? Parametrizing the benchmark on size (e.g. one small size, one large one) may make sense."", 'comment_created': datetime.datetime(2021, 6, 5, 7, 12, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 646087815, 'comment_body': 'Thanks for reminding me about the size!  I just found the size is really a big problem... When I run the benchmark with `size = 4000`, the master branch is ~1.32ms while my branch is ~3.39ms. Seems in this case, a larger input size would make pythran slower than the original code... I just submitted an issue in Pythran https://github.com/serge-sans-paille/pythran/issues/1793\r\n', 'comment_created': datetime.datetime(2021, 6, 6, 7, 18, 29, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}]","[{'commit_sha': '72d1687cb890aab1e5c452eac4f545286ef135cd', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b2f9331a20da2c41d14390896e64db8f1a304ae', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2fe5e9d8c01c4e14486dfde0705c1756fd89378', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b6816a9dacc64f82bb95051bcf9d2120030147e', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a9d8937da05c4fd9b6d4fb3aebaa8800af498465', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+669070275, BENCH: add more benchmarks for inferential statistics tests,"#### What does this implement/fix?
+Add more benchmarks for inferential statistic tests:
+
+- KS test
+- MannWhitneyU
+- RankSums
+- BrunnerMunzel
+- chisqure
+- friedmanchisquare
+- epps_singleton_2samp
+- kruskal
+
+Seems MannWhitneyU(exact) and friedmanchisquare are very slow, will look into them.
+cc @rgommers @serge-sans-paille 
+```
+[ 75.00%] ··· stats.KS.time_ks_1samp                                                                              ok
+[ 75.00%] ··· ============= ========== ========== ==========
+              --                          mode              
+              ------------- --------------------------------
+               alternative     auto      exact      asymp   
+              ============= ========== ========== ==========
+                two-sided    412±20μs   501±70μs   260±20μs 
+                   less      327±40μs   374±60μs   272±10μs 
+                 greater     535±70μs   501±20μs   661±20μs 
+              ============= ========== ========== ==========
+
+[100.00%] ··· stats.KS.time_ks_2samp                                                                              ok
+[100.00%] ··· ============= ========== ========== ==========
+              --                          mode              
+              ------------- --------------------------------
+               alternative     auto      exact      asymp   
+              ============= ========== ========== ==========
+                two-sided    317±30μs   287±30μs   538±20μs 
+                   less      170±10μs   179±6μs    166±8μs  
+                 greater     185±20μs   234±30μs   192±40μs 
+              ============= ========== ========== ==========
+```
+
+```
+[100.00%] ··· stats.MannWhitneyU.time_mannwhitneyu                                                                               ok
+[100.00%] ··· ============= ========== ============ =============
+              --                            method               
+              ------------- -------------------------------------
+               alternative     auto     asymptotic      exact    
+              ============= ========== ============ =============
+                two-sided    482±70μs    496±20μs     2.21±0.3ms 
+                   less      503±10μs    462±20μs    2.03±0.09ms 
+                 greater     581±50μs    509±80μs    4.60±0.01ms 
+              ============= ========== ============ =============
+```
+
+```
+[100.00%] ··· stats.RankSums.time_ranksums                                                                                       ok
+[100.00%] ··· ============= ==========
+               alternative            
+              ------------- ----------
+                two-sided    161±5μs  
+                   less      174±10μs 
+                 greater     169±7μs  
+              ============= ==========
+```
+
+```
+[100.00%] ··· ============= ============ =========== ==========
+              --                              distribution     
+              -------------------------- ----------------------
+               alternative   nan_policy       t        normal  
+              ============= ============ =========== ==========
+                two-sided    propagate     364±30μs   365±10μs 
+                two-sided      raise       394±40μs   435±50μs 
+                two-sided       omit       379±10μs   382±30μs 
+                   less      propagate     353±20μs   347±10μs 
+                   less        raise       474±30μs   369±10μs 
+                   less         omit       409±20μs   353±20μs 
+                 greater     propagate     391±20μs   412±50μs 
+                 greater       raise      402±100μs   411±20μs 
+                 greater        omit       398±20μs   367±20μs 
+              ============= ============ =========== ==========
+```
+```
+[ 58.33%] ··· stats.InferentialStats.time_chisqure              111±10μs
+[ 66.67%] ··· stats.InferentialStats.time_epps_singleton_2samp  638±20μs
+[ 75.00%] ··· stats.InferentialStats.time_friedmanchisquare     26.9±1ms
+[ 83.33%] ··· stats.InferentialStats.time_kruskal               752±40μs
+```",True,14228,https://api.github.com/repos/scipy/scipy/pulls/14228,https://github.com/scipy/scipy/pull/14228,closed,71,4,1,6,8,4,2,0,"[{'name': 'scipy.stats'}, {'name': 'Benchmarks'}]",2021-06-13 15:19:55+00:00,2021-07-31 18:03:08+00:00,4156993.0,"48 days, 2:43:13","[{'comment_id': 650582375, 'comment_body': ""This is indeed a bit slow. Only `exact` seems to depend on the array sizes here; the other two methods always take about 400 us. Would be good to check that that is the expected behavior.\r\n\r\nLooking at the implementation, there's no immediately obvious place to improve performance (it was recently rewritten completely, and I think fairly carefully reviewed). May be useful to profile it though, to see where the time is spent."", 'comment_created': datetime.datetime(2021, 6, 13, 21, 53, 46, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 650584687, 'comment_body': ""This being slower than other tests is not surprising. The exact method has a pure-Python, recursive calculation of the exact null distribution, and it was written primarily for clarity and to match the reference with only some attention to speed (e.g. using a recursive formula rather than the naive permutation method, memoizing results of method calls, and memoizing manually rather than using `@memoize`). The lowest hanging fruit would be to take advantage of the fact that the distribution is symmetric (see note [here](https://github.com/scipy/scipy/blob/ac3b21908adc937c42d99bd67b177723d484a101/scipy/stats/_mannwhitneyu.py#L38)). It might also benefit from being compiled, or perhaps there is a better formulation than the recursive one. I'd be interested in looking into these things myself later this summer.\r\n\r\nNote that the benchmark is not reporting accurate results because of the memoization. This test here actually takes about 3 seconds when run once on my machine.\r\n```python3\r\nimport numpy as np\r\nfrom scipy import stats\r\nfrom timeit import timeit\r\nrng = np.random.default_rng(0x2cedaefb4c66ab35f32d163376cc0c1b)\r\nn = 50\r\nu1 = rng.uniform(-1, 1, n)\r\nu2 = rng.uniform(-0.5, 1.5, 2*n)\r\nf = lambda: stats.mannwhitneyu(u1, u2, method='exact')\r\nprint(timeit(f, number=1))  # 3.1747862\r\n```\r\n\r\nFor reference, the 2015 `mann_whitney_u` implementation in gh-4933 (e.g. commit 476127b0beee5c2e11e5b819c5608f60aae80c7d) takes about that long with much smaller size arrays and doesn't scale very well.\r\n* With `u1 = rng.uniform(-1, 1, 8); u2 = rng.uniform(-0.5, 1.5, 16)` - 2.5 seconds\r\n* With `u1 = rng.uniform(-1, 1, 9); u2 = rng.uniform(-0.5, 1.5, 18)` - 17.5 seconds\r\n* With `u1 = rng.uniform(-1, 1, 10); u2 = rng.uniform(-0.5, 1.5, 20)` - 115 seconds"", 'comment_created': datetime.datetime(2021, 6, 13, 22, 16, 14, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 663757519, 'comment_body': ""> Note that the benchmark is not reporting accurate results because of the memoization. This test here actually takes about 3 seconds when run once on my machine.\r\n\r\nThis comment still needs addressing. If the function uses memoization, then I think we'd want the benchmark to just run for `1` repeat. And then add a comment explaining why."", 'comment_created': datetime.datetime(2021, 7, 5, 8, 55, 12, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 663758113, 'comment_body': ""Also, using smaller input arrays so it takes in the 100 ms - 1 sec range would be nice. (not much smaller than that, because for a single iteration there's no averaging, and very fast benchmarks will be more affected by run-to-run variation)."", 'comment_created': datetime.datetime(2021, 7, 5, 8, 56, 2, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}]","[{'commit_sha': '38bc3275c9190273e900c72d5feae99a22ea0a07', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09aa0e36419364a01323910d5c71977f9069e7d7', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21514223a0363b6870a6b591e0b4cf24d5d40f76', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3420679fee3c00257441945a55f256b0f8d6c0e2', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59b46b66fa687f1f71e68f7addbfa86b6e11e7ee', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc49990088823f06ec4d37a01e957f23e04d8d9e', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+668918943,MAINT: Modify to use new random API in benchmarks,"#### What does this implement/fix?
+https://github.com/scipy/scipy/pull/14018#discussion_r636858684
+> I think modifying all `numpy.random` usage to the new API in a follow up PR would be nice. If we leave it as a mix or mostly old-style, others are going to copy that old style.
+> There's a very minor issue that for some benchmarks, changing the exact set of random numbers that is generated may affect the timing. This can be detected by using --bench-compare, to see that the results didn't change significantly after making the change. In case there's one or two benchmarks where changed timings are significant, those could then be left as old-style.
+
+<google-sheets-html-origin><!--td {border: 1px solid #ccc;}br {mso-data-placement:same-cell;}-->
+Modified Benchmark | Time Change
+-- | --
+interpolate.BenchPPoly | not significant
+linalg.Lstsq | not significant
+signal_filtering.MedFilt2D | not significant
+signal.CalculateWindowedFFT | not significant
+signal.Convolve2D | not significant
+signal.FFTConvolve | not significant
+signal.OAConvolve | not significant
+signal.Convolve | not significant
+signal.Upfirdn1D | not significant
+signal.Upfirdn2D | not significant
+sparse_csgraph_djisktra.Dijkstra | not significant
+sparse_csgraph_matching.MaximumBipartiteMatching | not significant
+sparse_csgraph_matching.MinWeightFullBipartiteMatching | not significant
+sparse_linalg_expm.Expm | not significant
+sparse_linalg_onenormest.BenchmarkOneNormEst | not significant
+sparse_linalg_solve.Lgmres | not significant
+sparse.Matmul | not significant
+spatial.Build | not significant
+spatial.PresortedDataSetup | not significant
+spatial.Query | not significant
+spatial.SphericalVorSort | not significant
+spatial.Xdist | not significant
+spatial.XdistWeighted | not significant
+spatial.ConvexHullBench | not significant
+spatial.VoronoiBench | not significant
+spatial.Hausdorff | not significant
+spatial.RotationBench | not significant
+stats.InferentialStats | not significant
+stats.Distribution | not significant
+stats.DescriptiveStats | not significant
+stats.GaussianKDE | not significant
+stats.GroupSampling | not significant
+stats.BinnedStatisticDD | not significant
+stats.BenchQMCDiscrepancy | not significant
+
+</google-sheets-html-origin>
+
+cc @rgommers @serge-sans-paille ",True,14224,https://api.github.com/repos/scipy/scipy/pulls/14224,https://github.com/scipy/scipy/pull/14224,closed,118,119,12,12,0,0,1,0,[{'name': 'Benchmarks'}],2021-06-12 17:33:11+00:00,2021-06-12 20:00:31+00:00,8840.0,2:27:20,[],"[{'commit_sha': '626e6435e32d42e5a304d5518581e3121944d8a4', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ab535d46da81f609fd0ae8e1916b4d1a129aa1b', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '877d77212eac499352e9d1fbcbbcc9f6d50b9f93', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6cc72ef9d1b77f9b18cfb68221f6bfe9327f5dc8', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '683c444f372c03677a78a64d369de13aa7f906d3', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70f8f287597b27e8cf397dad0d806e287cf347bb', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '62fbdbbbe0db4790fcbb35281e58187e9ba6553d', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb9cfe4427bad62a64dd38f139d3ce5ff2668f62', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d8a23dcdb73cec1bd255ba0cf10276b3c943d2d', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b554016c9a7d69c43f930ce9181ff1545430e955', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a6a682bc5d6c2d027fd9783365481fa6489abd06', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f3b122c873163066401f22dd0389638fc6b3a489', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+678498350,ENH: use Pythran to speedup somersd and _tau_b,"Use Pythran to speedup somersd and _tau_b, 4x~20x faster than the original version. cc @rgommers @serge-sans-paille 
+
+
+
+  | Pythran version | Python version
+-- | -- | --
+somersd small (f1) | 0.108254081 | 0.457638957
+somersd large (f2) | 0.497433675 | 11.13540973
+_tau_b small (f3) | 0.107982646 | 0.410471312
+_tau_b large (f4) | 0.47962526 | 10.10672088
+
+
+
+```
+from scipy.stats import somersd
+from scipy.stats._hypotests import _tau_b
+from timeit import timeit
+import numpy as np
+
+
+table = [[27, 25, 14, 7, 0], [7, 14, 18, 35, 12], [1, 3, 2, 7, 17]]
+rng = np.random.default_rng(123)
+
+a = np.empty((5,100))
+for i in range(5):
+    a[i, :] = rng.choice(200, size=100)
+
+
+f1 = lambda: somersd(table)
+f2 = lambda: somersd(a)
+print(timeit(f1, number=1000))
+print(timeit(f2, number=1000))
+
+f3 = lambda: _tau_b(np.array(table))
+f4 = lambda: _tau_b(a)
+print(timeit(f3, number=1000))
+print(timeit(f4, number=1000))
+```
+",True,14308,https://api.github.com/repos/scipy/scipy/pulls/14308,https://github.com/scipy/scipy/pull/14308,closed,59,45,3,3,3,7,3,0,"[{'name': 'scipy.stats'}, {'name': 'enhancement'}, {'name': 'Pythran'}]",2021-06-27 11:17:08+00:00,2021-07-05 08:58:58+00:00,682910.0,"7 days, 21:41:50","[{'comment_id': 659305431, 'comment_body': '`A` is the ranking array, so it should be int type, but I added support for float anyway.', 'comment_created': datetime.datetime(2021, 6, 27, 11, 18, 46, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 659318430, 'comment_body': 'Would it be better to not rename this? The code could remain unchanged. Same for other variables.', 'comment_created': datetime.datetime(2021, 6, 27, 13, 1, 5, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 659318787, 'comment_body': ""So `_pythran` is already in the file name, hence I think it'd be easier not to have it in all function names too."", 'comment_created': datetime.datetime(2021, 6, 27, 13, 3, 32, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 659319100, 'comment_body': ""I think this cannot be removed yet, because Pythran is still optional. If `SCIPY_USE_PYTHRAN` is `0`, then there's a problem. I think this needs to be structured like:\r\n```python\r\ntry:\r\n    from _hypotests_pythran import _P, _Q, a_ij_Aij_Dij2\r\nexcept ImportError:\r\n    def _P(A):\r\n        ...\r\n    ...\r\n```"", 'comment_created': datetime.datetime(2021, 6, 27, 13, 6, 29, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 659320211, 'comment_body': 'oh, I thought if `SCIPY_USE_PYTHRAN` is `0`, then the `_hypotests_pythran` file would not be compiled but stayed like a pure python file, and we can still import function from it?', 'comment_created': datetime.datetime(2021, 6, 27, 13, 14, 31, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 659327062, 'comment_body': 'Argh, you are right and I should have more coffee! Of course:)', 'comment_created': datetime.datetime(2021, 6, 27, 14, 4, 57, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 659327087, 'comment_body': 'sorry for the noise!', 'comment_created': datetime.datetime(2021, 6, 27, 14, 5, 9, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}]","[{'commit_sha': 'c83b81a83959549a1950a9f363e896d31a17b004', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2769ce2dfc4e74af939a5774883b2c2f820bad0e', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8e411cb82fc2bf76181302098c92c0a256c2d94c', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+695550004,DOC: clarify meaning of rvalue in stats.linregress,"<!-- 
+Thanks for contributing a pull request! Please ensure that
+your PR satisfies the checklist before submitting:
+http://scipy.github.io/devdocs/dev/contributor/development_workflow.html#checklist-before-submitting-a-pr
+
+Also, please name and describe your PR as you would write a
+commit message:
+https://docs.scipy.org/doc/numpy/dev/development_workflow.html#writing-the-commit-message
+
+Note that we are a team of volunteers; we appreciate your
+patience during the review process.
+
+Again, thanks for contributing!
+-->
+
+#### Reference issue
+<!--Example: Closes gh-WXYZ.-->
+Closes gh-14416.
+
+#### What does this implement/fix?
+<!--Please explain your changes.-->
+Rewrote the description of the output value `rvalue` in `scipy.stats.linregress` to clarify that it is the Pearson correlation coefficient. Although ""correlation coefficient"" usually refers to the Pearson coefficient, it can refer to other quantities too, and it wasn't obvious to me from reading the documentation.
+
+#### Additional information
+<!--Any additional information you think is important.-->",True,14458,https://api.github.com/repos/scipy/scipy/pulls/14458,https://github.com/scipy/scipy/pull/14458,closed,2,1,1,2,1,3,2,0,"[{'name': 'scipy.stats'}, {'name': 'Documentation'}]",2021-07-22 22:29:00+00:00,2021-07-23 21:35:15+00:00,83175.0,23:06:15,"[{'comment_id': 675221768, 'comment_body': ""This does indeed appear to be consistent with the suggestion from @charlotte12l in the matching issue--I'll let them confirm.\r\n\r\nThe CI failure looks unrelated."", 'comment_created': datetime.datetime(2021, 7, 22, 23, 21, 8, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 675283339, 'comment_body': 'Thanks！ I think `is equal to` may be better?  ""_The square of ``rvalue`` is equal to the coefficient of determination._""', 'comment_created': datetime.datetime(2021, 7, 23, 3, 16, 9, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 675864964, 'comment_body': 'Yeah, I like that.', 'comment_created': datetime.datetime(2021, 7, 23, 21, 3, 54, tzinfo=datetime.timezone.utc), 'commenter': 'veeara282', 'type': 'User'}]","[{'commit_sha': '219ddb885ce0c90e89416961e8aec119cb4b9148', 'committer_username': 'veeara282', 'committer_name': 'Evelyn', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 11, 1, 5, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aa2b3e7b95bba86f26d3de0a3c27f2a1101f09e4', 'committer_username': 'veeara282', 'committer_name': 'Evelyn', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 11, 1, 5, 13, tzinfo=datetime.timezone.utc)}]",Evelyn,2768977,,User,,107,,94,46
+682702404,BUG: fix `stats.binned_statistic_dd` issue with values close to bin edge,"#### What does this implement/fix?
+Fix https://github.com/scipy/scipy/issues/14332.
+
+A potential concern: when the number is larger than 0.999999999999999999, `np.digitalize()` will put it to bin `10` rather than `9`. But this would not be a problem because it will also satisfy the condition `(sample[:, i] >= edges[i][-1]) `, namely, 0.999999999999999999>=1, then this point will be shifted from bin 10 to bin 9 later.
+```
+import numpy as np
+arr = []
+size = 8
+for i in range(size):
+    arr += [1-0.1**i]
+bins = np.linspace(0,1,10)
+a = 0.99999999999999999
+arr +=[a]
+print(a<1,a==1,a>1,a>=1)
+print(np.digitize(arr,bins)) # [ 1  9  9  9  9  9  9  9 10]
+```
+",True,14338,https://api.github.com/repos/scipy/scipy/pulls/14338,https://github.com/scipy/scipy/pull/14338,closed,18,2,2,2,5,0,2,0,"[{'name': 'scipy.stats'}, {'name': 'maintenance'}]",2021-07-02 15:08:17+00:00,2021-12-03 04:44:29+00:00,13268172.0,"153 days, 13:36:12",[],"[{'commit_sha': 'e15f28e3ae475151343a2e887b6b2642e5887f2f', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe38b51da94b75ce6f48aa50ce81b66ebe66c170', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+626006110,ENH: stats.ks_2samp: Pythranize remaining exact p-value calculations,"Pythran implementation of `_compute_prob_outside_square` and `_compute_prob_inside_method` to speedup stats.ks_2samp.
+
+`%timeit -n 100 -r 3 _compute_prob_inside_method(2000,3000,1000,1328)`
+The original Python version: `26.5 ms ± 269 µs per loop (mean ± std. dev. of 3 runs, 100 loops each)`
+The Pythran version: `6.34 ms ± 43 µs per loop (mean ± std. dev. of 3 runs, 100 loops each)`
+
+`%timeit -n 100 -r 3 _compute_prob_outside_square(3000,641)`
+The original Python version: `673 µs ± 26.6 µs per loop (mean ± std. dev. of 3 runs, 100 loops each)`
+The Pythran version: `40.8 µs ± 7.53 µs per loop (mean ± std. dev. of 3 runs, 100 loops each)`
+
+The speedup is large. A concern is that the original version is not very slow, and adding a new file `_exact_2kssamp.py` may make the package less readable?",True,13957,https://api.github.com/repos/scipy/scipy/pulls/13957,https://github.com/scipy/scipy/pull/13957,closed,136,124,4,32,72,13,3,0,"[{'name': 'scipy.stats'}, {'name': 'enhancement'}, {'name': 'Pythran'}]",2021-04-29 11:08:13+00:00,2022-11-27 05:59:10+00:00,49834257.0,"576 days, 18:50:57","[{'comment_id': 933931810, 'comment_body': '```suggestion\r\n# pythran export _compute_prob_outside_square(int64, int64)\r\n```', 'comment_created': datetime.datetime(2022, 7, 31, 6, 13, 41, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 933931816, 'comment_body': '```suggestion\r\n# pythran export _count_paths_outside_method(int64, int64, int64, int64)\r\n```', 'comment_created': datetime.datetime(2022, 7, 31, 6, 13, 49, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 967606043, 'comment_body': '> Oh, do you mean that the invalid call to binom should raise an Exception instead of returning nan ?\r\n\r\nNo, I wasn\'t requesting any changes to the behavior of `binom`. I\'m not necessarily saying that Pythran is doing anything wrong, either. It\'s just different from what pure Python/NumPy does, and I\'m asking for your suggestion about what I should do.\r\n\r\nLet me describe what happens when this code runs in pure Python/NumPy rather than via Pythran.\r\n\r\nHere on this line, at `j=367` and `i=366`, both `Bj` and `B[i]` have value `np.float64(np.inf)`, and there is a subtraction that would result in a `nan`. Outside of the `np.errstate` context, for example, something like:\r\n```python3\r\nx = np.float64(np.inf)\r\nx - x\r\n```\r\nresults in\r\n```\r\nC:\\Users\\matth\\AppData\\Local\\Temp\\ipykernel_20332\\4213061242.py:1: RuntimeWarning: invalid value encountered in double_scalars\r\n  x-x\r\nnan\r\n```\r\nBut within the `np.errstate` context that this function is in, this line actually raises:\r\n```\r\nFloatingPointError: invalid value encountered in double_scalars\r\n```\r\n(Previously, I said that there was an _overflow_ error. Sorry if that was misleading; that is not exactly what is happening.)\r\n\r\nWhen this code runs via Pythran, I don\'t get the same `FloatingPointError`, but instead I get the ""RuntimeError: Something happened on the way to Heaven"". Because the code is not currently `except`ing `RuntimeError`s, the whole function errors out, rather than handling the error, so I need to change something. I was asking what you\'d recommend that I change.\r\n\r\nThe obvious solution is to `except` the `RuntimeError`. But a `RuntimeError` is very non-specific - I don\'t know in general whether the root cause is the same as the `FloatingPointError` I was getting in Python, or whether it is something else that I should know about (that perhaps can/should be fixed). So I\'m hesitant to do the obvious thing here for the same sort of reason we don\'t often use bare `except`s: they can cover up real problems that are different from the error you\'re expecting.\r\n\r\nWhat do you think I should do? Should I just `except` the `RuntimeError`, or is there some way to get a more specific error message? Thanks for your help here!\r\n ', 'comment_created': datetime.datetime(2022, 9, 10, 6, 33, 49, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 971493767, 'comment_body': 'This raises `RuntimeError` or `FloatingPointError` depending on the platform...', 'comment_created': datetime.datetime(2022, 9, 15, 3, 42, 58, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 985159722, 'comment_body': '```suggestion\r\n[mypy-scipy.stats._hypotests_pythran]\r\n```', 'comment_created': datetime.datetime(2022, 10, 2, 0, 18, 30, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 1011249143, 'comment_body': '@rgommers should be `o2_flag` here', 'comment_created': datetime.datetime(2022, 11, 2, 6, 41, 47, tzinfo=datetime.timezone.utc), 'commenter': 'serge-sans-paille', 'type': 'User'}, {'comment_id': 1012962205, 'comment_body': '@mdhaber : can you fix @rgommers patch above? Just `s/os_flag/o2_flag/`', 'comment_created': datetime.datetime(2022, 11, 3, 14, 16, 40, tzinfo=datetime.timezone.utc), 'commenter': 'serge-sans-paille', 'type': 'User'}, {'comment_id': 1012990830, 'comment_body': ""I'm not at a computer, but if you add a code suggestion with the +/- button, I can commit it."", 'comment_created': datetime.datetime(2022, 11, 3, 14, 36, 14, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 1013029924, 'comment_body': ""```suggestion\r\n                o2_flag = '/O2'\r\n```"", 'comment_created': datetime.datetime(2022, 11, 3, 15, 4, 40, tzinfo=datetime.timezone.utc), 'commenter': 'serge-sans-paille', 'type': 'User'}, {'comment_id': 1013030346, 'comment_body': '@mdhaber like this?', 'comment_created': datetime.datetime(2022, 11, 3, 15, 4, 59, tzinfo=datetime.timezone.utc), 'commenter': 'serge-sans-paille', 'type': 'User'}, {'comment_id': 1013032223, 'comment_body': 'Yes, any other changes?', 'comment_created': datetime.datetime(2022, 11, 3, 15, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 1013033679, 'comment_body': 'You wrote ""s/os_flag/o2_flag"" above.', 'comment_created': datetime.datetime(2022, 11, 3, 15, 7, 41, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}, {'comment_id': 1031772302, 'comment_body': ""```suggestion\r\n                    with np.errstate(over='raise'):\r\n                        num_paths = _count_paths_outside_method(n1, n2, g, h)\r\n```\r\nProbably should keep this. I don't think it's necessary, because other checks will cause this function to return False if `num_paths` is `inf` or `nan`, but for the builds that don't use Pythran, it provides an early exit if something goes wrong in `_count_paths_outside_method`."", 'comment_created': datetime.datetime(2022, 11, 24, 18, 46, 15, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}]","[{'commit_sha': 'db0af3dcc2c7d530d33364a20cba47165f00f719', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc1e24696cdd07ff92f8bdb9428fd44ca1f72c85', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '62ad8c40388f4b934e73333fcdc11bc9a3df6e11', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6859df60c2b01a39739dbd9280378d9609a7d42e', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '60219c6daacfd5af2c1e3060a2a1f27f346fc955', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '51a77e775c0453970dbee305a440cb47d2cdde19', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3d3ab2dd20876fdc3ebe0e69bda8bb3999db73e', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae23b5a1c70dbd321061f7968aecb880a3f658c1', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e777b862d969a3ea53e663af02d438318c351f5d', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '841915fe0367eef8d743bb78e34536bb63ff9e2a', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e8869b6323352896ae5b1c146b0d6b6008bb6c1', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb3e51c057499dfcb46451de47f245f1e3c77453', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '050d0bee9de9ea4bdc429ea9ff96f6b503cc1cd7', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1653ce5b7be3c1bb2941141c3a57e841b38a451e', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83f4504dba4ee58f19278c5fca15b6c12f0ba180', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ff8c6d29f1e531c0410f53ace23e3c44b807a1d5', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9e06de3962cd0db92bfb817f1a415125b1efdafb', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '36782c0c0dd5060cce606d05dc034b04041b36b4', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b49d5fc444b27261f29d23484db3912d100aaaf', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5afa0c3b3b8bf3a28309cae0e17ba394caf4d95b', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6bda7c91f172fe57419612e759385ab6dab9f5d1', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7b5d6016ec611682f0ddc13c58a8e636a80cc1f8', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ceeda6eeab31b8602561a430e9d55676e34f3b9d', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2f8170d261535978166dee13047433c1870d8e3', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '292a3e7cbafc41e91ef0c6635a94e782ebe5849e', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b93fa97cae724cec31a236c60e793d4fe6faf197', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4cbf52e3e6f8944191a583ad517b3dd71d7629ca', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bfb611c53bc343ec69a2ca960d92568f50f7fea4', 'committer_username': 'rgommers', 'committer_name': 'Ralf Gommers', 'committer_email': 'ralf.gommers@gmail.com', 'commit_date': datetime.datetime(2009, 6, 23, 23, 16, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '731d5a0c29b6d2f60ce521dd8755eaed7c3408df', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '66a3412e9887a9c55220a4558736a906bbd091c3', 'committer_username': 'rgommers', 'committer_name': 'Ralf Gommers', 'committer_email': 'ralf.gommers@gmail.com', 'commit_date': datetime.datetime(2009, 6, 23, 23, 16, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6afa238c31e721fe5f6a26dad7fff8e67f8da357', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a1c0cf60d606a974a42a5f0e1f8c6a669e9a814a', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+683041055,ENH: improved binned_statistic_dd via Pythran,"At first, I improved the whole `if-elif` block and the benchmark showed it could make `count, sum, mean` 1.1x times faster, and make `std, median, min, max` 1.6x-20x faster . However, I found that Pythran can't support object type input so I failed some tests. To support object type, we need to keep the whole pure Python codes, and it will make the `if-elif` block duplicate and ugly. Since from the benchmark, there is not much improvement for `count, sum, mean`, I also tried to only improve std, median, min, max to make it look better and understandable. So in the end, I only improved a small inner function `_calc_binned_statistic_pythran.py ` but still get `std, median, min, max` 2x-30x faster, with no changes for `count, sum, mean` related codes.
+
+So far, the benchmark on my branch:
+
+
+```
+
+[ 75.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd                                                                    ok
+[ 75.00%] ··· =============================== =============
+                           param1                          
+              ------------------------------- -------------
+                           count                 711±30μs  
+                            sum                  717±30μs  
+                            mean                 777±10μs  
+                            min                 4.54±0.1ms 
+                            max                 4.46±0.2ms 
+                           median              4.65±0.03ms 
+                            std                3.00±0.06ms 
+               <function std at 0x110a8d160>     57.0±7ms  
+              =============================== =============
+
+[100.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd_reuse_bin                                                          ok
+[100.00%] ··· =============================== =============
+                           param1                          
+              ------------------------------- -------------
+                           count                 186±2μs   
+                            sum                  153±3μs   
+                            mean                 237±2μs   
+                            min                3.45±0.06ms 
+                            max                3.63±0.07ms 
+                           median               3.75±0.1ms 
+                            std                2.24±0.05ms 
+               <function std at 0x110a8d160>     52.5±2ms  
+              =============================== =============
+```
+On the master branch:
+
+```
+[ 75.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd                                                                                            ok
+[ 75.00%] ··· =============================== =============
+                           param1                          
+              ------------------------------- -------------
+                           count                 820±10μs  
+                            sum                  728±40μs  
+                            mean                 749±70μs  
+                            min                 14.0±0.4ms 
+                            max                  16.7±2ms  
+                           median                58.8±4ms  
+                            std                4.53±0.08ms 
+               <function std at 0x112ece160>     54.8±5ms  
+              =============================== =============
+
+[100.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd_reuse_bin                                                                                  ok
+[100.00%] ··· =============================== ============
+                           param1                         
+              ------------------------------- ------------
+                           count                166±10μs  
+                            sum                 162±20μs  
+                            mean                259±3μs   
+                            min                 15.4±1ms  
+                            max                 16.9±1ms  
+                           median              69.1±0.8ms 
+                            std                4.66±0.6ms 
+               <function std at 0x112ece160>    48.0±2ms  
+              =============================== ============
+
+```
+
+
+<strike>
+Now  `binned_statistic_dd ` is 1.1x~30x faster than the original version. This PR will work fine on CPython Nightly because there is a fix on Pythran recently(https://github.com/serge-sans-paille/pythran/pull/1823), and it is important for the Pythran version  `binned_statistic_dd `. 
+
+Run `python runtests.py --bench stats.BinnedStatisticDD` on my branch:
+```
+[  0.00%] ·· Benchmarking existing-py_Users_charlotte_anaconda3_envs_scipy-dev_bin_python
+[ 25.00%] ··· Running (stats.BinnedStatisticDD.time_binned_statistic_dd--)..
+[ 75.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd                                                                    ok
+[ 75.00%] ··· =============================== ============
+                           param1                         
+              ------------------------------- ------------
+                           count                608±20μs  
+                            sum                 623±20μs  
+                            mean                710±30μs  
+                            min                3.39±0.1ms 
+                            max                3.60±0.1ms 
+                           median              3.65±0.1ms 
+                            std                2.73±0.1ms 
+               <function std at 0x1113d8160>    53.2±1ms  
+              =============================== ============
+
+[100.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd_reuse_bin                                                          ok
+[100.00%] ··· =============================== =============
+                           param1                          
+              ------------------------------- -------------
+                           count                 92.1±4μs  
+                            sum                  93.0±4μs  
+                            mean                 146±3μs   
+                            min                2.84±0.08ms 
+                            max                2.77±0.09ms 
+                           median              3.27±0.02ms 
+                            std                 2.44±0.2ms 
+               <function std at 0x1113d8160>     55.6±3ms  
+              =============================== =============
+```
+
+On the master branch:
+```
+[ 75.00%] ··· ================================== ============
+                            param1                           
+              ---------------------------------- ------------
+                            count                  721±20μs  
+                             sum                   749±30μs  
+                             mean                  813±30μs  
+                             min                   17.0±2ms  
+                             max                   20.1±1ms  
+                            median                 66.2±3ms  
+                             std                  5.66±0.4ms 
+               <function std at 0x7fdd1b966f70>    54.0±3ms  
+              ================================== ============
+
+[100.00%] ··· stats.BinnedStatisticDD.time_binned_statistic_dd_reuse_bin                                           ok
+[100.00%] ··· ================================== =============
+                            param1                            
+              ---------------------------------- -------------
+                            count                   245±30μs  
+                             sum                    233±20μs  
+                             mean                   239±8μs   
+                             min                   14.6±0.3ms 
+                             max                   14.0±0.2ms 
+                            median                  59.6±3ms  
+                             std                  4.27±0.06ms 
+               <function std at 0x7fdd1b966f70>     51.2±1ms  
+              ================================== =============
+
+
+```
+
+
+1. I rewrote `result[vv, a] = flatsum[a] / flatcount[a]` in `if statistic == 'mean'`. At first I thought it is because I can’t index an 2d array like a1[int, tuple](see https://github.com/serge-sans-paille/pythran/issues/1819), but I found it works fine in `statistic == 'sum'` : `result[vv, a] = flatsum` .
+
+2. I rewrote `result[:, a] = flatcount[np.newaxis, :]` in `elif statistic == 'count'`:
+
+   - With the original `result[:, a] = flatcount[np.newaxis, :]`, it would first throw me a Dimension mismatch error.
+    ```
+    CRITICAL: You shall not pass!
+    E: cal_bin_more_pythran.py:45:23 error: Dimension mismatch when slicing `Array[1d, int]`
+    ----
+            result[:, a] = flatcount[np.newaxis, :]
+    ```
+
+    - Next, I also tried to use `reshape` and rewrote as follows but got a compilation error. I think it may be because the shapes must be exactly the same when using Pythran?
+
+    ```
+           flatcount_2d = flatcount.reshape((1,len(flatcount)))
+           result[:, a] = flatcount_2d
+    ```
+
+    - Finally, I chose to write a loop to assign the values.
+
+    ```
+     for vv in builtins.range(Vdim):
+                result[vv, a] = flatcount
+    ```
+</strike>
+cc @rgommers @serge-sans-paille 
+",False,14345,https://api.github.com/repos/scipy/scipy/pulls/14345,https://github.com/scipy/scipy/pull/14345,closed,85,4,4,9,8,7,3,0,"[{'name': 'scipy.stats'}, {'name': 'enhancement'}, {'name': 'Pythran'}]",2021-07-03 15:39:13+00:00,2022-09-15 03:57:22+00:00,37887489.0,"438 days, 12:18:09","[{'comment_id': 663484142, 'comment_body': ""Can you add a comment about what is going on here? It's hard to understand from just reading the code - is this for `object` dtype?"", 'comment_created': datetime.datetime(2021, 7, 4, 10, 44, 58, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 663484275, 'comment_body': ""This import is repeated a lot here. It looks to me like it should only be done once, at the top of the file. It's fine to do the import even if we don't need it, it's better than repeating it on every function call."", 'comment_created': datetime.datetime(2021, 7, 4, 10, 46, 37, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 663484672, 'comment_body': 'I think this whole is-else block needs to live within `def _calc_binned_statistic` in this file`. And regarding names:\r\n\r\n- `_calc_binned_statistic_pythran` is the main function, right?\r\n- `_calc_binned_statistic` needs to handle: (a) custom callables, and (b) `object` dtype. (anything else?)\r\n\r\nIt would be great to add a comment explaining that.', 'comment_created': datetime.datetime(2021, 7, 4, 10, 49, 42, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 663484989, 'comment_body': 'I think all the `_pythran` in function names can be dropped here, that would make it more readable.\r\n\r\nIn `_binned_statistic.py` you can then do:\r\n```python\r\nfrom _calc_binned_statistic_pythran.py import (\r\n    _create_binned_data as _create_binned_data_pythran,\r\n    _calc_binned_statistic as _calc_binned_statistic_pythran,\r\n)\r\n```\r\n', 'comment_created': datetime.datetime(2021, 7, 4, 10, 52, 19, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 663493252, 'comment_body': ""Thanks! I didn't import `_create_binned_data_pythran` because it is useless in `_binned_statistic.py`. The pure Python function  `_calc_binned_statistic` should also call the pure Python  `_create_binned_data` because   `_create_binned_data` also have an argument `values` that can be object type. \r\n\r\nThe Python version `_calc_binned_statistic` is used to handle object type `values` and callables. So actually when it is callable but `values` is not of object type, `_create_binned_data_pythran`  can be used by `_calc_binned_statistic` but the speed improvement is not large. I tried that in my first commit and you can see the benchmarks https://github.com/scipy/scipy/pull/14345#issue-683041055"", 'comment_created': datetime.datetime(2021, 7, 4, 11, 58, 44, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 663494344, 'comment_body': 'Yes! Current`_calc_binned_statistic_pythran`  basically has the same logic as `_calc_binned_statistic` but with an additional check for `statistics`. \r\n\r\nIn my first two versions(https://github.com/scipy/scipy/pull/14345/commits/503a30659a86e9cc87467421af7e5b933d2c8dad, https://github.com/scipy/scipy/pull/14345/commits/6926cd7081730676b1d58f2c39189215c8eb22e8), `_calc_binned_statistic_pythran` was to handle the whole `if-else` block(including `mean,count,sum`), but the codes became much more ugly after adding checks to fix the `object` type problem. So I changed it to the current version :) ', 'comment_created': datetime.datetime(2021, 7, 4, 12, 8, 13, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 663494835, 'comment_body': ""Yes, it is for the `object` type. I just thought it would be `object` type only when the input `values` is None. Seems it is better to do `if values.dtype == 'O':` ... I just modified this and added comments."", 'comment_created': datetime.datetime(2021, 7, 4, 12, 11, 40, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}]","[{'commit_sha': '503a30659a86e9cc87467421af7e5b933d2c8dad', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6926cd7081730676b1d58f2c39189215c8eb22e8', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2255892242d045743e94e7f6cb9f1adbcd337f33', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a571244c6b9a90aba00486a3e9c88cc1bc7240ca', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9afa21d09516adb683df8752c8b28c5ff6295f66', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08ec8e725facf7d1722a0311c6550b936115afce', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e14b793ee4d7ea7beb38e69c467bedddd3100361', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '72da5867a03aeb6e732effa7ab5eb0676f050ae3', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91fcae1819bad524ef651c5c2c3f1283f0c546bc', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+692074523,"ENH: improve cspline1d, qspline1d, and relative funcs via Pythran","Improve `cspline1d`,  `qspline1d`, `cspline1d_eval`, `qspline1d_eval` 10x faster. cc @rgommers @serge-sans-paille 
+
+
+  | Pythran version | Python version
+-- | -- | --
+cspline1d | 0.01569008 | 0.173588448
+qspline1d | 0.015873459 | 0.183773455
+cspline1d_eval | 0.002924217 | 0.032457083
+qspline1d_eval | 0.002290011 | 0.027695408
+
+Timing codes:
+
+```
+rng = np.random.default_rng()
+sig = np.repeat([0., 1., 0.], 1000)
+sig += rng.standard_normal(len(sig))*0.05  # add noise
+time = np.linspace(0, len(sig))
+cspline1d_res = cspline1d(sig)
+qspline1d_res = qspline1d(sig)
+
+f1 = lambda: cspline1d(sig)
+f2 = lambda: qspline1d(sig)
+f3 = lambda: cspline1d_eval(cspline1d_res, time)
+f4 = lambda: qspline1d_eval(qspline1d_res, time)
+
+version = 'python'
+print(timeit(f1, number=100)) 
+print(timeit(f2, number=100))  
+print(timeit(f3, number=100))
+print(timeit(f4, number=100))
+```
+",False,14429,https://api.github.com/repos/scipy/scipy/pulls/14429,https://github.com/scipy/scipy/pull/14429,open,188,152,3,9,2,5,4,0,"[{'name': 'enhancement'}, {'name': 'scipy.signal'}, {'name': 'needs-decision'}, {'name': 'Pythran'}]",2021-07-18 11:35:17+00:00,,0.0,,"[{'comment_id': 671896157, 'comment_body': ""Whoa, there are a lot of signatures here. I suspect there's a more concise way of writing this - and if there isn't, we should create one. The pattern of having multiple signatures to express that a keyword may be given yes/no seems less than great."", 'comment_created': datetime.datetime(2021, 7, 18, 20, 53, 15, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 671896328, 'comment_body': ""Or maybe the correct pattern is to leave the public function definition and docstring in Python, and only call the private Pythranized version - that way it's easy to guarantee that all arguments are positional."", 'comment_created': datetime.datetime(2021, 7, 18, 20, 54, 34, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 671896358, 'comment_body': 'Will be an interesting discussion for our meeting tomorrow.', 'comment_created': datetime.datetime(2021, 7, 18, 20, 54, 57, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 671896518, 'comment_body': ""Note that `np.add.reduce` is just a cumbersome way to write `np.sum`. A long time ago `add.reduce` was faster, which is why the code looks like this - but that's no longer true I believe. And this should translate to the same C++ anyway. So you can change to `np.sum`."", 'comment_created': datetime.datetime(2021, 7, 18, 20, 56, 29, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 671896609, 'comment_body': 'can you call this `_bsplines_pythran.py`?', 'comment_created': datetime.datetime(2021, 7, 18, 20, 57, 15, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}]","[{'commit_sha': '82d130e2ccd253b18ae7c441f2b8d8b4822ad749', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e581e2540b78f5fbc2030c9bed19856d9aa157c0', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3055cd315b8502546756ceb51ffd3bc6898028b3', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1f377ffdfede06be1476288d1faf7f5863f768e0', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca875256aa8aafd9d44038630600f75e2218b33f', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9489e5ce1052a3e63cc2d5315548cd634a29b251', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bb29cec14f1ee37e158d8f51e76912de00fb619', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '26dcf54180693f2e1ddf22bbf79630192de3edc8', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53e4b5c0e23e061b026fa53a5b998bc3e8f51b77', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+692092816,ENH: improve siegelslopes via pythran,"The Pythran version is 10x faster than the original Python version. cc @rgommers @serge-sans-paille 
+
+Timing codes:
+
+```
+import numpy as np
+from timeit import timeit
+import scipy.stats.mstats as mstats
+
+x = 2 * np.arange(100)
+y = 5 * x - 3.0
+
+f1 = lambda : mstats.siegelslopes(x,y)
+print(timeit(f1, number=100)) #0.020322154000000037 vs 0.271933536 10x faster
+
+``` ",True,14430,https://api.github.com/repos/scipy/scipy/pulls/14430,https://github.com/scipy/scipy/pull/14430,closed,42,34,7,11,3,4,3,0,"[{'name': 'scipy.stats'}, {'name': 'enhancement'}, {'name': 'Pythran'}]",2021-07-18 13:54:17+00:00,2022-10-03 00:09:11+00:00,38139294.0,"441 days, 10:14:54","[{'comment_id': 676196581, 'comment_body': 'The input validation up to here is best left in Python. That way the signatures and generated C++ code are significantly simpler, and this part of the function is very fast.\r\n\r\nAfter this point you also know that `x` is a float array, so the annotation can simply be `float[:]` instead of `int[:] or float[:] or None`.', 'comment_created': datetime.datetime(2021, 7, 25, 20, 13, 41, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 680797047, 'comment_body': ""The one thing to look at still is this type annotation. The types are not constrained in the public Python function, so this won't work for, e.g., `float32` or `int16`. I think we still need to figure out exactly how to deal with dtypes in these cases."", 'comment_created': datetime.datetime(2021, 8, 2, 8, 59, 15, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 680797243, 'comment_body': ""There's a balance to strike between binary size, performance, and maintainability."", 'comment_created': datetime.datetime(2021, 8, 2, 8, 59, 33, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 810709982, 'comment_body': ""It doesn't look like the original Python function had support for different data types in mind, as `x` is explicitly cast to `float` at the beginning. Were we hoping to fix this in the Pythran version?\r\n\r\n(Just to confirm, since you don't mention complex dtypes here - contributors probably don't often have complex generalizations in mind when they write `stats` functions. Do we have a policy about support for complex dtypes in stats functions?)\r\n\r\nFor now, I think that a Pythranized version of this function would be useful even if it were just for `float64` (and maybe also `float32`). The benefit of integer versions seems less compelling here. There could be some memory savings for `int8` and `int16`, but it will probably be slower as the type needs to be promoted to do the division. \r\n\r\nIf we want to be more careful about `dtypes` throughout stats in the future, we could come back to it. In the interest of seeing these PRs through, would supporting just those one or two types make sense? "", 'comment_created': datetime.datetime(2022, 2, 21, 0, 25, 11, tzinfo=datetime.timezone.utc), 'commenter': 'mdhaber', 'type': 'User'}]","[{'commit_sha': 'd2f1ffe4a8358c12e8860caec250348726dfd2cf', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd263843c9258dfd8490fb3b898055b91e242c983', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd4934a1d3dade75e8b6ddfa9128501b280b9632', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd4bff5337316efecfd01d7f69e0b60819abff4c', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49574123c566766ee078e43806fed95ad54b0444', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b30c394d94f276fd51ced8ed140289728ec32acd', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b4a226e96bf45596a325ef97ff4367492ea7079', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '42a0bc13b32beaea17c11620e1de1f7f47601de7', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dcb7b431f7f23f911f6962b8eade528e0b439d77', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e291e5953cb31cdaa9cf4e5de15c4fb4c3d714e0', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3765af41c9fef80a0f1e07951dc2f2ba8a3af2c1', 'committer_username': 'mdhaber', 'committer_name': 'Matt Haberland', 'committer_email': None, 'commit_date': datetime.datetime(2014, 2, 2, 23, 23, 33, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+657606146,ENH: Pythran implementation of _cdf_distance,"#### What does this implement/fix?
+Pythran implementation of _cdf_distance.
+
+```
+u_values, v_values = [0.7, 7.4, 2.4, 6.8], [1.4, 8. ] 
+u_weights, v_weights = [2.1, 4.2, 7.4, 8. ], [7.6, 8.8]
+
+u_values = np.asarray(u_values, dtype=float)
+u_weights = np.asarray(u_weights, dtype=float)
+
+v_values = np.asarray(v_values, dtype=float)
+v_weights = np.asarray(v_weights, dtype=float)
+```
+
+The Pythran version:
+```
+%timeit -n 100 -r 3 _pythran_cdf_distance(1,u_values, v_values, u_weights, v_weights)
+23.4 µs ± 8.47 µs per loop (mean ± std. dev. of 3 runs, 100 loops each)
+```
+The original version:
+```
+%timeit -n 100 -r 3 _orig_cdf_distance(1,u_values, v_values, u_weights, v_weights )
+74.4 µs ± 23.9 µs per loop (mean ± std. dev. of 3 runs, 100 loops each)
+```
+
+3x speedup with a small array input.
+
+#### I also rewrote some parts to support Pythran compilation
+
+Rewrote `u_values[u_sorter].searchsort` to `np.searchsort` to avoid Pythran `AssertionError: Function path is chained attributes and name.`
+
+Rewrote `all_values.sort(kind='mergesort')` to `np.sort(all_values, kind='mergesort')` to avoid Pythran compliation error.
+
+cc @rgommers @serge-sans-paille 
+
+",False,14154,https://api.github.com/repos/scipy/scipy/pulls/14154,https://github.com/scipy/scipy/pull/14154,closed,103,38,3,4,5,4,3,0,"[{'name': 'scipy.stats'}, {'name': 'enhancement'}, {'name': 'Pythran'}]",2021-05-30 06:00:21+00:00,2022-09-15 03:49:51+00:00,40859370.0,"472 days, 21:49:30","[{'comment_id': 642070373, 'comment_body': 'this should also work (and catch more cases):\r\n```\r\n#pythran export _cdf_distance_1d(int, float[:], float[:], float[:] or None, float[:] or None)\r\n```', 'comment_created': datetime.datetime(2021, 5, 30, 12, 36, 36, tzinfo=datetime.timezone.utc), 'commenter': 'serge-sans-paille', 'type': 'User'}, {'comment_id': 642081341, 'comment_body': 'Oh I forgot these two cases. Thank you very much !!  Just added it https://github.com/scipy/scipy/pull/14154/commits/4a93095eba2bcff3cc1dbc983b58fb82c3b93761', 'comment_created': datetime.datetime(2021, 5, 30, 14, 2, 45, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 643026465, 'comment_body': ""Minor: if you're touching this code anyway, can you add some PEP 8 spaces after the commas?"", 'comment_created': datetime.datetime(2021, 6, 1, 11, 44, 52, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 643111018, 'comment_body': 'Sorry, I forgot that before. Just added the spaces.', 'comment_created': datetime.datetime(2021, 6, 1, 13, 37, 58, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}]","[{'commit_sha': '510ad912d9d10b4c6d67eb8889a6cec883f2a831', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '879506c922e6aa09624480ebda7dbca227e9d428', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a93095eba2bcff3cc1dbc983b58fb82c3b93761', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9f208649527945b9b665d494662078e1e53316a2', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+679094084,WIP: ENH: improve _count_paths_outside_method via pythran,"Could speed up `stats.ks_2samp(rvs1, rvs2, alternative='less', mode='exact')` >20x times on my computer if went well with Pythran master
+
+```
+from scipy import stats
+import numpy as np
+from timeit import timeit
+
+print(stats.__file__)
+rng = np.random.default_rng(1234)
+n1 = 200
+n2 = 300
+
+rvs1 = stats.norm.rvs(size=n1, loc=0., scale=1, random_state=rng)
+rvs2 = stats.norm.rvs(size=n2, loc=0.5, scale=1.5, random_state=rng)
+stats.ks_2samp(rvs1, rvs2, alternative='less', mode='exact')
+```",False,14314,https://api.github.com/repos/scipy/scipy/pulls/14314,https://github.com/scipy/scipy/pull/14314,closed,55,88,3,1,5,0,2,0,"[{'name': 'scipy.stats'}, {'name': 'Pythran'}]",2021-06-28 14:21:14+00:00,2022-07-31 05:55:50+00:00,34356876.0,"397 days, 15:34:36",[],"[{'commit_sha': '5b34e57ac576eac592e52042570c5dba374e8cf2', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+686879345,ENH: spatial.SphericalVoronoi: Pythranize `sort_vertices_of_regions`,"Pythran version is 3x faster than the Cython version.
+Current Pythran version:
+```
+============ =============
+ num_points               
+------------ -------------
+     10        9.77±0.4μs 
+    100         105±4μs   
+    1000      1.23±0.08ms 
+    5000       6.33±0.3ms 
+   10000       12.9±0.7ms 
+============ =============
+
+```
+
+Previous Cython version:
+
+```
+============ ============ 
+ num_points              
+------------ ------------
+     10       38.8±0.5μs 
+    100        388±3μs   
+    1000      3.82±0.2ms 
+    5000      20.6±0.6ms 
+   10000       38.6±1ms  
+============ ============
+
+```
+
+To made the codes more readable, I referred to the original Python version codes in https://github.com/scipy/scipy/pull/6768
+
+cc @rgommers @serge-sans-paille ",False,14376,https://api.github.com/repos/scipy/scipy/pulls/14376,https://github.com/scipy/scipy/pull/14376,open,45,2,3,6,13,14,4,0,"[{'name': 'enhancement'}, {'name': 'scipy.spatial'}, {'name': 'needs-work'}, {'name': 'Pythran'}]",2021-07-09 15:38:27+00:00,,0.0,,"[{'comment_id': 667217635, 'comment_body': ""Don't we need a guard for the import of the Cython extension? Locally with this feature branch I'm getting:\r\n\r\n```python\r\nscipy/spatial/__init__.py:99: in <module>\r\n    from ._spherical_voronoi import SphericalVoronoi\r\nscipy/spatial/_spherical_voronoi.py:17: in <module>\r\n    from . import _voronoi\r\nE   ImportError: cannot import name '_voronoi' from partially initialized module 'scipy.spatial' (most likely due to a circular import) (/Users/treddy/github_projects/scipy/build/testenv/lib/python3.8/site-packages/scipy/spatial/__init__.py)\r\n\r\n```\r\n\r\nEven if I fix that with:\r\n\r\n```diff\r\n--- a/scipy/spatial/_spherical_voronoi.py\r\n+++ b/scipy/spatial/_spherical_voronoi.py\r\n@@ -14,9 +14,11 @@ Spherical Voronoi Code\r\n import warnings\r\n import numpy as np\r\n import scipy\r\n-from . import _voronoi\r\n from scipy.spatial import cKDTree\r\n-from ._voronoi_pythran import sort_vertices_of_regions\r\n+try:\r\n+    from . import _voronoi\r\n+except ImportError:\r\n+    from ._voronoi_pythran import sort_vertices_of_regions\r\n \r\n\r\n```\r\n\r\nI still see a few test failures for `test_spherical_voronoi.py` locally."", 'comment_created': datetime.datetime(2021, 7, 9, 21, 22, 25, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667220703, 'comment_body': 'A few other things that might be helpful for me to understand:\r\n\r\n1) How does the Pythran namespacing work with `sort_vertices_of_regions()` imported with the same name as the function it is defined in here?\r\n2) Perhaps related--is there something about Pythran that makes it more useful to assign to `self.regions` than operating in place as before?\r\n3) When Pythran is absent, how is the Cython `sort_vertices_of_regions` function going to be found with the `_voronoi` extension module qualifier removed from the call?', 'comment_created': datetime.datetime(2021, 7, 9, 21, 30, 48, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667316734, 'comment_body': ""The current version is incorrect but the solution should be a bit different: we want to produce a `_voronoi.so` extension, not `_voronoi_pythran.so`. That way the import can simply be `from . import _voronoi`, and it will pick up a compiled version (the Python code in this file simply doesn't know if it was Cython or Pythran that was used at build time)."", 'comment_created': datetime.datetime(2021, 7, 10, 9, 32, 14, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 667322468, 'comment_body': 'Right, I was just guarding against the immediate error--`import ._voronoi_pythran as _voronoi` in the `except` block might make it explicit that two possible implementations exist.', 'comment_created': datetime.datetime(2021, 7, 10, 10, 32, 28, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667322924, 'comment_body': 'You can safely ignore `#1 `because of the `self.` qualifier I think; `#3` should go away if the imports shadow each other as noted above; `#2` still seems like a reasonable query.\r\n', 'comment_created': datetime.datetime(2021, 7, 10, 10, 37, 23, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667337342, 'comment_body': ""Thanks for your comments! For `#2`, it is because I'm getting the warning when I compiled the file `WARNING: Exporting function 'sort_vertices_of_regions' that modifies its List argument. Beware that this argument won't be modified at Python call site`.\r\n\r\nAnd Pythran doc says:\r\n>In most cases (with the notable exception of numpy.ndarray), Pythran is working on a deep copy of the original Python arguments. This copy shares no memory relationship with the original object, which means that modifying the argument content in Pythran won’t modify the original argument content.\r\n\r\n So I  assign to `self.regions` to fix that, is that right?  @serge-sans-paille "", 'comment_created': datetime.datetime(2021, 7, 10, 13, 7, 6, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 667347458, 'comment_body': ""How are you going to do a drop in replacement for the Cython version of the function that doesn't return anything though, without modifying the Cython code (which would not be desirable)? \r\n\r\nWon't it return `None` to `self.regions` when Pythran isn't used?"", 'comment_created': datetime.datetime(2021, 7, 10, 14, 43, 8, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667347744, 'comment_body': ""I think you may want `scipy.spatial._voronoi` here to shadow the Cython extension like Ralf was saying, assuming there's a way to drop-in replace without modifying the Cython code return value (`None`)."", 'comment_created': datetime.datetime(2021, 7, 10, 14, 46, 55, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667351543, 'comment_body': ""It probably isn't *that* big of a deal to modify the Cython code to return `regions` on top of modifying it in place--presumably that's a pass-through operation that doesn't introduce a copy. Bit awkward from a design standpoint maybe. Before modifying the Cython version (extra work) we'd probably want to confirm the performance gain.\r\n\r\nAlternatively, maybe Pythran provides a runtime constant or attribute/hook for making a decision."", 'comment_created': datetime.datetime(2021, 7, 10, 15, 18, 53, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667351780, 'comment_body': ""That's indeed a problem. How about\r\n```\r\ntmp = _voronoi.sort_vertices_of_regions(self._simplices, self.regions)\r\nif tmp != None: # use Pythran\r\n    self.regions = tmp\r\n```\r\nThat would make the code a little ugly though."", 'comment_created': datetime.datetime(2021, 7, 10, 15, 21, 23, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 667352253, 'comment_body': ""Hmm, something like that maybe. I'll be less worried about ugliness if we're still getting a decent speedup when the dust settles, since it will be a path to getting rid of the Cython version at some point anyway, or at least pressuring the Cython version to get faster if it wants to stay around."", 'comment_created': datetime.datetime(2021, 7, 10, 15, 25, 55, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667497266, 'comment_body': 'It is a small point compared to the test failures that remain, but I believe `if tmp is not None` is perhaps slightly preferred, and a nudge faster sometimes i.e., https://stackoverflow.com/a/3257957/2942522', 'comment_created': datetime.datetime(2021, 7, 11, 15, 23, 27, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}, {'comment_id': 667502735, 'comment_body': ""And it's more *idiomatic*"", 'comment_created': datetime.datetime(2021, 7, 11, 16, 7, 37, tzinfo=datetime.timezone.utc), 'commenter': 'serge-sans-paille', 'type': 'User'}, {'comment_id': 668005178, 'comment_body': ""the build/runtime system will prioritize the `_voronoi` extension over the Python module with the same name? I might have left the source file with the same pythran-specific name but built the extension to shadow Cython name for example, if that's possible."", 'comment_created': datetime.datetime(2021, 7, 12, 14, 55, 21, tzinfo=datetime.timezone.utc), 'commenter': 'tylerjereddy', 'type': 'User'}]","[{'commit_sha': '1d6cc27f928a256f578521a97cd2e7ebab170d8b', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb9c3ccb142d04c50369ce1cfc64a45deecc2269', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '97a058e0c71d763c78fea73afa7a9e043df4f00c', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '647db3bcf12c2a7ed19fca3dd86b00fd3c6085b5', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8ffeebc36fd26d25ea0570c97711f7e6325888a', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f4acdaee710c37d3eff2b39ca595becbbcd032ac', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+696446431,ENH: improve _sosfilt_float via Pythran,"[ci skip]
+
+Since Pythran performance is not much better than Cython's, and Pythran does not support `object type` `_sosfilt_object`, so we decided not to merge it.
+
+![image](https://user-images.githubusercontent.com/38244988/126888931-046ade3f-34d3-42b6-baa7-e96e58b8f198.png)
+
+
+cc @serge-sans-paille ,  I didn't simplify the loop in `_sosfilt_float` to `zi_slice[:,0] = sos[:,1] * x_cur - sos[:,4] ...` because it seems `x_cur` and `x_new` will be updated in the loop :) . cc @rgommers 
+
+
+
+",False,14473,https://api.github.com/repos/scipy/scipy/pulls/14473,https://github.com/scipy/scipy/pull/14473,closed,36,1,3,1,3,0,2,0,"[{'name': 'scipy.signal'}, {'name': 'Pythran'}]",2021-07-25 05:41:32+00:00,2021-07-25 20:09:08+00:00,52056.0,14:27:36,[],"[{'commit_sha': '473b2a9ac9bd759895cc0cf43f11804d15d0ad19', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+683725203,Import test cases from scipy,"Import `scipy/stats/_calc_binned_statistic_pythran.py` and `scipy/stats/_hypotests_pythran.py`
+
+
+cc @rgommers @serge-sans-paille ",True,1830,https://api.github.com/repos/serge-sans-paille/pythran/pulls/1830,https://github.com/serge-sans-paille/pythran/pull/1830,closed,96,0,2,1,1,0,0,0,[],2021-07-05 13:56:31+00:00,2021-07-06 05:28:45+00:00,55934.0,15:32:14,[],"[{'commit_sha': '5fcc8643881ee5148e460f5c1faf35bd88df7f6c', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+707713708,Feature/add keep dims,,True,1869,https://api.github.com/repos/serge-sans-paille/pythran/pulls/1869,https://github.com/serge-sans-paille/pythran/pull/1869,closed,189,77,10,4,1,0,0,0,[],2021-08-10 21:11:30+00:00,2021-08-13 16:47:47+00:00,243377.0,"2 days, 19:36:17",[],"[{'commit_sha': '27a5a562358815a49877ac96d0e44496370bb505', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b13a48fb72643067c3d873dd9c74c013b0b330f', 'committer_username': 'serge-sans-paille', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 6, 21, 8, 53, 9, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23f19090c396c198e4454bb0f56e307ebbd15cc9', 'committer_username': 'serge-sans-paille', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 6, 21, 8, 53, 9, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24eb22e123a9e31da28d5070acb349431736436d', 'committer_username': 'serge-sans-paille', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 6, 21, 8, 53, 9, tzinfo=datetime.timezone.utc)}]",,863807,,User,,115,,0,237
+712384267,Support  boolean arguments in numpy unique,"https://github.com/serge-sans-paille/pythran/issues/1842#issuecomment-896320261
+
+Hard code boolean arguments in numpy unique, at first, I only consider the case `len(node.args) >= 4` & `return_index` is true & `return_inverse` is true & `return_counts` is true.  
+
+Next:
+- [done]consider the case when `len(node.args) == 3` or `2` 
+- [done] support `return_index` is true/false & `return_inverse` is true/false & `return_counts` is true/false.  
+- use offset to generalize",True,1876,https://api.github.com/repos/serge-sans-paille/pythran/pulls/1876,https://github.com/serge-sans-paille/pythran/pull/1876,closed,382,8,4,1,11,0,0,0,[],2021-08-13 14:03:44+00:00,2021-08-17 06:35:06+00:00,318682.0,"3 days, 16:31:22",[],"[{'commit_sha': 'b424ac3650d1e9f692d48d6235513dbed4d4e015', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+713098195,General implementation of supporting immediate arguments,"At first, I tried to use keywords name rather than offset:
+```
+            for k, v in node.kwargs.items():
+                if k in alias.immediate_arguments:
+                    if isinstance(v, ast.Constant):
+                        self.result.add(v)     
+```
+
+but got the following error, saying no attribute `kwargs`, so I chose to use offset instead.
+```
+    def visit_Call(self, node):
+        func_aliases = self.aliases[node.func]
+        for alias in func_aliases:
+>           for k, v in node.kwargs.items():
+E           AttributeError: 'Call' object has no attribute 'kwargs'
+ 
+pythran/analyses/immediates.py:21: AttributeError
+```
+ With my current offset implementation, I can pass the tests for `unique` in my local machine, but I can't pass tests for `mean` even on the master branch on my local machine:
+
+```
+------------------------------------------------ Captured stderr call -------------------------------------------------
+In file included from /var/folders/j_/zm2rmlh549733gxckfkzj9000000gn/T/tmp2_dotauw.cpp:15:
+In file included from /Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/numpy/mean.hpp:8:
+In file included from /Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/numpy/sum.hpp:5:
+In file included from /Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/numpy/reduce.hpp:9:
+In file included from /Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/utils/neutral.hpp:4:
+In file included from /Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/include/utils/neutral.hpp:8:
+In file included from /Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/include/operator_/imax.hpp:5:
+/Users/charlotte/Desktop/internship/gsoc/pythran/pythran/pythonic/include/numpy/maximum.hpp:9:10: fatal error: 'xsimd/xsimd.hpp' file not found
+#include <xsimd/xsimd.hpp>
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+WARNING: Compilation error, trying hard to find its origin...
+WARNING: Nop, I'm going to flood you with C++ errors!
+```
+seems it is related to `xsimd`, do you know how to fix it?
+
+I'll clean the code later :)
+
+
+
+",True,1878,https://api.github.com/repos/serge-sans-paille/pythran/pulls/1878,https://github.com/serge-sans-paille/pythran/pull/1878,closed,12,21,3,1,9,0,0,0,[],2021-08-16 04:07:03+00:00,2021-08-18 21:50:22+00:00,236599.0,"2 days, 17:43:19",[],"[{'commit_sha': 'ac4834842e8d4c4b825e7512420df19de3faab6a', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+705906132,WIP: TST: add tests for Pythran somersd,"<!-- 
+Thanks for contributing a pull request! Please ensure that
+your PR satisfies the checklist before submitting:
+http://scipy.github.io/devdocs/dev/contributor/development_workflow.html#checklist-before-submitting-a-pr
+
+Also, please name and describe your PR as you would write a
+commit message:
+https://docs.scipy.org/doc/numpy/dev/development_workflow.html#writing-the-commit-message
+
+Note that we are a team of volunteers; we appreciate your
+patience during the review process.
+
+Again, thanks for contributing!
+-->
+
+#### Reference issue
+https://github.com/scipy/scipy/issues/14544
+
+#### What does this implement/fix?
+Take `somersd` as an example, firstly implement all the tests by hand. 
+
+Hi @rgommers, thank you so much for your detailed suggestions! But I'm a little confused about :
+>A size-1 array, and (if applicable for the function) a size-0 array
+see BUG: RBFInterpolator fails when calling it with a slice of a (1, n) array #14420 for a relevant bug report for non-contiguous inputs and views.
+
+Do you mean size-1 array is like (1, n), and size-0 array is like np.empty(shape=(0, 0)) ? Why would that be a potential problem to Pythran? I think https://github.com/scipy/scipy/issues/14420 is more a problem of views, not a problem of size-1 array..?
+
+For your sketch, 
+```
+# in class TestMyFunc(PythranFunc)
+def pythranfunc(self, x, ):
+        ""This function is called by the test machinery with various inputs for `x`""
+        result = module.funcname(x, ...)  # this is the function call to test, e.g. `stats.somersd`
+        expected = # exact result
+        assert_allclose(result, expected, rtol=self.rtol, atol=self.atol)
+```
+How can `pythranfunc` be called by the test machinery with various inputs for `x`? I would expect there is a `_gen_types()` in `PythranFunc`, and in `pythranfunc`, I will call `_gen_types()` to generate different types of `x` and test them?
+
+Also, how many types do you think we should cover...? Currently, there are:
+```
+        self.ALL_INTEGER = [np.int32, np.int64]
+        self.ALL_FLOAT = [np.float32, np.float64]
+        self.ALL_COMPLEX = [np.complex64, np.complex128]
+```
+
+cc @serge-sans-paille ",True,14559,https://api.github.com/repos/scipy/scipy/pulls/14559,https://github.com/scipy/scipy/pull/14559,closed,108,3,2,5,6,10,1,0,[{'name': 'Pythran'}],2021-08-07 15:21:23+00:00,2021-12-05 04:20:13+00:00,10328330.0,"119 days, 12:58:50","[{'comment_id': 698486604, 'comment_body': 'Can you undo these changes?', 'comment_created': datetime.datetime(2021, 8, 30, 13, 26, 52, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 698525841, 'comment_body': ""Sorry, I forgot I've changed linux.yml on my master when I rebase on my master..."", 'comment_created': datetime.datetime(2021, 8, 30, 14, 15, 22, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 698595986, 'comment_body': 'Last week we discussed whether it is useful/needed to add `intc`/`intp` here, and I thought the outcome was yes.', 'comment_created': datetime.datetime(2021, 8, 30, 15, 40, 35, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 698597941, 'comment_body': ""These two lines are now present in every test case, however I don't see where the in-place modification would occur. Is this really necessary? No well-designed function should modify any of its input arguments."", 'comment_created': datetime.datetime(2021, 8, 30, 15, 43, 11, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 698599440, 'comment_body': 'Is `self.index` always (`range(len(self.arguments))`)? If so, it does not have to be specified separately.', 'comment_created': datetime.datetime(2021, 8, 30, 15, 45, 5, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 698604351, 'comment_body': ""No, sometimes the function's arguments are not of interest, like `nonetype`, `str`, and we should not test the (float/int) dypes for such arguments. Also, it came to me that different arguments may have different dtypes to test?"", 'comment_created': datetime.datetime(2021, 8, 30, 15, 51, 19, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 698608053, 'comment_body': ""Ah.. I thought if I didn't do `test_array = self.arguments.copy()`, then `self. arguments` will be modified `self. arguments[idx] = self. arguments[idx][::-1][::-1]` ?  and I think the best way is to copy the array first, and then modified the some of the elements?"", 'comment_created': datetime.datetime(2021, 8, 30, 15, 56, 5, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}, {'comment_id': 698611100, 'comment_body': ""If an argument is not of interest, maybe it should not be given in this list? That can always be avoided by using `functools.partial`.\r\n\r\nThe case that I'm not sure needs to be handled is:\r\n```\r\ndef somefunc(x0, str_param, x1):\r\n```\r\nThat pattern is so unusual that it can be ignored I think.\r\n\r\n> Also, it came to me that different arguments may have different dtypes to test?\r\n\r\nThat does seem more likely to happen. So maybe all this can be a single dictionary? Something like:\r\n```\r\nself.arguments = {0: (np.arange(10), (self.ALL_INTEGER + SELF.ALL_FLOAT)),\r\n                  1: ...}\r\n```"", 'comment_created': datetime.datetime(2021, 8, 30, 16, 0, 6, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 698625947, 'comment_body': 'Okay yes I see it now, sorry for the noise. One other suggestion, to avoid repeating the same comment everywhere: use a separate method, `args = self._get_args()`. With implementation:\r\n```\r\ndef _get_args(self):\r\n    # returns a copy of self.arguments because some of the test functions in this\r\n    # class perform an in-place modification of the argument list before passing those\r\n    # arguments to the function under test.\r\n    return self.arguments.copy()', 'comment_created': datetime.datetime(2021, 8, 30, 16, 20, 49, tzinfo=datetime.timezone.utc), 'commenter': 'rgommers', 'type': 'User'}, {'comment_id': 700726975, 'comment_body': ""Now I switched to use a single dictionary, and I made the following changes(not sure whether it is reasonable):\r\n- To test different dtypes for different input arrays, e.g. `def func(a,b)`, `a` have 5 dtypes to test, `b` have 3 dtypes to test.\r\n I don't think we should test all the `5*3` combinations of `a` dtypes and `b` dtypes because `a` and `b` would not influence each other. As long as `int` `a` & `int` `b` pass tests, `float` `a` & `float` `b` works, then `int` `a` & `float` `b` will definitely work too! (Unless there limits `a` and `b` must be the same type, but that's not what Pythran could do). Therefore, in my implementation, we only need to test `5` times rather than `5*3`. We iterate on `for idx in range(5)` types and for `b` which only has 3 types to test, it will keep using the last dtype for `idx>3`. See `get_max_dtype_list_length`, `get_dtype`, `test_all_dtypes` for details.\r\n- To test keywords. e.g. Test Somersd `def somersd(x, y=None)`.\r\nIn my understanding, testing keywords means testing whether the results of specifying the keyword arguments(`somersd(x, None)`) vs not-specifying the keyword arguments (`somersd(x)`) are the same.\r\nTherefore, I found it difficult to make `test_keywords` similar to `test_dtypes`/`test_views`/`test_stride`. For `def somersd(x, y=None)`, `y` can also be an array that requires testing dtypes or views, and if `y` is not None, `x` and `y` must be 1d array. If `y` is None, `x` must be a 2d array. In this way, when we `test_dtypes`/`test_views`, the input args are two 1d array, when we `test_keywords`, the input arg is one 2d array. It would be confusing if we defined so many different `self.arguments`/ `self.nonoptional_arguments` in the child class. Therefore, I choose to move `test_keywords` to the child class rather than remain in the parent class, but we provide util functions in the parent class like `self.get_optional_args` for `test_keywords` to use. \r\n"", 'comment_created': datetime.datetime(2021, 9, 2, 4, 1, 15, tzinfo=datetime.timezone.utc), 'commenter': 'charlotte12l', 'type': 'User'}]","[{'commit_sha': '92a02040139784392761ff0ac336c0c406e1266d', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bdd3adcb5865071aa3c8966488c6fb500ff3bb59', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c22b2b95ab52f21ea752d0795f25e574f182ace4', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6ba031918f5c65f06c4a95b7cdfde6dd3eb4f0c0', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b8f6439805f9b6bce5fe86ef741c94039b13a05c', 'committer_username': 'charlotte12l', 'committer_name': 'Xingyu Liu', 'committer_email': None, 'commit_date': datetime.datetime(2018, 4, 10, 9, 14, 54, tzinfo=datetime.timezone.utc)}]",Xingyu Liu,38244988,,User,,35,,24,46
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+1460385,scipy,scipy/scipy,Python,5113,12859,346,1672,33210,1811,31,304,"[{'id': 705906132, 'number': 14559, 'closed': datetime.datetime(2021, 12, 5, 4, 20, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 7, 15, 21, 23, tzinfo=datetime.timezone.utc), 'time_taken': 10328330.0, 'time_delta': '119 days, 12:58:50', 'additions': 108, 'deletions': 3, 'state': 'closed'}, {'id': 696446431, 'number': 14473, 'closed': datetime.datetime(2021, 7, 25, 20, 9, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 25, 5, 41, 32, tzinfo=datetime.timezone.utc), 'time_taken': 52056.0, 'time_delta': '14:27:36', 'additions': 36, 'deletions': 1, 'state': 'closed'}, {'id': 692092816, 'number': 14430, 'closed': datetime.datetime(2022, 10, 3, 0, 9, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 18, 13, 54, 17, tzinfo=datetime.timezone.utc), 'time_taken': 38139294.0, 'time_delta': '441 days, 10:14:54', 'additions': 42, 'deletions': 34, 'state': 'closed'}, {'id': 692074523, 'number': 14429, 'closed': None, 'created': datetime.datetime(2021, 7, 18, 11, 35, 17, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 188, 'deletions': 152, 'state': 'open'}, {'id': 687283485, 'number': 14381, 'closed': datetime.datetime(2021, 7, 11, 14, 34, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 11, 6, 31, 41, tzinfo=datetime.timezone.utc), 'time_taken': 28983.0, 'time_delta': '8:03:03', 'additions': 16, 'deletions': 1, 'state': 'closed'}, {'id': 686879345, 'number': 14376, 'closed': None, 'created': datetime.datetime(2021, 7, 9, 15, 38, 27, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 45, 'deletions': 2, 'state': 'open'}, {'id': 683041055, 'number': 14345, 'closed': datetime.datetime(2022, 9, 15, 3, 57, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 3, 15, 39, 13, tzinfo=datetime.timezone.utc), 'time_taken': 37887489.0, 'time_delta': '438 days, 12:18:09', 'additions': 85, 'deletions': 4, 'state': 'closed'}, {'id': 682702404, 'number': 14338, 'closed': datetime.datetime(2021, 12, 3, 4, 44, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 2, 15, 8, 17, tzinfo=datetime.timezone.utc), 'time_taken': 13268172.0, 'time_delta': '153 days, 13:36:12', 'additions': 18, 'deletions': 2, 'state': 'closed'}, {'id': 679094084, 'number': 14314, 'closed': datetime.datetime(2022, 7, 31, 5, 55, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 28, 14, 21, 14, tzinfo=datetime.timezone.utc), 'time_taken': 34356876.0, 'time_delta': '397 days, 15:34:36', 'additions': 55, 'deletions': 88, 'state': 'closed'}, {'id': 678498350, 'number': 14308, 'closed': datetime.datetime(2021, 7, 5, 8, 58, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 27, 11, 17, 8, tzinfo=datetime.timezone.utc), 'time_taken': 682910.0, 'time_delta': '7 days, 21:41:50', 'additions': 59, 'deletions': 45, 'state': 'closed'}, {'id': 669070275, 'number': 14228, 'closed': datetime.datetime(2021, 7, 31, 18, 3, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 13, 15, 19, 55, tzinfo=datetime.timezone.utc), 'time_taken': 4156993.0, 'time_delta': '48 days, 2:43:13', 'additions': 71, 'deletions': 4, 'state': 'closed'}, {'id': 668918943, 'number': 14224, 'closed': datetime.datetime(2021, 6, 12, 20, 0, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 12, 17, 33, 11, tzinfo=datetime.timezone.utc), 'time_taken': 8840.0, 'time_delta': '2:27:20', 'additions': 118, 'deletions': 119, 'state': 'closed'}, {'id': 659153087, 'number': 14163, 'closed': datetime.datetime(2021, 6, 7, 21, 46, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 1, 16, 14, 45, tzinfo=datetime.timezone.utc), 'time_taken': 538278.0, 'time_delta': '6 days, 5:31:18', 'additions': 24, 'deletions': 0, 'state': 'closed'}, {'id': 657606146, 'number': 14154, 'closed': datetime.datetime(2022, 9, 15, 3, 49, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 30, 6, 0, 21, tzinfo=datetime.timezone.utc), 'time_taken': 40859370.0, 'time_delta': '472 days, 21:49:30', 'additions': 103, 'deletions': 38, 'state': 'closed'}, {'id': 637965334, 'number': 14020, 'closed': datetime.datetime(2021, 5, 21, 16, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 10, 16, 31, 30, tzinfo=datetime.timezone.utc), 'time_taken': 948870.0, 'time_delta': '10 days, 23:34:30', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 637825932, 'number': 14018, 'closed': datetime.datetime(2021, 5, 21, 11, 50, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 10, 15, 14, 49, tzinfo=datetime.timezone.utc), 'time_taken': 938162.0, 'time_delta': '10 days, 20:36:02', 'additions': 15, 'deletions': 3, 'state': 'closed'}, {'id': 626006110, 'number': 13957, 'closed': datetime.datetime(2022, 11, 27, 5, 59, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 29, 11, 8, 13, tzinfo=datetime.timezone.utc), 'time_taken': 49834257.0, 'time_delta': '576 days, 18:50:57', 'additions': 136, 'deletions': 124, 'state': 'closed'}, {'id': 610305729, 'number': 13820, 'closed': datetime.datetime(2021, 4, 7, 8, 28, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 7, 3, 51, 1, tzinfo=datetime.timezone.utc), 'time_taken': 16638.0, 'time_delta': '4:37:18', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 610285198, 'number': 13819, 'closed': datetime.datetime(2021, 4, 7, 4, 8, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 7, 2, 44, tzinfo=datetime.timezone.utc), 'time_taken': 5062.0, 'time_delta': '1:24:22', 'additions': 6, 'deletions': 4, 'state': 'closed'}, {'id': 598046136, 'number': 13725, 'closed': datetime.datetime(2021, 3, 25, 12, 0, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 22, 14, 13, 23, tzinfo=datetime.timezone.utc), 'time_taken': 251249.0, 'time_delta': '2 days, 21:47:29', 'additions': 21, 'deletions': 0, 'state': 'closed'}, {'id': 592508447, 'number': 13685, 'closed': datetime.datetime(2021, 3, 16, 21, 14, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 14, 9, 19, 47, tzinfo=datetime.timezone.utc), 'time_taken': 215687.0, 'time_delta': '2 days, 11:54:47', 'additions': 2, 'deletions': 1, 'state': 'closed'}]"
+4479494,pythran,serge-sans-paille/pythran,C++,190,1992,49,72,3741,138,917,14,"[{'id': 713098195, 'number': 1878, 'closed': datetime.datetime(2021, 8, 18, 21, 50, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 4, 7, 3, tzinfo=datetime.timezone.utc), 'time_taken': 236599.0, 'time_delta': '2 days, 17:43:19', 'additions': 12, 'deletions': 21, 'state': 'closed'}, {'id': 712384267, 'number': 1876, 'closed': datetime.datetime(2021, 8, 17, 6, 35, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 13, 14, 3, 44, tzinfo=datetime.timezone.utc), 'time_taken': 318682.0, 'time_delta': '3 days, 16:31:22', 'additions': 382, 'deletions': 8, 'state': 'closed'}, {'id': 696525428, 'number': 1855, 'closed': datetime.datetime(2021, 8, 10, 21, 12, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 25, 16, 4, 45, tzinfo=datetime.timezone.utc), 'time_taken': 1400838.0, 'time_delta': '16 days, 5:07:18', 'additions': 60, 'deletions': 2, 'state': 'closed'}, {'id': 683725203, 'number': 1830, 'closed': datetime.datetime(2021, 7, 6, 5, 28, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 13, 56, 31, tzinfo=datetime.timezone.utc), 'time_taken': 55934.0, 'time_delta': '15:32:14', 'additions': 96, 'deletions': 0, 'state': 'closed'}]"

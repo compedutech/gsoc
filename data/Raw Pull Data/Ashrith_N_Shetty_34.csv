@@ -1,0 +1,388 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+476305139,Setup.py Fails because certain needs to be installed manually,"<!--- Provide a general, concise summary of your changes in the Title above -->
+On running `python setup.py develop` a ModuleNotFoundError is thrown, due to which the installation process fails.
+The reason being `""from owtf import __version""` imports packages from `install_requires dependencies `which are not yet installed
+We have to manually install the following Modules Tornado, PyYAML, Six, and then run `python setup.py develop` again to complete the installation process.
+
+## Description
+<!--- Describe your changes in detail -->
+Instead of importing the version number, the code the version will now extract it from init.py
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1057
+
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+To install OWTF, without the user manually needing to install the required dependent modules.
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [X] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+
+",True,1088,https://api.github.com/repos/owtf/owtf/pulls/1088,https://github.com/owtf/owtf/pull/1088,closed,18,7,1,1,0,0,0,0,[],2020-08-31 13:38:30+00:00,2020-11-06 17:31:03+00:00,5802753.0,"67 days, 3:52:33",[],"[{'commit_sha': 'bafdb4b83a52a0b8e82bf59909b72edd0ba4eaba', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+434840048,Fix docker build,"<!--- Provide a general, concise summary of your changes in the Title above -->
+
+- Using python3.7 to run OWTF, since python3.8 had dependency issues. 
+- Changed creation and activation of Python Virtual Environment.
+- Added wait-for-it.sh which was missing in Docker folder.
+- Updated configuration in settings.py to connect with PostgreSQL container.
+- Changed Kali Linux image to kalilinux/kali.
+
+
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1023
+
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+After the change, you can successfully build the docker container and run OWTF.
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1065,https://api.github.com/repos/owtf/owtf/pulls/1065,https://github.com/owtf/owtf/pull/1065,closed,254,38,4,17,1,6,0,0,[],2020-06-15 22:02:00+00:00,2020-11-06 17:34:33+00:00,12425553.0,"143 days, 19:32:33","[{'comment_id': 440889932, 'comment_body': 'you should keep this to `develop` since this is a dev Docker container - any changes you do while developing will automatically reflect otherwise you have to install the package every time to see your changes.', 'comment_created': datetime.datetime(2020, 6, 16, 14, 21, 54, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 440890096, 'comment_body': 'extra line', 'comment_created': datetime.datetime(2020, 6, 16, 14, 22, 5, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 441924452, 'comment_body': 'I have made the changes. Thank You.', 'comment_created': datetime.datetime(2020, 6, 18, 1, 53, 48, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 457548686, 'comment_body': '@viyatb  Have removed the extra lines, Thanks\r\n', 'comment_created': datetime.datetime(2020, 7, 20, 16, 43, 13, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 465165933, 'comment_body': 'lets remove this - egg info is only builds', 'comment_created': datetime.datetime(2020, 8, 4, 16, 10, 54, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 470582057, 'comment_body': '@viyatb Have made the changes.Thanks', 'comment_created': datetime.datetime(2020, 8, 14, 12, 1, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}]","[{'commit_sha': '0a7d98712f03f1ed0d402c1b3d83a141bda80a8e', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6e239e6b08c88434e321672fbe4d7ff94d867e6', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bbe03aee0658fce3edaf551b91f0a0a2b078b8e1', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '575fbf1855abe6d279636a03c2055b607e25f443', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a4e1b4ca785eeb94a919a05068da15587f23d383', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c49b5196e261cfd7c0771064a6e591cea49fa597', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '451c0f1cb6c307b547d0e769c0c9d8528eb4fc7e', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b572961c985b6de9ee00ae4ad6ab11afe666af3a', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40a995de8b5731c0f00f44cf431b355bb138e129', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f14bf3b398f014a8a45a6d5c2148968a62c62486', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '93aebd6a7f0b74b644461ccbdc75dc8d9d15e8ad', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf2ab7d4223364699fcc1dbabdf262a32f337108', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7476562e1b423d4b723badc4a628bc9e2d0859a9', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1de52097d6ca1d68407a8d52eae1c44e71e2f3e2', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1cb2d218a6660f8941eac4e6950a65089623a6d6', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '05d8ce8d65bacbb6a8ab5ea263fcb1b5b6eab7d8', 'committer_username': 'viyatb', 'committer_name': 'Viyat', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 29, 8, 41, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1e107a0c234f5821088286031e002e5a63b783bc', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+439577483,fix:Plugin Output Error,"<!--- Provide a general, concise summary of your changes in the Title above -->
+plugin_code was of the type list of bytes, this was causing a with PostgreSQL query, due to which outputs to the plugins run were not being displayed.
+The prefix of 'b' or 'B' is ignored in Python 2, hence it wasn't an issue while using python2.
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1062
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+![Screenshot from 2020-06-25 05-20-12](https://user-images.githubusercontent.com/52630129/85638515-b624a200-b6a3-11ea-99fc-125d2656da80.png)
+![Screenshot from 2020-06-25 05-19-07](https://user-images.githubusercontent.com/52630129/85638522-bc1a8300-b6a3-11ea-95d7-b4e7508cc1e0.png)
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1066,https://api.github.com/repos/owtf/owtf/pulls/1066,https://github.com/owtf/owtf/pull/1066,closed,5,3,1,3,0,0,0,0,[],2020-06-24 23:52:57+00:00,2020-06-25 03:20:56+00:00,12479.0,3:27:59,[],"[{'commit_sha': 'e1d9a741803945fccea7f909450892a2d46fb971', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be8c15f8edca55cbcd661ddac17e635e261ee67c', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23e7be7ec369baaa29dbed892b9a07a2053e4406', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+449907848,Fix#1069 Ensures that only selected plugins run,"<!--- Provide a general, concise summary of your changes in the Title above -->
+On selecting a particular plugin to run, all plugins were automatically getting selected and running,
+
+## Description
+<!--- Describe your changes in detail -->
+
+1. Sending the data as plugin_data.
+
+_Before the change_
+`0=g&1=r&2=o&3=u&4=p&5=%3D&6=w&7=e&8=b&9=%26&10=t&11=y&12=p&13=e&14=%3D&15=s&16=e&17=m&18=i&19=_&20=p&21=a&22=s&23=s&24=i&25=v&26=e&27=%26&28=c&29=o&30=d&31=e&32=%3D&33=O&34=W&35=T&36=F&37=&38=I&39=G&40=&41=0&42=0&43=4&44=%26&45=i&46=d&47=%3D&48=1&49=2&50=%26&51=f&52=o&53=r&54=c&55=e&56=_&57=o&58=v&59=e&60=r&61=w&62=r&63=i&64=t&65=e&66=%3D&67=f&68=a&69=l&70=s&71=e`
+
+_After the change_
+`plugin_data: group=web&type=semi_passive&code=OWTF-IG-004&id=4&force_overwrite=false`
+
+2. Convert all self.request.arguments from byte to character (Unicode) string.
+
+_Before the change_
+{'plugin_data': [b'group=web&type=semi_passive&code=OWTF-IG-004&id=5&force_overwrite=false']}
+
+_After the change_
+{'plugin_data': ['group=web&type=semi_passive&code=OWTF-IG-004&id=5&force_overwrite=false']}
+
+3.  Parse the data in required format by filter_data in post()
+
+_Before the change_
+{'plugin_data': ['group=web&type=semi_passive&code=OWTF-IG-004&id=7&force_overwrite=false']
+
+_After the change_
+{'group': ['web'], 'type': ['semi_passive'], 'code': ['OWTF-IG-004'], 'id': ['10'], 'force_overwrite': ['false
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1069
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [X] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1070,https://api.github.com/repos/owtf/owtf/pulls/1070,https://github.com/owtf/owtf/pull/1070,closed,93,46,4,9,1,4,0,0,[],2020-07-16 05:25:21+00:00,2020-11-06 17:33:04+00:00,9806863.0,"113 days, 12:07:43","[{'comment_id': 456945464, 'comment_body': '`force_overwrite` variable needs to be updated after the above change.', 'comment_created': datetime.datetime(2020, 7, 19, 19, 25, 49, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 457229710, 'comment_body': 'Thank you for reviewing the changes.\r\nI will look into it and make the required changes.\r\n', 'comment_created': datetime.datetime(2020, 7, 20, 9, 43, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 457510551, 'comment_body': 'correct, thanks @sharmamohit123 ', 'comment_created': datetime.datetime(2020, 7, 20, 15, 47, 9, tzinfo=datetime.timezone.utc), 'commenter': 'viyatb', 'type': 'User'}, {'comment_id': 459256428, 'comment_body': '@viyatb @sharmamohit123  Have made the required changes, Thank You.', 'comment_created': datetime.datetime(2020, 7, 23, 7, 16, 55, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}]","[{'commit_sha': 'e1d9a741803945fccea7f909450892a2d46fb971', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be8c15f8edca55cbcd661ddac17e635e261ee67c', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7b60872bbe3188c4f61439ef9087ce5778432a28', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d4160650b9aa751a78cf48f745fc84bea6d92e6', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c1645c3f9843b9ae00424aeb4ce3cc21aa5bae12', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d4e9ac70a40641a595cdd3edd78a44298eeed58', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b0e23ee2b370cdc99f1e771ff196a11903ec05f3', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d8e7b68379ddca3dc432acc483d3ea5f7f62693', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bfc1a9a97bdb1fc252b37aa46c61ef928f4c25db', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+449396020,Fix#1067 errors in http traceroute.py,"On Running OWTF-CM-003 Infrastructure Configuration Management, File ""HTTP-Traceroute.py"" throws various errors.
+1. NameError: name 'urllib' is not defined
+2. AttributeError: type object 'Request' has no attribute 'build_opener' etc
+
+## Description
+<!--- Describe your changes in detail -->
+
+- The request methods add_data, has_data, were deprecated since 3.3.
+- Use get() method instead of getheader() for HTTPMessage instance.
+- Converting byte string to base string.
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1067
+
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [ X] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1068,https://api.github.com/repos/owtf/owtf/pulls/1068,https://github.com/owtf/owtf/pull/1068,closed,29,11,1,3,2,0,0,0,[],2020-07-15 10:37:21+00:00,2020-07-20 15:48:21+00:00,450660.0,"5 days, 5:11:00",[],"[{'commit_sha': 'e1d9a741803945fccea7f909450892a2d46fb971', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be8c15f8edca55cbcd661ddac17e635e261ee67c', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9d4e950c353ab3f8f28e9e7e5c7f90c83a0de34', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+450281301,Fix(#1071)Deprecation and SSL compatibility for python3.7,"## Description
+
+`ssl.PROTOCOL_SSLv23` deprecated since version 3.6: Use `PROTOCOL_TLS `instead.
+Use `ssl.wrap_socket` in version python3.7  and `ssl.SSLSocket` in version python3.6 and below.
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1071
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [X] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1072,https://api.github.com/repos/owtf/owtf/pulls/1072,https://github.com/owtf/owtf/pull/1072,closed,23,10,2,2,0,0,0,0,[],2020-07-16 15:21:47+00:00,2020-07-20 15:54:20+00:00,347553.0,"4 days, 0:32:33",[],"[{'commit_sha': 'f9fe066824c70cb06d65b122bcee79c255177497', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f19588a2c973e05539be284bf30888d46a5684d5', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+460255416,Fix#1079 output passive plugins,"<!--- Provide a general, concise summary of your changes in the Title above -->
+Added support for displaying output for passive plugins
+
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1079
+
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+Display output for passive plugins
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Screenshots (if appropriate):
+<!--- Before the change and after the change. -->
+Before
+![Screenshot from 2020-07-31 21-00-18](https://user-images.githubusercontent.com/52630129/89050826-f47f4200-d370-11ea-8282-617b7509d3bd.png)
+
+After
+![Screenshot from 2020-07-31 20-56-09](https://user-images.githubusercontent.com/52630129/89050407-5a1efe80-d370-11ea-82e5-e0e98a3732cb.png)
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [X] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+",True,1080,https://api.github.com/repos/owtf/owtf/pulls/1080,https://github.com/owtf/owtf/pull/1080,closed,42,2,1,3,1,14,0,0,[],2020-07-31 15:36:14+00:00,2020-11-06 17:32:27+00:00,8474173.0,"98 days, 1:56:13","[{'comment_id': 463921836, 'comment_body': ""Use Evergreen-ui's **UnorderedList** component here."", 'comment_created': datetime.datetime(2020, 8, 1, 4, 46, 9, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 463921908, 'comment_body': 'Use **Link** component by evergreen-ui.', 'comment_created': datetime.datetime(2020, 8, 1, 4, 47, 11, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 463923057, 'comment_body': 'store the **ResourceListName** also in a variable', 'comment_created': datetime.datetime(2020, 8, 1, 4, 59, 55, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 463923126, 'comment_body': 'This should be **ResourceListName** value', 'comment_created': datetime.datetime(2020, 8, 1, 5, 0, 31, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 463923453, 'comment_body': 'In case of an empty list, a message (like ""Output not available"") would be more useful.', 'comment_created': datetime.datetime(2020, 8, 1, 5, 3, 53, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 463923518, 'comment_body': 'remove this comment.', 'comment_created': datetime.datetime(2020, 8, 1, 5, 4, 41, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 463990666, 'comment_body': 'Thank You, Will fix it!!', 'comment_created': datetime.datetime(2020, 8, 1, 19, 6, 56, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 463990757, 'comment_body': 'Thank you for reviewing!! Will modify it in the following commit.', 'comment_created': datetime.datetime(2020, 8, 1, 19, 8, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 463990923, 'comment_body': 'Thank you for reviewing. Will make the changes.', 'comment_created': datetime.datetime(2020, 8, 1, 19, 9, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 463990985, 'comment_body': 'Thanks, Will make the changes.', 'comment_created': datetime.datetime(2020, 8, 1, 19, 10, 48, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 463991640, 'comment_body': 'Thank You, Will make the changes.', 'comment_created': datetime.datetime(2020, 8, 1, 19, 19, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 463991765, 'comment_body': 'Thank You!! Will remove the comments.', 'comment_created': datetime.datetime(2020, 8, 1, 19, 20, 29, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}, {'comment_id': 467869317, 'comment_body': 'Make it `<Pane>`', 'comment_created': datetime.datetime(2020, 8, 10, 12, 29, 42, tzinfo=datetime.timezone.utc), 'commenter': 'sharmamohit123', 'type': 'User'}, {'comment_id': 467941459, 'comment_body': 'Done.\r\nPlease Look into it,', 'comment_created': datetime.datetime(2020, 8, 10, 14, 26, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Ashrith-Shetty', 'type': 'User'}]","[{'commit_sha': '2f4c194901bf42a15615a89daf8d57617762fdda', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ca07c8b015abc33764f161e4fcc1d91bbffe0df', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef2d7c750cdba2ca0c3f8edac50e9e10a124d2d4', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+471521414,Enhancement Plugin to test for Subdomain Takeover,"<!--- Provide a general, concise summary of your changes in the Title above -->
+Implement a plugin, which would check if the subdomains of a given domain are vulnerable for Subdomain Takeover.
+
+## Description
+<!--- Describe your changes in detail -->
+`subdomain_takeover.sh`
+The plugin first enumerates subdomain for a given domain. 
+The enumeration of the subdomains takes place in three stages:-
+1)It gathers subdomains from free online resources.
+2)Enumeration using Amass.
+3)Enumeration using Sublist3r.
+
+Once the enumeration is done, the subdomain are sent to Subjack which checks if a subdomain is vulnerable to takeover based on certain fingerprints.
+
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1082
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [X] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+
+
+",True,1083,https://api.github.com/repos/owtf/owtf/pulls/1083,https://github.com/owtf/owtf/pull/1083,closed,218,32,7,8,2,0,0,0,[],2020-08-21 09:27:56+00:00,2020-11-23 21:43:36+00:00,8165740.0,"94 days, 12:15:40",[],"[{'commit_sha': '51b2e61c69be39e70e3c609c3e31b81d7c385262', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '845843c12a292ce3d4019d16c126b21505beaaaf', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bebea99f2b8fc80f41fc64028921b65179a511ab', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6c651a6b150c9c5386b31c9699f121c2f68ca4c', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6b1bd64f325147d47685aa55e198a8b548e32db', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0fb1d5b577b75b16ab4d35d763be5db1187d21b2', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '951311a4fb301461bc6d94a2d359de235a1760e5', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ad14760b7c5e4f837fbf1d020a9f49729d03063', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+471572064,Fix#1084 minor issues in plugins,"<!--- Provide a general, concise summary of your changes in the Title above -->
+There were issues in running certain passive plugins which used `censys` and `shodan.io.`
+All these were issues with plugins which used `theHarvester `and `wapiti`
+
+
+## Description
+<!--- Describe your changes in detail -->
+
+- Updated the path of tools theHarvester and wapiti.
+- Updated the domain name and query parameters for censys and shodan.
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1084
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [X] Bug fix (non-breaking change which fixes an issue)
+
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+
+",True,1085,https://api.github.com/repos/owtf/owtf/pulls/1085,https://github.com/owtf/owtf/pull/1085,closed,6,6,2,2,0,0,0,0,[],2020-08-21 11:14:51+00:00,2020-11-06 17:31:58+00:00,6675427.0,"77 days, 6:17:07",[],"[{'commit_sha': '20bb10b3323b52b2e08f157c74d0954277b4e5f6', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47f5ecfc5da8d719d32fac0f3d09f6cb16d84b9a', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+476244520,Enhancement: Check for Public S3 Buckets,"<!--- Provide a general, concise summary of your changes in the Title above -->
+With Open S3 Buckets, sensitive files can be publicly accessed. 
+
+## Description
+<!--- Describe your changes in detail -->
+`https://buckets.grayhatwarfare.com` is a free tool that lists open S3 buckets.
+
+Since greyhatwarfare works best with Second Level Domain, we extract the second level domain and then pass it to the search query.
+
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+https://github.com/owtf/owtf/issues/1086
+
+## Reviewers
+<!--- @mentions of the person/people responsible for reviewing proposed changes. -->
+@viyatb @sharmamohit123 
+
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [X] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Other
+
+### Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [X] My code follows the code style (modified PEP8) of this project.
+",True,1087,https://api.github.com/repos/owtf/owtf/pulls/1087,https://github.com/owtf/owtf/pull/1087,closed,24,0,3,3,1,0,0,0,[],2020-08-31 11:43:55+00:00,2020-11-06 17:35:27+00:00,5809892.0,"67 days, 5:51:32",[],"[{'commit_sha': '05105a994e5d2757c236d2d345b3aa46de2741c6', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30e38909d8591c7085dbe4c5b61183df16daf2cd', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'abe8812637771ec0db22b6e32b0abe1f435d28fb', 'committer_username': 'Ashrith-Shetty', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 7, 14, 58, 16, tzinfo=datetime.timezone.utc)}]",,52630129,,User,,9,,6,7
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+3215654,owtf,owtf/owtf,Python,471,1800,128,71,2228,93,5,18,"[{'id': 479907528, 'number': 1092, 'closed': datetime.datetime(2020, 11, 6, 17, 27, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 4, 17, 27, 33, tzinfo=datetime.timezone.utc), 'time_taken': 5443169.0, 'time_delta': '62 days, 23:59:29', 'additions': 25, 'deletions': 11, 'state': 'closed'}, {'id': 479772521, 'number': 1091, 'closed': datetime.datetime(2020, 11, 6, 17, 28, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 4, 15, 2, 40, tzinfo=datetime.timezone.utc), 'time_taken': 5451927.0, 'time_delta': '63 days, 2:25:27', 'additions': 1, 'deletions': 2, 'state': 'closed'}, {'id': 476305139, 'number': 1088, 'closed': datetime.datetime(2020, 11, 6, 17, 31, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 31, 13, 38, 30, tzinfo=datetime.timezone.utc), 'time_taken': 5802753.0, 'time_delta': '67 days, 3:52:33', 'additions': 18, 'deletions': 7, 'state': 'closed'}, {'id': 476244520, 'number': 1087, 'closed': datetime.datetime(2020, 11, 6, 17, 35, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 31, 11, 43, 55, tzinfo=datetime.timezone.utc), 'time_taken': 5809892.0, 'time_delta': '67 days, 5:51:32', 'additions': 24, 'deletions': 0, 'state': 'closed'}, {'id': 471572064, 'number': 1085, 'closed': datetime.datetime(2020, 11, 6, 17, 31, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 21, 11, 14, 51, tzinfo=datetime.timezone.utc), 'time_taken': 6675427.0, 'time_delta': '77 days, 6:17:07', 'additions': 6, 'deletions': 6, 'state': 'closed'}, {'id': 471521414, 'number': 1083, 'closed': datetime.datetime(2020, 11, 23, 21, 43, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 21, 9, 27, 56, tzinfo=datetime.timezone.utc), 'time_taken': 8165740.0, 'time_delta': '94 days, 12:15:40', 'additions': 218, 'deletions': 32, 'state': 'closed'}, {'id': 460255416, 'number': 1080, 'closed': datetime.datetime(2020, 11, 6, 17, 32, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 31, 15, 36, 14, tzinfo=datetime.timezone.utc), 'time_taken': 8474173.0, 'time_delta': '98 days, 1:56:13', 'additions': 42, 'deletions': 2, 'state': 'closed'}, {'id': 456409097, 'number': 1077, 'closed': datetime.datetime(2022, 12, 6, 17, 8, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 24, 17, 39, 58, tzinfo=datetime.timezone.utc), 'time_taken': 74734114.0, 'time_delta': '864 days, 23:28:34', 'additions': 89, 'deletions': 53, 'state': 'closed'}, {'id': 450301622, 'number': 1074, 'closed': datetime.datetime(2020, 7, 20, 15, 54, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 16, 15, 49, 12, tzinfo=datetime.timezone.utc), 'time_taken': 345939.0, 'time_delta': '4 days, 0:05:39', 'additions': 8, 'deletions': 8, 'state': 'closed'}, {'id': 450281301, 'number': 1072, 'closed': datetime.datetime(2020, 7, 20, 15, 54, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 16, 15, 21, 47, tzinfo=datetime.timezone.utc), 'time_taken': 347553.0, 'time_delta': '4 days, 0:32:33', 'additions': 23, 'deletions': 10, 'state': 'closed'}, {'id': 449907848, 'number': 1070, 'closed': datetime.datetime(2020, 11, 6, 17, 33, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 16, 5, 25, 21, tzinfo=datetime.timezone.utc), 'time_taken': 9806863.0, 'time_delta': '113 days, 12:07:43', 'additions': 93, 'deletions': 46, 'state': 'closed'}, {'id': 449396020, 'number': 1068, 'closed': datetime.datetime(2020, 7, 20, 15, 48, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 15, 10, 37, 21, tzinfo=datetime.timezone.utc), 'time_taken': 450660.0, 'time_delta': '5 days, 5:11:00', 'additions': 29, 'deletions': 11, 'state': 'closed'}, {'id': 439577483, 'number': 1066, 'closed': datetime.datetime(2020, 6, 25, 3, 20, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 24, 23, 52, 57, tzinfo=datetime.timezone.utc), 'time_taken': 12479.0, 'time_delta': '3:27:59', 'additions': 5, 'deletions': 3, 'state': 'closed'}, {'id': 434840048, 'number': 1065, 'closed': datetime.datetime(2020, 11, 6, 17, 34, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 15, 22, 2, tzinfo=datetime.timezone.utc), 'time_taken': 12425553.0, 'time_delta': '143 days, 19:32:33', 'additions': 254, 'deletions': 38, 'state': 'closed'}, {'id': 408468805, 'number': 1061, 'closed': datetime.datetime(2020, 5, 20, 19, 48, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 24, 10, 31, 4, tzinfo=datetime.timezone.utc), 'time_taken': 2279857.0, 'time_delta': '26 days, 9:17:37', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 408256760, 'number': 1059, 'closed': datetime.datetime(2020, 5, 20, 19, 47, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 23, 23, 51, 3, tzinfo=datetime.timezone.utc), 'time_taken': 2318177.0, 'time_delta': '26 days, 19:56:17', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 408245723, 'number': 1058, 'closed': datetime.datetime(2020, 8, 31, 13, 38, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 23, 23, 12, 31, tzinfo=datetime.timezone.utc), 'time_taken': 11197578.0, 'time_delta': '129 days, 14:26:18', 'additions': 13, 'deletions': 2, 'state': 'closed'}, {'id': 395087136, 'number': 1054, 'closed': datetime.datetime(2020, 3, 29, 15, 37, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 28, 12, 7, 29, tzinfo=datetime.timezone.utc), 'time_taken': 99013.0, 'time_delta': '1 day, 3:30:13', 'additions': 2, 'deletions': 1, 'state': 'closed'}, {'id': 394272398, 'number': 1053, 'closed': datetime.datetime(2020, 3, 27, 0, 22, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 26, 16, 18, 46, tzinfo=datetime.timezone.utc), 'time_taken': 29017.0, 'time_delta': '8:03:37', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 392078411, 'number': 1052, 'closed': datetime.datetime(2020, 3, 29, 15, 39, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 22, 22, 7, 19, tzinfo=datetime.timezone.utc), 'time_taken': 581519.0, 'time_delta': '6 days, 17:31:59', 'additions': 3, 'deletions': 2, 'state': 'closed'}]"

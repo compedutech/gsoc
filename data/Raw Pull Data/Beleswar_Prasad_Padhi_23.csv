@@ -1,0 +1,618 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+815711685,Fix msfdb init command failure when opting not to initialize webservices,"This PR fixes #15981   
+
+## Cause of bug  
+The cause of this issue was the disparity in the msf-command syntax (`./command`) in the `msfdb` file. The `./` part of the command in the beginning would not be the correct way to get executed in a windows environment (cmd). (https://github.com/rapid7/metasploit-framework/blob/master/msfdb#L661-L673).  
+  
+The `run_msfconsole_command` method attempts to run the command in 2 ways. First, it runs the command with the default env settings and then with the path set to current directory (by adding a `.` in the beginning of the input command). (https://github.com/rapid7/metasploit-framework/blob/master/msfdb#L655). Since `run_msfconsole_command` itself adds a `.` to the command (if it doesn't get executed in the default env), we need to change the command syntax from `./command` to `command`. This ensures the command works both in windows and linux systems.  
+  
+## Approach  
+The mere solution was to modify the syntax of the commands by removing the initial `./` part (done in commit 1). However, to make the code more maintainable and avoid the same issue in the future, it is better that we consolidate the whole 
+   `./msfconsole -qx` initial part of the command into the `run_msfconsole_command` method and only take the command to be executed by `msf_console` as its argument (done in commit 2).  
+  
+This will ensure that we are not prone to the same error in future, as any new command now would only consist of the optional commands to be run (eg: `db_disconnect --clear; exit`) ; and not the whole command (eg: `./msfconsole -qx 'db_disconnect --clear; exit'`). So, there would be no confusion of whether to include `./` before the command or not.  
+  
+## Before  
+```  
+C:\Windows\system32>msfdb init
+C:/metasploit-framework/embedded/lib/ruby/gems/3.0.0/gems/zeitwerk-2.5.3/lib/zeitwerk/kernel.rb:35: warning: Win32API is deprecated after Ruby 1.9.1; use fiddle directly instead
+[?] Would you like to init the webservice? (Not Required) [no]: no
+Clearing http web data service credentials in msfconsole
+C:/metasploit-framework/embedded/lib/ruby/3.0.0/open3.rb:221:in `spawn': No such file or directory - ./msfconsole -qx 'db_disconnect --clear; exit' (Errno::ENOENT)
+        from C:/metasploit-framework/embedded/lib/ruby/3.0.0/open3.rb:221:in `popen_run'
+        from C:/metasploit-framework/embedded/lib/ruby/3.0.0/open3.rb:209:in `popen2e'
+        from C:/metasploit-framework/embedded/lib/ruby/3.0.0/open3.rb:398:in `capture2e'
+        from C:/metasploit-framework/embedded/framework/lib/msfdb_helpers/db_interface.rb:55:in `run_cmd'
+        from C:/metasploit-framework/bin/../embedded/framework/msfdb:655:in `run_msfconsole_command'
+        from C:/metasploit-framework/bin/../embedded/framework/msfdb:674:in `clear_default_data_service'
+        from C:/metasploit-framework/bin/../embedded/framework/msfdb:1069:in `<main>'  
+```  
+  
+## After  
+```  
+C:\Windows\system32>msfdb init
+C:/metasploit-framework/embedded/lib/ruby/gems/3.0.0/gems/zeitwerk-2.5.3/lib/zeitwerk/kernel.rb:35: warning: Win32API is deprecated after Ruby 1.9.1; use fiddle directly instead
+[?] Would you like to init the webservice? (Not Required) [no]: no
+Clearing http web data service credentials in msfconsole
+Running the 'init' command for the database:
+Creating database at C:/Users/IEUser/.msf4/db
+Starting database at C:/Users/IEUser/.msf4/db...  
+```  
+  
+## Verification
+  
+- [ ] Install MSF on Windows 10 using the latest MSI installer
+- [ ] Add `MSF BIN` directory to `%PATH%` environment variable
+- [ ] Copy the modified `msfdb` file (of this PR) and place it in the `C:\metasploit-framework\embedded\framework` directory, deleting the original `msfdb` file.
+- [ ] Open `cmd` as administrator
+- [ ] Run `msfdb init`
+- [ ] Type `no` when asked to init webservice
+- [ ] **Verify** that the init script continues to **create and start the database** (it may hang at the step of `starting the database`, which is its sister issue I am working on next.)
+- [ ] **Verify** that the init script **does not result in a crash** or raise an error.",True,16025,https://api.github.com/repos/rapid7/metasploit-framework/pulls/16025,https://github.com/rapid7/metasploit-framework/pull/16025,closed,6,4,1,2,19,0,3,1,"[{'name': 'bug'}, {'name': 'database'}, {'name': 'rn-fix'}]",2022-01-06 17:43:28+00:00,2022-02-02 11:31:23+00:00,2310475.0,"26 days, 17:47:55",[],"[{'commit_sha': '30b1b4f47e69168414836007badc7227243462de', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c47ea05d2a0771201e8e646c4dbf03d3ca8fdafa', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}]",Beleswar Prasad Padhi,76038732,beleswarprasad@gmail.com,User,,29,,18,71
+806100424,Fix session crashing when unsetting smbuser or smbpass for a smb module,"This PR fixes #15916   
+  
+**Cause of bug:**
+The cause of this issue was that, the ```login_scanner.rb``` code checked for either valued creds or empty strings before applying ```force_encoding``` method on them. There was no check on nil values explicitly. So unsetting the smbuser and smbpass makes the creds nil values which raises the ```undefined method force_encoding``` exception.  
+  
+**Approach:**
+So one solution was to have a check on the nil values explicitly in the ```login_scanner.rb``` code. However, I figured out that ```login_scanner.rb``` always referenced to ```simple_client.rb``` while attempting a login on the creds. And in the ```simple_client.rb``` code, there was a check on the **smbpass**, which made it assign to an empty string if it was a nil value. Jackpot, So here I just added the same condition for **smbuser** as well, which solved the bug!  
+  
+I chose to change the ```simple_client.rb``` because instead of applying the nil check condition on all files which have smbuser creds, it would be better to change in the sole root file which they always reference to for attempting a login.
+  
+**Before:**  
+  
+```  
+msf6 > use exploit/windows/smb/ms07_029_msdns_zonename 
+[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > unset smbuser
+Unsetting smbuser...
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > unset smbpass
+Unsetting smbpass...
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > set RHOSTS 192.168.1.100
+RHOSTS => 192.168.1.100
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > run
+
+[*] Started reverse TCP handler on 192.168.1.105:4444 
+[-] 192.168.1.100:445 - Exploit failed [no-access]: Rex::Proto::SMB::Exceptions::LoginError Login Failed: undefined method `force_encoding' for nil:NilClass
+[*] Exploit completed, but no session was created.  
+```  
+  
+**After:**  
+  
+```  
+msf6 > use exploit/windows/smb/ms07_029_msdns_zonename 
+[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > unset smbuser
+Unsetting smbuser...
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > unset smbpass
+Unsetting smbpass...
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > set RHOSTS 192.168.1.100
+RHOSTS => 192.168.1.100
+msf6 exploit(windows/smb/ms07_029_msdns_zonename) > run
+
+[*] Started reverse TCP handler on 192.168.1.105:4444 
+[*] 192.168.1.100:445 - Unknown OS: Windows 7 Professional 7601 Service Pack 1
+[*] Exploit completed, but no session was created.  
+```
+
+## Verification
+
+- [ ] Start `msfconsole`
+- [ ] Use any smb module. eg - `use exploit/windows/smb/ms07_029_msdns_zonename`
+- [ ] `unset smbuser`
+- [ ] `unset smbpass`
+- [ ] `set RHOSTS TARGET_IP_ADDR`
+- [ ] `run`
+- [ ] **Verify** that `run` completes the exploit successfully even though no session is created 
+- [ ] **Verify** that `run` does not crash or raise an exception.",True,15982,https://api.github.com/repos/rapid7/metasploit-framework/pulls/15982,https://github.com/rapid7/metasploit-framework/pull/15982,closed,2,1,1,1,9,0,3,1,"[{'name': 'library'}, {'name': 'bug'}, {'name': 'rn-fix'}]",2021-12-19 17:13:57+00:00,2022-01-04 20:43:27+00:00,1394970.0,"16 days, 3:29:30",[],"[{'commit_sha': '56b19e5e9b92e91f09596f59d27645b972f02abf', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}]",Beleswar Prasad Padhi,76038732,beleswarprasad@gmail.com,User,,29,,18,71
+872181145,Add lcat command for meterpreter,"This PR implements the suggestion feature #16167 
+
+These changes introduce a `lcat` command for the meterpreter, where-in you can read the contents of a local file (present in the local machine or attacking machine),  to the meterpreter terminal. The already present `cat` command only reads the files that are present in the remote machine.
+
+**Before**
+
+No command to read the local files in the terminal
+
+**After**
+
+```
+meterpreter > pwd
+/
+meterpreter > lpwd
+/home/beleswar/metasploit-framework
+
+meterpreter > cat /etc/hosts
+127.0.0.1	localhost
+127.0.1.1	metasploitable.localdomain	metasploitable
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+meterpreter > lcat /etc/hosts
+# Static table lookup for hostnames.
+# See hosts(5) for details.
+
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	arch.localdomain	arch
+
+meterpreter > lcat -h
+Usage: lcat file
+```
+
+**Note:**
+
+In the above output, `cat` displays the hosts file of metasploitable (remote machine) and `lcat` displays the hosts file of arch linux (local machine). The tabs functionality is also added for lcat command.
+
+## Verification
+
+List the steps needed to make sure this thing works
+
+- [ ] Open a meterpreter session against a remote machine.
+- [ ] run `pwd` and `lpwd` to check the current directories in both machines.
+- [ ] run `lcat <path/to/your/localfile>` (ex- `lcat msfvenom`)
+- [ ] **Verify** that `lcat` displays the contents of the local file in the terminal
+- [ ] **Verify** the `lcat` also utilizes tab functionality to autocomplete file names.
+
+
+Fixes #16167",True,16282,https://api.github.com/repos/rapid7/metasploit-framework/pulls/16282,https://github.com/rapid7/metasploit-framework/pull/16282,closed,40,0,2,2,2,0,3,1,"[{'name': 'meterpreter'}, {'name': 'feature'}, {'name': 'rn-enhancement'}]",2022-03-05 05:27:50+00:00,2022-03-07 14:56:47+00:00,206937.0,"2 days, 9:28:57",[],"[{'commit_sha': '58484f3ae04a3752195772d5633a9f3e418f455d', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea954f758579eaf89cd52c79c6bf501b44f99406', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}]",Beleswar Prasad Padhi,76038732,beleswarprasad@gmail.com,User,,29,,18,71
+1066262863,GSoC Project: Implement HTTP-Trace enabled login scanners ,"This PR implements the **HTTP-Trace** option for login scanners of the framework. This is achieved by crafting a logging proc and passing it over to **Rex::Proto::Http::Client** while any HTTP request is sent.  
+  
+## Cause of Bug
+Currently the HTTP-Trace feature is implemented in the `Msf::Core::Exploit::Remote::HttpClient` mixin, hence it is only available for the exploit modules which import its functionality. The Login Scanner library is defined in the `Metasploit::Framework::LoginScanner::HTTP` mixin and thus is unable to access the HTTP-Trace feature.
+
+## Approach
+The idea is to implement a proc in `Metasploit::Framework::LoginScanner::HTTP` library for logging the HTTP requests and responses to the console. The `Metasploit::Framework::LoginScanner::HTTP` library is the central class to handle the HTTP requests and responses of all the login scanner modules. The `Metasploit::Framework::LoginScanner::HTTP library ultimately forwards the HTTP request to `Rex::Proto::Http::Client` for transmitting the request to the server and obtaining its response back.  
+  
+So, the logging proc defined in `Metasploit::Framework::LoginScanner::HTTP` is passed to `Rex::Proto::Http::Client` along with the HTTP request, and gets executed on the context of the Rex class. Once the proc is executed, the HTTP requests and responses are logged to the console.  
+  
+Note:
+While majority of the Login Scanner libraries (like `Metasploit::Framework::LoginScanner::Caidao`) access `Metasploit::Framework::LoginScanner::HTTP` class for sending requests, there are some libraries  (like `Metasploit::Framework::LoginScanner::Zabbix`) which do not access `Metasploit::Framework::LoginScanner::HTTP`, rather directly transmit the request via `Rex::Proto::Http::Client`. This PR also takes care of normalizing those login scanner libraries to follow the ideal template of accessing `Metasploit::Framework::LoginScanner::HTTP` library for sending HTTP requests and receiving responses.
+
+## Work Done in the project
+- Implemented **HttpTrace**, **HttpTraceHeadersOnly**, **HttpTraceColors** options for login scanner modules.
+- Normalized all login scanner modules to follow one template.
+- Covered RSpec unit tests for the functionality added.
+  
+## Before
+```
+msf6 > use auxiliary/scanner/http/buffalo_login 
+msf6 auxiliary(scanner/http/buffalo_login) > set RHOSTS www.google.com
+RHOSTS => www.google.com
+msf6 auxiliary(scanner/http/buffalo_login) > set HttpTrace true
+HttpTrace => true
+msf6 auxiliary(scanner/http/buffalo_login) > set USERPASS_FILE data/wordlists/http_default_userpass.txt
+USERPASS_FILE => data/wordlists/http_default_userpass.txt
+msf6 auxiliary(scanner/http/buffalo_login) > run
+
+[-] 142.250.193.164:80 - LOGIN FAILED: connect:connect (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: sitecom:sitecom (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: admin:1234 (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: cisco:cisco (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: cisco:sanfran (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: private:private (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: wampp:xampp (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: newuser:wampp (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: xampp-dav-unsecure:ppmax2011  (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: admin:turnkey (Incorrect)
+[-] 142.250.193.164:80 - LOGIN FAILED: vagrant:vagrant (Incorrect)
+[*] Scanned 1 of 2 hosts (50% complete)
+[-] 2404:6800:4007:821::2004:80 - LOGIN FAILED: connect:connect (Unable to Connect)
+[-] 2404:6800:4007:821::2004:80 - LOGIN FAILED: sitecom:sitecom (Unable to Connect)
+[-] 2404:6800:4007:821::2004:80 - LOGIN FAILED: admin:1234 (Unable to Connect)
+[*] Scanned 2 of 2 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
+## After
+<details>
+<summary>output</summary>
+
+```
+msf6 > use auxiliary/scanner/http/buffalo_login 
+msf6 auxiliary(scanner/http/buffalo_login) > set RHOSTS www.google.com
+RHOSTS => www.google.com
+msf6 auxiliary(scanner/http/buffalo_login) > set USERPASS_FILE data/wordlists/http_default_userpass.txt
+USERPASS_FILE => data/wordlists/http_default_userpass.txt
+msf6 auxiliary(scanner/http/buffalo_login) > set HttpTrace true
+HttpTrace => true
+msf6 auxiliary(scanner/http/buffalo_login) > run
+
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 51
+
+bufaction=verifyLogin&user=connect&password=connect
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:16 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: connect:connect (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 51
+
+bufaction=verifyLogin&user=sitecom&password=sitecom
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: sitecom:sitecom (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+bufaction=verifyLogin&user=admin&password=1234
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: admin:1234 (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+bufaction=verifyLogin&user=cisco&password=cisco
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: cisco:cisco (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 49
+
+bufaction=verifyLogin&user=cisco&password=sanfran
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: cisco:sanfran (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 51
+
+bufaction=verifyLogin&user=private&password=private
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: private:private (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+bufaction=verifyLogin&user=wampp&password=xampp
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: wampp:xampp (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 49
+
+bufaction=verifyLogin&user=newuser&password=wampp
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: newuser:wampp (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 67
+
+bufaction=verifyLogin&user=xampp-dav-unsecure&password=ppmax2011%20
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:17 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: xampp-dav-unsecure:ppmax2011  (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 49
+
+bufaction=verifyLogin&user=admin&password=turnkey
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:18 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: admin:turnkey (Incorrect)
+####################
+# Request:
+####################
+POST /dynamic.pl HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 12_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 51
+
+bufaction=verifyLogin&user=vagrant&password=vagrant
+####################
+# Response:
+####################
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
+Content-Length: 1571
+Date: Mon, 26 Sep 2022 06:21:18 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content=""initial-scale=1, minimum-scale=1, width=device-width"">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/dynamic.pl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+[-] 142.250.193.164:80 - LOGIN FAILED: vagrant:vagrant (Incorrect)
+[*] Scanned 1 of 2 hosts (50% complete)
+[-] 2404:6800:4007:821::2004:80 - LOGIN FAILED: connect:connect (Unable to Connect)
+[-] 2404:6800:4007:821::2004:80 - LOGIN FAILED: sitecom:sitecom (Unable to Connect)
+[-] 2404:6800:4007:821::2004:80 - LOGIN FAILED: admin:1234 (Unable to Connect)
+[*] Scanned 2 of 2 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
+</details>
+
+## Verification
+List the steps needed to make sure this thing works
+
+- Start `msfconsole`
+- Use any login scanner. (ex - `use auxiliary/scanner/http/buffalo_login`)
+- `set RHOSTS www.google.com`
+- `set USERPASS_FILE data/wordlists/http_default_userpass.txt`
+- `set HttpTrace true`
+- `run`
+- **Verify** that the HTTP requests and responses are tracked to the console for every credential tested.
+- `set HttpTraceHeadersOnly true`
+- `run`
+- **Verify** that only the Headers of HTTP requests and responses are tracked to the console for every credential tested.
+- `set HttpTraceColors blu/grn`
+- `run`
+- **Verify** that the requests and responses are tracked to the console in **blue** and **green** color respectively.
+
+## Acknowledgement
+I extend my heartfelt thanks to @gwillcox-r7 @zeroSteiner @adfoster-r7 @jmartin-r7 to guide me throughout the course of the project and for always helping me when I was stuck with the code. This wouldn't be possible without your helping hand :)",True,17060,https://api.github.com/repos/rapid7/metasploit-framework/pulls/17060,https://github.com/rapid7/metasploit-framework/pull/17060,closed,634,224,22,4,22,30,4,1,"[{'name': 'library'}, {'name': 'enhancement'}, {'name': 'rn-enhancement'}, {'name': 'GSoC'}]",2022-09-25 10:38:50+00:00,2023-05-11 14:45:01+00:00,19713971.0,"228 days, 4:06:11","[{'comment_id': 983576513, 'comment_body': ""If you're not using the options passed to the connect method here, you might as well remove the arguments to `set_http_trace_proc` and just use the datastore directly. That would mean you'd remove all three of these arguments and remove them from `#configure_http_login_scanner` because they're not being used."", 'comment_created': datetime.datetime(2022, 9, 29, 13, 54, 34, tzinfo=datetime.timezone.utc), 'commenter': 'smcintyre-r7', 'type': 'User'}, {'comment_id': 983578836, 'comment_body': ""It's really important that the trace proc work on requests and responses individually. This should be used to ensure that requests are logged / traced when they're made regardless of whether or not a response is received. This functionality would be critical for a user that is trying to debug a problem involving the server not responding."", 'comment_created': datetime.datetime(2022, 9, 29, 13, 55, 40, tzinfo=datetime.timezone.utc), 'commenter': 'smcintyre-r7', 'type': 'User'}, {'comment_id': 983581586, 'comment_body': ""This here is related to what I was saying about processing the requests and responses individually. You can see here the request is logged before it's made. So if a response is never received or `c.send_recv` crashes, the request will already have been logged."", 'comment_created': datetime.datetime(2022, 9, 29, 13, 57, 1, tzinfo=datetime.timezone.utc), 'commenter': 'smcintyre-r7', 'type': 'User'}, {'comment_id': 983583363, 'comment_body': ""Should document the `http_trace_proc` argument. It's a bit more complicated than the others and the documentation should include the arguments it's called with and a return value if one is expected."", 'comment_created': datetime.datetime(2022, 9, 29, 13, 57, 58, tzinfo=datetime.timezone.utc), 'commenter': 'smcintyre-r7', 'type': 'User'}, {'comment_id': 1039721991, 'comment_body': ""It might make sense to rename these to be something more generic. i.e. `on_request` `on_response`, that will allow us to hook into this again in the future without being tied specifically to logging.\r\n\r\nAnd similar to the other comments, as we're aiming towards having a single subscriber instance receive the on_request/on_response calls this will just be:\r\n\r\n```ruby\r\nself.subscriber = subscriber || HttpSubscriber.new\r\n```\r\n\r\nNote that the `HttpSubscriber` would be the default noop (no operation) implementation of an http subscriber which doesn't log anything by default. We can use that to ensure we don't need lots of `if subscriber.nil?` guard clauses in our implementation"", 'comment_created': datetime.datetime(2022, 12, 5, 15, 10, 50, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039727260, 'comment_body': 'It looks like the implementation of this is quite similar to the login scanner; Could we extract these into a single implementation? That way folk can change the implementation in one place\r\n\r\n```ruby\r\nclass HttpSubscriber\r\n  def on_request(request)\r\n  end\r\n\r\n  def on_response(response)\r\n  end\r\nend\r\n\r\nclass HttpLoggerSubscriber < HttpSubscriber\r\n  def initialize(logger: logger)\r\n    @logger = logger\r\n  end\r\n\r\n  def on_request(request)\r\n    logger.print_line("".... request ..."")\r\n  end\r\n\r\n  def on_response(response)\r\n    logger.print_line("".... response ..."")\r\n  end\r\nend\r\n```\r\n\r\nUsage:\r\n\r\n```ruby\r\nhttp_logger_subscriber = HttpLoggerSubscriber.new(logger: self)\r\n```\r\n\r\nNote that in the scenario of a login scanner - we will pass in `logger: framework_module` here - whilst in the context of running a module we\'ll pass in `logger: self` which will allow for the implementation to be consistent across both usages.\r\n\r\nWe\'ll also update the http client instantiation as well:\r\n\r\n```ruby\r\n    nclient = Rex::Proto::Http::Client.new(\r\n      ... params as usual...,\r\n      subscriber: http_logger_subscriber,\r\n   )\r\n```', 'comment_created': datetime.datetime(2022, 12, 5, 15, 14, 48, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039733722, 'comment_body': ""If we're passing in the subscriber logger object here, that would become something like:\r\n\r\n```suggestion\r\n      subscriber: http_subscriber_logger\r\n```"", 'comment_created': datetime.datetime(2022, 12, 5, 15, 19, 38, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039745429, 'comment_body': ""If this took an object, instead of separate methods, we wouldn't need the `proc` workaround here to act as a closure around the original logger state:\r\n\r\n```suggestion\r\n  def initialize(host, port = 80, context = {}, ssl = nil, ssl_version = nil, proxies = nil, username = '', password = '', comm: nil, subscriber: nil)\r\n```"", 'comment_created': datetime.datetime(2022, 12, 5, 15, 29, 4, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039747609, 'comment_body': '```suggestion\r\n    subscriber.on_request(req)\r\n```', 'comment_created': datetime.datetime(2022, 12, 5, 15, 30, 51, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039747833, 'comment_body': '```suggestion\r\n    subscriber.on_response(res)\r\n```', 'comment_created': datetime.datetime(2022, 12, 5, 15, 31, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039766563, 'comment_body': ""Is there a reason for needing to rename this? 👀 \r\n\r\nIf we want to perform the original method implementation, but perform the side effect of grabbing the cookie - I think this could just become:\r\n\r\n```ruby\r\n        def send_request(opts)\r\n          res = super(opts)\r\n          \r\n          # Found a cookie? Set it. We're going to need it.\r\n          if res && res.get_cookies =~ /JSESSIONID=(\\w*);/i\r\n            self.jsession = $1\r\n          end\r\n          res\r\n       end\r\n```\r\n\r\nContext: We can use Ruby's `super` keyword here to call the original implementation"", 'comment_created': datetime.datetime(2022, 12, 5, 15, 46, 31, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1039777697, 'comment_body': 'I think for consistency, this should follow the existing approach:\r\n\r\n```suggestion\r\n            req = opts[:cgi] ? cli.request_cgi(opts) : cli.request_raw(opts)\r\n```\r\n\r\nAs defined by:\r\n\r\nhttps://github.com/rapid7/metasploit-framework/blob/f4745f884a835ffc07b9dd1158ac70983315dfdc/lib/msf/core/exploit/remote/http_client.rb#L433', 'comment_created': datetime.datetime(2022, 12, 5, 15, 55, 46, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1136045904, 'comment_body': 'Just a thought here, it might be valuable to validate the `logger` passed here meets the interface expectations.\r\n\r\n```suggestion\r\n    raise RuntimeError, ""Incompatible logger"" unless logger.respond_to?(:print_line) && logger.respond_to?(:datastore)\r\n    @logger = logger\r\n```', 'comment_created': datetime.datetime(2023, 3, 14, 18, 52, 16, tzinfo=datetime.timezone.utc), 'commenter': 'jmartin-tech', 'type': 'User'}, {'comment_id': 1136087639, 'comment_body': 'Great point, implemented thank you :) ', 'comment_created': datetime.datetime(2023, 3, 14, 19, 30, 15, tzinfo=datetime.timezone.utc), 'commenter': '3V3RYONE', 'type': 'User'}, {'comment_id': 1136097095, 'comment_body': ""Place holder comment; we might need to double check that this doesn't get double encoded, i.e. `%` becoming `%25`\r\n\r\nSo this _might_ need to be\r\n\r\n```\r\n                 'data[Login][owner_name]' => 'admin',\r\n                 'data[Login][owner_passwd]' => cred\r\n\r\n```"", 'comment_created': datetime.datetime(2023, 3, 14, 19, 39, 4, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1136457499, 'comment_body': 'Running the module against a local ncat server:\r\n\r\n```\r\nmsf6 auxiliary(scanner/http/mybook_live_login) >  run http://127.0.0.1:4444 password=password123\r\n```\r\n\r\nOn master:\r\n\r\n```\r\nncat -klnvp 4444\r\nNcat: Version 7.93 ( https://nmap.org/ncat )\r\nNcat: Listening on :::4444\r\nNcat: Listening on 0.0.0.0:4444\r\nNcat: Connection from 127.0.0.1.\r\nNcat: Connection from 127.0.0.1:49407.\r\nNcat: Connection from 127.0.0.1.\r\nNcat: Connection from 127.0.0.1:49408.\r\nPOST /UI/login HTTP/1.1\r\nHost: 127.0.0.1:4444\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 13.1; rv:108.0) Gecko/20100101 Firefox/108.0\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 83\r\n\r\ndata%5BLogin%5D%5Bowner_name%5D=admin&data%5BLogin%5D%5Bowner_passwd%5D=password123\r\n```\r\n\r\nOn this branch no body is sent:\r\n```\r\nncat -klnvp 4444\r\nNcat: Version 7.93 ( https://nmap.org/ncat )\r\nNcat: Listening on :::4444\r\nNcat: Listening on 0.0.0.0:4444\r\nNcat: Connection from 127.0.0.1.\r\nNcat: Connection from 127.0.0.1:49428.\r\nNcat: Connection from 127.0.0.1.\r\nNcat: Connection from 127.0.0.1:49436.\r\nPOST /UI/login HTTP/1.1\r\nHost: 127.0.0.1:4444\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36\r\nContent-Length: 0\r\n\r\n\r\n```', 'comment_created': datetime.datetime(2023, 3, 15, 2, 9, 24, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1136459062, 'comment_body': ""If we add `cgi: true` to the `send_request` call, the body will be sent through now:\r\n\r\n```\r\nmsf6 auxiliary(scanner/http/mybook_live_login) > run http://127.0.0.1:4444 password=password123 httptrace=true\r\n\r\nFrom: /Users/adfoster/Documents/code/metasploit-framework/lib/metasploit/framework/login_scanner/mybook_live.rb:38 Metasploit::Framework::LoginScanner::MyBookLive#attempt_login:\r\n\r\n    33:             result_opts[:service_name] = 'http'\r\n    34:           end\r\n    35:           begin\r\n    36:             cred = Rex::Text.uri_encode(credential.private)\r\n    37:             require 'pry-byebug'; binding.pry\r\n => 38:             res = send_request({\r\n    39:               'method' => method,\r\n    40:               'uri' => uri,\r\n    41:               cgi: true,\r\n    42:               'vars_post' => {\r\n    43:                  'data%5BLogin%5D%5Bowner_name%5D' => 'admin',\r\n\r\n[1] pry(#<Metasploit::Framework::LoginScanner::MyBookLive>)> continue\r\n\r\n####################\r\n# Request:\r\n####################\r\nPOST /UI/login HTTP/1.1\r\nHost: 127.0.0.1:4444\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 13.1; rv:108.0) Gecko/20100101 Firefox/108.0\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 99\r\n\r\ndata%255BLogin%255D%255Bowner_name%255D=admin&data%255BLogin%255D%255Bowner_passwd%255D=password123\r\n```\r\n\r\nAnd it gets double encoded as I expected; So looks like this needs to be updated to set cgi to true, as well as removing extra level of entity encoding :+1:"", 'comment_created': datetime.datetime(2023, 3, 15, 2, 13, 6, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1136466790, 'comment_body': ""Ah it looks like the suggestion to change this to `opts[:cgi]` ends up breaking your login scanner modules that set `'cgi' => true`. For context, we were wanting to align with the existing `send_request_cgi` implementation:\r\n\r\nhttps://github.com/rapid7/metasploit-framework/blob/c2c5c0c339e4351ad939df780abae0a0ebbcd23f/lib/msf/core/exploit/remote/http_client.rb#L440\r\n\r\nI'm not against this being swapped to `req = opts['cgi'] ? cli.request_cgi(opts) : cli.request_raw(opts)` since this is an API specific to your `login_scanner/http.rb`, but I do wonder if people will copy/paste `send_request` and not realize that `'cgi' => true` only works for scanners - even though it's a similar name 🤔 "", 'comment_created': datetime.datetime(2023, 3, 15, 2, 29, 8, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1137224627, 'comment_body': ""We'll either need to update the existing scanner tests to always pass in a framework_module, or make this nil safe\r\n\r\n```suggestion\r\n          http_subscriber = framework_module.nil? ? nil : Rex::Proto::Http::HttpLoggerSubscriber.new(logger: framework_module)\r\n```"", 'comment_created': datetime.datetime(2023, 3, 15, 14, 55, 21, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1137371423, 'comment_body': 'I think the later is a better option, as it allows future login scanner specs to not worry about including logging as well.', 'comment_created': datetime.datetime(2023, 3, 15, 16, 8, 10, tzinfo=datetime.timezone.utc), 'commenter': '3V3RYONE', 'type': 'User'}, {'comment_id': 1137384264, 'comment_body': ""I could be totally wrong, but based on what I've researched about the login scanners, majority of the login scanners use `send_request_cgi` method to transmit the HTTP request to the server. There are a handful of login scanners which use `send_request_raw` method. So, I could go through all the login scanner libs and change the `'cgi' => true` to `cgi: true` if that would work?\r\n\r\nElse, let me know the best way I should approach to solve this? :)"", 'comment_created': datetime.datetime(2023, 3, 15, 16, 16, 20, tzinfo=datetime.timezone.utc), 'commenter': '3V3RYONE', 'type': 'User'}, {'comment_id': 1137957935, 'comment_body': 'We should move this above line 235:\r\n\r\n```ruby\r\n    subscriber.on_request(req)\r\n    if req.respond_to?(:opts) && req.opts[\'ntlm_transform_request\'] && self.ntlm_client\r\n      req = req.opts[\'ntlm_transform_request\'].call(self.ntlm_client, req)\r\n    elsif req.respond_to?(:opts) && req.opts[\'krb_transform_request\'] && self.krb_encryptor\r\n      req = req.opts[\'krb_transform_request\'].call(self.krb_encryptor, req)\r\n    end\r\n```\r\n\r\nSo when we httptrace the winrm login module, the raw soap request is logged - instead of the encrypted request:\r\n\r\n\r\n### Before\r\n\r\nThe encrypted binary request is logged\r\n\r\n```\r\n####################\r\n# Request:\r\n####################\r\nPOST /wsman HTTP/1.1\r\nHost: 192.168.123.13:5985\r\nUser-Agent: Microsoft WinRM Client\r\nContent-Type: multipart/encrypted;protocol=""application/HTTP-SPNEGO-session-encrypted"";boundary=""Encrypted Boundary""\r\nContent-Length: 2102\r\n\r\n--Encrypted Boundary\r\nContent-Type: application/HTTP-SPNEGO-session-encrypted\r\nOriginalContent: type=application/soap+xml;charset=UTF-8;Length=1847\r\n--Encrypted Boundary\r\nContent-Type: application/octet-stream\r\n?d????W???x\r\n           9Gh;\'0??xZ{A\r\n                       *\uef08??f?vG???!?YM?????d??4W~????\r\n>8?D\u07b7????s??l%J\'?>gG???5)U@?հ?L^?[R\\??\r\n??{}H?|?????pw????߀????U????F9\'??PP??\r\n\r\n```\r\n\r\n### After\r\n\r\nThe raw request before encryption is logged:\r\n\r\n```\r\n####################\r\n# Request:\r\n####################\r\nPOST /wsman HTTP/1.1\r\nHost: 192.168.123.13:5985\r\nUser-Agent: Microsoft WinRM Client\r\nContent-Type: application/soap+xml;charset=UTF-8\r\nContent-Length: 1895\r\n\r\n<?xml version=""1.0"" encoding=""UTF-8""?><env:Envelope xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:env=""http://www.w3.org/2003/05/soap-envelope"" xmlns:a=""http://schemas.xmlsoap.org/ws/2004/08/addressing"" xmlns:b=""http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"" xmlns:n=""http://schemas.xmlsoap.org/ws/2004/09/enumeration"" xmlns:x=""http://schemas.xmlsoap.org/ws/2004/09/transfer"" xmlns:w=""http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"" xmlns:p=""http://schemas.microsoft.com/wbem/wsman/1/wsman.xsd"" xmlns:rsp=""http://schemas.microsoft.com/wbem/wsman/1/windows/shell"" xmlns:cfg=""http://schemas.microsoft.com/wbem/wsman/1/config""><env:Header><a:To>http://192.168.123.13:5985/wsman</a:To><a:ReplyTo><a:Address mustUnderstand=""true"">http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:MaxEnvelopeSize mustUnderstand=""true"">153600</w:MaxEnvelopeSize><a:MessageID>uuid:E903F107-90C7-4CF9-89A2-031EE5E1B453</a:MessageID><p:SessionId mustUnderstand=""false"">uuid:99D1558F-FA62-4911-9AB6-2FB96034BE23</p:SessionId><w:Locale xml:lang=""en-US"" mustUnderstand=""false""/><p:DataLocale xml:lang=""en-US"" mustUnderstand=""false""/><w:OperationTimeout>PT1S</w:OperationTimeout><w:ResourceURI mustUnderstand=""true"">http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd</w:ResourceURI><a:Action mustUnderstand=""true"">http://schemas.microsoft.com/wbem/wsman/1/windows/shell/Command</a:Action><w:OptionSet><w:Option Name=""WINRS_CONSOLEMODE_STDIN"">TRUE</w:Option><w:Option Name=""WINRS_SKIP_CMD_SHELL"">FALSE</w:Option></w:OptionSet><w:SelectorSet><w:Selector Name=""ShellId"">AE21BDC9-2A9F-4009-8438-1F2DC6058E09</w:Selector></w:SelectorSet></env:Header><env:Body><rsp:CommandLine CommandId=""D139BB66-A6C8-4CA9-A79A-55C1EC4A1293""><rsp:Command>&quot;cmd.exe&quot;</rsp:Command></rsp:CommandLine></env:Body></env:Envelope>\r\n```', 'comment_created': datetime.datetime(2023, 3, 16, 0, 45, 40, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1137959490, 'comment_body': ""We should move this after the decryption happens, i.e. line 250\r\n\r\n```ruby\r\n    if req.respond_to?(:opts) && req.opts['ntlm_transform_response'] && self.ntlm_client\r\n      req.opts['ntlm_transform_response'].call(self.ntlm_client, res)\r\n    elsif req.respond_to?(:opts) && req.opts['krb_transform_response'] && self.krb_encryptor\r\n      req = req.opts['krb_transform_response'].call(self.krb_encryptor, res)\r\n    end\r\n    subscriber.on_response(res)\r\n```\r\n\r\nFor the same reason as above; if logging happens immediately, it's encrypted, if it happens afterwards it's decrypted"", 'comment_created': datetime.datetime(2023, 3, 16, 0, 47, 3, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1138463591, 'comment_body': ""It'd be great to add yard docs to these new methods\r\n\r\n```\r\n  # @param [Rex::Proto::Http::ClientRequest] request\r\n  def on_request(request)\r\n```\r\n\r\n```\r\n  # @param [Rex::Proto::Http::Response] response\r\n  def on_response(response)\r\n```"", 'comment_created': datetime.datetime(2023, 3, 16, 10, 50, 37, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1138464901, 'comment_body': 'Yard docs:\r\n\r\n```\r\n  # (see Rex::Proto::Http::HttpSubscriber#on_request)\r\n  def on_request(request)\r\n```\r\n\r\n```\r\n  # (see Rex::Proto::Http::HttpSubscriber#on_response)\r\n  def on_response(response)\r\n```', 'comment_created': datetime.datetime(2023, 3, 16, 10, 51, 42, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1138478117, 'comment_body': '```suggestion\r\n  # @return [Rex::Proto::Http::HttpSubscriber] The HTTP Subscriber\r\n```', 'comment_created': datetime.datetime(2023, 3, 16, 11, 3, 20, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1138763460, 'comment_body': 'Should you not be using `@see` here instead? See https://rubydoc.info/gems/yard/file/docs/Tags.md#see', 'comment_created': datetime.datetime(2023, 3, 16, 14, 25, 35, tzinfo=datetime.timezone.utc), 'commenter': 'gwillcox-r7', 'type': 'User'}, {'comment_id': 1138767295, 'comment_body': 'Small request but could we make this in the format `@param <param name> [<YARD type>] <description>`? This prevents you having the parameter name and description next to each other which can get confusing and should help standardize the format a bit.\r\n\r\nAlthough YARD supports the format that you show above, its not the way they recommend people do things for the reason mentioned above.', 'comment_created': datetime.datetime(2023, 3, 16, 14, 27, 24, tzinfo=datetime.timezone.utc), 'commenter': 'gwillcox-r7', 'type': 'User'}, {'comment_id': 1176706510, 'comment_body': '> Should you not be using @see here instead? See https://rubydoc.info/gems/yard/file/docs/Tags.md#see\r\n\r\nI don\'t believe so, from the same page that you link above:\r\n\r\n> If a tag\'s data begins with (see OBJECT) it is considered a ""reference tag"". A reference tag literally copies the tag data by the given tag name from the specified OBJECT. For instance, a method may copy all [@param](https://rubydoc.info/gems/yard/file/docs/Tags.md#param) tags from a given object using the reference tag syntax\r\n> https://rubydoc.info/gems/yard/file/docs/Tags.md#reference-tags\r\n\r\nExample:\r\n\r\nhttps://github.com/lsegal/yard/blob/698b22cc2340230856ab17a25cfefa889f1c8289/spec/docstring_spec.rb#L361-L362', 'comment_created': datetime.datetime(2023, 4, 25, 15, 40, 45, tzinfo=datetime.timezone.utc), 'commenter': 'adfoster-r7', 'type': 'User'}, {'comment_id': 1177092002, 'comment_body': ""Huh interesting I wasn't aware of that, thanks for pointing that out @adfoster-r7!"", 'comment_created': datetime.datetime(2023, 4, 25, 21, 42, 34, tzinfo=datetime.timezone.utc), 'commenter': 'gwillcox-r7', 'type': 'User'}]","[{'commit_sha': '9c20d0f84b8dbb0434ce99d9158562e648386dd8', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9d60480d4e70185f29951f3dfbbfdcca4053aaf3', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c8bc4e124847c58cdad9eb766406ddb23d5786e', 'committer_username': '3V3RYONE', 'committer_name': 'Beleswar Prasad Padhi', 'committer_email': 'beleswarprasad@gmail.com', 'commit_date': datetime.datetime(2020, 12, 15, 8, 54, 30, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe63d80679f0ae827e3e0e43759bd73f486ec77f', 'committer_username': 'adfoster-r7', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 27, 16, 35, 43, tzinfo=datetime.timezone.utc)}]",Beleswar Prasad Padhi,76038732,beleswarprasad@gmail.com,User,,29,,18,71
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+2293158,metasploit-framework,rapid7/metasploit-framework,Ruby,13846,33605,2052,1542,74573,442,15,37,"[{'id': 1066262863, 'number': 17060, 'closed': datetime.datetime(2023, 5, 11, 14, 45, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 25, 10, 38, 50, tzinfo=datetime.timezone.utc), 'time_taken': 19713971.0, 'time_delta': '228 days, 4:06:11', 'additions': 634, 'deletions': 224, 'state': 'closed'}, {'id': 1005853757, 'number': 16811, 'closed': datetime.datetime(2022, 7, 22, 14, 23, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 22, 14, 23, 35, tzinfo=datetime.timezone.utc), 'time_taken': 11.0, 'time_delta': '0:00:11', 'additions': 62, 'deletions': 40, 'state': 'closed'}, {'id': 872181145, 'number': 16282, 'closed': datetime.datetime(2022, 3, 7, 14, 56, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 5, 5, 27, 50, tzinfo=datetime.timezone.utc), 'time_taken': 206937.0, 'time_delta': '2 days, 9:28:57', 'additions': 40, 'deletions': 0, 'state': 'closed'}, {'id': 834417337, 'number': 16111, 'closed': datetime.datetime(2022, 5, 31, 22, 7, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 28, 12, 51, 50, tzinfo=datetime.timezone.utc), 'time_taken': 10660551.0, 'time_delta': '123 days, 9:15:51', 'additions': 335, 'deletions': 2, 'state': 'closed'}, {'id': 830244550, 'number': 16094, 'closed': datetime.datetime(2022, 7, 27, 17, 16, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 24, 10, 40, 30, tzinfo=datetime.timezone.utc), 'time_taken': 15921371.0, 'time_delta': '184 days, 6:36:11', 'additions': 53, 'deletions': 9, 'state': 'closed'}, {'id': 815711685, 'number': 16025, 'closed': datetime.datetime(2022, 2, 2, 11, 31, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 6, 17, 43, 28, tzinfo=datetime.timezone.utc), 'time_taken': 2310475.0, 'time_delta': '26 days, 17:47:55', 'additions': 6, 'deletions': 4, 'state': 'closed'}, {'id': 806100424, 'number': 15982, 'closed': datetime.datetime(2022, 1, 4, 20, 43, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 12, 19, 17, 13, 57, tzinfo=datetime.timezone.utc), 'time_taken': 1394970.0, 'time_delta': '16 days, 3:29:30', 'additions': 2, 'deletions': 1, 'state': 'closed'}]"

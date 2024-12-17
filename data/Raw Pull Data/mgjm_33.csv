@@ -1,0 +1,315 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1409238899,Mention that the go client reuses a running server,"#### What type of PR is this?
+
+/kind documentation
+
+#### What this PR does / why we need it:
+
+Mention in the documentation that the go client will connect to an already running server instance.
+
+When a server is already listening in the same `ServerRunDir`, the client reuses that server.
+
+That also means that other options of the `ConmonServerConfig` will be ignored. The server will keep its settings from the first invocation.
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+None
+```
+",True,1440,https://api.github.com/repos/containers/conmon-rs/pulls/1440,https://github.com/containers/conmon-rs/pull/1440,closed,5,0,1,1,2,0,4,1,"[{'name': 'approved'}, {'name': 'kind/documentation'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-06-27 07:07:36+00:00,2023-06-27 07:57:50+00:00,3014.0,0:50:14,[],"[{'commit_sha': 'f3d39881f3750040e21258a496ac9d3c98be5ba3', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1409248043,Remove redundant serialization of OOMExitPaths,"#### What type of PR is this?
+
+/kind cleanup
+
+#### What this PR does / why we need it:
+
+Merging of 22a1616 and c354aaf resulted in redundant serialization of the `OOMExitPaths` field.
+
+#### Special notes for your reviewer:
+
+Both commits introduced the `OOMExitPaths` field and added serialization code.
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+None
+```
+",True,1441,https://api.github.com/repos/containers/conmon-rs/pulls/1441,https://github.com/containers/conmon-rs/pull/1441,closed,0,3,1,1,2,0,4,1,"[{'name': 'approved'}, {'name': 'kind/bug'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-06-27 07:13:59+00:00,2023-06-27 07:55:17+00:00,2478.0,0:41:18,[],"[{'commit_sha': '2087e1d396f8b91570950aaf8c88db29083eb926', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1428855404,Update makefile `update-proto`,"#### What type of PR is this?
+
+/kind other
+
+#### What this PR does / why we need it:
+
+This updates the `update-proto` rule in the Makefile to be more robust und work with go version 1.20.
+
+- 880e0b7 creates an intermediate file in `internal/proto/conmon.capnp` with the required changes for go
+  - Bug: If the `capnp compile` step failed the applied changes didn't get reverted, when tried again the patch was applied twice
+  - Bug: The `git checkout` at the end did remove my uncommitted changes 😢
+  - The new version no longer overwrites the existing file
+  - The intermediate file gets removed by make automatically, even on error
+
+- 17780b4 updates the make rule to be compatible with go version 1.20
+  - `go install` no longer places source code in `$GOPATH/src`
+  - The change uses the new `$GOMODCACHE = $GOPATH/pkg/mod` used by `go install` in module mode
+  - And it uses the same go capnp version as specified in the `go.mod` file (instead of `latest`)
+
+#### Which issue(s) this PR fixes:
+
+None
+
+#### Special notes for your reviewer:
+
+Verify that this change also works with older go versions (depending on the minimum required go version). I could not figure out in wich version go switched to the `GOMODCACHE` directory for `go install`.
+
+And check that the grep rule works. Tested on Alpine and Arch Linux.
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+None
+```
+",True,1497,https://api.github.com/repos/containers/conmon-rs/pulls/1497,https://github.com/containers/conmon-rs/pull/1497,closed,276,238,2,2,2,1,4,1,"[{'name': 'approved'}, {'name': 'kind/other'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-07-11 07:08:04+00:00,2023-07-11 07:26:44+00:00,1120.0,0:18:40,"[{'comment_id': 1259287551, 'comment_body': 'Since the location of the capnp file changed the generated `InterfaceName` changed as well. But this is only used in debug messages, as far a I know.', 'comment_created': datetime.datetime(2023, 7, 11, 7, 10, 54, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}]","[{'commit_sha': '880e0b7bd427775f2ca891cd2935a14b1aff5f1d', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17780b421500ad75a6653ab7dc33e778bfa15194', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1429124543,Use capnp map for tracing metadata,"#### What type of PR is this?
+/kind other
+
+#### What this PR does / why we need it:
+Currently (if tracing is enabled) the `metadata` field gets filled with a JSON encoded string map, that contains tracing metadata.
+
+This PR changes this and uses capnp native maps and thereby eliminates the double encoding of JSON data inside of a capnp struct. Note that the [_proper way_](https://capnproto.org/language.html#generic-types) to implement maps in capnp is to use a `List` of string tuples.
+
+Changes:
+- Rename the existing `metadata` field to `metadataOld`
+- Add a new `metadata` field of type `List[StringStringMapEntry]`
+- Add utility functions to convert between a `List` of `MapEntry`s and rust types
+- Remove `serde_json` from the server code
+- Move capnp util function in go to `capnp_util.go` (slice and map encoding)
+- Encode the metadata in the client in both formats (for backwards-compatibility)
+
+Compatibility:
+- I don't expect the conmon-rs server installed on a system to be newer than the client implementation.
+- Eher the client and the server are installed with the same version (via os packages or installed from source)
+- Or the client is newer (installed from source) and the server is older (installed via os packages)
+- These cases are supported by the implemented backwards-compatibility in the client
+- In the rare case that the server is on a newer version **only** tracing does not work (the server ignores the old field, everything else works as expected)
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+Are those compatibility requirements acceptable?
+
+#### Does this PR introduce a user-facing change?
+```release-note
+None
+```
+",True,1498,https://api.github.com/repos/containers/conmon-rs/pulls/1498,https://github.com/containers/conmon-rs/pull/1498,closed,734,323,11,2,9,4,4,1,"[{'name': 'approved'}, {'name': 'kind/other'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-07-11 09:54:12+00:00,2023-07-18 13:25:40+00:00,617488.0,"7 days, 3:31:28","[{'comment_id': 1260214733, 'comment_body': 'I believe it defeats the purpose of keeping the old metadata around if we change the name. Either we need to make a new name for the Metadata or just drop this value and claim incompatibilty with older clients.', 'comment_created': datetime.datetime(2023, 7, 11, 19, 55, 21, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1260688173, 'comment_body': ""The name of a field is only relevant for the generated `proto` code. The binary encoding of capnp messages only depends on the field index `@1` (that didn't change).\r\n\r\nTherefore the binary protocol stays compatible with older versions of the protocol. Only the library code that fills the generated `proto` structs with data needs to change, but that change is not user facing and therefore also not a breaking change."", 'comment_created': datetime.datetime(2023, 7, 12, 6, 54, 59, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1261686434, 'comment_body': ""ah so if I have an old client and I'm accessing @1, I will just name it `metadata` and have no idea the server conceives of it as `metadataOld`?"", 'comment_created': datetime.datetime(2023, 7, 12, 20, 22, 3, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1262392556, 'comment_body': ""Yes, that's how it is."", 'comment_created': datetime.datetime(2023, 7, 13, 10, 58, 10, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}]","[{'commit_sha': '952ee1bd1a7d224a7e5ffae5e5599ba5ff1e7788', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '89abe39c54670c8edd16e04d694d2bb084fe00bf', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1429174195,Create container with environment variables,"#### What type of PR is this?
+/kind feature
+
+#### What this PR does / why we need it:
+Add an option to pass environment variables to the OCI runtime.
+
+```go
+type CreateContainerConfig struct {
+	// ...
+
+	// EnvVars are the environment variables passed to the create runtime call.
+	EnvVars map[string]string
+}
+```
+
+**Update:** I extended this PR to also add the same option to `ExecSyncConfig`.
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+This PR depends on #1498 for the new `TextTextMap` capnp type and helper functions.
+
+b4e18e1 is the new commit in this PR
+2224dd6 does the same for `ExecSync`
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+Add an option to pass environment variables to the OCI runtime
+```
+",True,1499,https://api.github.com/repos/containers/conmon-rs/pulls/1499,https://github.com/containers/conmon-rs/pull/1499,closed,275,199,5,2,6,0,4,1,"[{'name': 'approved'}, {'name': 'kind/feature'}, {'name': 'lgtm'}, {'name': 'release-note'}]",2023-07-11 10:24:47+00:00,2023-07-18 18:04:27+00:00,632380.0,"7 days, 7:39:40",[],"[{'commit_sha': '0c86c1d8967d424f0a9aeec071e54d0fd436da1a', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': '97d6b460fe0da1304de751c9b68b1fa6883351d2', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1430860606,Remove unnecessary SetRequest calls,"#### What type of PR is this?
+/kind cleanup
+
+#### What this PR does / why we need it:
+A capnp request created with `p.NewRequest()` is already associated with the params.
+
+Therefore a call to `p.SetRequest(req)` is not necessary.
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+The `SetRequest` function was only used in 4 out of 7 requests. The others already work without this call.
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+None
+```
+",True,1503,https://api.github.com/repos/containers/conmon-rs/pulls/1503,https://github.com/containers/conmon-rs/pull/1503,closed,0,15,2,1,2,0,4,1,"[{'name': 'approved'}, {'name': 'kind/cleanup'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-07-12 08:57:49+00:00,2023-07-12 09:13:23+00:00,934.0,0:15:34,[],"[{'commit_sha': '6e902ef65bdeb63ea31ad37aa7d1f13257e63568', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1430971973,Add per command cgroup manager option,"#### What type of PR is this?
+/kind feature
+
+#### What this PR does / why we need it:
+The `CgroupManager` option is only used inside `createContainer` and `execSyncContainer`.
+
+This PR moves this option from the global config to the respective command options.
+
+For backwards compatibility the go client keeps the global option and only uses the per command option if the global  `ConmonServerConfig.CgroupManager` is set to `CgroupManagerPerCommand`.
+
+This allows existing users like CRI-O to keep working with old and new conmon-rs servers and will allow new users like podman to use the per command option with new conmon-rs servers.
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+~This PR depends on #1499 because capnp fields are numbered sequentially.~ Merged
+
+Clippy complained about too many arguments to the `generate_create_args` and `generate_exec_sync_args` functions. Therefore I moved the common arguments to the new `GenerateRuntimeArgs` struct and implemented the `create_args` and `exec_sync_args `methods.
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+Add option to specify the cgroup manager per command
+```
+",True,1504,https://api.github.com/repos/containers/conmon-rs/pulls/1504,https://github.com/containers/conmon-rs/pull/1504,closed,375,280,7,1,2,0,4,1,"[{'name': 'approved'}, {'name': 'kind/feature'}, {'name': 'lgtm'}, {'name': 'release-note'}]",2023-07-12 10:07:37+00:00,2023-07-19 16:57:24+00:00,629387.0,"7 days, 6:49:47",[],"[{'commit_sha': 'd394dc4ab25bd2fab9142e83451dc56d96909752', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1431010532,Fix forget_grandchild retain condition,"#### What type of PR is this?
+/kind bug
+
+#### What this PR does / why we need it:
+I think the retain condition in `ChildReaper::forget_grandchild` was flipped.
+
+The function passed to retain specifies which elements to keep, but the specified condition returned which element we want to remove. ([docs](https://docs.rs/multimap/0.9.0/multimap/struct.MultiMap.html#method.retain))
+
+That results in the removal of all `grandchildren` except the one we want to forget.
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+I assume that the `forget_grandchild` function should **remove** the grandchild with `pid == grandchild_pid` and not keep it.
+
+There could be existing use cases that depend on the fact, that the ChildReaper forgot the wrong grandchildren by accident.
+
+I'm not sure, but it could be the case that conmon-rs didn't terminate spawned childs on exit because of this and will do this now. This could be a braking change? If this is the case, we should mention it in the release note block below.
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+None
+```
+",True,1505,https://api.github.com/repos/containers/conmon-rs/pulls/1505,https://github.com/containers/conmon-rs/pull/1505,closed,1,2,1,1,3,3,4,1,"[{'name': 'approved'}, {'name': 'kind/bug'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-07-12 10:29:38+00:00,2023-07-12 13:19:41+00:00,10203.0,2:50:03,"[{'comment_id': 1260978331, 'comment_body': 'Hm, I think this is the right change, we can observe CRI-O CI after this merge to double check if it breaks anything.\r\n\r\nCan we further simplify this please?\r\n\r\nSomething like this should be fine:\r\n```rust\r\n        Ok(lock!(locked_grandchildren).retain(|_, v| v.pid != grandchild_pid))\r\n```', 'comment_created': datetime.datetime(2023, 7, 12, 10, 39, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1260989864, 'comment_body': ""I would prefer an explicit `Ok(())` statement, but I'm ok with both styles:\r\n```rs\r\nlock!(locked_grandchildren).retain(|_, v| v.pid != grandchild_pid);\r\nOk(())\r\n```\r\n\r\nWhat do you think?"", 'comment_created': datetime.datetime(2023, 7, 12, 10, 49, 46, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1260991162, 'comment_body': ""I'm not opposed to any of the above, thank you!"", 'comment_created': datetime.datetime(2023, 7, 12, 10, 51, 5, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}]","[{'commit_sha': '94787b5529caa5a3abe0e449df0b5066bb03699b', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1457437904,Add support for file descriptor passing,"#### What type of PR is this?
+
+/kind feature
+
+#### What this PR does / why we need it:
+This PR adds support for file descriptors:
+- New `StartFdSocket` RPC command
+- `additionalFds` passed to the OCI runtime
+- `leakFds` kept open by conmon as long as the container is running
+
+I haven't found a good way to pass file descriptors via `SCM_RIGHTS` on the existing RPC connection. Therefore an additional socket is created for file descriptor passing. The protocol is documented in `conmon-rs/server/src/fd_socket.rs`.
+
+RPC level workflow:
+- The client calls `StartFdSocket` to start the fd socket server (if not already running) and gets the socket path
+- The client send the file descriptors to the server via `SCM_RIGHTS` and gets slot numbers in return
+- The client needs to keep the fd socket connection open until the fds are used
+- The client calls `CreateContainer` with `additionalFds` or `leakFds`
+- The client closes the fd socket connection (unused fds get closed at this point, the slot numbers are no longer valid)
+
+GO client workflow:
+- The user gets a `RemoteFDs` instance via the `client.RemoteFDs` method
+- The user sends file descriptors via the `remoteFDs.Send` method and gets slot numbers in return
+- The user calls `client.CreateContainer` with `AdditionalFDs` or `LeakFDs`
+- The user calls `remoteFDs.Close` to close the connection
+
+#### Which issue(s) this PR fixes:
+
+None
+
+#### Special notes for your reviewer:
+
+An alternative approach would be to hide the file descriptor logic from the public go client interface and just accept an file descriptor array in `CreateContainerConfig` and send the file descriptors in the `client.CreateContainer` method.
+
+This would result in a cleaner API but the current design is simpler and allows reusing the `RemoteFDs` instance. But we create a new connection for each RPC request anyways, so does that performance improvement even matter?
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+Add support for file descriptor passing
+```
+",True,1553,https://api.github.com/repos/containers/conmon-rs/pulls/1553,https://github.com/containers/conmon-rs/pull/1553,closed,1380,228,20,2,9,20,4,1,"[{'name': 'approved'}, {'name': 'kind/feature'}, {'name': 'lgtm'}, {'name': 'release-note'}]",2023-08-01 05:55:46+00:00,2023-08-15 07:46:22+00:00,1216236.0,"14 days, 1:50:36","[{'comment_id': 1280147536, 'comment_body': 'The ""typos"" GitHub action reports:\r\n> ""ue"" should be ""use"" or ""due""\r\n\r\n... but this is a generated binary string, that just happens to contain the ASCII sequence ""ue""', 'comment_created': datetime.datetime(2023, 8, 1, 6, 8, 30, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1283212649, 'comment_body': ""should we just always start it when conmon-rs starts? that will prevent container creation requests from needing to check it's created before sending some down"", 'comment_created': datetime.datetime(2023, 8, 3, 13, 32, 49, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1283213442, 'comment_body': ""if we do, we can either have a standard path within the run dir it exists (and the client can know this and return it) or we can have an rpc to ask the server. I'm fine either way"", 'comment_created': datetime.datetime(2023, 8, 3, 13, 33, 22, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1283214742, 'comment_body': 'why the dead code?', 'comment_created': datetime.datetime(2023, 8, 3, 13, 34, 17, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1286838740, 'comment_body': ""Some clients (e.g. CRI-O) do not need file descriptor passing at all or only for some containers (e.g. podman), therefore they also don't need the extra socket.\r\n\r\nAnd when automatic shutdown is implemented, we can also stop the socket after a few seconds of inactivity."", 'comment_created': datetime.datetime(2023, 8, 8, 9, 11, 13, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1286844135, 'comment_body': '`take_all` was previously implemented as a loop over `take`, but refactored to reuse the same lock guard.\r\n\r\nNow `take` is unused, but future use cases of the `FdSocket` could work with single file descriptors.\r\n\r\nTherefore I think it would be nice to leave this method, so other people can use it in the future without having to understand the internals of the `FdSocket` struct.', 'comment_created': datetime.datetime(2023, 8, 8, 9, 15, 59, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1287177722, 'comment_body': ""yeah I just think not starting it on startup makes some weird situations. does podman need to call StartFdSocket each time it runs to make sure? should the client keep track of it? how would the client restore that information? If we always start, we eliminate a lot of edge cases, for the cost of one unix socket running for a client that doesn't need it"", 'comment_created': datetime.datetime(2023, 8, 8, 14, 6, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1287178060, 'comment_body': 'WDYT @saschagrunert @rphillips ', 'comment_created': datetime.datetime(2023, 8, 8, 14, 6, 14, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1287186072, 'comment_body': 'The current implementation stores no state in the client and always fetches the path from the server (and thereby starts the socket). This introduces an extra RPC call, but there should be no edge cases.', 'comment_created': datetime.datetime(2023, 8, 8, 14, 11, 57, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1287796434, 'comment_body': 'Which option do we want?\r\n1. Create a [`.typos.toml`](https://github.com/crate-ci/typos/blob/master/docs/reference.md) file (or `typos.toml` or `_typos.toml`) and specify `files.extend-exclude`.\r\n2. Set the `files` option in the GitHub action to `. --exclude *.capnp.go`\r\n3. Create a `.github/typos.toml` file and set the `config` option in the GitHub action to point to that file', 'comment_created': datetime.datetime(2023, 8, 9, 0, 3, 2, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1288099605, 'comment_body': ""Where does that `3` come from? I'd say we make it a const for documentation purposes."", 'comment_created': datetime.datetime(2023, 8, 9, 7, 58, 17, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1288105637, 'comment_body': 'I see the benefits of both solutions and am not opinionated. :thinking: ', 'comment_created': datetime.datetime(2023, 8, 9, 8, 3, 17, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1288110880, 'comment_body': 'non blocking nit:\r\n```suggestion\r\nuse anyhow::{format_err, Result};\r\n```', 'comment_created': datetime.datetime(2023, 8, 9, 8, 7, 45, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1288111636, 'comment_body': ""nit: Let's combine with the macro in `conmon-rs/server/src/child_reaper.rs`."", 'comment_created': datetime.datetime(2023, 8, 9, 8, 8, 26, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1288114065, 'comment_body': ""I don't think we need a default implementation for `Server`:\r\n```suggestion\r\n#[derive(Debug)]\r\n```"", 'comment_created': datetime.datetime(2023, 8, 9, 8, 10, 30, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1288116486, 'comment_body': ""non blocking nit: I'd prefer having this an Option type `None`."", 'comment_created': datetime.datetime(2023, 8, 9, 8, 12, 28, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}, {'comment_id': 1288513701, 'comment_body': ""let's leave as-is then"", 'comment_created': datetime.datetime(2023, 8, 9, 13, 48, 32, tzinfo=datetime.timezone.utc), 'commenter': 'haircommander', 'type': 'User'}, {'comment_id': 1289348262, 'comment_body': 'May an ask why? I would add an Option if the `None` and `Some(vec![])` value would represent different states. But in this case both values would do the same. (and `vec![]` does not allocate either)', 'comment_created': datetime.datetime(2023, 8, 9, 23, 20, 39, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1289349072, 'comment_body': ""It is the fist usable file descriptor after stdin, stdout and stderr. It's documented now."", 'comment_created': datetime.datetime(2023, 8, 9, 23, 22, 6, tzinfo=datetime.timezone.utc), 'commenter': 'mgjm', 'type': 'User'}, {'comment_id': 1289676712, 'comment_body': ""`Some(vec![])` is a good argument, now I'm happy with `vec![]` :slightly_smiling_face: "", 'comment_created': datetime.datetime(2023, 8, 10, 7, 25, 19, tzinfo=datetime.timezone.utc), 'commenter': 'saschagrunert', 'type': 'User'}]","[{'commit_sha': 'af3e813dd055976a2063259f5d6e3e3dfd9674f9', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bfc3a0587b7ff5f17f004762992b2ab7a8410a00', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1475863708,Change resize channel to receive only,"#### What type of PR is this?
+/kind cleanup
+
+#### What this PR does / why we need it:
+The `Resize` channel in the `AttachConfig` go struct was not restricted. This PR changes the channel to a receive only channel.
+
+```diff
+-	Resize chan resize.TerminalSize
++	Resize <-chan resize.TerminalSize
+```
+
+The channel is only used for receive operations.
+
+**Note:** This is technically a breaking change as the following code would no longer work:
+
+```go
+config := new(client.AttachConfig)
+config.Resize = make(chan resize.TerminalSize, 1)
+config.Resize <- size
+```
+
+But this is an uncommon usage pattern. The following pattern is more expected (used by CRI-O) and is unaffected by this change:
+```go
+resize := make(chan resize.TerminalSize, 1)
+resize <- size
+
+config := new(client.AttachConfig)
+config.Resize = resize
+```
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+
+#### Does this PR introduce a user-facing change?
+
+```release-note
+None
+```
+",True,1595,https://api.github.com/repos/containers/conmon-rs/pulls/1595,https://github.com/containers/conmon-rs/pull/1595,closed,1,1,1,1,3,0,4,1,"[{'name': 'approved'}, {'name': 'kind/cleanup'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-08-15 13:02:57+00:00,2023-08-16 14:12:09+00:00,90552.0,"1 day, 1:09:12",[],"[{'commit_sha': '9b25faa4eebc96361f126cd7c61e8be4ea7c6292', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+1493743929,Fix early stdio close due to multiple ownership,"#### What type of PR is this?
+/kind bug
+
+#### What this PR does / why we need it:
+The `ContainerIO::read_loop_stdin` function was taking the fd to stdin as a `RawFd` and took ownership of the file descriptor. This worked for piped IO (`streams.rs`) but not for tty based IO (`terminal.rs`).
+
+With tty based IO the same file descriptor was used as an `AsyncFd` and passed to `read_loop_stdin` this resulted in two owners of the same file descriptor. The first owner (stdin in most cases) would close the fd on drop. The second owner would stall as it won't be notified that the fd closed and once the second owner would drop it would try to close the same fd again. Which could have been reused in the meantime.
+
+This change refactors `ContainerIO::read_loop_stdin` to take an implementation of `AsyncWrite` and introduces a new `TerminalFd` which wraps the pty file descriptor and implements  `AsyncRead` and `AsyncWrite` for references to itself. This allows us to use reference counting to close the file descriptor only after both the `read_loop_stdin` and `read_loop` terminate.
+
+#### Which issue(s) this PR fixes:
+None
+
+#### Special notes for your reviewer:
+
+#### Does this PR introduce a user-facing change?
+```release-note
+None
+```
+",True,1655,https://api.github.com/repos/containers/conmon-rs/pulls/1655,https://github.com/containers/conmon-rs/pull/1655,closed,98,50,5,1,2,0,4,1,"[{'name': 'approved'}, {'name': 'kind/bug'}, {'name': 'lgtm'}, {'name': 'release-note-none'}]",2023-08-29 13:07:29+00:00,2023-08-29 13:39:56+00:00,1947.0,0:32:27,[],"[{'commit_sha': '3cc76bf7db190c9e9b97a97c130712eacc0e0ccc', 'committer_username': 'mgjm', 'committer_name': 'Martin Michaelis', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 27, 16, 37, 38, tzinfo=datetime.timezone.utc)}]",Martin Michaelis,30504865,,User,,6,,0,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+418701313,conmon-rs,containers/conmon-rs,Rust,43,175,11,19,4000,24,3,7,"[{'id': 1493743929, 'number': 1655, 'closed': datetime.datetime(2023, 8, 29, 13, 39, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 29, 13, 7, 29, tzinfo=datetime.timezone.utc), 'time_taken': 1947.0, 'time_delta': '0:32:27', 'additions': 98, 'deletions': 50, 'state': 'closed'}, {'id': 1493728680, 'number': 1654, 'closed': None, 'created': datetime.datetime(2023, 8, 29, 12, 57, 52, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1, 'deletions': 1, 'state': 'open'}, {'id': 1475863708, 'number': 1595, 'closed': datetime.datetime(2023, 8, 16, 14, 12, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 15, 13, 2, 57, tzinfo=datetime.timezone.utc), 'time_taken': 90552.0, 'time_delta': '1 day, 1:09:12', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1475621288, 'number': 1590, 'closed': None, 'created': datetime.datetime(2023, 8, 15, 9, 14, 27, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 230, 'deletions': 15, 'state': 'open'}, {'id': 1457437904, 'number': 1553, 'closed': datetime.datetime(2023, 8, 15, 7, 46, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 1, 5, 55, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1216236.0, 'time_delta': '14 days, 1:50:36', 'additions': 1380, 'deletions': 228, 'state': 'closed'}, {'id': 1431010532, 'number': 1505, 'closed': datetime.datetime(2023, 7, 12, 13, 19, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 10, 29, 38, tzinfo=datetime.timezone.utc), 'time_taken': 10203.0, 'time_delta': '2:50:03', 'additions': 1, 'deletions': 2, 'state': 'closed'}, {'id': 1430971973, 'number': 1504, 'closed': datetime.datetime(2023, 7, 19, 16, 57, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 10, 7, 37, tzinfo=datetime.timezone.utc), 'time_taken': 629387.0, 'time_delta': '7 days, 6:49:47', 'additions': 375, 'deletions': 280, 'state': 'closed'}, {'id': 1430860606, 'number': 1503, 'closed': datetime.datetime(2023, 7, 12, 9, 13, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 8, 57, 49, tzinfo=datetime.timezone.utc), 'time_taken': 934.0, 'time_delta': '0:15:34', 'additions': 0, 'deletions': 15, 'state': 'closed'}, {'id': 1429174195, 'number': 1499, 'closed': datetime.datetime(2023, 7, 18, 18, 4, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 11, 10, 24, 47, tzinfo=datetime.timezone.utc), 'time_taken': 632380.0, 'time_delta': '7 days, 7:39:40', 'additions': 275, 'deletions': 199, 'state': 'closed'}, {'id': 1429124543, 'number': 1498, 'closed': datetime.datetime(2023, 7, 18, 13, 25, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 11, 9, 54, 12, tzinfo=datetime.timezone.utc), 'time_taken': 617488.0, 'time_delta': '7 days, 3:31:28', 'additions': 734, 'deletions': 323, 'state': 'closed'}, {'id': 1428855404, 'number': 1497, 'closed': datetime.datetime(2023, 7, 11, 7, 26, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 11, 7, 8, 4, tzinfo=datetime.timezone.utc), 'time_taken': 1120.0, 'time_delta': '0:18:40', 'additions': 276, 'deletions': 238, 'state': 'closed'}, {'id': 1409248043, 'number': 1441, 'closed': datetime.datetime(2023, 6, 27, 7, 55, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 27, 7, 13, 59, tzinfo=datetime.timezone.utc), 'time_taken': 2478.0, 'time_delta': '0:41:18', 'additions': 0, 'deletions': 3, 'state': 'closed'}, {'id': 1409238899, 'number': 1440, 'closed': datetime.datetime(2023, 6, 27, 7, 57, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 27, 7, 7, 36, tzinfo=datetime.timezone.utc), 'time_taken': 3014.0, 'time_delta': '0:50:14', 'additions': 5, 'deletions': 0, 'state': 'closed'}]"

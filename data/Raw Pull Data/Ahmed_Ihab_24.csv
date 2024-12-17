@@ -1,0 +1,290 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1234267763,Add macos pipeline and scripts,"# Description
+
+According to this [PR](https://github.com/metacall/core/pull/248) the only thing that was not completed is the macOS pipeline, so I created the pipeline for it.
+It is just running tests, for now, it does not support any language yet.
+
+
+Fixes #(issue_no)
+
+<!-- Replace `issue_no` with the issue number which is fixed in this PR -->
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+
+# Note:
+The ci for macOS is falling at three test cases which are:
+
+-  15- detour-test
+-  4 - log-custom-test (Subprocess aborted)
+-  35 - metacall-dynlink-path-test
+
+you can view full logs from [here ](https://github.com/ahmedihabb2/core/actions/runs/4129078853/jobs/7134289663)",True,383,https://api.github.com/repos/metacall/core/pulls/383,https://github.com/metacall/core/pull/383,closed,283,0,2,6,0,0,0,0,[],2023-02-08 23:11:49+00:00,2023-02-15 20:03:41+00:00,593512.0,"6 days, 20:51:52",[],"[{'commit_sha': '74d714abe9d4fe854cc5cf5b323deecfd30600ad', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '839a068973d68f424abdddea8217c6a412e22b9f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'd6a2d287ae90eaaa862276cccea6cb396cd6b1bf', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '96774c1f936d8b69fad0bcbcfb318ca3576fbb8c', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '0c1145bdb9b3a2a791673d0ee108e57fa6757e59', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '173d314aae521c0045fee79fa96b4376ca1b5e93', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1255657682,feat: Build with Python support for MacOS,"# Description
+
+Build Metacall with Python support for MacOS 
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+
+# Note:
+The following tests FAILED:
+	  4 - log-custom-test (SEGFAULT)
+	 33 - metacall-dynlink-path-test (Failed)
+	 34 - metacall-library-path-without-env-vars-test (Failed)
+you can view full logs from [here](https://github.com/ahmedihabb2/core/actions/runs/4276457026/jobs/7444558733)
+",True,391,https://api.github.com/repos/metacall/core/pulls/391,https://github.com/metacall/core/pull/391,closed,22,9,2,4,2,0,0,0,[],2023-02-27 15:17:13+00:00,2023-03-01 16:09:08+00:00,175915.0,"2 days, 0:51:55",[],"[{'commit_sha': '9a2846b30341d58817c870cedf0a85ad05e824fd', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e4ca15823744bfcb809e371092a21152b770550', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47c988626d95b44c1b006207e4a39075ba60c702', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5f8d59f3af47c2fa1c6ed27b1e4bebb9efd1c7c', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1290601135,feat: Build with Java support for MacOS,"# Description
+
+Build Metacall with Java support for MacOS 
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+
+# Note:
+The following tests FAILED:
+	  4 - log-custom-test (SEGFAULT)
+	 53 - metacall-dynlink-path-test (Failed)
+	 54 - metacall-library-path-without-env-vars-test (Failed)
+you can view full logs from [here](https://github.com/ahmedihabb2/core/actions/runs/4527734836/jobs/7973861776)
+",True,405,https://api.github.com/repos/metacall/core/pulls/405,https://github.com/metacall/core/pull/405,closed,10,2,2,9,0,0,0,0,[],2023-03-27 01:54:22+00:00,2023-03-27 22:30:25+00:00,74163.0,20:36:03,[],"[{'commit_sha': '9a2846b30341d58817c870cedf0a85ad05e824fd', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e4ca15823744bfcb809e371092a21152b770550', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47c988626d95b44c1b006207e4a39075ba60c702', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5f8d59f3af47c2fa1c6ed27b1e4bebb9efd1c7c', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8239d22ed29297d21df303abdd2f64fe19018558', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '86d2617cd6a8cc84f7365dfc32854a5d619a450f', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab5c9f447edbc6cad66f466791aabcb8681196c0', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1f54bd77bc44e165494231f5be020c275ffd0b52', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30fd78395e43178b2b4d8b9967805c8b55c85114', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1327741599,Build with Ruby and Pass cmake options using env file macOS,"# Description
+
+Build Metacall with Ruby support for MacOS and avoid passing Cmake options in CI file
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+
+",True,428,https://api.github.com/repos/metacall/core/pulls/428,https://github.com/metacall/core/pull/428,closed,41,10,3,4,0,0,0,0,[],2023-04-25 20:55:23+00:00,2023-04-26 06:57:53+00:00,36150.0,10:02:30,[],"[{'commit_sha': 'e8c22627e8e8a391ebe014da1612784a4317cbd7', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ffb6ce7fb25cfa415ec2b9d118c39ca0ed586d4', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7b8658015be3aa2c551167a96d644537a3b9be6e', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20039ea9abc3866b7fec60f8f65385d8775fce4b', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1359472426,Enable Wasm support in macOS ,"# Description
+
+Build Metacall with Web assembly support for MacOS
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+
+",True,433,https://api.github.com/repos/metacall/core/pulls/433,https://github.com/metacall/core/pull/433,closed,4,2,2,1,0,0,0,0,[],2023-05-22 15:36:30+00:00,2023-05-22 20:41:22+00:00,18292.0,5:04:52,[],"[{'commit_sha': '8813ba7a888ce550997aafd960b7dbbe21bf9951', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1377828595,Use Pre-built Node for macOS,"# Description
+
+Build Metacall with NodeJS support for MacOS
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+
+## Issue
+Please refer to this [issue](https://github.com/metacall/core/issues/401#issuecomment-1575629562) to see failed tests
+",True,435,https://api.github.com/repos/metacall/core/pulls/435,https://github.com/metacall/core/pull/435,closed,16,2,2,10,0,0,0,0,[],2023-06-04 16:27:15+00:00,2023-06-05 16:04:48+00:00,85053.0,23:37:33,[],"[{'commit_sha': '4045376d696de30137538e85fca6bcd613e75e2c', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '94f4a3eb26ba26fada7e0967fe1fa791cff6e4af', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f057db6ba2de0067f06c9237ee7a64d4bdcde3ab', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '597d20324a8258b4cc022f58f572b1698677ba28', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61f033a7e1093879c51166d89b1a2a4b9ad81ed3', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'adc56ca3f327ae2572c5f6379f281accec95ed78', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e2ee6016088d1c0a277f23c2c9b0ee71e626ff8', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08b1c495aab4ff702a66a47f879413c4ea8619d4', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '503fd74e067244bd1699ec2860c9fa117e54bf5e', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0318ec6c2972bbba3bbf1fa4b67576e60763aff', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1377878219,Build MetaCall with TypeScript Support,"# Description
+
+Build Metacall with Typescript support for MacOS
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+",True,436,https://api.github.com/repos/metacall/core/pulls/436,https://github.com/metacall/core/pull/436,closed,6,2,2,12,0,0,0,0,[],2023-06-04 18:27:35+00:00,2023-06-05 16:05:53+00:00,77898.0,21:38:18,[],"[{'commit_sha': '4045376d696de30137538e85fca6bcd613e75e2c', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '94f4a3eb26ba26fada7e0967fe1fa791cff6e4af', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f057db6ba2de0067f06c9237ee7a64d4bdcde3ab', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '597d20324a8258b4cc022f58f572b1698677ba28', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61f033a7e1093879c51166d89b1a2a4b9ad81ed3', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'adc56ca3f327ae2572c5f6379f281accec95ed78', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e2ee6016088d1c0a277f23c2c9b0ee71e626ff8', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08b1c495aab4ff702a66a47f879413c4ea8619d4', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '503fd74e067244bd1699ec2860c9fa117e54bf5e', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0318ec6c2972bbba3bbf1fa4b67576e60763aff', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '366a07a189842ce6fb617d800f36af84f03f327b', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f70266485d186a6d7c53b92e7272099f228940e', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1377914065,Build MetaCall with rpc and file support for macOS,"# Description
+
+Build Metacall with file and rpc support for MacOS
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+",True,437,https://api.github.com/repos/metacall/core/pulls/437,https://github.com/metacall/core/pull/437,closed,4,2,2,15,0,0,0,0,[],2023-06-04 20:12:22+00:00,2023-06-05 16:07:11+00:00,71689.0,19:54:49,[],"[{'commit_sha': '4045376d696de30137538e85fca6bcd613e75e2c', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '94f4a3eb26ba26fada7e0967fe1fa791cff6e4af', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f057db6ba2de0067f06c9237ee7a64d4bdcde3ab', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '597d20324a8258b4cc022f58f572b1698677ba28', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61f033a7e1093879c51166d89b1a2a4b9ad81ed3', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'adc56ca3f327ae2572c5f6379f281accec95ed78', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e2ee6016088d1c0a277f23c2c9b0ee71e626ff8', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '08b1c495aab4ff702a66a47f879413c4ea8619d4', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '503fd74e067244bd1699ec2860c9fa117e54bf5e', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0318ec6c2972bbba3bbf1fa4b67576e60763aff', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '366a07a189842ce6fb617d800f36af84f03f327b', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf927bf3022ac9159b3db3894fd6b1abc59808de', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d38cff74a50bacf55be07d979dfb0796b2821fa', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'caaa7cd33ecbbab471b97ab70786c480065b9cbb', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2c9d06abd91bfd78a34350bead5d67027e4306f', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1384882537,Build MetaCall with Cobol Support for macOS,"# Description
+
+Build Metacall with COBOL support for MacOS
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+",True,439,https://api.github.com/repos/metacall/core/pulls/439,https://github.com/metacall/core/pull/439,closed,10,2,2,4,0,0,0,0,[],2023-06-08 17:38:44+00:00,2023-06-08 22:25:31+00:00,17207.0,4:46:47,[],"[{'commit_sha': 'fb859e9812632b4fc2f16ecd179f1e62880f907c', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f53a1467f36b4f45fda7f0e8b13e5332f8884d3e', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c10934b158952af2f5eac34aa6544b85b33938a', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '983647d72470a460c0134cceb9a1bca2e978d202', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1397997602,Some improvements to macOS CI,"# Description
+
+-  Fix unused variables
+-  Fix Java and JNI paths to one installed via brew
+-  Avoid using bash_profile for setting env variables, now it's added to env file and sourced whenever we need it
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+",True,446,https://api.github.com/repos/metacall/core/pulls/446,https://github.com/metacall/core/pull/446,closed,27,14,2,30,0,0,0,0,[],2023-06-19 10:52:43+00:00,2023-06-30 20:15:09+00:00,984146.0,"11 days, 9:22:26",[],"[{'commit_sha': 'fe50ed509fcf39c325fbb9a87e30d519b180a714', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0998166e9da98a7d6526f2350bcb4945d1b8f275', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '11747f2cfc5cc62002ee18606b10d4100d4d26bd', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7bba52e60c5cdd56344730b4c348ff9292e701b6', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd2c2bc676e1d6795c34f5405bfb65383ffca130', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd6825a2197ce72e912b6ed378810db05d60a482b', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0263c05e6502b9ef496912bae69c88d27a111d46', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e07deb320d02ae7e0e6fc1dd3874f2e24a002dd0', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd222b283702ec72356d88108f26afe206aed80a7', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '84b05ff36c820b4d0d52c60796291f998a14806d', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7da6cf9904b6e3c32c9f8c39861ee023aefb94ed', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e571c615102cb6d9a884c86a94c1e458cc0ae3c', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf8f50185e3b22c22fd859a114a49f8ae912236f', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8f034d8959744d7a92e1770be4c4c82a9810cd2a', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bae93e878af177226e4e88f4140b745f3a004108', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80143b4aeb83f65fdafef5b0c82398d6794fbde2', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '715d46e9c8b6b2ea14b4de3283debad7bb47eef1', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0b54d2be83592ee83bf21964d375c63e0e4b3e1b', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1e4e22f5e3269772021e3bec0d5252fb06419b53', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d5c2b39e76028ccc16b15ce06f6544199dcd456', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f5088c065bc3ec34738c354b198b55d72f766a0', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '84a2f62c8e20607956666f7f8ae51bfee58cc4fc', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '31d33f8b1b082416752c854e8b6f33ee7925e5ed', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b4b2353f5c89ca22317e4b78c1d325d7931cfc8a', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df4e6a740798e2b5585654201514419330969a67', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d2cc3e09c4f70012ab36d298bb69e0ef2d3fa01', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3699755403f73d34ef1e00fdddffcf74109404fb', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73457a1ae82953991b79ae8ca25440752cb1f7b2', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '258990a5d5ca8257bf32dcdd47bf435986a9dd2d', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '003b117a05368d8ec8be56d9a3283c6a775478bd', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1431441761,Enable Backtracing in macOS CI,"# Description
+
+Enable Backtracing in macOS CI
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+",True,454,https://api.github.com/repos/metacall/core/pulls/454,https://github.com/metacall/core/pull/454,closed,12,1,2,12,0,0,0,0,[],2023-07-12 14:49:44+00:00,2023-07-12 17:47:27+00:00,10663.0,2:57:43,[],"[{'commit_sha': 'fd8dd90816d5fb014fdebabdb79a6c572f223260', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50b40e229fbf35bd4a873f86ad8f6ad1ab7fa80d', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17aeba7886e6f4c56752cf6d13eaa9a309e44c61', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e62931fb1230886ec60f195a66459a62306938d5', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c1a4581bbd4579a2d8346f2910e33c23df29a51', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a6b6f7dfa2f6abc0f5cfa8af77214a18ffa0be3', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3e6e8ae1fed3bc75307fa49d96908eac6e7da7d5', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '13af75467b5b9a324eff7b846e0f03417fe91f4b', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f1d170837edd72f7e2bfe1b5ed1cd920b87a8f95', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0423571afe6cac19ef109b629c75b4de1b705712', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '06c5d1067f25439cd1fa84df2e5bc1863eb321c2', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24f5338c7be53cfbbb7a71fdfba027ae8c69f982', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+1433194164,Enable GO ports in macOS CI,"# Description
+
+Enable GO ports in macOS CI
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [x] New feature (non-breaking change which adds functionality)
+
+
+# Checklist:
+
+- [x] I have performed a self-review of my own code.
+- [x] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [x] My changes generate no new warnings.
+- [x] I have added tests/screenshots (if any) that prove my fix is effective or that my feature works.
+- [x] I have tested the tests implicated (if any) by my own code and they pass (`make test` or `ctest -VV -R <test-name>`).
+- [x] If my change is significant or breaking, I have passed all tests with `./docker-compose.sh test &> output` and attached the 
+",True,455,https://api.github.com/repos/metacall/core/pulls/455,https://github.com/metacall/core/pull/455,closed,4,2,2,2,0,0,0,0,[],2023-07-13 14:02:10+00:00,2023-07-18 21:48:28+00:00,459978.0,"5 days, 7:46:18",[],"[{'commit_sha': 'd29220ad854dd823aa8f8e3da4cd57abaef5c799', 'committer_username': 'ahmedihabb2', 'committer_name': 'Ahmed Ihab', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 25, 14, 44, 3, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20f9a64becf2865b3971b7c1fa56fea9b5be61e3', 'committer_username': 'viferga', 'committer_name': 'Vicente Eduardo Ferrer Garcia', 'committer_email': None, 'commit_date': datetime.datetime(2014, 6, 10, 22, 10, 44, tzinfo=datetime.timezone.utc)}]",Ahmed Ihab,57008633,,User,,53,,131,128
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+163221062,core,metacall/core,C,161,1544,17,58,3630,53,4,6,"[{'id': 1518206200, 'number': 464, 'closed': datetime.datetime(2024, 1, 31, 22, 14, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 16, 12, 10, 44, tzinfo=datetime.timezone.utc), 'time_taken': 11873055.0, 'time_delta': '137 days, 10:04:15', 'additions': 22, 'deletions': 89, 'state': 'closed'}, {'id': 1514575478, 'number': 463, 'closed': datetime.datetime(2023, 9, 13, 23, 49, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 13, 21, 24, 18, tzinfo=datetime.timezone.utc), 'time_taken': 8724.0, 'time_delta': '2:25:24', 'additions': 52, 'deletions': 3, 'state': 'closed'}, {'id': 1449238668, 'number': 457, 'closed': datetime.datetime(2023, 9, 6, 20, 53, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 25, 22, 3, 13, tzinfo=datetime.timezone.utc), 'time_taken': 3711018.0, 'time_delta': '42 days, 22:50:18', 'additions': 208, 'deletions': 4, 'state': 'closed'}, {'id': 1439295134, 'number': 456, 'closed': datetime.datetime(2023, 7, 19, 13, 37, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 18, 13, 49, 19, tzinfo=datetime.timezone.utc), 'time_taken': 85668.0, 'time_delta': '23:47:48', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1433194164, 'number': 455, 'closed': datetime.datetime(2023, 7, 18, 21, 48, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 13, 14, 2, 10, tzinfo=datetime.timezone.utc), 'time_taken': 459978.0, 'time_delta': '5 days, 7:46:18', 'additions': 4, 'deletions': 2, 'state': 'closed'}, {'id': 1431441761, 'number': 454, 'closed': datetime.datetime(2023, 7, 12, 17, 47, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 14, 49, 44, tzinfo=datetime.timezone.utc), 'time_taken': 10663.0, 'time_delta': '2:57:43', 'additions': 12, 'deletions': 1, 'state': 'closed'}, {'id': 1397997602, 'number': 446, 'closed': datetime.datetime(2023, 6, 30, 20, 15, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 19, 10, 52, 43, tzinfo=datetime.timezone.utc), 'time_taken': 984146.0, 'time_delta': '11 days, 9:22:26', 'additions': 27, 'deletions': 14, 'state': 'closed'}, {'id': 1394886558, 'number': 445, 'closed': None, 'created': datetime.datetime(2023, 6, 15, 23, 57, 3, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 15, 'deletions': 4, 'state': 'open'}, {'id': 1384882537, 'number': 439, 'closed': datetime.datetime(2023, 6, 8, 22, 25, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 8, 17, 38, 44, tzinfo=datetime.timezone.utc), 'time_taken': 17207.0, 'time_delta': '4:46:47', 'additions': 10, 'deletions': 2, 'state': 'closed'}, {'id': 1377914065, 'number': 437, 'closed': datetime.datetime(2023, 6, 5, 16, 7, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 4, 20, 12, 22, tzinfo=datetime.timezone.utc), 'time_taken': 71689.0, 'time_delta': '19:54:49', 'additions': 4, 'deletions': 2, 'state': 'closed'}, {'id': 1377878219, 'number': 436, 'closed': datetime.datetime(2023, 6, 5, 16, 5, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 4, 18, 27, 35, tzinfo=datetime.timezone.utc), 'time_taken': 77898.0, 'time_delta': '21:38:18', 'additions': 6, 'deletions': 2, 'state': 'closed'}, {'id': 1377828595, 'number': 435, 'closed': datetime.datetime(2023, 6, 5, 16, 4, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 4, 16, 27, 15, tzinfo=datetime.timezone.utc), 'time_taken': 85053.0, 'time_delta': '23:37:33', 'additions': 16, 'deletions': 2, 'state': 'closed'}, {'id': 1359472426, 'number': 433, 'closed': datetime.datetime(2023, 5, 22, 20, 41, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 22, 15, 36, 30, tzinfo=datetime.timezone.utc), 'time_taken': 18292.0, 'time_delta': '5:04:52', 'additions': 4, 'deletions': 2, 'state': 'closed'}, {'id': 1327741599, 'number': 428, 'closed': datetime.datetime(2023, 4, 26, 6, 57, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 25, 20, 55, 23, tzinfo=datetime.timezone.utc), 'time_taken': 36150.0, 'time_delta': '10:02:30', 'additions': 41, 'deletions': 10, 'state': 'closed'}, {'id': 1326055718, 'number': 425, 'closed': datetime.datetime(2023, 4, 25, 20, 33, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 24, 20, 7, 28, tzinfo=datetime.timezone.utc), 'time_taken': 87941.0, 'time_delta': '1 day, 0:25:41', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1294562981, 'number': 409, 'closed': datetime.datetime(2023, 4, 24, 17, 1, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 29, 12, 34, 56, tzinfo=datetime.timezone.utc), 'time_taken': 2262387.0, 'time_delta': '26 days, 4:26:27', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1290601135, 'number': 405, 'closed': datetime.datetime(2023, 3, 27, 22, 30, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 27, 1, 54, 22, tzinfo=datetime.timezone.utc), 'time_taken': 74163.0, 'time_delta': '20:36:03', 'additions': 10, 'deletions': 2, 'state': 'closed'}, {'id': 1255657682, 'number': 391, 'closed': datetime.datetime(2023, 3, 1, 16, 9, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 27, 15, 17, 13, tzinfo=datetime.timezone.utc), 'time_taken': 175915.0, 'time_delta': '2 days, 0:51:55', 'additions': 22, 'deletions': 9, 'state': 'closed'}, {'id': 1234267763, 'number': 383, 'closed': datetime.datetime(2023, 2, 15, 20, 3, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 8, 23, 11, 49, tzinfo=datetime.timezone.utc), 'time_taken': 593512.0, 'time_delta': '6 days, 20:51:52', 'additions': 283, 'deletions': 0, 'state': 'closed'}]"

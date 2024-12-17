@@ -1,0 +1,235 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+717358246,Add instructions to set up ScalaPy using python-native-libs,[`python-native-libs`](https://github.com/kiendang/python-native-libs) was made to help setting up ScalaPy more reliably. This adds instructions on how to use it to the doc.,True,210,https://api.github.com/repos/scalapy/scalapy/pulls/210,https://github.com/scalapy/scalapy/pull/210,closed,40,3,3,4,0,0,0,0,[],2021-08-22 19:04:26+00:00,2021-08-25 23:14:31+00:00,274205.0,"3 days, 4:10:05",[],"[{'commit_sha': 'fc0302bd5379022c6ea483604eda285fe33c214b', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb03b05eb9dcd8d92ed808a61413d8f36f4e0629', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23e075ad320a383372104148a85076ce65a5291f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab02341ca81212c3865db8c7dac3b4ab34bae9ad', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+717918908,Add option to enable ScalaPy in the REPL,"Add `--scalapy` flag that enables ScalaPy in the REPL by setting up the correct system properties required by ScalaPy, pre-importing ScalaPy Ivy dependency and the `py` object. The `--python-executable` allows optionally specifying the path to a specific Python interpreter executable to be used with ScalaPy (defaults to `python3` if not provided).
+
+```sh
+amm --scalapy
+```
+
+or
+
+```sh
+amm --scalapy --python-executable /usr/local/bin/python3.8
+```
+
+```scala
+@ py""'Hello!'""
+res0: py.Dynamic = Hello!
+
+@ py""[x for x in ${List(1, 2, 3).toPythonProxy}]""
+res1: py.Dynamic = [1, 2, 3]
+```
+
+Specifying `--amm --python-executable <path>` is equivalent to running
+
+```scala
+@
+import $ivy.`ai.kien::python-native-libs:0.2.1`
+import $ivy.`me.shadaj::scalapy-core:0.5.0`
+
+ai.kien.python.Python(""<path>"").scalapyProperties.get.foreach {
+  case (k, v) => System.setProperty(k, v)
+}
+
+import me.shadaj.scalapy.py
+import me.shadaj.scalapy.py.{PyQuote, SeqConverters}
+```
+
+This adds no dependency to ammonite (not even scalapy) other than [python-native-libs](https://github.com/kiendang/python-native-libs), a tiny helper for calculating the correct system properties for ScalaPy to load a certain Python interpreter.
+
+@alexarchambault",False,1209,https://api.github.com/repos/com-lihaoyi/Ammonite/pulls/1209,https://github.com/com-lihaoyi/Ammonite/pull/1209,closed,71,8,4,1,8,0,0,0,[],2021-08-23 15:03:22+00:00,2021-08-30 15:23:53+00:00,606031.0,"7 days, 0:20:31",[],"[{'commit_sha': '4d085502b117ac92da3fecadf8547789abd4d5e0', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+680832225,Add support for rich display of Python objects in ScalaPy,"Demo here
+
+https://nbviewer.jupyter.org/github/kiendang/examples/blob/645332825d02aa244506b116867e38f7597beca6/notebooks/scalapy/scalapy_rich_display.ipynb",False,843,https://api.github.com/repos/almond-sh/almond/pulls/843,https://github.com/almond-sh/almond/pull/843,closed,309,7,11,9,3,0,0,0,[],2021-06-30 12:31:21+00:00,2022-08-21 02:54:20+00:00,35994179.0,"416 days, 14:22:59",[],"[{'commit_sha': '72aa5190a127b844d2aa92371c90ff6719e0e9f2', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ccc75b2a043b3e4fccd5bccd35e1940546d0ebc5', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3af95460b6ba9a55a4d51968c39fc9c3cc7b102', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '571b7e4f8baaebb804425a79ec678a0a68e25677', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b57abda110850e534d81bbfbcfe68c94c9b9f190', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c8d365dbf5b74d184010f3711afeb75c8b7477e', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20b93941e4b9659ededc8db102b19d001731da05', 'committer_username': 'alexarchambault', 'committer_name': 'Alexandre Archambault', 'committer_email': None, 'commit_date': datetime.datetime(2014, 3, 25, 22, 9, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf7c8935e1be1be8239ea084b51d19eca55d9651', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b75f6faf4298fb81c2cfd769b7333fb45deeec99', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+700933110,Add support for rich display of Python objects in ScalaPy (rebased),,True,854,https://api.github.com/repos/almond-sh/almond/pulls/854,https://github.com/almond-sh/almond/pull/854,closed,349,6,8,3,14,0,0,0,[],2021-08-01 15:40:14+00:00,2022-08-22 08:46:15+00:00,33325561.0,"385 days, 17:06:01",[],"[{'commit_sha': 'e97b363629be35afa4a0f894575a668678fb57bf', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '161cf78b76d9ecac07deeeb1b0e0744e3f5ec6df', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73db690db379eb5ef57f471a5e0b3e03641fe4c5', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Alexandre Archambault,7063723,,User,,204,,0,333
+703149104,Scalapy completion dev,"This PR adds completion support for ScalaPy in ammonite. It is not to be merged into ammonite as is but ideally waits till ammonite has support for completion extension
+
+### How to try this out
+
+build an executable from this branch
+
+```sh
+./mill ""amm[2.13.6].assembly""
+```
+
+run ammonite
+
+```sh
+java -jar out/amm/2.13.6/assembly/dest/out.jar
+```
+
+inside the repl, set up ScalaPy
+
+```scala
+import $ivy.`ai.kien::python-native-libs:0.2.1`
+import $ivy.`me.shadaj::scalapy-core:0.5.0+8-7c7a6042`
+
+import ai.kien.python.Python
+
+Python().scalapyProperties.fold(
+  ex => println(s""Error while getting ScalaPy properties: $ex""),
+  props => props.foreach { case(k, v) => System.setProperty(k, v) }
+)
+
+import me.shadaj.scalapy.py
+import me.shadaj.scalapy.py.PyQuote
+import me.shadaj.scalapy.interpreter.CPythonInterpreter
+```
+
+### Features
+
+Basic completion is provided by  the standard library [rlcompleter](https://docs.python.org/3/library/rlcompleter.html), more advanced completion is available if [jedi](https://github.com/davidhalter/jedi) is installed.
+
+#### Basic completion
+
+This provides completion for attributes only
+
+```scala
+@ py.Dynamic.global.li|
+license( list(
+
+@ val v = py""'string'""
+@ v.up|
+upper(
+
+@ Object Obj { val v = py""'string'"" }
+@ Obj.v.up|
+upper(
+
+@ CPythonInterpreter.execManyLines(""class Cls(): x = 'string'"")
+@ py.Dynamic.global.Cls.x.up|
+upper(
+```
+
+Things like `py.Dynamic.global.range(10).cou|` won't work
+
+#### Jedi completion
+
+This has support for more advanced completion thanks to `jedi` static analysis
+
+```scala
+@ py.Dynamic.global.range(10).cou|
+count|
+```",False,2,https://api.github.com/repos/kiendang/Ammonite/pulls/2,https://github.com/kiendang/Ammonite/pull/2,open,974,3,16,18,0,0,0,0,[],2021-08-04 08:55:32+00:00,,0.0,,[],"[{'commit_sha': '5250b07042b4378d259942046bc46572c4c544bd', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '88b47d07ff7e9d7d4d468b9a0eda4557dd4eda29', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ad50ca591650c8a048f60604ea7cfe0922a79a81', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1fd580d5d71f79402ce4574680cc6eeb32d0e45f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8638bd3b4af85f58e40db11dfc1787c9943a77d8', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24264e1c05db63a52ebbd35d3358836ced50ff32', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20b1dc0503307f6347975d09d3e712a8f9eca142', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '821e11e6623c3713a19e55b84a07b7f072a3bd19', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1a2e4e576e6371661346393cee26482efc1092d', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b6ff1e80fbaba20a188afbc17d1d8c9717d5842', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba20148a84703377ff967fd178f356d33e439be0', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'db57c2669e3d5981ba9ecd36ea3c2d9fce64b44e', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ef07c5ee292ac8562e56b01d7d5b48cac1c46b7', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd73158e869010e95756bff12c37fbb67229bfe4d', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c539eca807e1312ee01d2ec72e5ccd5331ad8738', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '294607dcbdece45ff5ac09ac4029b4d22724d638', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab3538521924b2c8cf46dbd38ca7a2c4b8a7403e', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8420f1a0d4a90e1e7b1c885920b398df6cfa07f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+714742393,Experimental Scala 3 support,,False,209,https://api.github.com/repos/scalapy/scalapy/pulls/209,https://github.com/scalapy/scalapy/pull/209,closed,529,85,23,4,1,0,0,0,[],2021-08-18 04:55:11+00:00,2021-08-27 18:07:01+00:00,825110.0,"9 days, 13:11:50",[],"[{'commit_sha': 'ca766e586081a3aa5738ee3942aba16f3b040416', 'committer_username': 'Ang9876', 'committer_name': 'AngAng', 'committer_email': 'angzhendong@gmail.com', 'commit_date': datetime.datetime(2019, 8, 25, 1, 56, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '424a9767ff886c40da97869a5b66cd09296b2f6f', 'committer_username': 'Ang9876', 'committer_name': 'AngAng', 'committer_email': 'angzhendong@gmail.com', 'commit_date': datetime.datetime(2019, 8, 25, 1, 56, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aaf9e4c59f1b7b61a73b01af1ebad1f245f9e1ad', 'committer_username': 'Ang9876', 'committer_name': 'AngAng', 'committer_email': 'angzhendong@gmail.com', 'commit_date': datetime.datetime(2019, 8, 25, 1, 56, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a1bda232756474c211d42d8b487af69a421f2dc', 'committer_username': 'jlareck', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2017, 1, 16, 19, 48, 24, tzinfo=datetime.timezone.utc)}]",,25159436,,User,,26,,29,24
+717358246,Add instructions to set up ScalaPy using python-native-libs,[`python-native-libs`](https://github.com/kiendang/python-native-libs) was made to help setting up ScalaPy more reliably. This adds instructions on how to use it to the doc.,True,210,https://api.github.com/repos/scalapy/scalapy/pulls/210,https://github.com/scalapy/scalapy/pull/210,closed,40,3,3,4,0,0,0,0,[],2021-08-22 19:04:26+00:00,2021-08-25 23:14:31+00:00,274205.0,"3 days, 4:10:05",[],"[{'commit_sha': 'fc0302bd5379022c6ea483604eda285fe33c214b', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb03b05eb9dcd8d92ed808a61413d8f36f4e0629', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23e075ad320a383372104148a85076ce65a5291f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab02341ca81212c3865db8c7dac3b4ab34bae9ad', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+717918908,Add option to enable ScalaPy in the REPL,"Add `--scalapy` flag that enables ScalaPy in the REPL by setting up the correct system properties required by ScalaPy, pre-importing ScalaPy Ivy dependency and the `py` object. The `--python-executable` allows optionally specifying the path to a specific Python interpreter executable to be used with ScalaPy (defaults to `python3` if not provided).
+
+```sh
+amm --scalapy
+```
+
+or
+
+```sh
+amm --scalapy --python-executable /usr/local/bin/python3.8
+```
+
+```scala
+@ py""'Hello!'""
+res0: py.Dynamic = Hello!
+
+@ py""[x for x in ${List(1, 2, 3).toPythonProxy}]""
+res1: py.Dynamic = [1, 2, 3]
+```
+
+Specifying `--amm --python-executable <path>` is equivalent to running
+
+```scala
+@
+import $ivy.`ai.kien::python-native-libs:0.2.1`
+import $ivy.`me.shadaj::scalapy-core:0.5.0`
+
+ai.kien.python.Python(""<path>"").scalapyProperties.get.foreach {
+  case (k, v) => System.setProperty(k, v)
+}
+
+import me.shadaj.scalapy.py
+import me.shadaj.scalapy.py.{PyQuote, SeqConverters}
+```
+
+This adds no dependency to ammonite (not even scalapy) other than [python-native-libs](https://github.com/kiendang/python-native-libs), a tiny helper for calculating the correct system properties for ScalaPy to load a certain Python interpreter.
+
+@alexarchambault",False,1209,https://api.github.com/repos/com-lihaoyi/Ammonite/pulls/1209,https://github.com/com-lihaoyi/Ammonite/pull/1209,closed,71,8,4,1,8,0,0,0,[],2021-08-23 15:03:22+00:00,2021-08-30 15:23:53+00:00,606031.0,"7 days, 0:20:31",[],"[{'commit_sha': '4d085502b117ac92da3fecadf8547789abd4d5e0', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+680832225,Add support for rich display of Python objects in ScalaPy,"Demo here
+
+https://nbviewer.jupyter.org/github/kiendang/examples/blob/645332825d02aa244506b116867e38f7597beca6/notebooks/scalapy/scalapy_rich_display.ipynb",False,843,https://api.github.com/repos/almond-sh/almond/pulls/843,https://github.com/almond-sh/almond/pull/843,closed,309,7,11,9,3,0,0,0,[],2021-06-30 12:31:21+00:00,2022-08-21 02:54:20+00:00,35994179.0,"416 days, 14:22:59",[],"[{'commit_sha': '72aa5190a127b844d2aa92371c90ff6719e0e9f2', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ccc75b2a043b3e4fccd5bccd35e1940546d0ebc5', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3af95460b6ba9a55a4d51968c39fc9c3cc7b102', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '571b7e4f8baaebb804425a79ec678a0a68e25677', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b57abda110850e534d81bbfbcfe68c94c9b9f190', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c8d365dbf5b74d184010f3711afeb75c8b7477e', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20b93941e4b9659ededc8db102b19d001731da05', 'committer_username': 'alexarchambault', 'committer_name': 'Alexandre Archambault', 'committer_email': None, 'commit_date': datetime.datetime(2014, 3, 25, 22, 9, 43, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf7c8935e1be1be8239ea084b51d19eca55d9651', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b75f6faf4298fb81c2cfd769b7333fb45deeec99', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+700933110,Add support for rich display of Python objects in ScalaPy (rebased),,True,854,https://api.github.com/repos/almond-sh/almond/pulls/854,https://github.com/almond-sh/almond/pull/854,closed,349,6,8,3,14,0,0,0,[],2021-08-01 15:40:14+00:00,2022-08-22 08:46:15+00:00,33325561.0,"385 days, 17:06:01",[],"[{'commit_sha': 'e97b363629be35afa4a0f894575a668678fb57bf', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '161cf78b76d9ecac07deeeb1b0e0744e3f5ec6df', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73db690db379eb5ef57f471a5e0b3e03641fe4c5', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Alexandre Archambault,7063723,,User,,204,,0,333
+703149104,Scalapy completion dev,"This PR adds completion support for ScalaPy in ammonite. It is not to be merged into ammonite as is but ideally waits till ammonite has support for completion extension
+
+### How to try this out
+
+build an executable from this branch
+
+```sh
+./mill ""amm[2.13.6].assembly""
+```
+
+run ammonite
+
+```sh
+java -jar out/amm/2.13.6/assembly/dest/out.jar
+```
+
+inside the repl, set up ScalaPy
+
+```scala
+import $ivy.`ai.kien::python-native-libs:0.2.1`
+import $ivy.`me.shadaj::scalapy-core:0.5.0+8-7c7a6042`
+
+import ai.kien.python.Python
+
+Python().scalapyProperties.fold(
+  ex => println(s""Error while getting ScalaPy properties: $ex""),
+  props => props.foreach { case(k, v) => System.setProperty(k, v) }
+)
+
+import me.shadaj.scalapy.py
+import me.shadaj.scalapy.py.PyQuote
+import me.shadaj.scalapy.interpreter.CPythonInterpreter
+```
+
+### Features
+
+Basic completion is provided by  the standard library [rlcompleter](https://docs.python.org/3/library/rlcompleter.html), more advanced completion is available if [jedi](https://github.com/davidhalter/jedi) is installed.
+
+#### Basic completion
+
+This provides completion for attributes only
+
+```scala
+@ py.Dynamic.global.li|
+license( list(
+
+@ val v = py""'string'""
+@ v.up|
+upper(
+
+@ Object Obj { val v = py""'string'"" }
+@ Obj.v.up|
+upper(
+
+@ CPythonInterpreter.execManyLines(""class Cls(): x = 'string'"")
+@ py.Dynamic.global.Cls.x.up|
+upper(
+```
+
+Things like `py.Dynamic.global.range(10).cou|` won't work
+
+#### Jedi completion
+
+This has support for more advanced completion thanks to `jedi` static analysis
+
+```scala
+@ py.Dynamic.global.range(10).cou|
+count|
+```",False,2,https://api.github.com/repos/kiendang/Ammonite/pulls/2,https://github.com/kiendang/Ammonite/pull/2,open,974,3,16,18,0,0,0,0,[],2021-08-04 08:55:32+00:00,,0.0,,[],"[{'commit_sha': '5250b07042b4378d259942046bc46572c4c544bd', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '88b47d07ff7e9d7d4d468b9a0eda4557dd4eda29', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ad50ca591650c8a048f60604ea7cfe0922a79a81', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1fd580d5d71f79402ce4574680cc6eeb32d0e45f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8638bd3b4af85f58e40db11dfc1787c9943a77d8', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24264e1c05db63a52ebbd35d3358836ced50ff32', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20b1dc0503307f6347975d09d3e712a8f9eca142', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '821e11e6623c3713a19e55b84a07b7f072a3bd19', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1a2e4e576e6371661346393cee26482efc1092d', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b6ff1e80fbaba20a188afbc17d1d8c9717d5842', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba20148a84703377ff967fd178f356d33e439be0', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'db57c2669e3d5981ba9ecd36ea3c2d9fce64b44e', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ef07c5ee292ac8562e56b01d7d5b48cac1c46b7', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd73158e869010e95756bff12c37fbb67229bfe4d', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c539eca807e1312ee01d2ec72e5ccd5331ad8738', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '294607dcbdece45ff5ac09ac4029b4d22724d638', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab3538521924b2c8cf46dbd38ca7a2c4b8a7403e', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8420f1a0d4a90e1e7b1c885920b398df6cfa07f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+712529206,Raise NameError when a global name is not found,Fix #205,True,207,https://api.github.com/repos/scalapy/scalapy/pulls/207,https://github.com/scalapy/scalapy/pull/207,closed,36,5,4,3,0,0,0,0,[],2021-08-13 17:42:52+00:00,2021-08-13 18:02:44+00:00,1192.0,0:19:52,[],"[{'commit_sha': '035ab7d562ba3c1e39592bd30278b26b8170d425', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f39e8a6580eb2bf9c8b326eebb52ee8618911571', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '392601c9edce5a5eeaeab4ec051e66094f0dcc3f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+717358246,Add instructions to set up ScalaPy using python-native-libs,[`python-native-libs`](https://github.com/kiendang/python-native-libs) was made to help setting up ScalaPy more reliably. This adds instructions on how to use it to the doc.,True,210,https://api.github.com/repos/scalapy/scalapy/pulls/210,https://github.com/scalapy/scalapy/pull/210,closed,40,3,3,4,0,0,0,0,[],2021-08-22 19:04:26+00:00,2021-08-25 23:14:31+00:00,274205.0,"3 days, 4:10:05",[],"[{'commit_sha': 'fc0302bd5379022c6ea483604eda285fe33c214b', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb03b05eb9dcd8d92ed808a61413d8f36f4e0629', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23e075ad320a383372104148a85076ce65a5291f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab02341ca81212c3865db8c7dac3b4ab34bae9ad', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+680147839,Enable setting version of python lib via system property,in order to facilitate automatic setting up ScalaPy since it much easier to set a system property than to set an environment variable in Scala.,True,198,https://api.github.com/repos/scalapy/scalapy/pulls/198,https://github.com/scalapy/scalapy/pull/198,closed,15,4,3,6,1,1,0,0,[],2021-06-29 15:44:32+00:00,2021-06-30 18:53:47+00:00,97755.0,"1 day, 3:09:15","[{'comment_id': 661651475, 'comment_body': 'Could you link to this PR to be consistent with the other items?', 'comment_created': datetime.datetime(2021, 6, 30, 16, 50, 33, tzinfo=datetime.timezone.utc), 'commenter': 'shadaj', 'type': 'User'}]","[{'commit_sha': 'c78fe2ee4eced865eecb7b4eab5d1e763f10a806', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c78a773f6b7f444d762f5fa37b22060d26b66a4', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '99de7ebdd84cfaadeaff96ff4c8aa0490a9a7fce', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4aff17f1e366ea52d576ed5ce765dc0474a99177', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ab4f904463aa85206f6fda7c2487bfdaa54635f', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a88fdf5101763e674620269df1b5f9631bcd34c', 'committer_username': 'kiendang', 'committer_name': 'Kien Dang', 'committer_email': None, 'commit_date': datetime.datetime(2014, 1, 28, 3, 36, 27, tzinfo=datetime.timezone.utc)}]",Kien Dang,6521018,,User,,103,,3,50
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+77757916,scalapy,scalapy/scalapy,Scala,42,545,23,16,220,41,1,19,"[{'id': 1039835341, 'number': 305, 'closed': datetime.datetime(2022, 8, 29, 20, 36, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 29, 15, 4, 43, tzinfo=datetime.timezone.utc), 'time_taken': 19907.0, 'time_delta': '5:31:47', 'additions': 21, 'deletions': 21, 'state': 'closed'}, {'id': 1038798297, 'number': 304, 'closed': datetime.datetime(2022, 8, 28, 19, 50, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 28, 5, 53, 15, tzinfo=datetime.timezone.utc), 'time_taken': 50223.0, 'time_delta': '13:57:03', 'additions': 6, 'deletions': 1, 'state': 'closed'}, {'id': 1037643495, 'number': 303, 'closed': None, 'created': datetime.datetime(2022, 8, 26, 7, 57, 30, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 580, 'deletions': 29, 'state': 'open'}, {'id': 1037586219, 'number': 302, 'closed': datetime.datetime(2022, 8, 29, 12, 9, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 26, 6, 56, 4, tzinfo=datetime.timezone.utc), 'time_taken': 277999.0, 'time_delta': '3 days, 5:13:19', 'additions': 32, 'deletions': 36, 'state': 'closed'}, {'id': 888532124, 'number': 273, 'closed': datetime.datetime(2022, 4, 17, 21, 58, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 24, 15, 41, 12, tzinfo=datetime.timezone.utc), 'time_taken': 2096265.0, 'time_delta': '24 days, 6:17:45', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 883989291, 'number': 270, 'closed': datetime.datetime(2022, 3, 21, 19, 44, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 19, 14, 38, 36, tzinfo=datetime.timezone.utc), 'time_taken': 191169.0, 'time_delta': '2 days, 5:06:09', 'additions': 7, 'deletions': 11, 'state': 'closed'}, {'id': 819356480, 'number': 249, 'closed': datetime.datetime(2022, 1, 13, 20, 28, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 12, 6, 38, 11, tzinfo=datetime.timezone.utc), 'time_taken': 136238.0, 'time_delta': '1 day, 13:50:38', 'additions': 5, 'deletions': 2, 'state': 'closed'}, {'id': 717358246, 'number': 210, 'closed': datetime.datetime(2021, 8, 25, 23, 14, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 22, 19, 4, 26, tzinfo=datetime.timezone.utc), 'time_taken': 274205.0, 'time_delta': '3 days, 4:10:05', 'additions': 40, 'deletions': 3, 'state': 'closed'}, {'id': 712529206, 'number': 207, 'closed': datetime.datetime(2021, 8, 13, 18, 2, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 13, 17, 42, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1192.0, 'time_delta': '0:19:52', 'additions': 36, 'deletions': 5, 'state': 'closed'}, {'id': 683589547, 'number': 200, 'closed': datetime.datetime(2021, 7, 10, 21, 55, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 10, 46, 50, tzinfo=datetime.timezone.utc), 'time_taken': 472093.0, 'time_delta': '5 days, 11:08:13', 'additions': 64, 'deletions': 8, 'state': 'closed'}, {'id': 680147839, 'number': 198, 'closed': datetime.datetime(2021, 6, 30, 18, 53, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 29, 15, 44, 32, tzinfo=datetime.timezone.utc), 'time_taken': 97755.0, 'time_delta': '1 day, 3:09:15', 'additions': 15, 'deletions': 4, 'state': 'closed'}]"
+29178282,Ammonite,com-lihaoyi/Ammonite,Scala,367,2599,66,146,2823,149,14,22,"[{'id': 717918908, 'number': 1209, 'closed': datetime.datetime(2021, 8, 30, 15, 23, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 23, 15, 3, 22, tzinfo=datetime.timezone.utc), 'time_taken': 606031.0, 'time_delta': '7 days, 0:20:31', 'additions': 71, 'deletions': 8, 'state': 'closed'}, {'id': 241470373, 'number': 912, 'closed': datetime.datetime(2019, 1, 7, 13, 15, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2018, 12, 30, 0, 40, 36, tzinfo=datetime.timezone.utc), 'time_taken': 736490.0, 'time_delta': '8 days, 12:34:50', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"
+31986032,almond,almond-sh/almond,Scala,239,1584,56,42,1570,132,8,16,"[{'id': 1340673469, 'number': 1115, 'closed': datetime.datetime(2023, 5, 6, 9, 27, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 6, 6, 58, 27, tzinfo=datetime.timezone.utc), 'time_taken': 8950.0, 'time_delta': '2:29:10', 'additions': 2, 'deletions': 33, 'state': 'closed'}, {'id': 757556999, 'number': 886, 'closed': datetime.datetime(2022, 8, 18, 14, 43, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 13, 16, 3, 28, tzinfo=datetime.timezone.utc), 'time_taken': 26692813.0, 'time_delta': '308 days, 22:40:13', 'additions': 12, 'deletions': 19, 'state': 'closed'}, {'id': 680832225, 'number': 843, 'closed': datetime.datetime(2022, 8, 21, 2, 54, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 30, 12, 31, 21, tzinfo=datetime.timezone.utc), 'time_taken': 35994179.0, 'time_delta': '416 days, 14:22:59', 'additions': 309, 'deletions': 7, 'state': 'closed'}, {'id': 618027967, 'number': 793, 'closed': datetime.datetime(2021, 4, 19, 15, 59, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 19, 14, 8, 28, tzinfo=datetime.timezone.utc), 'time_taken': 6645.0, 'time_delta': '1:50:45', 'additions': 25, 'deletions': 1, 'state': 'closed'}, {'id': 604076384, 'number': 785, 'closed': datetime.datetime(2021, 4, 1, 10, 0, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 16, 49, 58, tzinfo=datetime.timezone.utc), 'time_taken': 148211.0, 'time_delta': '1 day, 17:10:11', 'additions': 15, 'deletions': 2, 'state': 'closed'}, {'id': 600915716, 'number': 779, 'closed': datetime.datetime(2023, 5, 5, 14, 46, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 25, 17, 9, 41, tzinfo=datetime.timezone.utc), 'time_taken': 66605823.0, 'time_delta': '770 days, 21:37:03', 'additions': 159, 'deletions': 224, 'state': 'closed'}, {'id': 592406127, 'number': 763, 'closed': datetime.datetime(2021, 3, 14, 13, 39, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 13, 18, 34, 29, tzinfo=datetime.timezone.utc), 'time_taken': 68701.0, 'time_delta': '19:05:01', 'additions': 5, 'deletions': 1, 'state': 'closed'}, {'id': 244259920, 'number': 304, 'closed': datetime.datetime(2019, 1, 23, 23, 32, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 1, 13, 5, 24, 50, tzinfo=datetime.timezone.utc), 'time_taken': 929258.0, 'time_delta': '10 days, 18:07:38', 'additions': 16, 'deletions': 5, 'state': 'closed'}]"
+163550112,Ammonite,kiendang/Ammonite,Scala,0,0,3,134,2673,1,19,1,"[{'id': 703149104, 'number': 2, 'closed': None, 'created': datetime.datetime(2021, 8, 4, 8, 55, 32, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 974, 'deletions': 3, 'state': 'open'}, {'id': 700087916, 'number': 1, 'closed': datetime.datetime(2021, 8, 23, 15, 0, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 7, 57, 6, tzinfo=datetime.timezone.utc), 'time_taken': 2099030.0, 'time_delta': '24 days, 7:03:50', 'additions': 72, 'deletions': 8, 'state': 'closed'}]"

@@ -1,0 +1,126 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1500362093,[GSoC 2023] Create a gprMax custom kernel and that can be installed in Jupyter notebook,"# 💻 Google Summer of Code 2023 
+Project: Create a gprMax Custom Kernel for Jupyter Notebook
+
+## ✍🏼 Project Description
+This project aims to create a custom gprMax kernel within Jupyter Notebook, incorporating all the necessary modules and files from the gprMax installation for seamless use within the Jupyter environment.
+
+## 📂 Newly Added Folders
+
+## 1.
+
+ The following folders have been added under `gprMax/toolboxes` : 
+**`gprMaxOnJupyter` ->  This folder contains the script required to install gprMax-devel kernel on Jupyter Notebook**
+
+For using gprMax in a jupyter notebook, first normal installation of gprMax devel has to be done as directed in the documentation. Or one can follow the following steps
+
+**Installation Instructions**
+To install, follow these steps:
+1. Install the gprMax-devel as you would for a normal installation, ensuring that [Miniconda](https://docs.conda.io/en/latest/miniconda.html) and GCC (for Linux/Mac) or [Microsoft Build Tools for Visual Studio 2022](https://aka.ms/vs/17/release/vs_BuildTools.exe) (for Windows) are installed.
+
+    ```
+    $ conda update conda
+    $ conda install git
+    $ git clone --branch devel https://github.com/gprMax/gprMax.git
+    $ cd gprMax
+    $ conda env create -f conda_env.yml
+    $ conda activate gprMax-devel
+    $ cd ..
+    $ pip install -e gprMax
+    ```
+2. Then we run the `install_notebook_dependencies.py` script from the terminal to install the gprMax-devel kernel in Jupyter Notebook. This is the newly added script for installing dependencies to run gprMax on a jupyter notebook.
+    ```
+    $ python toolboxes.gprMaxOnJupyter.install_notebook_dependencies.py
+
+    ```
+3. After completing the installation, launch Jupyter Notebook and create a new notebook. In the kernel options, select the `gprMax-devel` custom kernel that you've installed. This will enable you to seamlessly use gprMax functionality within your Jupyter Notebook environment.
+
+## 2.
+
+Another newly added folder is `example_notebooks` under `gprMax/toolboxes/gprMaxOnJupyter` which contains Jupyter Notebooks and other related files for plotting these models on notebooks. They are
+  - cylinder_Ascan_2D
+  - cylinder_Bscan_2D
+  - GSSI_1500_antenna_dipole_model
+  - hertzian_dipole_hs
+  - magnetic_dipole_fs 
+  
+These folders have the notebooks which contain the model built and run on Jupyter as well as their 3D geometry plotted
+using a newly developed function named `visualize_vti_output`.
+
+## 3.
+
+**A new module has been introduced to plot 3D geometry in Jupyter Notebooks. This is present in the file `gprMax/toolboxes/Plotting/visualization_toolbox`**
+
+This folder contains the module `plot_3D_model.py` which introduces the function `visualize_vti_output` used to plot the 3D models in jupyter notebooks. <br>
+Usage of this module is as follows:
+
+```python
+
+visualize_vti_output(filename, orientation = 'xy', opacity = 0.4, backend = 'static'):
+
+```
+**Arguments:** <br>
+1. *filename* : string of filename (including path) of the geometry view file. <br>
+   eg: `cylinder_half_space.vti`
+2. *orientation* : string in which plane the 3D output is to be shown. <br>
+   eg: `xy`, `yz`, `zx`
+3. *opacity* : float point value to determine the transparency of the background. <br>
+   eg : `0.5`
+4. *backend* : string for the 3D plot to be static or dynamic.
+<br>
+
+The optional arguments are `opacity` and `backend`, while the required arguments are `filename` and `orientation`.
+
+An example notebook named `test_3D_output_notebook` is also present which visualizes the `simplebscan.vti` to show the usage of the function in a Jupyter Notebook.
+
+An important file named `colab_notebook` is also present in this folder. This notebook gives comprehensive description on how to install *gprMax* in Google Colab and use it's API to run models and view 3D models.
+
+## 4. 
+
+Both the newly added folders contain updated README files. Another new README file has also been created under `gprMax/docs/source` named `inc_gprMaxOnJupyter.rst` to include it's README in the main README. 
+
+## 📄 Updated gprMax Files
+While running models on Jupyter Notebooks, line 263 of `model_build_run.py` was throwing errors. So that line has been commented in this update. 
+
+# Summary 
+
+A new feature has been introduced in this project, i.e running gprMax on Jupyrter notebooks using a custom gprMax-devel kernel. This required a few additional scripts which have been added. Also a lot of example notebooks have been introduced which would make it easier for the user to understand the implementation of this new feature, 
+
+Appropriate changes in documentation has also been done along with addition of new documentation explaining the changes. 
+
+
+## Type of change
+
+<!----Please delete options that are not relevant.And in order to tick the check box just add x inside them for example [x] like this----->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [x] This change requires a documentation update
+
+# Checklist:
+
+<!----Please delete options that are not relevant.And in order to tick the check box just but x inside them for example [x] like this----->
+- [x] I have made this from my own
+- [x] I have taken help from some online resourses 
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] The title of my pull request is a short description of the requested changes.
+
+## ATTACHED SCREEN-SHOTS
+
+**gprMax-devel kernel on Jupyter Notebook**
+
+![jupyter-demo](https://github.com/gprMax/gprMax/assets/98389219/8e1da2a6-9fe3-4b3d-bbd4-718c41bd0e68)
+
+**3D output of a simplebscan model in Jupyter Notebook**
+
+![output](https://github.com/gprMax/gprMax/assets/98389219/6b0675ff-4e48-44c9-bca1-1121c77c8ddd)
+
+
+",False,381,https://api.github.com/repos/gprMax/gprMax/pulls/381,https://github.com/gprMax/gprMax/pull/381,open,2019,1,37,12,0,0,0,0,[],2023-09-03 19:35:18+00:00,,0.0,,[],"[{'commit_sha': 'cb83180aab7567f6fba00a487e8b8692fbb7d529', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2bc7e44d463ad049808d1e6257506e107ea0e2d6', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a302728907b154066b9a48e914d6e47d856bb684', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2ed78990f90217c1e9bd0e2c6cc1508fb523ff2', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b9791c730d91cf340c1217315be95761a42cc713', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '36cc0369f202fb7d19a1230ea6b0c34f20f0cb07', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2cc030ca4df2dd1327e92102b73050fecefd6b3', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0a71c48d969238e097c54ca927452bd89c97c668', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80b4bd6182f166cf6ecceae055c4a39caba97f81', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd378e3652b0b502198fbd7c098e3cca85af0ba04', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6be9792385dfb0755bc5b0bc72336e1f61cacaf8', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca738d52ae92b6c16f9595b27b6e673be9a6b28d', 'committer_username': 'srutanik', 'committer_name': 'Srutanik Bhaduri', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 25, 9, 51, 49, tzinfo=datetime.timezone.utc)}]",Srutanik Bhaduri,98389219,,User,,7,,6,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43433739,gprMax,gprMax/gprMax,Python,249,601,37,40,1927,25,2,8,"[{'id': 1500362093, 'number': 381, 'closed': None, 'created': datetime.datetime(2023, 9, 3, 19, 35, 18, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 2019, 'deletions': 1, 'state': 'open'}, {'id': 1492921117, 'number': 376, 'closed': datetime.datetime(2023, 8, 31, 9, 9, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 29, 1, 1, 9, tzinfo=datetime.timezone.utc), 'time_taken': 202109.0, 'time_delta': '2 days, 8:08:29', 'additions': 2086, 'deletions': 14, 'state': 'closed'}]"

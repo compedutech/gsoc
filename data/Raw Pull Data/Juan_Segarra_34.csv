@@ -1,0 +1,48 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+436773760,[CAMEL-15253] camel-oaipmh - basic implementation,"Google Summer of Code 2020:
+
+Implementation of a camel-oaipmh component. 
+
+Student: Juan Segarra 
+Mentors:
+Denis Istomin
+Zoran Regvart
+Andrea Cosentino
+
+Documentation:
+https://camel.apache.org/components/latest/oaipmh-component.html
+
+Camel Examples:
+https://github.com/apache/camel-examples/pull/13
+
+Spring Boot Starter:
+https://github.com/apache/camel-spring-boot/pull/143
+
+Jira:
+https://issues.apache.org/jira/browse/CAMEL-15253
+
+Proposal:
+https://docs.google.com/document/d/1zrPhEnhj5gc3VIPRWYXz7n6kJqrIjLbDHRRrCa5wwsg/edit?usp=sharing
+
+Blog:
+https://medium.com/@juanksegarraf/implementation-of-a-component-for-the-oai-pmh-protocol-in-apache-camel-94d98ca6908f
+
+Mail threads:
+http://camel.465427.n5.nabble.com/camel-oaipmh-quirks-mode-tp5878543.html
+http://camel.465427.n5.nabble.com/camel-oaipmh-HTTPS-and-endpoint-schema-tp5871118.html
+http://camel.465427.n5.nabble.com/GSoC-2020-Project-suggestion-OAI-PMH-tp5858089.html
+
+
+*Part of this code was imported from: https://github.com/cbadenes/camel-oaipmh
+
+
+[ ] Make sure there is a [JIRA issue](https://issues.apache.org/jira/browse/CAMEL) filed for the change (usually before you start working on it).  Trivial changes like typos do not require a JIRA issue.  Your pull request should address just this issue, without pulling in other changes.
+[ ] Each commit in the pull request should have a meaningful subject line and body.
+[ ] If you're unsure, you can format the pull request title like `[CAMEL-XXX] Fixes bug in camel-file component`, where you replace `CAMEL-XXX` with the appropriate JIRA issue.
+[ ] Write a pull request description that is detailed enough to understand what the pull request does, how, and why.
+[ ] Run `mvn clean install -Psourcecheck` in your module with source check enabled to make sure basic checks pass and there are no checkstyle violations. A more thorough check will be performed on your pull request automatically.
+Below are the contribution guidelines:
+https://github.com/apache/camel/blob/master/CONTRIBUTING.md",True,3934,https://api.github.com/repos/apache/camel/pulls/3934,https://github.com/apache/camel/pull/3934,closed,4246,0,52,4,5,13,0,0,[],2020-06-18 21:32:21+00:00,2020-08-13 10:28:54+00:00,4798593.0,"55 days, 12:56:33","[{'comment_id': 463478543, 'comment_body': ""You don't need this plugin, is already included in the parent pom of the components."", 'comment_created': datetime.datetime(2020, 7, 31, 8, 32, 55, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463479201, 'comment_body': 'As well here', 'comment_created': datetime.datetime(2020, 7, 31, 8, 34, 27, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463479705, 'comment_body': ""You already having the parent dependency, I don't think you need to add the Camel BOM here"", 'comment_created': datetime.datetime(2020, 7, 31, 8, 35, 29, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463481059, 'comment_body': 'and here', 'comment_created': datetime.datetime(2020, 7, 31, 8, 38, 27, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463484430, 'comment_body': 'I see these imports are not used here', 'comment_created': datetime.datetime(2020, 7, 31, 8, 45, 12, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463484704, 'comment_body': ""I don't think you need to throw all these exception since you are throwing `Exception`."", 'comment_created': datetime.datetime(2020, 7, 31, 8, 45, 40, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463487164, 'comment_body': ""I'd prefer to put all headers key string constants in a different class, [example](https://github.com/apache/camel/blob/master/components/camel-arangodb/src/main/java/org/apache/camel/component/arangodb/ArangoDbConstants.java#L19)"", 'comment_created': datetime.datetime(2020, 7, 31, 8, 50, 33, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463495764, 'comment_body': 'I think these kind of validations, could be simplified into a function that takes lambda as argument, example:\r\n```\r\nprivate <T> void checkAndSetConfigs(final Message message, final String key, final Consumer<T> fn, final Class<T> type) {\r\n        final T header = message.getHeader(key, type);\r\n        if (!ObjectHelper.isEmpty(header)) {\r\n            fn.accept(header);\r\n        }\r\n    }\r\n``` \r\nto call it:\r\n```\r\ncheckAndSetConfigs(msg, ""CamelOaimphVerb"", harvester::setVerb, String.class);\r\n```\r\nFor the URI, you may need to add the a wrapper from URI to String somewhere that creates `URI.create(header)`', 'comment_created': datetime.datetime(2020, 7, 31, 9, 8, 12, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463497323, 'comment_body': 'You can replace it with:\r\n```suggestion\r\n       try (CloseableHttpClient httpclient = getCloseableHttpClient()) {\r\n```', 'comment_created': datetime.datetime(2020, 7, 31, 9, 11, 13, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463498425, 'comment_body': 'I am just wondering, do we need to check that we really have two params split with `=`? ', 'comment_created': datetime.datetime(2020, 7, 31, 9, 13, 36, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463499212, 'comment_body': 'unnecessary comments here', 'comment_created': datetime.datetime(2020, 7, 31, 9, 15, 12, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463500230, 'comment_body': ""If you are catching the exception and then throw it again, makes no sense. However, I don't feel comfortable of throwing generic `Exception` here, please be specific on which exception you want to throw here"", 'comment_created': datetime.datetime(2020, 7, 31, 9, 17, 19, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}, {'comment_id': 463500702, 'comment_body': 'This looks deprecated. ', 'comment_created': datetime.datetime(2020, 7, 31, 9, 18, 12, tzinfo=datetime.timezone.utc), 'commenter': 'omarsmak', 'type': 'User'}]","[{'commit_sha': '3cc8ca4f027a9c19fb32df42eaadd0583e983ffe', 'committer_username': 'juanksega', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2020, 3, 3, 0, 9, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2c23cdec6dc8115cfbf03636145ef9ea53fbc2a1', 'committer_username': 'juanksega', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2020, 3, 3, 0, 9, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b1bdc9e44f1190caea333240d9b0469733a2a16', 'committer_username': 'juanksega', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2020, 3, 3, 0, 9, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '305b642f123c96b4523b89b249ea7df5357e8061', 'committer_username': 'juanksega', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2020, 3, 3, 0, 9, 34, tzinfo=datetime.timezone.utc)}]",,61717390,,User,,10,,0,0
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+206317,camel,apache/camel,Java,4924,5455,270,1417,71896,9,67,9,"[{'id': 471299892, 'number': 4111, 'closed': datetime.datetime(2020, 8, 21, 7, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 21, 0, 3, 39, tzinfo=datetime.timezone.utc), 'time_taken': 26121.0, 'time_delta': '7:15:21', 'additions': 168, 'deletions': 43, 'state': 'closed'}, {'id': 436773760, 'number': 3934, 'closed': datetime.datetime(2020, 8, 13, 10, 28, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 18, 21, 32, 21, tzinfo=datetime.timezone.utc), 'time_taken': 4798593.0, 'time_delta': '55 days, 12:56:33', 'additions': 4246, 'deletions': 0, 'state': 'closed'}]"

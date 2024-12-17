@@ -1,0 +1,50 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+668098545,Display type information when type alias is hovered in rbs,"we now display type information when alias is hovered in rbs 
+![image](https://user-images.githubusercontent.com/18569016/122393021-65424380-cfaf-11eb-94af-ca433ee24494.png)
+
+## Known issue
+The judgment when hovering is off by one character.
+I think this is a location issue, so I'll fix it in a later PR.
+",True,385,https://api.github.com/repos/soutaro/steep/pulls/385,https://github.com/soutaro/steep/pull/385,closed,188,82,4,3,2,2,0,0,[],2021-06-11 12:36:26+00:00,2021-06-22 13:31:31+00:00,953705.0,"11 days, 0:55:05","[{'comment_id': 655245091, 'comment_body': 'You can use `#as_lsp_range` (https://github.com/soutaro/steep/blob/master/lib/steep/range_extension.rb)', 'comment_created': datetime.datetime(2021, 6, 21, 10, 5, 40, tzinfo=datetime.timezone.utc), 'commenter': 'soutaro', 'type': 'User'}, {'comment_id': 655372802, 'comment_body': 'thank you for the review!\r\nupdated it here https://github.com/soutaro/steep/pull/385/commits/d93aee587ef7710723f6f5791b8af0989d8682b7', 'comment_created': datetime.datetime(2021, 6, 21, 13, 24, 19, tzinfo=datetime.timezone.utc), 'commenter': 'Yuuki77', 'type': 'User'}]","[{'commit_sha': '0795e821e8a63fec572ca8f995f2e8c81aab93d2', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'd93aee587ef7710723f6f5791b8af0989d8682b7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'aba8daf27ee73097fe08a57b43ca57f356e0c544', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Yuki Osaki,18569016,yuki.osaki7@gmail.com,User,,37,,141,27
+686712566,Extend the functionality of hover in rbs files.,"add hover supports for `RBS::Types::ClassInstance`, `RBS::Types::ClassSingleton` and `RBS::Types::Interface`.
+
+When these are hovered, the information and comments will now be displayed!
+
+![image](https://user-images.githubusercontent.com/18569016/125070604-28232a00-e0f3-11eb-85eb-88bb01082d4d.png)
+
+### How to test
+crate a rbs file with this content and you can confirm that you can see the information when you hover them
+```rbs
+# my comment
+class Foo [T] < Parent[T]
+end
+
+class Parent [in T]
+end
+
+module Hoge
+end
+
+class Qux
+  @foo: Foo[Hoge]
+end
+
+interface _Fooable
+  def foo: () -> nil
+end
+
+class C
+  def foo: (_Fooable) -> singleton(String)
+end
+```",True,397,https://api.github.com/repos/soutaro/steep/pulls/397,https://github.com/soutaro/steep/pull/397,closed,262,5,4,2,1,1,0,0,[],2021-07-09 11:23:18+00:00,2021-07-20 14:04:46+00:00,960088.0,"11 days, 2:41:28","[{'comment_id': 667801700, 'comment_body': 'Use `location[:name]` here to highlight only name of the interface.', 'comment_created': datetime.datetime(2021, 7, 12, 10, 10, 56, tzinfo=datetime.timezone.utc), 'commenter': 'soutaro', 'type': 'User'}]","[{'commit_sha': 'decbe274cdd0fe78ed78116e9b0024f91faec1c6', 'committer_username': 'Yuuki77', 'committer_name': 'Yuki Osaki', 'committer_email': 'yuki.osaki7@gmail.com', 'commit_date': datetime.datetime(2016, 4, 20, 7, 22, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1545d6b6b34a85bde47f2c253673c359dacec421', 'committer_username': 'Yuuki77', 'committer_name': 'Yuki Osaki', 'committer_email': 'yuki.osaki7@gmail.com', 'commit_date': datetime.datetime(2016, 4, 20, 7, 22, 32, tzinfo=datetime.timezone.utc)}]",Yuki Osaki,18569016,yuki.osaki7@gmail.com,User,,37,,141,27
+707386664,Implement auto complete feature,"Implement auto complete feature for rbs files
+and some fix for hover feature
+
+Demo 
+
+https://user-images.githubusercontent.com/18569016/129554155-d0c7ebcd-8eb3-4669-ad77-68f7b721e28c.mov
+
+",True,404,https://api.github.com/repos/soutaro/steep/pulls/404,https://github.com/soutaro/steep/pull/404,closed,246,28,3,2,0,0,0,0,[],2021-08-10 14:05:21+00:00,2021-08-16 12:58:18+00:00,514377.0,"5 days, 22:52:57",[],"[{'commit_sha': '99d5c9dee5373acd972829770aab594b5d2d87c0', 'committer_username': 'Yuuki77', 'committer_name': 'Yuki Osaki', 'committer_email': 'yuki.osaki7@gmail.com', 'commit_date': datetime.datetime(2016, 4, 20, 7, 22, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49017c0f4c5c31432fb5896a6733960bd99843f4', 'committer_username': 'Yuuki77', 'committer_name': 'Yuki Osaki', 'committer_email': 'yuki.osaki7@gmail.com', 'commit_date': datetime.datetime(2016, 4, 20, 7, 22, 32, tzinfo=datetime.timezone.utc)}]",Yuki Osaki,18569016,yuki.osaki7@gmail.com,User,,37,,141,27
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+86352893,steep,soutaro/steep,Ruby,86,1348,26,46,3158,120,13,11,"[{'id': 707386664, 'number': 404, 'closed': datetime.datetime(2021, 8, 16, 12, 58, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 10, 14, 5, 21, tzinfo=datetime.timezone.utc), 'time_taken': 514377.0, 'time_delta': '5 days, 22:52:57', 'additions': 246, 'deletions': 28, 'state': 'closed'}, {'id': 686712566, 'number': 397, 'closed': datetime.datetime(2021, 7, 20, 14, 4, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 9, 11, 23, 18, tzinfo=datetime.timezone.utc), 'time_taken': 960088.0, 'time_delta': '11 days, 2:41:28', 'additions': 262, 'deletions': 5, 'state': 'closed'}, {'id': 668098545, 'number': 385, 'closed': datetime.datetime(2021, 6, 22, 13, 31, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 11, 12, 36, 26, tzinfo=datetime.timezone.utc), 'time_taken': 953705.0, 'time_delta': '11 days, 0:55:05', 'additions': 188, 'deletions': 82, 'state': 'closed'}]"

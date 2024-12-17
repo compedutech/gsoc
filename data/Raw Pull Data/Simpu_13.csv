@@ -1,0 +1,71 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+428080409,Added Custom Performance Monitor,"Task 1 & 2 of [GSoC project](https://gist.github.com/simpuid/35bd3fa74d052ec1e0bae5453f9fdd12)
+
+Custom monitors can be added/removed/check using `Performance.add_custom_monitor`/`Performance.remove_custom_monitor`/`Performance.has_custom_monitor`
+
+The value can be viewed in the `Custom` section of `Monitor` tab of Debugger.
+Basically...
+```
+func _enter_tree():
+	var self_var = self
+	Performance.add_custom_monitor(""Hello/There"", Callable(self_var, ""monitor_call""), [1, 2])
+	Performance.add_custom_monitor("""", Callable(self_var, ""monitor_call""), [1, 2])
+	Performance.add_custom_monitor(""General/Kenobi"", Callable(self_var, ""monitor_call""), [2, 3])
+	Performance.add_custom_monitor(""Multiple/First"", Callable(self_var, ""monitor_call""), [3, 4])
+	Performance.add_custom_monitor(""Multiple/Second"", Callable(self_var, ""monitor_call""), [4, 5])
+	Performance.add_custom_monitor(""Audio/BuiltinCategory"", Callable(self_var, ""monitor_call""), [5, 6])
+	Performance.add_custom_monitor(""Too/Much/Slashes/So it's in Custom"", Callable(self_var, ""monitor_call""), [6, 7])
+	Performance.add_custom_monitor(""No slash so it's in Custom"", Callable(self_var, ""monitor_call""), [7, 8])
+
+func _exit_tree():
+	Performance.remove_custom_monitor(""Hello/There"")
+	Performance.remove_custom_monitor("""")
+	Performance.remove_custom_monitor(""General/Kenobi"")
+	Performance.remove_custom_monitor(""Multiple/First"")
+	Performance.remove_custom_monitor(""Multiple/Second"")
+	Performance.remove_custom_monitor(""Audio/BuiltinCategory"")
+	Performance.remove_custom_monitor(""Too/Much/Slashes/So it's in Custom"")
+	Performance.remove_custom_monitor(""No slash so it's in Custom"")
+
+func monitor_call(from, to) -> float:
+	return rand_range(from, to)
+
+```
+Above code causes
+
+![sample](https://user-images.githubusercontent.com/37181756/85929603-f9655780-b8d3-11ea-96fa-c7da6e4df834.png)
+
+
+Edit: Monitor list is now cleared when debugging is started.
+Edit: Updated with categorized monitors.
+Edit: This implements godotengine/godot-proposals#1014 too
+
+*Bugsquad edit: This closes https://github.com/godotengine/godot-proposals/issues/229.*",True,39302,https://api.github.com/repos/godotengine/godot/pulls/39302,https://github.com/godotengine/godot/pull/39302,closed,708,242,8,1,20,3,2,0,"[{'name': 'enhancement'}, {'name': 'topic:editor'}]",2020-06-04 20:49:36+00:00,2020-06-29 20:18:14+00:00,2158118.0,"24 days, 23:28:38","[{'comment_id': 447162929, 'comment_body': 'This should be [codeblock]. [code] is inline code like `this`.', 'comment_created': datetime.datetime(2020, 6, 29, 18, 17, 58, tzinfo=datetime.timezone.utc), 'commenter': 'akien-mga', 'type': 'User'}, {'comment_id': 447163374, 'comment_body': 'Initialize members directly when declaring them in the header.', 'comment_created': datetime.datetime(2020, 6, 29, 18, 18, 58, tzinfo=datetime.timezone.utc), 'commenter': 'akien-mga', 'type': 'User'}, {'comment_id': 447163857, 'comment_body': 'Add space after `//`.', 'comment_created': datetime.datetime(2020, 6, 29, 18, 19, 52, tzinfo=datetime.timezone.utc), 'commenter': 'akien-mga', 'type': 'User'}]","[{'commit_sha': 'bfadb882b1d7aecd47020e177b5352638f078a75', 'committer_username': 'simpuid', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 8, 13, 1, 7, tzinfo=datetime.timezone.utc)}]",Utkarsh,37181756,,User,,26,,20,15
+432577513,Debugger Plugins in Godot,"#### Purpose
+Godot's debugger uses `Profiler` and `Capture` to communicate with the running game. This PR exposes them to gdscript as debugger plugins.
+
+#### How to use
+To make a debugger plugin, we need 3 scripts and a scene (optional ).
+
+* First script is the plugin script that is used to register the debugger plugin script and autoload script.
+
+* Second script is the debugger plugin script. It is an extension of `EditorDebuggerPlugin` class. It can register/unregister message captures and send messages to the game using member functions. The script will run inside the editor.
+
+* Third script is an autoload script . It use `EngineDebugger` functions to register/unregister profilers and captures. It can also use `EngineDebugger.send_message` to send messages to the Editor. The script will run inside the game.
+
+#### Capture system
+ Capture system is used to relay the messages to the correct recipient (Callables in this case). A message like `my_profiler:my_message` will be passed to the capture registered with name `my_profiler` and the message would be `my_message`. The debugger uses some captures like `performance`, `scene`, `memory`, `visual`, `servers`, `network` etc internally, so don't use them. 
+
+#### Sending message
+Message should be in the format `[capture name]:[message]`. Use the argument array to send additional data with messages.
+
+#### Demo
+[This](https://github.com/simpuid/godot-profiler-demo/) is the demo used for testing.
+
+The right panel displays the mouse position relative to the running game. The left text field and button can be used to execute `Expression` inside the game. (It's a profiler but the usage is not limited to profiling)
+#### Action
+![demo](https://user-images.githubusercontent.com/37181756/84294079-46240100-ab66-11ea-9b1d-94dc1ecd9990.gif)
+",True,39440,https://api.github.com/repos/godotengine/godot/pulls/39440,https://github.com/godotengine/godot/pull/39440,closed,780,1,16,1,10,6,3,0,"[{'name': 'enhancement'}, {'name': 'topic:gdscript'}, {'name': 'topic:editor'}]",2020-06-10 16:43:12+00:00,2020-08-27 09:35:39+00:00,6713547.0,"77 days, 16:52:27","[{'comment_id': 464060529, 'comment_body': 'Sorry, this was a leftover from my patch. I think it can be safely removed.', 'comment_created': datetime.datetime(2020, 8, 2, 10, 30, 30, tzinfo=datetime.timezone.utc), 'commenter': 'Faless', 'type': 'User'}, {'comment_id': 464060538, 'comment_body': 'Sorry, this was a leftover from my patch. I think it can be safely removed.', 'comment_created': datetime.datetime(2020, 8, 2, 10, 30, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Faless', 'type': 'User'}, {'comment_id': 477341539, 'comment_body': ""I don't think we need this Mutex. Concurrency at connection level (when supported) is handled by `RemoteDebuggerPeer` itself, and in general, other methods are not thread safe (users should use their own message queue and mutex in GDScript if so desired)."", 'comment_created': datetime.datetime(2020, 8, 26, 14, 23, 29, tzinfo=datetime.timezone.utc), 'commenter': 'Faless', 'type': 'User'}, {'comment_id': 477341780, 'comment_body': 'see above', 'comment_created': datetime.datetime(2020, 8, 26, 14, 23, 50, tzinfo=datetime.timezone.utc), 'commenter': 'Faless', 'type': 'User'}, {'comment_id': 477344793, 'comment_body': ""`true` and `false` should be wrapped around `[code][/code]` tags when it's meant as a boolean value (also apply to the rest of the added doc)."", 'comment_created': datetime.datetime(2020, 8, 26, 14, 27, 37, tzinfo=datetime.timezone.utc), 'commenter': 'Faless', 'type': 'User'}, {'comment_id': 477345788, 'comment_body': ""For parameters, and code in general (unless it's a block) use the `[code][/code]` tag instead of `[i][/i]`"", 'comment_created': datetime.datetime(2020, 8, 26, 14, 28, 56, tzinfo=datetime.timezone.utc), 'commenter': 'Faless', 'type': 'User'}]","[{'commit_sha': 'ea2eaf8c276e5d694aee075f8701467c3db76735', 'committer_username': 'simpuid', 'committer_name': 'Utkarsh', 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 8, 13, 1, 7, tzinfo=datetime.timezone.utc)}]",Utkarsh,37181756,,User,,26,,20,15
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+15634981,godot,godotengine/godot,C++,19962,88180,1515,2965,66512,13377,14,2859,"[{'id': 432577513, 'number': 39440, 'closed': datetime.datetime(2020, 8, 27, 9, 35, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 10, 16, 43, 12, tzinfo=datetime.timezone.utc), 'time_taken': 6713547.0, 'time_delta': '77 days, 16:52:27', 'additions': 780, 'deletions': 1, 'state': 'closed'}, {'id': 428080409, 'number': 39302, 'closed': datetime.datetime(2020, 6, 29, 20, 18, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 4, 20, 49, 36, tzinfo=datetime.timezone.utc), 'time_taken': 2158118.0, 'time_delta': '24 days, 23:28:38', 'additions': 708, 'deletions': 242, 'state': 'closed'}, {'id': 390828351, 'number': 37161, 'closed': datetime.datetime(2020, 3, 21, 14, 31, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 19, 6, 49, 50, tzinfo=datetime.timezone.utc), 'time_taken': 200518.0, 'time_delta': '2 days, 7:41:58', 'additions': 7, 'deletions': 2, 'state': 'closed'}, {'id': 390374957, 'number': 37136, 'closed': None, 'created': datetime.datetime(2020, 3, 18, 11, 18, 39, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 44, 'deletions': 8, 'state': 'open'}, {'id': 390074114, 'number': 37123, 'closed': datetime.datetime(2020, 3, 18, 20, 49, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 17, 20, 58, 23, tzinfo=datetime.timezone.utc), 'time_taken': 85881.0, 'time_delta': '23:51:21', 'additions': 5, 'deletions': 7, 'state': 'closed'}, {'id': 389488494, 'number': 37101, 'closed': datetime.datetime(2020, 3, 16, 22, 50, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 16, 20, 50, 8, tzinfo=datetime.timezone.utc), 'time_taken': 7236.0, 'time_delta': '2:00:36', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 388999161, 'number': 37083, 'closed': datetime.datetime(2023, 1, 10, 7, 0, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 16, 5, 34, 21, tzinfo=datetime.timezone.utc), 'time_taken': 88997170.0, 'time_delta': '1030 days, 1:26:10', 'additions': 23, 'deletions': 1, 'state': 'closed'}, {'id': 388897713, 'number': 37078, 'closed': datetime.datetime(2023, 10, 16, 13, 38, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 16, 0, 47, 20, tzinfo=datetime.timezone.utc), 'time_taken': 113143859.0, 'time_delta': '1309 days, 12:50:59', 'additions': 77, 'deletions': 9, 'state': 'closed'}, {'id': 382548910, 'number': 36734, 'closed': datetime.datetime(2020, 5, 31, 15, 5, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 2, 18, 51, 36, tzinfo=datetime.timezone.utc), 'time_taken': 7762425.0, 'time_delta': '89 days, 20:13:45', 'additions': 16, 'deletions': 12, 'state': 'closed'}, {'id': 381713881, 'number': 36667, 'closed': datetime.datetime(2020, 2, 29, 13, 12, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 29, 3, 28, 44, tzinfo=datetime.timezone.utc), 'time_taken': 35051.0, 'time_delta': '9:44:11', 'additions': 6, 'deletions': 3, 'state': 'closed'}, {'id': 381624784, 'number': 36660, 'closed': None, 'created': datetime.datetime(2020, 2, 28, 22, 27, 22, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 27, 'deletions': 2, 'state': 'open'}, {'id': 381432835, 'number': 36644, 'closed': datetime.datetime(2020, 6, 12, 12, 45, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 28, 14, 56, 49, tzinfo=datetime.timezone.utc), 'time_taken': 9064114.0, 'time_delta': '104 days, 21:48:34', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 364554403, 'number': 35319, 'closed': datetime.datetime(2020, 10, 6, 10, 5, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 19, 16, 50, 3, tzinfo=datetime.timezone.utc), 'time_taken': 22526128.0, 'time_delta': '260 days, 17:15:28', 'additions': 18, 'deletions': 10, 'state': 'closed'}, {'id': 349338154, 'number': 34114, 'closed': datetime.datetime(2019, 12, 5, 20, 39, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2019, 12, 5, 9, 28, 35, tzinfo=datetime.timezone.utc), 'time_taken': 40226.0, 'time_delta': '11:10:26', 'additions': 2, 'deletions': 2, 'state': 'closed'}]"

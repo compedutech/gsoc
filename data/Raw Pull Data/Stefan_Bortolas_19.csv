@@ -1,0 +1,171 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+436941565,Catty-308 Implement Landscape Mode in Data Structure,"In order to enable the landscape mode, a landscape bool has to be implemented in the data structure. The askUserForLandscapeMode will be implemented later on, for now it just returns false. The manipulation of the sensors will be implemented using the updateDeviceSensorForLandscapeMode method in SensorManager.swift
+https://jira.catrob.at/browse/CATTY-308
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [ ] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1395,https://api.github.com/repos/Catrobat/Catty/pulls/1395,https://github.com/Catrobat/Catty/pull/1395,closed,349,183,94,1,2,19,1,0,[{'name': 'code review pending'}],2020-06-19 07:33:58+00:00,2020-07-01 17:35:06+00:00,1072868.0,"12 days, 10:01:08","[{'comment_id': 446664859, 'comment_body': 'Please correct this comment to avoid confusion', 'comment_created': datetime.datetime(2020, 6, 28, 15, 33, 43, tzinfo=datetime.timezone.utc), 'commenter': 'roelac11', 'type': 'User'}, {'comment_id': 446665154, 'comment_body': 'Maybe comment this line out and add a ToDo to use it when the askUserForLandscapeMode function is implemented?', 'comment_created': datetime.datetime(2020, 6, 28, 15, 36, 15, tzinfo=datetime.timezone.utc), 'commenter': 'roelac11', 'type': 'User'}, {'comment_id': 446665312, 'comment_body': 'Same as above', 'comment_created': datetime.datetime(2020, 6, 28, 15, 37, 44, tzinfo=datetime.timezone.utc), 'commenter': 'roelac11', 'type': 'User'}, {'comment_id': 447388256, 'comment_body': 'Please also add a test for `convertToStandardized` when called with `landscapeMode` `true`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 35, 27, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447388390, 'comment_body': 'Please also add a test for `convertToStandardized` when called with `landscapeMode` `true`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 36, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447388434, 'comment_body': 'Please also add a test for `convertToStandardized` when called with `landscapeMode` `true`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 36, 12, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447388469, 'comment_body': 'Please also add a test for `convertToStandardized` when called with `landscapeMode` `true`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 36, 18, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447388498, 'comment_body': 'Please also add a test for `convertToStandardized` when called with `landscapeMode` `true`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 36, 26, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447388511, 'comment_body': 'Please also add a test for `convertToStandardized` when called with `landscapeMode` `true`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 36, 31, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447389044, 'comment_body': 'I think this method can be removed.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 38, 49, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447390102, 'comment_body': 'Please add a few tests to `PhiroSensorTest` to verify the `convertToStandardized` method.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 43, 1, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447390371, 'comment_body': 'Is it necessary to change this value after initialization? If not, please change to `let`. Also change scope to `private`.', 'comment_created': datetime.datetime(2020, 6, 30, 3, 44, 21, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447390653, 'comment_body': 'Please set it directly in the initializer (will be necessary when changing to `let`).', 'comment_created': datetime.datetime(2020, 6, 30, 3, 45, 21, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 447393542, 'comment_body': ""It is probably not the best idea to implement this function in the `Util`. Since there will be user interaction you will for sure need at least one completion block, so you will need to largely refactor this method anyhow. That's why I would recommend to completely remove it for now. Maybe in a separate ticket you can come up with some ideas on how to avoid code duplication for adding a project (`MyProjectsViewController` and `CatrobatTableViewController`). Maybe a common protocol with an extension? You could then implement the user interaction in this extension directly."", 'comment_created': datetime.datetime(2020, 6, 30, 3, 56, 2, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 448188668, 'comment_body': 'Done!', 'comment_created': datetime.datetime(2020, 7, 1, 8, 4, 26, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 448188946, 'comment_body': 'Of course, thanks.', 'comment_created': datetime.datetime(2020, 7, 1, 8, 5, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 448189086, 'comment_body': 'Done!', 'comment_created': datetime.datetime(2020, 7, 1, 8, 5, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 448189391, 'comment_body': 'No it was not necessary and your suggestion is the proper way, thanks.', 'comment_created': datetime.datetime(2020, 7, 1, 8, 5, 44, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 448189464, 'comment_body': 'Done!', 'comment_created': datetime.datetime(2020, 7, 1, 8, 5, 52, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}]","[{'commit_sha': '883bf6249e6e59a9b9f0b398790458d83e2754b9', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+443323742,CATTY-326 Accelerator Sensor behaviour landscape mode,"Added landscape specific sensor behavior for Acceleration Sensors. If the project is in landscape Mode the Acceleration Sensors should use the values of the opposite sensors. _AccelerationXSensor_ uses values of _AccelerationYSensor_ and vice versa. https://jira.catrob.at/browse/CATTY-326
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline]
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [x] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1403,https://api.github.com/repos/Catrobat/Catty/pulls/1403,https://github.com/Catrobat/Catty/pull/1403,closed,36,14,4,1,1,0,1,0,[{'name': 'code review passed'}],2020-07-02 07:15:37+00:00,2020-07-18 18:01:01+00:00,1421124.0,"16 days, 10:45:24",[],"[{'commit_sha': 'b6638f288cc73b04c20124f9b2d4a7b776f602aa', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+444812347,CATTY-327 Inclination Sensor behaviour landscape mode,"Added landscape specific sensor behavior for Inclination Sensors. If the project is in landscape Mode the Acceleration Sensors should use the values of the opposite sensors. InclinationXSensor uses values of InclinationYSensor and vice versa.
+https://jira.catrob.at/browse/CATTY-327
+
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline]
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1406,https://api.github.com/repos/Catrobat/Catty/pulls/1406,https://github.com/Catrobat/Catty/pull/1406,closed,98,9,4,1,0,0,1,0,[{'name': 'code review passed'}],2020-07-06 14:28:24+00:00,2020-07-17 10:04:28+00:00,934564.0,"10 days, 19:36:04",[],"[{'commit_sha': '5ba27aeaf37d85f5b3ec6067d554b0433e202116', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+450825335,CATTY-329 Compass Direction Sensor behaviour landscape mode,"Added landscape specific sensor behavior for Compass Sensor. If the project is in landscape Mode the Compass Value should adapt by 90 degrees.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1420,https://api.github.com/repos/Catrobat/Catty/pulls/1420,https://github.com/Catrobat/Catty/pull/1420,closed,15,7,2,1,0,2,1,0,[{'name': 'code review passed'}],2020-07-17 06:25:33+00:00,2020-07-20 10:58:34+00:00,275581.0,"3 days, 4:33:01","[{'comment_id': 456859648, 'comment_body': 'In case this sensor is not available, the default value is wrong. Please verify and document this case in the tests.', 'comment_created': datetime.datetime(2020, 7, 19, 4, 55, 8, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 457144477, 'comment_body': 'Thanks for your review, I changed it according to your request !', 'comment_created': datetime.datetime(2020, 7, 20, 7, 50, 20, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}]","[{'commit_sha': '1c333e058e9c5a854f2e6f49e62b1c2713a0105a', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+445332038,CATTY-350 Change Sensor evaluation for landscape mode,"Changed the sensor evaluation for landscape mode. The Sensor behaviour depending on the orientation will now be determined in the rawValue method of the sensors. Therefore the landscape bool of the convertToStandardized method was removed. The key changes are in the _DeviceSensor_ protocol. The other changes are a result of these.
+https://jira.catrob.at/browse/CATTY-350
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline]
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1407,https://api.github.com/repos/Catrobat/Catty/pulls/1407,https://github.com/Catrobat/Catty/pull/1407,closed,357,287,54,1,1,0,0,0,[],2020-07-07 10:51:18+00:00,2020-07-09 11:03:46+00:00,173548.0,"2 days, 0:12:28",[],"[{'commit_sha': '0e3586372f477c5618105bd5f22367637b478c3d', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+453213048,CATTY-373 Change default raw value sensor evaluation,"I changed the InclinationXSensor and InclinationYSensor behaviour if the sensor is not available. There is only one standard path used to evaluate if the sensor is available. The rawValue methods (including the tests) for the opposite sensors were removed.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [ ] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1425,https://api.github.com/repos/Catrobat/Catty/pulls/1425,https://github.com/Catrobat/Catty/pull/1425,closed,12,40,4,1,0,0,0,0,[],2020-07-20 08:52:15+00:00,2020-07-20 11:06:06+00:00,8031.0,2:13:51,[],"[{'commit_sha': 'c2aba6da5926a558f0de35bb9f88e2f3c7c9662d', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+466748835,CATTY-403 Sensor behavior landscape mode,"Modified the behavior of sensors in landscape mode to fix bugs listed in the ticket. The Sensors behaved in the exact opposite from the landscape mode. It got fixed by changing signing of the return value for Accelerator and Inclination Sensor and by modifying the return value of the compass by 180 degree.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [ ] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1462,https://api.github.com/repos/Catrobat/Catty/pulls/1462,https://github.com/Catrobat/Catty/pull/1462,closed,51,51,10,1,1,0,1,0,[{'name': 'code review passed'}],2020-08-12 12:47:29+00:00,2020-08-21 09:31:12+00:00,765823.0,"8 days, 20:43:43",[],"[{'commit_sha': 'be3fdaf8c60ca84afc231d44ca6fb3f40e9ae7c8', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+463274059,CATTY-335 Scene Presenter Landscape Mode,"Change the orientation of the Scene (now ""StagePresenter"") depending on the chosen orientation of the project.
+Also changed the hideMenu method of the scene as it would not disappear as a whole otherwise.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1455,https://api.github.com/repos/Catrobat/Catty/pulls/1455,https://github.com/Catrobat/Catty/pull/1455,closed,18,5,3,1,3,7,1,0,[{'name': 'code review passed'}],2020-08-05 09:49:48+00:00,2020-08-24 08:01:15+00:00,1635087.0,"18 days, 22:11:27","[{'comment_id': 469935412, 'comment_body': 'Could you please double check if that is necessary? When I create a project in landscape mode using Catroid (e.g., https://share.catrob.at/app/project/6c0dfc4c-dd62-11ea-a5c3-005056a36f47), then the height is smaller than the width, meaning that the coordinates are already switched.', 'comment_created': datetime.datetime(2020, 8, 13, 13, 4, 55, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 471159588, 'comment_body': 'Hey @m-herold I checked it again. Yes the changes are needed, otherwise the Scene is presented as in the screenshot.\r\n![IMG_44475E27B87A-1](https://user-images.githubusercontent.com/44603698/90344023-2a315580-e016-11ea-9059-959a40e90e08.jpeg)\r\n', 'comment_created': datetime.datetime(2020, 8, 16, 21, 14, 12, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 471229989, 'comment_body': 'Thanks -- I see. Nevertheless, could you please provide me with a link to the project you created like shown in the screenshot?', 'comment_created': datetime.datetime(2020, 8, 17, 4, 49, 33, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 471243740, 'comment_body': 'Of course, for example https://share.catrob.at/app/project/01475b14-e04c-11ea-a5c3-005056a36f47. This project is with the implementation in the _StageBuilder.swift_', 'comment_created': datetime.datetime(2020, 8, 17, 5, 46, 51, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 471248251, 'comment_body': 'Could you please create the same project with Android? I think there the height and width should be reversed (leading to the above mentioned code-switch to be obsolete).', 'comment_created': datetime.datetime(2020, 8, 17, 6, 2, 53, tzinfo=datetime.timezone.utc), 'commenter': 'm-herold', 'type': 'User'}, {'comment_id': 471265234, 'comment_body': ""That's the link to the Android Project https://share.catrob.at/app/project/811b16ea-e053-11ea-a5c3-005056a36f47"", 'comment_created': datetime.datetime(2020, 8, 17, 6, 53, 45, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}, {'comment_id': 472266333, 'comment_body': 'Thanks for your input, I made your suggested changes! ', 'comment_created': datetime.datetime(2020, 8, 18, 15, 2, 51, tzinfo=datetime.timezone.utc), 'commenter': 'Bortol15', 'type': 'User'}]","[{'commit_sha': 'e5ba19aacf52783e6783138378de58e3e26a40cc', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+463291198,CATTY-402 Modify Grid View for Landscape Mode,"Changed grid view if the project is in landscape mode.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [ ] Verify that the Jira ticket is in the status *Ready for Development*
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline]
+- [x] Stick to the project’s git workflow (rebase and squash your commits)
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#catty* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,1456,https://api.github.com/repos/Catrobat/Catty/pulls/1456,https://github.com/Catrobat/Catty/pull/1456,closed,57,12,3,1,0,0,1,0,[{'name': 'code review passed'}],2020-08-05 10:23:24+00:00,2020-08-20 10:43:59+00:00,1297235.0,"15 days, 0:20:35",[],"[{'commit_sha': 'e79d67751728b8ffcf16030099f31b1bcfe7edea', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,44603698,,User,,3,,1,1
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+4935742,Catty,Catrobat/Catty,Swift,95,84,118,86,6134,29,4,29,"[{'id': 732121072, 'number': 1695, 'closed': datetime.datetime(2021, 12, 8, 5, 56, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 12, 8, 43, 22, tzinfo=datetime.timezone.utc), 'time_taken': 7506778.0, 'time_delta': '86 days, 21:12:58', 'additions': 381, 'deletions': 253, 'state': 'closed'}, {'id': 657489056, 'number': 1649, 'closed': datetime.datetime(2021, 5, 31, 5, 22, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 29, 15, 39, 27, tzinfo=datetime.timezone.utc), 'time_taken': 135770.0, 'time_delta': '1 day, 13:42:50', 'additions': 3, 'deletions': 1, 'state': 'closed'}, {'id': 651421128, 'number': 1643, 'closed': datetime.datetime(2021, 6, 8, 8, 12, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 24, 15, 28, 34, tzinfo=datetime.timezone.utc), 'time_taken': 1269822.0, 'time_delta': '14 days, 16:43:42', 'additions': 3135, 'deletions': 8378, 'state': 'closed'}, {'id': 560469318, 'number': 1574, 'closed': datetime.datetime(2021, 1, 27, 5, 10, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 23, 18, 21, 32, tzinfo=datetime.timezone.utc), 'time_taken': 298136.0, 'time_delta': '3 days, 10:48:56', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 492992525, 'number': 1489, 'closed': datetime.datetime(2020, 10, 2, 5, 2, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 25, 10, 51, 55, tzinfo=datetime.timezone.utc), 'time_taken': 583860.0, 'time_delta': '6 days, 18:11:00', 'additions': 40, 'deletions': 38, 'state': 'closed'}, {'id': 476981505, 'number': 1476, 'closed': datetime.datetime(2020, 9, 20, 7, 16, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 1, 10, 27, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1630133.0, 'time_delta': '18 days, 20:48:53', 'additions': 104, 'deletions': 4, 'state': 'closed'}, {'id': 466748835, 'number': 1462, 'closed': datetime.datetime(2020, 8, 21, 9, 31, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 12, 12, 47, 29, tzinfo=datetime.timezone.utc), 'time_taken': 765823.0, 'time_delta': '8 days, 20:43:43', 'additions': 51, 'deletions': 51, 'state': 'closed'}, {'id': 464645995, 'number': 1458, 'closed': datetime.datetime(2020, 8, 12, 12, 42, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 7, 14, 46, 36, tzinfo=datetime.timezone.utc), 'time_taken': 424567.0, 'time_delta': '4 days, 21:56:07', 'additions': 41, 'deletions': 41, 'state': 'closed'}, {'id': 463291198, 'number': 1456, 'closed': datetime.datetime(2020, 8, 20, 10, 43, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 10, 23, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1297235.0, 'time_delta': '15 days, 0:20:35', 'additions': 57, 'deletions': 12, 'state': 'closed'}, {'id': 463274059, 'number': 1455, 'closed': datetime.datetime(2020, 8, 24, 8, 1, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 9, 49, 48, tzinfo=datetime.timezone.utc), 'time_taken': 1635087.0, 'time_delta': '18 days, 22:11:27', 'additions': 18, 'deletions': 5, 'state': 'closed'}, {'id': 453213048, 'number': 1425, 'closed': datetime.datetime(2020, 7, 20, 11, 6, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 20, 8, 52, 15, tzinfo=datetime.timezone.utc), 'time_taken': 8031.0, 'time_delta': '2:13:51', 'additions': 12, 'deletions': 40, 'state': 'closed'}, {'id': 450825335, 'number': 1420, 'closed': datetime.datetime(2020, 7, 20, 10, 58, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 17, 6, 25, 33, tzinfo=datetime.timezone.utc), 'time_taken': 275581.0, 'time_delta': '3 days, 4:33:01', 'additions': 15, 'deletions': 7, 'state': 'closed'}, {'id': 445332038, 'number': 1407, 'closed': datetime.datetime(2020, 7, 9, 11, 3, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 7, 10, 51, 18, tzinfo=datetime.timezone.utc), 'time_taken': 173548.0, 'time_delta': '2 days, 0:12:28', 'additions': 357, 'deletions': 287, 'state': 'closed'}, {'id': 444812347, 'number': 1406, 'closed': datetime.datetime(2020, 7, 17, 10, 4, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 6, 14, 28, 24, tzinfo=datetime.timezone.utc), 'time_taken': 934564.0, 'time_delta': '10 days, 19:36:04', 'additions': 98, 'deletions': 9, 'state': 'closed'}, {'id': 443323742, 'number': 1403, 'closed': datetime.datetime(2020, 7, 18, 18, 1, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 2, 7, 15, 37, tzinfo=datetime.timezone.utc), 'time_taken': 1421124.0, 'time_delta': '16 days, 10:45:24', 'additions': 36, 'deletions': 14, 'state': 'closed'}, {'id': 436941565, 'number': 1395, 'closed': datetime.datetime(2020, 7, 1, 17, 35, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 19, 7, 33, 58, tzinfo=datetime.timezone.utc), 'time_taken': 1072868.0, 'time_delta': '12 days, 10:01:08', 'additions': 349, 'deletions': 183, 'state': 'closed'}, {'id': 423654211, 'number': 1370, 'closed': datetime.datetime(2020, 6, 3, 4, 50, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 27, 7, 10, 54, tzinfo=datetime.timezone.utc), 'time_taken': 596389.0, 'time_delta': '6 days, 21:39:49', 'additions': 194, 'deletions': 96, 'state': 'closed'}, {'id': 409393836, 'number': 1326, 'closed': datetime.datetime(2020, 4, 28, 8, 21, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 27, 10, 8, 9, tzinfo=datetime.timezone.utc), 'time_taken': 79972.0, 'time_delta': '22:12:52', 'additions': 185, 'deletions': 3, 'state': 'closed'}, {'id': 400662360, 'number': 1288, 'closed': datetime.datetime(2020, 4, 16, 10, 24, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 8, 6, 52, 4, tzinfo=datetime.timezone.utc), 'time_taken': 703930.0, 'time_delta': '8 days, 3:32:10', 'additions': 334, 'deletions': 3, 'state': 'closed'}, {'id': 391175023, 'number': 1276, 'closed': datetime.datetime(2020, 4, 16, 10, 27, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 19, 18, 44, 54, tzinfo=datetime.timezone.utc), 'time_taken': 2389375.0, 'time_delta': '27 days, 15:42:55', 'additions': 216, 'deletions': 242, 'state': 'closed'}, {'id': 384992292, 'number': 1266, 'closed': datetime.datetime(2020, 4, 3, 5, 14, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 6, 19, 46, 41, tzinfo=datetime.timezone.utc), 'time_taken': 2366884.0, 'time_delta': '27 days, 9:28:04', 'additions': 89, 'deletions': 2, 'state': 'closed'}, {'id': 382282723, 'number': 1259, 'closed': datetime.datetime(2020, 3, 2, 16, 33, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 2, 9, 51, 13, tzinfo=datetime.timezone.utc), 'time_taken': 24117.0, 'time_delta': '6:41:57', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 361716216, 'number': 1212, 'closed': datetime.datetime(2020, 1, 13, 14, 8, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 11, 10, 9, 38, tzinfo=datetime.timezone.utc), 'time_taken': 187161.0, 'time_delta': '2 days, 3:59:21', 'additions': 71, 'deletions': 71, 'state': 'closed'}, {'id': 359215865, 'number': 1206, 'closed': datetime.datetime(2020, 2, 6, 7, 41, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 1, 4, 13, 56, 24, tzinfo=datetime.timezone.utc), 'time_taken': 2828689.0, 'time_delta': '32 days, 17:44:49', 'additions': 115, 'deletions': 2, 'state': 'closed'}]"

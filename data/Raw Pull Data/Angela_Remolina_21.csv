@@ -1,0 +1,232 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+672217360,Brython as a Python 3 interpreter for activecode for advanced exercises,"I created an optional argument for activecode blocks called python3_interpreter. It can be used writing something like this:
+```
+.. activecode::
+    :language: python3
+    :python3_interpreter: brython
+
+    print(""You can see this print on the browser console"")
+    from browser import document, alert, html
+    def hello(ev):
+        alert(""Hello world! I'm using Brython now"")
+
+    document <= html.BUTTON(""My button"", id=""button_alert"")
+    document[""button_alert""].bind(""click"", hello)
+```
+I am working on a project called [PyZombis](https://github.com/PyAr/PyZombis). PyZombis is an spanish course to learn how to code in Python and it is being built using Runestone. We had issues making some advance exercises of the course that involves:
+
+1. GUI (http://pyar.github.io/PyZombis/master/lectures/TWP50.html) / MVC (http://pyar.github.io/PyZombis/master/lectures/TWP52.html) (buttons, textbox, images)
+2. APIs (http://pyar.github.io/PyZombis/master/lectures/TWP45.html): Facebook, twitter, etc.
+3. Databases (http://pyar.github.io/PyZombis/master/lectures/TWP42.html) (sqlite queries from python)
+
+The third one might be solved using the [SQL activecode option](https://runestone.academy/runestone/books/published/instructorguide/ActiveCode/sql.html), but the first two could not be done with any of the Runestone's tool. 
+
+This PR gives a graphic alternative for runestone. The output shows an iframe in which you can append things with the browser module that Brython offers. 
+Note: The `print()` function show its output on the browser console. If there is any syntax error, it is also shown in this browser console. It would be a good idea to add a console as well for students to see their prints or mistakes in the same screen (https://github.com/angelasofiaremolinagutierrez/RunestoneComponents/issues/8)
+
+I have also created a PR on the PyZombis project, to use Runestone with this new implementation (see [here](https://github.com/PyAr/PyZombis/pull/102)). You can try out one exercise I did trying out this activecode block with Brython here: http://pyar.github.io/PyZombis/102/lectures/TWP45.html and here is also a gif of how it works (on an exercises that works with the Facebook API showing public profile photos): 
+
+![fb-exercise](https://user-images.githubusercontent.com/10239480/122336319-420d8a80-cf02-11eb-8afd-675f572ee565.gif)",False,1208,https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/pulls/1208,https://github.com/RunestoneInteractive/RunestoneComponents/pull/1208,open,174,2,6,10,1,2,0,0,[],2021-06-17 05:15:22+00:00,,0.0,,"[{'comment_id': 653938410, 'comment_body': ""I'm amazed at how -- seemingly easy -- it was to add Brython support!\r\nSince you are using interpolated strings (`) you should eliminate the + and use ${prog} to insert prog into the string."", 'comment_created': datetime.datetime(2021, 6, 17, 21, 1, 6, tzinfo=datetime.timezone.utc), 'commenter': 'bnmnetp', 'type': 'User'}, {'comment_id': 654581526, 'comment_body': 'Thank you for the suggestion. I will commit it right away! :)', 'comment_created': datetime.datetime(2021, 6, 18, 17, 19, 56, tzinfo=datetime.timezone.utc), 'commenter': 'AngelaRemolina', 'type': 'User'}]","[{'commit_sha': 'c0ae589c9b80ead5b75c995c164f468ab88a7d45', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e418f6589c296566a084258db1f5ceb90b9ff5e3', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82d391d7cfad247fd7da90fc5ed32e4051634e93', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1725fe7618c8c7f9ca4c3859ca6346a4a089fd7d', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a88e6aa1aa741bcf8c9ad70eba79f793aaece3f6', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a7d1ae60ab95e6ab498721618185f1bde9ceed08', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b91d2623b1b1cd16fbd4c0ba878572deafbe92ec', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd84eff0761d7ebc721ac59a1d99045f52867674', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '671a63de2f4b5cf83894b18647da8c74eaca6b96', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82a2822ce5bb1184a80c3c132b77234f7f56d57c', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+702729595,New style for menu pages,"## Summary
+
+- A html file was created containing css styling for <a> tags or hyperlinks to look like buttons in pages that contains toctrees.
+- The course content was dived into 4 modules to shorten the menu options (before there were 41 options)
+- A new zombie image was added from the original course in the 4 divisions index page.
+
+This PR closes https://github.com/angelasofiaremolinagutierrez/PyZombis/issues/4
+
+And also closes https://github.com/angelasofiaremolinagutierrez/PyZombis/issues/12
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/10239480/128099556-cb9a1f0f-d72e-4345-af98-88bde67fb211.png)
+",False,163,https://api.github.com/repos/PyAr/PyZombis/pulls/163,https://github.com/PyAr/PyZombis/pull/163,open,117,48,7,6,5,0,0,0,[],2021-08-03 23:38:14+00:00,,0.0,,[],"[{'commit_sha': 'a50c6d46ce417e27fa56f1905222572bad761652', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc4862f98adaa2cc5cc80b2aade42747134f1b53', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b5a5e7b36c3f052c99c31e8c6c55d6253aeba2eb', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d30e58c523dae9c6ce5201f6dca391bc38174a6', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43a3f9ebe4bd60b8787d6692da830b8d787d9752', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': '89b243ca1897d734ea51bd698828a9125907af8c', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+706226056,Refactor Lecture TWP42: Bases de datos (indexedDB approach),"## Summary
+
+This PR may close: https://github.com/angelasofiaremolinagutierrez/PyZombis/issues/48
+I have implemented an approach to solve this issue of lecture `TWP 42: Bases de datos` with an API that is supported by Brython called [indexedDB](https://developer.mozilla.org/es/docs/Web/API/IndexedDB_API/Using_IndexedDB). 
+
+**Important note:** The refactoring is not finished, this is just a test. Even though this is a functional solution, the syntax changes a lot from the original lecture where `sqlite3` was used.
+
+For example:
+```
+cursor.execute(""select * from surfers  where age > 25"")
+linhas = cursor.fetchall()
+for linha in linhas:
+    print(""id :"",linha['id'])
+    print(""Nombre :"",linha['name'])
+    print(""Pais  :"",linha['country'])
+    print(""Media  :"",linha['average'])
+    print(""Estilo :"",linha['board'])
+    print(""Edad  :"",linha['age'])
+    print()
+```
+had to change to:
+```
+if(getattr(v, ""edad"") >=25):
+    for key in [""nombre"", ""pais"", ""media"", ""estilo"", ""edad""]:
+        print(f""{key}: {getattr(v, key)}"")
+  getattr(res, ""continue"")()
+```
+
+I will keep exploring other possible options, but this is a starting point in case none other option is found.
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+## Screenshots
+
+![indexedDB](https://user-images.githubusercontent.com/10239480/128662921-3ad3d6f1-1a31-4082-ba48-c25f437afbe8.gif)
+
+",False,171,https://api.github.com/repos/PyAr/PyZombis/pulls/171,https://github.com/PyAr/PyZombis/pull/171,open,92,22,1,3,3,0,0,0,[],2021-08-09 05:16:13+00:00,,0.0,,[],"[{'commit_sha': 'e47363b796fff9c107fa46ff24070e4fb2526402', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e81916aa7524b82ac0ad41c8d669fe1a7a6e9022', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e263ad577a746916a831ee653bb87579b310d344', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+712098963,Refactor lecture TWP42: Bases de datos (sql.js approach),"## Summary
+
+This PR may close: angelasofiaremolinagutierrez#48
+I have implemented another approach (better than tha one on this [PR](https://github.com/PyAr/PyZombis/pull/171) to refacto this lecture.
+I use [sql.js](https://sql.js.org/) library for SQLite compiled to JavaScript. I load create the original surfersDB from the PyZombis course using the `.. raw:: html` tag as a global variable. 
+
+I'm still working on accessing this global variable from the activecode block with Brython. But I can confirm the db is global since in the browser console you can print it (see image below)
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+Note: debug prints and some comments for the draft PR have not been deleted yet. Is still on progress.
+
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/10239480/129313573-484f8492-c7aa-4180-bb48-6beb5dd10e24.png)
+",False,184,https://api.github.com/repos/PyAr/PyZombis/pulls/184,https://github.com/PyAr/PyZombis/pull/184,open,72,16,1,1,2,0,0,0,[],2021-08-13 06:20:13+00:00,,0.0,,[],"[{'commit_sha': 'a9097e5b616320cc3be4b752e69467e8a0e5ac4c', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+712661451,SQL activecode approach,"## Summary
+
+This PR may close: angelasofiaremolinagutierrez#48
+I use an activecode block with SQL language to read the file `surf.db`. That file contains the original database from the course converted from sqlite3 to regular SQLite database.
+
+However there is an error happening right now to load the database (See image below).
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+## Screenshots
+
+![bugSQLrunestone](https://user-images.githubusercontent.com/10239480/129424787-6af60dea-e7ee-4fcf-ab6e-c8958d1f5e3d.png)
+
+",False,185,https://api.github.com/repos/PyAr/PyZombis/pulls/185,https://github.com/PyAr/PyZombis/pull/185,open,26,11,3,1,1,0,1,0,[{'name': 'help wanted'}],2021-08-13 22:45:30+00:00,,0.0,,[],"[{'commit_sha': '5876b059eb0bf4f20b35e7551a0fed8eea20be22', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+712661451,SQL activecode approach,"## Summary
+
+This PR may close: angelasofiaremolinagutierrez#48
+I use an activecode block with SQL language to read the file `surf.db`. That file contains the original database from the course converted from sqlite3 to regular SQLite database.
+
+However there is an error happening right now to load the database (See image below).
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+## Screenshots
+
+![bugSQLrunestone](https://user-images.githubusercontent.com/10239480/129424787-6af60dea-e7ee-4fcf-ab6e-c8958d1f5e3d.png)
+
+",False,185,https://api.github.com/repos/PyAr/PyZombis/pulls/185,https://github.com/PyAr/PyZombis/pull/185,open,26,11,3,1,1,0,1,0,[{'name': 'help wanted'}],2021-08-13 22:45:30+00:00,,0.0,,[],"[{'commit_sha': '5876b059eb0bf4f20b35e7551a0fed8eea20be22', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+712098963,Refactor lecture TWP42: Bases de datos (sql.js approach),"## Summary
+
+This PR may close: angelasofiaremolinagutierrez#48
+I have implemented another approach (better than tha one on this [PR](https://github.com/PyAr/PyZombis/pull/171) to refacto this lecture.
+I use [sql.js](https://sql.js.org/) library for SQLite compiled to JavaScript. I load create the original surfersDB from the PyZombis course using the `.. raw:: html` tag as a global variable. 
+
+I'm still working on accessing this global variable from the activecode block with Brython. But I can confirm the db is global since in the browser console you can print it (see image below)
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+Note: debug prints and some comments for the draft PR have not been deleted yet. Is still on progress.
+
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/10239480/129313573-484f8492-c7aa-4180-bb48-6beb5dd10e24.png)
+",False,184,https://api.github.com/repos/PyAr/PyZombis/pulls/184,https://github.com/PyAr/PyZombis/pull/184,open,72,16,1,1,2,0,0,0,[],2021-08-13 06:20:13+00:00,,0.0,,[],"[{'commit_sha': 'a9097e5b616320cc3be4b752e69467e8a0e5ac4c', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+706226056,Refactor Lecture TWP42: Bases de datos (indexedDB approach),"## Summary
+
+This PR may close: https://github.com/angelasofiaremolinagutierrez/PyZombis/issues/48
+I have implemented an approach to solve this issue of lecture `TWP 42: Bases de datos` with an API that is supported by Brython called [indexedDB](https://developer.mozilla.org/es/docs/Web/API/IndexedDB_API/Using_IndexedDB). 
+
+**Important note:** The refactoring is not finished, this is just a test. Even though this is a functional solution, the syntax changes a lot from the original lecture where `sqlite3` was used.
+
+For example:
+```
+cursor.execute(""select * from surfers  where age > 25"")
+linhas = cursor.fetchall()
+for linha in linhas:
+    print(""id :"",linha['id'])
+    print(""Nombre :"",linha['name'])
+    print(""Pais  :"",linha['country'])
+    print(""Media  :"",linha['average'])
+    print(""Estilo :"",linha['board'])
+    print(""Edad  :"",linha['age'])
+    print()
+```
+had to change to:
+```
+if(getattr(v, ""edad"") >=25):
+    for key in [""nombre"", ""pais"", ""media"", ""estilo"", ""edad""]:
+        print(f""{key}: {getattr(v, key)}"")
+  getattr(res, ""continue"")()
+```
+
+I will keep exploring other possible options, but this is a starting point in case none other option is found.
+
+## Checklist
+
+- [x] Variables, functions and comments are translated to Spanish
+- [x] Functions follow underscore notation
+- [x] Spell check done & typos fixed
+- [x] All python code is PEP8 compliant
+- [x] Test coverage with Playwright implemented; locators are Pyhton code
+- [x] Reviewers assigned (all peers & at least 1 mentor)
+
+## Screenshots
+
+![indexedDB](https://user-images.githubusercontent.com/10239480/128662921-3ad3d6f1-1a31-4082-ba48-c25f437afbe8.gif)
+
+",False,171,https://api.github.com/repos/PyAr/PyZombis/pulls/171,https://github.com/PyAr/PyZombis/pull/171,open,92,22,1,3,3,0,0,0,[],2021-08-09 05:16:13+00:00,,0.0,,[],"[{'commit_sha': 'e47363b796fff9c107fa46ff24070e4fb2526402', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e81916aa7524b82ac0ad41c8d669fe1a7a6e9022', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e263ad577a746916a831ee653bb87579b310d344', 'committer_username': 'AngelaRemolina', 'committer_name': 'Angela Remolina', 'committer_email': 'angela.remolina.2019@upb.edu.co', 'commit_date': datetime.datetime(2014, 12, 19, 3, 53, 59, tzinfo=datetime.timezone.utc)}]",Angela Remolina,10239480,angela.remolina.2019@upb.edu.co,User,,17,,22,23
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+16952984,RunestoneComponents,RunestoneInteractive/RunestoneComponents,JavaScript,226,102,9,70,3566,17,37,17,"[{'id': 672217360, 'number': 1208, 'closed': None, 'created': datetime.datetime(2021, 6, 17, 5, 15, 22, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 174, 'deletions': 2, 'state': 'open'}]"
+42544315,PyZombis,PyAr/PyZombis,JavaScript,47,21,16,20,970,97,18,62,"[{'id': 713005266, 'number': 191, 'closed': datetime.datetime(2021, 8, 15, 21, 57, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 21, 34, 34, tzinfo=datetime.timezone.utc), 'time_taken': 1357.0, 'time_delta': '0:22:37', 'additions': 20, 'deletions': 16, 'state': 'closed'}, {'id': 712986179, 'number': 190, 'closed': datetime.datetime(2021, 8, 15, 19, 28, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 19, 3, 12, tzinfo=datetime.timezone.utc), 'time_taken': 1544.0, 'time_delta': '0:25:44', 'additions': 1454, 'deletions': 1454, 'state': 'closed'}, {'id': 712979575, 'number': 189, 'closed': None, 'created': datetime.datetime(2021, 8, 15, 18, 13, 13, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 195, 'deletions': 202, 'state': 'open'}, {'id': 712973307, 'number': 188, 'closed': datetime.datetime(2021, 8, 15, 18, 10, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 17, 27, 55, tzinfo=datetime.timezone.utc), 'time_taken': 2573.0, 'time_delta': '0:42:53', 'additions': 386, 'deletions': 373, 'state': 'closed'}, {'id': 712661451, 'number': 185, 'closed': None, 'created': datetime.datetime(2021, 8, 13, 22, 45, 30, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 26, 'deletions': 11, 'state': 'open'}, {'id': 712098963, 'number': 184, 'closed': None, 'created': datetime.datetime(2021, 8, 13, 6, 20, 13, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 72, 'deletions': 16, 'state': 'open'}, {'id': 706226056, 'number': 171, 'closed': None, 'created': datetime.datetime(2021, 8, 9, 5, 16, 13, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 92, 'deletions': 22, 'state': 'open'}, {'id': 704357788, 'number': 167, 'closed': datetime.datetime(2021, 8, 15, 16, 20, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 5, 4, 23, 27, tzinfo=datetime.timezone.utc), 'time_taken': 907026.0, 'time_delta': '10 days, 11:57:06', 'additions': 228, 'deletions': 285, 'state': 'closed'}, {'id': 704338636, 'number': 166, 'closed': datetime.datetime(2021, 8, 14, 19, 49, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 5, 3, 49, 34, tzinfo=datetime.timezone.utc), 'time_taken': 835186.0, 'time_delta': '9 days, 15:59:46', 'additions': 479, 'deletions': 583, 'state': 'closed'}, {'id': 702984523, 'number': 164, 'closed': datetime.datetime(2021, 8, 14, 16, 10, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 4, 5, 23, 28, tzinfo=datetime.timezone.utc), 'time_taken': 902841.0, 'time_delta': '10 days, 10:47:21', 'additions': 363, 'deletions': 366, 'state': 'closed'}, {'id': 702729595, 'number': 163, 'closed': None, 'created': datetime.datetime(2021, 8, 3, 23, 38, 14, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 117, 'deletions': 48, 'state': 'open'}, {'id': 702379342, 'number': 159, 'closed': datetime.datetime(2021, 8, 14, 16, 20, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 15, 24, 8, tzinfo=datetime.timezone.utc), 'time_taken': 953768.0, 'time_delta': '11 days, 0:56:08', 'additions': 68, 'deletions': 84, 'state': 'closed'}, {'id': 702349922, 'number': 158, 'closed': datetime.datetime(2021, 8, 3, 23, 39, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 14, 49, 48, tzinfo=datetime.timezone.utc), 'time_taken': 31795.0, 'time_delta': '8:49:55', 'additions': 198, 'deletions': 222, 'state': 'closed'}, {'id': 701944089, 'number': 157, 'closed': datetime.datetime(2021, 8, 3, 22, 52, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 3, 4, 25, 50, tzinfo=datetime.timezone.utc), 'time_taken': 66382.0, 'time_delta': '18:26:22', 'additions': 137, 'deletions': 171, 'state': 'closed'}, {'id': 700746865, 'number': 156, 'closed': datetime.datetime(2021, 8, 3, 22, 41, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 31, 18, 1, 31, tzinfo=datetime.timezone.utc), 'time_taken': 276025.0, 'time_delta': '3 days, 4:40:25', 'additions': 369, 'deletions': 407, 'state': 'closed'}, {'id': 700549694, 'number': 154, 'closed': datetime.datetime(2021, 8, 3, 22, 35, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 20, 39, 9, tzinfo=datetime.timezone.utc), 'time_taken': 352576.0, 'time_delta': '4 days, 1:56:16', 'additions': 132, 'deletions': 143, 'state': 'closed'}, {'id': 696396951, 'number': 148, 'closed': datetime.datetime(2021, 7, 29, 1, 5, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 19, 36, 56, tzinfo=datetime.timezone.utc), 'time_taken': 365301.0, 'time_delta': '4 days, 5:28:21', 'additions': 214, 'deletions': 214, 'state': 'closed'}, {'id': 696389686, 'number': 147, 'closed': datetime.datetime(2021, 7, 28, 23, 49, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 18, 32, 17, tzinfo=datetime.timezone.utc), 'time_taken': 364657.0, 'time_delta': '4 days, 5:17:37', 'additions': 417, 'deletions': 391, 'state': 'closed'}, {'id': 696383013, 'number': 146, 'closed': datetime.datetime(2021, 7, 28, 23, 33, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 17, 42, 18, tzinfo=datetime.timezone.utc), 'time_taken': 366699.0, 'time_delta': '4 days, 5:51:39', 'additions': 191, 'deletions': 179, 'state': 'closed'}, {'id': 696280838, 'number': 145, 'closed': datetime.datetime(2021, 7, 28, 23, 17, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 2, 34, 16, tzinfo=datetime.timezone.utc), 'time_taken': 420223.0, 'time_delta': '4 days, 20:43:43', 'additions': 419, 'deletions': 420, 'state': 'closed'}, {'id': 696218293, 'number': 144, 'closed': datetime.datetime(2021, 7, 28, 23, 6, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 21, 25, 35, tzinfo=datetime.timezone.utc), 'time_taken': 438044.0, 'time_delta': '5 days, 1:40:44', 'additions': 428, 'deletions': 429, 'state': 'closed'}, {'id': 696077307, 'number': 143, 'closed': datetime.datetime(2021, 7, 28, 22, 55, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 16, 48, 36, tzinfo=datetime.timezone.utc), 'time_taken': 454002.0, 'time_delta': '5 days, 6:06:42', 'additions': 350, 'deletions': 353, 'state': 'closed'}, {'id': 695679096, 'number': 142, 'closed': datetime.datetime(2021, 7, 27, 23, 4, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 5, 24, 46, tzinfo=datetime.timezone.utc), 'time_taken': 409175.0, 'time_delta': '4 days, 17:39:35', 'additions': 426, 'deletions': 427, 'state': 'closed'}, {'id': 695612099, 'number': 141, 'closed': datetime.datetime(2021, 7, 27, 3, 58, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 1, 45, 9, tzinfo=datetime.timezone.utc), 'time_taken': 353577.0, 'time_delta': '4 days, 2:12:57', 'additions': 228, 'deletions': 225, 'state': 'closed'}, {'id': 695596514, 'number': 140, 'closed': datetime.datetime(2021, 7, 27, 3, 30, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 0, 42, 8, tzinfo=datetime.timezone.utc), 'time_taken': 355702.0, 'time_delta': '4 days, 2:48:22', 'additions': 313, 'deletions': 318, 'state': 'closed'}, {'id': 694860963, 'number': 138, 'closed': datetime.datetime(2021, 7, 27, 3, 8, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 22, 4, 26, 33, tzinfo=datetime.timezone.utc), 'time_taken': 427312.0, 'time_delta': '4 days, 22:41:52', 'additions': 229, 'deletions': 222, 'state': 'closed'}, {'id': 694849019, 'number': 137, 'closed': datetime.datetime(2021, 7, 27, 2, 57, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 22, 3, 50, 3, tzinfo=datetime.timezone.utc), 'time_taken': 428872.0, 'time_delta': '4 days, 23:07:52', 'additions': 324, 'deletions': 325, 'state': 'closed'}, {'id': 694731023, 'number': 136, 'closed': datetime.datetime(2021, 7, 27, 2, 50, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 21, 21, 48, 48, tzinfo=datetime.timezone.utc), 'time_taken': 450099.0, 'time_delta': '5 days, 5:01:39', 'additions': 202, 'deletions': 201, 'state': 'closed'}, {'id': 693901011, 'number': 135, 'closed': datetime.datetime(2021, 7, 27, 2, 36, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 22, 17, 4, tzinfo=datetime.timezone.utc), 'time_taken': 533947.0, 'time_delta': '6 days, 4:19:07', 'additions': 719, 'deletions': 730, 'state': 'closed'}, {'id': 691225482, 'number': 132, 'closed': datetime.datetime(2021, 7, 20, 3, 29, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 16, 6, 15, 11, tzinfo=datetime.timezone.utc), 'time_taken': 335636.0, 'time_delta': '3 days, 21:13:56', 'additions': 467, 'deletions': 506, 'state': 'closed'}, {'id': 689430543, 'number': 130, 'closed': datetime.datetime(2021, 7, 19, 1, 12, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 13, 22, 3, 15, tzinfo=datetime.timezone.utc), 'time_taken': 443341.0, 'time_delta': '5 days, 3:09:01', 'additions': 26, 'deletions': 12, 'state': 'closed'}, {'id': 687274789, 'number': 129, 'closed': datetime.datetime(2021, 7, 20, 1, 27, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 11, 4, 51, 32, tzinfo=datetime.timezone.utc), 'time_taken': 765362.0, 'time_delta': '8 days, 20:36:02', 'additions': 169, 'deletions': 372, 'state': 'closed'}, {'id': 687261483, 'number': 128, 'closed': datetime.datetime(2021, 7, 17, 4, 42, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 11, 1, 55, 17, tzinfo=datetime.timezone.utc), 'time_taken': 528441.0, 'time_delta': '6 days, 2:47:21', 'additions': 64, 'deletions': 114, 'state': 'closed'}, {'id': 686304084, 'number': 127, 'closed': datetime.datetime(2021, 7, 8, 23, 0, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 8, 20, 26, 48, tzinfo=datetime.timezone.utc), 'time_taken': 9219.0, 'time_delta': '2:33:39', 'additions': 30, 'deletions': 9, 'state': 'closed'}, {'id': 684856294, 'number': 125, 'closed': datetime.datetime(2021, 7, 8, 4, 14, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 7, 4, 44, 40, tzinfo=datetime.timezone.utc), 'time_taken': 84587.0, 'time_delta': '23:29:47', 'additions': 219, 'deletions': 263, 'state': 'closed'}, {'id': 671845573, 'number': 102, 'closed': datetime.datetime(2021, 6, 25, 3, 11, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 16, 20, 2, 46, tzinfo=datetime.timezone.utc), 'time_taken': 716896.0, 'time_delta': '8 days, 7:08:16', 'additions': 64, 'deletions': 459, 'state': 'closed'}, {'id': 664194390, 'number': 82, 'closed': datetime.datetime(2021, 6, 9, 23, 51, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 8, 3, 42, 19, tzinfo=datetime.timezone.utc), 'time_taken': 158978.0, 'time_delta': '1 day, 20:09:38', 'additions': 22, 'deletions': 0, 'state': 'closed'}, {'id': 604331680, 'number': 69, 'closed': datetime.datetime(2021, 5, 24, 20, 14, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 30, 19, 47, 29, tzinfo=datetime.timezone.utc), 'time_taken': 4753636.0, 'time_delta': '55 days, 0:27:16', 'additions': 317, 'deletions': 20, 'state': 'closed'}]"

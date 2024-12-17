@@ -1,0 +1,41 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+722014833,[SIL] Add `cloneModule`,"<!-- What's in this pull request? -->
+This PR adds the `cloneModule()` function to `SILCloner`. `cloneModule()` returns a deep copy of the `originalModule` `SILModule`. The implementation is modeled after [`llvm::CloneModule()`](https://llvm.org/doxygen/namespacellvm.html#ae13b67a51d9f8061d598e82272b79b80).
+
+I wrote this as part of my [Alive2 for SIL](https://summerofcode.withgoogle.com/projects/#6666007931781120) GSoC project. I'm submitting the PR in case the functionality will be useful to others. An important part of the review process will be deciding if it will in fact be useful to others. 
+
+@CodaFi could you review this? 
+
+<!-- If this pull request resolves any bugs in the Swift bug tracker, provide a link: -->
+
+<!--
+Before merging this pull request, you must run the Swift continuous integration tests.
+For information about triggering CI builds via @swift-ci, see:
+https://github.com/apple/swift/blob/master/docs/ContinuousIntegration.md#swift-ci
+
+Thank you for your contribution to Swift!
+-->
+",False,39093,https://api.github.com/repos/swiftlang/swift/pulls/39093,https://github.com/swiftlang/swift/pull/39093,closed,110,0,3,1,1,4,0,0,[],2021-08-29 20:33:19+00:00,2022-01-06 18:37:03+00:00,11225024.0,"129 days, 22:03:44","[{'comment_id': 698880974, 'comment_body': 'This file comment needs to be update with the correct filename and date.', 'comment_created': datetime.datetime(2021, 8, 30, 23, 46, 21, tzinfo=datetime.timezone.utc), 'commenter': 'atrick', 'type': 'User'}, {'comment_id': 698881807, 'comment_body': 'If you do anything in the initializer other than assign a constant value, it should be generated and lazily invoked. There are test/SILOptimizer/global_init & globalopt tests for this.', 'comment_created': datetime.datetime(2021, 8, 30, 23, 48, 32, tzinfo=datetime.timezone.utc), 'commenter': 'atrick', 'type': 'User'}, {'comment_id': 699509275, 'comment_body': ""Does cloning modify the original `SILModule` or is there some sharing going on (i.e. is this not a deep copy)? I would've expected `originalModule` to be `const SILModule &` and not `SILModule &`."", 'comment_created': datetime.datetime(2021, 8, 31, 16, 53, 27, tzinfo=datetime.timezone.utc), 'commenter': 'varungandhi-apple', 'type': 'User'}, {'comment_id': 699511160, 'comment_body': 'It looks like this assertion condition is always going to be true, and the assertion string is out-of-sync from the condition. Could you clarify what is intended to be checked here?', 'comment_created': datetime.datetime(2021, 8, 31, 16, 56, tzinfo=datetime.timezone.utc), 'commenter': 'varungandhi-apple', 'type': 'User'}]","[{'commit_sha': 'c277564040e9f9cda9a01d8765750e8c083649bf', 'committer_username': 'justinfargnoli', 'committer_name': 'Justin Fargnoli', 'committer_email': 'jfargnoli@nvidia.com', 'commit_date': datetime.datetime(2017, 11, 30, 18, 56, 27, tzinfo=datetime.timezone.utc)}]",Justin Fargnoli,34139864,jfargnoli@nvidia.com,User,,26,,2,12
+721837081,[build-script] Make `--infer` to be `True` by default,"<!-- What's in this pull request? -->
+This PR sets the `--infer` option to [`build-script`](https://github.com/apple/swift/blob/main/utils/build-script) to be `True` by default and adds a `--no-infer` tag to set it to `False`.
+
+When the `--infer` tag is `True` it invokes [`build-script`'s dependency solver](https://github.com/apple/swift/blob/main/utils/swift_build_support/swift_build_support/build_graph.py). Currently this is set to false by default. 
+
+I realized this when adding two new dependencies to the build system. I think it could make sense to always run the dependency solver despite the fact that it is not necessary given the current build configuration. 
+
+<!-- If this pull request resolves any bugs in the Swift bug tracker, provide a link: -->
+
+<!--
+Before merging this pull request, you must run the Swift continuous integration tests.
+For information about triggering CI builds via @swift-ci, see:
+https://github.com/apple/swift/blob/master/docs/ContinuousIntegration.md#swift-ci
+
+Thank you for your contribution to Swift!
+-->
+
+@CodaFi could you review this?
+
+P.S. - This is my first PR to the Swift project! Please let me know if there is anything I should change about my PR and if it even makes sense for the Swift project :)",False,39089,https://api.github.com/repos/swiftlang/swift/pulls/39089,https://github.com/swiftlang/swift/pull/39089,closed,3,0,1,1,5,0,0,0,[],2021-08-28 19:43:23+00:00,2022-01-06 18:37:49+00:00,11314466.0,"130 days, 22:54:26",[],"[{'commit_sha': '17f5fb1b6cfedac4c370a20bcf446c2bd6cb3eb4', 'committer_username': 'justinfargnoli', 'committer_name': 'Justin Fargnoli', 'committer_email': 'jfargnoli@nvidia.com', 'commit_date': datetime.datetime(2017, 11, 30, 18, 56, 27, tzinfo=datetime.timezone.utc)}]",Justin Fargnoli,34139864,jfargnoli@nvidia.com,User,,26,,2,12
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+44838949,swift,swiftlang/swift,C++,10326,67162,2473,1414,171129,7500,516,884,"[{'id': 722014833, 'number': 39093, 'closed': datetime.datetime(2022, 1, 6, 18, 37, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 29, 20, 33, 19, tzinfo=datetime.timezone.utc), 'time_taken': 11225024.0, 'time_delta': '129 days, 22:03:44', 'additions': 110, 'deletions': 0, 'state': 'closed'}, {'id': 721837081, 'number': 39089, 'closed': datetime.datetime(2022, 1, 6, 18, 37, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 28, 19, 43, 23, tzinfo=datetime.timezone.utc), 'time_taken': 11314466.0, 'time_delta': '130 days, 22:54:26', 'additions': 3, 'deletions': 0, 'state': 'closed'}]"

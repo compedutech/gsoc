@@ -1,0 +1,664 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1463006831,FINERACT-1932: Add custom Configuration class for meeting service,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3359,https://api.github.com/repos/apache/fineract/pulls/3359,https://github.com/apache/fineract/pull/3359,closed,63,28,3,1,1,6,0,0,[],2023-08-04 14:17:09+00:00,2023-09-11 12:49:07+00:00,3277918.0,"37 days, 22:31:58","[{'comment_id': 1296866984, 'comment_body': ""Just a minor thing: let's take the opportunity to clean up situations like these... not necessarily wrong, but we can use the Lombok `@RequiredArgsConstructor` class annotation and get rid of the constructor boilerplate code. Here it's not much, but we have other cases where we have a lot of injected dependencies."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 33, 18, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296890117, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation.\r\nSee following `MeetingWritePlatformService`, there you used the Java interface, that's correct."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 51, 36, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296890556, 'comment_body': 'Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation.', 'comment_created': datetime.datetime(2023, 8, 17, 8, 51, 55, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1297315855, 'comment_body': ""Oh definitely. I've made the change now"", 'comment_created': datetime.datetime(2023, 8, 17, 14, 34, 43, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297317086, 'comment_body': 'My bad. Thanks for pointing it out. Fixed it now', 'comment_created': datetime.datetime(2023, 8, 17, 14, 35, 39, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297317517, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 35, 59, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': '5e03af4e67d79c0b5316c7ea94c9a1e63a70cf32', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1471861667,FINERACT-1932: Add configuration for useradministration service,"…NERACT-1932)
+
+## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3372,https://api.github.com/repos/apache/fineract/pulls/3372,https://github.com/apache/fineract/pull/3372,closed,144,73,9,1,0,33,0,0,[],2023-08-11 14:02:46+00:00,2023-08-30 12:28:12+00:00,1635926.0,"18 days, 22:25:26","[{'comment_id': 1296877177, 'comment_body': ""Just a minor thing: let's take the opportunity to clean up situations like these... not necessarily wrong, but we can use the Lombok @RequiredArgsConstructor class annotation and get rid of the constructor boilerplate code. Saves us again a bunch of unnecessary lines of code."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 41, 55, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296880623, 'comment_body': 'Add `@Slf4j` Lombok annotation and remove this logger (uppercase ""LOG""). Replace it with a lower case ""log"". Also: add `@RequiredArgsConstructor` and get rid of the constructor. Cleaning up code where we can :-)', 'comment_created': datetime.datetime(2023, 8, 17, 8, 43, 33, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296883875, 'comment_body': 'Please cleanup with Lombok statements, see previous comments (log and constructor).', 'comment_created': datetime.datetime(2023, 8, 17, 8, 46, 16, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296884375, 'comment_body': 'Please cleanup with Lombok statements, see previous comments (log and constructor).', 'comment_created': datetime.datetime(2023, 8, 17, 8, 46, 42, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296884606, 'comment_body': 'Please cleanup with Lombok statements, see previous comments (log and constructor).', 'comment_created': datetime.datetime(2023, 8, 17, 8, 46, 54, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296887360, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 49, 13, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296887570, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 49, 24, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296887736, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 49, 33, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296887893, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 49, 41, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296888055, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 49, 49, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296888212, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 49, 57, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296888349, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 50, 4, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1296888512, 'comment_body': ""Don't use implementation classes here, always use Java interfaces... they are not excheangable! Please provide the Java interface class reference in parenthesis with the `@ConditionalOnMissingBean` annotation."", 'comment_created': datetime.datetime(2023, 8, 17, 8, 50, 12, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1297318186, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 36, 29, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297318277, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 36, 34, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297318654, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 36, 53, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297318770, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 36, 58, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297318990, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 37, 8, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297319166, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 37, 14, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297319333, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 37, 20, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297319488, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 37, 27, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297319582, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 37, 31, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297319704, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 37, 37, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297326333, 'comment_body': ""We're instantiating a RoleMapper object in the constructor, so we can't directly use Lombok's `@RequiredArgsConstructor` here"", 'comment_created': datetime.datetime(2023, 8, 17, 14, 42, 42, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297327264, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 43, 26, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297330007, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 45, 18, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297330751, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 8, 17, 14, 45, 45, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1297607886, 'comment_body': 'This will probably fail. Before you submit please run `./gradlew spotlessApply` to fix (most) of these (formatting) errors.', 'comment_created': datetime.datetime(2023, 8, 17, 18, 43, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1297610315, 'comment_body': 'I bet you RoleMapper is used only once (here) or not more than a handful of places in the whole source code... and that we do the same thing (instantiating it) everywhere in the exact same manner. If that is true then we can provide this somewhere as a ready to use injectable dependency in a Java configuration class for example.', 'comment_created': datetime.datetime(2023, 8, 17, 18, 45, 32, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1297616955, 'comment_body': ""Let's leave it like this for now... not that important."", 'comment_created': datetime.datetime(2023, 8, 17, 18, 52, 29, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1297634418, 'comment_body': ""Done. I'll make sure to review git differecnes before opening future PRs to avoid this."", 'comment_created': datetime.datetime(2023, 8, 17, 19, 12, 38, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1301280579, 'comment_body': 'This is not auto configuration. Please rename it.', 'comment_created': datetime.datetime(2023, 8, 22, 8, 50, 6, tzinfo=datetime.timezone.utc), 'commenter': 'adamsaghy', 'type': 'User'}, {'comment_id': 1301738565, 'comment_body': 'Done', 'comment_created': datetime.datetime(2023, 8, 22, 14, 28, 40, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': 'a7668fa8f9450237059f449fe16042ccebeb54c9', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1483713577,FINERACT-1932: Add custom Configuration class for Account module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3392,https://api.github.com/repos/apache/fineract/pulls/3392,https://github.com/apache/fineract/pull/3392,closed,135,27,8,1,0,2,0,0,[],2023-08-21 23:02:10+00:00,2023-08-30 09:26:28+00:00,728658.0,"8 days, 10:24:18","[{'comment_id': 1301307559, 'comment_body': 'This is not an auto configuration. Please rename it.', 'comment_created': datetime.datetime(2023, 8, 22, 9, 7, 12, tzinfo=datetime.timezone.utc), 'commenter': 'adamsaghy', 'type': 'User'}, {'comment_id': 1301476908, 'comment_body': ""> This is not an auto configuration. Please rename it.\r\n\r\nI'll change the name of the class to AccountConfiguration, is that ok?"", 'comment_created': datetime.datetime(2023, 8, 22, 11, 5, 17, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': 'f50fa845c27c1c0f0c6c18f8a6bdcc3aba8be0c4', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1487153853,FINERACT-1932: Add custom Configuration class for calendar module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3398,https://api.github.com/repos/apache/fineract/pulls/3398,https://github.com/apache/fineract/pull/3398,closed,70,24,4,1,0,0,0,0,[],2023-08-23 23:31:49+00:00,2023-08-30 09:26:20+00:00,554071.0,"6 days, 9:54:31",[],"[{'commit_sha': '8d7f276e5e14d5abe474d92b9416677df2c0f391', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1490204275,FINERACT-1932: Add custom Configuration class for charge module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3402,https://api.github.com/repos/apache/fineract/pulls/3402,https://github.com/apache/fineract/pull/3402,closed,87,50,4,1,0,0,0,0,[],2023-08-25 19:18:18+00:00,2023-08-30 09:26:13+00:00,396475.0,"4 days, 14:07:55",[],"[{'commit_sha': '167ae51ced599bb7f665baa6adcd5dcc7c70b246', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1494658898,FINERACT-1932: Add custom Configuration class for collateral module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3414,https://api.github.com/repos/apache/fineract/pulls/3414,https://github.com/apache/fineract/pull/3414,closed,74,43,4,1,0,0,0,0,[],2023-08-30 00:49:25+00:00,2023-08-30 09:26:04+00:00,30999.0,8:36:39,[],"[{'commit_sha': 'd525583c1b369f9c3fe2d3cb7bb1f551c979235c', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1496384289,FINERACT-1932: Add custom Configuration class for collectionsheet module,"…932)
+
+## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3418,https://api.github.com/repos/apache/fineract/pulls/3418,https://github.com/apache/fineract/pull/3418,closed,86,26,3,1,1,0,1,0,[{'name': 'stale'}],2023-08-31 01:58:52+00:00,2023-10-02 13:15:57+00:00,2805425.0,"32 days, 11:17:05",[],"[{'commit_sha': '393e2e00708ecdded0f16c8240c6e8cc199d1be7', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1501593223,FINERACT-1932: Add custom Configuration class for delinquency module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3428,https://api.github.com/repos/apache/fineract/pulls/3428,https://github.com/apache/fineract/pull/3428,closed,76,6,4,1,0,0,0,0,[],2023-09-04 16:23:01+00:00,2023-09-11 12:45:01+00:00,591720.0,"6 days, 20:22:00",[],"[{'commit_sha': 'b544782c37b96855307aadd38b05eed1a125d85e', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1524820704,FINERACT-1932:Add custom Configuration class for floatingrates module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3466,https://api.github.com/repos/apache/fineract/pulls/3466,https://github.com/apache/fineract/pull/3466,closed,54,22,3,1,0,0,0,0,[],2023-09-21 12:57:00+00:00,2023-10-02 13:14:34+00:00,951454.0,"11 days, 0:17:34",[],"[{'commit_sha': '490916307fea105659a41bd0f035405b3ca3b9fd', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569443456,FINERACT 1932: Add custom Configuration class for accounting/accrual module,"…CT-1932)
+
+## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3524,https://api.github.com/repos/apache/fineract/pulls/3524,https://github.com/apache/fineract/pull/3524,closed,38,2,2,1,0,0,0,0,[],2023-10-23 15:37:30+00:00,2023-10-26 13:29:42+00:00,251532.0,"2 days, 21:52:12",[],"[{'commit_sha': '65db009c67eed72d45ec00aba7cf9f95bb5fd10d', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569604498,FINERACT 1932: Add custom Configuration class for accounting/journalentry module,"
+
+## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3525,https://api.github.com/repos/apache/fineract/pulls/3525,https://github.com/apache/fineract/pull/3525,closed,105,6,4,1,0,0,0,0,[],2023-10-23 17:20:06+00:00,2023-10-26 13:27:06+00:00,245220.0,"2 days, 20:07:00",[],"[{'commit_sha': '101a82bf6fd6542a1a6ad3a5b302a79c8ee2d2e3', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569714432,FINERACT 1932: Add custom Configuration class for accounting/provisioning  module,"
+
+## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3526,https://api.github.com/repos/apache/fineract/pulls/3526,https://github.com/apache/fineract/pull/3526,closed,69,4,3,1,0,0,0,0,[],2023-10-23 18:29:18+00:00,2023-10-26 13:26:07+00:00,241009.0,"2 days, 18:56:49",[],"[{'commit_sha': 'e4ffad20544dfae9b221b2f8b94ca73346d70da9', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569752777,FINERACT 1932: Add custom Configuration class for accounting/rule module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3527,https://api.github.com/repos/apache/fineract/pulls/3527,https://github.com/apache/fineract/pull/3527,closed,57,4,3,1,0,0,0,0,[],2023-10-23 18:48:43+00:00,2023-10-26 13:25:21+00:00,239798.0,"2 days, 18:36:38",[],"[{'commit_sha': '93a4f8aac48edc7c11f0500fce664f4aec5d915c', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569783276,FINERACT 1932: Add custom Configuration class for adhocquery module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3528,https://api.github.com/repos/apache/fineract/pulls/3528,https://github.com/apache/fineract/pull/3528,closed,62,13,3,1,0,1,0,0,[],2023-10-23 19:04:16+00:00,2023-10-27 11:32:02+00:00,318466.0,"3 days, 16:27:46","[{'comment_id': 1373169259, 'comment_body': ""What's up with `AdHocReadPlatformServiceImpl`? Please add to this PR."", 'comment_created': datetime.datetime(2023, 10, 26, 13, 23, 47, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}]","[{'commit_sha': 'fb44b1b1c9630e8e35ee0f900b281aa2e87e4b78', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569901440,FINERACT 1932: Add custom Configuration class for commands module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3529,https://api.github.com/repos/apache/fineract/pulls/3529,https://github.com/apache/fineract/pull/3529,closed,60,2,2,1,0,0,0,0,[],2023-10-23 20:29:46+00:00,2023-10-26 13:20:53+00:00,233467.0,"2 days, 16:51:07",[],"[{'commit_sha': '6b43f42fe1b945fc841f94dee7369cbd3f55d686', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569931497,FINERACT 1932: Add custom Configuration class for organisation/holiday module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3530,https://api.github.com/repos/apache/fineract/pulls/3530,https://github.com/apache/fineract/pull/3530,closed,60,30,3,1,1,0,0,0,[],2023-10-23 20:54:10+00:00,2023-10-26 14:31:58+00:00,236268.0,"2 days, 17:37:48",[],"[{'commit_sha': 'a924753122fb6f06d4a1b3cfe9de4526541a1656', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569959099,FINERACT 1932: Add custom Configuration class for organisation/monetary  module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3531,https://api.github.com/repos/apache/fineract/pulls/3531,https://github.com/apache/fineract/pull/3531,closed,73,38,4,1,0,2,0,0,[],2023-10-23 21:17:05+00:00,2023-10-26 18:03:53+00:00,247608.0,"2 days, 20:46:48","[{'comment_id': 1373158584, 'comment_body': 'Please use @RequiredArgsConstructor.\r\nThe CurrencyMapper can also be written in one line (without a constructor):\r\n```\r\nprivate final CurrencyMapper currencyRowMapper = new CurrencyMapper();\r\n```\r\n', 'comment_created': datetime.datetime(2023, 10, 26, 13, 17, 38, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1373199620, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 10, 26, 13, 39, 16, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': '3096d83eb4336551aa5c248fa5d3a59601c79a50', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1569977569,FINERACT 1932: Add custom Configuration class for organisation/office module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3532,https://api.github.com/repos/apache/fineract/pulls/3532,https://github.com/apache/fineract/pull/3532,closed,64,4,3,1,0,0,0,0,[],2023-10-23 21:32:21+00:00,2023-10-26 13:14:43+00:00,229342.0,"2 days, 15:42:22",[],"[{'commit_sha': '6fb27893766f20bfdae9a75e05571dd35fd04ad9', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570005102,FINERACT 1932: Add custom Configuration class for organisation/provisioning module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3533,https://api.github.com/repos/apache/fineract/pulls/3533,https://github.com/apache/fineract/pull/3533,closed,112,80,6,1,2,2,0,0,[],2023-10-23 21:58:55+00:00,2023-10-26 18:03:30+00:00,245075.0,"2 days, 20:04:35","[{'comment_id': 1373193184, 'comment_body': 'Again, constructor can be avoided. Please use the required args annotation and instantiate the provision category row mapper in one line:\r\n```\r\nprivate final ProvisioningCategoryRowMapper provisionCategoryRowMapper = new ProvisioningCategoryRowMapper();\r\n```', 'comment_created': datetime.datetime(2023, 10, 26, 13, 35, 18, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1373213713, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 10, 26, 13, 48, 13, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': '8fac6412b548bdbcd2c92f9d1bd472a28b764c76', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570017224,FINERACT 1932: Add custom Configuration class for organisation/staff module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3534,https://api.github.com/repos/apache/fineract/pulls/3534,https://github.com/apache/fineract/pull/3534,closed,58,26,3,1,0,0,0,0,[],2023-10-23 22:11:27+00:00,2023-10-26 13:12:45+00:00,226878.0,"2 days, 15:01:18",[],"[{'commit_sha': 'd90c9d247381d1932eb5e2d055dca9c218dc4264', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570037345,FINERACT 1932: Add custom Configuration class for organisation/teller module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3535,https://api.github.com/repos/apache/fineract/pulls/3535,https://github.com/apache/fineract/pull/3535,closed,74,9,3,1,0,0,0,0,[],2023-10-23 22:29:20+00:00,2023-10-26 13:11:45+00:00,225745.0,"2 days, 14:42:25",[],"[{'commit_sha': '702e0ac85ee62d0b0e583227751d6229c5b592d3', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570046120,FINERACT 1932: Add custom Configuration class for organisation/workingdays module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3536,https://api.github.com/repos/apache/fineract/pulls/3536,https://github.com/apache/fineract/pull/3536,closed,51,18,3,1,0,0,0,0,[],2023-10-23 22:39:10+00:00,2023-10-26 13:09:55+00:00,225045.0,"2 days, 14:30:45",[],"[{'commit_sha': '1a6c80c7dcd76bb67f0a387fcb608014a0dcfb8e', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570062992,FINERACT 1932: Add custom Configuration class for interoperation module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3537,https://api.github.com/repos/apache/fineract/pulls/3537,https://github.com/apache/fineract/pull/3537,closed,67,35,2,1,0,0,0,0,[],2023-10-23 22:50:55+00:00,2023-10-26 13:09:01+00:00,224286.0,"2 days, 14:18:06",[],"[{'commit_sha': '79f5ef94f5ef5a64bbaf0b97a3d22e9bc192b543', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570081116,FINERACT 1932: Add custom Configuration class for mix module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3538,https://api.github.com/repos/apache/fineract/pulls/3538,https://github.com/apache/fineract/pull/3538,closed,69,28,6,1,0,0,0,0,[],2023-10-23 23:08:18+00:00,2023-10-26 13:07:23+00:00,223145.0,"2 days, 13:59:05",[],"[{'commit_sha': '757d20d23204041c088ccc2751715e32e68bb8ee', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1570104342,FINERACT 1932: Add custom Configuration class for notification module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3539,https://api.github.com/repos/apache/fineract/pulls/3539,https://github.com/apache/fineract/pull/3539,closed,87,26,8,1,0,4,0,0,[],2023-10-23 23:32:08+00:00,2023-10-27 13:56:40+00:00,311072.0,"3 days, 14:24:32","[{'comment_id': 1373133568, 'comment_body': 'Just services.... no repositories.', 'comment_created': datetime.datetime(2023, 10, 26, 13, 1, 42, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1373133823, 'comment_body': 'Just services.... no repositories.', 'comment_created': datetime.datetime(2023, 10, 26, 13, 1, 53, tzinfo=datetime.timezone.utc), 'commenter': 'vidakovic', 'type': 'User'}, {'comment_id': 1373178929, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 10, 26, 13, 28, 17, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}, {'comment_id': 1373179282, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 10, 26, 13, 28, 26, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': 'cfb2eaff9f9f0b80e0918873f827deb440f7f0c5', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+1521618506,FINERACT 1932: Add custom Configuration class for collateralmanagement module,"## Description
+
+Describe the changes made and why they were made.
+
+Ignore if these details are present on the associated [Apache Fineract JIRA ticket](https://github.com/apache/fineract/pull/1284).
+
+
+## Checklist
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Write the commit message as per https://github.com/apache/fineract/#pull-requests
+
+- [x] Acknowledge that we will not review PRs that are not passing the build _(""green"")_ - it is your responsibility to get a proposed PR to pass the build, not primarily the project's maintainers.
+
+- [x] Create/update unit or integration tests for verifying the changes made.
+
+- [x] Follow coding conventions at https://cwiki.apache.org/confluence/display/FINERACT/Coding+Conventions.
+
+- [x] Add required Swagger annotation and update API documentation at fineract-provider/src/main/resources/static/legacy-docs/apiLive.htm with details of any API changes
+
+- [x] Submission is not a ""code dump"".  (Large changes can be made ""in repository"" via a branch.  Ask on the developer mailing list for guidance, if required.)
+
+FYI our guidelines for code reviews are at https://cwiki.apache.org/confluence/display/FINERACT/Code+Review+Guide.
+",True,3460,https://api.github.com/repos/apache/fineract/pulls/3460,https://github.com/apache/fineract/pull/3460,closed,123,75,8,1,1,2,0,0,[],2023-09-19 16:07:25+00:00,2023-10-26 14:34:49+00:00,3191244.0,"36 days, 22:27:24","[{'comment_id': 1342586376, 'comment_body': ""Please don't use assert for validations. "", 'comment_created': datetime.datetime(2023, 10, 2, 11, 47, 22, tzinfo=datetime.timezone.utc), 'commenter': 'galovics', 'type': 'User'}, {'comment_id': 1373053486, 'comment_body': ""Understood, I've reverted the change. It wasn't required - I put an assertion because I saw an IDE warning. I've restored the code to what it was before"", 'comment_created': datetime.datetime(2023, 10, 26, 12, 9, 1, tzinfo=datetime.timezone.utc), 'commenter': 'abhinav7sinha', 'type': 'User'}]","[{'commit_sha': 'b12d0a0c3965c6534f1785db71e54bbe8a3d4f57', 'committer_username': 'abhinav7sinha', 'committer_name': 'Abhinav Sinha', 'committer_email': 'abhinav7.sinha@gmail.com', 'commit_date': datetime.datetime(2016, 8, 22, 11, 38, 9, tzinfo=datetime.timezone.utc)}]",Abhinav Sinha,21173162,abhinav7.sinha@gmail.com,User,,39,,56,11
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+48418599,fineract,apache/fineract,Java,1574,1295,113,266,8024,36,19,36,"[{'id': 1742127131, 'number': 3765, 'closed': None, 'created': datetime.datetime(2024, 2, 25, 11, 12, 31, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 577, 'deletions': 637, 'state': 'open'}, {'id': 1570104342, 'number': 3539, 'closed': datetime.datetime(2023, 10, 27, 13, 56, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 23, 32, 8, tzinfo=datetime.timezone.utc), 'time_taken': 311072.0, 'time_delta': '3 days, 14:24:32', 'additions': 87, 'deletions': 26, 'state': 'closed'}, {'id': 1570081116, 'number': 3538, 'closed': datetime.datetime(2023, 10, 26, 13, 7, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 23, 8, 18, tzinfo=datetime.timezone.utc), 'time_taken': 223145.0, 'time_delta': '2 days, 13:59:05', 'additions': 69, 'deletions': 28, 'state': 'closed'}, {'id': 1570062992, 'number': 3537, 'closed': datetime.datetime(2023, 10, 26, 13, 9, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 22, 50, 55, tzinfo=datetime.timezone.utc), 'time_taken': 224286.0, 'time_delta': '2 days, 14:18:06', 'additions': 67, 'deletions': 35, 'state': 'closed'}, {'id': 1570046120, 'number': 3536, 'closed': datetime.datetime(2023, 10, 26, 13, 9, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 22, 39, 10, tzinfo=datetime.timezone.utc), 'time_taken': 225045.0, 'time_delta': '2 days, 14:30:45', 'additions': 51, 'deletions': 18, 'state': 'closed'}, {'id': 1570037345, 'number': 3535, 'closed': datetime.datetime(2023, 10, 26, 13, 11, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 22, 29, 20, tzinfo=datetime.timezone.utc), 'time_taken': 225745.0, 'time_delta': '2 days, 14:42:25', 'additions': 74, 'deletions': 9, 'state': 'closed'}, {'id': 1570017224, 'number': 3534, 'closed': datetime.datetime(2023, 10, 26, 13, 12, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 22, 11, 27, tzinfo=datetime.timezone.utc), 'time_taken': 226878.0, 'time_delta': '2 days, 15:01:18', 'additions': 58, 'deletions': 26, 'state': 'closed'}, {'id': 1570005102, 'number': 3533, 'closed': datetime.datetime(2023, 10, 26, 18, 3, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 21, 58, 55, tzinfo=datetime.timezone.utc), 'time_taken': 245075.0, 'time_delta': '2 days, 20:04:35', 'additions': 112, 'deletions': 80, 'state': 'closed'}, {'id': 1569977569, 'number': 3532, 'closed': datetime.datetime(2023, 10, 26, 13, 14, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 21, 32, 21, tzinfo=datetime.timezone.utc), 'time_taken': 229342.0, 'time_delta': '2 days, 15:42:22', 'additions': 64, 'deletions': 4, 'state': 'closed'}, {'id': 1569959099, 'number': 3531, 'closed': datetime.datetime(2023, 10, 26, 18, 3, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 21, 17, 5, tzinfo=datetime.timezone.utc), 'time_taken': 247608.0, 'time_delta': '2 days, 20:46:48', 'additions': 73, 'deletions': 38, 'state': 'closed'}, {'id': 1569931497, 'number': 3530, 'closed': datetime.datetime(2023, 10, 26, 14, 31, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 20, 54, 10, tzinfo=datetime.timezone.utc), 'time_taken': 236268.0, 'time_delta': '2 days, 17:37:48', 'additions': 60, 'deletions': 30, 'state': 'closed'}, {'id': 1569901440, 'number': 3529, 'closed': datetime.datetime(2023, 10, 26, 13, 20, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 20, 29, 46, tzinfo=datetime.timezone.utc), 'time_taken': 233467.0, 'time_delta': '2 days, 16:51:07', 'additions': 60, 'deletions': 2, 'state': 'closed'}, {'id': 1569783276, 'number': 3528, 'closed': datetime.datetime(2023, 10, 27, 11, 32, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 19, 4, 16, tzinfo=datetime.timezone.utc), 'time_taken': 318466.0, 'time_delta': '3 days, 16:27:46', 'additions': 62, 'deletions': 13, 'state': 'closed'}, {'id': 1569752777, 'number': 3527, 'closed': datetime.datetime(2023, 10, 26, 13, 25, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 18, 48, 43, tzinfo=datetime.timezone.utc), 'time_taken': 239798.0, 'time_delta': '2 days, 18:36:38', 'additions': 57, 'deletions': 4, 'state': 'closed'}, {'id': 1569714432, 'number': 3526, 'closed': datetime.datetime(2023, 10, 26, 13, 26, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 18, 29, 18, tzinfo=datetime.timezone.utc), 'time_taken': 241009.0, 'time_delta': '2 days, 18:56:49', 'additions': 69, 'deletions': 4, 'state': 'closed'}, {'id': 1569604498, 'number': 3525, 'closed': datetime.datetime(2023, 10, 26, 13, 27, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 17, 20, 6, tzinfo=datetime.timezone.utc), 'time_taken': 245220.0, 'time_delta': '2 days, 20:07:00', 'additions': 105, 'deletions': 6, 'state': 'closed'}, {'id': 1569443456, 'number': 3524, 'closed': datetime.datetime(2023, 10, 26, 13, 29, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 23, 15, 37, 30, tzinfo=datetime.timezone.utc), 'time_taken': 251532.0, 'time_delta': '2 days, 21:52:12', 'additions': 38, 'deletions': 2, 'state': 'closed'}, {'id': 1524820704, 'number': 3466, 'closed': datetime.datetime(2023, 10, 2, 13, 14, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 21, 12, 57, tzinfo=datetime.timezone.utc), 'time_taken': 951454.0, 'time_delta': '11 days, 0:17:34', 'additions': 54, 'deletions': 22, 'state': 'closed'}, {'id': 1521618506, 'number': 3460, 'closed': datetime.datetime(2023, 10, 26, 14, 34, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 19, 16, 7, 25, tzinfo=datetime.timezone.utc), 'time_taken': 3191244.0, 'time_delta': '36 days, 22:27:24', 'additions': 123, 'deletions': 75, 'state': 'closed'}, {'id': 1501593223, 'number': 3428, 'closed': datetime.datetime(2023, 9, 11, 12, 45, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 4, 16, 23, 1, tzinfo=datetime.timezone.utc), 'time_taken': 591720.0, 'time_delta': '6 days, 20:22:00', 'additions': 76, 'deletions': 6, 'state': 'closed'}, {'id': 1496384289, 'number': 3418, 'closed': datetime.datetime(2023, 10, 2, 13, 15, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 31, 1, 58, 52, tzinfo=datetime.timezone.utc), 'time_taken': 2805425.0, 'time_delta': '32 days, 11:17:05', 'additions': 86, 'deletions': 26, 'state': 'closed'}, {'id': 1494658898, 'number': 3414, 'closed': datetime.datetime(2023, 8, 30, 9, 26, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 30, 0, 49, 25, tzinfo=datetime.timezone.utc), 'time_taken': 30999.0, 'time_delta': '8:36:39', 'additions': 74, 'deletions': 43, 'state': 'closed'}, {'id': 1490204275, 'number': 3402, 'closed': datetime.datetime(2023, 8, 30, 9, 26, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 25, 19, 18, 18, tzinfo=datetime.timezone.utc), 'time_taken': 396475.0, 'time_delta': '4 days, 14:07:55', 'additions': 87, 'deletions': 50, 'state': 'closed'}, {'id': 1487153853, 'number': 3398, 'closed': datetime.datetime(2023, 8, 30, 9, 26, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 23, 23, 31, 49, tzinfo=datetime.timezone.utc), 'time_taken': 554071.0, 'time_delta': '6 days, 9:54:31', 'additions': 70, 'deletions': 24, 'state': 'closed'}, {'id': 1483713577, 'number': 3392, 'closed': datetime.datetime(2023, 8, 30, 9, 26, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 21, 23, 2, 10, tzinfo=datetime.timezone.utc), 'time_taken': 728658.0, 'time_delta': '8 days, 10:24:18', 'additions': 135, 'deletions': 27, 'state': 'closed'}, {'id': 1471861667, 'number': 3372, 'closed': datetime.datetime(2023, 8, 30, 12, 28, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 11, 14, 2, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1635926.0, 'time_delta': '18 days, 22:25:26', 'additions': 144, 'deletions': 73, 'state': 'closed'}, {'id': 1463006831, 'number': 3359, 'closed': datetime.datetime(2023, 9, 11, 12, 49, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 4, 14, 17, 9, tzinfo=datetime.timezone.utc), 'time_taken': 3277918.0, 'time_delta': '37 days, 22:31:58', 'additions': 63, 'deletions': 28, 'state': 'closed'}, {'id': 1458537103, 'number': 3349, 'closed': datetime.datetime(2023, 8, 4, 13, 51, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 1, 17, 55, 20, tzinfo=datetime.timezone.utc), 'time_taken': 244574.0, 'time_delta': '2 days, 19:56:14', 'additions': 2046, 'deletions': 0, 'state': 'closed'}, {'id': 1298703828, 'number': 3094, 'closed': datetime.datetime(2023, 7, 6, 13, 24, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 1, 13, 7, 35, tzinfo=datetime.timezone.utc), 'time_taken': 8295444.0, 'time_delta': '96 days, 0:17:24', 'additions': 53, 'deletions': 157, 'state': 'closed'}, {'id': 1298589170, 'number': 3093, 'closed': datetime.datetime(2023, 4, 1, 11, 20, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 1, 6, 14, 47, tzinfo=datetime.timezone.utc), 'time_taken': 18350.0, 'time_delta': '5:05:50', 'additions': 69, 'deletions': 178, 'state': 'closed'}, {'id': 1298035978, 'number': 3092, 'closed': datetime.datetime(2023, 4, 3, 15, 29, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 31, 16, 28, 13, tzinfo=datetime.timezone.utc), 'time_taken': 255702.0, 'time_delta': '2 days, 23:01:42', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1297988597, 'number': 3091, 'closed': datetime.datetime(2023, 3, 31, 16, 20, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 31, 15, 51, 29, tzinfo=datetime.timezone.utc), 'time_taken': 1753.0, 'time_delta': '0:29:13', 'additions': 2, 'deletions': 2, 'state': 'closed'}]"

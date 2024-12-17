@@ -1,0 +1,691 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+678202842,boxes: Use indicator attribute to hold compose box status.,"**PR structure:**
+- **boxes: Use an indicator attribute to specify current compose box status.**
+This commit introduces an attribute, `compose_box_status` to the WriteBox
+class, to indicate the current compose status of the WriteBox, which can
+be one of ""open_with_private"", ""open_with_stream"" or ""closed"". Such an
+indicator would be a structured way to check for compose status before
+performing status specific tasks.
+- **boxes: Create a helper method to set WriteBox attributes to defaults.**
+This commit adds a helper method to the WriteBox class to reset all
+the WriteBox attributes to their defaults after usage by the
+`stream_box_view` or `private_box_view`. This helps to ensure that
+the state of the attributes do not persist beyond their function.
+- **boxes: Configure `*_box_views` to set and reset WriteBox attributes.**
+This commit enables the setting of the `compose_box_status` and
+resetting it (by setting it to ""closed"") along with the other WriteBox
+attributes, after a compose.
+The `private_box_view` and `stream_box_view` set the `compose_box_view`
+status appropriately in their call. The `GO_BACK` keypress now calls
+the helper method to reset WriteBox attributes like the `stream_id` and
+the `to_write_box` among others, to prevent persistence, which is not
+ideal here, because these attributes are specific to the particular
+compose action they were set in.
+Tests updated.
+
+**Testing and linting:**
+I've ran tests locally on each commit. I've also ran `black` checks and then the more extensive `./tools/lint-all`.",True,1057,https://api.github.com/repos/zulip/zulip-terminal/pulls/1057,https://github.com/zulip/zulip-terminal/pull/1057,closed,94,21,2,3,5,5,2,0,"[{'name': 'size: XL'}, {'name': 'area: refactoring'}]",2021-06-25 22:02:15+00:00,2021-07-31 17:55:20+00:00,3095585.0,"35 days, 19:53:05","[{'comment_id': 659234298, 'comment_body': 'This should no longer be necessary now.', 'comment_created': datetime.datetime(2021, 6, 26, 22, 46, 40, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 680289904, 'comment_body': 'Would it make sense to remove `main_view` fully now too? That seems part of the reset?', 'comment_created': datetime.datetime(2021, 7, 31, 2, 3, 52, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 680376870, 'comment_body': 'Responded on the stream, [#zulip-terminal > Resetting WriteBox attributes to defaults #T1057](https://chat.zulip.org/#narrow/stream/206-zulip-terminal/topic/.E2.9C.94.20Resetting.20WriteBox.20attributes.20to.20defaults.20.23T1057).', 'comment_created': datetime.datetime(2021, 7, 31, 16, 9, 35, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 680377093, 'comment_body': ""This isn't the best way to test these initializations, but I'm unable to patch the `datetime.now` method (I'm not sure if we can), and this seemed like a reasonable alternative."", 'comment_created': datetime.datetime(2021, 7, 31, 16, 11, 41, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 680387168, 'comment_body': ""This is a good improvement for now - I think we'd need to adjust how we handle datetime otherwise."", 'comment_created': datetime.datetime(2021, 7, 31, 17, 22, 38, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}]","[{'commit_sha': '68c2a7172336b351c07bf6893d31eca3e89e13a0', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ddf0d8b2f825b0679feac9436ca1ecf0b4e3990b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c554a96c4b5935f26ec571069c35b318727ce6f', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+672699159,bugfix: Construct narrow appropriately before verifying and triggering footer notifications.,"**PR Structure:**
+
+- **refactor: tests: Change req parameter to use a list of recipient emails.**
+This commit refactors the test cases of the `req` parameter in
+`test_notify_if_message_sent_outside_narrow` from a string of ', '
+separated emails to a list of emails, consistent with the current type
+of the `to` attribute of PrivateComposition.
+Tests updated.
+
+- **bugfix: helper: Use ', ' as separator to construct narrow to verify.**
+This commit fixes a bug that previously caused a ""Message sent outside
+current narrow."" message in the footer in group pms (huddles) even when
+on the right narrow. This happened because of the wrong separator being
+used, ','. This has been changed to the relevant separator - ', '.
+Test added.
+
+**Testing and linting:**
+I've ran tests locally on each commit. I've also ran `black` checks and then the more extensive `./tools/lint-all`.",True,1054,https://api.github.com/repos/zulip/zulip-terminal/pulls/1054,https://github.com/zulip/zulip-terminal/pull/1054,closed,19,5,2,2,2,0,3,0,"[{'name': 'bug'}, {'name': 'size: S'}, {'name': 'area: refactoring'}]",2021-06-17 14:36:35+00:00,2021-06-18 17:05:55+00:00,95360.0,"1 day, 2:29:20",[],"[{'commit_sha': '761069ffab12a7febb063e9ffbceac32b045dc3b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44452f5ea7aabad510847bde2b2802996c0fec57', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+686157289,tests: run: Use the `tmp_path` fixture instead of `tmpdir`.,"**Commit structure:**
+- **tests: run: Use the `tmp_path` fixture instead of `tmpdir`.**
+The `tmpdir` fixture under `pytest` is a `py.path.local` object,
+belonging to the `py` library, which is currently under maintenance
+mode, mentioned in the note here:
+https://py.readthedocs.io/en/latest/path.html#py-path.
+This commit migrates from `tmpdir` to using the `tmp_path` fixture
+instead, which is a `pathlib.Path` object.
+Reference: https://docs.pytest.org/en/6.2.x/tmpdir.html
+
+**Testing and linting:**
+I've ran tests locally on each commit. I've also ran `black` checks and then the more extensive `./tools/lint-all`.",True,1073,https://api.github.com/repos/zulip/zulip-terminal/pulls/1073,https://github.com/zulip/zulip-terminal/pull/1073,closed,16,15,1,1,1,0,2,0,"[{'name': 'area: tests'}, {'name': 'area: refactoring'}]",2021-07-08 16:20:04+00:00,2021-07-09 04:26:55+00:00,43611.0,12:06:51,[],"[{'commit_sha': '0c214093aaae38b3c9ecf756defdc7a803c6e73e', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+687390676,tests: run: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to the `test_run.py` file. Includes this file under the `run-mypy` tool to type-check.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] New tests added (for any new behavior)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- **refactor: tests: run: Add type annotations.**
+This commit adds paramter and return type annotations or hints to the
+`test_run.py` file, that contains tests for it's counterpart `run.py`
+from  the `zulipterminal` module, to make mypy checks consistent and
+improve code readability.
+- **tools: Include test_run.py under files to be type-checked with mypy.**
+This commit adds a new ""tests"" key to the `repo_python_files` dict to
+let mypy know which files to type check. A new list,
+`type_consistent_testfiles` is also added, to hold the list of test
+files that have been type-annotated incrementally till all the test
+files are consistent.
+
+**Notes & Questions** <!-- if any; add/delete/fill-in as appropriate -->
+<!-- For example:
+- this doesn't include feature X (yet?)
+- unsure about Y
+- should this do Z?
+-->
+I've referred to the `pytest` and `pytest-mock` docs for the type annotations on some of the fixtures, is a reference link in the commit necessary? (one reference would then be to a CHANGELOG)",True,1076,https://api.github.com/repos/zulip/zulip-terminal/pulls/1076,https://github.com/zulip/zulip-terminal/pull/1076,closed,82,49,2,2,3,3,2,0,"[{'name': 'area: tests'}, {'name': 'area: refactoring'}]",2021-07-11 20:26:41+00:00,2021-07-11 23:31:32+00:00,11091.0,3:04:51,"[{'comment_id': 667544133, 'comment_body': ""This is incorrect. I'm not sure if there's a good way of writing the test so that this kind of thing can be caught."", 'comment_created': datetime.datetime(2021, 7, 11, 22, 29, 40, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 667544838, 'comment_body': 'This is the wrong type for autohide.', 'comment_created': datetime.datetime(2021, 7, 11, 22, 36, 6, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 667545047, 'comment_body': 'notify_option is also incorrect.', 'comment_created': datetime.datetime(2021, 7, 11, 22, 37, 56, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}]","[{'commit_sha': '99f44a508dbdaece0043231229f4342125248da1', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fccc5896d452c149eeb38fbe1748d33e801e64aa', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+687392492,tests: core: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to the test_core.py file. I've also added a few refactor/bugfix commits. 
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+**Commit flow**
+- **bugfix: tests: core: Replace incorrect return type annotation.**
+- **bugfix: tests: core: Assign ThemeSpec instance to controller theme.**
+- **refactor: tests: core: Use mocker.patch for model.is_muted_topic.**
+- **bugfix: tests: core: Assign a set to model's muted_streams.**
+- **refactor: tests: core: Use mocker.patch for `report_*` methods.**
+- **tests: conftest: Add an index_search_messages fixture.**
+- **refactor: tests: core: Use index_search_messages in search tests.**
+- **refactor: tests: core: Add type annotations.**
+
+**Interactions** <!-- if any; add/delete/fill-in as appropriate -->
+- Waiting on #1076 to extend the changes made to the `run-mypy` tool.
+
+",True,1077,https://api.github.com/repos/zulip/zulip-terminal/pulls/1077,https://github.com/zulip/zulip-terminal/pull/1077,closed,130,75,3,9,3,5,2,0,"[{'name': 'area: tests'}, {'name': 'area: refactoring'}]",2021-07-11 20:44:06+00:00,2021-07-14 06:29:46+00:00,207940.0,"2 days, 9:45:40","[{'comment_id': 667562866, 'comment_body': ""The main point is that we're using a fuller index, right?\r\n\r\nIs this necessary for the mypy work?"", 'comment_created': datetime.datetime(2021, 7, 12, 0, 49, 47, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 667563713, 'comment_body': 'After the refactoring I implemented where we now explicitly pass in the required parameters to the narrow methods, we should be able to simplify the tests first to avoid the need for these.', 'comment_created': datetime.datetime(2021, 7, 12, 0, 54, 15, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 667567188, 'comment_body': ""This should be being picked up; I'm investigating."", 'comment_created': datetime.datetime(2021, 7, 12, 1, 12, 32, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 667716827, 'comment_body': ""Yeah, it seemed to raise an error for all the keys that didn't exist, likely because it's being typed as `Index`."", 'comment_created': datetime.datetime(2021, 7, 12, 8, 10, 41, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 667732875, 'comment_body': ""This was originally a mypy error when I was making an assignment like this to `controller.model.index` where mypy mentioned that the types did not match (`Index` and `Dict[str, object]`); I don't think mypy catches type errors when the only interaction ever being made is an `assert`."", 'comment_created': datetime.datetime(2021, 7, 12, 8, 34, 2, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': 'd3a49222a0eb15641cb0510ea830dbec823d8ca4', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9d1508c15c0deea953dfe868319690713b601c07', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fbd833f37daa7e34bf57d0244dcf1059ae63b9a1', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0449cf606ec39d47a824a514eb4f24a24e64e10d', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f054959a990f6082388f7300bf03775e752b4cec', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '698a5620c8430cf9a662bbbd09d1c4846b7c7dfc', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '72582e941c14c38554de102d3902474285b1a5de', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '861288d4564d2eed101498253bec97917b47a855', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd9a00d2f2dec8c79bb06890ed555f469cdd6f31', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+689450547,tests: emoji_data: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to the `test_emoji_data.py` file. Also updates the `run-mypy` tool to run mypy on it.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- **refactor: tests: emoji_data: Add type annotations.**
+- **tools: Include test_emoji_data.py to be checked by mypy.**
+",True,1079,https://api.github.com/repos/zulip/zulip-terminal/pulls/1079,https://github.com/zulip/zulip-terminal/pull/1079,closed,6,3,2,2,1,0,3,0,"[{'name': 'area: tests'}, {'name': 'size: S'}, {'name': 'area: refactoring'}]",2021-07-13 22:49:48+00:00,2021-07-14 21:21:48+00:00,81120.0,22:32:00,[],"[{'commit_sha': '11f9ecb423e677f319be93c818768d752fd593b8', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8430c3fa4f7ebf735a3d4fa315dc1ceb91c01b86', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+689933790,refactor: buttons/core: Avoid using StreamButton as a popup parameter.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Prior to this PR, the `stream_muting_confirmation_popup` required
+a `StreamButton` instance as a parameter to mute/unmute it and show
+it to the user to request for confirmation. This PR refactors
+the parameters to require the `stream_name` and `stream_id` instead
+to abstract the StreamButton from this method.
+
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: buttons/core: Avoid using StreamButton as a popup parameter.
+Prior to this commit, the `stream_muting_confirmation_popup` required
+a `StreamButton` instance as a parameter to mute/unmute it and show
+it to the user to request for confirmation. This commit refactors
+the parameters to require the `stream_name` and `stream_id` instead
+to abstract the StreamButton from this method.
+Tests updated.
+",True,1081,https://api.github.com/repos/zulip/zulip-terminal/pulls/1081,https://github.com/zulip/zulip-terminal/pull/1081,closed,24,13,4,1,2,0,2,0,"[{'name': 'size: M'}, {'name': 'area: refactoring'}]",2021-07-14 13:51:32+00:00,2021-07-14 17:19:39+00:00,12487.0,3:28:07,[],"[{'commit_sha': 'b035c6f16422065f2abbe3e32751b79ce1b2b960', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+691035192,tests: helper: Add type annotations. ,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `test_helper.py`. I've also added a prior bugfix commit changing `muted_streams`' data structure from List to Set and a final follow up commit to include `test_helper.py` in the list of files being checked by `run-mypy`.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+- bugfix: tests: helper: Use Sets as params for muted_streams.
+This commits changes the previous incorrect configuration of `Lists`
+to the `muted_streams` parameter in `test_classify_unread_counts`
+which is assigned model's muted_streams, to `Set`s instead, which is
+the appropriate data structure.
+
+- refactor: tests: helper: Add type annotations.
+This commit adds parameter and return type annotations or hints
+to the `test_helper.py` file, that contains tests for its counterpart
+`helper.py` from  the `zulipterminal` module, to make mypy checks
+consistent and improve code readability.
+
+- tools: Include test_helper.py to be checked by mypy.
+This commit adds `test_helper.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+",True,1083,https://api.github.com/repos/zulip/zulip-terminal/pulls/1083,https://github.com/zulip/zulip-terminal/pull/1083,closed,89,39,2,3,2,0,3,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'area: refactoring'}]",2021-07-15 21:05:39+00:00,2021-07-15 23:40:51+00:00,9312.0,2:35:12,[],"[{'commit_sha': '8cc3712157f2717b888aadba781dd630ed1c1c9c', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba81efd080dda3d5bf90d62f592338976fca264b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '191d6d0f7f6257ab84c49006cf79295c427880e1', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+692130769,tests: server_url: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `test_server_url.py` and includes it under files to be checked by mypy in the `run-mypy` tool.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: tests: server_url: Add type annotations.
+This commit adds parameter and return type annotations or hints
+to the `test_server_url.py` file, that contains tests for its
+counterpart `server_url.py` from  the `zulipterminal` module, to
+make mypy checks consistent and improve code readability.
+- tools: Include test_server_url.py to be checked by mypy.
+This commit adds `test_server_url.py` to the
+`type_consistent_testfiles` list to check for type consistency
+with mypy.
+",True,1089,https://api.github.com/repos/zulip/zulip-terminal/pulls/1089,https://github.com/zulip/zulip-terminal/pull/1089,closed,9,3,2,2,2,0,3,0,"[{'name': 'area: tests'}, {'name': 'size: S'}, {'name': 'area: refactoring'}]",2021-07-18 18:32:34+00:00,2021-07-19 05:03:32+00:00,37858.0,10:30:58,[],"[{'commit_sha': '227857346c190812e4f0e95e955e7b2304c50f87', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '439bddd7adc41ed971837cec6615d5ce7423cf20', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+692902737,tests: ui: Add type annotations. ,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `test_ui.py` and includes it under files to be checked by mypy in the run-mypy tool. Also added a couple of prior commits to use appropriate patches.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: ui: Patch *_box_views in OPEN_DRAFT tests.
+This commit assigns patches `stream_box_view` and `private_box_view`
+using `mocker.patch.object` to maintain type consistency since their
+mocked nature's assert methods are being called.
+
+- refactor: ui: Use patch for non-existent attributes instead of Mock.
+This commit uses `mocker.patch` with the `create` parameter set as
+True for attributes of the `View` fixture instance that don't exist
+without their corresponding generation methods being called. `View`'s
+`middle_column` is generated by the `middle_column_view()` method
+and `users_view` is generated by the `right_column_view()` method.
+
+- refactor: tests: ui: Add type annotations.
+This commit adds parameter and return type annotations or hints to the
+`test_ui.py` file, that contains tests for its counterpart `ui.py`
+from the `zulipterminal` module, to make mypy checks consistent and
+improve code readability.
+
+- tools: Include test_ui.py to be checked by mypy.
+This commit adds `test_ui.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.",True,1091,https://api.github.com/repos/zulip/zulip-terminal/pulls/1091,https://github.com/zulip/zulip-terminal/pull/1091,closed,114,33,2,4,2,4,4,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'area: infrastructure'}, {'name': 'area: refactoring'}]",2021-07-19 20:29:41+00:00,2021-07-21 05:18:18+00:00,118117.0,"1 day, 8:48:37","[{'comment_id': 672611153, 'comment_body': ""I'm not very confident in this being the most relevant type for the `widget` parameter in `widget_size`, does this fit?"", 'comment_created': datetime.datetime(2021, 7, 19, 20, 33, 3, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 672773098, 'comment_body': 'This seems fine for now - it is the base widget class after all?', 'comment_created': datetime.datetime(2021, 7, 20, 3, 5, 41, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 673246189, 'comment_body': 'Could we simplify this to use:\r\n* mocker.patch.object on view with ""middle_column""? (create=True still probably necessary?)\r\n* assert on that object .keypress?\r\n\r\nSame for the users_view case.', 'comment_created': datetime.datetime(2021, 7, 20, 15, 47, 9, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 673534228, 'comment_body': ""Yeah, verified by the class's docstring."", 'comment_created': datetime.datetime(2021, 7, 20, 22, 27, 13, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': 'd46f6b5fe366e284acddad77cc05ccb2c3fe6522', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e3c868b554ddee1578639f5d4d7ec82d256dc0b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f808955b6d0751aee9eda0e5bbebba60df05ca04', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc2632eccab102492756a04eb614f043101d3e1a', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+696362124,tests: conftest: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `conftest.py` and some relevant prior refactors. Also includes `conftest.py` under the list in `run-mypy`.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: tests: conftest: Return a Message from template factory. 
+This commit changes the returned object of the `msg_template_factory`
+from a `Dict` to a `Message` instance, which is the appropriate type
+for a message template.
+
+- refactor: tests: conftest: Return Index instance from empty_index.
+This commit returns an Index instance for the `empty_index` fixture
+which previously returned a deepcopy of a Dict, as Index is the
+`empty_index`'s appropriate type.
+
+- refactor: test: conftest: Return Index instances for index_* fixtures. 
+This commit returns Index instances instead of `dict`s from all the
+various index fixtures present, since the appropriate type for these
+fixtures is Index.
+
+- api_types/helper/model/server_url: Replace stream_id type in Message.
+This commit replaces the Message class' stream_id attribute's type
+from int to Optional[int], since this attribute only has an integer
+value when the message is a stream message and None when it is a
+private message.
+
+- bugfix: tests: conftest: Return empty tuple when widget isn't box/flow.
+This commit fixes the `else` case of the `_widget_size` method of
+the `widget_size` fixture method. Previously, the `else case did not
+return anything, which has been modified to appropriately return an
+empty tuple now.
+
+- refactor: tests: conftest: Add type annotations.
+This commit adds parameter and return type annotations or hints to
+the `conftest.py` file, that contains custom pytest fixtures meant to
+be used in the tests to make mypy checks consistent and improve code
+readability.
+
+- tools: Include conftest.py to be checked by mypy. 
+This commit adds `conftest.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+
+**Notes & Questions** <!-- if any; add/delete/fill-in as appropriate -->
+<!-- For example:
+- this doesn't include feature X (yet?)
+- unsure about Y
+- should this do Z?
+-->
+The `request` pytest fixture has no exported type, so I've typed it as `Any` for now. The only way to type it currently would be a private import otherwise.
+",True,1096,https://api.github.com/repos/zulip/zulip-terminal/pulls/1096,https://github.com/zulip/zulip-terminal/pull/1096,closed,160,129,7,8,3,14,4,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'PR blocks other PR'}, {'name': 'area: refactoring'}]",2021-07-24 14:55:56+00:00,2021-08-12 20:05:42+00:00,1660186.0,"19 days, 5:09:46","[{'comment_id': 676023060, 'comment_body': 'We have a dedicated type for this.', 'comment_created': datetime.datetime(2021, 7, 24, 17, 12, 59, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 676023502, 'comment_body': ""Same thing here with user type; I think we'd need to amend types based on ZFL or something like that, which is beyond the scope of this."", 'comment_created': datetime.datetime(2021, 7, 24, 17, 16, 53, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 676023693, 'comment_body': 'This should match a type, but again we may have entries missing and be ZFL-dependent :/', 'comment_created': datetime.datetime(2021, 7, 24, 17, 18, 58, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 676023958, 'comment_body': ""I'm not sure if we have a better type here, and we have some missing fields. We've not fully settled on how we want to handle typing between feature levels."", 'comment_created': datetime.datetime(2021, 7, 24, 17, 21, 25, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 676024129, 'comment_body': ""We may want to check with Zeeshan, but a specific (internal) type might be good to define for this, given how much we're using it :)"", 'comment_created': datetime.datetime(2021, 7, 24, 17, 22, 53, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 676024381, 'comment_body': 'Reading the earlier commit I wondered if it would be good to set this return type and the types in all using locations at the same time (ie. in the earlier commit) - what do you think?', 'comment_created': datetime.datetime(2021, 7, 24, 17, 26, 10, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 683973818, 'comment_body': ""Unfortunately this isn't quite a full `RealmUser` api type?"", 'comment_created': datetime.datetime(2021, 8, 6, 6, 12, 43, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 683977256, 'comment_body': '`int`?', 'comment_created': datetime.datetime(2021, 8, 6, 6, 21, 24, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 684254135, 'comment_body': 'Maybe a prep commit to make these full?', 'comment_created': datetime.datetime(2021, 8, 6, 13, 53, 49, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 684257793, 'comment_body': ""We could, `conftest` already has scattered type annotations, and I can see how your suggestion provides more context on how this change affects all the templates being generated. The only thing that I'm a little unsure of is how that maintains that practice of optionally adding type annotations, albeit in a commit prior to adding type annotations completely."", 'comment_created': datetime.datetime(2021, 8, 6, 13, 58, 50, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 684260129, 'comment_body': 'Though there is the ZFL issue, I do think an API type for streams would be appropriate, since a ""Stream"" is one of our major types.', 'comment_created': datetime.datetime(2021, 8, 6, 14, 2, 2, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 684260641, 'comment_body': ""Agreed, there's also an instance of this in `test_emoji_data.py`."", 'comment_created': datetime.datetime(2021, 8, 6, 14, 2, 43, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 687185338, 'comment_body': ""I've accommodated this change, it makes sense now, although scattered, since annotations are being added soon after, and we have the benefit of additional context."", 'comment_created': datetime.datetime(2021, 8, 11, 20, 56, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 687185636, 'comment_body': ""I've accommodated this change, it makes sense now, although scattered, since annotations are being added soon after, and we have the benefit of additional context."", 'comment_created': datetime.datetime(2021, 8, 11, 20, 56, 26, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': '887fb0fecbcac9006077999743bb919af395192d', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ab03ebb5e0460ed9bdab2ff95997d994d18c1ab', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7ba31aa652d7a24a2344ac577c3a62e858e2416f', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '35d88f7db87bcd43f64f817d3d9850465305ec94', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6920261b7e39dcc703bd5e5bfa40e15d1e0f1e50', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '62500fa59402c7b4600b87d0b20c04dc9a742a30', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df052f6dd216809861cf409d60e6914424cf7c20', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f9e7a8efc72ee682215d04ee96ca52e2b39e9a49', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+696411993,tests: config: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to the `test_keys.py`, `test_themes.py` and `test_color.py` files. Adds these files to the list in `run-mypy`.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- bugfix: tests: keys: Use lists for keys of key bindings. 
+This commits replaces the data structure used for mentioning the keys
+of the various key bindings under `test_commands_for_random_tips` from
+`set` to `list` which is the right structure.
+
+- refactor: tests: keys: Add type annotations.
+This commit adds parameter and return type annotations or hints
+to the `test_keys.py` file, that contains tests for its counterpart
+`keys.py` from  the `zulipterminal` module, to make mypy checks
+consistent and improve code readability.
+
+- tools: Include test_keys.py to be checked by mypy. 
+This commit adds `test_keys.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+Commits on Jul 25, 2021
+
+- refactor: tests: themes: Add type annotations. 
+This commit adds parameter and return type annotations or hints to the
+`test_themes.py` file, that contains tests for its counterpart
+`themes.py` from  the `zulipterminal` module, to make mypy
+checks consistent and improve code readability.
+
+- tools: Include test_themes.py to be checked by mypy. 
+This commit adds `test_themes.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+
+- refactor: tests: color: Rename variable to avoid conflict with class. 
+This commit renames the `Color` variable of `test_color_properties`
+to avoid conflict with the `Color` class, to the name `color`
+instead.
+
+- refactor: tests: color: Add type annotations.
+This commit adds paramter and return type annotations or hints to the
+`test_color.py` file, that contains tests for it's counterpart
+`color.py` from  the `zulipterminal` module, to make mypy checks
+consistent and improve code readability.
+
+- tools: Include test_color.py to be checked by mypy. 
+This commit adds `test_color.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.",True,1099,https://api.github.com/repos/zulip/zulip-terminal/pulls/1099,https://github.com/zulip/zulip-terminal/pull/1099,closed,36,27,4,8,2,0,3,0,"[{'name': 'area: tests'}, {'name': 'size: L'}, {'name': 'area: refactoring'}]",2021-07-24 22:16:17+00:00,2021-07-25 17:39:19+00:00,69782.0,19:23:02,[],"[{'commit_sha': '32fabdc3a132f8da55aeee48e0be6dbb0805d99e', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '432adb25392ff1ce303f2152b8ef8950d8e07f43', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0220ef2a604d31b75ced8dfaab7bdc90eff81ff7', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '570358beec1aeda7fe622acdeed541016a4db842', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2baa68b2e93129206b5fac2310e27c5c1a0d5161', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ccb10b278c21ab67b2e665f30922ee8b8296026', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc98903da1771b6866a0b052c6502afd86576096', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3637cb9baab48eeb2d51d53d854ab7407302b4a0', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+698179244,tests: boxes: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `test_boxes.py` and adds the file to the list in `run-mypy`. Also has a prior refactor commit to remove unnecessary `mocker` parameters.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: tests: boxes: Remove mocker as parameter where unnecessary.
+This commit removes the `mocker` fixture as a parameter from tests
+where it isn't used.
+
+- refactor: tests: boxes: Add type annotations. 
+This commit adds parameter and return type annotations or hints to the
+`test_boxes.py` file, that contains tests for it's counterpart
+`boxes.py` from  the `zulipterminal` module, to make mypy checks
+consistent and improve code readability.
+
+- tools: Include test_boxes.py to be checked by mypy.
+This commit adds `test_boxes.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.",True,1102,https://api.github.com/repos/zulip/zulip-terminal/pulls/1102,https://github.com/zulip/zulip-terminal/pull/1102,closed,255,129,2,5,6,0,3,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'area: refactoring'}]",2021-07-27 20:50:07+00:00,2021-08-17 18:08:30+00:00,1804703.0,"20 days, 21:18:23",[],"[{'commit_sha': 'e637a442e2077d08b2b5ecb7e37738ed798df376', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab5b1891aaf091b1c044d5b0d4168911536959eb', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afd4aa94735d22dd20737807d468bc7feba9f73f', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5999f86372f56b98cc1ed55d07160a159ec26293', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb73646f3a4f045d547910b68e60fbf5de4b98bb', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+699020432,refactor: tests: buttons: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to test_buttons.py and adds the file to the list in run-mypy. Also has a prior refactor commit to assign `mocker.patch`s to variables.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: tests: buttons: Assign method mocker.patchs to variables.
+This commit assigns fixture method attribute `mocker.patch`s to
+variables, so that the corresponding asserts can be called on the
+mocked nature, as was the original intention.
+
+- refactor: tests: buttons: Add type annotations.
+This commit adds parameter and return type annotations or hints to the
+`test_buttons.py` file, that contains tests for it's counterpart
+`buttons.py` from  the `zulipterminal` module, to make mypy checks
+consistent and improve code readability.
+
+- tools: Include test_buttons.py to be checked by mypy.
+This commit adds `test_buttons.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+
+**Waiting on**:
+Refactor work to improve type annotations for urwid markup.",True,1105,https://api.github.com/repos/zulip/zulip-terminal/pulls/1105,https://github.com/zulip/zulip-terminal/pull/1105,closed,261,177,2,4,3,5,3,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'area: refactoring'}]",2021-07-28 21:16:21+00:00,2021-07-30 18:32:18+00:00,162957.0,"1 day, 21:15:57","[{'comment_id': 678791575, 'comment_body': ""A button isn't a Box?"", 'comment_created': datetime.datetime(2021, 7, 29, 3, 15, 40, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 678791606, 'comment_body': 'Improving this is pending on the urwid markup PR, or something like it.', 'comment_created': datetime.datetime(2021, 7, 29, 3, 15, 48, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 678855648, 'comment_body': ""If this is just `None` then the type is None, though it may warrant a comment to explain why we're only testing that value."", 'comment_created': datetime.datetime(2021, 7, 29, 6, 15, 43, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 679323251, 'comment_body': ""This was typed the same way even in the method in the main code, wouldn't it be more consistent to type it the same way? This is something I've followed even in the annotations for `test_boxes.py` with the `state` parameter we pass into the autocomplete. I'm not sure what the best approach is here, but wouldn't it be easier to read as well if it's typed the same way in the tests, irrespective of whether only a subtype is being fulfilled by the cases?"", 'comment_created': datetime.datetime(2021, 7, 29, 16, 49, 55, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 679380139, 'comment_body': 'The type does give a suggestion that it should be expanded, so I can see this as an alternative :+1:', 'comment_created': datetime.datetime(2021, 7, 29, 18, 12, 40, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}]","[{'commit_sha': '967d8b0f55d35320ccaef0f7dad2d77f617526a6', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6c691be9b55d509434be736d047015b144a4b3dd', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '36ac16860e79ccdf69b047d3e1e3e1555b88027a', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '28d3adeff55c8815007bffc9937ffa86ced65254', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+704098045,tests: utils: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `test_utils.py` and adds the file to the list in `run-mypy`.
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: tests: utils: Add type annotations. 
+This commit adds parameter and return type annotations or hints to the
+`test_utils.py` file, that contains tests for it's counterpart
+`utils.py` from  the `zulipterminal` module, to make mypy checks
+consistent and improve code readability.
+
+- tools: Include test_utils.py to be checked by mypy. 
+This commit adds `test_utils.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+",True,1112,https://api.github.com/repos/zulip/zulip-terminal/pulls/1112,https://github.com/zulip/zulip-terminal/pull/1112,closed,20,4,2,2,2,0,3,0,"[{'name': 'area: tests'}, {'name': 'size: S'}, {'name': 'area: refactoring'}]",2021-08-04 22:16:07+00:00,2021-08-05 05:02:02+00:00,24355.0,6:45:55,[],"[{'commit_sha': 'c293d223e01dfab69be8f8ce7a6eae96de139dac', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5971101d7a87b692f8141cb7dbcf428312cccde6', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+569772364,Minor typing adjustments to reach Zulip's client expectations,"- The first commit adds a 'state' boolean that indicates whether a typing `start` event has been sent, so as to avoid sending unnecessary `stop` events.
+- The second commit adds assertions within the `_handle_typing_event()` tests, to assert on the message being passed to the footer call based on the `op`.
+- The third commit adds a duration of 15 seconds to the `set_footer_text()` function call so that the footer doesn't get stuck displaying the 'is typing...' status when it doesn't receive a `stop` event.
+ 
+Fixes #885.",False,915,https://api.github.com/repos/zulip/zulip-terminal/pulls/915,https://github.com/zulip/zulip-terminal/pull/915,closed,32,3,4,3,11,8,2,0,"[{'name': 'size: S'}, {'name': 'PR needs review'}]",2021-02-08 20:30:21+00:00,2021-07-10 11:25:17+00:00,13100096.0,"151 days, 14:54:56","[{'comment_id': 603028210, 'comment_body': 'Could we improve this naming? Maybe ""start_typing_status_sent""?', 'comment_created': datetime.datetime(2021, 3, 29, 5, 51, 32, tzinfo=datetime.timezone.utc), 'commenter': 'Ezio-Sarthak', 'type': 'User'}, {'comment_id': 603130288, 'comment_body': ""I think the current name is fine.\r\nIt all depends on how you break that name while reading. e.g. currently with `sent_start_typing_status` you would break it something like: `sent` - `start_typing_status`, whereas with Sarthak's version of name, something like: `start_typing_status` - `sent`.\r\n\r\nPlus, the current name is consistent with a similar naming above: `send_next_typing_update`. :)"", 'comment_created': datetime.datetime(2021, 3, 29, 9, 8, 11, tzinfo=datetime.timezone.utc), 'commenter': 'zee-bit', 'type': 'User'}, {'comment_id': 603600501, 'comment_body': '@zee-bit thanks for clarifying, that is what I had in mind.\r\nI\'ve also named it in a way that\'s easy to read, `sent_typing_start_status` meaning that we\'ve ""sent the `start` status"". If it still seems like it can be improved, I\'m happy to make it more readable. :)', 'comment_created': datetime.datetime(2021, 3, 29, 20, 43, 59, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 624647383, 'comment_body': 'Maybe we could extend this note to include the context of the additional check below?', 'comment_created': datetime.datetime(2021, 5, 2, 7, 30, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Ezio-Sarthak', 'type': 'User'}, {'comment_id': 663511770, 'comment_body': ""This comment doesn't seem to belong here. You could add it prior to the next change."", 'comment_created': datetime.datetime(2021, 7, 4, 14, 24, 39, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 663512031, 'comment_body': ""Let's amend the test associated with it as well in the corresponding `test_init`."", 'comment_created': datetime.datetime(2021, 7, 4, 14, 27, 2, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 663513057, 'comment_body': 'We could amend the existing test to check whether the method was called with the required args.', 'comment_created': datetime.datetime(2021, 7, 4, 14, 35, 3, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 663931914, 'comment_body': 'This was my understanding of your suggestion to amend `test_init`, is this what you had in mind? If yes, should I add another commit asserting on other attributes initiated in the `write_box`?', 'comment_created': datetime.datetime(2021, 7, 5, 13, 28, 2, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': '8c0d9eaca840a3acd817d7520c22b17efe512c3f', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '84753832d7069cb5746165b21553600df6f20d55', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c7511229c2c344905028f66c81a59bc0ea548056', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+575247608,boxes: Use `user_id`s in autocomplete for user mentions.,"This PR adds a commit that append `user_id`s to the users' names in the autocomplete typeahead for user mentions. This helps in distinguishing between users having the same name, similar to the pm recipients autocomplete.
+
+Tests updated.
+
+Fixes #151.",True,928,https://api.github.com/repos/zulip/zulip-terminal/pulls/928,https://github.com/zulip/zulip-terminal/pull/928,closed,216,26,3,2,8,14,3,0,"[{'name': 'size: XL'}, {'name': 'area: autocomplete'}, {'name': 'missing feature: user'}]",2021-02-17 22:16:23+00:00,2021-06-11 23:47:44+00:00,9855081.0,"114 days, 1:31:21","[{'comment_id': 601907004, 'comment_body': 'This setup would be clearer using a loop rather than manual cut+paste.', 'comment_created': datetime.datetime(2021, 3, 25, 23, 41, 35, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601909871, 'comment_body': ""We end up with bigger diffs since we don't have a trailing comma, so let's add them in this commit."", 'comment_created': datetime.datetime(2021, 3, 25, 23, 49, 57, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601911011, 'comment_body': 'The last paragraph of the commit text here looks like it can be simplified - updated==modified', 'comment_created': datetime.datetime(2021, 3, 25, 23, 53, 40, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601918563, 'comment_body': ""This is just one pair, right? If so, let's place it in the body of the test."", 'comment_created': datetime.datetime(2021, 3, 26, 0, 14, 43, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601919008, 'comment_body': 'This looks like something which we could generate.', 'comment_created': datetime.datetime(2021, 3, 26, 0, 15, 6, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601920471, 'comment_body': 'Can we combine with the previous test?', 'comment_created': datetime.datetime(2021, 3, 26, 0, 16, 15, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601924884, 'comment_body': ""This remains my main concern with this implementation. It's not a common case, but for example I get a pretty bad response trying a mention of `@user`<kbd>ctrl-f</kbd> on czo.\r\n\r\nInstinctively I'd suggest using `Counter`, but anything which doesn't make a slice in every loop would likely be sufficient.\r\n\r\nYou have tests to ensure you get good results, so refactoring should be easier :+1:"", 'comment_created': datetime.datetime(2021, 3, 26, 0, 26, 12, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 601926534, 'comment_body': ""Minor: I know you need user as the base object to get the user-id in the loop, but it seems strange that we're generating a list with names and then only use it once."", 'comment_created': datetime.datetime(2021, 3, 26, 0, 30, 56, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 602527791, 'comment_body': ""The `distinct_matching_users` list differs for these autocomplete `text`'s, which is why I moved these to another test. "", 'comment_created': datetime.datetime(2021, 3, 26, 19, 2, 57, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 602577421, 'comment_body': 'I meant that the typeahead would need `@_**Human 1**` instead of `@**Human 1**` because this test is for silent mentions, which makes the `distinct_matching_users` list different.', 'comment_created': datetime.datetime(2021, 3, 26, 20, 46, 1, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 603453978, 'comment_body': ""I'm having to add this prefix as an extra case this way because it moves away from the general pattern that is common for both prefixes. We're able to test only the prefix as a case in case of `@**` and not `@` is because the only the former is specifically used only for user mentions and has only user names in the typeahead, the latter also being applicable to group names."", 'comment_created': datetime.datetime(2021, 3, 29, 16, 49, 57, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 648745016, 'comment_body': ""It's worth adding a note/todo/fixme here as to why we use this - this definitely seems faster and more efficient than the previous implementation, but it's worth noting why, and how/why we could improve this in future (we generate this counter each time we do an autocomplete?)"", 'comment_created': datetime.datetime(2021, 6, 9, 23, 19, 6, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 648745118, 'comment_body': ""If these are only specific to the assert part then they can sit with it, below the act[ion] part. That makes it clear they're not part of the setting-up."", 'comment_created': datetime.datetime(2021, 6, 9, 23, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 648748875, 'comment_body': 'This test seems the same as the previous but with a different prefix; can we not just add that to the parametrize?', 'comment_created': datetime.datetime(2021, 6, 9, 23, 29, 54, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}]","[{'commit_sha': '01d63b199a392a09e4e647df3f04fce9158abf91', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ecbbc64072648ecacab177c9dfbd1b428a580cc9', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+581406223,Enhance validation and check for bad/no recipients in PMs,"This PR adds a commit that refactors the `get_invalid_recipients_emails()` method
+of the model to `check_recipient_validity()` which checks if the
+recipient's name and email match.
+
+This commit follows this strategy:
+* Ensures that the email and the name are of the same user.
+* Removes extra text after the email.
+
+The recipients' information is also tidied for all the valid recipients,
+by formatting the information to fit the `name <email>` format.",True,937,https://api.github.com/repos/zulip/zulip-terminal/pulls/937,https://github.com/zulip/zulip-terminal/pull/937,closed,191,11,3,5,7,24,4,0,"[{'name': 'enhancement'}, {'name': 'area: UI'}, {'name': 'size: XL'}, {'name': 'PR ready to be merged'}]",2021-02-27 21:38:11+00:00,2021-07-03 07:04:26+00:00,10833975.0,"125 days, 9:26:15","[{'comment_id': 584204394, 'comment_body': ""This isn't relevant to message editing? I think this change would be clearer with a nested if."", 'comment_created': datetime.datetime(2021, 2, 27, 23, 26, 24, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 584208965, 'comment_body': ""The code design here feels strange - 4 nested if's, with a continue, or else it appends. Could you use a more complex regex to avoid all the manual cleaning?\r\n\r\nAlso the function of the code is different now - it is connected to the structure of the UI display. Ideally the model would simply validate name/email pairs passed in, with the caller doing any parsing into that format."", 'comment_created': datetime.datetime(2021, 2, 28, 0, 17, 45, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 584209194, 'comment_body': ""You said this commit is WIP so I'm guessing we'll have a test in a later iteration :)"", 'comment_created': datetime.datetime(2021, 2, 28, 0, 19, 54, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 584322079, 'comment_body': ""Alright, I'll separate it and nest the condition."", 'comment_created': datetime.datetime(2021, 2, 28, 16, 29, 17, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 584322288, 'comment_body': ""Absolutely, once we decide on how we want to handle this, I'll add relevant tests."", 'comment_created': datetime.datetime(2021, 2, 28, 16, 31, 11, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 584322293, 'comment_body': ""I'll try using a more complex regex, I was a little uncertain about the design, and hence I pushed the commit as WIP."", 'comment_created': datetime.datetime(2021, 2, 28, 16, 31, 21, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 591557327, 'comment_body': ""return type specified here doesn't match with that of the functions. :)\r\nIs this because the tests haven't been amended yet?"", 'comment_created': datetime.datetime(2021, 3, 10, 14, 18, 13, tzinfo=datetime.timezone.utc), 'commenter': 'zee-bit', 'type': 'User'}, {'comment_id': 591850594, 'comment_body': ""Right, this commit is just functionality at the moment, because it hasn't been decided on completely. I needed a little feedback on the validation before I proceeded with the tests. Let me know if you have suggestions and I'll modify it."", 'comment_created': datetime.datetime(2021, 3, 10, 20, 32, 19, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 593967638, 'comment_body': 'This behavior suggests we should use `join` for this too, ie. build a list during this loop.', 'comment_created': datetime.datetime(2021, 3, 14, 21, 59, 36, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 603020869, 'comment_body': ""Currently, it's fine, though I feel it'd be nice to split this into a prior commit, where you could add relevant tests for this method as well."", 'comment_created': datetime.datetime(2021, 3, 29, 5, 25, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Ezio-Sarthak', 'type': 'User'}, {'comment_id': 603022858, 'comment_body': ""minor: If we aren't interested in `invalid_text`, we could replace it with `_` :)"", 'comment_created': datetime.datetime(2021, 3, 29, 5, 32, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Ezio-Sarthak', 'type': 'User'}, {'comment_id': 603595985, 'comment_body': ""I considered doing that, but a change here in a previous commit would need me to change the function call and the calling parameters, which needs extraction of the user's name as well, which is basically what the current standalone commit is doing. :) \r\n\r\nFor tests, I've covered the functionality in the more general tests for validation, with extensive cases that test the functioning of this method, I don't think we'd need more explicit tests for the method."", 'comment_created': datetime.datetime(2021, 3, 29, 20, 36, 22, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 603596037, 'comment_body': ""We're not interested in `invalid_text` but I'm inclined to let the name stay so that it's somewhat understandable from reading the code why we're discarding it, but that also sounds like a need for some comments within, I'll add them."", 'comment_created': datetime.datetime(2021, 3, 29, 20, 36, 26, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 616297928, 'comment_body': ""I just noticed this comment. This method is really sort of just a helper used in one place - ideally we would have a test, but it's like an external (but encapsulated in another class) implementation function at least for now. I suspect this code will change again in the near future.\r\n\r\nAs per my review below, ideally this change could be accompanied by only a small change elsewhere. That is, in some commit we need this different function in the model to make a feature work elsewhere, but if we try and avoid doing too much in the commit at once, it'll be clearer that this change is also made just to support that change/feature."", 'comment_created': datetime.datetime(2021, 4, 20, 2, 25, 50, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662509650, 'comment_body': ""When returning a `bool` it's often useful to name functions (or variables) with a prefix like `is_` (or `has_` in some cases) - that makes their use in conditionals read more clearer, eg. `if is_valid_recipient(...):`."", 'comment_created': datetime.datetime(2021, 7, 1, 18, 29, 10, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662510445, 'comment_body': 'Often with bool-returning functions you can simply return the conditional expression.', 'comment_created': datetime.datetime(2021, 7, 1, 18, 30, 38, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662534758, 'comment_body': 'This may be simplified and clearer with the `is_*` form I mention above?', 'comment_created': datetime.datetime(2021, 7, 1, 19, 16, 22, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662537197, 'comment_body': 'Would it be more accurate to name these as `all_valid` or similar?', 'comment_created': datetime.datetime(2021, 7, 1, 19, 20, 59, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662547028, 'comment_body': '""code"" should likely be ""footer_contrast""?', 'comment_created': datetime.datetime(2021, 7, 1, 19, 40, 5, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662750024, 'comment_body': 'I hinted at this in the last review, but we could simplify this into one assignment.', 'comment_created': datetime.datetime(2021, 7, 2, 5, 41, 31, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662762792, 'comment_body': 'These 2 extra checks (draft/send)  are still part of this commit; you don\'t mention this change in the commit text either, but it\'d probably come across as an ""also applies checking to x and y"", which indicates it could go into another commit.', 'comment_created': datetime.datetime(2021, 7, 2, 6, 15, 21, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662763076, 'comment_body': 'Is there some change in behavior by having this after instead of earlier? Does it warrant a mention?', 'comment_created': datetime.datetime(2021, 7, 2, 6, 16, 5, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 662765275, 'comment_body': 'Other than adding the feature for the other keypresses, this commit also extracts the code into a function *and* changes it - those could easily be a separate refactor followed by the extra checks.', 'comment_created': datetime.datetime(2021, 7, 2, 6, 21, 43, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 663066946, 'comment_body': ""It ensures that the emails extracted are valid for sure, I've added a comment for the same."", 'comment_created': datetime.datetime(2021, 7, 2, 14, 47, 10, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': '8dff238ae9d66ea1bda6eb453bb24c1a567e6d95', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '300e9a64dc25d23d264d1dbeeaa798ad7c7e4cbe', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '10f6d0b5d6008fb054afaf03cdcf9d438ce810cf', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0072986cf60cbe58578a7547edf1105fc7eed91f', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '26743a0453f920f2adddf060bb660e2fb785c403', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+620497176,Use `user_id`s as message destinations,"There are 4 commits to this PR:
+- The first commit refactors `update_recipient_emails()` to `update_recipients()`, also updating the recipients' `user_id`s now, which is a preparatory step for the third commit. A test has also been added for this method.
+- The second commit adds a test fixture for `user_id_email_dict` as a prep commit for the third commit.
+- The third commit migrates from using delivery emails as message destinations to using `user_id`s instead. Tests updated.
+- The fourth commit deprecates the `emails` parameter from `private_box_view()`. Tests updated.
+ 
+The abstraction between the narrow model and the Composition API type is maintained by modifying the corresponding connections to the narrow model such that the delivery emails are still in use in the narrow model currently, making this a message-destination-only change. 
+
+This change also serves as a prelude to the larger scale narrow model refactoring, which needs `Model` and narrow structure abstraction.
+
+This would accommodate the first point under #965.",True,1006,https://api.github.com/repos/zulip/zulip-terminal/pulls/1006,https://github.com/zulip/zulip-terminal/pull/1006,closed,106,78,11,4,5,9,4,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'area: refactoring'}, {'name': 'api migrations'}]",2021-04-21 19:55:53+00:00,2021-08-11 06:40:46+00:00,9629093.0,"111 days, 10:44:53","[{'comment_id': 648536167, 'comment_body': ""We could add an `expected_` prefix for `recipient_emails` and `recipient_user_ids` as we're _expecting_ the method to return these values. It improves readability."", 'comment_created': datetime.datetime(2021, 6, 9, 17, 48, 2, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 648539249, 'comment_body': ""Let's add a newline post the method call. It makes it easier to spot the Arrange, Act and Assert (AAA) sections."", 'comment_created': datetime.datetime(2021, 6, 9, 17, 52, 39, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 650378690, 'comment_body': ""Let's use case, `from pytest import param as case`, and in-line ids as we've elsewhere in the source. It makes it easier to identify which case tests what."", 'comment_created': datetime.datetime(2021, 6, 12, 10, 52, 14, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 664131090, 'comment_body': ""I'm removing these test cases, since `self.update_recipients()` will only be called if all the recipients are valid, eliminating the possibility of invalid emails being passed into it."", 'comment_created': datetime.datetime(2021, 7, 5, 21, 25, 53, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 664131121, 'comment_body': 'This is part of the `update_recipients` method now, so removing these lines as well.', 'comment_created': datetime.datetime(2021, 7, 5, 21, 25, 58, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 664133280, 'comment_body': 'I seem to have partly marked the wrong lines here, I\'ve let the ""multiple_recipients"" case stay, I\'ve removed another case below ""invalid_recipient"", which was valid and invalid mixed together.', 'comment_created': datetime.datetime(2021, 7, 5, 21, 35, 23, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 667467249, 'comment_body': ""commit-description: I think the first statement needs rephrasing; `Prior to this commit, we update only recipient_emails using the\r\nupdate_recipient_emails() method to update recipients` isn't clear."", 'comment_created': datetime.datetime(2021, 7, 11, 11, 34, 29, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 667467593, 'comment_body': ""The test method name doesn't match the method name that is being tested."", 'comment_created': datetime.datetime(2021, 7, 11, 11, 36, 56, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}, {'comment_id': 667469142, 'comment_body': 'commit-description: send_private_message*', 'comment_created': datetime.datetime(2021, 7, 11, 11, 50, 17, tzinfo=datetime.timezone.utc), 'commenter': 'preetmishra', 'type': 'User'}]","[{'commit_sha': 'c126a86a19b753bd47d3020fb014e2502e2a9dfd', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a69264db90ce389e47fe31eec75772f92547bd9b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '548f7131fd89fd555cd782d9477738ae2e7e903c', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c71246924b49ffd45db0b639c4df3ef65da8a6a1', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+623770322,bugfix: Don't send and display typing updates from oneself.,"First commit:
+- Typing events from oneself are currently handled and
+displayed on the footer. This commit adds an extra check in the
+typing event handler's conditional to verify that the sender
+isn't the logged in user themselves before displaying the update.
+Tests added.
+
+Second commit:
+- Prior to this commit, typing updates were sent to all recipients of
+the current private message as specified in `recipient_user_ids`,
+which is an unnecesary expense for the server though minute.
+
+- This commit uses another list, `typing_recipients`, that stores all the
+recipient user_ids except for the user's own, that can be used to send
+typing updates. This list is initiated as a part of WriteBox for
+persistence to send start and stop updates.",False,1011,https://api.github.com/repos/zulip/zulip-terminal/pulls/1011,https://github.com/zulip/zulip-terminal/pull/1011,closed,104,12,4,3,5,3,4,0,"[{'name': 'area: UI'}, {'name': 'size: L'}, {'name': 'area: event handling'}, {'name': 'PR ready to be merged'}]",2021-04-26 21:16:08+00:00,2021-07-17 00:42:58+00:00,7010810.0,"81 days, 3:26:50","[{'comment_id': 624221350, 'comment_body': ""Strategically, we should be replacing `email` comparisons with `id` comparisons everywhere -- with Zulip's modern API, there should never be a reason to use emails to identify users except in input/typeahead UI.\r\n\r\nProbably we should open a master issue for doing a migration of this form across the codebase.  Especially with our `email_address_visibility` feature."", 'comment_created': datetime.datetime(2021, 4, 30, 21, 28, 12, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 624249257, 'comment_body': ""I've used an email comparison here to keep it consistent with the previous check where we check if the sender's email is in the current narrow. \r\n\r\nI believe the project currently still uses emails as part of the narrow description, but we aim to migrate to using `user_id`s in narrow descriptions instead soon. Would it be more consistent to migrate this conditional along with the one in the previous line once that narrow migration is being made?\r\n\r\n#579 is the issue you're referring to? (Using user_ids in preference to emails where possible)"", 'comment_created': datetime.datetime(2021, 4, 30, 22, 10, 17, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 663455661, 'comment_body': ""This is nice simple extra variable which works fine. My only thoughts are:\r\n* Maybe append `_user_ids` to indicate more clearly what's in it elsewhere\r\n* Should it be reset everywhere that recipient_user_ids is? It doesn't currently appear to be? (I know they have different uses, but it seems useful to be consistent)\r\n* If we're resetting/setting at similar times, should that be in a function, existing or otherwise? (maybe a refactor?)"", 'comment_created': datetime.datetime(2021, 7, 4, 6, 42, 21, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}]","[{'commit_sha': '520201ad72f3def153b500dede24c0378000ae14', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e943747794e083267c9ea3ac68480d58f5e68112', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '78f42e617ec905845432744cb9e579274f0899d5', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+660167821,Update topic and stream headers on update message events mid-compose.,"**PR structure**:
+- **tests: Generalize the update message index using factory.**
+This commit adds a factory to generate the messages index relevant to
+update message event tests, in an effort to reduce code duplications
+for future tests. The factory requires three parameters - msg_stream_id,
+(stream_id of the messages in the index), topics (dict containing streams
+as keys, and a list of topics as the values, consistent with the structure
+in the index) and message_ids (which is a list of the message ids to be
+generated in the index). The factory uses these parameters to customize
+the index.
+- **boxes: Create helper function to update the topic compose header.**
+This commit adds a helper function facilitating abstracted updates
+to the topic in the topic compose header (title_write_box), and also
+sets the edit_pos appropriately.
+Test added.
+- **api_types: Extend UpdateMessageEvent to accomodate topic updates.**
+This commit includes more fields under the UpdateMessageEvent class
+to ensure type-consistent handling for said fields in the update message
+events conveying topic updates.
+- **model: Handle topic updates in the compose header mid-compose.**
+This commit enables dynamic behaviour in the compose box when a topic
+is updated when the user is currently composing. The topic that the user
+is currently writing a message to is checked and the relevant update is
+done if the topic in the event matches the corresponding header.
+Tests added.
+- **boxes: Create helper function to update the stream compose header.**
+This commit adds a helper function facilitating abstracted updates
+to the stream name in the stream compose header (title_write_box),
+the corresponding edit_pos modification, as well as the stream_id
+attribute of the WriteBox object in use.
+Test added.
+- **api_types: Extend UpdateMessageEvent to handle cross-stream updates.**
+This commit extends the UpdateMessageEvent class by including the
+new_stream_id field to ensure type-consistent handling of cross-stream
+updates (moving topics between streams) in the update message events.
+- **model: Handle stream updates in the compose header mid-compose.**
+This commit updates the compose header when a stream is updated while
+the user is currently composing. The stream that the user is currently
+writing a message to is checked and the relevant update is done if the
+stream_id in the event matches the corresponding header.
+Tests added.
+
+**Testing and linting:**
+I've ran tests locally on each commit. I've also ran `black` checks and then the more extensive `./tools/lint-all`.
+
+Fixes #1040.",False,1046,https://api.github.com/repos/zulip/zulip-terminal/pulls/1046,https://github.com/zulip/zulip-terminal/pull/1046,open,245,15,5,7,3,27,4,0,"[{'name': 'high priority'}, {'name': 'has conflicts'}, {'name': 'size: XL'}, {'name': 'PR awaiting update'}]",2021-06-02 15:23:15+00:00,,0.0,,"[{'comment_id': 644386337, 'comment_body': 'The leading underscores here suggest that these are ""private"" to the class/object, but they are not used in that way.\r\n\r\nAlso, I\'d suggest we use less internal-variable names, and more application-related ones, ie. we\'re updating the stream or topic compose details, so let\'s describe it in that way.', 'comment_created': datetime.datetime(2021, 6, 2, 23, 39, 3, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 644388762, 'comment_body': 'Does this test depend on these fields?', 'comment_created': datetime.datetime(2021, 6, 2, 23, 46, 28, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 644707308, 'comment_body': ""Right, I was a little conflicted about that myself. Understood, I'll rename them."", 'comment_created': datetime.datetime(2021, 6, 3, 11, 18, 15, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 644708501, 'comment_body': ""No, it doesn't but I check for the `propagate_mode` key's value before I update the headers, and hence the tests fail without it. It's certain that the `propagate_mode` key exists if the `subject` key included in the event."", 'comment_created': datetime.datetime(2021, 6, 3, 11, 20, 8, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 644911726, 'comment_body': 'Right, so this can go into the commit that adds this feature - topic updates?', 'comment_created': datetime.datetime(2021, 6, 3, 15, 48, 3, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 645121457, 'comment_body': ""Yes, this is currently a part of the final commit (topic and stream update features combined). I'll break that commit down and put these changes up in the topic updates commit."", 'comment_created': datetime.datetime(2021, 6, 3, 20, 58, 57, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 646184353, 'comment_body': ""I'm not sure if you're trying to avoid black formatting here, but there seems to be a lot of nested conditionals here. Note also that you don't use a raw 'view' here so you can use a different variable to simplify the code."", 'comment_created': datetime.datetime(2021, 6, 6, 20, 38, 29, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646185266, 'comment_body': ""This is the original compose topic, right? Assuming so, let's name it specifically to make that clearer.\r\n\r\nThe same applies to the stream-id, and since they refer to the same area, you may wish to move the parametrize lines to be adjacent."", 'comment_created': datetime.datetime(2021, 6, 6, 20, 47, 1, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646185858, 'comment_body': ""At first glance I like the abstracting of the compose_box_open, but what are the values here if it's false?"", 'comment_created': datetime.datetime(2021, 6, 6, 20, 51, 37, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646186618, 'comment_body': 'As I think we discussed in PMs, the problem with this testing approach is that it runs the risk of simply duplicating the code logic.', 'comment_created': datetime.datetime(2021, 6, 6, 20, 57, 20, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646190050, 'comment_body': 'Does it make sense to combine this with the other compose setup variations into one parametrize?', 'comment_created': datetime.datetime(2021, 6, 6, 21, 27, 10, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646191979, 'comment_body': 'Can we make this more concise? Renarrowing seems like the wrong term here too.', 'comment_created': datetime.datetime(2021, 6, 6, 21, 46, 14, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646192501, 'comment_body': ""The main benefit of a *factory* fixture in comparison to a regular fixture is that since it's a function then you can tune what it generates and make it explicit - and we're not using that benefit here, yet. See the reaction fixture factories for examples."", 'comment_created': datetime.datetime(2021, 6, 6, 21, 50, 33, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646193115, 'comment_body': ""I can see the benefit of trying to be consistent with the existing fixtures, though we're not interacting with them right now. The problem here is that these ids are easily mistaken in reading the tests with the message ids.\r\n\r\nYou could of course make the stream id a parameter, potentially, as per another comment, as well as the message_ids too, and the subjects/topics.\r\n\r\nDepending on the parameters, this has potential for use elsewhere, but let's see where this goes here first."", 'comment_created': datetime.datetime(2021, 6, 6, 21, 56, 8, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646193415, 'comment_body': ""This is inconsistent with the messages dict; that is possible, but I'm not sure if it's intentional?"", 'comment_created': datetime.datetime(2021, 6, 6, 21, 59, 50, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646193529, 'comment_body': 'Did you want to assert on positions too, generally?', 'comment_created': datetime.datetime(2021, 6, 6, 22, 0, 50, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 646736009, 'comment_body': ""I'm not sure what alternative strategy here would be effective, do you have any thoughts on this?"", 'comment_created': datetime.datetime(2021, 6, 7, 16, 6, 12, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 646738853, 'comment_body': ""Sounds good, I'll update accordingly."", 'comment_created': datetime.datetime(2021, 6, 7, 16, 9, 59, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 646809395, 'comment_body': 'Do you mean extending the ""alias"" further to `self.controller.view.write_box` and giving that a name instead? So that it makes the code below more compact.', 'comment_created': datetime.datetime(2021, 6, 7, 17, 41, 38, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 646842219, 'comment_body': ""Inconsistent as in? I'm not very confident about the logic here, but I've added `other_subject` only where `old subject` is already present in the `dict` in the cases from the test below."", 'comment_created': datetime.datetime(2021, 6, 7, 18, 27, 58, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 646875081, 'comment_body': ""When it's False, the stream_id is `None` and the `edit_text` is an empty string. You're suggesting that I mention that to portray a closed compose box here, yes?"", 'comment_created': datetime.datetime(2021, 6, 7, 19, 19, 59, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 649707417, 'comment_body': 'Two topics in stream id `1`?', 'comment_created': datetime.datetime(2021, 6, 11, 5, 50, 24, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 649713675, 'comment_body': ""That's what I meant by the last sentence, yes."", 'comment_created': datetime.datetime(2021, 6, 11, 6, 7, 17, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 653129736, 'comment_body': ""In the test this is a mock, so do those values matter? If so, you need to set them.\r\n\r\nRegarding `compose_box_open` in general, this seems to work but it's a little confusing as a shortcut for... well is it just testing those values? Or is it intended as setup, which then later appears in the assert selection? It just feels suspicious for some reason"", 'comment_created': datetime.datetime(2021, 6, 16, 23, 58, 18, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 653133511, 'comment_body': 'See the stream for discussion.', 'comment_created': datetime.datetime(2021, 6, 17, 0, 6, 56, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 654831892, 'comment_body': ""I've rewritten this code in a way that facilitates a smooth extension when adding support for moving topics between streams, which is why it is a little different from the previous iteration."", 'comment_created': datetime.datetime(2021, 6, 19, 19, 34, 35, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 682304654, 'comment_body': 'Just glancing at this alone, it\'s not as obvious as it could be what this translates to:\r\n* topics -> topics_per_stream_id?\r\n* the message_ids and msg_stream_id are coupled? If so, I\'d prefer to see the data coupled and not repeated\r\n* what are the message_ids in? If it\'s a default name, then we don\'t need to specify it, perhaps...\r\n\r\n...or ultimately, maybe just one nested structure could work?\r\n`{stream_id: {""old_subject"": [1, 2], ""other_subject"": []}`\r\n\r\nNot all of that may be necessary to get this PR bootstrapped, but it\'s definitely the case that we should avoid reusing numbers for streams and message ids to avoid confusion :)', 'comment_created': datetime.datetime(2021, 8, 4, 5, 45, 39, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}]","[{'commit_sha': '8099567976ea7e99849200cdfe2b21d60caa9893', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b22a593b56213c466cec5cc6c8ad62a4b5190549', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c98c5fdaf587f9b08874a1fd2fe7641ed56573c', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6688c35ba60867d686b01de37d7f19cd8b071132', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe2707f979442a7bdc47f0dfdc5b7a1d9392d254', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14f6c79f1d06968d406c1583a3be23a5bb48c816', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a548468ded35fa22f552fce188688bd6554b9d9', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+717163790,tests: popups: Add type annotations.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+**What does this PR do?**  <!-- Overall description goes here -->
+Adds type annotations to `test_popups.py` and adds the file to the list in `run-mypy`. Also has a few related prior refactors to ensure type consistency.
+
+<!-- If fixing a filed bug or new feature, add 'Fixes #<issue>' or 'Partial fix for #<issue>' -->
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- refactor: tests: popups: Remove unnecessary parameters. 
+This commit removes the passing of parameters in test definitions
+for parameters that are unused within the body of the test.
+
+- refactor: tests: popups: Use Message instances to pass into views. 
+This commit refactors the multiple `dict` assignments to View classes'
+message attribute to Message instances instead to maintain type
+consistency.
+
+- refactor: tests: popups: Assign mocked keypress to a variable.
+This commit assigns the mocked keypress method of the
+emoji_picker_view within `test_mouse_event` of the TestEmojiPickerView
+class to a variable, so that the corresponding assert method calls
+are type consistent.
+
+- refactor: tests: popups: Return a PopUpView instance from pop_up_view.
+This commit refactors the pop_up_view fixture to return a PopUpView
+instance for usage in further tests, instead of assigning the instance
+to an attribute of the TestPopUpView class, to maintain type
+consistency.
+
+- refactor: tests: popups: Add type annotations. 
+This commit adds parameter and return type annotations or hints
+to the `test_popups.py` file, that contains tests for the
+corresponding classes present in `views.py` from  the
+`zulipterminal` module, to make mypy checks consistent and
+improve code readability.
+
+- tools: Include test_popups.py to be checked by mypy. 
+This commit adds `test_popups.py` to the `type_consistent_testfiles`
+list to check for type consistency with mypy.
+",True,1125,https://api.github.com/repos/zulip/zulip-terminal/pulls/1125,https://github.com/zulip/zulip-terminal/pull/1125,closed,256,108,2,6,2,6,3,0,"[{'name': 'area: tests'}, {'name': 'size: XL'}, {'name': 'area: refactoring'}]",2021-08-21 14:56:11+00:00,2021-08-25 01:26:45+00:00,297034.0,"3 days, 10:30:34","[{'comment_id': 693573955, 'comment_body': ""This is the only prep commit which seems unclear. This is an autouse fixture, which you're manually inserting into each test in the commit instead (or as well)?"", 'comment_created': datetime.datetime(2021, 8, 22, 23, 32, 26, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 693579696, 'comment_body': 'Is this the only way that the `.update` can work? I suppose this is OK for now.', 'comment_created': datetime.datetime(2021, 8, 23, 0, 13, 50, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 693912014, 'comment_body': ""We can also use another `TypedDict` identical to `Message` but `Message` is already non-total so I haven't done that. Other than that, there's the option to inline the dict, but that's not possible here. I referred to this previous discussion on CZO: [#zulip-terminal > update keys of TypedDict](https://chat.zulip.org/#narrow/stream/206-zulip-terminal/topic/update.20keys.20of.20TypedDict)."", 'comment_created': datetime.datetime(2021, 8, 23, 12, 7, 12, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 693946416, 'comment_body': ""The tests fail when I don't pass `pop_up_view` into those tests, I'm not sure why. Linting fails too."", 'comment_created': datetime.datetime(2021, 8, 23, 12, 56, 33, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 694271532, 'comment_body': ""I assume you mean mypy won't pass? Otherwise, it seems like one of the other prep commits is at fault?"", 'comment_created': datetime.datetime(2021, 8, 23, 20, 4, 46, tzinfo=datetime.timezone.utc), 'commenter': 'neiljp', 'type': 'User'}, {'comment_id': 694325412, 'comment_body': 'I meant pytest and mypy both fail. None of the previous prep commits touch that class (`TestPopUpView`).', 'comment_created': datetime.datetime(2021, 8, 23, 21, 35, 13, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': 'e661185920464d59cefaa2f5041940bed274f3f7', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63ae071db8f299d33e792983858a424032a00c30', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17921ff01333cdd4a3922fc07384a7df7a90838b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '66d867b6c98929f02caa4010af4d488aa49e8470', 'committer_username': 'neiljp', 'committer_name': 'Neil Pilgrim', 'committer_email': None, 'commit_date': datetime.datetime(2014, 11, 5, 10, 28, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '495267a2a06fd2e5540843812fad44d5586711a4', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eeecb67a44c3b3216cfc3b194ab2b32461889509', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+717818700,Update index's `topic_msg_ids` accurately with topic updates.,"<!-- Please see https://github.com/zulip/zulip-terminal#contributor-guidelines ! -->
+
+**What does this PR do?**  <!-- Overall description goes here -->
+Prior to this PR, if a message's topic was changed, the
+corresponding `message_id` was not removed from the old topic's set
+and added to the new one under the ""topic_msg_ids"" key of the model's
+index. This PR updates the relevant sets to ensure accuracy.
+
+<!-- Add a link to a discussion on chat.zulip.org, if relevant -->
+
+**Tested?** <!-- Fine to leave some of these unchecked if this is a draft/work-in-progress -->
+- [x] Manually
+- [x] Existing tests (adapted, if necessary)
+- [x] Passed linting & tests (each commit)
+<!-- Code must pass CI (GitHub Actions) before merging - look for the green tick! -->
+
+<!-- See https://github.com/zulip/zulip-terminal#commit-style -->
+**Commit flow** <!-- if more than one commit; add/delete/fill-in as appropriate -->
+<!-- For example:
+- first commit doing some thing
+- maybe multiple commits doing similar things
+-->
+- api_types: Include the orig_subject field in UpdateMessageEvent. 
+This commit introduces another field to the UpdateMessageEvent class
+in `api_types.py` to accommodate this field in the event handler
+method for update message events.
+
+- bugfix: model: Remove updated message_ids from their old topic's set.
+Prior to this commit, if a message's topic was changed, the
+corresponding `message_id` was not removed from the old topic's set
+under the ""topic_msg_ids"" key of the model's index. This commit removes
+the updated `message_id` from that set, ensuring the accuracy of the
+set.
+Tests updated.",True,1130,https://api.github.com/repos/zulip/zulip-terminal/pulls/1130,https://github.com/zulip/zulip-terminal/pull/1130,closed,56,4,3,4,2,0,2,0,"[{'name': 'bug'}, {'name': 'size: L'}]",2021-08-23 13:07:21+00:00,2022-03-09 03:31:48+00:00,17072667.0,"197 days, 14:24:27",[],"[{'commit_sha': 'c91f80fa6df554d9de7c2164146741dd19691caf', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a52236b2f348d140064e0aa4982aaa462da00c8a', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d07db21360149ecbc45ebf734548cb7b69338d7', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '67498090f28af242bad8664bcc3a945d329891f2', 'committer_username': 'neiljp', 'committer_name': 'Neil Pilgrim', 'committer_email': None, 'commit_date': datetime.datetime(2014, 11, 5, 10, 28, 12, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+122704772,zulip-terminal,zulip/zulip-terminal,Python,243,612,18,81,2276,423,3,165,"[{'id': 717818700, 'number': 1130, 'closed': datetime.datetime(2022, 3, 9, 3, 31, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 23, 13, 7, 21, tzinfo=datetime.timezone.utc), 'time_taken': 17072667.0, 'time_delta': '197 days, 14:24:27', 'additions': 56, 'deletions': 4, 'state': 'closed'}, {'id': 717163790, 'number': 1125, 'closed': datetime.datetime(2021, 8, 25, 1, 26, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 21, 14, 56, 11, tzinfo=datetime.timezone.utc), 'time_taken': 297034.0, 'time_delta': '3 days, 10:30:34', 'additions': 256, 'deletions': 108, 'state': 'closed'}, {'id': 704098045, 'number': 1112, 'closed': datetime.datetime(2021, 8, 5, 5, 2, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 4, 22, 16, 7, tzinfo=datetime.timezone.utc), 'time_taken': 24355.0, 'time_delta': '6:45:55', 'additions': 20, 'deletions': 4, 'state': 'closed'}, {'id': 699020432, 'number': 1105, 'closed': datetime.datetime(2021, 7, 30, 18, 32, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 28, 21, 16, 21, tzinfo=datetime.timezone.utc), 'time_taken': 162957.0, 'time_delta': '1 day, 21:15:57', 'additions': 261, 'deletions': 177, 'state': 'closed'}, {'id': 698179244, 'number': 1102, 'closed': datetime.datetime(2021, 8, 17, 18, 8, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 27, 20, 50, 7, tzinfo=datetime.timezone.utc), 'time_taken': 1804703.0, 'time_delta': '20 days, 21:18:23', 'additions': 255, 'deletions': 129, 'state': 'closed'}, {'id': 696411993, 'number': 1099, 'closed': datetime.datetime(2021, 7, 25, 17, 39, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 22, 16, 17, tzinfo=datetime.timezone.utc), 'time_taken': 69782.0, 'time_delta': '19:23:02', 'additions': 36, 'deletions': 27, 'state': 'closed'}, {'id': 696362124, 'number': 1096, 'closed': datetime.datetime(2021, 8, 12, 20, 5, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 14, 55, 56, tzinfo=datetime.timezone.utc), 'time_taken': 1660186.0, 'time_delta': '19 days, 5:09:46', 'additions': 160, 'deletions': 129, 'state': 'closed'}, {'id': 692902737, 'number': 1091, 'closed': datetime.datetime(2021, 7, 21, 5, 18, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 19, 20, 29, 41, tzinfo=datetime.timezone.utc), 'time_taken': 118117.0, 'time_delta': '1 day, 8:48:37', 'additions': 114, 'deletions': 33, 'state': 'closed'}, {'id': 692130769, 'number': 1089, 'closed': datetime.datetime(2021, 7, 19, 5, 3, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 18, 18, 32, 34, tzinfo=datetime.timezone.utc), 'time_taken': 37858.0, 'time_delta': '10:30:58', 'additions': 9, 'deletions': 3, 'state': 'closed'}, {'id': 691035192, 'number': 1083, 'closed': datetime.datetime(2021, 7, 15, 23, 40, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 15, 21, 5, 39, tzinfo=datetime.timezone.utc), 'time_taken': 9312.0, 'time_delta': '2:35:12', 'additions': 89, 'deletions': 39, 'state': 'closed'}, {'id': 689933790, 'number': 1081, 'closed': datetime.datetime(2021, 7, 14, 17, 19, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 14, 13, 51, 32, tzinfo=datetime.timezone.utc), 'time_taken': 12487.0, 'time_delta': '3:28:07', 'additions': 24, 'deletions': 13, 'state': 'closed'}, {'id': 689450547, 'number': 1079, 'closed': datetime.datetime(2021, 7, 14, 21, 21, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 13, 22, 49, 48, tzinfo=datetime.timezone.utc), 'time_taken': 81120.0, 'time_delta': '22:32:00', 'additions': 6, 'deletions': 3, 'state': 'closed'}, {'id': 687392492, 'number': 1077, 'closed': datetime.datetime(2021, 7, 14, 6, 29, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 11, 20, 44, 6, tzinfo=datetime.timezone.utc), 'time_taken': 207940.0, 'time_delta': '2 days, 9:45:40', 'additions': 130, 'deletions': 75, 'state': 'closed'}, {'id': 687390676, 'number': 1076, 'closed': datetime.datetime(2021, 7, 11, 23, 31, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 11, 20, 26, 41, tzinfo=datetime.timezone.utc), 'time_taken': 11091.0, 'time_delta': '3:04:51', 'additions': 82, 'deletions': 49, 'state': 'closed'}, {'id': 686157289, 'number': 1073, 'closed': datetime.datetime(2021, 7, 9, 4, 26, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 8, 16, 20, 4, tzinfo=datetime.timezone.utc), 'time_taken': 43611.0, 'time_delta': '12:06:51', 'additions': 16, 'deletions': 15, 'state': 'closed'}, {'id': 678202842, 'number': 1057, 'closed': datetime.datetime(2021, 7, 31, 17, 55, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 25, 22, 2, 15, tzinfo=datetime.timezone.utc), 'time_taken': 3095585.0, 'time_delta': '35 days, 19:53:05', 'additions': 94, 'deletions': 21, 'state': 'closed'}, {'id': 672699159, 'number': 1054, 'closed': datetime.datetime(2021, 6, 18, 17, 5, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 17, 14, 36, 35, tzinfo=datetime.timezone.utc), 'time_taken': 95360.0, 'time_delta': '1 day, 2:29:20', 'additions': 19, 'deletions': 5, 'state': 'closed'}, {'id': 660167821, 'number': 1046, 'closed': None, 'created': datetime.datetime(2021, 6, 2, 15, 23, 15, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 245, 'deletions': 15, 'state': 'open'}, {'id': 645216257, 'number': 1035, 'closed': datetime.datetime(2021, 5, 15, 22, 58, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 15, 20, 42, 24, tzinfo=datetime.timezone.utc), 'time_taken': 8160.0, 'time_delta': '2:16:00', 'additions': 32, 'deletions': 24, 'state': 'closed'}, {'id': 623770322, 'number': 1011, 'closed': datetime.datetime(2021, 7, 17, 0, 42, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 26, 21, 16, 8, tzinfo=datetime.timezone.utc), 'time_taken': 7010810.0, 'time_delta': '81 days, 3:26:50', 'additions': 104, 'deletions': 12, 'state': 'closed'}, {'id': 620497176, 'number': 1006, 'closed': datetime.datetime(2021, 8, 11, 6, 40, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 21, 19, 55, 53, tzinfo=datetime.timezone.utc), 'time_taken': 9629093.0, 'time_delta': '111 days, 10:44:53', 'additions': 106, 'deletions': 78, 'state': 'closed'}, {'id': 608412328, 'number': 979, 'closed': datetime.datetime(2021, 4, 20, 19, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 3, 16, 45, 20, tzinfo=datetime.timezone.utc), 'time_taken': 1477540.0, 'time_delta': '17 days, 2:25:40', 'additions': 62, 'deletions': 7, 'state': 'closed'}, {'id': 597363967, 'number': 955, 'closed': datetime.datetime(2021, 3, 25, 23, 25, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 20, 21, 39, 56, tzinfo=datetime.timezone.utc), 'time_taken': 438332.0, 'time_delta': '5 days, 1:45:32', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 581406223, 'number': 937, 'closed': datetime.datetime(2021, 7, 3, 7, 4, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 27, 21, 38, 11, tzinfo=datetime.timezone.utc), 'time_taken': 10833975.0, 'time_delta': '125 days, 9:26:15', 'additions': 191, 'deletions': 11, 'state': 'closed'}, {'id': 578782248, 'number': 935, 'closed': datetime.datetime(2021, 2, 24, 7, 2, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 23, 21, 57, 58, tzinfo=datetime.timezone.utc), 'time_taken': 32678.0, 'time_delta': '9:04:38', 'additions': 13, 'deletions': 1, 'state': 'closed'}, {'id': 575247608, 'number': 928, 'closed': datetime.datetime(2021, 6, 11, 23, 47, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 17, 22, 16, 23, tzinfo=datetime.timezone.utc), 'time_taken': 9855081.0, 'time_delta': '114 days, 1:31:21', 'additions': 216, 'deletions': 26, 'state': 'closed'}, {'id': 569772364, 'number': 915, 'closed': datetime.datetime(2021, 7, 10, 11, 25, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 8, 20, 30, 21, tzinfo=datetime.timezone.utc), 'time_taken': 13100096.0, 'time_delta': '151 days, 14:54:56', 'additions': 32, 'deletions': 3, 'state': 'closed'}, {'id': 568502057, 'number': 909, 'closed': datetime.datetime(2021, 2, 6, 20, 58, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 5, 17, 26, 38, tzinfo=datetime.timezone.utc), 'time_taken': 99131.0, 'time_delta': '1 day, 3:32:11', 'additions': 23, 'deletions': 4, 'state': 'closed'}, {'id': 556187816, 'number': 877, 'closed': datetime.datetime(2021, 2, 5, 3, 55, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 16, 15, 7, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1687665.0, 'time_delta': '19 days, 12:47:45', 'additions': 179, 'deletions': 32, 'state': 'closed'}, {'id': 547094940, 'number': 862, 'closed': None, 'created': datetime.datetime(2020, 12, 30, 21, 34, 50, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 127, 'deletions': 9, 'state': 'open'}, {'id': 546212570, 'number': 858, 'closed': datetime.datetime(2021, 1, 1, 0, 40, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 28, 19, 36, 29, tzinfo=datetime.timezone.utc), 'time_taken': 277454.0, 'time_delta': '3 days, 5:04:14', 'additions': 1, 'deletions': 3, 'state': 'closed'}, {'id': 535330318, 'number': 845, 'closed': datetime.datetime(2021, 1, 22, 1, 12, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 12, 9, 17, 10, 27, tzinfo=datetime.timezone.utc), 'time_taken': 3744127.0, 'time_delta': '43 days, 8:02:07', 'additions': 99, 'deletions': 4, 'state': 'closed'}]"

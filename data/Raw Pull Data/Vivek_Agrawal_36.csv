@@ -1,0 +1,539 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+607391640,"fix(docs): deprecate runserver, instead use python-devserver","### Summary
+
+[Based on my discussion with @rtibbles](https://learningequality.slack.com/archives/C01QW21F8F6/p1616609623111100?thread_ts=1616571699.106100&cid=C01QW21F8F6), I was advised to use the `python-devserver` command instead of `kolibri manage runserver` when on develop branch because `python-devserver` command starts the kolibri services which are needed for kolibri to work. Also, I was told to run `kolibri manage collectstatic` after building the assets (`yarn run build`) to make them available for serving by cherrypy.
+
+This PR updates the getting started section of the developer documentation to reflect the above.
+
+### Reviewer guidance
+1. [Build & update the documentation locally](https://kolibri-dev.readthedocs.io/en/latest/getting_started.html#updating-documentation). 
+1. Visit the getting started page of the built version to see the latest changes.
+
+### References
+Might be somewhat related to https://github.com/learningequality/kolibri/issues/7384.
+
+### Contributor Checklist
+
+PR process:
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+Testing:
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+### Reviewer Checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,7940,https://api.github.com/repos/learningequality/kolibri/pulls/7940,https://github.com/learningequality/kolibri/pull/7940,closed,2,2,1,2,2,3,0,0,[],2021-04-01 13:10:35+00:00,2021-04-01 18:10:29+00:00,17994.0,4:59:54,"[{'comment_id': 605712889, 'comment_body': 'Since https://github.com/learningequality/kolibri/pull/7920 was merged `collectstatic` is no longer necessary, as static files are now always served without collectstatic needing to be run. Can remove this.', 'comment_created': datetime.datetime(2021, 4, 1, 14, 41, 20, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 605713008, 'comment_body': 'Can remove this too, as per above.', 'comment_created': datetime.datetime(2021, 4, 1, 14, 41, 30, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 605769048, 'comment_body': ""Ohh, okay sir, I'm removing it."", 'comment_created': datetime.datetime(2021, 4, 1, 15, 56, 3, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': 'b16175fe5472494e55d07edaeb9fd4e65d92b4a3', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '939ff6f435df2b7cdb520298ce98881527ff2d7a', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+608616051,fix(tasks): tasks queue is cleared on server start,"### Summary
+When the kolibri server starts, we were clearing the tasks queue which lead us to lose the historical information of completed, failed or cancelled tasks.
+
+This PR fixes the issue by not letting that happen. 
+
+### Reviewer guidance
+
+1. Complete some tasks or cancel running tasks.
+2. Restart the server.
+3. See the task manager. 
+4. The task list should have persisted.  
+
+### References
+
+Fixes https://github.com/learningequality/kolibri/issues/6255
+
+----
+
+### Contributor Checklist
+
+
+PR process:
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+Testing:
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+### Reviewer Checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,7951,https://api.github.com/repos/learningequality/kolibri/pulls/7951,https://github.com/learningequality/kolibri/pull/7951,closed,0,5,1,1,3,0,1,0,[{'name': 'changelog'}],2021-04-04 21:45:15+00:00,2021-04-05 16:57:26+00:00,69131.0,19:12:11,[],"[{'commit_sha': '73071e1e9475646b553a034f549000a1ef4c7342', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+608541039,fix(restarttask): client side reappearance of task upon restart,"### Summary
+The recent implementation of restart functionality had a minor client side issue where a restarted task was first disappearing and then appearing again.
+
+This PR fixes that by keeping the `job_id` of the new job same as that of restarted job. 
+
+### Reviewer guidance
+1. Test the restarttask api.
+
+### References
+
+Closes https://github.com/learningequality/kolibri/issues/7929
+
+----
+
+### Contributor Checklist
+
+
+PR process:
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+Testing:
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [x] Critical and brittle code paths are covered by unit tests
+
+### Reviewer Checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,7950,https://api.github.com/repos/learningequality/kolibri/pulls/7950,https://github.com/learningequality/kolibri/pull/7950,closed,11,9,3,1,2,0,0,0,[],2021-04-04 12:49:21+00:00,2021-04-05 21:46:34+00:00,118633.0,"1 day, 8:57:13",[],"[{'commit_sha': 'b5f79a17cc1d1691a2e9c9d504863a8543c33762', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+610125705,fix(scheduler): scheduled tasks does not persist on server restart,"## Summary
+
+On #7951 we changed the behaviour for the regular task queue to stay persistent on server restarts, but not for the scheduled tasks. This PR achieves persistency for scheduled tasks. 
+
+- Now, we should be able to persist scheduled tasks across server restarts.
+- The `schedule_pingback` and `schedule_vaccum` functions should not queue in the scheduler if one already exists.
+
+## References
+Closes https://github.com/learningequality/kolibri/issues/7954
+
+## Reviewer guidance
+1. Clear all the records of scheduled_jobs table in job_storage.sqlite3 db to avoid any confusion during testing.
+2. Start the server, now check the scheduled_jobs table, two jobs must be scheduled: `_ping` and `vacuum`.
+3. Schedule a new job.
+4. Restart the server, now all the scheduled jobs (`_ping`, `vacuum` and your own job) must have persisted.
+5. Also, make sure that _ping and vacuum aren't queued again on server restarts.
+
+----
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,7959,https://api.github.com/repos/learningequality/kolibri/pulls/7959,https://github.com/learningequality/kolibri/pull/7959,closed,37,23,4,6,2,5,0,0,[],2021-04-06 19:45:14+00:00,2021-04-19 19:01:41+00:00,1120587.0,"12 days, 23:16:27","[{'comment_id': 608148033, 'comment_body': ""I think I'd prefer to put this check inside the `schedule_ping` function rather than in here."", 'comment_created': datetime.datetime(2021, 4, 6, 20, 10, 37, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 608162756, 'comment_body': 'I think there\'s a simpler solution here.\r\n\r\nWhen we schedule a task: https://github.com/learningequality/kolibri/blob/develop/kolibri/core/tasks/scheduler.py#L143 we are able to pass in arbitrary args and kwargs for the job constructor.\r\n\r\nIf we update the job constructor to allow a supplied job_id to be passed in:\r\nhttps://github.com/learningequality/kolibri/blob/develop/kolibri/core/tasks/job.py#L90:\r\n`self.job_id = kwargs.get(""job_id"", uuid.uuid4().hex)`\r\n\r\nThen we can just choose a constant job_id for the scheduled pingback task and just check that it exists.\r\n\r\nThis also has the virtue that we can schedule additional tasks for the `_ping` if we want.', 'comment_created': datetime.datetime(2021, 4, 6, 20, 35, 33, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 608198750, 'comment_body': ""Wow :heart:, your approach is so simple!  \r\n\r\nI just have one nit thought, don't you think assigning constant job ids might become an issue when jobs like ping are in good numbers...?  "", 'comment_created': datetime.datetime(2021, 4, 6, 21, 39, 37, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 608199017, 'comment_body': ""Yes, I'll do that."", 'comment_created': datetime.datetime(2021, 4, 6, 21, 40, 10, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 608202994, 'comment_body': 'We should expect that the `schedule_ping` function just ensures that there is a single ping scheduled - if other `_ping` jobs need to be scheduled, then they can not pass the constant job_id, and so will be assigned a random uuid.', 'comment_created': datetime.datetime(2021, 4, 6, 21, 48, 56, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}]","[{'commit_sha': 'a3c3340b1fa4db7522105bb9a08579874644fdc9', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d09ed569d447becc552c58ba3d08cac560cbe57', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da40959248d05a0e1c5f624d76f330a3b9006a33', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45da44deaec0af6c9c4f9b14a0a7e9afde906fae', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20c7cbe2ff5fe167651fb078e71456b0726dacd3', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c8b32d0936a8813223c90de3c5fa55c891479f2', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+622817037,tests: ensure jobs persist on server restart,"## Summary
+https://github.com/learningequality/kolibri/pull/7951 and https://github.com/learningequality/kolibri/pull/7959 changed server behavior to persist jobs across server restarts. This PR adds tests for this new behavior. 
+
+The tests are not at all ideal, I would love to hear ways of making it better!
+
+## References
+Already referenced.
+
+## Reviewer guidance
+Do these tests mimic server behavior correctly? Does tests pass?
+
+----
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [x] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8030,https://api.github.com/repos/learningequality/kolibri/pulls/8030,https://github.com/learningequality/kolibri/pull/8030,closed,144,16,3,6,2,2,0,0,[],2021-04-25 18:39:03+00:00,2021-04-28 21:40:33+00:00,270090.0,"3 days, 3:01:30","[{'comment_id': 619884273, 'comment_body': 'I think the main weakness with the tests is the use of the MockServices plugin here - we should use the real services plugin, as otherwise we are not guaranteeing anything about how the services plugin will behave in production.', 'comment_created': datetime.datetime(2021, 4, 25, 21, 51, 34, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 620144666, 'comment_body': 'Yes I agree with you, let me see how can this be done.', 'comment_created': datetime.datetime(2021, 4, 26, 9, 52, 40, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': 'ac89d38a348af9c8abccbc4b4dcdafe8c8e557fa', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '858f676fc09c5e9bc5ee2a5b5af6153786aac5da', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '479ec03933889b3787662d094bccd61b9aba15c1', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aaedb1ca59558abfee9d96ea703f37d4df0fc76f', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '167b1398ccbcb09b7aaf2be50e57b0ca803519b9', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fba956a2342f36da526a4ea6e65d3c4e95446936', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+632076116,Add integrity checking for sqlite3 databases,"## Summary
+Added integrity checking for sqlite3 databases. It has been implemented on `job_storage.sqlite3` to detect database corruption and regenerate. 
+
+## References
+
+Closes https://github.com/learningequality/kolibri/issues/7907
+
+## Reviewer guidance
+
+Edit `job_storage.sqlite3` via text editor to break integrity then run server to see if the database is detected as corrupt or not.  
+
+----
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8063,https://api.github.com/repos/learningequality/kolibri/pulls/8063,https://github.com/learningequality/kolibri/pull/8063,closed,37,8,2,1,4,0,0,0,[],2021-05-07 00:04:16+00:00,2021-05-07 23:20:56+00:00,83800.0,23:16:40,[],"[{'commit_sha': 'd4846b7cb51b5da744c71184586666aa11388aee', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+663923448,Add task decorators and task APIs for functions registered via decorators,"<!--
+ 1. Following guidance below, replace …'s with your own words
+ 2. After saving the PR, tick of completed checklist items
+ 3. Skip checklist items that are not applicable or not necessary
+ 4. Delete instruction/comment blocks
+-->
+
+## Summary
+
+> ### This summary is outdated. Please refer to `kolibri.core.tasks.job.RegisteredJob`'s docstring for updated info.
+<!--
+ * description of the change
+ * manual verification steps performed
+ * screenshots if the PR affects the UI
+-->
+This PR adds two task decorators:
+
+- `task.register(job_id=None, validator=None, permission=None, priority=task.Priority.REGULAR)`
+    
+    This decorator when applied registers function to `JobRegistry.REGISTERED_JOBS` dict which will be queried when client 
+    submits a method via API endpoint.
+    
+- `task.config(group=None, cancellable=False, track_progress=False)`
+
+    This decorator affects only if first `task.register` is applied otherwise it raises an exception. This allows modification of task 
+    attributes.
+
+Next, I've added three methods available only on jobs registered via decorator. Suppose `add` is defined as:
+
+```python
+@task.register
+def add(x, y): 
+    return x + y
+```  
+- `add.task.enqueue_at(dt, interval=0, repeat=0).initiate(65, 85)`
+    It's very readable. `add` will be scheduled based on `dt, interval, repeat` with arguments 65 and 85.
+
+- `add.task.enqueue_in(delta_t, interval=0, repeat=0).initiate(89, 26)`
+    `add` will be scheduled based on `delta_t, interval, repeat` with arguments 89 and 26.
+
+- `add.task.initiate(56, 24)`
+    `add` will be enqueued with arguments 56 and 24.
+
+The `task.register` decorator and the api methods have been applied to `_ping` job for example showcase and to manually test everything.
+
+**To dos for this PR:**
+- improve implementation based on reviews
+- add unit tests (extremely important)    
+
+## Reviewer guidance
+<!--
+ * how can a reviewer test these changes?
+ * are there any risky areas that deserve extra testing
+-->
+
+Apply decorators to functions, play with the api and see if everything's working as expected.
+
+----
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8142,https://api.github.com/repos/learningequality/kolibri/pulls/8142,https://github.com/learningequality/kolibri/pull/8142,closed,498,56,14,18,4,24,0,0,[],2021-06-07 21:24:46+00:00,2021-06-22 14:21:33+00:00,1270607.0,"14 days, 16:56:47","[{'comment_id': 651128211, 'comment_body': 'Could you make this a [django `TestCase` ](https://docs.djangoproject.com/en/3.2/topics/testing/overview/)and use the assertion methods they provided? (e.g. `self.assertEqual`)? This is just to be consistent with the rest of the test suite; plus you might need/want some of the features provided to the test runner.', 'comment_created': datetime.datetime(2021, 6, 14, 17, 10, 2, tzinfo=datetime.timezone.utc), 'commenter': 'jonboiser', 'type': 'User'}, {'comment_id': 651651089, 'comment_body': ""Yeap, good idea. I've pushed commits that addresses this."", 'comment_created': datetime.datetime(2021, 6, 15, 10, 15, 53, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 653922984, 'comment_body': ""Given that we are modifying the registered task in place I am not sure I understand the motivation of separate 'register' and 'config' decorators.\r\n\r\nMy first assumption when I read the description of the API was that this would allow the same registered job to be exposed with different configurations - but here we are updating the configuration in place of the registered job.\r\n\r\nWith this in mind, it seems simpler to just put all the kwargs for the config decorator into the register decorator."", 'comment_created': datetime.datetime(2021, 6, 17, 20, 45, 5, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653925350, 'comment_body': 'I understand the motivation for wanting to separate out the args and kwargs for `enqueue_at` here - but I think the additional `initiate` is a slightly odd syntax. If we want to clearly delineate the arguments, we can change it so that `enqueue_at` takes explicit `args` and `kwargs` keyword arguments, which then get passed to the invoked task as `*args, **kwargs`.', 'comment_created': datetime.datetime(2021, 6, 17, 20, 47, 32, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653928844, 'comment_body': ""It seems like this would only be the case before the job gets saved to the task database (after that it's at least SCHEDULED or QUEUED) - when is it useful to track that a job is PENDING?"", 'comment_created': datetime.datetime(2021, 6, 17, 20, 51, 1, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653934872, 'comment_body': ""I think this can be refactored into a 'create job object' method - then we have three methods:\r\n`enqueue`, `enqueue_in`, `enqueue_at` that call this to generate the Job object, then each one calls the appropriate part of the if statement below.\r\n\r\nThis also means that you don't have to track state on `self` which is a little dangerous if multiple parallel threads are spawning tasks, as they might share memory and leak state to each other. By just calling the scheduler or queue method in each method, the arguments are scoped inside the method."", 'comment_created': datetime.datetime(2021, 6, 17, 20, 57, 20, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653936076, 'comment_body': 'The description is correct - but the examples less so. The primary one here is channel metadata import.', 'comment_created': datetime.datetime(2021, 6, 17, 20, 58, 35, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653938690, 'comment_body': 'Any reason to remove this code? Seems like harmless defensive programming to me.', 'comment_created': datetime.datetime(2021, 6, 17, 21, 1, 19, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653939832, 'comment_body': ""Oh, disregard my comment above, you're just consolidating logic."", 'comment_created': datetime.datetime(2021, 6, 17, 21, 2, 34, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 653940287, 'comment_body': 'Typo? `from` not `frm`?', 'comment_created': datetime.datetime(2021, 6, 17, 21, 3, 4, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 654561708, 'comment_body': 'The main motivation behind separation of `register` and `config` decorator was to separate ""configurable"" attributes from other attributes. Every kwarg in one decorator will make that decorator too longish and kind of hard to read, don\'t you think?', 'comment_created': datetime.datetime(2021, 6, 18, 16, 41, 2, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654562781, 'comment_body': ""That's actually a great idea! Commits landing right now."", 'comment_created': datetime.datetime(2021, 6, 18, 16, 43, 4, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654566647, 'comment_body': 'Actually, when I was manually testing, I sometimes felt unclear if the job has been actually QUEUED or not so to make that explicit I added PENDING. ', 'comment_created': datetime.datetime(2021, 6, 18, 16, 50, 50, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654567333, 'comment_body': 'Superb! This will be a good design.  ', 'comment_created': datetime.datetime(2021, 6, 18, 16, 52, 14, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654567497, 'comment_body': 'Commits landing!', 'comment_created': datetime.datetime(2021, 6, 18, 16, 52, 31, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654567615, 'comment_body': 'Commits landing!', 'comment_created': datetime.datetime(2021, 6, 18, 16, 52, 47, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654568813, 'comment_body': ""I think there are two alternatives:\r\n\r\n1. Just be ok with lots of kwargs - this feels OK, especially as it has the advantage of the function parameters being explicit.\r\n2. Add a `config` kwarg that accepts a dict of the configurable attributes - this clearly delineates these attributes as 'configurable' but you lose the function parameter introspectability to know what arguments can be passed.\r\n\r\nI think because I don't really see the kwargs being passed to `register` and `config` right now as being that different to each other (for example, if a task is cancellable is not really configurable, and more a matter of whether the internal implementation of the task properly handles when a cancel event is raised) my preference is for what I suggested above, which is 1.\r\n\r\nIt's possible we may have a clearer need for separating configuration from registration in the future, but for now, it seems unnecessary."", 'comment_created': datetime.datetime(2021, 6, 18, 16, 55, 11, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 654569422, 'comment_body': ""OK, if there was ambiguity that this helps clear up, that's fine."", 'comment_created': datetime.datetime(2021, 6, 18, 16, 56, 21, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 654575422, 'comment_body': 'Okay, so let us move forward with 1 as said above. \r\n\r\nFor `POST /api/tasks/`, I added `@task.permission_classes([])` as a separate decorator, I think we will be fine with that or do we want to keep `permission_classes` as a kwarg in register? I will say separation will be much better in this case to allow for easy readability of permissions especially when bitwise operators are used.', 'comment_created': datetime.datetime(2021, 6, 18, 17, 8, 17, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654575990, 'comment_body': 'Yup, PENDING is just to keep things explicit internally.', 'comment_created': datetime.datetime(2021, 6, 18, 17, 9, 17, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 654591600, 'comment_body': 'I think to maintain simplicity, just adding it as another kwarg to register for now would be fine - we can then see if it produces monstrous code and we need to rethink, but I think it is mostly just a matter of code formatting, so with `black` running on the code, I think it should be readable.', 'comment_created': datetime.datetime(2021, 6, 18, 17, 41, 49, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 654596212, 'comment_body': ""Okay, let's go with only register. One to rule them all! Commits landing asap. "", 'comment_created': datetime.datetime(2021, 6, 18, 17, 51, 58, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 655709530, 'comment_body': 'I think it would be good to just make `register` a top level module function, rather than using the class here.', 'comment_created': datetime.datetime(2021, 6, 21, 21, 15, 36, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 656132852, 'comment_body': ""I personally like decorators of form `object.action` (that's why I left the class there :sweat_smile:). \r\n\r\nAnyway, since we only have one decorator let us get rid of class. \r\n\r\nIn future if we think of a second decorator then we'll get back to class please! :laughing: "", 'comment_created': datetime.datetime(2021, 6, 22, 11, 35, 48, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': '85afc091aa4909710ad0a9039630c114d41a4c6d', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73fbc7963cbc924bb86d460e689899ad07fb6b05', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90a323ab9fd99572de9c522682ae3e9349de8021', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '140a4c258e30e2a31ffc38b3fa4b2bcd4fe013f8', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c409a9da1c530789e332dcc9fe77f9321926e40', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ff2a02cc54f537c26e404026da2272528b2de088', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '191266f77715f22a7ae26712c683eaf96d476c56', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '88e5b5117c747f21cc868503d2e5c123ca976585', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c29230640c091684e94fc714053856c8d01b121b', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d9c592d3ae9231d8e6fa845c489d807aacbc083', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '803cbf05a69306423017246cec93f0c0833ac538', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8096ba4d64d6e100e9e0894e22aaa77e365ff53', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09544a93747390e4c252239e1da836b486b567a6', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd81faac1a3e107c364ec441100d81d01e49997d0', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fab7a7bbd19d5ff485e9f27b2b838cbf8a045219', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6753d5260d4271fa42a023f479d7fe5c5682d1f', 'committer_username': 'rtibbles', 'committer_name': 'Richard Tibbles', 'committer_email': None, 'commit_date': datetime.datetime(2012, 4, 26, 3, 4, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2abd331a21c8073f993b0229f5bb84a92615b7bc', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6265eb186554829a0e69c761dad08a0e0693f89', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+683981511,Create API endpoint for Tasks backend,"<!--
+ 1. Following guidance below, replace …'s with your own words
+ 2. After saving the PR, tick of completed checklist items
+ 3. Skip checklist items that are not applicable or not necessary
+ 4. Delete instruction/comment blocks
+-->
+
+## Summary
+<!--
+ * description of the change
+ * manual verification steps performed
+ * screenshots if the PR affects the UI
+-->
+
+This PR adds `POST /api/tasks/` endpoint method. 
+
+**Note:** I couldn't add tests as I'm moving out of my town this morning. Tests will be added after I return from the trip (most probably 11th July).
+
+## Reviewer guidance
+<!--
+ * how can a reviewer test these changes?
+ * are there any risky areas that deserve extra testing
+-->
+
+Does the endpoint handle bulk and normal tasks properly? Are permissions working as expected? 
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8186,https://api.github.com/repos/learningequality/kolibri/pulls/8186,https://github.com/learningequality/kolibri/pull/8186,closed,530,50,6,8,3,31,0,0,[],2021-07-06 00:11:40+00:00,2021-07-20 21:47:33+00:00,1287353.0,"14 days, 21:35:53","[{'comment_id': 666534425, 'comment_body': 'Presumably this would all just go away when we transfer all these permissions over to the tasks themselves.', 'comment_created': datetime.datetime(2021, 7, 8, 21, 37, 6, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 668782428, 'comment_body': ""Yep that's true but for the time being this change fixes an issue we discussed on Slack."", 'comment_created': datetime.datetime(2021, 7, 13, 13, 49, 45, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 671489102, 'comment_body': 'I would prefer not to use a blank base URL path here, it feels like an anti-pattern to me.\r\n\r\nWe can have this under `managetask` for now, but as we finish migrations of tasks to the new API, I would expect that `BaseViewSet` will be renamed `TasksViewSet` and that this will all be under `""tasks""` with a basename of `""tasks""`, as at that point, we can dispense with the other two endpoints!', 'comment_created': datetime.datetime(2021, 7, 16, 19, 47, 1, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 671491152, 'comment_body': 'The task defined in here should live in `kolibri/core/content/tasks.py`', 'comment_created': datetime.datetime(2021, 7, 16, 19, 51, 21, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 671491880, 'comment_body': ""Not understanding the purpose of `self.extra_metadata` in this file - also, if multiple jobs are being created, there's a risk we are sharing the extra_metadata dict among them.\r\n\r\nGiven that this `self.extra_metadata` is always an empty object, it's not doing anything additional over the default (and safer) setting of it inside the Job constructor: https://github.com/learningequality/kolibri/blob/develop/kolibri/core/tasks/job.py#L189"", 'comment_created': datetime.datetime(2021, 7, 16, 19, 52, 53, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 671493154, 'comment_body': 'This may be the cause of the postgres errors you are seeing - make sure to follow the same lazy object pattern that the other objects defined in this module follow, rather than instantiating the `Storage` object in the module scope directly.', 'comment_created': datetime.datetime(2021, 7, 16, 19, 55, 38, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 671493928, 'comment_body': ""We don't need to address this in this PR, but one thought that occurs is that it would be useful to be able to schedule tasks through this endpoint as well.\r\n\r\nAny thoughts on how we could extent the API to allow for that? Possibly optional `enqueue_at` and `enqueue_in` arguments?"", 'comment_created': datetime.datetime(2021, 7, 16, 19, 57, 17, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 671672230, 'comment_body': ""@rtibbles the only reason to use a blank base URL path was to have urlconf generated as `/api/tasks/` not `/api/tasks/tasks/`. Don't you think the former looks more beautiful?"", 'comment_created': datetime.datetime(2021, 7, 17, 11, 1, 19, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 671672768, 'comment_body': ""Okay, will do. \r\n\r\nAlso, I've some questions regarding separation of tasks (related to breaking changes..). Will talk to you on Slack about those!"", 'comment_created': datetime.datetime(2021, 7, 17, 11, 7, 33, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 671678467, 'comment_body': '`self.extrametadata` plays a very important role there.\r\n\r\nIf a task function wants to set extra metadata, it can do that in its validator by doing `task_func.extra_metadata={""some"": ""thing""}`. This `extra_metadata` is binded to the registered job instance\'s `extra_metadata`, which gets passed to the job constructor via `_ready_job`. \r\n\r\nEvery job that is registered will have its own `RegisteredJob.extra_metadata` so there\'s no chance of metadata being shared wrongly between multiple jobs.\r\n\r\nHave a look at the demo `tasks.py` module to see it practically.    ', 'comment_created': datetime.datetime(2021, 7, 17, 11, 17, 46, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 671679697, 'comment_body': 'Ohhh! Will fix this! :tada: \r\n\r\nBut sir, why is this the case though? I mean any specific reason for following lazy object initialization...?', 'comment_created': datetime.datetime(2021, 7, 17, 11, 19, 32, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 671686312, 'comment_body': 'Yes, we can extent our API to make it do that. \r\n\r\nNot only `enqueue_at` and `enqueue_in` but also `repeat` & `interval`. \r\n\r\nSo, here we have two choices of request payloads:\r\n\r\n**1.** \r\n```\r\n{\r\n  ""task"": ""...."",\r\n  ""enqueue_at"": ""July 27 2021  2:00PM"",\r\n  ""repeat"": 5,\r\n  ""interval"": 86400, (in seconds)\r\n  ... (args that get passed to the task function)\r\n}\r\n```  \r\n**2.**\r\n```\r\n{\r\n  ""task"": ""...."",\r\n  ""enqueue_at"": {\r\n        ""time"": ""July 27 2021  2:00PM"",\r\n        ""repeat"": 5,\r\n        ""interval"": 86400, (in seconds)\r\n       }\r\n  ... (args that get passed to the task function)\r\n}\r\n```  \r\n\r\nMy choice is the second one as it offers zero chance of conflict with names of task function arguments. What\'s your say?', 'comment_created': datetime.datetime(2021, 7, 17, 11, 36, 34, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 672331314, 'comment_body': ""The general pattern we have for API URLs has <appname>/<endpoint> - so I'd rather keep with that, even if it looks repetitive in this case."", 'comment_created': datetime.datetime(2021, 7, 19, 14, 8, 11, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 672337433, 'comment_body': ""I missed that in my initial review - but the way this is being used inside the validator is concerning.\r\n\r\nIn the last PR, there was some clean up to ensure that we were not using the registered task object as a transitory state object during task registration. This PR has reintroduced some of that concerning use again.\r\n\r\nAs a general rule, the validator functions should be pure functions without side effects - if we need to set the `extra_metadata` property - it seems that returning `extra_metadata` as a key on the dict that gets returned from the validator function is the appropriate way to do this, not by assigning it to the global registered task object.\r\n\r\nAgain, the issue here is if two tasks are being enqueued at the same time, with shared memory at play, then the use of the global object could lead either to the extra_metadata for one queuing being applied to another, or the extra metadata for one being cleared while another is being queued. It's a recipe for hard to narrow down bugs."", 'comment_created': datetime.datetime(2021, 7, 19, 14, 15, 14, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 672339027, 'comment_body': 'I am not completely certain that this is the cause of your Postgresql failures - but the main reason for the lazy initialization is to allow objects from this module to be imported before any app initialization has happened, without fear of database connections being initialized.', 'comment_created': datetime.datetime(2021, 7, 19, 14, 17, 2, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 672340049, 'comment_body': 'I do prefer the second option, yes - there are some other options, but this seems the most sensible.', 'comment_created': datetime.datetime(2021, 7, 19, 14, 18, 15, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 672443232, 'comment_body': ""Okay - so I'll remove the new endpoint that I've added. Since, `TasksViewSet` inherits from `BaseViewSet`, until `TasksViewSet` is alive it'll handle the endpoints. After migration, I'll remove the two viewsets that we have and will rename `BaseViewSet` to `TasksViewSet`. "", 'comment_created': datetime.datetime(2021, 7, 19, 16, 16, 54, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 672446080, 'comment_body': ""The issue I can see is not with two different tasks because they'll have their own registered job instance so no issues with shared memory there. But yes if the same task is being enqueued by two different threads, then there can be race conditions with this approach. Is my thinking correct sir @rtibbles? \r\n\r\n   "", 'comment_created': datetime.datetime(2021, 7, 19, 16, 20, 49, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 672447031, 'comment_body': 'Got it!', 'comment_created': datetime.datetime(2021, 7, 19, 16, 21, 59, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 672452610, 'comment_body': ""Yes, it's the potential sharing of state between two tasks of the same type that I am concerned about."", 'comment_created': datetime.datetime(2021, 7, 19, 16, 29, 35, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 672456870, 'comment_body': ""Will be fixed. :rocket: \r\n\r\nFrom now on, I'll keep this lesson in mind. "", 'comment_created': datetime.datetime(2021, 7, 19, 16, 35, 19, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 684656132, 'comment_body': '`task` key should be removed from the `request_data`. With the current implementation the task function is forced to have an unused arg called `task`', 'comment_created': datetime.datetime(2021, 8, 7, 17, 10, 9, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 684659121, 'comment_body': 'Given that it\'s already been validated to have `""task""` in the data, can use:\r\n```\r\nfuncstr = request_data.pop(""task"")\r\n```\r\n\r\nAbove - using pop instead of get to address this!', 'comment_created': datetime.datetime(2021, 8, 7, 17, 39, 51, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 684740600, 'comment_body': 'Yes, this will be fixed in the upcoming PR that aims to decouple some tasks to their respective places. ', 'comment_created': datetime.datetime(2021, 8, 8, 8, 55, 18, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 684806447, 'comment_body': ""hi , @vkWeb  I'm using the current implementation for a new feature. If you plan to do changes on the api it's important to know it.\r\nThere are a some things I have missed using this new tasks api:\r\n1. Possibility to select a different queue (only normal or high are available)\r\n2. A JS api (I've done my own but having a general to inherit would be great)\r\n3. Possibility to change the permissions of some of the `TaskViewSet` functions. I have had to create a new class inheriting it just to be able to change the permissions to see the list of tasks.\r\n4. I have read in the specs the possility to use `groupName` to group tasks but it's not implemented as far as I have seen\r\n\r\nIn any case, none of these things are fundamental and I've found workarounds for them, but having them would make a dev life easier. The general work done on the tasks is great and being able to register new tasks from a plugin is awesome. I have had to delete code from a previous implementation and that's my favourite refactoring ;)"", 'comment_created': datetime.datetime(2021, 8, 8, 17, 37, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 684817451, 'comment_body': ""Hi sir @jredrejo. I'm reallyyy happy to hear that! \r\n\r\nRight now, the Tasks API and the tasks backend are under active refactoring. In the span of next one month we can expect our tasks backend to give a much more delightful developer experience. I'll keep you updated on the developments via Slack!     \r\n\r\n> Possibility to select a different queue (only normal or high are available).\r\n> I have read in the specs the possility to use groupName to group tasks but it's not implemented as far as I have seen.\r\n\r\nAfter implementing single worker pool, we'll have the ability to give tasks any queue we want, later on we can fetch/delete tasks by any particular queue. Moreover, `Queue` interface will be removed, queue will just be a string column on the job storage table. Then, `high` and `normal` priority levels will be used to decide which task should be fetched first by the workers.   \r\n\r\nI've planned to implement single worker pool after I shift tasks from the `kolibri.core.tasks.api` monolith to their respective django apps. Once shifting is complete, we'll get the freedom to mould our tasks backend in whatever way we want without disturbing the working of tasks itself.\r\n\r\n> A JS api (I've done my own but having a general to inherit would be great)\r\n\r\nA JS API...? I'm not sure I understand..?\r\n\r\n> Possibility to change the permissions of some of the TaskViewSet functions. I have had to create a new class inheriting it just to be able to change the permissions to see the list of tasks.\r\n\r\nThe `register_task` decorator has a `permission_classes` argument that'll allow flexible setting of permissions for any particular task. I would request you try not to inherit TaskViewSet, let us discuss the problem to see the pain that's forcing us to inherit. \r\n\r\n     "", 'comment_created': datetime.datetime(2021, 8, 8, 19, 18, 8, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 684817865, 'comment_body': ""@jredrejo just to flag, all the upcoming PRs related to tasks backend will target https://github.com/learningequality/kolibri/tree/tasks_api_refactor branch so that it don't cause trouble in the 0.15 release. "", 'comment_created': datetime.datetime(2021, 8, 8, 19, 21, 49, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 685018646, 'comment_body': ""Hello again @vkWeb  I have been working on this in this PR  #8185 so all the code I'll mention here is there if you want to take a look\r\n\r\n> > A JS api (I've done my own but having a general to inherit would be great)\r\n> \r\n> A JS API...? I'm not sure I understand..?\r\n> \r\n\r\nSomething in https://github.com/learningequality/kolibri/blob/release-v0.15.x/kolibri/core/assets/src/api-resources/task.js to make all this new taks endpoints easier to be used from JS. I had to add in _kolibri/plugins/setup_wizard/assets/src/api.js_ some functions to handle it  (`SetupSoUDTasksResource` object)\r\n\r\n> > Possibility to change the permissions of some of the TaskViewSet functions. I have had to create a new class inheriting it just to be able to change the permissions to see the list of tasks.\r\n> \r\n> The `register_task` decorator has a `permission_classes` argument that'll allow flexible setting of permissions for any particular task. I would request you try not to inherit TaskViewSet, let us discuss the problem to see the pain that's forcing us to inherit.\r\n\r\nIf you take a look at #8185 you can find in _kolibri/plugins/setup_wizard/tasks.py_  the `startprovisionsoud` with its own permission_classes as you say. So far so good. \r\nThe problem comes when the frontend needs to pull the tasks list to know if this task is in process. This code is being executed when provisioning kolibri after been installled, so there are not users yet and the permissions in `startprovisionsoud` work fine, but there's no way to get the list of the tasks from the frontend because `TasksViewSet` has a different permissions for `list`. \r\nI had to creeate  the class `SetupWizardSoUDTaskView(TasksViewSet) `at _kolibri/plugins/setup_wizard/api.py_ in #8185 to be able to use `SetupSoUDTasksResource.fetchCollection`  in _kolibri/plugins/setup_wizard/assets/src/views/importLODUsers/LoadingTaskPage.vue_ . If you know of a better solution to poll the tasks without inheriting `TaskViewSet` I am all ears :) \r\n"", 'comment_created': datetime.datetime(2021, 8, 9, 8, 53, 1, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 685160890, 'comment_body': ""> Something in https://github.com/learningequality/kolibri/blob/release-v0.15.x/kolibri/core/assets/src/api-resources/task.js to make all this new taks endpoints easier to be used from JS. I had to add in kolibri/plugins/setup_wizard/assets/src/api.js some functions to handle it (SetupSoUDTasksResource object).\r\n\r\nI have not touched the frontend code at all because my all focus has been on first refactoring the tasks backend.\r\n\r\n> The problem comes when the frontend needs to pull the tasks list to know if this task is in process. This code is being executed when provisioning kolibri after been installled, so there are not users yet and the permissions in startprovisionsoud work fine, but there's no way to get the list of the tasks from the frontend because TasksViewSet has a different permissions for list.\r\n\r\nOh, I get it. This should be handled on the TasksViewSet level, we must not inherit it. \r\n\r\nUmmm, looks like @rtibbles initial suggestion will prove helpful now. His suggestion was to filter the tasks based on whether user has permission for it or not, if the user do have permission then that task gets included in the response.  \r\n\r\nSo, in our case of `startprovisionsoud`, if the user sending API request to `list` has permission `[IsSuperuser | NotProvisionedCanPost | LODUserHasSyncPermissions]` the `startprovisionsoud` will be included in the response list. \r\n\r\nThis feels like a good general solution to this problem. What do you think sir @jredrejo?  \r\n\r\n"", 'comment_created': datetime.datetime(2021, 8, 9, 12, 46, 31, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 685163756, 'comment_body': '\r\n> \r\n> Ummm, looks like @rtibbles initial suggestion will prove helpful now. His suggestion was to filter the tasks based on whether user has permission for it or not, if the user do have permission then that task gets included in the response.\r\n> \r\n> So, in our case of `startprovisionsoud`, if the user sending API request to `list` has permission `[IsSuperuser | NotProvisionedCanPost | LODUserHasSyncPermissions]` the `startprovisionsoud` will be included in the response list.\r\n> \r\n> This feels like a good general solution to this problem. What do you think sir @jredrejo?\r\n\r\nit sounds perfect !\r\n', 'comment_created': datetime.datetime(2021, 8, 9, 12, 50, 29, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 685165051, 'comment_body': ""If you say I'll send a PR right away...?"", 'comment_created': datetime.datetime(2021, 8, 9, 12, 52, 13, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': '88db72c21d92d8e21d0d6be9a2500dd8ca5b6562', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1fa2f2ce959df945a050cf71456314ab6768fc02', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '52edc50e726334de7d1173f8538cef7092d8aa9c', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a91a32118dadaa742868279e330fc2a0c9891e72', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0a4d2e4f45682431839f342ccb67a130294ff91c', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '25e97dd64856e97cbad32709b49ae64641e2e161', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a1005e777ff498f7296ceb4cccff01b780dec49', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3db12c511bc0bdf6c9eee9fad5ab74bbf0170cc', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+712966032,Single worker pool for tasks,"## Summary
+
+This PR implements a dynamic single worker pool for tasks. Dynamic as in `high workers` come into action only when `regular workers` are busy and we still have jobs with `high` priority. 
+
+If there are less workers running than there are `regular workers`, we look first for jobs with `high` priority, if found one we run it else we look for jobs with `regular` priority, if found we run it. 
+
+If all `regular workers` are busy, then the remaining workers only look for `high` priority jobs. If found one, we run it.
+
+This algorithm will make sure `high` priority jobs don't need to wait. 
+
+
+## Reviewer guidance
+
+Is the single worker pool logic suitable for our tasks needs? Do you see any edge cases?
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [x] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [ ] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8299,https://api.github.com/repos/learningequality/kolibri/pulls/8299,https://github.com/learningequality/kolibri/pull/8299,closed,206,105,10,10,3,6,0,0,[],2021-08-15 16:38:09+00:00,2021-08-17 15:57:05+00:00,170336.0,"1 day, 23:18:56","[{'comment_id': 689802750, 'comment_body': 'The removal of the while loop here means that we will only ever queue one job during a single run of `check_jobs`.\r\n\r\nI think it might be good to do something more along the lines of:\r\n\r\n```\r\nwhile job_to_start:\r\n    self.start_next_job(job_to_start)\r\n    job_to_start = self.get_next_job()\r\n```\r\n\r\nThat way we will fill up the worker threads as fast as possible.', 'comment_created': datetime.datetime(2021, 8, 16, 19, 30, 14, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 690443753, 'comment_body': 'Is there a use case for filtering by `queues` for the next queued job now? My assumption was that we would only be using the `queues` field for filtering jobs to return via the API?', 'comment_created': datetime.datetime(2021, 8, 17, 14, 45, 55, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 690457201, 'comment_body': 'Ummm, yes you are right. Adding the loop back. ', 'comment_created': datetime.datetime(2021, 8, 17, 14, 59, 56, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 690457875, 'comment_body': ""No, there's no use case. Let us remove that? "", 'comment_created': datetime.datetime(2021, 8, 17, 15, 0, 41, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 690461840, 'comment_body': 'Yes, it should simplify the code!', 'comment_created': datetime.datetime(2021, 8, 17, 15, 4, 53, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 690494969, 'comment_body': '@rtibbles code docs updated in task api permission PR. ', 'comment_created': datetime.datetime(2021, 8, 17, 15, 41, 35, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': 'e713b6f20f4cd7691949383ba295dacdbb31da10', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3efab72176ee1f694b58c8fa0f9f46e695d72deb', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8395d2fc906f0498172947bd54ef4a95aea21aff', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb49c5177c451f7fb845a01b38be0fde916e6e61', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bc1f16b7921bf8bd8af9523421ff3d6f9a4d60a', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd3cb925dd57e0d968838d76731d8534fd11ec64', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7ea387a1a035851c844f4e38ad682fcfcd0556c6', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '606f4e732e1d4be62cdeb9a2d50ae32ea155f582', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c553dea4031a9dbe0d3a7a4197f756cfff6cb9ee', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '74f6c0af8f7af0f6c1ac4b6d290d245b2f1466a7', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+714119198,Task APIs now behave based on registered job's permissions,"## Summary
+This PR makes the `list`, `retrieve`, `create` and `restarttask` API work based on the registered job's permissions. This change was done to support use cases found on #8185. 
+
+@jredrejo @rtibbles after we merge this PR, we'll be able to query the task API to list tasks only for a particular `queue`.  
+
+Tests are being worked upon, will be pushed by today itself. 
+
+## Reviewer guidance
+Does this new permission based API suits our use cases? Any security considerations?  
+
+----
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [ ] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8303,https://api.github.com/repos/learningequality/kolibri/pulls/8303,https://github.com/learningequality/kolibri/pull/8303,closed,498,279,9,15,3,13,0,0,[],2021-08-17 10:32:36+00:00,2022-04-15 00:40:49+00:00,20786893.0,"240 days, 14:08:13","[{'comment_id': 690632774, 'comment_body': 'Maybe move this comment inside the function where you moved the code too?', 'comment_created': datetime.datetime(2021, 8, 17, 18, 46, 45, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 690636288, 'comment_body': ""One slight issue with just using the 'registered_job' and not the job object itself is that we might need more granular control.\r\n\r\nFor example, for the 'facility' queue jobs, we only want to allow a user to see jobs for their own facility (if they have appropriate permissions) and not for all facilities, to do this, we would have to introspect the Job object.\r\n\r\nThe superuser is of course the exception, as they can see all facility jobs across all facilities."", 'comment_created': datetime.datetime(2021, 8, 17, 18, 51, 42, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 690637054, 'comment_body': 'This seems to have been reverted from the previous PR?', 'comment_created': datetime.datetime(2021, 8, 17, 18, 52, 50, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 691431838, 'comment_body': '@rtibbles do we have a DRF permission on the lines of `CanManageContentOfOwnFacility` or can we build one like we have here: https://github.com/learningequality/kolibri/blob/release-v0.15.x/kolibri/core/tasks/permissions.py...? ', 'comment_created': datetime.datetime(2021, 8, 18, 16, 47, 9, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 691434017, 'comment_body': ""No, not a great idea. That function has its own doc string that defines what its doing. \r\n\r\nLet this comment stay here for clarity of what's going on.  "", 'comment_created': datetime.datetime(2021, 8, 18, 16, 49, 49, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 691436314, 'comment_body': 'No sir, actually I first removed the default values of the parameters but then I added them back so that instances of `RegisteredJob` can be created by passing only a part of the arguments. Might help in testing.  ', 'comment_created': datetime.datetime(2021, 8, 18, 16, 52, 46, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 702022482, 'comment_body': ""My note was mostly just about the fact that the 'DRF way' refers to what is happening now inside the function that is being called."", 'comment_created': datetime.datetime(2021, 9, 3, 16, 20, 50, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 702023339, 'comment_body': ""My thought was to do something similar to the `readable_by_user_filter` that we have on the Kolibri permissions classes: https://github.com/learningequality/kolibri/blob/b87f9da274a6a9218419cf9f858be695aa04304a/kolibri/core/auth/permissions/base.py#L57\r\n\r\nWe couldn't use it directly though, as it would have to be compatible with the SQLAlchemy interface we are using for querying jobs."", 'comment_created': datetime.datetime(2021, 9, 3, 16, 22, 15, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 702023627, 'comment_body': 'Or... because it depends on metadata inside the stored job object, it would probably have to do the filtering in Python anyway.', 'comment_created': datetime.datetime(2021, 9, 3, 16, 22, 39, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 702024155, 'comment_body': 'Yes, I agree that having the defaults is helpful, I was just curious as you had previously had defaults, removed them, and now they were coming back in. I think this change is good, just wanted to make sure it was intentional.', 'comment_created': datetime.datetime(2021, 9, 3, 16, 23, 39, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 706123793, 'comment_body': 'Resolved on Slack.', 'comment_created': datetime.datetime(2021, 9, 10, 12, 0, 49, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 716595929, 'comment_body': 'This is not working when is being executed from the setup wizard. In this case the request is done from an anonymous user that in the previous implementation has permission to execute this endpoint because it\'s in a non-provisioned device. \r\nNow we get this error and the wizard can not sync any user:\r\n```\r\n  File ""/datos/le/mio/kolibri/kolibri/core/tasks/api.py"", line 345, in create\r\n    facility_id=request.user.facility_id, **request_data\r\nAttributeError: \'KolibriAnonymousUser\' object has no attribute \'facility_id\'\r\n```', 'comment_created': datetime.datetime(2021, 9, 27, 11, 19, 5, tzinfo=datetime.timezone.utc), 'commenter': 'jredrejo', 'type': 'User'}, {'comment_id': 716854425, 'comment_body': 'Looks like I should remove the `[IsAuthenticated]` permission class from the `permission_classes` and use `request.user.get(...)` instead of accessing the attribute directly. ', 'comment_created': datetime.datetime(2021, 9, 27, 16, 26, 31, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': '494ba55f594a8aa3b3b7b58ba612e222a4677615', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07635991dadbe7bcd125b48c1d116ae733d1bd09', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '06d5405fcd795257e59782a709fcba4b0eb6cbde', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8bfabfbbcf6a83bf9e593ab3b141989caee80038', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd674d5ab0e485f2b7688eeab5c226441d615e6f', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac3268e95f434361ea053c538ad023ddf90658bd', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d921f9566e675792e2203d30caa0e50f46e07ba', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f3dd2a03dac6e24c1153ffe0db69666af01873c', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cefe8a5a5e744d657c88bccda02a458354259b4f', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49b530a7549e4044d7afe208630f6d45e16deb2d', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5374aa4e1c0d7099f2a6771513080ffd8fcf0c10', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b5ae9841654a534904758605c2412c8b1e4bcaf', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a9d116db600f567759bc98514731df12fd3d942', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f785999ea1b8af2f520354c44ea6d90b4e48d608', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb636e481052fcbe33e522dbd66a8d9b97387741', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+716794063,Developer documentation for Tasks architecture and consumable APIs,"## Summary
+
+This PR will have work related to developer documentation for Tasks architecture and consumable APIs. 
+
+## Reviewer guidance
+
+Is there room for more simplification and clarification (without compromising on technical details)? Does the docs cover all consumable APIs?
+
+----
+
+## Testing checklist
+
+- [ ] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [ ] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [ ] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [ ] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8336,https://api.github.com/repos/learningequality/kolibri/pulls/8336,https://github.com/learningequality/kolibri/pull/8336,closed,106,0,2,5,1,4,1,0,[{'name': 'TAG: developer docs'}],2021-08-20 14:45:24+00:00,2021-11-12 21:06:11+00:00,7280447.0,"84 days, 6:20:47","[{'comment_id': 747792889, 'comment_body': '```suggestion\r\nasynchronously outside of the HTTP request-response cycle. This frees the HTTP server for client use.\r\n```', 'comment_created': datetime.datetime(2021, 11, 11, 20, 20, 48, tzinfo=datetime.timezone.utc), 'commenter': 'indirectlylit', 'type': 'User'}, {'comment_id': 747793600, 'comment_body': ""> there by that module gets to run\r\n\r\nI'm a bit confused about this phrase. Is the intent something like:\r\n\r\n```suggestion\r\nthem, which results in the registration of tasks defined within.\r\n```"", 'comment_created': datetime.datetime(2021, 11, 11, 20, 22, 6, tzinfo=datetime.timezone.utc), 'commenter': 'indirectlylit', 'type': 'User'}, {'comment_id': 747795548, 'comment_body': '```suggestion\r\n- ``validator (callable)``: validator for the job. The details of how validation works is described later.\r\n```', 'comment_created': datetime.datetime(2021, 11, 11, 20, 25, 38, tzinfo=datetime.timezone.utc), 'commenter': 'indirectlylit', 'type': 'User'}, {'comment_id': 747797826, 'comment_body': '```suggestion\r\n- ``priority (""high"" or ""regular"")``: priority of the job. It can be ``""high""`` or ``""regular""``. ``""regular""`` priority is for tasks that can wait for some time before it actually starts executing. Tasks that are shown to users in the task manager should use regular priority. ``""high""`` priority is used for tasks that need execution as soon as possible. These are often short-lived tasks that temporarily block user interaction using a \'busy\' animation (for example, tasks that import channel metadata before browsing)\r\n```', 'comment_created': datetime.datetime(2021, 11, 11, 20, 29, 53, tzinfo=datetime.timezone.utc), 'commenter': 'indirectlylit', 'type': 'User'}]","[{'commit_sha': '909e9c6022f8192bacf5374ae28347c22c4b712a', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5c95225b39f4cde2b2f34ca017444de9cd3f8ee6', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc41305340d4df4854dffdebc83b589ed06fb328', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0ebe2a70e20a92c31b14aa11fa9924c92831fcd9', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b023f933203f5cda5524a52a2a588228858b7504', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+706708306,Decouple tasks to their respective Django apps,"## Summary
+<!--
+ * description of the change
+ * manual verification steps performed
+ * screenshots if the PR affects the UI
+-->
+
+This PR decouples `core/tasks/api.py` tasks to their respective core django apps.
+
+## Reviewer guidance
+
+Do the structure of tasks, their validators make sense?  
+
+Fixes #9268
+
+
+----
+
+## Testing checklist
+
+- [x] Contributor has fully tested the PR manually
+- [ ] If there are any front-end changes, before/after screenshots are included
+- [ ] Critical user journeys are covered by Gherkin stories
+- [x] Critical and brittle code paths are covered by unit tests
+
+
+## PR process
+
+- [x] PR has the correct target branch and milestone
+- [ ] PR has 'needs review' or 'work-in-progress' label
+- [x] If PR is ready for review, a reviewer has been added. (Don't use 'Assignees')
+- [ ] If this is an important user-facing change, PR or related issue has a 'changelog' label
+- [ ] If this includes an internal dependency change, a link to the diff is provided
+
+## Reviewer checklist
+
+- Automated test coverage is satisfactory
+- PR is fully functional
+- PR has been tested for [accessibility regressions](http://kolibri-dev.readthedocs.io/en/develop/manual_testing.html#accessibility-a11y-testing)
+- External dependency files were updated if necessary (`yarn` and `pip`)
+- Documentation is updated
+- Contributor is in AUTHORS.md
+",True,8269,https://api.github.com/repos/learningequality/kolibri/pulls/8269,https://github.com/learningequality/kolibri/pull/8269,closed,1548,11,7,10,3,6,0,0,[],2021-08-09 17:32:55+00:00,2022-04-25 18:47:28+00:00,22382073.0,"259 days, 1:14:33","[{'comment_id': 857114815, 'comment_body': ""In `core/tasks/api.py` we have a task under `FacilityViewSet` named `startdataportalbulksync`, it'll be repalced with `startdataportalsync`. Our frontend will first fetch all the registered facilities and then it'll use our new task create api to enqeue `startdataportalbulksync` in bulk. "", 'comment_created': datetime.datetime(2022, 4, 24, 11, 54, 52, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 857115092, 'comment_body': '`startbulkdelete` will be replaced with `startdeletechannel`.', 'comment_created': datetime.datetime(2022, 4, 24, 11, 57, 2, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 857115427, 'comment_body': '`startdiskbulkexport` will be replaced with the bulk version of `startdiskexport`. Here bulk version means frontend will be sending a list of `startduskexport` tasks to our new tasks create api. ', 'comment_created': datetime.datetime(2022, 4, 24, 12, 0, 29, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 857116342, 'comment_body': 'Earlier it was: \r\n\r\n```python\r\nchannel_name = task_description.get(""channel_name"", \r\n               get_channe_name(channel_id=channel_id, require_channel=require_channel))\r\n```\r\n\r\nThe above was interfering with tests. Even when `channel_name` was provided, `get_channel_name` was being run so I changed it to `try except`.\r\n\r\nIs the new code segment doing the right thing?\r\nIf we have `channel_id` already shouldn\'t we fetch from db and return that as `channel_name`...? This will return the correct channel name even if our frontend provides errenous `channel_name`. \r\n\r\nThoughts on these @rtibbles?', 'comment_created': datetime.datetime(2022, 4, 24, 12, 7, 8, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}, {'comment_id': 857800299, 'comment_body': ""The main issue is for channels that do not yet exist in our database, so we can't look up the channel name (which is why it need to be provided separately)."", 'comment_created': datetime.datetime(2022, 4, 25, 16, 11, 7, tzinfo=datetime.timezone.utc), 'commenter': 'rtibbles', 'type': 'User'}, {'comment_id': 857812348, 'comment_body': 'Gotcha!', 'comment_created': datetime.datetime(2022, 4, 25, 16, 25, 4, tzinfo=datetime.timezone.utc), 'commenter': 'vkWeb', 'type': 'User'}]","[{'commit_sha': '5c61b96c34fc4a6262450c1cb0ccf8993344c104', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e68e3a823de94d9f7f8296d06c949706ce696405', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3441d4e21ac346bc92ac3f8c980e936471b49d56', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ae7502406fd838511e955fea105570e369b301f', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e3caea219889056de68698b75ead39b7be329b7', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76f2fca5e5027d7c371239b33105ab1b8e3e1858', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ec107caca32131faf3f639b5a5fc00b42ff285b0', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bed76c2aa0d5086a3449f2a9d56b6911840f5e90', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d29fdd8ad031a39b6595e93f30c4012a355bb4a', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09a7fff9febd36426856e4252632c9d38ce55e3b', 'committer_username': 'vkWeb', 'committer_name': 'Vivek Agrawal', 'committer_email': 'vivekmittalagrawal@gmail.com', 'commit_date': datetime.datetime(2017, 3, 27, 19, 48, 46, tzinfo=datetime.timezone.utc)}]",Vivek Agrawal,26724128,vivekmittalagrawal@gmail.com,User,,39,,45,132
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+49976939,kolibri,learningequality/kolibri,CSS,637,765,42,199,31392,422,37,38,"[{'id': 1743025353, 'number': 11922, 'closed': datetime.datetime(2024, 2, 27, 14, 10, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 2, 26, 9, 59, 36, tzinfo=datetime.timezone.utc), 'time_taken': 101433.0, 'time_delta': '1 day, 4:10:33', 'additions': 2, 'deletions': 6, 'state': 'closed'}, {'id': 1697636742, 'number': 11811, 'closed': datetime.datetime(2024, 1, 26, 18, 59, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 26, 18, 58, tzinfo=datetime.timezone.utc), 'time_taken': 90.0, 'time_delta': '0:01:30', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 1697086115, 'number': 11805, 'closed': datetime.datetime(2024, 1, 26, 18, 55, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 26, 12, 12, 29, tzinfo=datetime.timezone.utc), 'time_taken': 24161.0, 'time_delta': '6:42:41', 'additions': 13, 'deletions': 4, 'state': 'closed'}, {'id': 1664651290, 'number': 11694, 'closed': datetime.datetime(2024, 1, 4, 12, 55, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 4, 12, 49, 29, tzinfo=datetime.timezone.utc), 'time_taken': 383.0, 'time_delta': '0:06:23', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 1664632773, 'number': 11693, 'closed': datetime.datetime(2024, 1, 4, 12, 46, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 4, 12, 35, 4, tzinfo=datetime.timezone.utc), 'time_taken': 675.0, 'time_delta': '0:11:15', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1664586550, 'number': 11692, 'closed': datetime.datetime(2024, 1, 4, 12, 25, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 4, 12, 1, 26, tzinfo=datetime.timezone.utc), 'time_taken': 1472.0, 'time_delta': '0:24:32', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 1664544067, 'number': 11691, 'closed': datetime.datetime(2024, 1, 4, 11, 55, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 4, 11, 29, 59, tzinfo=datetime.timezone.utc), 'time_taken': 1556.0, 'time_delta': '0:25:56', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1663675545, 'number': 11688, 'closed': datetime.datetime(2024, 1, 4, 11, 21, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 1, 3, 18, 44, 1, tzinfo=datetime.timezone.utc), 'time_taken': 59872.0, 'time_delta': '16:37:52', 'additions': 34, 'deletions': 29, 'state': 'closed'}, {'id': 1642438584, 'number': 11631, 'closed': datetime.datetime(2023, 12, 13, 14, 0, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 13, 13, 24, 22, tzinfo=datetime.timezone.utc), 'time_taken': 2150.0, 'time_delta': '0:35:50', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1641082136, 'number': 11625, 'closed': datetime.datetime(2023, 12, 12, 17, 34, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 12, 16, 51, 28, tzinfo=datetime.timezone.utc), 'time_taken': 2571.0, 'time_delta': '0:42:51', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1641041979, 'number': 11624, 'closed': datetime.datetime(2023, 12, 12, 16, 42, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 12, 16, 27, 18, tzinfo=datetime.timezone.utc), 'time_taken': 885.0, 'time_delta': '0:14:45', 'additions': 29, 'deletions': 0, 'state': 'closed'}, {'id': 1641021745, 'number': 11623, 'closed': datetime.datetime(2023, 12, 12, 16, 31, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 12, 12, 16, 18, 36, tzinfo=datetime.timezone.utc), 'time_taken': 765.0, 'time_delta': '0:12:45', 'additions': 7, 'deletions': 9, 'state': 'closed'}, {'id': 1621494485, 'number': 11564, 'closed': datetime.datetime(2023, 12, 11, 17, 20, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 11, 29, 9, 51, 7, tzinfo=datetime.timezone.utc), 'time_taken': 1063775.0, 'time_delta': '12 days, 7:29:35', 'additions': 31, 'deletions': 0, 'state': 'closed'}, {'id': 1567143213, 'number': 11443, 'closed': None, 'created': datetime.datetime(2023, 10, 20, 17, 57, 14, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 163, 'deletions': 46, 'state': 'open'}, {'id': 1521524805, 'number': 11271, 'closed': datetime.datetime(2023, 9, 26, 16, 34, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 19, 15, 9, 3, tzinfo=datetime.timezone.utc), 'time_taken': 609910.0, 'time_delta': '7 days, 1:25:10', 'additions': 90, 'deletions': 12, 'state': 'closed'}, {'id': 1479505743, 'number': 11119, 'closed': datetime.datetime(2023, 8, 17, 21, 52, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 17, 18, 33, 54, tzinfo=datetime.timezone.utc), 'time_taken': 11937.0, 'time_delta': '3:18:57', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1236329171, 'number': 10105, 'closed': datetime.datetime(2023, 2, 14, 18, 49, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 10, 8, 51, 48, tzinfo=datetime.timezone.utc), 'time_taken': 381465.0, 'time_delta': '4 days, 9:57:45', 'additions': 102, 'deletions': 2, 'state': 'closed'}, {'id': 1143187743, 'number': 9889, 'closed': datetime.datetime(2022, 12, 7, 18, 29, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 12, 2, 12, 50, tzinfo=datetime.timezone.utc), 'time_taken': 452396.0, 'time_delta': '5 days, 5:39:56', 'additions': 476, 'deletions': 18, 'state': 'closed'}, {'id': 1083727885, 'number': 9769, 'closed': datetime.datetime(2022, 10, 18, 17, 30, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 11, 19, 8, 41, tzinfo=datetime.timezone.utc), 'time_taken': 598915.0, 'time_delta': '6 days, 22:21:55', 'additions': 10, 'deletions': 0, 'state': 'closed'}, {'id': 1000856881, 'number': 9567, 'closed': datetime.datetime(2022, 7, 28, 16, 54, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 19, 14, 27, 42, tzinfo=datetime.timezone.utc), 'time_taken': 786380.0, 'time_delta': '9 days, 2:26:20', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 925801853, 'number': 9395, 'closed': datetime.datetime(2022, 5, 3, 15, 59, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 2, 17, 56, 2, tzinfo=datetime.timezone.utc), 'time_taken': 79380.0, 'time_delta': '22:03:00', 'additions': 77, 'deletions': 2, 'state': 'closed'}, {'id': 910741502, 'number': 9297, 'closed': datetime.datetime(2022, 4, 15, 15, 10, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 15, 10, 3, 51, tzinfo=datetime.timezone.utc), 'time_taken': 18371.0, 'time_delta': '5:06:11', 'additions': 48, 'deletions': 29, 'state': 'closed'}, {'id': 727087793, 'number': 8396, 'closed': datetime.datetime(2021, 9, 3, 23, 58, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 3, 21, 6, 58, tzinfo=datetime.timezone.utc), 'time_taken': 10264.0, 'time_delta': '2:51:04', 'additions': 6, 'deletions': 4, 'state': 'closed'}, {'id': 716794063, 'number': 8336, 'closed': datetime.datetime(2021, 11, 12, 21, 6, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 20, 14, 45, 24, tzinfo=datetime.timezone.utc), 'time_taken': 7280447.0, 'time_delta': '84 days, 6:20:47', 'additions': 106, 'deletions': 0, 'state': 'closed'}, {'id': 714119198, 'number': 8303, 'closed': datetime.datetime(2022, 4, 15, 0, 40, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 17, 10, 32, 36, tzinfo=datetime.timezone.utc), 'time_taken': 20786893.0, 'time_delta': '240 days, 14:08:13', 'additions': 498, 'deletions': 279, 'state': 'closed'}, {'id': 712966032, 'number': 8299, 'closed': datetime.datetime(2021, 8, 17, 15, 57, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 15, 16, 38, 9, tzinfo=datetime.timezone.utc), 'time_taken': 170336.0, 'time_delta': '1 day, 23:18:56', 'additions': 206, 'deletions': 105, 'state': 'closed'}, {'id': 706708306, 'number': 8269, 'closed': datetime.datetime(2022, 4, 25, 18, 47, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 9, 17, 32, 55, tzinfo=datetime.timezone.utc), 'time_taken': 22382073.0, 'time_delta': '259 days, 1:14:33', 'additions': 1548, 'deletions': 11, 'state': 'closed'}, {'id': 689926505, 'number': 8204, 'closed': datetime.datetime(2021, 7, 14, 14, 21, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 14, 13, 42, 23, tzinfo=datetime.timezone.utc), 'time_taken': 2366.0, 'time_delta': '0:39:26', 'additions': 0, 'deletions': 14, 'state': 'closed'}, {'id': 683981511, 'number': 8186, 'closed': datetime.datetime(2021, 7, 20, 21, 47, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 6, 0, 11, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1287353.0, 'time_delta': '14 days, 21:35:53', 'additions': 530, 'deletions': 50, 'state': 'closed'}, {'id': 663923448, 'number': 8142, 'closed': datetime.datetime(2021, 6, 22, 14, 21, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 7, 21, 24, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1270607.0, 'time_delta': '14 days, 16:56:47', 'additions': 498, 'deletions': 56, 'state': 'closed'}, {'id': 632076116, 'number': 8063, 'closed': datetime.datetime(2021, 5, 7, 23, 20, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 7, 0, 4, 16, tzinfo=datetime.timezone.utc), 'time_taken': 83800.0, 'time_delta': '23:16:40', 'additions': 37, 'deletions': 8, 'state': 'closed'}, {'id': 622817037, 'number': 8030, 'closed': datetime.datetime(2021, 4, 28, 21, 40, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 25, 18, 39, 3, tzinfo=datetime.timezone.utc), 'time_taken': 270090.0, 'time_delta': '3 days, 3:01:30', 'additions': 144, 'deletions': 16, 'state': 'closed'}, {'id': 610125705, 'number': 7959, 'closed': datetime.datetime(2021, 4, 19, 19, 1, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 6, 19, 45, 14, tzinfo=datetime.timezone.utc), 'time_taken': 1120587.0, 'time_delta': '12 days, 23:16:27', 'additions': 37, 'deletions': 23, 'state': 'closed'}, {'id': 608616051, 'number': 7951, 'closed': datetime.datetime(2021, 4, 5, 16, 57, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 4, 21, 45, 15, tzinfo=datetime.timezone.utc), 'time_taken': 69131.0, 'time_delta': '19:12:11', 'additions': 0, 'deletions': 5, 'state': 'closed'}, {'id': 608541039, 'number': 7950, 'closed': datetime.datetime(2021, 4, 5, 21, 46, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 4, 12, 49, 21, tzinfo=datetime.timezone.utc), 'time_taken': 118633.0, 'time_delta': '1 day, 8:57:13', 'additions': 11, 'deletions': 9, 'state': 'closed'}, {'id': 607391640, 'number': 7940, 'closed': datetime.datetime(2021, 4, 1, 18, 10, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 1, 13, 10, 35, tzinfo=datetime.timezone.utc), 'time_taken': 17994.0, 'time_delta': '4:59:54', 'additions': 2, 'deletions': 2, 'state': 'closed'}]"

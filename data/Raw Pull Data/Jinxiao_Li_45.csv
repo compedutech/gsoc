@@ -1,0 +1,672 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+973028396,Support Mathesar custom JSON type reading and casting,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Related to #1409 
+
+<!-- Concisely describe what the pull request does. -->
+Created create_json_casts and _get_json_type_body_map to support casting to JSON or JSONB types.
+Also created happy test cases to test the transform to JSON.
+
+**Technical details**
+<!-- Add any other information or technical details about the implementation; or delete the section entirely. -->
+Supports the default casting between JSON and JSONB, and defines a custom casting from TEXT to json types. 
+For NULL values, skip casting and keep the original value.
+
+
+**Screenshots**
+<!-- Add screenshots to show the problem and the solution; or delete the section entirely. -->
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [x] I added or updated documentation (if applicable).
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1443,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1443,https://github.com/mathesar-foundation/mathesar/pull/1443,closed,402,13,12,24,3,7,0,1,[],2022-06-21 03:51:28+00:00,2022-07-15 03:38:00+00:00,2072792.0,"23 days, 23:46:32","[{'comment_id': 902295865, 'comment_body': '```suggestion\r\njson = _make_hint(""json"")\r\n```', 'comment_created': datetime.datetime(2022, 6, 21, 8, 12, 21, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 902299494, 'comment_body': ""1. I don't think if-else are necessary here\r\n2. There's a bug, since you're declaring a variable called `integer_res`, but then assigning to a variable called `json_res`."", 'comment_created': datetime.datetime(2022, 6, 21, 8, 16, 2, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 904772457, 'comment_body': 'Please fill these with actual test cases in the `VALID` arrays.', 'comment_created': datetime.datetime(2022, 6, 23, 9, 5, 36, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 904773367, 'comment_body': 'Please remove these sorts of lines. They will be a pain to remove later.', 'comment_created': datetime.datetime(2022, 6, 23, 9, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 905021434, 'comment_body': 'This condition does not handle json null values. If the value of `json_res` is `""null""` (This is not the SQL NULL, this is json null value), then this condition would throw an exception. We should probably allow json null values and convert them to SQL NULLs.\r\n\r\n@mathemancer Thoughts on this?', 'comment_created': datetime.datetime(2022, 6, 23, 13, 27, tzinfo=datetime.timezone.utc), 'commenter': 'pavish', 'type': 'User'}, {'comment_id': 905192607, 'comment_body': ""I'm not sure whether a bare JSON null is even possible, since both SQL `NULL` and JSON `null` are represented as `None` in Python."", 'comment_created': datetime.datetime(2022, 6, 23, 15, 46, 10, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}, {'comment_id': 920923634, 'comment_body': 'This is still different. Please check this file out from the master branch', 'comment_created': datetime.datetime(2022, 7, 14, 8, 58, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}]","[{'commit_sha': 'abfa5e720ea0c5faa4cc18509ade0e7680dd020d', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '851450feb7f0c00f3e5f8d94bfd281817ec486ff', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29afc18208aa5d8f69ff68f8297d1d4552fe1567', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd38e8d3bfba06df10e3af4d0248b15758d24d70', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a1c8ae5e0e0b22e2d3aadc905c0044723de05cfb', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '77886bb282f5c0cd93c50483b7c90d77b7468a12', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '778240783159eaab7a9fdb0f9a5302e7387ac3cc', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f45fb17aae62a194f54918215602bcbf69e36e73', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59d27197a25d66a856f4d2eeb647040c7f635397', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d300549e2b86ba7b2a60d2bac5813d689baa4a6', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c99234e36c16d6f86b363a2b80979b8e77e8332c', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ed4f58568ea11f230bfcd81365e99e60ba0feff', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd22bef259b13096cc7ed717ff3d378d9cc802415', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3866344fa3f42df2e95942a5f8e7e8dbed44a173', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b74d05e096bb854f28c61ceb47aa02da44202c53', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a2227f91793bf4fdc60a6dc6d05909c244870348', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f76badde339cee7a325fdb1a3137dfe2f4c325b', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5472e21e32e40dee036937a98cb5f0c013e66b6d', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e7d0337dd1e4ff40b6bd5b017b28d15e96e800d', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40865fba3ade32d39324b5b82c350ce5b5a5b054', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5990d65be109860becdc588ca5631f1f7cf98b42', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b6e17bec7f54170162ee0864b0a28a9c66a1da5', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee6d47e0268b86ab82f7cab9faf8cac886bb2c2d', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af0a59f2d48c89740579473b19581c2152adad5c', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+1002506365,fix merging conflict issue,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Fixes #[issue number]
+
+<!-- Concisely describe what the pull request does. -->
+
+**Technical details**
+<!-- Add any other information or technical details about the implementation; or delete the section entirely. -->
+
+**Screenshots**
+<!-- Add screenshots to show the problem and the solution; or delete the section entirely. -->
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [x] I added or updated documentation (if applicable).
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1474,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1474,https://github.com/mathesar-foundation/mathesar/pull/1474,closed,44,0,5,13,2,0,1,1,[{'name': 'pr-status: review'}],2022-07-20 16:14:17+00:00,2022-07-21 22:48:14+00:00,110037.0,"1 day, 6:33:57",[],"[{'commit_sha': '2843448b7c6fccc014e42f1e289513731f622ad8', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'feea9fc9f7515adce60dc75d3c618ab27429ccbb', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ddbcacabefca3f80f1892c5ea98415e560c2d35', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba548ab45df46fa273d3254b993f197fd37b2dc8', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f3a7ef8758438cc06c1db888730f6e4d08477e48', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dcbed415213c373edfb661855b781b65ab8a44a', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a47efdf80407436ba18aec5187589b1e24fd6a2d', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '06d5c8aa06f1554e5c29879a8221b93d111f60e7', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03cf7a96cfc9db27768043397cca84500fe5c0ba', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3a31cebc8edf5916fd42c54f68c0b5db367326b', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dfb8058a1dbba5c4ec703f6fd64cec9bc27e3dd', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '61b7061da0606be3b88e66071937257d9dd2ae3b', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8eaad8e9ad9141ee814dcdc8307a6c5978f7ac13', 'committer_username': 'pavish', 'committer_name': 'Pavish Kumar Ramani Gopal', 'committer_email': 'pavishkumar.r@gmail.com', 'commit_date': datetime.datetime(2015, 4, 8, 9, 5, 6, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+1008029003,add json array sorting tests,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Related to #1411 
+
+<!-- Concisely describe what the pull request does. -->
+This PR creates a testing table with a column of json array type, and test cases for json array sorting behavior.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [x] I added or updated documentation (if applicable).
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1482,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1482,https://github.com/mathesar-foundation/mathesar/pull/1482,closed,65,0,3,8,2,1,0,0,[],2022-07-26 04:15:16+00:00,2022-07-28 03:33:11+00:00,170275.0,"1 day, 23:17:55","[{'comment_id': 930762196, 'comment_body': 'The goals of this test should be both checking the behavior, but also providing an example of how sorting will look.\r\n\r\n```suggestion\r\n    assert [row[""json_array""] for row in record_list] == [\r\n        \'[]\',\r\n        \'[""BMW"", ""Ford"", ""Fiat""]\',\r\n        \'[""BMW"", ""Ford"", [1, 2]]\',\r\n        \'[""BMW"", ""Ford"", [""Akshay"", ""Prashant"", ""Varun""]]\',\r\n        \'[""BMW"", ""Ford"", [1, 2, 3]]\',\r\n        \'[""Ford"", ""BMW"", ""Fiat""]\',\r\n        \'[1, 2, 3]\',\r\n        \'[1, 2, false]\',\r\n        \'[1, 2, true]\',\r\n        \'[2, 3, 4]\',\r\n        \'[false, false, false]\',\r\n        \'[true, true, false]\',\r\n        \'[""BMW"", ""Ford"", ""Fiat"", ""Fiat""]\',\r\n        \'[""Ram"", ""Shyam"", ""Radhika"", ""Akshay"", ""Prashant"", ""Varun""]\',\r\n    ]\r\n```\r\n\r\nPlease double-check my ordering and types for the suggestion. I hope it makes clear how the test should look, though.', 'comment_created': datetime.datetime(2022, 7, 27, 8, 19, 13, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}]","[{'commit_sha': '81f343b7302b79e7e7cb7dd7b56601ca9d63aad1', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '95dfa23b95118edc01a95e0a985d1996b7444a53', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb6afa5d4470f130b0281a07f5be6fddd991a8a7', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eecf7f25e526ca9735c0660f4e8f8124104665af', 'committer_username': 'mathemancer', 'committer_name': 'Brent Moran', 'committer_email': 'brentmoran@gmail.com', 'commit_date': datetime.datetime(2014, 3, 2, 7, 55, 26, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9d112e328c1e240485865502051c1a28f1a6ef0f', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80d2821cad4c257b88105e49c5c1c1574d43bdf9', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '13cbc82554041bbc7852d30cf9c5ad512c667061', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7083c42d24e3a7a90dc178f5964cba0a0345f1d0', 'committer_username': 'mathemancer', 'committer_name': 'Brent Moran', 'committer_email': 'brentmoran@gmail.com', 'commit_date': datetime.datetime(2014, 3, 2, 7, 55, 26, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+1036179559,Add test for json object sorting as well as json array contains function,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+
+<!-- Concisely describe what the pull request does. -->
+1. Added test cases for json object type sorting functions. The sorting results is displayed at `db/tests/records/operations/test_sort.py/test_json_sort_object`
+2. Implemented the filtering functions of ""json array contains"" and ""json array is not empty"". Contain function is based on the sqlalchemy function ` jsonb_contains(jsonb, jsonb)`, which transforms input strings into jsonb type. The useage of either array ot string is to be discussed.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [ ] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [ ] My pull request targets the `master` branch of the repository
+- [ ] My commit messages follow [best practices][best_practices].
+- [ ] My code follows the established code style of the repository.
+- [ ] I added tests for the changes I made (if applicable).
+- [ ] I added or updated documentation (if applicable).
+- [ ] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1565,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1565,https://github.com/mathesar-foundation/mathesar/pull/1565,closed,132,42,6,13,5,6,1,1,[{'name': 'pr-status: review'}],2022-08-25 02:39:52+00:00,2022-09-07 17:20:28+00:00,1176036.0,"13 days, 14:40:36","[{'comment_id': 955945917, 'comment_body': ""I'd like the python class name to reflect that this function is about JSON, similarly to how the id string makes that clear.\n\nSame goes for all function classes that are meant to operate only on JSON values."", 'comment_created': datetime.datetime(2022, 8, 26, 11, 26, 29, tzinfo=datetime.timezone.utc), 'commenter': 'dmos62', 'type': 'User'}, {'comment_id': 960573411, 'comment_body': 'For this filter, we do not expect any user input. So, this should be:\r\n```suggestion\r\n      [abstractTypeCategory.Array]: [],\r\n```', 'comment_created': datetime.datetime(2022, 9, 1, 12, 7, 43, tzinfo=datetime.timezone.utc), 'commenter': 'pavish', 'type': 'User'}, {'comment_id': 960645446, 'comment_body': 'Thanks for your suggestions, Pavish! I have made that change.', 'comment_created': datetime.datetime(2022, 9, 1, 13, 19, 22, tzinfo=datetime.timezone.utc), 'commenter': 'Jinxiao0302', 'type': 'User'}, {'comment_id': 961499322, 'comment_body': ""Since `Noop` is so similar to `Literal`, could you explain in a docstring why it is necessary? Is it because `Literal` creates an SQLAlchemy expression like `literal(subexpression)`, which in some way doesn't play well with the subexpression being a list of literals? Thanks!"", 'comment_created': datetime.datetime(2022, 9, 2, 9, 45, 56, tzinfo=datetime.timezone.utc), 'commenter': 'dmos62', 'type': 'User'}, {'comment_id': 962363369, 'comment_body': 'Thanks for your review! Since we are using array as a input in `JsonArrayContains`, it is having trouble passing the filtering tests because of the literal() function. Thus, we need another function without literal wrapping to have that porperly implemented.', 'comment_created': datetime.datetime(2022, 9, 4, 20, 11, 14, tzinfo=datetime.timezone.utc), 'commenter': 'Jinxiao0302', 'type': 'User'}, {'comment_id': 962459694, 'comment_body': ""@Jinxiao0302 Given the confusion, I do think it makes sense to add a docstring indicating the reason for this DBFunction.\r\n- The `Literal` DB function produces a `literal` SQLAlchemy wrapper which doesn't play nicely with the type conversion between python classes and db types in `psycopg2`. \r\n\r\n@dmos62 Long-term, we need to reassess how we're dealing with literal (in the general sense) values in the DBFunction subclasses. Wrapping an arg in `literal` should probably be avoided, except in situations where we actually want to produce a column of literals in the produced query. I don't think it should ever be used for the comparand in a filter."", 'comment_created': datetime.datetime(2022, 9, 5, 4, 5, 8, tzinfo=datetime.timezone.utc), 'commenter': 'mathemancer', 'type': 'User'}]","[{'commit_sha': '3722fc5bdd7f3e430078682f2eeae02cccc41797', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9eaa2c6f4a2dabeeebf01c2324cec06ebfd90296', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f0b062930557083f8d3ad42eb24ccd6075286b35', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8985c388c87f2fb21dbc3650e1662ae5f40d3283', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82359f7540bd310f5ed903d7089916f57064369e', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd074f2d6df5df9ad945b5ebfcd21fe73b4a114da', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e11b723dbac1e1b1835fdcaec5d83a1cd465fce7', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30be43040a1bdd471118e6199ace869d33aecd28', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2d1caa0236cf322e77eba6d812c5bfe21e68f8e', 'committer_username': 'mathemancer', 'committer_name': 'Brent Moran', 'committer_email': 'brentmoran@gmail.com', 'commit_date': datetime.datetime(2014, 3, 2, 7, 55, 26, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f32deeac83bec8bcd44e4b403c3c61f4669d6829', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bc91afbf920a5d3f148cc97e081c4284099035c7', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d499868a59a0ddffbf0aa29ebc68f442c6c0bed', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '514e09c556f97f364dfb5aad427e890add648532', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+1014640761,Implement JSON array filtering functions,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Related to  #1410
+
+<!-- Concisely describe what the pull request does. -->
+
+**Technical details**
+Added a DBFunction for getting JSON array length;
+To be done: Add comparaing functions that nest array length function.
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [ ] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [ ] My pull request targets the `master` branch of the repository
+- [ ] My commit messages follow [best practices][best_practices].
+- [ ] My code follows the established code style of the repository.
+- [ ] I added tests for the changes I made (if applicable).
+- [ ] I added or updated documentation (if applicable).
+- [ ] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1493,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1493,https://github.com/mathesar-foundation/mathesar/pull/1493,closed,96,3,9,12,1,4,1,2,[{'name': 'pr-status: review'}],2022-08-02 05:40:53+00:00,2022-08-11 03:09:18+00:00,768505.0,"8 days, 21:28:25","[{'comment_id': 935415681, 'comment_body': ""Actually, since this `DBFunction` depends on the custom type `json_array` which has its own namespace (`db.types.custom.json_array`), it makes sense to put this `DBFunction` in there too (some other namespaces under `db.types.custom` already do this). You're actually already half-way there, since you've added these modules to the list of modules to search for `DBFunction`s in (`db.functions.known_db_functions._modules_to_search_in`)."", 'comment_created': datetime.datetime(2022, 8, 2, 10, 53, 18, tzinfo=datetime.timezone.utc), 'commenter': 'dmos62', 'type': 'User'}, {'comment_id': 935443121, 'comment_body': 'You\'ll want to tell Mathesar how these hints relate to actual types. Look at `db/types/hintsets.py`. Note this line:\r\n\r\n```\r\n    _add_to_db_type_hintsets(categories.JSON_TYPES, (hints.json,))\r\n```\r\n\r\nThis says that all database types defined as `categories.JSON_TYPES` are associated with the hints `(hints.json,)`.\r\n\r\nYou\'ll probably want to make changes to this. And, to the related categories in `db.types.categories` as well, since currently we only have `categories.JSON_TYPES`, which is a catch-all category for everything JSON, and you probably want something more granular.\r\n\r\nNote how the `categories` sets define a sort of hierarchy, where for example time-related types are made up of point-in-time as well as duration types, those in turn are made up of other more granular categories, etc.\r\n\r\nBy the way, if this wasn\'t clear before (probably not), the way Mathesar finds what hints are associated with what UI type, is it takes the intersection of a UI type\'s DB types\' hints (a UI type is effectively a set of DB types, and each of those have a set of hints, as seen in `db/types/hintsets.py`); and, the way it checks whether a filter is applyable to a column of a given UI type, is that it checks if the hints of the first parameter of that filter are satisfied by the hints of the UI type. ""Satisfied"" here is intentionally ambiguous, since we want the freedom to evolve how this works, but at the moment this mostly means that the first param hint-set must be a subset of the UI type hint-set.\r\n\r\nOof, sorry for the wall of text. Thumbs up for braving through :+1::+1:, feel free to reach out.', 'comment_created': datetime.datetime(2022, 8, 2, 11, 18, 45, tzinfo=datetime.timezone.utc), 'commenter': 'dmos62', 'type': 'User'}, {'comment_id': 935450350, 'comment_body': ""This isn't actually a filter (doesn't return a boolean; not meant to be used directly by the UI). You'll probably use this function to compose a `DBFunctionPacked`-based filter and you'll give that a `mathesar_filter` hint, but giving this function here a `mathesar_filter` will result in unexpected behaviour."", 'comment_created': datetime.datetime(2022, 8, 2, 11, 25, 40, tzinfo=datetime.timezone.utc), 'commenter': 'dmos62', 'type': 'User'}, {'comment_id': 936114922, 'comment_body': 'Thanks for your very helpful explanation! @dmos62 , I added a DBFunctionPacked function using ArrayLength in the `db/types/custom/json_array` and also moved the ArrayLength into that file. Also, I added the json array into categories. ', 'comment_created': datetime.datetime(2022, 8, 2, 23, 33, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Jinxiao0302', 'type': 'User'}]","[{'commit_sha': 'feddbf3c2cd16c0a2ff605068d63b2a62cb4722a', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '053c4b90628a510f322e026e23c5ee323fb9ec40', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4425a728e730327e9010a545173f790da927bbda', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d4bc7efc0d0ee4d48c41ae7bf2cbae004b8f1d6', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d6522d95024f86d1fad2a5e139f096f1f003293', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '998fadc9249165ae77df15fb254c63884728747c', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '19d21c6eb4f4bc6698d0978a5126706c8fdb4a78', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cdb1dbbc31844b3c2156f398899cec0d5f5f7255', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd52361b4ee004050701814a5e66b9b2ae581a861', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd393993399903b513dc038807d4d14c88c12271a', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac420a7ab3898e912fa93776abec1c22cd2949f2', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '263552c61f83d0d858336254a0cf4466b51f1c3b', 'committer_username': 'mathemancer', 'committer_name': 'Brent Moran', 'committer_email': 'brentmoran@gmail.com', 'commit_date': datetime.datetime(2014, 3, 2, 7, 55, 26, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+1026913425,Complete all json array filtering functions with tests,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Fixes #1410 
+
+<!-- Concisely describe what the pull request does. -->
+Added Length Greater, Length Greater or equal, Length Less than, Length Less than or equal to fucntions at json_array.py.
+
+**Screenshots**
+<!-- Add screenshots to show the problem and the solution; or delete the section entirely. -->
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [ ] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [ ] My pull request targets the `master` branch of the repository
+- [ ] My commit messages follow [best practices][best_practices].
+- [ ] My code follows the established code style of the repository.
+- [ ] I added tests for the changes I made (if applicable).
+- [ ] I added or updated documentation (if applicable).
+- [ ] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1528,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1528,https://github.com/mathesar-foundation/mathesar/pull/1528,closed,117,4,4,5,2,0,1,2,[{'name': 'pr-status: review'}],2022-08-15 21:36:45+00:00,2022-08-16 17:31:18+00:00,71673.0,19:54:33,[],"[{'commit_sha': '55826443147de20ece2aae6d711e6f9ff1a75a3b', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a5d08e7771da80e55a265049c5006d4cb62d14b', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce7cecaa4b3481be3a0395c3f4ddf4b68cd7dd65', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bbd361c318352201a395f14a1840b358dd0891cf', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '837119d31f718527040bb81be1f35dec14172672', 'committer_username': 'pavish', 'committer_name': 'Pavish Kumar Ramani Gopal', 'committer_email': 'pavishkumar.r@gmail.com', 'commit_date': datetime.datetime(2015, 4, 8, 9, 5, 6, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+1049430095,Add json object filtering functions and tests,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Related to #1410 
+
+**Technical details**
+Type of json object filterings added:
+1. Contains key
+2. Not contains key
+3. Contains object
+4. Not contains object
+
+Type of json object filtering added but unsuccessful:
+1. Number of keys
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [ ] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [ ] My pull request targets the `master` branch of the repository
+- [ ] My commit messages follow [best practices][best_practices].
+- [ ] My code follows the established code style of the repository.
+- [ ] I added tests for the changes I made (if applicable).
+- [ ] I added or updated documentation (if applicable).
+- [ ] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",False,1606,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1606,https://github.com/mathesar-foundation/mathesar/pull/1606,closed,162,4,5,2,2,0,0,1,[],2022-09-08 02:29:39+00:00,2022-11-03 09:42:43+00:00,4864384.0,"56 days, 7:13:04",[],"[{'commit_sha': '5992fd221613a94efac06f963afdefff5e86ea21', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa447b9f7c8eaaa9215e660bc497eed2f0a55028', 'committer_username': 'pavish', 'committer_name': 'Pavish Kumar Ramani Gopal', 'committer_email': 'pavishkumar.r@gmail.com', 'commit_date': datetime.datetime(2015, 4, 8, 9, 5, 6, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+904307436,Referenced column deleted-issue 987,"Since the filtering funtion is still in progress, I modified the deleteColumn() function so that it has no more reference gregaring sorting and grouping relationships with the deleted columns.
+
+<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Fixes #987 
+
+<!-- Concisely describe what the pull request does. -->
+
+**Technical details**
+<!-- Add any other information or technical details about the implementation; or delete the section entirely. -->
+
+**Screenshots**
+<!-- Add screenshots to show the problem and the solution; or delete the section entirely. -->
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [x] I added tests for the changes I made (if applicable).
+- [x] I added or updated documentation (if applicable).
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1275,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1275,https://github.com/mathesar-foundation/mathesar/pull/1275,closed,13,0,3,12,4,0,1,1,[{'name': 'pr-status: review'}],2022-04-08 23:58:24+00:00,2022-04-21 01:55:43+00:00,1043839.0,"12 days, 1:57:19",[],"[{'commit_sha': 'bf25d9387d264329c0aa810606cb9d39de95edb2', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a2937952ad0c139e0f3088010395e08c628ef76', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f14b9f605410663443fe47ee75f075dd096c89f5', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '96e23c41110ad41a8299ac754a9fdbefbbdb48dd', 'committer_username': 'seancolsen', 'committer_name': 'Sean Colsen', 'committer_email': None, 'commit_date': datetime.datetime(2008, 12, 24, 2, 52, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17dd7fee0ca45ae5f19ad421007d12a375b97155', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3162c4287776efd5c5737e59eb072505563697f5', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '01f5ae6adf59186b3aea741282990ab3b8127879', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '240f1614a9b01a8edc881a870038914951e8ead0', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2f82fcfc24c9fc57f24efc5f10cb789a3cc9e05e', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7861d21d1f89ccb8ec22441871b4b5a5914cd8a8', 'committer_username': 'seancolsen', 'committer_name': 'Sean Colsen', 'committer_email': None, 'commit_date': datetime.datetime(2008, 12, 24, 2, 52, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd2f69be5a838c70d43a53cc362a3d4a7e323188', 'committer_username': 'seancolsen', 'committer_name': 'Sean Colsen', 'committer_email': None, 'commit_date': datetime.datetime(2008, 12, 24, 2, 52, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed1d6be470098d1a7318d42bc99b1774cb6e2eef', 'committer_username': 'seancolsen', 'committer_name': 'Sean Colsen', 'committer_email': None, 'commit_date': datetime.datetime(2008, 12, 24, 2, 52, 13, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+928223675,Removed the loading skeleton when deleting rows,"<!-- If PR doesn't fully resolve the issue, replace 'Fixes' below with 'Related to'. -->
+<!-- If there is no issue being resolved, open one before creating this pull request. -->
+Related to #1289
+
+<!-- Concisely describe what the pull request does. -->
+The loading skeleton is not showing in unrelated cells now when deleting rows.
+
+**Technical details**
+Added an extra parameter in fetch function of records.ts, which is set to be true in deleting is called:
+fetch(
+    retainExistingRows = false,
+    isDeleteOperation = false
+  )
+
+**Screen shot**
+
+https://user-images.githubusercontent.com/70693960/166856644-8f3aebe2-2924-4bea-8ce2-77746b095f4b.mp4
+
+
+## Checklist
+<!-- Replace  the [ ] with [x] to check the boxes. --> 
+- [x] My pull request has a descriptive title (not a vague title like `Update
+  index.md`).
+- [x] My pull request targets the `master` branch of the repository
+- [x] My commit messages follow [best practices][best_practices].
+- [x] My code follows the established code style of the repository.
+- [ ] I added tests for the changes I made (if applicable).
+- [ ] I added or updated documentation (if applicable).
+- [x] I tried running the project locally and verified that there are no
+  visible errors.
+
+[best_practices]:https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53
+
+## Developer Certificate of Origin
+<!-- You must read and understand the following attestation. -->
+
+<details>
+<summary>Developer Certificate of Origin</summary>
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+</details>
+",True,1351,https://api.github.com/repos/mathesar-foundation/mathesar/pulls/1351,https://github.com/mathesar-foundation/mathesar/pull/1351,closed,1,1,1,7,1,0,1,1,[{'name': 'pr-status: review'}],2022-05-05 01:47:06+00:00,2022-05-12 13:38:57+00:00,647511.0,"7 days, 11:51:51",[],"[{'commit_sha': '1c847856e07d86ef6a744dda42148772dfe07f71', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6cfde33f0decc998055a0161b9fe2486fed457cf', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82ad545431b7754980e9c66a11e413f4f40ff805', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91510938eb6ed9edd69964691c74d0bf40a34e37', 'committer_username': 'Jinxiao0302', 'committer_name': 'Jinxiao Li', 'committer_email': 'jinxiaol@andrew.cmu.edu', 'commit_date': datetime.datetime(2020, 9, 3, 9, 30, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '75162bb867120563f21ca5a33cade043f12a8138', 'committer_username': 'pavish', 'committer_name': 'Pavish Kumar Ramani Gopal', 'committer_email': 'pavishkumar.r@gmail.com', 'commit_date': datetime.datetime(2015, 4, 8, 9, 5, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd3ab08d299692ed60650bbe068ea44a22cd9c07', 'committer_username': 'pavish', 'committer_name': 'Pavish Kumar Ramani Gopal', 'committer_email': 'pavishkumar.r@gmail.com', 'commit_date': datetime.datetime(2015, 4, 8, 9, 5, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5afabd5840e31b689f23cad47594809181f77e5a', 'committer_username': 'pavish', 'committer_name': 'Pavish Kumar Ramani Gopal', 'committer_email': 'pavishkumar.r@gmail.com', 'commit_date': datetime.datetime(2015, 4, 8, 9, 5, 6, tzinfo=datetime.timezone.utc)}]",Jinxiao Li,70693960,jinxiaol@andrew.cmu.edu,User,,7,,1,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+348788771,mathesar,mathesar-foundation/mathesar,Python,318,2316,28,110,13752,268,24,8,"[{'id': 1049430095, 'number': 1606, 'closed': datetime.datetime(2022, 11, 3, 9, 42, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 8, 2, 29, 39, tzinfo=datetime.timezone.utc), 'time_taken': 4864384.0, 'time_delta': '56 days, 7:13:04', 'additions': 162, 'deletions': 4, 'state': 'closed'}, {'id': 1036179559, 'number': 1565, 'closed': datetime.datetime(2022, 9, 7, 17, 20, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 25, 2, 39, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1176036.0, 'time_delta': '13 days, 14:40:36', 'additions': 132, 'deletions': 42, 'state': 'closed'}, {'id': 1029950775, 'number': 1539, 'closed': datetime.datetime(2022, 8, 25, 12, 3, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 18, 12, 45, 10, tzinfo=datetime.timezone.utc), 'time_taken': 602321.0, 'time_delta': '6 days, 23:18:41', 'additions': 45, 'deletions': 4, 'state': 'closed'}, {'id': 1026913425, 'number': 1528, 'closed': datetime.datetime(2022, 8, 16, 17, 31, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 15, 21, 36, 45, tzinfo=datetime.timezone.utc), 'time_taken': 71673.0, 'time_delta': '19:54:33', 'additions': 117, 'deletions': 4, 'state': 'closed'}, {'id': 1014640761, 'number': 1493, 'closed': datetime.datetime(2022, 8, 11, 3, 9, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 2, 5, 40, 53, tzinfo=datetime.timezone.utc), 'time_taken': 768505.0, 'time_delta': '8 days, 21:28:25', 'additions': 96, 'deletions': 3, 'state': 'closed'}, {'id': 1008029003, 'number': 1482, 'closed': datetime.datetime(2022, 7, 28, 3, 33, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 26, 4, 15, 16, tzinfo=datetime.timezone.utc), 'time_taken': 170275.0, 'time_delta': '1 day, 23:17:55', 'additions': 65, 'deletions': 0, 'state': 'closed'}, {'id': 1002506365, 'number': 1474, 'closed': datetime.datetime(2022, 7, 21, 22, 48, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 20, 16, 14, 17, tzinfo=datetime.timezone.utc), 'time_taken': 110037.0, 'time_delta': '1 day, 6:33:57', 'additions': 44, 'deletions': 0, 'state': 'closed'}, {'id': 973028396, 'number': 1443, 'closed': datetime.datetime(2022, 7, 15, 3, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 21, 3, 51, 28, tzinfo=datetime.timezone.utc), 'time_taken': 2072792.0, 'time_delta': '23 days, 23:46:32', 'additions': 402, 'deletions': 13, 'state': 'closed'}, {'id': 928227577, 'number': 1352, 'closed': datetime.datetime(2022, 5, 5, 2, 16, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 5, 2, 2, 1, tzinfo=datetime.timezone.utc), 'time_taken': 875.0, 'time_delta': '0:14:35', 'additions': 5, 'deletions': 2, 'state': 'closed'}, {'id': 928223675, 'number': 1351, 'closed': datetime.datetime(2022, 5, 12, 13, 38, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 5, 1, 47, 6, tzinfo=datetime.timezone.utc), 'time_taken': 647511.0, 'time_delta': '7 days, 11:51:51', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 904307436, 'number': 1275, 'closed': datetime.datetime(2022, 4, 21, 1, 55, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 8, 23, 58, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1043839.0, 'time_delta': '12 days, 1:57:19', 'additions': 13, 'deletions': 0, 'state': 'closed'}]"

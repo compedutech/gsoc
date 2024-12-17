@@ -1,0 +1,79 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+715028186,[GSoC 2021] Modelling complex materials,"This pull request contains the work done by me during GSoC 2021. Throughout this project, I, along with my mentors, worked on stand-alone subpackage DebyeFit which allows to model dispersive materials, and integrated it into the gprMax environment.
+
+## Deliverables
+
+* Stand alone scripts to modelling electromagnetic properties of different media using relaxation functions like Havriliak-Negami, Johnsher, CRIM methods and fitting to raw data by hybrid linear-nonlinear optimization in form of sub-package `DebyeFit`. 
+* Integration of stand alone scripts with existing gprMax software.
+* User-friendly interface to use provided functions.
+* Proper documentation and tests for provided components (tutorials for users) in form of jupyter notebooks. 
+
+# Problem description
+
+All electromagnetic phenomena are governed by the Maxwell's equations, which describing how electric and magnetic fields are distributed due to charges and currents, and how they are changing in time. gprMax is open source software that simulates electromagnetic wave propagation by using Yee's algorithm to solve (3+1)D Maxwell’s equations with FiniteDifference Time-Domain (FDTD) method. The behavior of the electromagnetic wave is closely dependent on the material in which it propagates. Some dispersive media have quite complex electromagnetic properties depending on the wavelength. This, for example, means that for different frequencies the wave can propagate with a different speed in different materials. This significantly affects the solver’s output. The main goal of the project was to enhance series of scripts, which modelled electromagnetic properties of the variety range of materials. Initial series of scripts have been prepared earlier (#125), however, their technical improvement and coupling with main software gprMax was required.
+
+# Multi-pole Debye model
+
+Electric permittivity is a complex function with both real and imaginary parts. In general, as a hard and fast rule, the real part dictates the velocity of the medium while the imaginary part is related to the electromagnetic losses. The generic form of dispersive media takes a form of
+
+   ε(ω) = ε'(ω) + jε''(ω)
+
+where ω is the angular frequency, ε' and ε'' are the real and imaginary parts of the permittivity respectively. 
+
+In the ``user_libs`` sub-package is a module called ``DebyeFit`` which can be used to fit a multi-Debye expansion to dielectric data, defined as
+
+    ε(ω) = ε_inf + Σ^N [Dε_n/(1+jωt0_n)]
+
+where ε(ω) is frequency dependent dielectric permittivity, Dε - difference between the real permittivity at zero and infinity frequency. t0 is relaxation time (s), ε_inf - real part of relative permittivity at infinity frequency, and N is number of the Debye poles.
+
+The user can choose between Havriliak-Negami, Jonscher, Complex Refractive Index Mixing models, and arbitrary dielectric data derived experimentally or calculated using some other function to fit the data to a multi-Debye expansion.
+
+# Package structure
+
+The package was divided into two main modules:
+- `Debye_fit.py` with definition of all Relaxation functions classes,
+- `optimization.py` with definition of three chosen global optimization methods.
+
+The Class Relaxation is designed for modelling different relaxation functions, like Havriliak-Negami (`Class HavriliakNegami`), Jonscher (`Class Jonscher`), Complex Refractive Index Mixing (`Class CRIM`) models, and arbitrary dielectric data derived experimentally or calculated using some other function (`Class Rawdata`). The constructor for chosen object type constructs a proper relaxation object and defines all its parameters, along with frequency point grid.
+
+The Class Optimizer supports global optimization algorithms (particle swarm, duall annealing, evolutionary algorithms) for finding an optimal set of relaxation times that minimise the error between the actual and the approximated electric permittivity and calculate optimised weights for the given relaxation times. Code written here is mainly based on external libraries, like `scipy` and `pyswarm`. The optimizer object is created inside the relaxation module. The user has the possibility to choose one from three optimization algorithms and its properties in the form of a python dictionary.
+
+The fitting procedure is launched after relaxation object initialization, by using the run method. Algorithm implemented inside the function consists of the following steps:
+1. Check the validity of the inputs using the check_inputs method.
+2. Print information about chosen approximation settings using the print_info method.
+3. Calculate both real and imaginary parts using the calculation method, and then set self.rl and self.im properties.
+4. Call the main optimization module using the optimize method and calculate errors based on the error method. 
+    * [OPTIONAL] If number of debye poles is set to -1 optimization procedure is repeated until percentage error goes smaller than 5% or number of 20 Debye poles is reached.
+5. Print the results in gprMax format style using the print_output method
+6. [OPTIONAL] Save results in txt file in gprMax style using the save_result method
+7. [OPTIONAL] Plot the actual and the approximate dielectric properties using the plot_result method.
+
+## Examples
+
+In subdirectory `examples`, I provided jupyter notebooks, scripts and data to show how use stand alone script ```DebyeFit.py```:
+
+* ```example_DebyeFitting.ipynb```: simple cases of using all available implemented relaxation functions,
+* ```example_BiologicalTissues.ipynb```: simple cases of using Cole-Cole function for biological tissues,
+* ```example_ColeCole.py```: simple cases of using Cole-Cole function in case of 3, 5 and automatically chosen number of Debye poles,
+* ```Test.txt```: raw data for testing ```Rawdata Class```, file contains 3 columns: the first column contains the frequencies (Hz) associated with the value of the permittivity, second column contains the real part of the relative permittivity, and the third one the imaginary part of the relative permittivity. The columns should separated by comma.
+
+# Dispersive material gprMax commands
+
+I provided four gprMax hashtag commands to use fitting aproach inside gprMax software:
+- `#havriliak_negami`
+- `#jonscher`
+- `#crim`
+- `#raw-data`
+
+Notice that Havriliak-Negami is an inclusive function that holds as special cases the widely-used **Cole-Cole** and **Cole-Davidson** functions.
+
+Warning:
+* The fitting accuracy depends on the number of the Debye poles as well as the fitted function. It is advised to check if the resulted accuracy is sufficient for your application. 
+* Increasing the number of Debye poles will make the approximation more accurate but it will increase the overall computational resources of FDTD.
+
+# Further Scope
+
+The structure of the sub-package and the optimization module gives a possibility to implement other optimization approaches, like standard single nonlinear optimization procedures. Another concern for the future could be implementation for anisotropic dispersive media.",True,296,https://api.github.com/repos/gprMax/gprMax/pulls/296,https://github.com/gprMax/gprMax/pull/296,closed,3827,4,19,29,0,0,0,0,[],2021-08-18 12:21:23+00:00,2021-10-19 13:30:26+00:00,5360943.0,"62 days, 1:09:03",[],"[{'commit_sha': '938243d6ec9da2ae16f7755abdcf6f0caf70c627', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': 'aea8aab39ba88fde20875a6f3841b980753f39fe', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '89cb502f73f0d5b32251072cac55773ea4eee74d', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0e12a19f9c70c12ab4b8e645f4cfeb889c034e59', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7a1d9289d384cee1bb60e64c4d7dd20201cfeb0a', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e997046c380d2d67955fe1ca4144c74f927e7e', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7ab02cb7a8a53a42a38983d595366b6fa066014', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49378b35b7e6d3d2a19ee39a622093329664daa0', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf3eae5ad864b225027a36022e9cf0e1cc263ae0', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e524c95a101d6bca27266d429dd1a988ad5d084d', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5927840bb4b810bacbdef77c0c191691d67eb6fd', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '51abd1397cdefc22916936bbb7299b838d2a8911', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '4aa43a10b08715a52c7f301d60f442d1e0930ceb', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63bc9c204b6833446b703fe22abd4e32e0642ce7', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6ad5ba5825b97436e1241da9b54cb6731ea9b2fd', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '13f304913b2296743b56e4be1793e9cfe43514c7', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '57cf0abba9df07df6e8f114c3c513943a8fe7a9d', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d65a52d09d3539fdb9146ed74665dcfeb73089b', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f33c8710fa474942ed88eb9dd7d6db2ab61914a', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6aef05894919d4cc2b16355075b79251d4d10faf', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69f2d558bef1a65b1f834187a88628d21d47fe02', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b26acdb573067b5a8fd4eb2778db176760ac2c4', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5205486bf9618f6f7e4c9f2dbe21990a291f0f4f', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '94ee7a41fbea8d68ee6846c093d27541e8ecd198', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8c87430b5978aa50420175cc916108580536b51d', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba59c4d763488350ee78b942e1831516c3bc5046', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba997a648fd5766a80cd5036367115ad168cc5f4', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ebbe7f3f0a2d6009cbd84d3a2d44bbcde083fc3', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c7c2a99c96144e89a45f6ecc5b56d1c2588a22e', 'committer_username': 'majsylw', 'committer_name': 'Sylwia Majchrowska', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 20, 17, 30, 55, tzinfo=datetime.timezone.utc)}]",Sylwia Majchrowska,58003896,,User,,27,,13,35
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43433739,gprMax,gprMax/gprMax,Python,249,601,37,40,1927,25,2,8,"[{'id': 715028186, 'number': 296, 'closed': datetime.datetime(2021, 10, 19, 13, 30, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 18, 12, 21, 23, tzinfo=datetime.timezone.utc), 'time_taken': 5360943.0, 'time_delta': '62 days, 1:09:03', 'additions': 3827, 'deletions': 4, 'state': 'closed'}]"

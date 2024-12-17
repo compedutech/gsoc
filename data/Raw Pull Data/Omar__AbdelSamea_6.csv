@@ -1,0 +1,67 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+716882678,feat(core): Microservices Architecture ,"<!-- Please refer to CONTRIBUTING.md (https://github.com/fossology/fossology/blob/master/CONTRIBUTING.md)
+before creating the pull request to make sure you follow all the standards. -->
+
+## Description
+
+Making Fossology Architecture microservice friendly.
+
+### Changes
+
+1. Added Dockerfile for 
+   - Scheduler
+   - Web
+   - nomos
+   - Ojo
+   - Ununpack
+   - Copyright
+   - Wget_agent
+2. Added Kubernetes manfist files
+   - Agents Deploymnets and service
+   - Config maps and secrets
+   - ETCD deployment, service and pvc
+   - Database Statefulset, service and pvc
+   - Scheudler Deployment, service and pvc
+   - Web Deployment and service
+   - Repository pvc
+3. Modfied the following function to get configuration from ETCD **instead** of conf files
+    - scheduler_agent_config in scheudler.c
+    - scheduler_foss_config in scheduler.c
+    - fo_dbconnect in libfossdb
+4. Modified `agent_spawn `in `agent.c `to get the agents from kubernetes cluster using `kubectl exec` instead of ssh
+5. Modified `agent_test` in `agent.c` to check for agent type before testing the host
+6. added host type in `host_t` struct.
+7. Modifed `host_init` to account for host type in `host.c`
+8. Modifed `plugin_disable` in `common-plugin` to only list availble agents in upload section
+## How to test
+
+All installation instructions are provided in [here](https://github.com/OmarAbdelSamea/fossology/wiki/02-Installation)
+",False,2086,https://api.github.com/repos/fossology/fossology/pulls/2086,https://github.com/fossology/fossology/pull/2086,open,2029,297,54,1,3,3,5,0,"[{'name': 'enhancement'}, {'name': 'needs code review'}, {'name': 'has merge conflicts'}, {'name': 'needs test'}, {'name': 'GSOC-21'}]",2021-08-20 17:09:09+00:00,,0.0,,"[{'comment_id': 694519847, 'comment_body': 'please take care release data has been over written.', 'comment_created': datetime.datetime(2021, 8, 24, 5, 53, 19, tzinfo=datetime.timezone.utc), 'commenter': 'shaheemazmalmmd', 'type': 'User'}, {'comment_id': 694520543, 'comment_body': 'please fix copyrights ', 'comment_created': datetime.datetime(2021, 8, 24, 5, 55, 1, tzinfo=datetime.timezone.utc), 'commenter': 'shaheemazmalmmd', 'type': 'User'}, {'comment_id': 695871728, 'comment_body': 'I pulled the latest changelog from master. but currently fo-debuild not working\r\n```\r\nUpdating changelog with focal distro and 3.10.0.60-1 version.\r\ndebchange: fatal error at line 1211:\r\nNew version specified (3.10.0.60-1) is less than\r\nthe current version number (3.11.0-1)!  Use -b to force.\r\n```', 'comment_created': datetime.datetime(2021, 8, 25, 15, 32, 56, tzinfo=datetime.timezone.utc), 'commenter': 'OmarAbdelSamea', 'type': 'User'}]","[{'commit_sha': '98d8010d3189c7e45b4f897c8d064aa76b5f6410', 'committer_username': 'OmarAbdelSamea', 'committer_name': 'Omar AbdelSamea', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 19, 10, 4, 53, tzinfo=datetime.timezone.utc)}]",Omar AbdelSamea,57943026,,User,,29,,21,29
+687062995,docs(microservices): Intro & reports weeks1 - 4,"## Microservice
+- Added Introduction
+- Fixed index page, the project was new build system instead of microservice
+- Added first 4 weekly reports
+- Capitalised 'A' letter in sidebar for consistency ",True,3,https://api.github.com/repos/fossology/gsoc/pulls/3,https://github.com/fossology/gsoc/pull/3,closed,242,24,8,1,2,0,0,0,[],2021-07-09 22:11:16+00:00,2021-07-12 04:36:28+00:00,195912.0,"2 days, 6:25:12",[],"[{'commit_sha': 'd4f4b6b61bd908f6660a71d9c358939308be80c9', 'committer_username': 'OmarAbdelSamea', 'committer_name': 'Omar AbdelSamea', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 19, 10, 4, 53, tzinfo=datetime.timezone.utc)}]",Omar AbdelSamea,57943026,,User,,29,,21,29
+710497546,docs(microservice): added weekly reports 5 - 9,"## Project
+
+Making Fossology architecture microservice friendly
+
+### Changes
+
+Added Weekly reports weeks 5 to 9
+
+### Notes
+
+N/A",True,23,https://api.github.com/repos/fossology/gsoc/pulls/23,https://github.com/fossology/gsoc/pull/23,closed,267,3,13,1,1,1,0,0,[],2021-08-12 08:49:19+00:00,2021-08-12 11:20:31+00:00,9072.0,2:31:12,"[{'comment_id': 687544967, 'comment_body': 'To enable reliable storage, please upload the image in the repository under `static/img/microservice/` and change the path to `![image](/img/microservice/<image_name>.png)`\r\n\r\nSame need to be done for other images.', 'comment_created': datetime.datetime(2021, 8, 12, 9, 27, 31, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}]","[{'commit_sha': '7f14a6a8513bf9076f8ff468919ba57ceb3cdb60', 'committer_username': 'OmarAbdelSamea', 'committer_name': 'Omar AbdelSamea', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 19, 10, 4, 53, tzinfo=datetime.timezone.utc)}]",Omar AbdelSamea,57943026,,User,,29,,21,29
+715938823,docs(microservices): added week 10 and setup,"## Project
+
+Making Fossology architecture more microservice friendly
+
+### Changes
+
+Added week 10 report, setup instructions, and how to build docker images
+",True,28,https://api.github.com/repos/fossology/gsoc/pulls/28,https://github.com/fossology/gsoc/pull/28,closed,112,1,3,1,0,0,0,0,[],2021-08-19 13:31:13+00:00,2021-08-19 15:42:20+00:00,7867.0,2:11:07,[],"[{'commit_sha': 'c7d6236e661daee6301c1e2fe6f7dc25541e012c', 'committer_username': 'OmarAbdelSamea', 'committer_name': 'Omar AbdelSamea', 'committer_email': None, 'commit_date': datetime.datetime(2019, 11, 19, 10, 4, 53, tzinfo=datetime.timezone.utc)}]",Omar AbdelSamea,57943026,,User,,29,,21,29
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+15866170,fossology,fossology/fossology,PHP,397,778,64,142,9788,392,76,19,"[{'id': 716882678, 'number': 2086, 'closed': None, 'created': datetime.datetime(2021, 8, 20, 17, 9, 9, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 2029, 'deletions': 297, 'state': 'open'}, {'id': 580487935, 'number': 1898, 'closed': datetime.datetime(2021, 5, 7, 11, 14, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 25, 23, 55, 23, tzinfo=datetime.timezone.utc), 'time_taken': 6088768.0, 'time_delta': '70 days, 11:19:28', 'additions': 58, 'deletions': 4, 'state': 'closed'}]"
+378043387,gsoc,fossology/gsoc,JavaScript,37,18,18,31,575,12,2,12,"[{'id': 715938823, 'number': 28, 'closed': datetime.datetime(2021, 8, 19, 15, 42, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 19, 13, 31, 13, tzinfo=datetime.timezone.utc), 'time_taken': 7867.0, 'time_delta': '2:11:07', 'additions': 112, 'deletions': 1, 'state': 'closed'}, {'id': 710497546, 'number': 23, 'closed': datetime.datetime(2021, 8, 12, 11, 20, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 12, 8, 49, 19, tzinfo=datetime.timezone.utc), 'time_taken': 9072.0, 'time_delta': '2:31:12', 'additions': 267, 'deletions': 3, 'state': 'closed'}, {'id': 687062995, 'number': 3, 'closed': datetime.datetime(2021, 7, 12, 4, 36, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 9, 22, 11, 16, tzinfo=datetime.timezone.utc), 'time_taken': 195912.0, 'time_delta': '2 days, 6:25:12', 'additions': 242, 'deletions': 24, 'state': 'closed'}]"

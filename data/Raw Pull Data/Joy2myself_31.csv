@@ -1,0 +1,47 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+476012290,Universal intrinsics implementation with RISC-V vector extension,"This PR From GSoC Project ""Optimize OpenCV for RISC-V""
+
+### Project introduction
+The main objective of the project is adding implementation of OpenCV wide universal intrinsics for RISC-V vector in OpenCV Hardware Acceleration Layer (HAL).
+This PR is now working in progress.
+
+### Two previous PRs related to the project
+Following two previous PRs mainly provided the toolchain files for cross-compiling OpenCV with target riscv64 on Linux platform. The first PR is with Clang and the second is with riscv-gnu-toolchain.
+https://github.com/opencv/opencv/pull/17922
+https://github.com/opencv/opencv/pull/18227
+
+### Main contents of my work
+Added toolchain file for target `riscv64-clang`.
+Added toolchain file for target `riscv64-gcc`.
+Added universal intrinsics implementation with RISC-V vector extension.
+Added some native intrinsics in C++ that are unsupported by compiler temporarily.
+
+### Current progress
+Universal intrinsics implementation with RISC-V vector extension is almost done. But the way universal intrinsic vector types are declared right now needs some changes. See the following issue for specific reasons.
+https://github.com/riscv/riscv-gnu-toolchain/issues/701
+Use empty functions instead of missing native intrinsics temporarily.
+
+### Near future work
+Change the universal intrinsic vector types with in-memory vectors and add extra loads/stores to get functional code.
+Implement missing native intrinsics in C++ which are now still empty functions.
+
+### Long future work
+Performance improvements. Maybe the current universal intrinsic framework need some change to fit scalable vector architecture.
+RISC-V vector extension and rvv-intrinsics are still in the process of development. The compiler support is not completely ready at present and there may be changes in riscv-v-spec and rvv-intrinsics in the future. Therefore, this implementation needs to be maintained continuously according to the development of RISC-V.
+
+
+### Pull Request Readiness Checklist
+
+See details at https://github.com/opencv/opencv/wiki/How_to_contribute#making-a-good-pull-request
+
+- [x] I agree to contribute to the project under Apache 2 License.
+- [x] To the best of my knowledge, the proposed patch is not based on a code under GPL or other license that is incompatible with OpenCV
+- [x] The PR is proposed to proper branch
+- [x] There is reference to original bug report and related work
+- [x] There is accuracy test, performance test and test data in opencv_extra repository, if applicable
+      Patch to opencv_extra has the same branch name.
+- [x] The feature is well documented and sample code can be built with the project CMake
+",True,18228,https://api.github.com/repos/opencv/opencv/pulls/18228,https://github.com/opencv/opencv/pull/18228,closed,2532,1290,4,1,5,1,2,1,"[{'name': 'GSoC'}, {'name': 'platform: riscv'}]",2020-08-31 02:42:39+00:00,2020-12-02 13:27:56+00:00,8073917.0,"93 days, 10:45:17","[{'comment_id': 481180785, 'comment_body': 'Copy constructor and `operator=` required for build for all `v_int`, `v_uint`, `v_float`, etc structures.', 'comment_created': datetime.datetime(2020, 9, 1, 14, 29, 22, tzinfo=datetime.timezone.utc), 'commenter': 'asmorkalov', 'type': 'User'}]","[{'commit_sha': '673e4e20f02881aff08534d17acfb6370a31363a', 'committer_username': 'joy2myself', 'committer_name': 'ZhangYin', 'committer_email': 'zhangyin2018@iscas.ac.cn', 'commit_date': datetime.datetime(2018, 10, 4, 3, 43, 58, tzinfo=datetime.timezone.utc)}]",ZhangYin,43837589,zhangyin2018@iscas.ac.cn,User,,23,,1,13
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+5108051,opencv,opencv/opencv,C++,55700,77556,2655,2194,34486,2600,6,133,"[{'id': 690403432, 'number': 20412, 'closed': datetime.datetime(2021, 7, 23, 14, 8, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 15, 5, 20, 42, tzinfo=datetime.timezone.utc), 'time_taken': 722881.0, 'time_delta': '8 days, 8:48:01', 'additions': 151, 'deletions': 148, 'state': 'closed'}, {'id': 673239816, 'number': 20278, 'closed': datetime.datetime(2021, 7, 9, 22, 42, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 18, 7, 34, 25, tzinfo=datetime.timezone.utc), 'time_taken': 1868907.0, 'time_delta': '21 days, 15:08:27', 'additions': 582, 'deletions': 716, 'state': 'closed'}, {'id': 495222530, 'number': 18462, 'closed': datetime.datetime(2020, 12, 2, 18, 38, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 30, 3, 8, 6, tzinfo=datetime.timezone.utc), 'time_taken': 5499049.0, 'time_delta': '63 days, 15:30:49', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 476012290, 'number': 18228, 'closed': datetime.datetime(2020, 12, 2, 13, 27, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 31, 2, 42, 39, tzinfo=datetime.timezone.utc), 'time_taken': 8073917.0, 'time_delta': '93 days, 10:45:17', 'additions': 2532, 'deletions': 1290, 'state': 'closed'}, {'id': 476007372, 'number': 18227, 'closed': datetime.datetime(2020, 12, 2, 5, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 31, 2, 19, 45, tzinfo=datetime.timezone.utc), 'time_taken': 8045715.0, 'time_delta': '93 days, 2:55:15', 'additions': 20, 'deletions': 0, 'state': 'closed'}, {'id': 455529562, 'number': 17922, 'closed': datetime.datetime(2020, 8, 4, 9, 45, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 23, 7, 32, 43, tzinfo=datetime.timezone.utc), 'time_taken': 1044793.0, 'time_delta': '12 days, 2:13:13', 'additions': 1782, 'deletions': 0, 'state': 'closed'}]"

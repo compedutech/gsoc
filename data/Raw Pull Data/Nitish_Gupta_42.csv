@@ -1,0 +1,119 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+939036298,Add support to embed source metadata from git,"## Summary
+<!-- Provide a high-level summary of the change. -->
+Add support to add source metadata from git, to complete https://github.com/buildpacks/pack/pull/1280
+
+- [x] Support current branch refs
+- [x] Support current tag refs
+- [x] Support `git describe --tags --always`
+- [x] Support `git remote`
+- [x] Add unit tests
+- [ ] Add acceptance tests
+- [x] Clean and organize code with proper error handling
+
+## Output
+<!-- If applicable, please provide examples of the output changes. -->
+
+#### Before
+
+#### After
+
+## Documentation
+<!-- If this change should be documented, please create an issue or PR on https://github.com/buildpacks/docs and link below. -->
+<!-- NOTE: This can be added (by editing the issue) after the PR is opened. -->
+
+- Should this change be documented?
+    - [ ] Yes, see #___
+    - [x] No
+
+## Related
+<!-- If this PR addresses an issue, please provide issue number below. -->
+
+Resolves #1137
+",True,1444,https://api.github.com/repos/buildpacks/pack/pulls/1444,https://github.com/buildpacks/pack/pull/1444,closed,876,28,10,9,4,4,1,2,[{'name': 'type/enhancement'}],2022-05-17 16:26:49+00:00,2022-08-11 18:04:22+00:00,7436253.0,"86 days, 1:37:33","[{'comment_id': 875675395, 'comment_body': 'nit: remove', 'comment_created': datetime.datetime(2022, 5, 18, 9, 26, 40, tzinfo=datetime.timezone.utc), 'commenter': 'dfreilich', 'type': 'User'}, {'comment_id': 875676801, 'comment_body': 'Ultimately, I would remove the `print` statements here, and just return `nil` if there is an issue in these cases', 'comment_created': datetime.datetime(2022, 5, 18, 9, 28, 3, tzinfo=datetime.timezone.utc), 'commenter': 'dfreilich', 'type': 'User'}, {'comment_id': 875677110, 'comment_body': 'nit: same as above', 'comment_created': datetime.datetime(2022, 5, 18, 9, 28, 22, tzinfo=datetime.timezone.utc), 'commenter': 'dfreilich', 'type': 'User'}, {'comment_id': 875677606, 'comment_body': 'nit: remove this', 'comment_created': datetime.datetime(2022, 5, 18, 9, 28, 51, tzinfo=datetime.timezone.utc), 'commenter': 'dfreilich', 'type': 'User'}]","[{'commit_sha': 'dd422a518444eeec8be3fdfe740fef2b86cec3f4', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4ea4993c9d2a800fba27f93b294f07479d3440ed', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '93c0f3b583720f9a1da2e18bf6731244b97dabad', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e75def31451e99ba2768924b3e343e038ef553e3', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '927da530a718f4654b04ba72f1d55d4046ea2e30', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '073f3ead56eb347d45624626f43d4e1937675038', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '032e9e782b027f14f03bfc375c0f6466e1018984', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6ce2abedde3ea8056e720a6a9e691c95c30fec15', 'committer_username': 'jromero', 'committer_name': 'Javier Romero', 'committer_email': 'root@jromero.codes', 'commit_date': datetime.datetime(2010, 11, 10, 11, 27, 55, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58c1f5682ce952e076592bd1ba7de348aefe860b', 'committer_username': 'jromero', 'committer_name': 'Javier Romero', 'committer_email': 'root@jromero.codes', 'commit_date': datetime.datetime(2010, 11, 10, 11, 27, 55, tzinfo=datetime.timezone.utc)}]",Nitish Gupta,35267629,,User,,62,,0,4
+930421511,Update error when bp order group is malformed for meta-buildpacks,"## Summary
+The error for when pack encounters a malformed `buildpack.toml` order group entry referenced by `package.toml` wasn't very descriptive. This PR tries to update the methods used to fetch full name of a builpack complying with the documentation, and update the relevant error message.
+
+
+I feel the change is quite small and kind of redundant 😬 , would be happy to rework this if there is something missing.
+I avoided adding acceptance tests because that would only be possible by introducing new malformed `package.toml` and `buildpack.toml` file combination, but if we see value in them then I can write those as well.
+
+## Output
+<!-- If applicable, please provide examples of the output changes. -->
+
+#### Before
+
+#### After
+
+## Documentation
+<!-- If this change should be documented, please create an issue or PR on https://github.com/buildpacks/docs and link below. -->
+<!-- NOTE: This can be added (by editing the issue) after the PR is opened. -->
+
+- Should this change be documented?
+    - [ ] Yes, see #___
+    - [x] No
+
+## Related
+<!-- If this PR addresses an issue, please provide issue number below. -->
+
+Resolves #1384 
+",True,1437,https://api.github.com/repos/buildpacks/pack/pulls/1437,https://github.com/buildpacks/pack/pull/1437,closed,60,3,3,1,3,4,1,1,[{'name': 'type/enhancement'}],2022-05-08 07:26:58+00:00,2022-06-07 21:04:35+00:00,2641057.0,"30 days, 13:37:37","[{'comment_id': 868451760, 'comment_body': ""I feel like the new error message is a little too opaque. If the version was missing, all we would see is:\r\n\r\n```\r\nInvalid buildpack 'bp.missing.id@' defined in order group.\r\n```\r\n\r\n\r\nBased on our conversation [here](https://github.com/buildpacks/pack/issues/1384#issuecomment-1116129061), what if we had two errors:\r\n\r\n1. the existing error for when a buildpack is genuinely missing\r\n2. a new error for when the referenced buildpack is missing a version:\r\n```\r\nbuildpack %s must specify a version when referencing buildpack %s.\r\n```"", 'comment_created': datetime.datetime(2022, 5, 9, 20, 54, 24, tzinfo=datetime.timezone.utc), 'commenter': 'jromero', 'type': 'User'}, {'comment_id': 869151905, 'comment_body': 'Updated the error as discussed, added test as well.\r\nLet me know if more work is required.', 'comment_created': datetime.datetime(2022, 5, 10, 12, 3, 25, tzinfo=datetime.timezone.utc), 'commenter': 'imnitishng', 'type': 'User'}, {'comment_id': 872655279, 'comment_body': ""It's a little strange that we're not using the `err` being returned from this method.\r\n\r\nCould we figure out a way to incorporate the error message from the method into the message we are returning?\r\n\r\nThis would most likely change the exact verbiage we wanted but it would hopefully lead to a more detailed error message."", 'comment_created': datetime.datetime(2022, 5, 13, 18, 11, 40, tzinfo=datetime.timezone.utc), 'commenter': 'jromero', 'type': 'User'}, {'comment_id': 872657451, 'comment_body': ""> It's a little strange that we're not using the err being returned from this method.\r\n\r\nCompletely agree, the idea was to get the error message that you [suggested](https://github.com/buildpacks/pack/pull/1437#discussion_r868451760).\r\nI'll update this and find a way to use the error as well as keep the error message relevant."", 'comment_created': datetime.datetime(2022, 5, 13, 18, 15, 8, tzinfo=datetime.timezone.utc), 'commenter': 'imnitishng', 'type': 'User'}]","[{'commit_sha': 'd9b834ef272a8f3428712e5627bc27ea034823d9', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}]",Nitish Gupta,35267629,,User,,62,,0,4
+917515809,Add process specific working directories,"## Summary
+- Show process' working directory from the `WorkingDirectory` param in metadata label
+- If working directory from label is empty then use Image's inspect to figure out the working directory (stored as WorkingDir)
+This PR depends on https://github.com/buildpacks/imgutil/pull/141, I did not find a way to expose the working directory so I had to go for this change, let me know if there's another way to handle the problem. 
+Moreover, I had to update a bunch of dependencies to actually get the newly added `WorkingDirectory` param inside of `process`, which means `go.mod` and `go.sum` are modified.
+I think we'll need to update the PR again with the new `imgutil` release if we decide to merge both PRs and go this route, if not then I'd be happy to work on the feedback.
+Tests will be failing until we merge the PR for `imgutil` 
+
+## Output
+<!-- If applicable, please provide examples of the output changes. -->
+
+#### Before
+
+#### After
+
+## Documentation
+
+- Should this change be documented?
+    - [ ] Yes, see #___
+    - [x] No
+
+## Related
+https://github.com/buildpacks/pack/issues/1422
+
+Resolves #1422 
+",True,1427,https://api.github.com/repos/buildpacks/pack/pulls/1427,https://github.com/buildpacks/pack/pull/1427,closed,459,252,20,2,4,0,1,0,[{'name': 'type/enhancement'}],2022-04-24 20:06:11+00:00,2022-04-29 20:34:35+00:00,433704.0,"5 days, 0:28:24",[],"[{'commit_sha': 'f6825aa293638b4534c2149740620303daa3b47c', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '39ffe821638ccd1a770ecdf4eb0f58c97a51935a', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}]",Nitish Gupta,35267629,,User,,62,,0,4
+934141920,bug: Update `getFileFilter` to include parent folders,"## Summary
+<!-- Provide a high-level summary of the change. -->
+- The `include` directive when specified with a file inside a
+  folder `testdir/testfile` did not pass the parent folder to
+  the builder image, which led to the folder being created by
+  docker instead pack causing the permissions of the folder
+  to be `cnb`.
+- This PR fixes the include logic to get parent folders and
+  add them to the file filter, so they get created via pack.
+
+## Output
+<!-- If applicable, please provide examples of the output changes. -->
+
+#### Before
+
+#### After
+
+## Documentation
+<!-- If this change should be documented, please create an issue or PR on https://github.com/buildpacks/docs and link below. -->
+<!-- NOTE: This can be added (by editing the issue) after the PR is opened. -->
+
+- Should this change be documented?
+    - [ ] Yes, see #___
+    - [x] No
+
+## Related
+<!-- If this PR addresses an issue, please provide issue number below. -->
+
+Resolves #1419 
+",False,1439,https://api.github.com/repos/buildpacks/pack/pulls/1439,https://github.com/buildpacks/pack/pull/1439,open,296,2,3,1,2,0,2,1,"[{'name': 'type/enhancement'}, {'name': 'type/chore'}]",2022-05-11 20:58:48+00:00,,0.0,,[],"[{'commit_sha': 'c1af702a04f5d590144e2da6f6177a76b0d20d98', 'committer_username': 'imnitishng', 'committer_name': 'Nitish Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 9, 15, 57, 5, tzinfo=datetime.timezone.utc)}]",Nitish Gupta,35267629,,User,,62,,0,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+138544269,pack,buildpacks/pack,Go,283,2505,30,144,4557,125,69,29,"[{'id': 1023063785, 'number': 1497, 'closed': datetime.datetime(2022, 9, 14, 20, 19, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 10, 18, 44, 35, tzinfo=datetime.timezone.utc), 'time_taken': 3029679.0, 'time_delta': '35 days, 1:34:39', 'additions': 241, 'deletions': 27, 'state': 'closed'}, {'id': 1006288638, 'number': 1490, 'closed': datetime.datetime(2022, 7, 27, 15, 28, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 23, 6, 12, 23, tzinfo=datetime.timezone.utc), 'time_taken': 378950.0, 'time_delta': '4 days, 9:15:50', 'additions': 298, 'deletions': 153, 'state': 'closed'}, {'id': 985706300, 'number': 1477, 'closed': datetime.datetime(2022, 7, 12, 14, 58, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 11, 55, 2, tzinfo=datetime.timezone.utc), 'time_taken': 788586.0, 'time_delta': '9 days, 3:03:06', 'additions': 420, 'deletions': 7, 'state': 'closed'}, {'id': 939036298, 'number': 1444, 'closed': datetime.datetime(2022, 8, 11, 18, 4, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 17, 16, 26, 49, tzinfo=datetime.timezone.utc), 'time_taken': 7436253.0, 'time_delta': '86 days, 1:37:33', 'additions': 876, 'deletions': 28, 'state': 'closed'}, {'id': 934141920, 'number': 1439, 'closed': None, 'created': datetime.datetime(2022, 5, 11, 20, 58, 48, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 296, 'deletions': 2, 'state': 'open'}, {'id': 930421511, 'number': 1437, 'closed': datetime.datetime(2022, 6, 7, 21, 4, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 8, 7, 26, 58, tzinfo=datetime.timezone.utc), 'time_taken': 2641057.0, 'time_delta': '30 days, 13:37:37', 'additions': 60, 'deletions': 3, 'state': 'closed'}, {'id': 917515809, 'number': 1427, 'closed': datetime.datetime(2022, 4, 29, 20, 34, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 24, 20, 6, 11, tzinfo=datetime.timezone.utc), 'time_taken': 433704.0, 'time_delta': '5 days, 0:28:24', 'additions': 459, 'deletions': 252, 'state': 'closed'}]"

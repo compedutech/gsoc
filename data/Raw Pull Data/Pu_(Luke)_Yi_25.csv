@@ -1,0 +1,70 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+713977145,Systematically explore bit-flip faults in user-specified variables in Java  programs.,"## Systematically explore bit-flip faults in user-specified variables in Java programs.
+
+Computer hardware is susceptible to errors. For example, radiation may induce error to the hardware and some bit might be flipped. It is important to improve the resiliency of software against hardware errors. One way to evaluate the resiliency of software against hardware errors is by fault injection. This JPF extension aims to systematically inject and explore bit-flip faults in the user specified variables in Java programs.
+This [website](https://y553546436.github.io/jpf-core) summarizes the contributions of this extension.
+
+### What it does
+
+This extension can systematically inject and explore bit-flip faults in the user specified variables in Java programs. The variable to flip can be method parameters, fields, and local variables, and it can be any of the [8 primitive data types](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html). You can specify the variable(s) to flip in three different ways: (1) directly calling the `Verify.getBitFlip` API in the code, (2) adding `@BitFlip` annotation to the variables, and (3) specifying in the command line arguments without changing the application code.
+
+### How to use it
+
+Suppose you have this simple program that does nothing but prints `0` by invoking a method called `foo`:
+
+```java
+package simple.example;
+
+public class SimpleExample {
+     public static void foo(int bar) {
+         System.out.println(bar);
+     }
+     public static void main(String[] args) {
+         foo(0);
+     }
+}
+```
+
+Now you want to see what will happen if there is some error in the argument passing that causes a bit flip in argument `bar`. Since `bar` is of type `int`, there are 32 cases of which bit is flipped, and you want to see how the program reacts to all of them. You can three options of doing that:
+
+1. Call the `Verify.getBitFlip` API. This approach is straightforward and easy to control. You just need to add one line at the beginning of the method `foo` (of course you should first import `gov.nasa.jpf.vm.Verify`):
+
+   `bar = Verify.getBitFlip(bar, 1)`
+
+   The second parameter of `getBitFlip` method specifies the number of bits to flip in the variable, which is usually `1`, but we support up to `7` bits to flip. The first argument can be again, any of the 8 primitive types. Now run this program in JPF, expectedly you will get the following output:
+
+   ```
+   1
+   2
+   4
+   ...
+   1073741824
+   -2147483648
+   ```
+
+   The output shows that the JPF explores all the 32 cases of one bit flip in `bar`.
+
+2. Add `@BitFlip` annotation to the variable. This is even simpler than calling the `getBitFlip` API. You just need to annotate `bar` like this:
+
+   `public static void foo(@BitFlip int bar)`
+
+   and then run the program in JPF with this command line argument `+listener=gov.nasa.jpf.listener.BitFlipListener`. You will get the same output as we get for the API option. 
+
+   To explain a bit, this extension injects bit flips to annotated parameters when the argument values are passed, and to annotated fields and local variables when they are written. To support that, we need a JPF listener that checks the annotations of the target variables of each instruction, and that is what the command line argument above is for.
+
+   You can also configure the number of bits to flip in the variable by annotate it with `@BitFlip(k)` where `k` is the number, and by default `1`.
+
+3. Specify the variable in the command line argument to the JPF. If you don't want any change to your source code, then this is the best option. You can directly run the program in JPF with the following arguments passed to the JPF:
+
+   `+listener=gov.nasa.jpf.listener.BitFlipListener +bitflip.params=foobar +bitflip.foobar.method=simple.example.SimpleExample.foo(int) +bitflip.foobar.name=bar`
+
+   The `BitFlipListener` will read the command line arguments and add the specified variables to the watch list, and before a store instruction or invocation instruction, it will check the watch list for variables to flip. The name `foobar` is a configuration name for a parameter bit flip, and the following two arguments specify the method and parameter name of `foobar`. Note that you can also configure the number of bits to flip by passing another argument `+bitflip.foobar.nbit=k`, and if not specified, `k` is by defaut one.
+
+### More Examples
+
+For more detail, the regression test class `gov.nasa.jpf.test.mc.data.BitFlipTest` documents most of the use senarios in 16 regression tests, from simple usage as shown above, to more complex usage like combining the annotations and the command line arguments.
+
+We also have a [GitHub repository](https://github.com/y553546436/Fault-Injection-Examples) to show how this extension could be used to evaluate error detection algorithms' resiliency against bit flip faults. Specifically, it contains the implementation of the Cyclic redundancy check ([CRC](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)) and International Standard Book Number ([ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number)) algorithms where you can try out this extension.",True,295,https://api.github.com/repos/javapathfinder/jpf-core/pulls/295,https://github.com/javapathfinder/jpf-core/pull/295,closed,1106,2,7,24,1,0,0,0,[],2021-08-17 07:12:58+00:00,2021-08-17 19:32:22+00:00,44364.0,12:19:24,[],"[{'commit_sha': 'd2cf42376f1d5ae1ff5fcff3d70982e12df856aa', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09c76f7273adf20fa36e5f910fb0449d46994ffc', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6bf63dbfaf132f99debf338035181ff3faadca9c', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ecca824ca1d2caa3c787852d921dfccf2763a95', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ac0014c105c29cee1e3cb8c4318a8013ad8abe95', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea8eed30ea32ea7d04dc30e44ffa6dd2113aa99d', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48df8181d7dc51f30a5a65b32940adaf5c9aba4f', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7f49ed49b86726c57e3f198e44701486c3efbfc7', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d9150f7701be9bf261a52c7e4acf45a7f7b7aff', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa6113e2513ca722bb6fb403bc8df226300acde8', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ad2b920adc6e42467f91d1974109d77e6221e00d', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c1fe769d98d27a76faf7fdf0c49d103f58cc5a5b', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd125415c81bdd4a1fc584ae91b3a0da427068135', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b98befb716cb838c5294d56682440a36146668d4', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5fe5b717cebe3cbf0efdb64507ba8e31f5ed32a7', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e26c6130f1fb1b21c97c03ac7d9be52ad69a3c60', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45fe90afeba5eed2d50487a4eee0a9c86e146698', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df409aab798827e5b7473bfced0e5b1079e2dbe6', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '38460cfd5fb1143be121cb784560dc72d5251b2b', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4aae84b2fb1a3428ff1cfc4646dd91d164a6639', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '32df38c483b60090de9626ac08f3a52a4e766f61', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3fa033ccedb9063cc1af02bcdf059c99f7f743f', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8573598f68ea11d7881c2fcf0e79126d16294d6b', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c35581962cdcfda27fb5066face143b4d49b83b8', 'committer_username': 'y553546436', 'committer_name': 'Pu (Luke) Yi', 'committer_email': 'lukeyi@stanford.edu', 'commit_date': datetime.datetime(2017, 4, 16, 12, 59, 4, tzinfo=datetime.timezone.utc)}]",Pu (Luke) Yi,27625624,lukeyi@stanford.edu,User,,21,,1,8
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+92887912,jpf-core,javapathfinder/jpf-core,Java,334,520,21,24,302,39,5,3,"[{'id': 736836701, 'number': 299, 'closed': datetime.datetime(2021, 9, 21, 14, 52, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 18, 5, 38, tzinfo=datetime.timezone.utc), 'time_taken': 292462.0, 'time_delta': '3 days, 9:14:22', 'additions': 50, 'deletions': 83, 'state': 'closed'}, {'id': 713977145, 'number': 295, 'closed': datetime.datetime(2021, 8, 17, 19, 32, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 17, 7, 12, 58, tzinfo=datetime.timezone.utc), 'time_taken': 44364.0, 'time_delta': '12:19:24', 'additions': 1106, 'deletions': 2, 'state': 'closed'}, {'id': 607767466, 'number': 285, 'closed': datetime.datetime(2021, 5, 11, 11, 55, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 2, 2, 8, 48, tzinfo=datetime.timezone.utc), 'time_taken': 3404785.0, 'time_delta': '39 days, 9:46:25', 'additions': 412, 'deletions': 0, 'state': 'closed'}]"

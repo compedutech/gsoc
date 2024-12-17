@@ -1,0 +1,58 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+670780791,MDEV-25015 - Custom Formatting of Strings (GSoC),"<!--
+Thank you for contributing to the MariaDB Server repository!
+
+You can help us review your changes faster by filling this template <3
+
+If you have any questions related to MariaDB or you just want to
+hang out and meet other community members, please join us on
+https://mariadb.zulipchat.com/ .
+-->
+
+<!--
+If you've already identified a https://jira.mariadb.org/ issue
+that seems to track this bug/feature, please add its number below.
+-->
+- [x] *The Jira issue number for this PR is: MDEV-25015*
+
+<!--
+An amazing description should answer some questions like:
+1. What problem is the patch trying to solve?
+2. If some output changed, what was it looking like before
+   the change and how it's looking with this patch applied
+3. Do you think this patch might introduce side-effects in
+   other parts of the server?
+-->
+## Description
+The sformat function is a custom formatting of strings in MariaDB queries. This query simplify formatting more complex strings in a SELECT statement can get awkward when there are many concat(), format(), etc calls involved.
+
+_**NOTE: This project is for the Google Summer of Code 2021.**_
+
+## How can this PR be tested?
+It can be tested using the mariadb testing tool:
+`cd mysql-test`
+`./mtr sformat`
+
+<!--
+Tick one of the following boxes [x] to help us understand
+if the base branch for the PR is correct
+-->
+## Basing the PR against the correct MariaDB version
+- [x] *This is a new feature and the PR is based against the latest MariaDB development branch*
+- [ ] *This is a bug fix and the PR is based against the earliest branch in which the bug can be reproduced*
+
+<!--
+You might consider answering some questions like:
+1. Does this affect the on-disk format used by MariaDB?
+2. Does this change any behavior experienced by a user
+   who upgrades from a version prior to this patch?
+3. Would a user be able to start MariaDB on a datadir
+   created prior to your fix?
+-->
+## Backward compatibility
+TODO: fill details here, if applicable, or remove the section
+
+",True,1862,https://api.github.com/repos/MariaDB/server/pulls/1862,https://github.com/MariaDB/server/pull/1862,closed,919,2,11,1,3,15,0,1,[],2021-06-15 21:59:40+00:00,2021-10-12 11:27:36+00:00,10243676.0,"118 days, 13:27:56","[{'comment_id': 656098085, 'comment_body': 'We need a test case for this.\r\n\r\nLook up `--error` examples in other test cases to see how you can tell MTR to expect an error for a query.', 'comment_created': datetime.datetime(2021, 6, 22, 10, 42, 31, tzinfo=datetime.timezone.utc), 'commenter': 'cvicentiu', 'type': 'User'}, {'comment_id': 658556568, 'comment_body': 'could you also add tests with non-constant arguments? with table columns, expressions, few tests like that, please?', 'comment_created': datetime.datetime(2021, 6, 25, 8, 4, 35, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658560618, 'comment_body': 'And some invalid formats too, like non-paired curly braces.', 'comment_created': datetime.datetime(2021, 6, 25, 8, 10, 53, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658569934, 'comment_body': ""for now you don't need this `* 10`, better to remove it to make the pr merge-able at any time.\r\n\r\nin the future you might need to scan the string there to take into account formatting modifiers inside curly braces"", 'comment_created': datetime.datetime(2021, 6, 25, 8, 19, 43, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658574020, 'comment_body': 'please, use more explanatory variable names. I cannot see whether this function searches for `a` in `b` or for `b` in `a`.\r\nConventionally these arguments are called `haystack` and `needle` (see e.g. `man strstr`) but, of course, you can use any names that are as short as possible, but still convey argument roles.', 'comment_created': datetime.datetime(2021, 6, 25, 8, 23, 29, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658580550, 'comment_body': ""you don't necessarily have to do it. It was in the `Item_func_locate`, indeed, but there it was an argument provided by the user, it had to be validated.\r\n\r\n here it's just your internal function, if you know that you never pass invalid values to it, better remove the check and replace it with an assert, like\r\n```c\r\nDBUG_ASSERT(start >= 0);\r\nDBUG_ASSERT(start < a->length());\r\n```"", 'comment_created': datetime.datetime(2021, 6, 25, 8, 29, 41, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658582085, 'comment_body': ""again, this is — I guess — because offset in the definition of `LOCATE()` is counted from 1. But in your internal function you don't necessarily need to do it."", 'comment_created': datetime.datetime(2021, 6, 25, 8, 31, 13, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658583679, 'comment_body': 'and same here. This converts an offset in characters (that a user has specified, like, ""starting from the 3rd character"") into an offset in bytes. In your internal function you can simply always count in bytes.', 'comment_created': datetime.datetime(2021, 6, 25, 8, 33, 4, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658584151, 'comment_body': 'and mutli-byte characters in utf8', 'comment_created': datetime.datetime(2021, 6, 25, 8, 33, 36, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658587377, 'comment_body': 'This is good. But with more complex formatting syntax you won\'t have a string to search for, it\'ll be just ""{"". It might be easier just to scan character by character in the future.', 'comment_created': datetime.datetime(2021, 6, 25, 8, 37, 11, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658627085, 'comment_body': ""all the same comments as above.  While we need to validate user provided values, you don't necessarily have to do it for your internal helper functions, where you have full control over arguments. And you don't need to convert offsets in characters to bytes either.\r\n"", 'comment_created': datetime.datetime(2021, 6, 25, 9, 28, 32, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658628747, 'comment_body': 'this is likely wrong, if format is in an ascii-incompatible charset, like ucs2. Please, add a test for that.', 'comment_created': datetime.datetime(2021, 6, 25, 9, 30, 58, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658630474, 'comment_body': ""Okay. I don't know what should we do here. An error? A warning? NULL? Let's keep it your way for now (but please add tests for too many and too few arguments). We can change this behavior later if needed."", 'comment_created': datetime.datetime(2021, 6, 25, 9, 33, 48, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 658631682, 'comment_body': ""I won't comment on indentation now. Try to follow the existing coding style, but don't strain yourself too much over it. This can be fixed later, before pushing. Better not to slow down now because of this."", 'comment_created': datetime.datetime(2021, 6, 25, 9, 35, 45, tzinfo=datetime.timezone.utc), 'commenter': 'vuvova', 'type': 'User'}, {'comment_id': 659053370, 'comment_body': ""I going to leave it like this for now, because it breaks the logic of substr. I tried to fix it changing a few lines, but I couldn't, so I think it needs more analysis."", 'comment_created': datetime.datetime(2021, 6, 25, 21, 46, 17, tzinfo=datetime.timezone.utc), 'commenter': 'alan-cueva', 'type': 'User'}]","[{'commit_sha': '8abefdabfbb22ab25a751851766cde5b23e16b11', 'committer_username': 'alan-cueva', 'committer_name': 'Alan Cueva', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 31, 22, 4, 52, tzinfo=datetime.timezone.utc)}]",Alan Cueva,85137397,,User,,3,,0,0
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+19816070,server,MariaDB/server,C++,1667,5515,268,1875,201521,237,2617,237,"[{'id': 670780791, 'number': 1862, 'closed': datetime.datetime(2021, 10, 12, 11, 27, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 15, 21, 59, 40, tzinfo=datetime.timezone.utc), 'time_taken': 10243676.0, 'time_delta': '118 days, 13:27:56', 'additions': 919, 'deletions': 2, 'state': 'closed'}]"

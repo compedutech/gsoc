@@ -1,0 +1,38 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+369878838, Introduce nicer style for records,"This will format records like this:
+
+```haskell
+module Herp where
+
+data Foo a
+  = Foo
+      { a :: Int
+      , a2 :: String
+        -- ^ some haddock
+      }
+  | Bar
+      { b :: a
+      }
+  deriving (Eq, Show)
+  deriving (ToJSON) via Bar Foo
+```
+
+Goals of this change are:
+
+- Achieve uniform style for data with one and many constructors by
+always starting the first constructor on the new line and aligning `=`
+and `|` symbols;
+- Visually separate fields from constructor names;
+- Keep a column with `{`, `,`, `}` clean by indenting line comments two
+spaces to the right.
+
+---
+
+Personally I find this style much more pleasant than one introduced in #256. If you don't want to have it as the default one, how about making it at least configurable?
+
+---
+
+This PR is made on top of #265 and so depends on its merge. Once you merge it after your comments and edits, I will rebase this one on top of the new master. However, I would like to open discussion about this change already now.",True,266,https://api.github.com/repos/haskell/stylish-haskell/pulls/266,https://github.com/haskell/stylish-haskell/pull/266,closed,449,139,8,6,13,0,0,0,[],2020-02-01 09:40:49+00:00,2020-02-17 18:32:02+00:00,1414273.0,"16 days, 8:51:13",[],"[{'commit_sha': '7f1ac294012354042ecdb3820d54a5af164398ef', 'committer_username': 'maksbotan', 'committer_name': 'Maxim Koltsov', 'committer_email': 'kolmax94@gmail.com', 'commit_date': datetime.datetime(2010, 5, 13, 15, 40, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e8c926b43e8cca14107faa6291cf81579e7bff3c', 'committer_username': 'maksbotan', 'committer_name': 'Maxim Koltsov', 'committer_email': 'kolmax94@gmail.com', 'commit_date': datetime.datetime(2010, 5, 13, 15, 40, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee13e4af6ca48aaad17539fa12f908b8490bedfd', 'committer_username': 'maksbotan', 'committer_name': 'Maxim Koltsov', 'committer_email': 'kolmax94@gmail.com', 'commit_date': datetime.datetime(2010, 5, 13, 15, 40, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c5120806abe5ad22e2507fae9f9b295609dc6060', 'committer_username': 'maksbotan', 'committer_name': 'Maxim Koltsov', 'committer_email': 'kolmax94@gmail.com', 'commit_date': datetime.datetime(2010, 5, 13, 15, 40, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f76b6f644cc47501840742b4fae71f04b2061b3a', 'committer_username': 'maksbotan', 'committer_name': 'Maxim Koltsov', 'committer_email': 'kolmax94@gmail.com', 'commit_date': datetime.datetime(2010, 5, 13, 15, 40, 5, tzinfo=datetime.timezone.utc)}, {'commit_sha': '562c878c2db84be6565c7e7b737d32fc7b52812b', 'committer_username': 'maksbotan', 'committer_name': 'Maxim Koltsov', 'committer_email': 'kolmax94@gmail.com', 'commit_date': datetime.datetime(2010, 5, 13, 15, 40, 5, tzinfo=datetime.timezone.utc)}]",Maxim Koltsov,275614,kolmax94@gmail.com,User,,71,,4,37
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+4322202,stylish-haskell,haskell/stylish-haskell,Haskell,149,977,16,84,484,138,17,20,"[{'id': 498008064, 'number': 316, 'closed': datetime.datetime(2020, 10, 5, 18, 28, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 5, 17, 32, 37, tzinfo=datetime.timezone.utc), 'time_taken': 3361.0, 'time_delta': '0:56:01', 'additions': 27, 'deletions': 8, 'state': 'closed'}, {'id': 497480482, 'number': 311, 'closed': datetime.datetime(2020, 10, 4, 22, 53, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 10, 4, 18, 49, 44, tzinfo=datetime.timezone.utc), 'time_taken': 14622.0, 'time_delta': '4:03:42', 'additions': 29, 'deletions': 3, 'state': 'closed'}, {'id': 369878838, 'number': 266, 'closed': datetime.datetime(2020, 2, 17, 18, 32, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 1, 9, 40, 49, tzinfo=datetime.timezone.utc), 'time_taken': 1414273.0, 'time_delta': '16 days, 8:51:13', 'additions': 449, 'deletions': 139, 'state': 'closed'}, {'id': 369875641, 'number': 265, 'closed': datetime.datetime(2020, 2, 2, 12, 18, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 1, 9, 4, 34, tzinfo=datetime.timezone.utc), 'time_taken': 98031.0, 'time_delta': '1 day, 3:13:51', 'additions': 28, 'deletions': 10, 'state': 'closed'}]"

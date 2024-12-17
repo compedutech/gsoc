@@ -1,0 +1,423 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+427654751,FM2-193: Generate default narratives provided by HAPI FHIR,"## Description of what I changed
+Set Thymeleaf Narrative Generator (with `propFile` as the properties file of HAPI FHIR) while initialising `FhirRestServlet`.
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/FM2-193
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+",True,194,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/194,https://github.com/openmrs/openmrs-module-fhir2/pull/194,closed,34,0,4,2,5,4,0,0,[],2020-06-04 07:53:08+00:00,2020-06-09 16:19:48+00:00,462400.0,"5 days, 8:26:40","[{'comment_id': 435278905, 'comment_body': 'Constants should be UPPER_CASE. Also, we have a `FhirConstants` class for holding this type of information.', 'comment_created': datetime.datetime(2020, 6, 4, 13, 58, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 435281851, 'comment_body': ""Please don't do this this way. The problem here is that you're hard-coding the `FhirContext` which is actually being set by Spring (see above). The correct thing to do here would be to replace where you have the call to `this.setDefaultNarrativeGenerator()` with the last line of code:\r\n\r\n```java\r\ngetFhirContext().setNarrativeGenerator(new CustomThymeleafNarrativeGenerator(hapiDefaultNarrativesPropFile));\r\n```\r\n\r\nThat way, it only depends on the FhirContext that is set by Spring, so that we don't break support for DSTU3 while doing this.\r\n\r\nIt might also be worth thinking about if we could load the `ThymeleafNarrativeGenerator` from Spring, as this might give us more flexibility in defining the property files to load, instead of needing to know about them ahead of time."", 'comment_created': datetime.datetime(2020, 6, 4, 14, 2, 3, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 435322697, 'comment_body': ""Okay, I'll do the changes."", 'comment_created': datetime.datetime(2020, 6, 4, 14, 54, 53, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 435412328, 'comment_body': 'So the set of dependencies here should be kept as minimal as possible. These should be moved to the `dependencyManagement` section and then included in the POM where they are necessary (possibly only in the OMOD). I\'d also drop the dependency on commons-io or change it\'s scope to ""provided"", since it\'s included in the platform.', 'comment_created': datetime.datetime(2020, 6, 4, 17, 3, 41, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}]","[{'commit_sha': 'a8f9d80fddfc0f549fa846734c1aaa05e45106bb', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e07d7925c362107383f8f20e62b4d531b803796', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+431280300,"FM2-194: Create default narratives for AllergyIntolerance, MedicationRequest, and Condition","## Description of what I changed
+Added OpenMRS Narratives for the following resources:
+* AllergyIntolerance
+* Condition
+* MedicationRequest
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-194
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,198,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/198,https://github.com/openmrs/openmrs-module-fhir2/pull/198,closed,1349,3,20,1,14,30,0,0,[],2020-06-08 17:09:41+00:00,2020-06-18 19:46:24+00:00,873403.0,"10 days, 2:36:43","[{'comment_id': 437129706, 'comment_body': 'Better to use logger if you really need or you can remove the `System.out.println` from the code', 'comment_created': datetime.datetime(2020, 6, 9, 4, 24, 32, tzinfo=datetime.timezone.utc), 'commenter': 'suthagar23', 'type': 'User'}, {'comment_id': 437137452, 'comment_body': ""Thanks for reviewing @suthagar23 :) \r\nActually I'd put this just for convenience in checking the output for now. It isn't intended to be a part of the final commit. Though I'll remove it from the code here and limit it to my local code."", 'comment_created': datetime.datetime(2020, 6, 9, 4, 56, 59, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 437236005, 'comment_body': '@ibacher what do you think of @ShivanshRakesh   arranging his data into data sets ?', 'comment_created': datetime.datetime(2020, 6, 9, 8, 40, 41, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 437449244, 'comment_body': 'Always prefer the `should` style of naming tests over `test` to make it clear what the test is testing. For example, I would name this `shouldGenerateAnAllergyIntoleranceNarrative`.', 'comment_created': datetime.datetime(2020, 6, 9, 14, 5, 15, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437464743, 'comment_body': 'Rather than populating this resource completely in code like this, it seems like it would be simpler to download the file from [here](https://www.hl7.org/fhir/allergyintolerance-example.json), remove the ""text"" section and save that in the test resources, then load it.\r\n\r\nFor example:\r\n\r\n```java\r\n// ensure ctx is a FhirContext with the correct NarrativeGenerator\r\nIParser parser = ctx.newJsonParser();\r\n\r\n// load initial data (this is our ""given"" for the test)\r\nAllergyIntolerance given = parser.parseResource(AllergyIntolerance.class, getClass().getClassLoader().getResourceAsStream(""allergyintolerance-example.json""));\r\n\r\nAllergyIntolerance result = parser.parseResource(AllergyIntolerance.class, parser.encodeResourceToString(allergyIntolerance));\r\n\r\n// now our assertions\r\nassertThat(result, notNullValue());\r\nassertThat(result.getText(), notNullValue());\r\nassertThat(result.getText().getStatusAsString(), equalTo(""generated""));\r\n// note that we should check the generated result against a reference of what we expect it to be\r\nassertThat(result.getText().getDivAsString(), equalTo(getClass().getClassLoader().getResourceAsStream(""expected/allergyintolerance-example.html""));\r\n```', 'comment_created': datetime.datetime(2020, 6, 9, 14, 25, 34, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437466659, 'comment_body': 'We should get away from referring to ""DefaultNarrative"". I understand that there\'s a difference  whether the narrative is generated from the HAPI defaults or ours, but by and large, we don\'t care about that difference. In my mind, it would almost make sense to break out a new series of classes to test narrative generation alone, so, e.g. having an `AllergyIntoleranceNarrativeTest` class, etc.', 'comment_created': datetime.datetime(2020, 6, 9, 14, 27, 59, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437467719, 'comment_body': 'Why is this a separate class?', 'comment_created': datetime.datetime(2020, 6, 9, 14, 29, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437469674, 'comment_body': ""Rather than using a logger (which is a good idea if we were going to output anything) or... manually reading the output, use assertions to check that these are the expected values. That's why they exist."", 'comment_created': datetime.datetime(2020, 6, 9, 14, 31, 49, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437472461, 'comment_body': 'Several things:\r\n\r\n* Comments here are not very helpful. If we need a resource just for testing, it **must** to be included in the base POM with the `<scope>test</scope>`. Otherwise, this jar ends up bundled in the OMOD (by default, Maven artifacts are loaded with the scope `compile` unless you tell Maven otherwise).\r\n* We should move away from using GSON at all. HAPI has moved from GSON to using Jackson, which should already be available on the class path.', 'comment_created': datetime.datetime(2020, 6, 9, 14, 35, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437472738, 'comment_body': 'Why not just call this `narratives.properties`?', 'comment_created': datetime.datetime(2020, 6, 9, 14, 35, 55, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437473048, 'comment_body': 'Always have a new line at the end of the file. This is primarily to prevent some Git weirdness issues.', 'comment_created': datetime.datetime(2020, 6, 9, 14, 36, 20, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437473655, 'comment_body': '@HerbertYiga If by this you mean ""should this data be stored in a file and loaded from there"" my answer would be yes. This should be a different mechanism from loading data into the database, if only because there are a number of layers between the raw data in the database and the narrative that we don\'t need to worry about here. ', 'comment_created': datetime.datetime(2020, 6, 9, 14, 37, 6, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437482163, 'comment_body': ""Actually I thought to keep the generator separate. But I'll move it to the same class with the tests."", 'comment_created': datetime.datetime(2020, 6, 9, 14, 47, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 437487734, 'comment_body': ""@ibacher Actually I did not mean it that way. I meant that it won't actually be a part of the final commit. \r\n\r\nBut yes, I'll remove such code which I don't plan to keep in the final commit, i.e. the `google-gson` dependency and the `print` statements. Or maybe if I need it at all, I'll use Jackson as you suggested."", 'comment_created': datetime.datetime(2020, 6, 9, 14, 54, 44, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 437505178, 'comment_body': '@ibacher Thanks a lot for this! I myself was looking for alternative ways.', 'comment_created': datetime.datetime(2020, 6, 9, 15, 14, 4, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 437549508, 'comment_body': 'Ah! Ok... I see now!', 'comment_created': datetime.datetime(2020, 6, 9, 16, 7, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437627263, 'comment_body': '@ibacher PTAL. Doing it this way is fine right? \r\nUsing just `equalTo(getClass().getClassLoader().getResourceAsStream(<path>))` raised errors due to type mismatch.', 'comment_created': datetime.datetime(2020, 6, 9, 18, 16, 58, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 437661060, 'comment_body': 'Why not just use `IOUtils.resourceToString(EXPECTED_NARRATIVE_PATH, StandardCharsets.UTF_8)`? \r\n\r\nAlso, some general points about unit tests. We want to structure unit tests so that it is clear what is being tested in each test. We also want to factor out the common setup parts so that things aren\'t repeating themselves too much.\r\n\r\nFor unit tests, I use this structure:\r\n\r\n```java\r\n// given - setup the preconditions\r\n\r\n// when - do the thing being tested\r\n\r\n// then - assertions to ensure state is right\r\n```\r\n\r\nGiven this structure, I think this test should look something like this:\r\n\r\n```java\r\n// do this once per class\r\nprivate FhirContext ctx = FhirContext.forR4();\r\n\r\nprivate IParser parser;\r\n\r\n@Before\r\nprivate void setup() {\r\n    ctx.setNarrativeGenerator(new CustomThymeleafNarrativeGenerator(FhirConstants.HAPI_NARRATIVES_PROPERTY_FILE,\r\n        FhirConstants.OPENMRS_NARRATIVES_PROPERTY_FILE));\r\n    parser = ctx.newJsonParser();\r\n}\r\n\r\n@Test\r\npublic void shouldGenerateMedicationRequestNarrative() throws IOException {\r\n    // given\r\n    MedicationRequest given = parser.parseResource(MedicationRequest.class,\r\n         getClass().getClassLoader().getResourceAsStream(EXAMPLE_RESOURCE_PATH));\r\n\r\n    // when\r\n    MedicationRequest result = parser.parseResource(MedicationRequest.class, parser.encodeResourceToString(given));\r\n\r\n    // then\r\n    assertThat(result, notNullValue());\r\n    assertThat(result.getText(), notNullValue());\r\n    assertThat(result.getText().getStatusAsString(), equalTo(""generated""));\r\n    // if you don\'t do it in one line like this, I would load the expected narrative here\r\n    // that way, if some error comes from just loading the expected result, we can at least be\r\n    // assured that the other assertions passed\r\n    assertThat(result.getText().getDivAsString(),\r\n        equalTo(IOUtils.resourceToString(EXPECTED_NARRATIVE_PATH, StandardCharsets.UTF_8)));\r\n}\r\n```\r\n\r\nThe comments there don\'t need to be preserved. They\'re just to show you why I\'ve put the line breaks where I did.', 'comment_created': datetime.datetime(2020, 6, 9, 19, 17, 15, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 437728051, 'comment_body': 'Actually I used `IOUtils.readlines()` because I just needed the first line, since I had to keep a newline in the end. Though, I guess I can use `IOUtils.resourceToString()` too and then split it at a newline.\r\n\r\nOkay, will restructure the tests.', 'comment_created': datetime.datetime(2020, 6, 9, 21, 17, 36, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 437732976, 'comment_body': 'Did the changes. PTAL.', 'comment_created': datetime.datetime(2020, 6, 9, 21, 28, 20, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 438110029, 'comment_body': 'Here\'s my suggestion for the dealing with the TimeZone issue:\r\n\r\n```java\r\nprotected static TimeZone defaultTimeZone;\r\n\r\n@BeforeClass\r\npublic static void setupTimeZone() {\r\n    defaultTimeZone = TimeZone.getDefault();\r\n    TimeZone.setDefault(TimeZone.getTimeZone(""UTC""));\r\n}\r\n\r\n@AfterClass\r\npublic static void resetTimeZone() {\r\n    TimeZone.setDefault(defaultTimeZone);\r\n}\r\n```\r\n\r\nPS It maybe worth looking into creating a `BaseFhirNarrativeTest` class which handles:\r\n\r\n* Creating the context and parser (i.e., the `@Before` method with both the `ctx` and `parser` fields marked as `protected`\r\n* Setting up the timezone stuff suggested above', 'comment_created': datetime.datetime(2020, 6, 10, 13, 12, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 438110534, 'comment_body': 'Does this not work without the `.split(""\\n"")[0]`?', 'comment_created': datetime.datetime(2020, 6, 10, 13, 13, 6, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 438114499, 'comment_body': 'Thanks for that @ibacher! Sure, will do that.', 'comment_created': datetime.datetime(2020, 6, 10, 13, 18, 52, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 438115836, 'comment_body': ""No, actually there's an extra newline I added following [this](https://github.com/openmrs/openmrs-module-fhir2/pull/198#discussion_r437473048). With that, it throws an assertion error."", 'comment_created': datetime.datetime(2020, 6, 10, 13, 20, 51, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 438126679, 'comment_body': 'Have made the changes. PTAL!', 'comment_created': datetime.datetime(2020, 6, 10, 13, 35, 50, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 438967502, 'comment_body': 'That makes sense', 'comment_created': datetime.datetime(2020, 6, 11, 17, 52, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 438967875, 'comment_body': 'This should be ""classpath:narrative.properties""', 'comment_created': datetime.datetime(2020, 6, 11, 17, 52, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 440334703, 'comment_body': ""@ibacher If I do that, it uses the narratives.properties of HAPI, instead of the local one. So I've moved the resources to a sub-directory `org/openmrs/module/fhir2/` inside the `resources` directory, and changed `OPENMRS_NARRATIVES_PROPERTY_FILE` to `classpath:org/openmrs/module/fhir2/narratives.properties`."", 'comment_created': datetime.datetime(2020, 6, 15, 17, 30, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 440937057, 'comment_body': 'Ok. My point was primarily that `file:` with `src/main/resources/...` is only going to work in a development environment. Instead of differentiating these two, it might make sense to just use something like `classpath*:narratives.properties`, allowing us to use other `narratives.properties` files that exist on the classpath. Basically, we want to be forced to know as little as possible about HAPI.', 'comment_created': datetime.datetime(2020, 6, 16, 15, 21, 23, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 440941826, 'comment_body': 'Ah, I see.', 'comment_created': datetime.datetime(2020, 6, 16, 15, 27, 46, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': '7b669e42e745a97d6a0d4b9d8d7d04ad13c03ede', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+433971026,"FM2-207: Create default narratives for Encounter, Observation and Location","## Description of what I changed
+Added OpenMRS Narratives for the following resources:
+* Encounter
+* Observation
+* Location
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-207
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,207,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/207,https://github.com/openmrs/openmrs-module-fhir2/pull/207,closed,1006,1,18,1,13,1,0,0,[],2020-06-13 07:18:36+00:00,2020-06-29 16:53:49+00:00,1416913.0,"16 days, 9:35:13","[{'comment_id': 443966201, 'comment_body': 'I guess this file got changed due to autoformat.', 'comment_created': datetime.datetime(2020, 6, 23, 5, 16, 7, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': '070b5b1163ab0f85f9bd30cfa407a6ed3aacf5a5', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+436639734,"FM2-208: Create default narratives for Person, Practitioner and ServiceRequest","## Description of what I changed
+Added OpenMRS Narratives for the following resources:
+* Person
+* Practitioner
+* ServiceRequest
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-208
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,219,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/219,https://github.com/openmrs/openmrs-module-fhir2/pull/219,closed,843,2,14,3,5,2,0,0,[],2020-06-18 17:06:21+00:00,2020-06-29 19:35:36+00:00,959355.0,"11 days, 2:29:15","[{'comment_id': 447205775, 'comment_body': 'This is probably on the list of things we should do, but we should add `mailto:` links for emails and `tel:` links for telephone numbers, where we know that information.', 'comment_created': datetime.datetime(2020, 6, 29, 19, 35, 26, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 447249354, 'comment_body': ""@ibacher The `mailto:` link is actually present in case of emails (above in the file). The one I removed in this commit was a correction. I had added `mailto:` link to all contact points where `system` value was `null`. \r\n\r\nSure I'll add the `tel:` link too."", 'comment_created': datetime.datetime(2020, 6, 29, 20, 57, 22, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': '6f64d7449000a369885990fb728ebb3f9bc0eb12', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5d8ecbae8e56a14e20883837d73591bad5dcd29', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8f4da4ff1bbef4ab19366f22dd1c9b411c4e43ac', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+440038857,"FM2-230: Create default narratives for RelatedPerson, Task and PractitionerRole","## Description of what I changed
+Added OpenMRS Narratives for the following resources:
+* RelatedPerson
+* Task
+* PractitionerRole
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-230
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,232,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/232,https://github.com/openmrs/openmrs-module-fhir2/pull/232,closed,873,0,13,5,7,0,0,0,[],2020-06-25 13:57:35+00:00,2020-06-29 22:31:11+00:00,376416.0,"4 days, 8:33:36",[],"[{'commit_sha': '556b3e0decae2e366eaac18449470315c34451c0', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e540c7a36ba1120c5888a62c2ade61366c12e310', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf2692f57e6d9b7d84345a119c0fc446177a4e6c', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a6bb5512619c22c71c672132b91a661f137d0064', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd99e17a507a624c60a98e7c4931b06744732d383', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+465953258,FM2-243: Fix test errors on Windows,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Trimming the trailing whitespaces instead of comparison with `\n` in assertion tests.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-243
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+",True,279,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/279,https://github.com/openmrs/openmrs-module-fhir2/pull/279,closed,2,2,1,1,5,0,0,0,[],2020-08-11 08:30:49+00:00,2020-08-12 14:59:12+00:00,109703.0,"1 day, 6:28:23",[],"[{'commit_sha': '456078064f28492b4c11898f91a268846a0c0aff', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+441916098,FM2-249: Improve content and layout of narratives,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+Improvements that have been done:
+- [x] Add details to the  properties of `Coding` type.
+- [x] Add `tel:` link to properties of `ContactPoint` type when the `system` is `phone` and URL links when `system` is `url`.
+- [x] Make the sub property tables reside in rows of the main property table itself.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-249
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+",True,238,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/238,https://github.com/openmrs/openmrs-module-fhir2/pull/238,closed,522,536,22,1,10,4,0,0,[],2020-06-30 09:54:39+00:00,2020-07-20 20:29:52+00:00,1766113.0,"20 days, 10:35:13","[{'comment_id': 448751842, 'comment_body': '@ShivanshRakesh  Thanks for spotting this change.\r\nThe pr looks good to me. @ibacher   Hi ian,how does this entire pr look to you cc @dkayiwa ', 'comment_created': datetime.datetime(2020, 7, 2, 5, 9, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 448755175, 'comment_body': 'Thanks @HerbertYiga! :)', 'comment_created': datetime.datetime(2020, 7, 2, 5, 22, 18, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 454605968, 'comment_body': 'Is this intentional? It looks weird to me having a line break inside a `<td>`.', 'comment_created': datetime.datetime(2020, 7, 14, 19, 53, 55, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 454627692, 'comment_body': ""Actually it was looking a bit cluttered without any separation, so I added a newline. I'll remove it though."", 'comment_created': datetime.datetime(2020, 7, 14, 20, 34, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': '2f7fb8e0d61a31272467a813263ea45097048f64', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+449593720,FM2-251: Add support for overriding default narratives,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Added support for overriding default narratives, with the narrative override property file location to be stored as the global property `narrativesOverridePropertyFile`.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-251
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,257,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/257,https://github.com/openmrs/openmrs-module-fhir2/pull/257,closed,150,3,5,1,3,17,0,0,[],2020-07-15 16:26:54+00:00,2020-07-20 13:53:39+00:00,422805.0,"4 days, 21:26:45","[{'comment_id': 455183539, 'comment_body': 'It now adds the `file:` prefix if there is no prefix in the path, since the `loadResource()` method requires either `classpath:` or `file:` prefix.', 'comment_created': datetime.datetime(2020, 7, 15, 16, 38, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 455184042, 'comment_body': ""I've added few checks for the properties file."", 'comment_created': datetime.datetime(2020, 7, 15, 16, 38, 46, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 455185065, 'comment_body': ""I've restructured this the way suggested [here](https://github.com/openmrs/openmrs-module-fhir2/pull/252#discussion_r455036175)."", 'comment_created': datetime.datetime(2020, 7, 15, 16, 40, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 455530830, 'comment_body': 'You could use shouldReturnNullWhenClassPathIsEmpty as the name of that method', 'comment_created': datetime.datetime(2020, 7, 16, 6, 9, 17, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 455531598, 'comment_body': 'how do you see if we used logger instead of LOGGER', 'comment_created': datetime.datetime(2020, 7, 16, 6, 11, 31, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 455532316, 'comment_body': 'hI @ibacher   How does this entire pr look to you?', 'comment_created': datetime.datetime(2020, 7, 16, 6, 13, 36, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 455584890, 'comment_body': ""Yeah, it's not a constant so I guess using `logger` is better. I'll use `logger` instead."", 'comment_created': datetime.datetime(2020, 7, 16, 7, 54, 26, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 455585255, 'comment_body': 'Okay, will make the changes to this.', 'comment_created': datetime.datetime(2020, 7, 16, 7, 54, 50, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 455592705, 'comment_body': '@HerbertYiga should I use `log` instead? I just saw that `log` has been used at other places in the repository.', 'comment_created': datetime.datetime(2020, 7, 16, 8, 2, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 455595601, 'comment_body': 'true,use log', 'comment_created': datetime.datetime(2020, 7, 16, 8, 5, 9, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 455628138, 'comment_body': ""@HerbertYiga I've made the changes. PTAL."", 'comment_created': datetime.datetime(2020, 7, 16, 8, 50, 10, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 456611592, 'comment_body': 'Two points on this:\r\n\r\n1. Could you add what you said above as a comment on this line of code.\r\n2. Isn\'t `path = ""file:"" + path` easier to read?', 'comment_created': datetime.datetime(2020, 7, 17, 18, 38, 27, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 456663025, 'comment_body': '> 1. Could you add what you said above as a comment on this line of code.\r\n\r\nOkay. \r\n\r\n> 2. Isn\'t `path = ""file:"" + path` easier to read?\r\n\r\nYeah, I\'ll change it to this.', 'comment_created': datetime.datetime(2020, 7, 17, 20, 37, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 456665048, 'comment_body': 'Actually, if I can suggest, just annotate the class with the `@Slf4j` annotation, which will magically generate the `log` variable for you. See [here](https://projectlombok.org/features/log).', 'comment_created': datetime.datetime(2020, 7, 17, 20, 42, 48, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 456668242, 'comment_body': ""@ibacher I've made the changes. PTAL."", 'comment_created': datetime.datetime(2020, 7, 17, 20, 50, 45, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 456668877, 'comment_body': ""Oh that's nice! Will do that."", 'comment_created': datetime.datetime(2020, 7, 17, 20, 52, 27, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 456671535, 'comment_body': 'Have made the changes.', 'comment_created': datetime.datetime(2020, 7, 17, 20, 58, 55, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': '77d7cbe85dd8246242482935897d0401d6ce0403', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+448284208,FM2-252: Add support for relative path with prefix 'openmrs:' for narrative templates,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Added support for relative paths prefixed with `openmrs:` for location of narratives and properties file. 
+For example, the relative path `openmrs:configuration/Patient.html` would point to the location `<OPENMRS_APPLICATION_DATA_DIRECTORY>/configuration/Patient.html`.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-252
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+",True,255,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/255,https://github.com/openmrs/openmrs-module-fhir2/pull/255,closed,606,7,11,1,6,16,0,0,[],2020-07-13 14:14:39+00:00,2020-07-28 12:48:23+00:00,1290824.0,"14 days, 22:33:44","[{'comment_id': 453769514, 'comment_body': 'Here is the main modification which has been done to support `openmrs:` prefixed relative paths.', 'comment_created': datetime.datetime(2020, 7, 13, 16, 19, 3, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 453770882, 'comment_body': 'The modified `loadResource()` method has been called here.', 'comment_created': datetime.datetime(2020, 7, 13, 16, 21, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 454553069, 'comment_body': ""Definitely don't use ALL_CAPS for instance names. They are used for constants, which are usually `static final`."", 'comment_created': datetime.datetime(2020, 7, 14, 18, 18, 40, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 454554570, 'comment_body': 'So my main question here is why we have this whole implementation when it seems like we could get away with this:\r\n\r\n```java\r\npublic class OpenMRSNarrativeTemplate extends ca.uhn.fhir.narrative2.NarrativeTemplate {\r\n    @Override\r\n\tpublic String getTemplateText() {\r\n\t\ttry {\r\n\t\t\treturn OpenMRSNarrativeTemplateManifest.loadResource(getTemplateFileName());\r\n\t\t} catch (IOException e) {\r\n\t\t\tthrow new InternalErrorException(e);\r\n\t\t}\r\n\t}\r\n}\r\n```', 'comment_created': datetime.datetime(2020, 7, 14, 18, 21, 9, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 454556381, 'comment_body': 'Couldn\'t this just be something like:\r\n\r\n```java\r\npublic class OpenMRSNarrativeTemplateManifest extends ca.uhn.fhir.narrative2.NarrativeTemplateManifest {\r\n\tpublic static NarrativeTemplateManifest forManifestFileLocation(String... propertyFiles) throws IOException {\r\n\t\treturn forManifestFileLocation(Arrays.asList(propertyFiles));\r\n\t}\r\n\r\n\tpublic static NarrativeTemplateManifest forManifestFileLocation(Collection<String> propertyFiles) throws IOException {\r\n\t\tlog.debug(""Loading narrative properties file(s): {}"", propertyFiles);\r\n\t\treturn new NarrativeTemplateManifest(propertyFiles.stream().map(r -> loadResource(r)).map(p -> NarrativeTemplateManifest.loadProperties(p))\r\n\t\t\t.flatMap(p -> p.stream()).map(t -> new OpenmrsNarrativeTemplate(t)).collect(Collectors.toList()));\r\n\t}\r\n\r\n\tstatic String loadResource(String name) throws IOException {\r\n\t\tif (name.startsWith(""openmrs:"")) {\r\n\t\t\tFile file = new File(OpenmrsUtil.getApplicationDataDirectory(), name.substring(""openmrs:"".length()));\r\n\r\n\t\t\tif (file.exists() == false) {\r\n\t\t\t\tthrow new IOException(""File not found: "" + file.getAbsolutePath());\r\n\t\t\t}\r\n\r\n\t\t\ttry (FileInputStream inputStream = new FileInputStream(file)) {\r\n\t\t\t\treturn IOUtils.toString(inputStream, Charsets.UTF_8);\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\treturn NarrativeTemplateManifest.loadResource(name);\r\n\t\t}\r\n\t}\r\n}\r\n```\r\n\r\n(The above adds a small dependency that we create a constructor for `OpenmrsNarrativeTemplate` that takes a `NarrativeTemplate`, but that isn\'t too hard. That way we cut the code down to what we minimally need to support this change.', 'comment_created': datetime.datetime(2020, 7, 14, 18, 24, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 454638030, 'comment_body': ""Yeah actually we could do this. I didn't think of it this way initially because of the constructor. But yeah, this looks much better."", 'comment_created': datetime.datetime(2020, 7, 14, 20, 53, 4, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 454640637, 'comment_body': ""@ibacher Actually doing this resulted in errors in [`loadProperties()`](https://github.com/jamesagnew/hapi-fhir/blob/d6f6ec2d66c84b2cd9bd3e09d82437958fc871ee/hapi-fhir-base/src/main/java/ca/uhn/fhir/narrative2/NarrativeTemplateManifest.java#L123) method of `NarrativeTemplateManifest`, as it calls non-public methods of `NarrativeTemplate` like `setTemplateName()`, `addAppliesToProfile()`, etc.\r\n\r\nBut yes, if we change the `OpenMRSNarrativeTemplateManifest` class like the way you've suggested, I guess we could make this work too."", 'comment_created': datetime.datetime(2020, 7, 14, 20, 57, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 456754612, 'comment_body': '@ibacher I just forgot about it, but `NarrativeTemplateManifest` cannot be inherited because of a private constructor right?', 'comment_created': datetime.datetime(2020, 7, 18, 6, 1, 36, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 457613827, 'comment_body': ""I think that's what I'd like to see here. The idea is if we can make our implementation as light as possible, we're able to evolve with HAPI as easily as possible."", 'comment_created': datetime.datetime(2020, 7, 20, 18, 37, 40, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 457619134, 'comment_body': ""Yes... that's a good point. And I guess there isn't an easy way to remove a bunch of duplication here."", 'comment_created': datetime.datetime(2020, 7, 20, 18, 47, 12, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 457657794, 'comment_body': ""@ibacher Hmm.. and since some methods of `NarrativeTemplateManifest` call some private methods of `NarrativeTemplate` class, we can't reduce that either. So what should be done instead?"", 'comment_created': datetime.datetime(2020, 7, 20, 19, 59, 39, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 457661468, 'comment_body': ""Are you sure there are methods in `NarrativeTemplateManifest` that call *private* methods of `NarrativeTemplate`? Because, by definition, that's not possible... If it's just a matter of package-private methods, we can always stick our version of `OpenMRSNarrativeTemplateManifest` in the `ca.uhn.fhir.narrative2` package.\r\n\r\nThe alternative is to dress these classes up so that they more closely resemble OpenMRS coding conventions: Setters should be `public` or at least `protected`. We should drop `the` and `my` as prefixes to variables, etc. I'd also like to minimize duplicating code as much as possible."", 'comment_created': datetime.datetime(2020, 7, 20, 20, 6, 52, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 457664925, 'comment_body': ""> Are you sure there are methods in `NarrativeTemplateManifest` that call _private_ methods of `NarrativeTemplate`?\r\n\r\nAh, my bad. I meant non-public methods. Like `setTemplateName()`, `setTemplateType()` etc. They're basically called in `loadProperties()` method of `NarrativeTemplateManifest`."", 'comment_created': datetime.datetime(2020, 7, 20, 20, 13, 51, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 457665884, 'comment_body': ""> The alternative is to dress these classes up so that they more closely resemble OpenMRS coding conventions: Setters should be `public` or at least `protected`. We should drop `the` and `my` as prefixes to variables, etc. I'd also like to minimize duplicating code as much as possible.\r\n\r\nOkay."", 'comment_created': datetime.datetime(2020, 7, 20, 20, 15, 39, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 458135746, 'comment_body': 'Removed the `forManifestFileContents(String... resources)`, `forManifestFileLocation(String... propertyFilePaths)` methods since they were not used anywhere.', 'comment_created': datetime.datetime(2020, 7, 21, 14, 22, 6, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 458136407, 'comment_body': 'Removed `templateCount` since it was not being used anywhere.', 'comment_created': datetime.datetime(2020, 7, 21, 14, 22, 52, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': '8e9b17cc04e193adbb7023d16c590f50c76072bd', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+465675003,FM2-280: Add support for localisation of narratives,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Added support for localisation of narratives by externalizing property names using `messages.properties`.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-280
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,278,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/278,https://github.com/openmrs/openmrs-module-fhir2/pull/278,closed,784,378,26,2,11,17,0,0,[],2020-08-10 19:01:30+00:00,2020-08-27 13:11:29+00:00,1447799.0,"16 days, 18:09:59","[{'comment_id': 468115196, 'comment_body': 'Returning `null` so that absence of the message can be identified in the templates.', 'comment_created': datetime.datetime(2020, 8, 10, 19, 2, 50, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 468116909, 'comment_body': 'Used a setter so that `ReloadableResourceBundleMessageSource` could be set as `messageSource` in web tests.', 'comment_created': datetime.datetime(2020, 8, 10, 19, 6, 5, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 468117767, 'comment_body': ""Using a default value if the message is absent, so that populating the `messages.properties` won't be required for English language (and the default would be English too)."", 'comment_created': datetime.datetime(2020, 8, 10, 19, 7, 50, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 468118664, 'comment_body': 'Setting a `ReloadableResourceBundleMessageSource` as `messageSource` for web tests.', 'comment_created': datetime.datetime(2020, 8, 10, 19, 9, 35, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 468121053, 'comment_body': '```suggestion\r\npublic class OpenmrsMessageResolver extends AbstractMessageResolver {\r\n```', 'comment_created': datetime.datetime(2020, 8, 10, 19, 14, 11, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 468121450, 'comment_body': ""@ShivanshRakesh Things like this should be added as a comment to the code. It's a good point though."", 'comment_created': datetime.datetime(2020, 8, 10, 19, 14, 55, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 468121852, 'comment_body': 'Please use the existing `messages.properties` files in the API rather than adding them to the OMOD.', 'comment_created': datetime.datetime(2020, 8, 10, 19, 15, 41, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 468122333, 'comment_body': ""I'd make sure that these defaults also exist at least in the base `message.properties` file."", 'comment_created': datetime.datetime(2020, 8, 10, 19, 16, 38, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 468122953, 'comment_body': 'Move these two lines down just before the call to `setMessageSource()`', 'comment_created': datetime.datetime(2020, 8, 10, 19, 17, 53, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 468124166, 'comment_body': ""Shouldn't we expect that the output is the same?"", 'comment_created': datetime.datetime(2020, 8, 10, 19, 20, 19, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 468129658, 'comment_body': ""Yeah, actually it's the `:` which is missing after the property names."", 'comment_created': datetime.datetime(2020, 8, 10, 19, 26, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 468133960, 'comment_body': ""@ibacher I tried using the one in API, but it doesn't seem to work. I mean the `MessageResolver` is not fetching messages from those files."", 'comment_created': datetime.datetime(2020, 8, 10, 19, 31, 48, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 468836368, 'comment_body': 'Have added the missing `:`.', 'comment_created': datetime.datetime(2020, 8, 11, 20, 11, 22, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 469499526, 'comment_body': 'Changed `Organisation` to `Organization` since the property name had `z` instead of `s`; hence the change in expected narrative.', 'comment_created': datetime.datetime(2020, 8, 12, 19, 46, 48, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 470230118, 'comment_body': ""That's problematic. Does it work if you run this code in an actual instance of OpenMRS?"", 'comment_created': datetime.datetime(2020, 8, 13, 20, 31, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 470606862, 'comment_body': ""@ibacher I'm not sure about it. I did however run this on the OpenMRS server, but I'm not sure how to check for the narrative. There is nothing for the narrative on the front-end side right? \r\n\r\nOn the other hand, it might be that it is happening in the tests since we are using `ReloadableResourceBundleMessageSource` instead of the `messageSource` which gets autowired. So for this, will setting a different `ResourceLoader` for this message source in tests work? I'm not sure how to set it up to use the `API` files though.\r\n\r\nAlso, will keeping the messages in both the `messages.properties` be a good idea?"", 'comment_created': datetime.datetime(2020, 8, 14, 12, 57, 4, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 470704571, 'comment_body': ""@ibacher Also, aren't the `messages.properties` files supposed to be in the `/omod/src/main/resources` directory as mentioned in the [wiki](https://wiki.openmrs.org/display/docs/Module+messages.properties+Files)? Or is it configured differently in FHIR?"", 'comment_created': datetime.datetime(2020, 8, 14, 15, 42, 29, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}]","[{'commit_sha': 'fdf1cfdbc04655c3e2775359b3698161a03b8156', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1cb6510704502b14ca1010c0754c9a0fed4ed052', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+463472542,FM2-281: Add checks for empty properties in narrative templates,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Added checks for empty resources or resource properties in narrative templates.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-281
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,273,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/273,https://github.com/openmrs/openmrs-module-fhir2/pull/273,closed,51,27,11,1,4,0,0,0,[],2020-08-05 15:47:50+00:00,2020-08-10 13:41:25+00:00,424415.0,"4 days, 21:53:35",[],"[{'commit_sha': 'db0f3da8bae31a8132b43e239e0efbcbae847eec', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+464200474,FM2-295: Narrative generation failing for MedicationRequest resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Changed `th:narrative` to `th:text` for all properties of type `code` in narrative templates.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-295
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [X] My pull request is **based on the latest changes** of the master branch.
+",True,275,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/275,https://github.com/openmrs/openmrs-module-fhir2/pull/275,closed,7,7,5,1,1,0,0,0,[],2020-08-06 18:40:43+00:00,2020-08-10 13:38:46+00:00,327483.0,"3 days, 18:58:03",[],"[{'commit_sha': '9e5fea96ea48e8bc1afeac29d014f95ff9b1792f', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+468345356,FM2-295: Narrative generation failing for MedicationRequest resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+- Covered cases when properties of type `code` have been changed to different type in process of `R3 -> R4` conversion.
+- Changed `th:narrative` to `th:text` for explicit `boolean` type properties.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-295 (related issue)
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,288,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/288,https://github.com/openmrs/openmrs-module-fhir2/pull/288,closed,71,63,11,1,6,8,0,0,[],2020-08-15 17:33:19+00:00,2020-08-25 21:09:23+00:00,876964.0,"10 days, 3:36:04","[{'comment_id': 471286587, 'comment_body': 'thanks @ShivanshRakesh how does the entire pr look to you @ibacher', 'comment_created': datetime.datetime(2020, 8, 17, 7, 17, 47, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 474184899, 'comment_body': 'Are you sure about the logic here? R4 definitely has `clinicalStatus` and `verificationStatus` for AllergyIntolerance.', 'comment_created': datetime.datetime(2020, 8, 20, 18, 23, 32, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 474185675, 'comment_body': '`assertedDate` is only available in R3. R5 and beyond presumably use the R4 property names by default.', 'comment_created': datetime.datetime(2020, 8, 20, 18, 24, 58, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 474190353, 'comment_body': '@ibacher Yeah, but the type has been changed from `code` in R3 to `CodableConcept` in R4. Since `code` needs `th:text`, I had to separate out R3 and R4 here.\r\nThe part for R4 is there above in line 30.', 'comment_created': datetime.datetime(2020, 8, 20, 18, 33, 14, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 474191576, 'comment_body': 'Ok... but I actually prefer for these kinds of things that we\'d do ""${fhirVersion} eq \'DSTU3\'"" rather than this as future versions of FHIR are going to be based on R4. In other words, this is treating R4 as the exceptional case where as it\'s DSTU3 support that\'s the exceptional case.', 'comment_created': datetime.datetime(2020, 8, 20, 18, 35, 25, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 474191788, 'comment_body': 'Okay so I will change it back to `th:if=""${fhirVersion} eq \'DSTU3\'""`.', 'comment_created': datetime.datetime(2020, 8, 20, 18, 35, 48, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 474193305, 'comment_body': 'Okay, so I guess changing all R3->R4 diffs to ""${fhirVersion} eq \'DSTU3\'"" would do right?', 'comment_created': datetime.datetime(2020, 8, 20, 18, 38, 43, tzinfo=datetime.timezone.utc), 'commenter': 'ShivanshRakesh', 'type': 'User'}, {'comment_id': 474204524, 'comment_body': 'Yes', 'comment_created': datetime.datetime(2020, 8, 20, 18, 59, 18, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}]","[{'commit_sha': 'cd7bff765dc3114f580881910f724167afc321c9', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+468146175,"FM2-297: Create default narratives for DiagnosticReport, Medication, Patient","<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Created default narratives for DiagnosticReport, Medication, Patient.
+Will add support for localisation of these resources in #278.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-297
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,287,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/287,https://github.com/openmrs/openmrs-module-fhir2/pull/287,closed,937,5,15,1,3,0,0,0,[],2020-08-14 19:21:12+00:00,2020-08-20 18:27:03+00:00,515151.0,"5 days, 23:05:51",[],"[{'commit_sha': '87ccfba24331d3d78e65af413865bc75b01502b4', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+468938182,FM2-299: Add necessary Javadoc to methods and classes,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Added Javadocs to methods and classes created under [FM2-192](https://issues.openmrs.org/browse/FM2-299).
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-299
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.",True,291,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/291,https://github.com/openmrs/openmrs-module-fhir2/pull/291,closed,231,0,17,2,7,0,0,0,[],2020-08-17 16:34:00+00:00,2020-10-29 14:06:57+00:00,6298377.0,"72 days, 21:32:57",[],"[{'commit_sha': '2a3c55e316c4cc242a9e4a685cfb505a048f87be', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5e2066667832fb6461c5b827d6762b92caab102f', 'committer_username': 'ShivanshRakesh', 'committer_name': 'Shivansh Rakesh', 'committer_email': None, 'commit_date': datetime.datetime(2019, 3, 28, 18, 1, 15, tzinfo=datetime.timezone.utc)}]",Shivansh Rakesh,49039969,,User,,27,,0,0
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+232160993,openmrs-module-fhir2,openmrs/openmrs-module-fhir2,Java,108,66,50,46,765,24,17,24,"[{'id': 468938182, 'number': 291, 'closed': datetime.datetime(2020, 10, 29, 14, 6, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 16, 34, tzinfo=datetime.timezone.utc), 'time_taken': 6298377.0, 'time_delta': '72 days, 21:32:57', 'additions': 231, 'deletions': 0, 'state': 'closed'}, {'id': 468345356, 'number': 288, 'closed': datetime.datetime(2020, 8, 25, 21, 9, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 15, 17, 33, 19, tzinfo=datetime.timezone.utc), 'time_taken': 876964.0, 'time_delta': '10 days, 3:36:04', 'additions': 71, 'deletions': 63, 'state': 'closed'}, {'id': 468146175, 'number': 287, 'closed': datetime.datetime(2020, 8, 20, 18, 27, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 14, 19, 21, 12, tzinfo=datetime.timezone.utc), 'time_taken': 515151.0, 'time_delta': '5 days, 23:05:51', 'additions': 937, 'deletions': 5, 'state': 'closed'}, {'id': 465953258, 'number': 279, 'closed': datetime.datetime(2020, 8, 12, 14, 59, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 11, 8, 30, 49, tzinfo=datetime.timezone.utc), 'time_taken': 109703.0, 'time_delta': '1 day, 6:28:23', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 465675003, 'number': 278, 'closed': datetime.datetime(2020, 8, 27, 13, 11, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 10, 19, 1, 30, tzinfo=datetime.timezone.utc), 'time_taken': 1447799.0, 'time_delta': '16 days, 18:09:59', 'additions': 784, 'deletions': 378, 'state': 'closed'}, {'id': 464200474, 'number': 275, 'closed': datetime.datetime(2020, 8, 10, 13, 38, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 6, 18, 40, 43, tzinfo=datetime.timezone.utc), 'time_taken': 327483.0, 'time_delta': '3 days, 18:58:03', 'additions': 7, 'deletions': 7, 'state': 'closed'}, {'id': 463472542, 'number': 273, 'closed': datetime.datetime(2020, 8, 10, 13, 41, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 15, 47, 50, tzinfo=datetime.timezone.utc), 'time_taken': 424415.0, 'time_delta': '4 days, 21:53:35', 'additions': 51, 'deletions': 27, 'state': 'closed'}, {'id': 449593720, 'number': 257, 'closed': datetime.datetime(2020, 7, 20, 13, 53, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 15, 16, 26, 54, tzinfo=datetime.timezone.utc), 'time_taken': 422805.0, 'time_delta': '4 days, 21:26:45', 'additions': 150, 'deletions': 3, 'state': 'closed'}, {'id': 448284208, 'number': 255, 'closed': datetime.datetime(2020, 7, 28, 12, 48, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 13, 14, 14, 39, tzinfo=datetime.timezone.utc), 'time_taken': 1290824.0, 'time_delta': '14 days, 22:33:44', 'additions': 606, 'deletions': 7, 'state': 'closed'}, {'id': 446651766, 'number': 252, 'closed': datetime.datetime(2020, 7, 15, 16, 25, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 9, 6, 40, 28, tzinfo=datetime.timezone.utc), 'time_taken': 553507.0, 'time_delta': '6 days, 9:45:07', 'additions': 17, 'deletions': 3, 'state': 'closed'}, {'id': 441916098, 'number': 238, 'closed': datetime.datetime(2020, 7, 20, 20, 29, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 30, 9, 54, 39, tzinfo=datetime.timezone.utc), 'time_taken': 1766113.0, 'time_delta': '20 days, 10:35:13', 'additions': 522, 'deletions': 536, 'state': 'closed'}, {'id': 440038857, 'number': 232, 'closed': datetime.datetime(2020, 6, 29, 22, 31, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 25, 13, 57, 35, tzinfo=datetime.timezone.utc), 'time_taken': 376416.0, 'time_delta': '4 days, 8:33:36', 'additions': 873, 'deletions': 0, 'state': 'closed'}, {'id': 436639734, 'number': 219, 'closed': datetime.datetime(2020, 6, 29, 19, 35, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 18, 17, 6, 21, tzinfo=datetime.timezone.utc), 'time_taken': 959355.0, 'time_delta': '11 days, 2:29:15', 'additions': 843, 'deletions': 2, 'state': 'closed'}, {'id': 433971026, 'number': 207, 'closed': datetime.datetime(2020, 6, 29, 16, 53, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 13, 7, 18, 36, tzinfo=datetime.timezone.utc), 'time_taken': 1416913.0, 'time_delta': '16 days, 9:35:13', 'additions': 1006, 'deletions': 1, 'state': 'closed'}, {'id': 431280300, 'number': 198, 'closed': datetime.datetime(2020, 6, 18, 19, 46, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 8, 17, 9, 41, tzinfo=datetime.timezone.utc), 'time_taken': 873403.0, 'time_delta': '10 days, 2:36:43', 'additions': 1349, 'deletions': 3, 'state': 'closed'}, {'id': 427654751, 'number': 194, 'closed': datetime.datetime(2020, 6, 9, 16, 19, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 4, 7, 53, 8, tzinfo=datetime.timezone.utc), 'time_taken': 462400.0, 'time_delta': '5 days, 8:26:40', 'additions': 34, 'deletions': 0, 'state': 'closed'}, {'id': 425987579, 'number': 190, 'closed': datetime.datetime(2020, 6, 3, 17, 26, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 1, 13, 43, 34, tzinfo=datetime.timezone.utc), 'time_taken': 186185.0, 'time_delta': '2 days, 3:43:05', 'additions': 164, 'deletions': 0, 'state': 'closed'}]"

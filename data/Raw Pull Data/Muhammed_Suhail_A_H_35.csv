@@ -1,0 +1,314 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+651023054,rgw: remove quota soft threshold,"According to [this thread in dev@ceph.io](https://lists.ceph.io/hyperkitty/list/dev@ceph.io/thread/QHALPTYRZA2OKLHYNOMY7EZYRXPMXVYU/), the quota soft threshold is not reasonable anymore after dynamic resharding was introduced, which causes expensive checks for sharded buckets. This pull request reverts the 14eabd4aa7b8a2e2c0c43fe7f877ed2171277526 commit to remove the quota soft threshold.
+
+Fixes: 14eabd4aa7b8a2e2c0c43fe7f877ed2171277526
+https://tracker.ceph.com/issues/50975
+Signed-off-by: Zulai Wang <wangzl31@outlook.com>
+
+
+<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+## Checklist
+- [ ] References tracker ticket
+- [ ] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",True,41495,https://api.github.com/repos/ceph/ceph/pulls/41495,https://github.com/ceph/ceph/pull/41495,closed,7,70,3,1,1,4,4,0,"[{'name': 'bug-fix'}, {'name': 'rgw'}, {'name': 'needs-qa'}, {'name': 'common'}]",2021-05-24 06:19:49+00:00,2021-05-27 14:46:41+00:00,289612.0,"3 days, 8:26:52","[{'comment_id': 639491429, 'comment_body': 'I think you added new line by mistake, other than that LGTM', 'comment_created': datetime.datetime(2021, 5, 26, 8, 1, 12, tzinfo=datetime.timezone.utc), 'commenter': 'ofriedma', 'type': 'User'}, {'comment_id': 639498968, 'comment_body': 'Reformatted.', 'comment_created': datetime.datetime(2021, 5, 26, 8, 11, 37, tzinfo=datetime.timezone.utc), 'commenter': 'pleiadesian', 'type': 'User'}, {'comment_id': 639516033, 'comment_body': 'Can you please squash the commits into a single commit?', 'comment_created': datetime.datetime(2021, 5, 26, 8, 34, 21, tzinfo=datetime.timezone.utc), 'commenter': 'ofriedma', 'type': 'User'}, {'comment_id': 639517868, 'comment_body': 'Done', 'comment_created': datetime.datetime(2021, 5, 26, 8, 36, 51, tzinfo=datetime.timezone.utc), 'commenter': 'pleiadesian', 'type': 'User'}]","[{'commit_sha': '32a39705765af0f87bec9101e5d337b797e05fea', 'committer_username': 'pleiadesian', 'committer_name': None, 'committer_email': 'zl31wang@gmail.com', 'commit_date': datetime.datetime(2019, 1, 12, 8, 23, 1, tzinfo=datetime.timezone.utc)}]",,46620760,zl31wang@gmail.com,User,,50,,335,153
+660588046,rgw: require bucket name in bucket chown,"Checking and reporting missing the mandatory parameter avoid clueless error message for bucket chown.
+Fixes: https://tracker.ceph.com/issues/49831
+Signed-off-by: Zulai Wang <zl31wang@gmail.com>
+
+
+<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+## Checklist
+- [ ] References tracker ticket
+- [ ] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",True,41668,https://api.github.com/repos/ceph/ceph/pulls/41668,https://github.com/ceph/ceph/pull/41668,closed,4,0,1,1,1,0,3,0,"[{'name': 'bug-fix'}, {'name': 'rgw'}, {'name': 'needs-qa'}]",2021-06-03 05:42:50+00:00,2021-06-03 14:28:35+00:00,31545.0,8:45:45,[],"[{'commit_sha': '158a1f4313c0fa206031ede6f48a26c0c7467d57', 'committer_username': 'pleiadesian', 'committer_name': None, 'committer_email': 'zl31wang@gmail.com', 'commit_date': datetime.datetime(2019, 1, 12, 8, 23, 1, tzinfo=datetime.timezone.utc)}]",,46620760,zl31wang@gmail.com,User,,50,,335,153
+668705058,rgw: add enable_keep_alive option,"This commit adds an enable_keep_alive option to control the keep_alive for
+the beast frontend.
+
+Fixes: https://tracker.ceph.com/issues/48402
+Signed-off-by: Zulai Wang <zl31wang@gmail.com>
+
+
+<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+## Checklist
+- [ ] References tracker ticket
+- [ ] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",False,41824,https://api.github.com/repos/ceph/ceph/pulls/41824,https://github.com/ceph/ceph/pull/41824,closed,20,1,2,1,1,4,2,0,"[{'name': 'documentation'}, {'name': 'rgw'}]",2021-06-12 02:12:14+00:00,2021-07-13 10:12:22+00:00,2707208.0,"31 days, 8:00:08","[{'comment_id': 668094031, 'comment_body': ""this description confuses http keepalive with tcp keepalive\r\n\r\nthe frontend already supports http keepalive based on the http `Connection` header. see `handle_connection()` in `rgw_asio_frontend.cc`, which loops on `parser.keep_alive()`\r\n\r\nthis pr is enabling `SO_KEEPALIVE` on the socket, which controls tcp's keepalive. this differs from civetweb's `enable_keep_alive` option which controls http keepalive. is that really the intent here?"", 'comment_created': datetime.datetime(2021, 7, 12, 16, 47, 13, tzinfo=datetime.timezone.utc), 'commenter': 'cbodley', 'type': 'User'}, {'comment_id': 668624525, 'comment_body': ""You're right. I'll close this PR."", 'comment_created': datetime.datetime(2021, 7, 13, 10, 12, 13, tzinfo=datetime.timezone.utc), 'commenter': 'pleiadesian', 'type': 'User'}, {'comment_id': 709796843, 'comment_body': 'Hi, I opened the issue https://tracker.ceph.com/issues/48402 and I can say that tcp keepalive is actually the intent here.  So this PR looked like a fix for my issue, only the documentation part is wrong.  Can this be reopened?', 'comment_created': datetime.datetime(2021, 9, 16, 5, 47, 21, tzinfo=datetime.timezone.utc), 'commenter': 'r0ss3', 'type': 'User'}, {'comment_id': 710132364, 'comment_body': 'hi @r0ss3, i added some thoughts to https://tracker.ceph.com/issues/48402, shall we continue the discussion there?', 'comment_created': datetime.datetime(2021, 9, 16, 13, 43, 34, tzinfo=datetime.timezone.utc), 'commenter': 'cbodley', 'type': 'User'}]","[{'commit_sha': '29902d30d5f1445003e334a1ae93283a265ed900', 'committer_username': 'pleiadesian', 'committer_name': None, 'committer_email': 'zl31wang@gmail.com', 'commit_date': datetime.datetime(2019, 1, 12, 8, 23, 1, tzinfo=datetime.timezone.utc)}]",,46620760,zl31wang@gmail.com,User,,50,,335,153
+693086351,rgw: add balanced read option,"Add a config and the ability to use balanced reads when RGW sends a RADOS op.
+<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+## Checklist
+- [ ] References tracker ticket
+- [ ] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",False,42409,https://api.github.com/repos/ceph/ceph/pulls/42409,https://github.com/ceph/ceph/pull/42409,closed,144,65,14,1,0,1,4,0,"[{'name': 'core'}, {'name': 'rgw'}, {'name': 'common'}, {'name': 'DNM'}]",2021-07-20 03:32:31+00:00,2021-08-01 08:29:36+00:00,1054625.0,"12 days, 4:57:05",[],"[{'commit_sha': '59dde1809febd1aa5fbabe0d308e87db087ae0c2', 'committer_username': 'pleiadesian', 'committer_name': None, 'committer_email': 'zl31wang@gmail.com', 'commit_date': datetime.datetime(2019, 1, 12, 8, 23, 1, tzinfo=datetime.timezone.utc)}]",,46620760,zl31wang@gmail.com,User,,50,,335,153
+717087379,examples: add elasticsearch and prometheus examples,"Add examples on how to use lua scripting to push request fields from the RGW to Elasticsearch and Prometheus.
+
+Signed-off-by: Zulai Wang <zl31wang@gmail.com>
+
+<!--
+Thank you for opening a pull request!  Here are some tips on creating
+a well formatted contribution.
+
+Please give your pull request a title like ""[component]: [short description]""
+
+This is the format for commit messages:
+
+""""""
+[component]: [short description]
+
+[A longer multiline description]
+
+Fixes: [ticket URL on tracker.ceph.com, create one if necessary]
+Signed-off-by: [Your Name] <[your email]>
+""""""
+
+The Signed-off-by line is important, and it is your certification that
+your contributions satisfy the Developers Certificate or Origin.  For
+more detail, see SubmittingPatches.rst.
+
+The component is the short name of a major daemon or subsystem,
+something like ""mon"", ""osd"", ""mds"", ""rbd, ""rgw"", etc. For ceph-mgr modules,
+give the component as ""mgr/<module name>"" rather than a path into pybind.
+
+For more examples, simply use ""git log"" and look at some historical commits.
+
+This was just a quick overview.  More information for contributors is available here:
+https://raw.githubusercontent.com/ceph/ceph/master/SubmittingPatches.rst
+
+-->
+## Checklist
+- [ ] References tracker ticket
+- [ ] Updates documentation if necessary
+- [ ] Includes tests for new functionality or reproducer for bug
+
+---
+
+<details>
+<summary>Show available Jenkins commands</summary>
+
+- `jenkins retest this please`
+- `jenkins test classic perf`
+- `jenkins test crimson perf`
+- `jenkins test signed`
+- `jenkins test make check`
+- `jenkins test make check arm64`
+- `jenkins test submodules`
+- `jenkins test dashboard`
+- `jenkins test dashboard cephadm`
+- `jenkins test api`
+- `jenkins test docs`
+- `jenkins render docs`
+- `jenkins test ceph-volume all`
+- `jenkins test ceph-volume tox`
+
+</details>
+",True,42875,https://api.github.com/repos/ceph/ceph/pulls/42875,https://github.com/ceph/ceph/pull/42875,closed,274,0,6,1,1,10,2,0,"[{'name': 'documentation'}, {'name': 'rgw'}]",2021-08-21 04:14:41+00:00,2021-09-05 07:57:16+00:00,1309355.0,"15 days, 3:42:35","[{'comment_id': 693904213, 'comment_body': 'did you tests that assignment of non-basic data types work?\r\n`Request.HTTP.Metadata` is a reference to a C++ map', 'comment_created': datetime.datetime(2021, 8, 23, 11, 54, 25, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 693904464, 'comment_body': 'also a non-basic data type', 'comment_created': datetime.datetime(2021, 8, 23, 11, 54, 47, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 693905333, 'comment_body': 'maybe better to demonstrate a more interesting query. e.g. query all information on a specific bucket?', 'comment_created': datetime.datetime(2021, 8, 23, 11, 56, 8, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 693931750, 'comment_body': 'would be nice to put a screenshot from prometheus here', 'comment_created': datetime.datetime(2021, 8, 23, 12, 36, 33, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 693932878, 'comment_body': '""...specifically, to collect information on object sizes""', 'comment_created': datetime.datetime(2021, 8, 23, 12, 38, 12, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 693934485, 'comment_body': 'you should probably put that inside an ""if"" statement checking that this is a ""put"" (or ""get""?) request\r\notherwise, your measurements will be biased due to ""delete"" (or other operations) that have small content', 'comment_created': datetime.datetime(2021, 8, 23, 12, 40, 31, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 699413263, 'comment_body': '@pleiadesian did you try to send the metadata map? does the elasticsearch client know how to encode that?', 'comment_created': datetime.datetime(2021, 8, 31, 15, 0, 28, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 699415886, 'comment_body': 'No, it cannot be encoded and appears as an empty record `{}` in the elasticsearch query result. How can I get the contents of the metadata map in Lua?', 'comment_created': datetime.datetime(2021, 8, 31, 15, 3, 20, tzinfo=datetime.timezone.utc), 'commenter': 'pleiadesian', 'type': 'User'}, {'comment_id': 699460285, 'comment_body': 'can we do something similar to: https://github.com/ceph/ceph/blob/master/examples/lua/nats_adapter.lua#L50 ?', 'comment_created': datetime.datetime(2021, 8, 31, 15, 52, 32, tzinfo=datetime.timezone.utc), 'commenter': 'yuvalif', 'type': 'User'}, {'comment_id': 699858099, 'comment_body': 'Yes, it works.', 'comment_created': datetime.datetime(2021, 9, 1, 5, 37, 24, tzinfo=datetime.timezone.utc), 'commenter': 'pleiadesian', 'type': 'User'}]","[{'commit_sha': '9b8a75a19b1023ebaa2fbfd8521bd122ad25799c', 'committer_username': 'pleiadesian', 'committer_name': None, 'committer_email': 'zl31wang@gmail.com', 'commit_date': datetime.datetime(2019, 1, 12, 8, 23, 1, tzinfo=datetime.timezone.utc)}]",,46620760,zl31wang@gmail.com,User,,50,,335,153
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+2310495,ceph,ceph/ceph,C++,5921,13710,656,1920,147585,921,217,921,"[{'id': 717087379, 'number': 42875, 'closed': datetime.datetime(2021, 9, 5, 7, 57, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 21, 4, 14, 41, tzinfo=datetime.timezone.utc), 'time_taken': 1309355.0, 'time_delta': '15 days, 3:42:35', 'additions': 274, 'deletions': 0, 'state': 'closed'}, {'id': 693086351, 'number': 42409, 'closed': datetime.datetime(2021, 8, 1, 8, 29, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 20, 3, 32, 31, tzinfo=datetime.timezone.utc), 'time_taken': 1054625.0, 'time_delta': '12 days, 4:57:05', 'additions': 144, 'deletions': 65, 'state': 'closed'}, {'id': 668705058, 'number': 41824, 'closed': datetime.datetime(2021, 7, 13, 10, 12, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 12, 2, 12, 14, tzinfo=datetime.timezone.utc), 'time_taken': 2707208.0, 'time_delta': '31 days, 8:00:08', 'additions': 20, 'deletions': 1, 'state': 'closed'}, {'id': 660588046, 'number': 41668, 'closed': datetime.datetime(2021, 6, 3, 14, 28, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 3, 5, 42, 50, tzinfo=datetime.timezone.utc), 'time_taken': 31545.0, 'time_delta': '8:45:45', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 651023054, 'number': 41495, 'closed': datetime.datetime(2021, 5, 27, 14, 46, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 24, 6, 19, 49, tzinfo=datetime.timezone.utc), 'time_taken': 289612.0, 'time_delta': '3 days, 8:26:52', 'additions': 7, 'deletions': 70, 'state': 'closed'}]"

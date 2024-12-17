@@ -1,0 +1,469 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1274444161,feat: added app info to the nav drawer,"Fixes #1542 
+
+Added a separate section for app info, it now provides better workflow.
+
+1. Added a new item for app info in the menu nav drawer xml(menu_nav_drawer.xml)
+2. added it's title by default in english and translated it to all the other languages.
+3. added a new drawable for about us option and used about us icon for the app info, did it according to icon style guides & it looks better now.
+4. added the logic to launch app info in the home activity(HomeActivity.kt)
+5. tested changes on my android device.
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1976,https://api.github.com/repos/openMF/mifos-mobile/pulls/1976,https://github.com/openMF/mifos-mobile/pull/1976,closed,33,1,20,1,2,0,0,0,[],2023-03-14 06:10:12+00:00,2023-03-14 16:35:29+00:00,37517.0,10:25:17,[],"[{'commit_sha': 'ee64dae7d5f1428328451d43f286c68e99b1fbef', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1277993339,fix : added apk support for arm64-v8a android architecture.,"
+Fixes #1995 
+
+Added application apk support for arm64-v8a android architecture, application now supports more devices(newer).
+
+Current application apk didn't support the newer arm64-v8a android architecture, which is much recent and newer. According to the latest guidelines it's also required to be supported as it is a newer version of armeabi-v7a.
+
+1. in build.gradle(app) -> abiFilters add ""arm64-v8a"" android architecture.
+2. tested in my local device(armeabi-v7a) and pixel 2(arm64-v8a), application runs & installs succesfully.
+
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,1996,https://api.github.com/repos/openMF/mifos-mobile/pulls/1996,https://github.com/openMF/mifos-mobile/pull/1996,closed,1,1,1,1,1,0,0,0,[],2023-03-16 06:33:58+00:00,2023-03-16 13:40:02+00:00,25564.0,7:06:04,[],"[{'commit_sha': 'a14a41cf538ec381ee1d5b7ee90c1896271b1778', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1279148808,fix : fixed the logic of comparator function that's used to sort notifications,"Fixes #2000 
+
+
+Fixed the logic of comparator function that used to sort nofications(desc order) on the basis of their timestamps.
+
+The comparator function that is called in DatabaseHelper.kt to sort the notifications in Descending order of their timestamp is incorrect and doesn't provide the right comparator function logic to sort objects in descending order. According to online java/kotlin documentation a comparator function should provide return values for all three cases.
+
+1. updated the comparator function to provide return values for all three conditions(a > b ,a < b and a == b), where a and b are timestamps of any two notifications that are being compared.
+
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2001,https://api.github.com/repos/openMF/mifos-mobile/pulls/2001,https://github.com/openMF/mifos-mobile/pull/2001,closed,5,4,1,2,1,2,0,0,[],2023-03-16 19:05:50+00:00,2023-03-22 11:45:08+00:00,491958.0,"5 days, 16:39:18","[{'comment_id': 1140566888, 'comment_body': ""Great catch! However, both comparators are the same in line number 13 and 14, it is difficult to understand it for developers (although it's technically correct). Let's rename `mifosNotification1` variable to something like `firstNotification` and the other one to `secondNotificaiton`\r\nthen do the comparison like:\r\n `firstNotification.timpeStamp > secondNotificaiton.timeStamp` and \r\n`firstNotification.timpeStamp < secondNotificaiton.timeStamp `"", 'comment_created': datetime.datetime(2023, 3, 17, 18, 17, 37, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1140985801, 'comment_body': 'Thank you @jawidMuhammadi, I made the required changes : )', 'comment_created': datetime.datetime(2023, 3, 18, 10, 1, 57, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}]","[{'commit_sha': '4aef42a3226c106f44c750626cda514c91537eb2', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b66ecd247db0c6b2b7689738a94c62548ac503aa', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1281624893,fix : making on-screen/soft keyboard dismiss on background tap,"
+Fixes #1499 
+
+To enhance the user flow, added the ability to dismiss the soft keyboard or on-screen keyboard by tapping on the background or anywhere other than an EditText.
+
+1. dismissSoftKeyboardOnBkgTap() takes View/ViewGroup as an input and then individually checks all its child Views/ViewGroups to find a View that doesn't include EditText.
+
+2. when such a view is found and a tap is made on such a view, it's passed to hideSoftKeyboard() Utils function that by using Input Method Manager hides the soft keyboard.
+
+3. tested on pixel 2(api 33), the fix works smoothly.
+
+
+
+https://user-images.githubusercontent.com/59947871/226180530-0580d102-6e02-41d0-b924-9cf536055348.mp4
+
+
+
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2019,https://api.github.com/repos/openMF/mifos-mobile/pulls/2019,https://github.com/openMF/mifos-mobile/pull/2019,closed,21,5,2,3,6,17,0,0,[],2023-03-19 13:53:22+00:00,2023-03-24 16:17:29+00:00,440647.0,"5 days, 2:24:07","[{'comment_id': 1144788890, 'comment_body': 'Remove this comment, please.', 'comment_created': datetime.datetime(2023, 3, 22, 13, 10, 55, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1144789411, 'comment_body': 'This comment too', 'comment_created': datetime.datetime(2023, 3, 22, 13, 11, 17, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1144791604, 'comment_body': 'I believe we already have this method implemented in the BaseActivity, use that one, please.', 'comment_created': datetime.datetime(2023, 3, 22, 13, 12, 53, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1145110592, 'comment_body': 'done :)', 'comment_created': datetime.datetime(2023, 3, 22, 16, 31, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1145110881, 'comment_body': 'done :)', 'comment_created': datetime.datetime(2023, 3, 22, 16, 31, 12, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1145113779, 'comment_body': ""Ops that's totally my fault, I'll be extra considerate of existing code now onwards. Thanks @jawidMuhammadi. I've made the required changes. "", 'comment_created': datetime.datetime(2023, 3, 22, 16, 33, 1, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1145480062, 'comment_body': 'Are you sure this import and the others which are added by you are being used?', 'comment_created': datetime.datetime(2023, 3, 22, 22, 42, 31, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1145483080, 'comment_body': 'Remove this space, please', 'comment_created': datetime.datetime(2023, 3, 22, 22, 47, 40, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1145484212, 'comment_body': ""what does the `nsv_bkg` stand for? Could you please give it's full name?"", 'comment_created': datetime.datetime(2023, 3, 22, 22, 49, 37, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1145485040, 'comment_body': 'hmmm... as you you are binding the view with ButterKnife, you could access the view directly by its id, I think there is no need for `findViewById`, agree?', 'comment_created': datetime.datetime(2023, 3, 22, 22, 51, 11, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1145652907, 'comment_body': 'It\'s NestedScrollView which is the background. I found places where if a LinearLayout is used as a login tray its id is given as ""ll_login"" and hence I gave it an id ""nsv_bkg"", should I rename it?', 'comment_created': datetime.datetime(2023, 3, 23, 3, 58, 41, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1145655356, 'comment_body': ""No they aren't, I've removed them now."", 'comment_created': datetime.datetime(2023, 3, 23, 4, 1, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1145656180, 'comment_body': 'you mean line 62, right?', 'comment_created': datetime.datetime(2023, 3, 23, 4, 2, 49, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1145667143, 'comment_body': 'Yes I agree. Made the changes. ', 'comment_created': datetime.datetime(2023, 3, 23, 4, 29, 31, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1147709595, 'comment_body': 'Yes, something to: `nsv_background`', 'comment_created': datetime.datetime(2023, 3, 24, 15, 3, 47, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1147710660, 'comment_body': 'Yes, that is right', 'comment_created': datetime.datetime(2023, 3, 24, 15, 4, 30, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1147742486, 'comment_body': 'done!!', 'comment_created': datetime.datetime(2023, 3, 24, 15, 27, 27, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}]","[{'commit_sha': 'd1ca3b23e1fa3e8a0f428e4a7554b84d4c181370', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bec9fb229a4541ccde2c10fec5d9bb1f5fc7a7a3', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6cdd95547c6b2dc86a8af51d3e1a45cb05193a0e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1289501114,fix #1408 : fixing EditText error message on the login screen,"Fixes #1408 
+
+The error message is displayed in case of an error(eg : user left username/ or password blank and pressed login) But the error should go away when the user tries to input the username/ password again.
+
+1. adding onTouch listener to both et_password and et_username, so when the user touches on these to input username/ or password clearUsernameError(), or clearPasswordError() is called and the error is dismissed.
+
+2. tested on my pixel 2 and the fix runs smooth and fine.
+
+
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2048,https://api.github.com/repos/openMF/mifos-mobile/pulls/2048,https://github.com/openMF/mifos-mobile/pull/2048,closed,10,0,1,2,1,0,0,0,[],2023-03-24 19:06:16+00:00,2023-03-28 14:20:17+00:00,328441.0,"3 days, 19:14:01",[],"[{'commit_sha': '3dcb2f913ae986788d392f32033df28dda766c5e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4d638e157807fccfcd0692f55c7df0ba9143dc2', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1290234712,fix #2064 : fixing spelling mistake in permission material dialog box.,"Fixes #2064 
+
+Fixed a spelling error that appears in the permission material dialog box.
+
+### After the fix : 
+
+<img width=""249"" alt=""Screenshot 2023-03-26 at 10 11 38"" src=""https://user-images.githubusercontent.com/59947871/227756025-73a7eeec-eab7-4329-a474-16e46f65d8fc.png"">
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2065,https://api.github.com/repos/openMF/mifos-mobile/pulls/2065,https://github.com/openMF/mifos-mobile/pull/2065,closed,2,2,2,1,1,0,0,0,[],2023-03-26 04:53:23+00:00,2023-03-26 11:28:58+00:00,23735.0,6:35:35,[],"[{'commit_sha': 'e2234e0fb1f9563b60166fa3502694c981110226', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1304242517,fix #2089 : fixed back button in the settings,"Fixes #2089
+
+super.onBackPressed() should be outside the condition : if(hasSettingsChanged) ... so that it could provide the default functionality even when the settings aren't changed.
+
+ 
+
+Please Add Screenshots If there are any UI changes.
+
+
+https://user-images.githubusercontent.com/59947871/230304391-93964573-498a-4795-b7a6-3d43e2096f76.mp4
+
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2093,https://api.github.com/repos/openMF/mifos-mobile/pulls/2093,https://github.com/openMF/mifos-mobile/pull/2093,closed,1,1,1,1,0,0,0,0,[],2023-04-06 07:23:56+00:00,2023-04-06 17:08:02+00:00,35046.0,9:44:06,[],"[{'commit_sha': '96bb46b0d3c4798bb961bd7305e550c14fb892a4', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1306806822,fix #1354 : making TableView width cover entire screen width.,"Fixes #1354
+
+TableView width now covers the entire screen width, UI looks much cleaner and sharp.
+
+1. modified height of each cell to default_cell_height, so as to match the height of row header cell(screenshot below)
+2. added a check in DateHelper.kt so as to avoid app crash from indexOutOfBoundsException(Logcat screen below)
+3. added layout_width constraint to the View in row_header_loan_repayment_schedule.xml, because the app was crashing when layout_inflator was trying to inflate this View. #2097 
+4. fixed TableView width to cover entire screen.(video below)
+5. extensively tested on pixel 2
+
+ 
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.
+
+before fix, table height didn't catchup with row header height(due to cell_height != row_header_cell_height)
+<img width=""358"" alt=""Screenshot 2023-04-09 at 22 42 26"" src=""https://user-images.githubusercontent.com/59947871/230788047-2e55ee31-3cac-4a5c-8273-8ead06da2f40.png"">
+
+before fix, indexOutOfBoundsException
+<img width=""1273"" alt=""Screenshot 2023-04-09 at 22 40 40"" src=""https://user-images.githubusercontent.com/59947871/230788113-50e0b3c4-9665-4b48-b62e-753a071dc2c1.png"">
+
+after fix : 
+
+https://user-images.githubusercontent.com/59947871/230788158-0e496a5f-91d8-4a64-9b24-8b4841fcd36e.mp4
+
+after fix : orientation change ->
+
+
+https://user-images.githubusercontent.com/59947871/230833296-cf28e390-2a18-4b77-b7b5-3b39a7017057.mp4
+
+
+",True,2101,https://api.github.com/repos/openMF/mifos-mobile/pulls/2101,https://github.com/openMF/mifos-mobile/pull/2101,closed,38,2,5,1,2,0,0,0,[],2023-04-09 17:44:32+00:00,2023-05-03 13:10:06+00:00,2057134.0,"23 days, 19:25:34",[],"[{'commit_sha': 'aadfc47ac8b8b5a64824b95721b94a218b6d21b4', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1356165247,migrating lower navigation drawer features from butterknife to viewbinding,"fixes #2142 
+
+migrating following files which fall under the lower navigation drawer ->
+
+activities(4)
+	AboutUs, Help, PrivacyPolicy, Settings
+fragments(2)
+	AboutUsFragment, HelpFragment
+
+videos after the change, 
+
+Light Theme -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/ded1a17c-e9ea-4188-87ad-2e59e391f3bf
+
+
+Dark Theme -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/80af76c6-2cb1-45d4-b40b-53151049729c
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2143,https://api.github.com/repos/openMF/mifos-mobile/pulls/2143,https://github.com/openMF/mifos-mobile/pull/2143,closed,89,81,9,3,10,14,1,1,"[{'name': ""GSoC'2023""}]",2023-05-18 19:15:13+00:00,2023-05-25 21:47:20+00:00,613927.0,"7 days, 2:32:07","[{'comment_id': 1198896725, 'comment_body': 'we need to make changes here as well. with the current changes I dont think we will be able to see the toolbar and the backbutton ', 'comment_created': datetime.datetime(2023, 5, 19, 12, 19, 53, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1198899765, 'comment_body': 'with these in place we wont be able to see the toolbar and the backbutton in the darkmode. ', 'comment_created': datetime.datetime(2023, 5, 19, 12, 23, 50, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1198903412, 'comment_body': 'this is perfect but I would suggest summing them up in a single line . Not that it would make much of a difference\r\n```suggestion\r\n        val view = binding.root\r\n        setContentView(view)\r\n```', 'comment_created': datetime.datetime(2023, 5, 19, 12, 28, 6, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1198905530, 'comment_body': 'do check if the toolbar is visible in the dark mode without changing this line', 'comment_created': datetime.datetime(2023, 5, 19, 12, 30, 36, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1199032228, 'comment_body': 'it works totally fine, have a look : \r\n\r\nhttps://github.com/openMF/mifos-mobile/assets/59947871/c3a933c4-38db-476f-a268-263a582b2e75\r\n\r\n', 'comment_created': datetime.datetime(2023, 5, 19, 14, 30, 33, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1199033351, 'comment_body': ""Because I've overriden setContentView(view : View?) {...} with similar functionality as before, it works fine. "", 'comment_created': datetime.datetime(2023, 5, 19, 14, 31, 37, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1199035616, 'comment_body': 'Is this how it should in dark mode? \r\n\r\nhttps://github.com/openMF/mifos-mobile/assets/59947871/af86ae12-3769-40ac-9ec5-f329f118b6f3\r\n\r\n', 'comment_created': datetime.datetime(2023, 5, 19, 14, 33, 51, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1199037181, 'comment_body': 'please checkout the video I attached in SettingActivity.kt', 'comment_created': datetime.datetime(2023, 5, 19, 14, 35, 24, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1199044820, 'comment_body': 'So something like this, \r\nsetContentView(binding.root), right?', 'comment_created': datetime.datetime(2023, 5, 19, 14, 40, 26, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1199284355, 'comment_body': 'check the dark mode to see if it works as expected @gururani-abhishek ', 'comment_created': datetime.datetime(2023, 5, 19, 19, 3, 41, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1199284691, 'comment_body': 'yes !!', 'comment_created': datetime.datetime(2023, 5, 19, 19, 4, 10, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1199285421, 'comment_body': 'yes, but I merged your changes into mine for review  and I wasnt able to see the toolbar in dark mode\r\n', 'comment_created': datetime.datetime(2023, 5, 19, 19, 5, 21, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1199286484, 'comment_body': '![WhatsApp Image 2023-05-20 at 00 36 17](https://github.com/openMF/mifos-mobile/assets/90026952/619076d1-bca1-4d84-be18-ffc144aba31c)\r\n', 'comment_created': datetime.datetime(2023, 5, 19, 19, 6, 47, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1199597391, 'comment_body': 'What could be the issue, because the video I shared is for this same PR. ', 'comment_created': datetime.datetime(2023, 5, 20, 11, 3, 33, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}]","[{'commit_sha': 'ea586368a7cb09fc982260606f0a6fc8ceeb9169', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b2a8cbb27b48a2e434b15fb822cba60ecda64af', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0d3ad8b4fd5d9724e3ecf1308cebe147f281cd1', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1364583551,fix #2142: migrating fragments from butterknife to viewbinding,"Fixes #2142 
+
+fragments migrated(5)
+	AccountsFragment,
+	ClientAccountsFragment
+	HomeOldFragment,
+	RegistrationFragment,
+	RegistrationVerificationFragment
+
+videos, 
+light theme -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/6962cdae-a0b4-45fa-9f9e-7eb2d6f585c8
+
+
+dark theme -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/cec161c0-c0ad-468d-976e-9d773b177177
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2147,https://api.github.com/repos/openMF/mifos-mobile/pulls/2147,https://github.com/openMF/mifos-mobile/pull/2147,closed,246,321,8,3,3,8,0,0,[],2023-05-25 11:36:01+00:00,2023-05-27 19:07:42+00:00,199901.0,"2 days, 7:31:41","[{'comment_id': 1205440703, 'comment_body': 'change `checkValidityOfPhoneNumber ` to `isPhoneNumberValid` and in the arguments change `isPhoneNumberValid` to `ccp` . This was a mistake that I should have rectified a long time back but since you are on it , could you please make the necessary changes ? ', 'comment_created': datetime.datetime(2023, 5, 25, 12, 24, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1205451872, 'comment_body': 'i think we can remove this from this PR as it has already been merged in `migrate_to_view_binding` branch', 'comment_created': datetime.datetime(2023, 5, 25, 12, 34, 2, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1205458149, 'comment_body': 'do we need TabLayout ? What I make of it is that we are removing its usage from line 51 . Do cross check and remove it if its unused', 'comment_created': datetime.datetime(2023, 5, 25, 12, 39, 30, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1205465202, 'comment_body': 'are you sure that this function will never be used outside this class ? \r\n', 'comment_created': datetime.datetime(2023, 5, 25, 12, 45, 18, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1205578871, 'comment_body': 'Yes we are removing usage of it. \r\nBut it\'s still being automatically imported by the IDE because there\'s a reference to it in the same file using a javadoc comment. If I\'ll remove the import then this javadoc comment will no more reference us when we hover over it. I don\'t know what to make of it(🤔). Let\'s leave it there. \r\n\r\n<img width=""639"" alt=""Screenshot 2023-05-25 at 19 37 32"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/df662274-991d-4a3f-a804-b271338ddaa5"">\r\n\r\nOn Hovering ->\r\n<img width=""464"" alt=""Screenshot 2023-05-25 at 19 39 06"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/1fb7934a-3ebe-4973-82d9-4f20d6d0a82c"">\r\n', 'comment_created': datetime.datetime(2023, 5, 25, 14, 9, 23, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1205581422, 'comment_body': ""As of now there's no usage of it except the same file, hence I thought it's better to make it _private_. "", 'comment_created': datetime.datetime(2023, 5, 25, 14, 11, 15, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1205589153, 'comment_body': '\r\nTo this -> \r\n\r\n`private fun isPhoneNumberValid(ccp: CountryCodePicker): Boolean {\r\n        binding.countryCodePicker.registerCarrierNumberEditText(binding.etPhoneNumber)\r\n        return ccp.isValidFullNumber\r\n    }`\r\n', 'comment_created': datetime.datetime(2023, 5, 25, 14, 16, 51, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1205810888, 'comment_body': 'yes @gururani-abhishek \r\n', 'comment_created': datetime.datetime(2023, 5, 25, 17, 15, 59, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}]","[{'commit_sha': 'baa45b7ab0955d19b447632ec3b08f103609387b', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1b92a87d88a8c230cbe8f4745baa36ad319a0594', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa290b98dd04f1c943852609f814fe63a2e783ad', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1369608555,fix #2142 : migrating fragments to viewbinding,"Fixes #2142 
+
+light theme -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/af93e963-2125-485c-8ec2-050e9a583a79
+
+
+dark theme -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/17539512-9eeb-43ba-adc0-3ac723d23f85
+
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2152,https://api.github.com/repos/openMF/mifos-mobile/pulls/2152,https://github.com/openMF/mifos-mobile/pull/2152,closed,437,473,4,1,3,8,0,0,[],2023-05-29 22:47:53+00:00,2023-06-09 14:07:52+00:00,919199.0,"10 days, 15:19:59","[{'comment_id': 1209708621, 'comment_body': 'remove the comment here', 'comment_created': datetime.datetime(2023, 5, 30, 5, 2, 18, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}, {'comment_id': 1221238654, 'comment_body': ""You could use Kotlin's `with` and avoid using the `binding` variable many times inside the function.\r\n\r\n```\r\nwith(binding){\r\n  llLoanSummary.visibility = View.VISIBLE\r\n  tvLoanProductName.text = loanWithAssociations?.loanProductName\r\n ....\r\n}\r\n```"", 'comment_created': datetime.datetime(2023, 6, 7, 9, 19, 34, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1222531710, 'comment_body': 'Thanks @jawidMuhammadi, got it. Made the changes. ', 'comment_created': datetime.datetime(2023, 6, 8, 6, 47, 56, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1222647114, 'comment_body': ""@gururani-abhishek and @PratyushSingh07 whenever there is a code change request from someone on your PR, please don't mark it as resolved. Once it is done, ping the reviewer and let them mark it as resolved."", 'comment_created': datetime.datetime(2023, 6, 8, 8, 31, 19, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1222655852, 'comment_body': 'I believe you could use the `with` here as well, so in any place when you need a `binding` instance for more than 2 items I recommend you to use this function. Do the same in all other open PRs as well, please 😊 \r\n\r\ncc @PratyushSingh07 ', 'comment_created': datetime.datetime(2023, 6, 8, 8, 39, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1223475366, 'comment_body': 'alright, got it. ', 'comment_created': datetime.datetime(2023, 6, 8, 19, 44, 11, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}, {'comment_id': 1223492550, 'comment_body': 'sure @jawidMuhammadi !! \r\n', 'comment_created': datetime.datetime(2023, 6, 8, 20, 0, 49, tzinfo=datetime.timezone.utc), 'commenter': 'PratyushSingh07', 'type': 'User'}]","[{'commit_sha': 'ad73eb12bfeaaa8585154fa9c8b91be0161f2bd2', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1374406982,fix #2142 : migrating adapters to viewbinding,"Fixes #2142 
+
+adapters migrated :
+1. ClientChargeAdapter.kt
+2. NotificationAdapter.kt
+
+
+
+Please Add Screenshots If there are any UI changes.
+
+NotificationAdapter.kt after populating it with mock data -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/7b637b65-3359-41a5-86b6-b2f4e70c7d36
+
+
+ClientChargeAdatper.kt with mock data -> 
+
+<img width=""355"" alt=""Screenshot 2023-06-01 at 20 13 17"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/9961be9e-fcb5-4220-8889-3b7cc9f8c309"">
+
+<img width=""356"" alt=""Screenshot 2023-06-01 at 20 13 46"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/945abb31-48ba-429b-99a2-0f4a82cc1581"">
+
+
+
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2153,https://api.github.com/repos/openMF/mifos-mobile/pulls/2153,https://github.com/openMF/mifos-mobile/pull/2153,closed,63,113,2,1,1,0,0,0,[],2023-06-01 16:19:58+00:00,2023-06-07 09:09:46+00:00,492588.0,"5 days, 16:49:48",[],"[{'commit_sha': 'f9508ef577ca46df27a77c6bcdcdbf43e807aa69', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1376142915,fix : finishing checkbox adapter migration to viewbinding,"Fixes #2142 
+
+1. removing unused imports.
+2. fixed a bug with button tint by using a different lib component
+3. also added setOnChangeListener which was missed during the previous migration attempt`
+
+
+
+Please Add Screenshots If there are any UI changes.
+before fixing button tint bug -> 
+
+<img width=""356"" alt=""Screenshot 2023-06-02 at 21 58 57"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/3c535e78-1a6a-471f-a2e4-fc5d402ec5be"">
+<img width=""355"" alt=""Screenshot 2023-06-02 at 21 58 21"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/175c1c24-d448-44b6-8c20-29c32af8edca"">
+
+
+after fixing button tint bug -> 
+<img width=""357"" alt=""Screenshot 2023-06-02 at 21 54 51"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/ff5ac621-ab6c-4ccb-8e32-76e42147f524"">
+<img width=""359"" alt=""Screenshot 2023-06-02 at 21 57 15"" src=""https://github.com/openMF/mifos-mobile/assets/59947871/fe089eac-b496-481f-8422-b7354e81e841"">
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2155,https://api.github.com/repos/openMF/mifos-mobile/pulls/2155,https://github.com/openMF/mifos-mobile/pull/2155,closed,6,11,1,1,1,0,0,0,[],2023-06-02 18:10:56+00:00,2023-06-07 09:10:43+00:00,399587.0,"4 days, 14:59:47",[],"[{'commit_sha': 'af422df7758a2c7a2fb7fabddb5e690242d563e4', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1381949740,fix : RecentTransactionList adapter migration to view binding,"Fixes #2142 
+
+migrated RecentTransactionListAdapter.kt from ButterKnife to ViewBinding.
+
+video -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/8c6ef728-a5f5-487b-a926-b4b7e7ef6aad
+
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2161,https://api.github.com/repos/openMF/mifos-mobile/pulls/2161,https://github.com/openMF/mifos-mobile/pull/2161,closed,16,27,1,1,2,0,0,0,[],2023-06-07 05:43:56+00:00,2023-06-08 21:51:31+00:00,144455.0,"1 day, 16:07:35",[],"[{'commit_sha': '83e291c78765a602d2b3d7ffdef51b664eae452b', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1384872053,fix #2142 : migrated GurantorListAdapter.kt to viewbinding.,"Fixes #2142 
+
+Please Add Screenshots If there are any UI changes.
+light mode -> 
+![Screenshot_20230608-160916](https://github.com/openMF/mifos-mobile/assets/59947871/57ab299b-0269-4a73-b282-1296a20c5fa4)
+![Screenshot_20230608-160920](https://github.com/openMF/mifos-mobile/assets/59947871/54764b22-c3d8-476a-ad3a-c25021035bf3)
+
+
+dark mode -> 
+![Screenshot_20230608-160939](https://github.com/openMF/mifos-mobile/assets/59947871/fe8c8ba1-1b74-4c80-aedc-dbe15dca187a)
+![Screenshot_20230608-160941](https://github.com/openMF/mifos-mobile/assets/59947871/182486e1-7700-4ae0-9d35-806574aa138b)
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2164,https://api.github.com/repos/openMF/mifos-mobile/pulls/2164,https://github.com/openMF/mifos-mobile/pull/2164,closed,15,27,1,1,1,0,0,0,[],2023-06-08 17:27:42+00:00,2023-06-08 21:48:06+00:00,15624.0,4:20:24,[],"[{'commit_sha': '59a017edeb3e46730570f810aba7016a39e2ac96', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1385016292,fix #2142 : migrating LoanRepaymentScheduleAdapter to ViewBinding.,"Fixes #2142 
+
+LoanRepaymentSchedulaAdapter migrated from butterknife to viewbinding. 
+
+Please Add Screenshots If there are any UI changes.
+
+light mode -> 
+![Screenshot_20230609-010929](https://github.com/openMF/mifos-mobile/assets/59947871/fca4a217-fcc8-45e4-b14c-b2d294d17e05)
+
+dark mode -> 
+![Screenshot_20230609-011001](https://github.com/openMF/mifos-mobile/assets/59947871/6015bbe4-710d-40c8-b8a0-24fcc0a1e2af)
+
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2165,https://api.github.com/repos/openMF/mifos-mobile/pulls/2165,https://github.com/openMF/mifos-mobile/pull/2165,closed,55,79,1,1,0,0,0,0,[],2023-06-08 19:43:13+00:00,2023-06-08 21:49:15+00:00,7562.0,2:06:02,[],"[{'commit_sha': '0a45aea30b3bcc7b2efda8ea168b5b113e7b5e92', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1397229953,feat : migrating notification fragment to MVVM,"Fixes MOBILE-70
+
+1. Created NotificationViewModel that handles business logic. 
+2. Created a NotificationRepository interface and it's implementation class to link ViewModel interactions with data layer.
+3. Kept UI related code to View(NotificationFragment) and shifted business logic from both View(NotificationFragment) and Presenter(NotificationPresenter) to ViewModel(NotificationViewModel)
+4. Performed proper unit testing on viewModel and Repository using exiting framework -> jUnit and Mockito.
+
+Please Add Screenshots If there are any UI changes.
+
+https://github.com/openMF/mifos-mobile/assets/59947871/65c5bbf2-c814-47d6-97d3-3a4058a978c6
+
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2180,https://api.github.com/repos/openMF/mifos-mobile/pulls/2180,https://github.com/openMF/mifos-mobile/pull/2180,closed,254,16,8,6,2,0,0,0,[],2023-06-18 18:08:39+00:00,2023-07-18 21:03:29+00:00,2602490.0,"30 days, 2:54:50",[],"[{'commit_sha': '32ea26ce367fd195661d5b5b8e9ee4c16a4d5682', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c7c42b6a51bf6ccc46b1f30f6c01ed4452a6c808', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80ee7c2be8fc4330bdfe4ff8436d0a79bab0e78e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d2c4ecbf411e514085a79a251c8f938bd6b4a3c', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '27673517750094d95908ebf9e2dc7add62480d6d', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03b89bc709d5476ec03b63281a0ea129516abc22', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1424056699,feat : login activity mvvm migration,"MOBILE-67
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.
+",True,2201,https://api.github.com/repos/openMF/mifos-mobile/pulls/2201,https://github.com/openMF/mifos-mobile/pull/2201,closed,595,42,28,7,1,2,0,0,[],2023-07-07 06:03:28+00:00,2023-07-22 11:52:47+00:00,1316959.0,"15 days, 5:49:19","[{'comment_id': 1257517587, 'comment_body': 'It is recommended to avoid having these functions within the UserAuthRepository class as it goes against the Single Responsibility Principle (SRP). To address this concern, it is great to create a new interface called `ClientRepository` along with its implementation, `ClientRepositoryImp`. This new class can then be used in the `LoginViewModel`.', 'comment_created': datetime.datetime(2023, 7, 9, 17, 33, 2, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1257696098, 'comment_body': 'Got it, so insightful. made the req changes. 😃', 'comment_created': datetime.datetime(2023, 7, 10, 4, 14, 57, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}]","[{'commit_sha': '55fdbdc7d32017c45c326552cfb6e8a0eb63f16c', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b5b0f4f4baef1b750bb3952db8005603c975674', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1af9aa034da56ff5a375a9818c01d4f95a225c7b', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afbcedcab25d0fd773139d220f2e800d5361dbb7', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '81ba0d103012f898f4290b41e7a77f0a4fcb1a2f', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48461b720bc6b4d027bbd16671450cbc15c7e259', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '888ca39538f8484a87ebbd5ceff2738d3e029b62', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1426307547,feat : updatepassword fragment mvvm migration,"fixes : MOBILE-97
+
+-> added viewModel and repository
+-> refactored ""RegistrationUiState"" to ""UiState"" so that it could be used across registrationFragment and updatePasscode fragment 
+-> refactored updatePassword fragment's exisiting code, to use more kotlin specific ways.
+
+Fixes #Issue_Number
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2203,https://api.github.com/repos/openMF/mifos-mobile/pulls/2203,https://github.com/openMF/mifos-mobile/pull/2203,closed,396,115,13,5,0,2,0,0,[],2023-07-09 13:24:25+00:00,2023-07-16 17:33:22+00:00,619737.0,"7 days, 4:08:57","[{'comment_id': 1264681915, 'comment_body': ' It is better to give a specific name like `RegistrationUiState` then a general name', 'comment_created': datetime.datetime(2023, 7, 16, 13, 9, 44, tzinfo=datetime.timezone.utc), 'commenter': 'jawidMuhammadi', 'type': 'User'}, {'comment_id': 1264697065, 'comment_body': 'done plus resolved some conflicts. ', 'comment_created': datetime.datetime(2023, 7, 16, 14, 51, 32, tzinfo=datetime.timezone.utc), 'commenter': 'gururani-abhishek', 'type': 'User'}]","[{'commit_sha': 'cd3b0f497d0c2e67e83003ee8255afef3249d188', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1edb472ca38398b12b5412979456061b88d47b66', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b97626fc516fbf5d53c9bf7b31fa7d7dca9c8c4', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23ff33738f210a46530acd5fe889252e70f6282e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd9ed53706c215ddd81836fc84073eab46f70f95', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1445656188,Mvvm architecture,"MVP to MVVM migration 
+Dagger 2 to Hilt migration
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2217,https://api.github.com/repos/openMF/mifos-mobile/pulls/2217,https://github.com/openMF/mifos-mobile/pull/2217,closed,3737,770,150,54,1,0,0,0,[],2023-07-23 16:26:24+00:00,2023-07-27 14:51:17+00:00,339893.0,"3 days, 22:24:53",[],"[{'commit_sha': 'efd682761e5a7fb1e56c292671a76c1a1873fa51', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40e51f92a0f3a68fb9b71b3c6ef1b25a1c4803bd', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2052096298226d729e7bf0d6d2aaed8718f26c5', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '927d4784e77bd1247c8a08b133168c8f09a3233c', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '32ea26ce367fd195661d5b5b8e9ee4c16a4d5682', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c7c42b6a51bf6ccc46b1f30f6c01ed4452a6c808', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c0f72443f822a10034edfc4b30d769185670ed95', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5af918ab2eeb661d01953f75abed0b89e6c3cee', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7174c46d6b27092aba914f8efff6a818a6f5eced', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '198ac3b63425dd31f1ff7c0b9cecc98b9c50bbd6', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0a889137e9e72ea41d5357b8430d5ee22496b315', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9f980b54d2fa4eff7134fb281ec7638396d54491', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7ccce6c212408551993e9ed5a3a7dcbd44cd8817', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0ea36814bcd04f795653370164531d414df2ef8', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2f8c7e0712f91484aae51dc9774ccf4b86369e3', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e54c1f66e5ee5735399e3c55ba29aeacd6a00ea7', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '097d7faa43b0feb0a7a52341005526507765313e', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3aa41952d6474e8ca99c3940f7780f58b0637ab9', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '01609e96edad70c77783486579595d2a2f0a9317', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a2038b4b2d4edf9a247bb0f940cceffe43b9ba8c', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fe997691b56bc266712c1f593af1a42a2bd86c5', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80ee7c2be8fc4330bdfe4ff8436d0a79bab0e78e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3d2c4ecbf411e514085a79a251c8f938bd6b4a3c', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '27673517750094d95908ebf9e2dc7add62480d6d', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07a7aabee32be6120fc5f12eebdac488eb235d7d', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '57270b912a11c9972006357b3fc82e2c7d65d35e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a648a6204e3ab7b0994cfbe074404404791aea0f', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b0b93689cd238d2bc101b54995c7e7d46014fbdc', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '55fdbdc7d32017c45c326552cfb6e8a0eb63f16c', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b5b0f4f4baef1b750bb3952db8005603c975674', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1af9aa034da56ff5a375a9818c01d4f95a225c7b', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afbcedcab25d0fd773139d220f2e800d5361dbb7', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '81ba0d103012f898f4290b41e7a77f0a4fcb1a2f', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e3ed04d9237bfc815d449cf90a59a41c35415526', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd3b0f497d0c2e67e83003ee8255afef3249d188', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1edb472ca38398b12b5412979456061b88d47b66', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b97626fc516fbf5d53c9bf7b31fa7d7dca9c8c4', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2997f3e0262e37100083ba717746651103a29f9', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd046bdfaafe041863101e0790ce7190bc084441d', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1be8efe9ed1736be00b5f67bb13e933ee4a2bedf', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23ff33738f210a46530acd5fe889252e70f6282e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fd9ed53706c215ddd81836fc84073eab46f70f95', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85f34a645790bdbb07fba86b4034eeff4275d63e', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c0a8e8a1a3bf32a6e23a255336bd2a0df1ec0b14', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4bb68387ee52fb48a8ff248402aec5c2936e8ab2', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48461b720bc6b4d027bbd16671450cbc15c7e259', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03b89bc709d5476ec03b63281a0ea129516abc22', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e45ccf96b7bc725042e26b4e22a866ec67eba05d', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a6a541d40f9d60225ab326c7a281264a73c17e3f', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': '888ca39538f8484a87ebbd5ceff2738d3e029b62', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb0c52cf749e3fd0ed430970beff7f052844b0f0', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7573f2e832eb5d0741e9fd0c2f34500af4d5b0a4', 'committer_username': 'PratyushSingh07', 'committer_name': 'Pratyush Singh', 'committer_email': None, 'commit_date': datetime.datetime(2021, 9, 3, 6, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9d93078477d0a761167aaff08ce7879dbb46c472', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2e3ed4a8db42151a3a12009f421d7e48bc34083', 'committer_username': 'jawidMuhammadi', 'committer_name': 'Ahmad Jawid Muhammadi', 'committer_email': None, 'commit_date': datetime.datetime(2019, 4, 24, 21, 55, 45, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1458210783,Saving features mvvm migration,"Fixes MOBILE-99
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2249,https://api.github.com/repos/openMF/mifos-mobile/pulls/2249,https://github.com/openMF/mifos-mobile/pull/2249,closed,1545,136,22,8,1,0,0,0,[],2023-08-01 14:20:46+00:00,2023-08-11 07:23:09+00:00,838943.0,"9 days, 17:02:23",[],"[{'commit_sha': 'f2e6a7d258562d7960db99ed7d9ad74a40fb3556', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '34cc39076f9ea5d6c810b8c7c707e817df9209b8', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '36ac2b3f0f05d3eda03a6eaf695b2f1a6b71b332', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b56fe2420939dc2963c62380e5179cbf56e27266', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f0a330929a7b0f2368f51e530bd7bcd3ca51bf2f', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b68e788d544ba47121fb5dd19b2adc52d3f7c267', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd850ef5dc0833d29e815c8019b49a5574e87e9e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '337d374f95ba005d3349f1534ede4592ad51d780', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1458537935,Accounts Presenter migration to mvvm,"Fixes MOBILE-106
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",True,2254,https://api.github.com/repos/openMF/mifos-mobile/pulls/2254,https://github.com/openMF/mifos-mobile/pull/2254,closed,698,142,10,4,2,0,0,0,[],2023-08-01 17:56:05+00:00,2023-08-11 07:22:10+00:00,825965.0,"9 days, 13:26:05",[],"[{'commit_sha': 'c94e772421d06ac108240b4940874865b6a9af49', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aba9555b73d60ba2d25a0c509615b5e95d6f5bd4', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e36c11cc9fcab27425a82e8853d54b83ce4613e', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea88c0d579e716b3745d563e00dfab65d9f64ad2', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+1483269169,Rocket Chat Integration,"working model -> 
+
+https://github.com/openMF/mifos-mobile/assets/59947871/dc8b3545-2477-404a-a616-99e577cf7831
+
+
+
+Please Add Screenshots If there are any UI changes.
+
+Please make sure these boxes are checked before submitting your pull request - thanks!
+
+- [x] Apply the `AndroidStyle.xml` style template to your code in Android Studio.
+
+- [x] Run the unit tests with `./gradlew check` to make sure you didn't break anything
+
+- [x] If you have multiple commits please combine them into one commit by squashing them.",False,2295,https://api.github.com/repos/openMF/mifos-mobile/pulls/2295,https://github.com/openMF/mifos-mobile/pull/2295,open,553,60,15,4,0,0,0,0,[],2023-08-21 17:11:18+00:00,,0.0,,[],"[{'commit_sha': '67f3daaf51cae428156739feb0c16269681f9587', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cbad8347f7fe8940a5cce271c0f77caa850d67a0', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76659b20b508c7c6aab1a1067c065f09c142c769', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe47d360b083392ac8d363fd2ee061cdc0974373', 'committer_username': 'gururani-abhishek', 'committer_name': 'Abhishek Gururani', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 16, 4, 24, 17, tzinfo=datetime.timezone.utc)}]",Abhishek Gururani,59947871,,User,,35,,83,19
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+59611171,mifos-mobile,openMF/mifos-mobile,Kotlin,670,263,26,123,1417,138,26,15,"[{'id': 1483269169, 'number': 2295, 'closed': None, 'created': datetime.datetime(2023, 8, 21, 17, 11, 18, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 553, 'deletions': 60, 'state': 'open'}, {'id': 1483244997, 'number': 2294, 'closed': datetime.datetime(2023, 8, 21, 17, 6, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 21, 16, 56, 18, tzinfo=datetime.timezone.utc), 'time_taken': 596.0, 'time_delta': '0:09:56', 'additions': 175, 'deletions': 60, 'state': 'closed'}, {'id': 1458537935, 'number': 2254, 'closed': datetime.datetime(2023, 8, 11, 7, 22, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 1, 17, 56, 5, tzinfo=datetime.timezone.utc), 'time_taken': 825965.0, 'time_delta': '9 days, 13:26:05', 'additions': 698, 'deletions': 142, 'state': 'closed'}, {'id': 1458210783, 'number': 2249, 'closed': datetime.datetime(2023, 8, 11, 7, 23, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 1, 14, 20, 46, tzinfo=datetime.timezone.utc), 'time_taken': 838943.0, 'time_delta': '9 days, 17:02:23', 'additions': 1545, 'deletions': 136, 'state': 'closed'}, {'id': 1448824847, 'number': 2224, 'closed': datetime.datetime(2023, 8, 1, 14, 2, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 25, 17, 11, 25, tzinfo=datetime.timezone.utc), 'time_taken': 593456.0, 'time_delta': '6 days, 20:50:56', 'additions': 468, 'deletions': 142, 'state': 'closed'}, {'id': 1445656188, 'number': 2217, 'closed': datetime.datetime(2023, 7, 27, 14, 51, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 23, 16, 26, 24, tzinfo=datetime.timezone.utc), 'time_taken': 339893.0, 'time_delta': '3 days, 22:24:53', 'additions': 3737, 'deletions': 770, 'state': 'closed'}, {'id': 1445494833, 'number': 2216, 'closed': datetime.datetime(2023, 8, 1, 14, 10, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 23, 5, 5, 26, tzinfo=datetime.timezone.utc), 'time_taken': 810298.0, 'time_delta': '9 days, 9:04:58', 'additions': 6, 'deletions': 1, 'state': 'closed'}, {'id': 1436877108, 'number': 2213, 'closed': datetime.datetime(2023, 8, 1, 14, 2, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 17, 8, 40, 8, tzinfo=datetime.timezone.utc), 'time_taken': 1315330.0, 'time_delta': '15 days, 5:22:10', 'additions': 1545, 'deletions': 136, 'state': 'closed'}, {'id': 1426307547, 'number': 2203, 'closed': datetime.datetime(2023, 7, 16, 17, 33, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 9, 13, 24, 25, tzinfo=datetime.timezone.utc), 'time_taken': 619737.0, 'time_delta': '7 days, 4:08:57', 'additions': 396, 'deletions': 115, 'state': 'closed'}, {'id': 1424056699, 'number': 2201, 'closed': datetime.datetime(2023, 7, 22, 11, 52, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 6, 3, 28, tzinfo=datetime.timezone.utc), 'time_taken': 1316959.0, 'time_delta': '15 days, 5:49:19', 'additions': 595, 'deletions': 42, 'state': 'closed'}, {'id': 1397229953, 'number': 2180, 'closed': datetime.datetime(2023, 7, 18, 21, 3, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 18, 18, 8, 39, tzinfo=datetime.timezone.utc), 'time_taken': 2602490.0, 'time_delta': '30 days, 2:54:50', 'additions': 254, 'deletions': 16, 'state': 'closed'}, {'id': 1397096991, 'number': 2177, 'closed': datetime.datetime(2023, 6, 19, 17, 19, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 18, 11, 14, 3, tzinfo=datetime.timezone.utc), 'time_taken': 108305.0, 'time_delta': '1 day, 6:05:05', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 1396725454, 'number': 2175, 'closed': datetime.datetime(2023, 7, 18, 21, 0, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 17, 10, 27, 17, tzinfo=datetime.timezone.utc), 'time_taken': 2716377.0, 'time_delta': '31 days, 10:32:57', 'additions': 138, 'deletions': 21, 'state': 'closed'}, {'id': 1395133366, 'number': 2174, 'closed': datetime.datetime(2023, 7, 3, 20, 20, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 16, 6, 8, 25, tzinfo=datetime.timezone.utc), 'time_taken': 1519924.0, 'time_delta': '17 days, 14:12:04', 'additions': 635, 'deletions': 158, 'state': 'closed'}, {'id': 1385016292, 'number': 2165, 'closed': datetime.datetime(2023, 6, 8, 21, 49, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 8, 19, 43, 13, tzinfo=datetime.timezone.utc), 'time_taken': 7562.0, 'time_delta': '2:06:02', 'additions': 55, 'deletions': 79, 'state': 'closed'}, {'id': 1384872053, 'number': 2164, 'closed': datetime.datetime(2023, 6, 8, 21, 48, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 8, 17, 27, 42, tzinfo=datetime.timezone.utc), 'time_taken': 15624.0, 'time_delta': '4:20:24', 'additions': 15, 'deletions': 27, 'state': 'closed'}, {'id': 1381949740, 'number': 2161, 'closed': datetime.datetime(2023, 6, 8, 21, 51, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 7, 5, 43, 56, tzinfo=datetime.timezone.utc), 'time_taken': 144455.0, 'time_delta': '1 day, 16:07:35', 'additions': 16, 'deletions': 27, 'state': 'closed'}, {'id': 1376142915, 'number': 2155, 'closed': datetime.datetime(2023, 6, 7, 9, 10, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 2, 18, 10, 56, tzinfo=datetime.timezone.utc), 'time_taken': 399587.0, 'time_delta': '4 days, 14:59:47', 'additions': 6, 'deletions': 11, 'state': 'closed'}, {'id': 1374406982, 'number': 2153, 'closed': datetime.datetime(2023, 6, 7, 9, 9, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 1, 16, 19, 58, tzinfo=datetime.timezone.utc), 'time_taken': 492588.0, 'time_delta': '5 days, 16:49:48', 'additions': 63, 'deletions': 113, 'state': 'closed'}, {'id': 1369608555, 'number': 2152, 'closed': datetime.datetime(2023, 6, 9, 14, 7, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 29, 22, 47, 53, tzinfo=datetime.timezone.utc), 'time_taken': 919199.0, 'time_delta': '10 days, 15:19:59', 'additions': 437, 'deletions': 473, 'state': 'closed'}, {'id': 1364583551, 'number': 2147, 'closed': datetime.datetime(2023, 5, 27, 19, 7, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 25, 11, 36, 1, tzinfo=datetime.timezone.utc), 'time_taken': 199901.0, 'time_delta': '2 days, 7:31:41', 'additions': 246, 'deletions': 321, 'state': 'closed'}, {'id': 1356165247, 'number': 2143, 'closed': datetime.datetime(2023, 5, 25, 21, 47, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 18, 19, 15, 13, tzinfo=datetime.timezone.utc), 'time_taken': 613927.0, 'time_delta': '7 days, 2:32:07', 'additions': 89, 'deletions': 81, 'state': 'closed'}, {'id': 1320892799, 'number': 2116, 'closed': datetime.datetime(2023, 5, 3, 20, 44, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 20, 5, 30, 6, tzinfo=datetime.timezone.utc), 'time_taken': 1178041.0, 'time_delta': '13 days, 15:14:01', 'additions': 44, 'deletions': 1, 'state': 'closed'}, {'id': 1320419158, 'number': 2115, 'closed': datetime.datetime(2023, 5, 3, 20, 48, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 19, 19, 21, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1214784.0, 'time_delta': '14 days, 1:26:24', 'additions': 40, 'deletions': 0, 'state': 'closed'}, {'id': 1306806822, 'number': 2101, 'closed': datetime.datetime(2023, 5, 3, 13, 10, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 9, 17, 44, 32, tzinfo=datetime.timezone.utc), 'time_taken': 2057134.0, 'time_delta': '23 days, 19:25:34', 'additions': 38, 'deletions': 2, 'state': 'closed'}, {'id': 1304242517, 'number': 2093, 'closed': datetime.datetime(2023, 4, 6, 17, 8, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 6, 7, 23, 56, tzinfo=datetime.timezone.utc), 'time_taken': 35046.0, 'time_delta': '9:44:06', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1290234712, 'number': 2065, 'closed': datetime.datetime(2023, 3, 26, 11, 28, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 26, 4, 53, 23, tzinfo=datetime.timezone.utc), 'time_taken': 23735.0, 'time_delta': '6:35:35', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1289501114, 'number': 2048, 'closed': datetime.datetime(2023, 3, 28, 14, 20, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 24, 19, 6, 16, tzinfo=datetime.timezone.utc), 'time_taken': 328441.0, 'time_delta': '3 days, 19:14:01', 'additions': 10, 'deletions': 0, 'state': 'closed'}, {'id': 1281624893, 'number': 2019, 'closed': datetime.datetime(2023, 3, 24, 16, 17, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 19, 13, 53, 22, tzinfo=datetime.timezone.utc), 'time_taken': 440647.0, 'time_delta': '5 days, 2:24:07', 'additions': 21, 'deletions': 5, 'state': 'closed'}, {'id': 1279148808, 'number': 2001, 'closed': datetime.datetime(2023, 3, 22, 11, 45, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 16, 19, 5, 50, tzinfo=datetime.timezone.utc), 'time_taken': 491958.0, 'time_delta': '5 days, 16:39:18', 'additions': 5, 'deletions': 4, 'state': 'closed'}, {'id': 1277993339, 'number': 1996, 'closed': datetime.datetime(2023, 3, 16, 13, 40, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 16, 6, 33, 58, tzinfo=datetime.timezone.utc), 'time_taken': 25564.0, 'time_delta': '7:06:04', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1274444161, 'number': 1976, 'closed': datetime.datetime(2023, 3, 14, 16, 35, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 14, 6, 10, 12, tzinfo=datetime.timezone.utc), 'time_taken': 37517.0, 'time_delta': '10:25:17', 'additions': 33, 'deletions': 1, 'state': 'closed'}, {'id': 1272604507, 'number': 1967, 'closed': datetime.datetime(2023, 3, 13, 16, 39, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 13, 4, 0, 50, tzinfo=datetime.timezone.utc), 'time_taken': 45501.0, 'time_delta': '12:38:21', 'additions': 1, 'deletions': 2, 'state': 'closed'}]"

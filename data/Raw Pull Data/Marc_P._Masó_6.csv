@@ -1,0 +1,433 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+666093327,Fixes to the selection tools,"I've fixed the two errors from #614, and the enhancement from #452.
+
+- for the bottom-left to top-right: the points where flipped.
+- the random selection: the selection computed the bound IDs as atom IDs creating unexpected behaviors.
+- Removed the flat property from `selectiontoolwidget.ui` the solution is simple and visual, but if you don't like it I can try a more complex solution. 
+
+Also I added a double click selection, and correct the draw function from disable the camera move. ",True,615,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/615,https://github.com/OpenChemistry/avogadrolibs/pull/615,closed,122,63,3,4,2,12,0,0,[],2021-06-09 17:06:35+00:00,2021-06-10 17:45:28+00:00,88733.0,"1 day, 0:38:53","[{'comment_id': 648507873, 'comment_body': ""don't know why there is a double accept, so I've removed one."", 'comment_created': datetime.datetime(2021, 6, 9, 17, 7, 31, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 648531690, 'comment_body': 'Did we need this? If you want to debug in any of the Qt classes:\r\n```\r\n#include <QDebug>\r\n\r\n..\r\nqDebug() << "" debugging message "";\r\n```', 'comment_created': datetime.datetime(2021, 6, 9, 17, 41, 37, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 648533495, 'comment_body': 'This is probably a useful iterator ""get connected component."" I\'m working on some iterators over the angles and torsions, so I\'ll look at adding a range iterator for ""visit all atoms connected to this"" and some similar things.', 'comment_created': datetime.datetime(2021, 6, 9, 17, 44, 9, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 648647075, 'comment_body': ""If you click on a single atom and then click again, I think the expectation is that it selects and then deselects.\r\n\r\nAs far as I can tell, this clears the selection .. so later on, it doesn't know that the atom was previously selected.\r\n\r\nSee below."", 'comment_created': datetime.datetime(2021, 6, 9, 20, 4, 46, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 648648153, 'comment_body': ""Can we switch this to the new `for (auto it: hits)` loop syntax? I'm hoping to submit a match to migrate loops soon."", 'comment_created': datetime.datetime(2021, 6, 9, 20, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 648648425, 'comment_body': 'I think this is where you need to call `shouldClean()`', 'comment_created': datetime.datetime(2021, 6, 9, 20, 7, 1, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 648648786, 'comment_body': 'By moving the `shouldClean()` this should work for single atom toggle-on / toggle-off', 'comment_created': datetime.datetime(2021, 6, 9, 20, 7, 37, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 648649337, 'comment_body': 'This is really a great idea - very intuitive. Thanks!', 'comment_created': datetime.datetime(2021, 6, 9, 20, 8, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 649050931, 'comment_body': ""Range-based don't support iterators, for this case, as far as I know, not important but is something to keep in mind."", 'comment_created': datetime.datetime(2021, 6, 10, 10, 18, 37, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 649051394, 'comment_body': 'Ups sorry.', 'comment_created': datetime.datetime(2021, 6, 10, 10, 19, 26, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 649070348, 'comment_body': 'Yes. Funny thing is that now double click followed by ctrl + double click does a complementary selection.', 'comment_created': datetime.datetime(2021, 6, 10, 10, 49, 19, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 649081451, 'comment_body': 'Note this is `O(atoms*bonds*log(atoms))` and for large structures may be slow. maybe a dinamic solution using a structure ID and pointers should be considerated.', 'comment_created': datetime.datetime(2021, 6, 10, 11, 7, 6, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}]","[{'commit_sha': 'cb03b980f61e7fb02ccdda0fb07fe3c10e98a7c7', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '89ee774bade9b78ba0c25fd97147a4a59b45a95c', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9e3494eb91c8c3928234ccc77a0e060bbb686b0e', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59b7b1d871977bdc40bfad7f639cbf95ad54ac16', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+680836662,Move axis to view menu,"I've moved the ""Overlay axis"" to the view menu. 
+Also I've added an enum tag `UiType` in the `GroupNode` to differentiate between nodes types: UI nodes, Geometry nodes, etc...
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,641,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/641,https://github.com/OpenChemistry/avogadrolibs/pull/641,closed,190,65,6,3,4,1,0,0,[],2021-06-30 12:37:41+00:00,2021-07-05 16:36:46+00:00,446345.0,"5 days, 3:59:05","[{'comment_id': 661497418, 'comment_body': 'Let\'s call this ""Type"" or ""NodeType""  instead of UiType - since Geometry != UI', 'comment_created': datetime.datetime(2021, 6, 30, 13, 54, 8, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}]","[{'commit_sha': '975acc4fd25f7dde6a486004ac52b92b90cb6727', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c244e83bbdf5690384433767712a55879070deb', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b5cca1fecfcc3952f784fe34dcba0d8bb6aadf9', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+683796649,Refactor Molecules class ,"I've refactored the `RWMolecule`, `QtGui::Molecule` and `Core::Molecule` so the Molecule graph is dynamic and also compute the connectivity between nodes.
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,648,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/648,https://github.com/OpenChemistry/avogadrolibs/pull/648,closed,1725,1352,18,7,7,29,0,0,[],2021-07-05 15:36:42+00:00,2021-07-14 14:30:19+00:00,773617.0,"8 days, 22:53:37","[{'comment_id': 664664667, 'comment_body': 'This could use a documentation comment. I\'m guessing you\'re adding this as a ""faster remove"" method? (e.g., https://stackoverflow.com/q/34994311/131896)', 'comment_created': datetime.datetime(2021, 7, 6, 15, 32, 36, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664665498, 'comment_body': '(for example the set of  bonded atoms)', 'comment_created': datetime.datetime(2021, 7, 6, 15, 33, 33, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664667317, 'comment_body': '\\return all the elements in the @p group', 'comment_created': datetime.datetime(2021, 7, 6, 15, 35, 47, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664667751, 'comment_body': '\\return the group ID from the item', 'comment_created': datetime.datetime(2021, 7, 6, 15, 36, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664668334, 'comment_body': 'We probably want to avoid the word ""element"" so it\'s not confused with carbon, hydrogen, etc.\r\nLet\'s use element => ""item"" or ""node"" or ""vertex"" (which  is the word used  in the Graph class)', 'comment_created': datetime.datetime(2021, 7, 6, 15, 37, 2, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664668468, 'comment_body': 'N items or nodes or vertexes', 'comment_created': datetime.datetime(2021, 7, 6, 15, 37, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664669995, 'comment_body': 'the \\return directive makes the docs look nicer: http://two.avogadro.cc/api/class/class_avogadro_1_1_core_1_1_residue.html#_CPPv4N8Avogadro4Core7Residue12residueAtomsEv', 'comment_created': datetime.datetime(2021, 7, 6, 15, 38, 58, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664670130, 'comment_body': '\\return the group size from the node', 'comment_created': datetime.datetime(2021, 7, 6, 15, 39, 9, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664670589, 'comment_body': '\\return all the groups and their nodes', 'comment_created': datetime.datetime(2021, 7, 6, 15, 39, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664674545, 'comment_body': '\\return a set containing the indices of each vertex connected with ""\\p"" index', 'comment_created': datetime.datetime(2021, 7, 6, 15, 44, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664674906, 'comment_body': '\\return the number of connected groups / subgraphs', 'comment_created': datetime.datetime(2021, 7, 6, 15, 44, 56, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664675663, 'comment_body': '\\return the group size of the group containing \\p vertex', 'comment_created': datetime.datetime(2021, 7, 6, 15, 45, 53, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664675990, 'comment_body': '\\return the group ID the includes \\p vertex', 'comment_created': datetime.datetime(2021, 7, 6, 15, 46, 18, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664679020, 'comment_body': ""If these are moved to the base class, we're still going to want them as inline header functions in `moleculegraph.h`. Key methods like this need to be really fast, since we execute them a lot."", 'comment_created': datetime.datetime(2021, 7, 6, 15, 50, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664679546, 'comment_body': 'All of these inline functions need to say inline somewhere...', 'comment_created': datetime.datetime(2021, 7, 6, 15, 50, 40, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664681248, 'comment_body': ""I guess I'm unclear conceptually on why these methods couldn't just go into `molecule.h` and `molecule.cpp` and we needed an abstract base class?\r\n\r\nI'd merge this class into the Molecule class. It's not like there's going to be another subclass of MoleculeGraph."", 'comment_created': datetime.datetime(2021, 7, 6, 15, 52, 47, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664682520, 'comment_body': ""I'm not sure I understand the point here. Can you explain your motivation for  making these protected?"", 'comment_created': datetime.datetime(2021, 7, 6, 15, 54, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 664685015, 'comment_body': 'I guess I want a different filename, maybe `rwmolecule_undo.h`', 'comment_created': datetime.datetime(2021, 7, 6, 15, 57, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668080582, 'comment_body': 'Yes, I did this to ensure that `m_graph` is always sync with `m_bondPairs` and `m_atomicNumbers` and separate this part from Molecule class was a first step to ensure it.  if you prefer I can merge it with molecule again.', 'comment_created': datetime.datetime(2021, 7, 12, 16, 28, 1, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 668192652, 'comment_body': 'This looks like a merge conflict', 'comment_created': datetime.datetime(2021, 7, 12, 19, 20, 20, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668193035, 'comment_body': 'Again, looks like a merge conflict. Does  it compile?', 'comment_created': datetime.datetime(2021, 7, 12, 19, 20, 56, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668194838, 'comment_body': '""efficient""', 'comment_created': datetime.datetime(2021, 7, 12, 19, 24, 1, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668196166, 'comment_body': 'I think we can omit ""find"" and just call it Molecule::bond(Index, index) - it would match Molecule::atom(index) which already exists.', 'comment_created': datetime.datetime(2021, 7, 12, 19, 26, 24, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668196701, 'comment_body': ""This could probably use Molecule::getAtomBonds(index) to clarify it's  the  index to the atom, not a bond index."", 'comment_created': datetime.datetime(2021, 7, 12, 19, 27, 19, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668694994, 'comment_body': 'There is already a `BondType bond(Index atomId1, Index atomId2) const` I cannot overload the `bond` function. Any alternative name?', 'comment_created': datetime.datetime(2021, 7, 13, 11, 59, 58, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 668825946, 'comment_body': 'I think I\'ve ""inlined"" all of them not sure if I missed one.', 'comment_created': datetime.datetime(2021, 7, 13, 14, 35, 21, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 668829211, 'comment_body': ""Now I've moved all of them to `core/molecule.h` but the idea is keeping the graph sync with the arrays. So everything except that is keep in protected/public and this three elements can only be modified by the class (only const reference getter allowed).  "", 'comment_created': datetime.datetime(2021, 7, 13, 14, 38, 47, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 668829492, 'comment_body': ""I guess then I'm not clear on what this method does differently?"", 'comment_created': datetime.datetime(2021, 7, 13, 14, 39, 6, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 668917491, 'comment_body': 'The same but returns the index. I just realize I can use `bond` and extract the index.', 'comment_created': datetime.datetime(2021, 7, 13, 16, 17, 13, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}]","[{'commit_sha': '68ae83c4715f3b9b36c471825066d5ed364db645', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b379d531357bcb948fbf6779dadb6ef05462f791', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e80430908fda66f3552fe77acf7c76780f8642ec', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '794bad8c98d535d2da56184f11d36dce9845533a', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23c69b89a90bdc9dfc7b2b41198999f481ba10d4', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70305c9c5294130020eb5a70cd4496cb6b5c7f66', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8bd7f5bca423008ceb23439946a5e881890aa6d1', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+700104729,Layer system,"Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,185,https://api.github.com/repos/OpenChemistry/avogadroapp/pulls/185,https://github.com/OpenChemistry/avogadroapp/pull/185,closed,152,22,2,5,6,2,0,0,[],2021-07-30 08:22:30+00:00,2021-08-11 15:59:10+00:00,1064200.0,"12 days, 7:36:40","[{'comment_id': 686126026, 'comment_body': ""Does this also need to activate the plugin with the default layer? I'm not seeing any display types active by default..."", 'comment_created': datetime.datetime(2021, 8, 10, 15, 54, 22, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 686588338, 'comment_body': 'That one failed because the `layerManager` had no Molecule to `setEnabled`, so I just moved a little bit to call it after setting the molecule.', 'comment_created': datetime.datetime(2021, 8, 11, 7, 54, 13, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}]","[{'commit_sha': '97d1fc14d94904f29bfe8401a6bd003334119ab1', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '69dfec7bc873eb70c5e7981f51df2d801bb0c440', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '5dbe30094da696cf69f62aefa9af96a9eb92af98', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '939bf2d198da39dee0c9e4d6a2361d5b11989270', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '8ca8cab21429ce8eb2354775699799c038b16291', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",serk,10197352,,User,,39,,16,9
+686877366,All basic cartoons,"From bacbone to simple cartoon, some clasic secondary structure visualizations.
+PD: I use the `ConnectedGroup` in the graph class which is still in revision but you can skip it, make it `return 0` always, it will mix all the component groups but it will work.
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,660,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/660,https://github.com/OpenChemistry/avogadrolibs/pull/660,closed,1103,29,21,9,5,4,3,0,"[{'name': 'enhancement'}, {'name': 'rendering'}, {'name': 'bio'}]",2021-07-09 15:35:09+00:00,2021-07-22 00:08:12+00:00,1067583.0,"12 days, 8:33:03","[{'comment_id': 667402205, 'comment_body': 'This doesn\'t work well with translation because the script that grabs the messages won\'t see these.\r\n\r\nTry something like:\r\nQStringList labels;\r\nlabels << tr(""Backbone"") << tr(""Trace"") << tr(""Tube"") << tr(""Ribbon"") << tr(""Cartoon""), tr(""Rope"");\r\n\r\nIf it gets more complicated, we can use QtDesigner to make a UI file, which writes a lot of this code for  us.', 'comment_created': datetime.datetime(2021, 7, 11, 0, 41, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 667402504, 'comment_body': 'Vector3f Q(w, w, w);', 'comment_created': datetime.datetime(2021, 7, 11, 0, 45, 47, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 667402529, 'comment_body': 'Vector3f h(1.0f, 1.0f, 1.0f);', 'comment_created': datetime.datetime(2021, 7, 11, 0, 46, 1, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 667402588, 'comment_body': ""Vector3f Q(0.0f, 0.0f, 0.0f);  // I think it's also Eigen::VZero"", 'comment_created': datetime.datetime(2021, 7, 11, 0, 47, 3, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}]","[{'commit_sha': 'c4566bbc9ddbe85f50770cbcde59d2ac61826b33', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80d723ebeef911034515448aa65bcf24e300f70b', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8a14b3ff32d31f36e204f0cd8f4b092c6e43b812', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c18c0102a9b973f10d6247cf60eac9e713af933', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '288653948827788a3fcf431ad5a19a4e6a9c997a', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ee7bbeaec1f9ecc5f7b0ec4e5bc45b18e389ddd', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '632a36345b26ae281399130987adab32989ac1fc', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e99dc999ec4db178223a9b0f726f67c4b576b35a', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '83a27af222610fea2ffd51f198f9834ba03f62e4', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+695760997,Hot fix cartoons cliping,"In the previous PR I forgot to add the `GeometryVisitor::visit` and `GLRenderVisitor::visit` functions for the `CurveGeometry` class where they calculate the zFar/zNear and the render pass respectively, necessary if it can be rendered alone.  
+
+Signed-off-by: Marc Prat Masó <marc.prat.maso@estudiantat.upc.edu>
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,694,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/694,https://github.com/OpenChemistry/avogadrolibs/pull/694,closed,45,1,9,1,2,0,0,0,[],2021-07-23 08:23:17+00:00,2021-07-23 13:46:15+00:00,19378.0,5:22:58,[],"[{'commit_sha': '32354cec7ea0f8e756aff7aeaaa662795f657228', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+706102619,Improve in cartoon display,"- Added area hit (area selection) in all curves geometry.
+- Fix visual bug where the curve has big twists. 
+- Added complex/simple cartoon with arrows.
+
+Signed-off-by: Marc Prat Masó <marc.prat.maso@estudiantat.upc.edu>
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,716,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/716,https://github.com/OpenChemistry/avogadrolibs/pull/716,closed,382,159,14,2,2,9,2,0,"[{'name': 'enhancement'}, {'name': 'rendering'}]",2021-08-08 20:32:53+00:00,2021-08-10 00:52:04+00:00,101951.0,"1 day, 4:19:11","[{'comment_id': 684835737, 'comment_body': 'SKIPPED ?', 'comment_created': datetime.datetime(2021, 8, 8, 22, 10, 25, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684836010, 'comment_body': ""Was this for debugging? It's good to minimize un-needed `#include` because they slow down compile time. (Which can be big for Avogadro.)"", 'comment_created': datetime.datetime(2021, 8, 8, 22, 12, 59, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684838547, 'comment_body': 'It might be worth adding a separate `Rendering::ResidueType` but this is okay for now.', 'comment_created': datetime.datetime(2021, 8, 8, 22, 35, 46, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684838712, 'comment_body': 'helix\r\n(here, I thought I was the only one having trouble with my ""h"" key 😄 )', 'comment_created': datetime.datetime(2021, 8, 8, 22, 37, 20, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684838776, 'comment_body': 'Please remove.', 'comment_created': datetime.datetime(2021, 8, 8, 22, 37, 43, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684838866, 'comment_body': 'SKIPPED', 'comment_created': datetime.datetime(2021, 8, 8, 22, 38, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684839245, 'comment_body': ""see `core/avogadrocore.h` especially `PI_F` already as a macro.\r\n(I'd be happy to add `DEG_TO_RAD_F` and `RAD_TO_DEG_F` as well.)"", 'comment_created': datetime.datetime(2021, 8, 8, 22, 41, 49, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684839277, 'comment_body': '`PI_F` or define `RAD_TO_DEG_F` for readability.', 'comment_created': datetime.datetime(2021, 8, 8, 22, 42, 6, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684919986, 'comment_body': ""Yes, I'm thinking in a good solution for single ray vs cartoon so it works smooth. But I wanted to add at least some selection so the user can work with this."", 'comment_created': datetime.datetime(2021, 8, 9, 5, 37, 1, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}]","[{'commit_sha': 'a0c6b92c83ed25065245aaab58d29bdfecc1068e', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2963f0f14f0e9f108954bf37e5ef70d91c55c88', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+700098444,Layer system,"Signed-off-by: Marc Prat Masó <marc.prat.maso@estudiantat.upc.edu>
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+
+Some examples:
+
+<img src=""https://user-images.githubusercontent.com/10197352/127621981-261240c6-c8c8-40af-98a3-6265bbfbd82a.png""  height=""500"">
+
+<img src=""https://user-images.githubusercontent.com/10197352/127621985-55de184e-ec46-48a5-a376-28081ff1ef8a.png"" height=""500"">
+
+<img src=""https://user-images.githubusercontent.com/10197352/127621986-9469fbb7-9ad4-431a-9bba-d336d833ca54.png""  height=""500"">
+",True,709,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/709,https://github.com/OpenChemistry/avogadrolibs/pull/709,closed,2135,555,63,12,6,14,2,0,"[{'name': 'enhancement'}, {'name': 'rendering'}]",2021-07-30 08:13:06+00:00,2021-08-10 13:30:49+00:00,969463.0,"11 days, 5:17:43","[{'comment_id': 682741002, 'comment_body': ""Why should this be public? Shouldn't the class handle this internally / automatically for calling code?"", 'comment_created': datetime.datetime(2021, 8, 4, 15, 46, 28, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 682741459, 'comment_body': 'I think to parallel ""atomCount"" and ""bondCount"" this should be ""nodeCount""', 'comment_created': datetime.datetime(2021, 8, 4, 15, 47, 2, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 682744722, 'comment_body': 'This could really use some comments / docs on the methods (e.g., see comment in the cpp file)', 'comment_created': datetime.datetime(2021, 8, 4, 15, 50, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 682745626, 'comment_body': 'To keep with other syntax, should this be `layerCount()` ?', 'comment_created': datetime.datetime(2021, 8, 4, 15, 51, 45, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 682746913, 'comment_body': ""I'm not clear on what these three addAtom() methods do and how they differ..."", 'comment_created': datetime.datetime(2021, 8, 4, 15, 53, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 682751020, 'comment_body': 'Can we do better than `void *` here?', 'comment_created': datetime.datetime(2021, 8, 4, 15, 57, 59, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 682754752, 'comment_body': ""I'd declare an enum  -- either in the header or here. That way you can have `(idx.column()  == LayerVisible)` and it makes it much easier to change / add  columns in the future.\r\n\r\ne.g., `propertymodel.*`\r\nhttps://github.com/OpenChemistry/avogadrolibs/pull/711/files"", 'comment_created': datetime.datetime(2021, 8, 4, 16, 2, 26, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 684920695, 'comment_body': ""`MaxLayer` is the known maximum, so it starts at 0. If you prefer I could rewrite it, but it's not a counting variable. "", 'comment_created': datetime.datetime(2021, 8, 9, 5, 39, 48, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 684925401, 'comment_body': ""I'm not happy with this, is there anything in `Avogadro:IO` I could extend to? or any better idea?"", 'comment_created': datetime.datetime(2021, 8, 9, 5, 55, 34, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 685269385, 'comment_body': ""Okay. Still seems like there should be a `layerCount()` method to parallel atoms, bonds, residues, etc, but I guess that's `maxLayer() + 1` "", 'comment_created': datetime.datetime(2021, 8, 9, 14, 57, 14, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 685274552, 'comment_body': ""I mean, this is basically `serialize()` and `deserialize()` - you're not actually saving, you're just generating a string that represents the current layer configuration.\r\n\r\nYou can be sure the base method isn't called by making it a pure virtual method."", 'comment_created': datetime.datetime(2021, 8, 9, 15, 3, 3, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 685360967, 'comment_body': ""I can't use pure virtual method. I create `LayerData` objects in `cjsonformat.cpp` and then it's serialized in `pluginlayermanager.h` where I know the class type. But the renaming gives me some comfort .  "", 'comment_created': datetime.datetime(2021, 8, 9, 16, 51, 37, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 685607296, 'comment_body': ""Can we drop the `assert` if it's always true?"", 'comment_created': datetime.datetime(2021, 8, 10, 0, 28, 14, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 685612790, 'comment_body': '`#include <string>`', 'comment_created': datetime.datetime(2021, 8, 10, 0, 47, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}]","[{'commit_sha': '90e4f0217e78b9826d0e0a13127af23389f0f029', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '68d9eee8d76b541038f470659d6a06af7beb4cb6', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '925e71e1b44d08dfb50021f8d233a56c0314027f', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'af3b7397b8e88ac742e847c270047632357cb2d8', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a4bd137ad03d7c5ea41eb0b110519a85d509367', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '93c4b38f1f6f2443ef2cad6674d8f4e62133cb8a', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e58338f913590d5519c4d933668d8bcb4209ce39', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4569dcab13f9d393511556f5722a16a2b19e318a', 'committer_username': 'San4ito', 'committer_name': 'Alex Brohovsky', 'committer_email': 'san4ito94@gmail.com', 'commit_date': datetime.datetime(2016, 12, 14, 13, 47, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82a6cb418e071ac9be12c732fc5db2eb50b08dc7', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '83eed3a7a530db71c226fbfeb21ea6eaec9d1a2d', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a693462d152f96f20832ec180c8cf360e5d6662', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7363e4aa9f66f44bdcdea3e3bad2a338235ee656', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+706099361,Labels,"Labels display type and Label editor. 
+Thanks to @foowhiz for the initial start.
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,715,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/715,https://github.com/OpenChemistry/avogadrolibs/pull/715,closed,434,4,11,4,4,0,2,0,"[{'name': 'enhancement'}, {'name': 'rendering'}]",2021-08-08 20:07:11+00:00,2021-08-11 14:39:10+00:00,239519.0,"2 days, 18:31:59",[],"[{'commit_sha': '9dbb8a981476bcd886061792f6b5b3e9c11693e9', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91bf91e03e1947d76512d672caf7950f030999d3', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f8fa5f14ffad972b11441919d36e58846326be0f', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f81ad5afa0cda2b986ff8df872c532ba4564290', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+716017246,Add label editor to create custom labels,"- Label editor
+- fix transparent labels
+
+Signed-off-by: Marc Prat Masó <marc.prat.maso@estudiantat.upc.edu>
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,740,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/740,https://github.com/OpenChemistry/avogadrolibs/pull/740,closed,377,61,8,5,16,12,2,0,"[{'name': 'enhancement'}, {'name': 'rendering'}]",2021-08-19 14:55:30+00:00,2021-08-31 18:56:28+00:00,1051258.0,"12 days, 4:00:58","[{'comment_id': 692224984, 'comment_body': 'I think we definitely want to let people pick colors for the labels. (Not per-label.)', 'comment_created': datetime.datetime(2021, 8, 19, 15, 25, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 692228482, 'comment_body': '""Write Label"" or maybe ""Set Label"" or ""Create Label""?', 'comment_created': datetime.datetime(2021, 8, 19, 15, 27, 31, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 692272100, 'comment_body': 'QString::fromStdString() should also work, I think...', 'comment_created': datetime.datetime(2021, 8, 19, 16, 7, 38, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 692819924, 'comment_body': '+1 to ""Create Label""', 'comment_created': datetime.datetime(2021, 8, 20, 9, 50, 53, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 692824801, 'comment_body': 'This is only in the label edit mode not the render display. But maybe white could be annoying if the background is white?', 'comment_created': datetime.datetime(2021, 8, 20, 9, 58, 35, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 693510828, 'comment_body': 'The white can be annoying for light-colored atoms (e.g., hydrogen)', 'comment_created': datetime.datetime(2021, 8, 22, 14, 30, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 694095662, 'comment_body': 'tr(""Residue Label:"")', 'comment_created': datetime.datetime(2021, 8, 23, 15, 49, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 694096031, 'comment_body': 'tr(""Atom Label:"")', 'comment_created': datetime.datetime(2021, 8, 23, 15, 49, 56, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 694107633, 'comment_body': 'Just use a string list. I know this works in English, but it won\'t work for translation in many languages.\r\n\r\nQStringList options;\r\noptions <<  tr(""None"") << tr(""Index"") << tr(""Element Symbol"") << tr(""Symbol + Index""); // etc', 'comment_created': datetime.datetime(2021, 8, 23, 16, 4, 24, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 694108393, 'comment_body': '`atom.index() + 1` // most users expect Atom 1, Atom 2, etc. rather than starting at zero...', 'comment_created': datetime.datetime(2021, 8, 23, 16, 5, 21, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}, {'comment_id': 695430863, 'comment_body': 'Yes, but the ""Select by Atom Index"" is indexed at 0. I can change both elements to indexed at 1 if you prefer.', 'comment_created': datetime.datetime(2021, 8, 25, 6, 16, 13, tzinfo=datetime.timezone.utc), 'commenter': 'serk12', 'type': 'User'}, {'comment_id': 698036127, 'comment_body': 'Yes, I think most users expect atom numbers to start at 1.', 'comment_created': datetime.datetime(2021, 8, 29, 16, 1, 7, tzinfo=datetime.timezone.utc), 'commenter': 'ghutchis', 'type': 'User'}]","[{'commit_sha': '9299907c4310d719de5a7dcec1c26b283cecd0ad', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '259bd97fdd733040a8a342861e93791252114396', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d0cf2d407e3f82702779197da6e499679dc1bb8', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b44356e4566dc8cc6f292201a757ddc58eea174e', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}, {'commit_sha': '93235e11c6c4da9f649032417c4f9281ea88e31f', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+714055785,Fix load settings,"The plugins are only created once and the load is never called when the files are opened. 
+I've fixed that and added a set to avoid reloading multiple times.
+
+Signed-off-by: Marc Prat Masó <marc.prat.maso@estudiantat.upc.edu>
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+",True,732,https://api.github.com/repos/OpenChemistry/avogadrolibs/pulls/732,https://github.com/OpenChemistry/avogadrolibs/pull/732,closed,19,15,8,1,2,0,0,0,[],2021-08-17 09:07:42+00:00,2021-08-17 13:57:17+00:00,17375.0,4:49:35,[],"[{'commit_sha': 'ebee17cf82e9aef0d7b8c05675f065acdf9885c5', 'committer_username': 'serk12', 'committer_name': 'serk', 'committer_email': None, 'commit_date': datetime.datetime(2014, 12, 15, 15, 47, 15, tzinfo=datetime.timezone.utc)}]",serk,10197352,,User,,39,,16,9
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+4169531,avogadrolibs,OpenChemistry/avogadrolibs,C++,163,428,27,183,4551,126,3,14,"[{'id': 749983560, 'number': 807, 'closed': datetime.datetime(2021, 10, 6, 17, 13, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 5, 15, 18, 24, tzinfo=datetime.timezone.utc), 'time_taken': 93320.0, 'time_delta': '1 day, 1:55:20', 'additions': 44, 'deletions': 22, 'state': 'closed'}, {'id': 716598009, 'number': 744, 'closed': datetime.datetime(2021, 8, 20, 18, 47, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 20, 9, 48, 26, tzinfo=datetime.timezone.utc), 'time_taken': 32339.0, 'time_delta': '8:58:59', 'additions': 33, 'deletions': 7, 'state': 'closed'}, {'id': 716017246, 'number': 740, 'closed': datetime.datetime(2021, 8, 31, 18, 56, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 19, 14, 55, 30, tzinfo=datetime.timezone.utc), 'time_taken': 1051258.0, 'time_delta': '12 days, 4:00:58', 'additions': 377, 'deletions': 61, 'state': 'closed'}, {'id': 714055785, 'number': 732, 'closed': datetime.datetime(2021, 8, 17, 13, 57, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 17, 9, 7, 42, tzinfo=datetime.timezone.utc), 'time_taken': 17375.0, 'time_delta': '4:49:35', 'additions': 19, 'deletions': 15, 'state': 'closed'}, {'id': 712255924, 'number': 729, 'closed': datetime.datetime(2021, 8, 17, 13, 57, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 13, 10, 40, 8, tzinfo=datetime.timezone.utc), 'time_taken': 357443.0, 'time_delta': '4 days, 3:17:23', 'additions': 192, 'deletions': 45, 'state': 'closed'}, {'id': 712248327, 'number': 728, 'closed': datetime.datetime(2021, 8, 13, 13, 41, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 13, 10, 27, 10, tzinfo=datetime.timezone.utc), 'time_taken': 11680.0, 'time_delta': '3:14:40', 'additions': 67, 'deletions': 47, 'state': 'closed'}, {'id': 706102619, 'number': 716, 'closed': datetime.datetime(2021, 8, 10, 0, 52, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 8, 20, 32, 53, tzinfo=datetime.timezone.utc), 'time_taken': 101951.0, 'time_delta': '1 day, 4:19:11', 'additions': 382, 'deletions': 159, 'state': 'closed'}, {'id': 706099361, 'number': 715, 'closed': datetime.datetime(2021, 8, 11, 14, 39, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 8, 20, 7, 11, tzinfo=datetime.timezone.utc), 'time_taken': 239519.0, 'time_delta': '2 days, 18:31:59', 'additions': 434, 'deletions': 4, 'state': 'closed'}, {'id': 700098444, 'number': 709, 'closed': datetime.datetime(2021, 8, 10, 13, 30, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 8, 13, 6, tzinfo=datetime.timezone.utc), 'time_taken': 969463.0, 'time_delta': '11 days, 5:17:43', 'additions': 2135, 'deletions': 555, 'state': 'closed'}, {'id': 695760997, 'number': 694, 'closed': datetime.datetime(2021, 7, 23, 13, 46, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 23, 8, 23, 17, tzinfo=datetime.timezone.utc), 'time_taken': 19378.0, 'time_delta': '5:22:58', 'additions': 45, 'deletions': 1, 'state': 'closed'}, {'id': 686877366, 'number': 660, 'closed': datetime.datetime(2021, 7, 22, 0, 8, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 9, 15, 35, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1067583.0, 'time_delta': '12 days, 8:33:03', 'additions': 1103, 'deletions': 29, 'state': 'closed'}, {'id': 683796649, 'number': 648, 'closed': datetime.datetime(2021, 7, 14, 14, 30, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 15, 36, 42, tzinfo=datetime.timezone.utc), 'time_taken': 773617.0, 'time_delta': '8 days, 22:53:37', 'additions': 1725, 'deletions': 1352, 'state': 'closed'}, {'id': 680836662, 'number': 641, 'closed': datetime.datetime(2021, 7, 5, 16, 36, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 30, 12, 37, 41, tzinfo=datetime.timezone.utc), 'time_taken': 446345.0, 'time_delta': '5 days, 3:59:05', 'additions': 190, 'deletions': 65, 'state': 'closed'}, {'id': 673477990, 'number': 620, 'closed': datetime.datetime(2021, 6, 29, 16, 14, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 18, 13, 31, 59, tzinfo=datetime.timezone.utc), 'time_taken': 960125.0, 'time_delta': '11 days, 2:42:05', 'additions': 493, 'deletions': 129, 'state': 'closed'}, {'id': 666093327, 'number': 615, 'closed': datetime.datetime(2021, 6, 10, 17, 45, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 17, 6, 35, tzinfo=datetime.timezone.utc), 'time_taken': 88733.0, 'time_delta': '1 day, 0:38:53', 'additions': 122, 'deletions': 63, 'state': 'closed'}, {'id': 652155545, 'number': 588, 'closed': datetime.datetime(2021, 6, 2, 14, 57, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 25, 10, 29, 50, tzinfo=datetime.timezone.utc), 'time_taken': 707269.0, 'time_delta': '8 days, 4:27:49', 'additions': 389, 'deletions': 1, 'state': 'closed'}, {'id': 393607057, 'number': 450, 'closed': datetime.datetime(2020, 4, 18, 0, 47, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 25, 14, 4, 8, tzinfo=datetime.timezone.utc), 'time_taken': 2025782.0, 'time_delta': '23 days, 10:43:02', 'additions': 332, 'deletions': 0, 'state': 'closed'}]"
+4532237,avogadroapp,OpenChemistry/avogadroapp,C++,69,181,16,112,1182,18,3,8,"[{'id': 749982869, 'number': 235, 'closed': datetime.datetime(2022, 1, 22, 22, 23, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 5, 15, 17, 41, tzinfo=datetime.timezone.utc), 'time_taken': 9443149.0, 'time_delta': '109 days, 7:05:49', 'additions': 17, 'deletions': 0, 'state': 'closed'}, {'id': 700104729, 'number': 185, 'closed': datetime.datetime(2021, 8, 11, 15, 59, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 30, 8, 22, 30, tzinfo=datetime.timezone.utc), 'time_taken': 1064200.0, 'time_delta': '12 days, 7:36:40', 'additions': 152, 'deletions': 22, 'state': 'closed'}]"

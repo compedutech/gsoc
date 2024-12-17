@@ -1,0 +1,292 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1409864971,PAINTROID-549 Refactoring,"[PAINTROID-549](https://jira.catrob.at/browse/PAINTROID-549)
+
+- Organised widget files into directories
+- Created new files for classes if files got too big
+- Deleted widgets and parameters that are not needed
+- Updated riverpod version to new major version (2.3.6)
+
+
+- Fixed failing tests after riverpod version upgrade
+- Reformatted files
+- Rebased with develop
+- Upgraded github workflow to Flutter version 3.10.2
+    - Kotlin and Gradle versions also upgraded
+    - Upgraded dependencies
+        - intl 
+        - file_picker
+        - package_info_plus
+     
+- Migrated some parts of the code after upgrade according to [documentation](https://docs.flutter.dev/release/breaking-changes/window-singleton)
+    - lib/service/device_service.dart
+    - lib/workspace/src/state/canvas_state.dart
+    - lib/workspace/src/state/canvas_state_notifier.dart
+    
+- Fixed flutter analyzer warnings (prefer_const_constructors)
+- Removed flutter_styled_toast for fluttertoast library 
+- Restructured main build method so that MaterialApp is the root widget.
+- Fixed inconsistencies in Save Dialogs.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,26,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/26,https://github.com/Catrobat/Paintroid-Flutter/pull/26,closed,1191,983,82,6,0,0,0,0,[],2023-06-27 13:12:32+00:00,2023-07-02 08:07:48+00:00,413716.0,"4 days, 18:55:16",[],"[{'commit_sha': '7d393ae71239f56e9612fc4361207586206a0550', 'committer_username': 'juliajulie95', 'committer_name': 'Julia Herold', 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 27, 12, 10, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '252793ad95299f54040d5b42a4902ff8ae72d32f', 'committer_username': 'juliajulie95', 'committer_name': 'Julia Herold', 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 27, 12, 10, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e035b146f772a6ec7ad0c7ba8e2d1225d76d3b81', 'committer_username': 'juliajulie95', 'committer_name': 'Julia Herold', 'committer_email': None, 'commit_date': datetime.datetime(2018, 3, 27, 12, 10, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '07287071725ae7a67f6906ee2f5b91b9dc6184f3', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50fa5361536f60b4cab13fae5620d8ae7210bf68', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40c75ef9b4217ed82192ca102f6fb6f9e9151915', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1290162351,PAINTROID-553 : Saving two projects with the same name and deleting one of them causes a red screen,"[PAINTROID-553](https://jira.catrob.at/browse/PAINTROID-553)
+
+The issue was that saveToApplicationDirectory overwrote the data and a new project got created in the database. Deleting one project would delete the overwritten file and the other projects in the database pointed at the wrong filepath.
+
+Added a new DAO function  that retrieves project by name for easier use in code.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [x] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer",True,22,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/22,https://github.com/Catrobat/Paintroid-Flutter/pull/22,closed,216,16,7,1,0,13,0,0,[],2023-03-25 22:09:35+00:00,2023-07-21 14:33:29+00:00,10167834.0,"117 days, 16:23:54","[{'comment_id': 1254512189, 'comment_body': 'If this is only used in one widget, please move it there.\r\nIf this is used in multiple widgets, please name it more specific, because now it seems like a generic widget is called, but it already uses hardcoded text', 'comment_created': datetime.datetime(2023, 7, 6, 14, 18, 41, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254513167, 'comment_body': 'error message does not fit', 'comment_created': datetime.datetime(2023, 7, 6, 14, 19, 23, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254514893, 'comment_body': 'this also does not make sese here?', 'comment_created': datetime.datetime(2023, 7, 6, 14, 20, 36, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254520083, 'comment_body': 'please rename this function, there is nothing saved in here, just deleted?', 'comment_created': datetime.datetime(2023, 7, 6, 14, 24, 22, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254524303, 'comment_body': 'please check what happens if the dialog returns null', 'comment_created': datetime.datetime(2023, 7, 6, 14, 27, 28, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254535886, 'comment_body': ""Let's try to not user variable! anywhere.\r\nEven though there is no error here, it has a lot of potential for errors\r\n\r\nLet's do \r\n```\r\nfinal projectId = oldProject.id;\r\nif (oldProject != null && projectId != null)\r\n      await db.projectDAO.deleteProject(projectId);\r\n```\r\n"", 'comment_created': datetime.datetime(2023, 7, 6, 14, 36, 10, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254542198, 'comment_body': 'or maybe function name?', 'comment_created': datetime.datetime(2023, 7, 6, 14, 40, 45, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1254923118, 'comment_body': 'Renamed the file and the function. This function can be reused later like other dialog functions.', 'comment_created': datetime.datetime(2023, 7, 6, 21, 10, 46, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1254924600, 'comment_body': 'Renamed function and changed error message so that it fits better.', 'comment_created': datetime.datetime(2023, 7, 6, 21, 12, 2, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1254925662, 'comment_body': 'Removed. A toast is already shown if the image is saved successfully in ```io_handler.dart``` in ```_saveAsCatrobatImage```.', 'comment_created': datetime.datetime(2023, 7, 6, 21, 13, 39, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1254926374, 'comment_body': 'Renamed to ```_checkIfFileExistsAndConfirmOverwrite```.', 'comment_created': datetime.datetime(2023, 7, 6, 21, 14, 37, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1254927585, 'comment_body': 'Added a null check.', 'comment_created': datetime.datetime(2023, 7, 6, 21, 16, 12, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1254927930, 'comment_body': 'Changed to \r\n```\r\nfinal oldProjectId = oldProject?.id;\r\n    if (oldProject != null && oldProjectId != null) {\r\n      await db.projectDAO.deleteProject(oldProjectId);\r\n      ref.invalidate(ProjectDatabase.provider);\r\n    }\r\n```', 'comment_created': datetime.datetime(2023, 7, 6, 21, 16, 42, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}]","[{'commit_sha': 'a642c85e6d7da96db7f1581812e68df77cc830d5', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1361441547,PAINTROID-584 : Pull request template,- Copied the pull request template from [Paintroid](https://github.com/Catrobat/Paintroid/tree/develop/.github),True,24,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/24,https://github.com/Catrobat/Paintroid-Flutter/pull/24,closed,19,0,1,1,0,0,0,0,[],2023-05-23 13:35:43+00:00,2023-06-01 15:52:55+00:00,785832.0,"9 days, 2:17:12",[],"[{'commit_sha': '94089cc617e545befdf2ebff375d401d68e51e04', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1435980320,PAINTROID-594 : Fix icon colors,"[PAINTROID-594](https://jira.catrob.at/browse/PAINTROID-594)
+
+Changed exit fullscreen button color from default gray to black.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,28,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/28,https://github.com/Catrobat/Paintroid-Flutter/pull/28,closed,4,1,1,1,0,0,0,0,[],2023-07-15 16:48:44+00:00,2023-07-21 13:02:09+00:00,504805.0,"5 days, 20:13:25",[],"[{'commit_sha': '0054e07bd1a2d85707ecf33bf2096ca2658ee058', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1437121365,PAINTROID-635 : Checkerboard is not the same density as Kotlin version,"[PAINTROID-635](https://jira.catrob.at/browse/PAINTROID-635)
+
+Changed checkerboard tile density & tried to match with kotlin version as good as possible.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,29,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/29,https://github.com/Catrobat/Paintroid-Flutter/pull/29,closed,2,2,1,1,0,0,0,0,[],2023-07-17 11:23:11+00:00,2023-07-21 14:17:19+00:00,356048.0,"4 days, 2:54:08",[],"[{'commit_sha': 'ec023235408ba5becaa2284713f64057a0426df6', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1444985926,PAINTROID-636 : Use code generation for riverpod,"[PAINTROID-636](https://jira.catrob.at/browse/PAINTROID-636)
+
+- Added repo-token to setup-protoc workflow.
+- Added riverpod_annotation, freezed_annotation, riverpod_generator, riverpod_lint, freezed packages
+- Added generated files to gitignore
+- Refactored following providers to use code generation
+  - CommandFactory
+  - CommandManager
+  - GraphicFactory
+  - BrushTool
+  - BrushToolState
+  - ToolBoxState
+  - CanvasState
+- Refactored tests to use the new providers
+- Renamed some providers
+
+| Provider                            | Refactored       |
+|-------------------------------------|------------------|
+| CanvasState                         |:heavy_check_mark:|
+| CommandFactory                      |:heavy_check_mark:|
+| CommandManager                      |:heavy_check_mark:|
+| GraphicFactory                      |:heavy_check_mark:|
+| BrushPaintState --> BrushToolState  |:heavy_check_mark:|
+| BrushTool                           |:heavy_check_mark:|
+| ToolState --> ToolBoxState          |:heavy_check_mark:|
+
+
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [x] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,30,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/30,https://github.com/Catrobat/Paintroid-Flutter/pull/30,closed,442,314,41,1,0,2,0,0,[],2023-07-21 20:44:51+00:00,2023-08-03 18:13:49+00:00,1114138.0,"12 days, 21:28:58","[{'comment_id': 1278604466, 'comment_body': ""Did you test this?\r\nI'm just thinking if the providers are not disposed, but the widget that uses it is disposed, does it generate a new provider if the widget is build again or is the old one used?"", 'comment_created': datetime.datetime(2023, 7, 30, 18, 59, 50, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1278614206, 'comment_body': 'When using code generation, the providers are always [auto disposed](https://docs-v2.riverpod.dev/docs/about_code_generation) by default. Our current non-generated providers are not disposed of automatically and thus are always alive whether they have listeners attached to them or not. I marked these new providers as ```keepAlive``` because non-auto-dispose providers cannot be used with always-alive providers. In your example, the state of the provider should stay the same since it is an always-alive provider (but I have not tested it, so I am not 100% sure). In the future, when we have refactored all providers, we should reconsider which providers we should mark as ```keepAlive``` and which ones we should not.', 'comment_created': datetime.datetime(2023, 7, 30, 20, 17, 58, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}]","[{'commit_sha': '5de7b5744daf6d82ab4c0cda5209dd8e52a3c4c4', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1419988485,PAINTROID-453 : Flutter: Add Brush Options,"[PAINTROID-453](https://jira.catrob.at/browse/PAINTROID-453)
+
+Added top and bottom brush tool options. Added a new provider for brush tool paint properties.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [ ] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,27,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/27,https://github.com/Catrobat/Paintroid-Flutter/pull/27,closed,337,22,9,1,2,6,0,0,[],2023-07-04 17:57:36+00:00,2023-07-21 14:10:41+00:00,1455185.0,"16 days, 20:13:05","[{'comment_id': 1264621656, 'comment_body': 'Should we give them a default value so they do not have to be late?\r\nLike round defaults to blue and square to white?', 'comment_created': datetime.datetime(2023, 7, 16, 6, 55, 31, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1264622577, 'comment_body': ""Why can't this just be a stateless widget?"", 'comment_created': datetime.datetime(2023, 7, 16, 7, 2, 50, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1264636798, 'comment_body': 'Just for my understanding: Why do we just need to read it once here and not watch it?', 'comment_created': datetime.datetime(2023, 7, 16, 8, 14, 39, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1264688085, 'comment_body': 'Done :+1: ', 'comment_created': datetime.datetime(2023, 7, 16, 13, 48, 42, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1264688327, 'comment_body': 'Good eye. This was done for testing purposes and forgot to change it back again to StatelessWidget. But in the future this widget will be ConsumerWidget. For now it can stay StatelessWidget.', 'comment_created': datetime.datetime(2023, 7, 16, 13, 50, 8, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1264688796, 'comment_body': 'My idea was that it was not necessary to watch but apparently I was wrong. [When providers are combined we are supposed to always use watch.](https://riverpod.dev/docs/concepts/combining_providers) Changed read to watch where it was applicable.', 'comment_created': datetime.datetime(2023, 7, 16, 13, 53, 38, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}]","[{'commit_sha': '1730b0f781574db7be3c2ddb73755ae28339287f', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1454870427,PAINTROID-634 : Add Eraser tool,"[PAINTROID-634](https://jira.catrob.at/browse/PAINTROID-634)
+[PAINTROID-533](https://jira.catrob.at/browse/PAINTROID-533)
+[PAINTROID-646](https://jira.catrob.at/browse/PAINTROID-646)
+
+## New Features and Enhancements
+
+- **Eraser Tool**: Added an eraser tool that functions similarly to the brush tool but utilizes a different BlendMode.
+- **Constant Identifier Names Analysis**: Added a new analysis option [constant_identifier_names](https://dart.dev/tools/linter-rules/constant_identifier_names) which is set to `false` to stay consistent with Paintroid-Kotlin.
+- **Clipboard Icon**: Copied the clipboard icon asset from Paintroid-Kotlin.
+- **BlendMode and StrokeJoin Serialization**: Expanded the paint serializer to include support for BlendMode and strokeJoin properties.
+- **ToolType Differentiation**: Assigned a ToolType to each tool, enhancing tool management and identification.
+- **ModalBottomSheet for Tools**: Implemented a ModalBottomSheet that displays a list of available tools.
+- **Navigation Enhancement**: Added the BottomNavBar functionality to highlight the active tool.
+- **Toast Package Update**: Replaced the toast package with [this package](https://pub.dev/packages/toast) for better toast notifications.
+- **Integration Test Improvements**: Changed integration testing through the addition of utility functions and the reorganization of existing tests.
+
+## Refactorings and Bug Fixes
+
+- **Component Renaming**: Renamed the component ""BottomControlNavigationBar"" to ""BottomNavBar"" for consistency and clarity.
+- **Background and PaintingLayer Refactoring**: Refactored the BackgroundLayer and PaintingLayer widgets for improved readability.
+- **PaintSerializer Optimization**: Optimized the PaintSerializer class.
+- **Image Saving Improvement**: Reworked the image-saving mechanism to fix JPG transparency issues that arose when using the eraser tool.
+- **Bug Fix**: Addressed a bug where strokes were saved with incorrect stroke widths in projects/images.
+- **API Permission Handling**: Fixed permission issues for API versions greater than 28.
+
+## Checklist
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [x] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,31,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/31,https://github.com/Catrobat/Paintroid-Flutter/pull/31,closed,1072,238,49,2,0,12,0,0,[],2023-07-29 19:14:38+00:00,2023-08-28 16:43:54+00:00,2582956.0,"29 days, 21:29:16","[{'comment_id': 1304573749, 'comment_body': 'I think the names are difficult to read, can we name them more clearly?', 'comment_created': datetime.datetime(2023, 8, 24, 16, 12, 11, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304578058, 'comment_body': 'Did you test it with older api versions?\r\nI think this was related to scoped storage which was introduced with android 29 I think', 'comment_created': datetime.datetime(2023, 8, 24, 16, 16, 11, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304586511, 'comment_body': 'The ThemeData should go to the styles file', 'comment_created': datetime.datetime(2023, 8, 24, 16, 24, 10, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304590593, 'comment_body': 'Did you try this?\r\nhttps://api.flutter.dev/flutter/widgets/GridView/GridView.count.html', 'comment_created': datetime.datetime(2023, 8, 24, 16, 27, 56, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304597968, 'comment_body': 'We are mixing too much UI with logic in here.\r\nCould we make this widget 100% generic and hand over the function as a callback and remove the tooldata?\r\n\r\nIf you do not like that solution, renaming it to something more specific is fine for me too.\r\nBut now it seems like a very generic widget, but it changes the tool\r\n\r\nThe 100% perfect solution would be a very generic IconButtonWithLabel that gets icon, label & callback\r\nAnd then a ToolButton which uses the IconButtonWithLabel and implements the tool switching', 'comment_created': datetime.datetime(2023, 8, 24, 16, 35, 5, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304601885, 'comment_body': 'I would write the whole name like you did with the others\r\nbackgroundPicture\r\nbackgroundImage\r\nAlso those 2 are synonyms, maybe specify what makes them different in the name', 'comment_created': datetime.datetime(2023, 8, 24, 16, 38, 18, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1306432929, 'comment_body': 'Added their respective enum names before each enum element. Should also cause fewer problems in the future when we add more enums.', 'comment_created': datetime.datetime(2023, 8, 26, 12, 42, 11, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306433803, 'comment_body': 'Added WidgetThemes abstract class, alse renamed ThemeText to TextThemes.', 'comment_created': datetime.datetime(2023, 8, 26, 12, 51, 51, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306439349, 'comment_body': 'Refactored to Gridview.count, better for readability. Thanks', 'comment_created': datetime.datetime(2023, 8, 26, 13, 38, 33, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306444012, 'comment_body': 'Create a new ToolButton widget, moved toast to provider,', 'comment_created': datetime.datetime(2023, 8, 26, 14, 20, 11, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306452814, 'comment_body': 'Refactored the function, it should be more readable now', 'comment_created': datetime.datetime(2023, 8, 26, 14, 42, 7, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306478274, 'comment_body': 'I tested it on API 34,33,28 and 24 and all of  them are working fine.', 'comment_created': datetime.datetime(2023, 8, 26, 16, 2, 23, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}]","[{'commit_sha': '609fe813e831ef330fe5d453ff30bdd93fcd83ed', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fddbb2a5c21c839d756eff06365f77a95ffd2b51', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1454870427,PAINTROID-634 : Add Eraser tool,"[PAINTROID-634](https://jira.catrob.at/browse/PAINTROID-634)
+[PAINTROID-533](https://jira.catrob.at/browse/PAINTROID-533)
+[PAINTROID-646](https://jira.catrob.at/browse/PAINTROID-646)
+
+## New Features and Enhancements
+
+- **Eraser Tool**: Added an eraser tool that functions similarly to the brush tool but utilizes a different BlendMode.
+- **Constant Identifier Names Analysis**: Added a new analysis option [constant_identifier_names](https://dart.dev/tools/linter-rules/constant_identifier_names) which is set to `false` to stay consistent with Paintroid-Kotlin.
+- **Clipboard Icon**: Copied the clipboard icon asset from Paintroid-Kotlin.
+- **BlendMode and StrokeJoin Serialization**: Expanded the paint serializer to include support for BlendMode and strokeJoin properties.
+- **ToolType Differentiation**: Assigned a ToolType to each tool, enhancing tool management and identification.
+- **ModalBottomSheet for Tools**: Implemented a ModalBottomSheet that displays a list of available tools.
+- **Navigation Enhancement**: Added the BottomNavBar functionality to highlight the active tool.
+- **Toast Package Update**: Replaced the toast package with [this package](https://pub.dev/packages/toast) for better toast notifications.
+- **Integration Test Improvements**: Changed integration testing through the addition of utility functions and the reorganization of existing tests.
+
+## Refactorings and Bug Fixes
+
+- **Component Renaming**: Renamed the component ""BottomControlNavigationBar"" to ""BottomNavBar"" for consistency and clarity.
+- **Background and PaintingLayer Refactoring**: Refactored the BackgroundLayer and PaintingLayer widgets for improved readability.
+- **PaintSerializer Optimization**: Optimized the PaintSerializer class.
+- **Image Saving Improvement**: Reworked the image-saving mechanism to fix JPG transparency issues that arose when using the eraser tool.
+- **Bug Fix**: Addressed a bug where strokes were saved with incorrect stroke widths in projects/images.
+- **API Permission Handling**: Fixed permission issues for API versions greater than 28.
+
+## Checklist
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [x] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,31,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/31,https://github.com/Catrobat/Paintroid-Flutter/pull/31,closed,1072,238,49,2,0,12,0,0,[],2023-07-29 19:14:38+00:00,2023-08-28 16:43:54+00:00,2582956.0,"29 days, 21:29:16","[{'comment_id': 1304573749, 'comment_body': 'I think the names are difficult to read, can we name them more clearly?', 'comment_created': datetime.datetime(2023, 8, 24, 16, 12, 11, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304578058, 'comment_body': 'Did you test it with older api versions?\r\nI think this was related to scoped storage which was introduced with android 29 I think', 'comment_created': datetime.datetime(2023, 8, 24, 16, 16, 11, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304586511, 'comment_body': 'The ThemeData should go to the styles file', 'comment_created': datetime.datetime(2023, 8, 24, 16, 24, 10, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304590593, 'comment_body': 'Did you try this?\r\nhttps://api.flutter.dev/flutter/widgets/GridView/GridView.count.html', 'comment_created': datetime.datetime(2023, 8, 24, 16, 27, 56, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304597968, 'comment_body': 'We are mixing too much UI with logic in here.\r\nCould we make this widget 100% generic and hand over the function as a callback and remove the tooldata?\r\n\r\nIf you do not like that solution, renaming it to something more specific is fine for me too.\r\nBut now it seems like a very generic widget, but it changes the tool\r\n\r\nThe 100% perfect solution would be a very generic IconButtonWithLabel that gets icon, label & callback\r\nAnd then a ToolButton which uses the IconButtonWithLabel and implements the tool switching', 'comment_created': datetime.datetime(2023, 8, 24, 16, 35, 5, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1304601885, 'comment_body': 'I would write the whole name like you did with the others\r\nbackgroundPicture\r\nbackgroundImage\r\nAlso those 2 are synonyms, maybe specify what makes them different in the name', 'comment_created': datetime.datetime(2023, 8, 24, 16, 38, 18, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1306432929, 'comment_body': 'Added their respective enum names before each enum element. Should also cause fewer problems in the future when we add more enums.', 'comment_created': datetime.datetime(2023, 8, 26, 12, 42, 11, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306433803, 'comment_body': 'Added WidgetThemes abstract class, alse renamed ThemeText to TextThemes.', 'comment_created': datetime.datetime(2023, 8, 26, 12, 51, 51, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306439349, 'comment_body': 'Refactored to Gridview.count, better for readability. Thanks', 'comment_created': datetime.datetime(2023, 8, 26, 13, 38, 33, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306444012, 'comment_body': 'Create a new ToolButton widget, moved toast to provider,', 'comment_created': datetime.datetime(2023, 8, 26, 14, 20, 11, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306452814, 'comment_body': 'Refactored the function, it should be more readable now', 'comment_created': datetime.datetime(2023, 8, 26, 14, 42, 7, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}, {'comment_id': 1306478274, 'comment_body': 'I tested it on API 34,33,28 and 24 and all of  them are working fine.', 'comment_created': datetime.datetime(2023, 8, 26, 16, 2, 23, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}]","[{'commit_sha': '609fe813e831ef330fe5d453ff30bdd93fcd83ed', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fddbb2a5c21c839d756eff06365f77a95ffd2b51', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1244280994,Paintroid 514 : Zoom level and position should be reset when creating a new image,"[PAINTROID-553](https://jira.catrob.at/browse/PAINTROID-553)
+
+Added a callback to CanvasStateNotifier and used it to call _resetCanvasScale in newImage.
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [ ] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+
+[PAINTROID-553]: https://catrobat.atlassian.net/browse/PAINTROID-553?atlOrigin=eyJpIjoiNWRkNTljNzYxNjVmNDY3MDlhMDU5Y2ZhYzA5YTRkZjUiLCJwIjoiZ2l0aHViLWNvbS1KU1cifQ",False,21,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/21,https://github.com/Catrobat/Paintroid-Flutter/pull/21,closed,9,1,3,1,0,2,0,0,[],2023-02-16 20:44:43+00:00,2024-04-23 14:28:36+00:00,37302233.0,"431 days, 17:43:53","[{'comment_id': 1156212888, 'comment_body': 'Because they are named the same, I ould think it should be \r\nresetScale: state.resetScale\r\nWhy is one of them negated?', 'comment_created': datetime.datetime(2023, 4, 3, 16, 49, 47, tzinfo=datetime.timezone.utc), 'commenter': 'juliajulie95', 'type': 'User'}, {'comment_id': 1156241179, 'comment_body': 'This is kinda a workaround solution. The changes to resetScale are listened to in build method of DrawinngCanvasState to call the private method ```_resetCanvasScale```. And since ```clearBackgroundImageAndResetDimensions``` wants to reset the canvas it should also reset the scale. The boolean variable acts as a toggle.', 'comment_created': datetime.datetime(2023, 4, 3, 17, 18, 55, tzinfo=datetime.timezone.utc), 'commenter': 'bakicelebi', 'type': 'User'}]","[{'commit_sha': 'f2ce748ae2047526ba24ed7c955374aba3b32bf0', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+1483022898,PAINTROID-654 : Remove tests from exluded folders and fix issues,"[PAINTROID-654](https://jira.catrob.at/browse/PAINTROID-654)
+
+- Removed tests from excluded folders in analysis options
+- Added riverpod as dev dependency to remove warning
+- Fixed analysis issues in various tests
+- Fixed the deprecated warning in CI
+
+- [x] Include the name of the Jira ticket in the PR’s title
+- [x] Include a summary of the changes plus the relevant context
+- [x] Choose the proper base branch (*develop*)
+- [x] Confirm that the changes follow the project’s coding guidelines
+- [x] Verify that the changes generate no compiler or linter warnings
+- [x] Perform a self-review of the changes
+- [x] Verify to commit no other files than the intentionally changed ones
+- [x] Include reasonable and readable tests verifying the added or changed behavior
+- [x] Confirm that new and existing unit tests pass locally
+- [x] Check that the commits’ message style matches the [project’s guideline](https://github.com/Catrobat/Catroid/wiki/Commit-Message-Guidelines)
+- [x] Stick to the project’s gitflow workflow
+- [x] Verify that your changes do not have any conflicts with the base branch
+- [x] After the PR, verify that all CI checks have passed
+- [ ] Post a message in the *#paintroid* [Slack channel](https://catrobat.slack.com) and ask for a code reviewer
+",True,33,https://api.github.com/repos/Catrobat/Paintroid-Flutter/pulls/33,https://github.com/Catrobat/Paintroid-Flutter/pull/33,closed,62,38,10,1,1,1,0,0,[],2023-08-21 14:42:09+00:00,2023-12-27 08:55:58+00:00,11038429.0,"127 days, 18:13:49","[{'comment_id': 1355456356, 'comment_body': 'Is this needed?', 'comment_created': datetime.datetime(2023, 10, 11, 17, 40, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Lenkomotive', 'type': 'User'}]","[{'commit_sha': 'f15851203d0903b915210a1b5abce5ee195b1837', 'committer_username': 'bakicelebi', 'committer_name': 'Baki Celebi', 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 15, 23, 27, 53, tzinfo=datetime.timezone.utc)}]",Baki Celebi,97812509,,User,,3,,6,5
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+505821622,Paintroid-Flutter,Catrobat/Paintroid-Flutter,Dart,54,37,14,12,162,12,6,12,"[{'id': 1988345745, 'number': 94, 'closed': datetime.datetime(2024, 8, 6, 14, 40, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 7, 25, 21, 7, 26, tzinfo=datetime.timezone.utc), 'time_taken': 1013558.0, 'time_delta': '11 days, 17:32:38', 'additions': 2462, 'deletions': 136, 'state': 'closed'}, {'id': 1958674913, 'number': 93, 'closed': datetime.datetime(2024, 7, 25, 20, 23, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 7, 8, 21, 11, 53, tzinfo=datetime.timezone.utc), 'time_taken': 1465914.0, 'time_delta': '16 days, 23:11:54', 'additions': 269, 'deletions': 1, 'state': 'closed'}, {'id': 1946093534, 'number': 87, 'closed': datetime.datetime(2024, 7, 1, 11, 1, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 6, 30, 20, 53, 18, tzinfo=datetime.timezone.utc), 'time_taken': 50916.0, 'time_delta': '14:08:36', 'additions': 303, 'deletions': 89, 'state': 'closed'}, {'id': 1934293555, 'number': 83, 'closed': datetime.datetime(2024, 6, 29, 10, 49, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 6, 23, 18, 54, 56, tzinfo=datetime.timezone.utc), 'time_taken': 489259.0, 'time_delta': '5 days, 15:54:19', 'additions': 93, 'deletions': 54, 'state': 'closed'}, {'id': 1927564678, 'number': 82, 'closed': datetime.datetime(2024, 6, 23, 20, 2, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 6, 19, 2, 2, 43, tzinfo=datetime.timezone.utc), 'time_taken': 410390.0, 'time_delta': '4 days, 17:59:50', 'additions': 292, 'deletions': 481, 'state': 'closed'}, {'id': 1908136146, 'number': 79, 'closed': datetime.datetime(2024, 6, 18, 18, 58, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 6, 6, 22, 8, 33, tzinfo=datetime.timezone.utc), 'time_taken': 1025376.0, 'time_delta': '11 days, 20:49:36', 'additions': 257, 'deletions': 187, 'state': 'closed'}, {'id': 1864483350, 'number': 73, 'closed': datetime.datetime(2024, 5, 26, 9, 5, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 5, 10, 20, 10, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1342489.0, 'time_delta': '15 days, 12:54:49', 'additions': 3, 'deletions': 19, 'state': 'closed'}, {'id': 1853579547, 'number': 70, 'closed': datetime.datetime(2024, 5, 7, 15, 0, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 5, 3, 14, 47, 7, tzinfo=datetime.timezone.utc), 'time_taken': 346398.0, 'time_delta': '4 days, 0:13:18', 'additions': 1546, 'deletions': 2339, 'state': 'closed'}, {'id': 1752941336, 'number': 52, 'closed': datetime.datetime(2024, 3, 20, 13, 57, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 3, 2, 13, 4, 26, tzinfo=datetime.timezone.utc), 'time_taken': 1558406.0, 'time_delta': '18 days, 0:53:26', 'additions': 158, 'deletions': 58, 'state': 'closed'}, {'id': 1752171183, 'number': 51, 'closed': datetime.datetime(2024, 3, 9, 11, 47, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 3, 1, 18, 5, tzinfo=datetime.timezone.utc), 'time_taken': 668545.0, 'time_delta': '7 days, 17:42:25', 'additions': 536, 'deletions': 16, 'state': 'closed'}, {'id': 1508783142, 'number': 34, 'closed': datetime.datetime(2023, 12, 28, 16, 47, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 9, 10, 26, 38, tzinfo=datetime.timezone.utc), 'time_taken': 9526827.0, 'time_delta': '110 days, 6:20:27', 'additions': 255, 'deletions': 13, 'state': 'closed'}, {'id': 1483022898, 'number': 33, 'closed': datetime.datetime(2023, 12, 27, 8, 55, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 21, 14, 42, 9, tzinfo=datetime.timezone.utc), 'time_taken': 11038429.0, 'time_delta': '127 days, 18:13:49', 'additions': 62, 'deletions': 38, 'state': 'closed'}, {'id': 1482880920, 'number': 32, 'closed': datetime.datetime(2023, 8, 24, 16, 4, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 21, 13, 25, 52, tzinfo=datetime.timezone.utc), 'time_taken': 268705.0, 'time_delta': '3 days, 2:38:25', 'additions': 9, 'deletions': 1, 'state': 'closed'}, {'id': 1454870427, 'number': 31, 'closed': datetime.datetime(2023, 8, 28, 16, 43, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 29, 19, 14, 38, tzinfo=datetime.timezone.utc), 'time_taken': 2582956.0, 'time_delta': '29 days, 21:29:16', 'additions': 1072, 'deletions': 238, 'state': 'closed'}, {'id': 1444985926, 'number': 30, 'closed': datetime.datetime(2023, 8, 3, 18, 13, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 21, 20, 44, 51, tzinfo=datetime.timezone.utc), 'time_taken': 1114138.0, 'time_delta': '12 days, 21:28:58', 'additions': 442, 'deletions': 314, 'state': 'closed'}, {'id': 1437121365, 'number': 29, 'closed': datetime.datetime(2023, 7, 21, 14, 17, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 17, 11, 23, 11, tzinfo=datetime.timezone.utc), 'time_taken': 356048.0, 'time_delta': '4 days, 2:54:08', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1435980320, 'number': 28, 'closed': datetime.datetime(2023, 7, 21, 13, 2, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 15, 16, 48, 44, tzinfo=datetime.timezone.utc), 'time_taken': 504805.0, 'time_delta': '5 days, 20:13:25', 'additions': 4, 'deletions': 1, 'state': 'closed'}, {'id': 1419988485, 'number': 27, 'closed': datetime.datetime(2023, 7, 21, 14, 10, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 17, 57, 36, tzinfo=datetime.timezone.utc), 'time_taken': 1455185.0, 'time_delta': '16 days, 20:13:05', 'additions': 337, 'deletions': 22, 'state': 'closed'}, {'id': 1409864971, 'number': 26, 'closed': datetime.datetime(2023, 7, 2, 8, 7, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 27, 13, 12, 32, tzinfo=datetime.timezone.utc), 'time_taken': 413716.0, 'time_delta': '4 days, 18:55:16', 'additions': 1191, 'deletions': 983, 'state': 'closed'}, {'id': 1405193285, 'number': 25, 'closed': datetime.datetime(2023, 6, 23, 15, 6, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 23, 14, 55, 57, tzinfo=datetime.timezone.utc), 'time_taken': 604.0, 'time_delta': '0:10:04', 'additions': 874, 'deletions': 717, 'state': 'closed'}, {'id': 1361441547, 'number': 24, 'closed': datetime.datetime(2023, 6, 1, 15, 52, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 23, 13, 35, 43, tzinfo=datetime.timezone.utc), 'time_taken': 785832.0, 'time_delta': '9 days, 2:17:12', 'additions': 19, 'deletions': 0, 'state': 'closed'}, {'id': 1290162351, 'number': 22, 'closed': datetime.datetime(2023, 7, 21, 14, 33, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 25, 22, 9, 35, tzinfo=datetime.timezone.utc), 'time_taken': 10167834.0, 'time_delta': '117 days, 16:23:54', 'additions': 216, 'deletions': 16, 'state': 'closed'}, {'id': 1244280994, 'number': 21, 'closed': datetime.datetime(2024, 4, 23, 14, 28, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 16, 20, 44, 43, tzinfo=datetime.timezone.utc), 'time_taken': 37302233.0, 'time_delta': '431 days, 17:43:53', 'additions': 9, 'deletions': 1, 'state': 'closed'}]"

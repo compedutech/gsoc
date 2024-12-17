@@ -1,0 +1,51 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1491049031,Integration of VisualCircuit and VC+,"## Dockerized Execution of Robotics Applications in RADI
+
+This guide outlines the steps to set up and run a Dockerized execution of robotics applications made from VisualCircuit within the RADI (Robotics Application Development Interface).
+
+
+### Step 1: Set Up VisualCircuit
+1. Set up the normal VisualCircuit environment.
+
+### Step 2: Start Frontend
+1. Navigate to the frontend directory:```cd frontend```
+2. Start the frontend server:```npm start```
+
+
+### Step 3: Start Backend
+1. Navigate to the backend directory:```cd backend```
+2. Start the backend server:```python3 manage.py runserver 8080```
+
+
+### Step 4: Activate PythonWebIDE Environment
+1. Navigate to the PythonWebIDE directory:```cd PythonWebIDE```
+2. Open a terminal and activate the virtual environment:```source env/bin/activate```
+
+
+### Step 5: Start React Frontend
+1. Navigate to the react_frontend directory:```cd react_frontend```
+2. Run the development server:```npm run dev```
+
+
+### Step 6: Start Another Backend Instance
+1. Open another terminal.
+2. Navigate to the backend directory:```cd backend```
+3. Start another instance of the backend server:```python3 manage.py runserver```
+
+### Step 7: Run Docker image RADI
+``sudo docker run --rm -it --name radi -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 1108:1108 -p 7163:7163 jderobot/robotics-academy:3.4.5 --no-server``
+
+### Verification
+After following these steps, the VisualCircuit should be running in a Dockerized environment within the RADI.
+
+[Video Proof](https://youtu.be/uWFZPpEpm0I?si=HMaXlxVxH06h601M).
+
+### Fixes
+- Fixes issue #220.
+
+
+
+",True,222,https://api.github.com/repos/JdeRobot/VisualCircuit/pulls/222,https://github.com/JdeRobot/VisualCircuit/pull/222,closed,763077,12807,2278,4,1,0,0,0,[],2023-08-27 19:14:19+00:00,2023-08-31 16:14:34+00:00,334815.0,"3 days, 21:00:15",[],"[{'commit_sha': '2524142f5f27759946a1416487a7340b3d99d137', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '88207fa704d6a7f6baa50cafb30ededfa31dd0cc', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '78000b98bae7d4028730c0f96fadaa7b6ea4dc27', 'committer_username': 'toshan-luktuke', 'committer_name': 'Toshan Luktuke', 'committer_email': None, 'commit_date': datetime.datetime(2017, 8, 17, 12, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '382b1637efc76ffe2b41c565b4cbb2e5927aa690', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}]",,105278190,,User,,34,,14,26
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+122512069,VisualCircuit,JdeRobot/VisualCircuit,JavaScript,14,12,9,10,369,19,25,7,"[{'id': 1587325149, 'number': 259, 'closed': None, 'created': datetime.datetime(2023, 11, 5, 7, 15, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 589, 'deletions': 500, 'state': 'open'}, {'id': 1491049031, 'number': 222, 'closed': datetime.datetime(2023, 8, 31, 16, 14, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 27, 19, 14, 19, tzinfo=datetime.timezone.utc), 'time_taken': 334815.0, 'time_delta': '3 days, 21:00:15', 'additions': 763077, 'deletions': 12807, 'state': 'closed'}]"

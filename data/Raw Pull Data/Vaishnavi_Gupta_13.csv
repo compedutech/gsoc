@@ -1,0 +1,595 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+950885873,[Backend] Add Issue and Comment models,"# Description
+
+Create two new database models - Issue and Comment, relevant to issue tracking system.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,637,https://api.github.com/repos/scorelab/LabelLab/pulls/637,https://github.com/scorelab/LabelLab/pull/637,closed,128,1,5,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-05-30 11:41:41+00:00,2022-05-30 12:22:41+00:00,2460.0,0:41:00,[],"[{'commit_sha': 'af29e253d2d832fa1970ac1d9c53630feb4be6cb', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+959266576,[Backend] Added 'Create issue' endpoint,"# Description
+
+Implemented the API endpoint for creating issue.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu20.04
+- Postman
+
+https://user-images.githubusercontent.com/76858666/172196163-1a38b694-13f7-49c5-a258-fc3a1409f8f7.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,639,https://api.github.com/repos/scorelab/LabelLab/pulls/639,https://github.com/scorelab/LabelLab/pull/639,closed,155,19,5,3,1,4,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-06 15:46:57+00:00,2022-06-07 13:41:27+00:00,78870.0,21:54:30,"[{'comment_id': 890374310, 'comment_body': ""Let's not have print statements in the new code. We have them in the code written earlier but let's avoid them now."", 'comment_created': datetime.datetime(2022, 6, 6, 17, 30, 56, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 890375481, 'comment_body': 'Instead of a generic message, we can say which key is missing by catching the `KeyError`.\r\nYou can check out the `CreateProject` method.\r\n', 'comment_created': datetime.datetime(2022, 6, 6, 17, 32, 30, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 890380987, 'comment_body': 'We\'re writing a lot of repeated code here for the optional fields. Let\'s try to minimize it. We can create a util for that. One such approach can be -\r\n\r\n1. We can create a list of dictionaries in the helpers file. Each dict would contain info about an optional attribute.\r\n\r\n```\r\nissue_attribute_validator = [\r\n    {\r\n        \'key\': \'priority\',\r\n        \'enum\': allowed_priorities,\r\n    },\r\n    {\r\n        \'key\': \'entity_id\',\r\n    }\r\n]\r\n```\r\n\r\n`key` refers to name of the attribute. `enum` can be an optional key in the dict referring to what values does that field allow.\r\n\r\n2. And then inside the controller, we can loop over the list and do the check there itself.\r\n\r\n```\r\nfor attribute in issue_attribute_validator:\r\n    try:\r\n        attribute_value = post_data[attribute[\'key\']]\r\n\r\n        # Check if enum is there\r\n        # If yes, validate against it\r\n        if \'enum\' in attribute and attribute_value not in attribute[\'enum\']:\r\n            response = {\r\n                \'success\': False,\r\n                \'msg\': f\'{attribute[""key""]} has an invalid value\'\r\n            }\r\n            return make_response(jsonify(response)), 400\r\n\r\n        # Set attribute in issue object\r\n        setattr(issue, attribute[\'key\'], attribute_value)\r\n    except:\r\n        # If the field is not present then just move on\r\n        continue\r\n```', 'comment_created': datetime.datetime(2022, 6, 6, 17, 39, 40, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 890381527, 'comment_body': 'This is just something rough I wrote for your reference. Do let me know if you need my help with this.', 'comment_created': datetime.datetime(2022, 6, 6, 17, 40, 21, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': '48e5398b7b5cd77d2a20b26c6855fe3995aac4ad', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '134802696b394712f3d7bd6a4c9b2cd84dd8e0d0', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de875d92521798d71f2d8a5e9821e653a334d1b0', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+962989256,"[Backend] Implement Single Issues Endpoints (GET, PUT, DELETE)","# Description
+
+Create following endpoints for Issue :
+1)  Get a particular issue  ( GET -  ```/api/v1/issue/issue_info/<int:project_id>/<int:issue_id>```)
+2) Update an issue  ( PUT -  ```/api/v1/issue/issue_info/<int:project_id>/<int:issue_id>```)
+3) Delete an issue  ( DELETE -  ```/api/v1/issue/issue_info/<int:project_id>/<int:issue_id>```)
+4) Assign an issue ( PUT -  ```/api/v1/issue/assign/<int:project_id>/<int:issue_id>```)
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu 20.04
+- Postman
+
+https://user-images.githubusercontent.com/76858666/172876762-f717698d-3b9b-4edf-81b3-1c45bbbff88f.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,641,https://api.github.com/repos/scorelab/LabelLab/pulls/641,https://github.com/scorelab/LabelLab/pull/641,closed,195,12,4,3,0,6,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-09 14:52:03+00:00,2022-06-09 17:20:50+00:00,8927.0,2:28:47,"[{'comment_id': 893714730, 'comment_body': 'Add the check here also. To see if the issue is present or not.', 'comment_created': datetime.datetime(2022, 6, 9, 16, 19, 53, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 893717194, 'comment_body': ""We're doing this check to see if the issue exists or not at 4 different places.\r\nMaybe we can create a common decorator for it then?\r\nIf the issue with this id is not present, the decorator will throw the 404 response, else it will move onto the route method."", 'comment_created': datetime.datetime(2022, 6, 9, 16, 22, 33, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 893718934, 'comment_body': 'Then we can reuse the middleware at other places also. Listing issues, comment endpoints etc', 'comment_created': datetime.datetime(2022, 6, 9, 16, 24, 19, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 893721720, 'comment_body': ""You can refer to this section in the `project_member_access.py` file\r\n\r\n```\r\ndef project_member_only(fun):\r\n  @wraps(fun)\r\n  def wrap(*args, **kwargs):\r\n\r\n    # Get current user\r\n    user_id = get_jwt_identity()\r\n\r\n    # Get project and admin_id\r\n    project_id = kwargs.get('project_id')\r\n    project = find_by_project_id(project_id)\r\n\r\n    if not project:\r\n      response = {\r\n        'success': False,\r\n        'msg': 'Project does not exist',\r\n      }\r\n      return make_response(jsonify(response)), 404\r\n```"", 'comment_created': datetime.datetime(2022, 6, 9, 16, 27, 16, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 893768817, 'comment_body': 'Added the decorator. I will try to prevent code repetition in future. ', 'comment_created': datetime.datetime(2022, 6, 9, 17, 17, 44, tzinfo=datetime.timezone.utc), 'commenter': 'vaishnavi-gupta18', 'type': 'User'}, {'comment_id': 893772018, 'comment_body': 'No worries. Thanks for the quick changes! 🎉 ', 'comment_created': datetime.datetime(2022, 6, 9, 17, 20, 11, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': 'c7c6b97731ac50d4297fdf699a75d5931e12b2da', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c5ea0f78232dbd4c42b7035356bcfc97af31ad37', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '932d1886819808b5baffaaa23094d45bad78e997', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+971261926,"Implement Endpoints for Single Comment (GET, PUT, DELETE)","# Description
+
+#### 1) Implement following endpoints for Single Comment :
+- Get a particular comment ( GET - `/api/v1/comment/comment_info/<int:issue_id>/<int:comment_id>`)
+- Update comment ( PUT - `/api/v1/comment/comment_info/<int:issue_id>/<int:comment_id>`)
+- Delete comment( DELETE - `/api/v1/comment/comment_info/<int:issue_id>/<int:comment_id>`)
+
+Also made a minor change in create comment endpoint to also include thumbnail of the user (other than default) if user has uploaded one.
+
+#### 2) Modified logs decorator to create logs for above endpoints. ( Though, i  think we do not need logs for updation/deletion of comments)
+
+#### 3) Modify issue details route (GET) to also fetch the list of comments. Also modified projects serializer to include issues.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu20.04
+- Postman
+
+https://user-images.githubusercontent.com/76858666/174435291-c9fa8111-add9-4110-8f2f-7bf2f0c238d1.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,647,https://api.github.com/repos/scorelab/LabelLab/pulls/647,https://github.com/scorelab/LabelLab/pull/647,closed,136,30,8,3,0,2,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-18 11:20:52+00:00,2022-06-19 10:33:46+00:00,83574.0,23:12:54,"[{'comment_id': 901010659, 'comment_body': ""I did say in the last meeting that we don't need logs for these 3 endpoints. You can remove them"", 'comment_created': datetime.datetime(2022, 6, 18, 20, 1, 10, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 901010762, 'comment_body': ""Also, can you make one small change here. The message should use issue title instead of project name.\r\nCheck #646 . Just make the same change. Then I won't need to merge that PR too."", 'comment_created': datetime.datetime(2022, 6, 18, 20, 2, 33, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': 'd65589404b590abb9af1b81fc62d94efbd552a29', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21b08e1053411ee1daf59e2324251713b82a7a90', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '81b005e4d3bc5d6c9e870644213d884db473474f', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+977599939,Add pagination in issues,"# Description
+
+Added pagination in fetching issues.
+URL - `http://localhost:5000/api/v1/issue/get/1?page=<page number>&per_page=<items per page>`
+Example - `http://localhost:5000/api/v1/issue/get/1?page=2&per_page=5`
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu20.04
+- Postman
+
+
+https://user-images.githubusercontent.com/76858666/175392193-b42092db-a3ca-46e7-b5e3-31fc0d39e8e2.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,650,https://api.github.com/repos/scorelab/LabelLab/pulls/650,https://github.com/scorelab/LabelLab/pull/650,closed,43,16,3,2,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-23 20:22:13+00:00,2022-06-24 13:37:56+00:00,62143.0,17:15:43,[],"[{'commit_sha': '117804e182e44d501621ee2c8e895a699c78416f', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '30bca63f520d7732a7cf35bcee401161069e5feb', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+978583834,Add websocket for comments,"# Description
+
+Added websocket for sending and receiving comments.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+
+https://user-images.githubusercontent.com/76858666/175617271-9b5225b2-bc43-4c99-80bd-10331181a4f6.mp4
+
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,651,https://api.github.com/repos/scorelab/LabelLab/pulls/651,https://github.com/scorelab/LabelLab/pull/651,closed,25,1,1,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-24 18:02:47+00:00,2022-06-25 02:49:54+00:00,31627.0,8:47:07,[],"[{'commit_sha': '03929926cff0e0e690089623125fdaaa1b1b8087', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+982448194,Implement the issues listing screen,"# Description
+
+1) Implemented issues listing screen within project with CRUD and filtering operations. (FRONTEND)
+2) Added a controller and route for getting data of all the users. 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu20.08
+
+![image](https://user-images.githubusercontent.com/76858666/176423355-3bed53af-682f-44b0-8e33-e3b0882406bf.png)
+
+
+https://user-images.githubusercontent.com/76858666/176423484-5c5cb352-b8ae-4c00-9e71-5db9a230292c.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,654,https://api.github.com/repos/scorelab/LabelLab/pulls/654,https://github.com/scorelab/LabelLab/pull/654,closed,1450,42,21,2,0,0,2,0,"[{'name': 'GSoC 2022'}, {'name': 'frontend'}]",2022-06-29 11:15:19+00:00,2022-06-29 16:15:11+00:00,17992.0,4:59:52,[],"[{'commit_sha': '47adce6627c478c53c427b726bdaae30d4c65f94', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '42af450d369b10cdcb8e5b2011435a23c45de874', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+985801721,Implement issue detail screen,"# Description
+
+Implemented issue details screen with comment section.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu 20.04
+
+https://user-images.githubusercontent.com/76858666/177054822-0a54fc27-d3ed-4424-9639-834700e111fd.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,656,https://api.github.com/repos/scorelab/LabelLab/pulls/656,https://github.com/scorelab/LabelLab/pull/656,closed,992,176,11,1,0,0,2,0,"[{'name': 'GSoC 2022'}, {'name': 'frontend'}]",2022-07-03 19:39:50+00:00,2022-07-04 18:01:43+00:00,80513.0,22:21:53,[],"[{'commit_sha': '7c1191d7bc657169772271142af7de56af3fd25a', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+964500196,Modify logging middleware to handle issue controller endpoints,"# Description
+
+Modified logging middleware to add logging functionality for following issue endpoints.
+1) Create issue
+2) Update issue
+3) Delete issue
+4) Assign Issue
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu 20.04
+- Postman
+
+
+https://user-images.githubusercontent.com/76858666/173142792-4e236a6a-8bee-4fc9-b4f0-7be188d0d9f1.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,643,https://api.github.com/repos/scorelab/LabelLab/pulls/643,https://github.com/scorelab/LabelLab/pull/643,closed,35,2,3,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-10 20:10:15+00:00,2022-06-11 15:06:47+00:00,68192.0,18:56:32,[],"[{'commit_sha': 'b3ba8b6326bea9ade9ba87c918a89663f03bea24', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+991262602,Modify message model to include tagged entity,"# Description
+
+Modified message model to include two new fields **entity_type** and **entity_id**. This unables an issue or a log to be tagged within a message by a user.
+Added the issue and log tagging feature in team chat in frontend
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+
+**Test Configuration**:
+
+- Ubuntu20.08
+- Pie Socket IO client/tester
+
+https://user-images.githubusercontent.com/76858666/177933250-773baa40-9a20-4d65-ad41-b9d30ec87684.mp4
+
+
+https://user-images.githubusercontent.com/76858666/178028945-d52535f1-512a-435b-942a-29dd320001e0.mp4
+
+
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,657,https://api.github.com/repos/scorelab/LabelLab/pulls/657,https://github.com/scorelab/LabelLab/pull/657,closed,216,44,9,2,4,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-07-08 06:48:02+00:00,2022-07-08 15:56:31+00:00,32909.0,9:08:29,[],"[{'commit_sha': '0d71a75ec268e885ed5723909b0d46ad717d85ce', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '716b4aec3a3a500538cc83f6c00ded3e7f85b6d2', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+995403819,Add user mentioning feature,"# Description
+
+Add feature  to allow user to mention other users in the chat system by typing '@'.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+[user mentioning.webm](https://user-images.githubusercontent.com/76858666/178727589-32752361-5090-4153-8ca8-0f0cb4f36edb.webm)
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,659,https://api.github.com/repos/scorelab/LabelLab/pulls/659,https://github.com/scorelab/LabelLab/pull/659,closed,145,51,3,1,0,0,2,0,"[{'name': 'GSoC 2022'}, {'name': 'frontend'}]",2022-07-13 11:55:49+00:00,2022-07-13 17:30:57+00:00,20108.0,5:35:08,[],"[{'commit_sha': '8b6ba40bf9a1d11ec54f566e05c484cc8ac74776', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1004717743,Add notification system backend,"# Description
+
+Added notifications for the following events -
+- Addition/Removal of project member
+- Addition/Removal of team member
+- Admin status
+- Issue is assigned to user
+- Assigned issue is updated
+- Comments on assigned issue
+- Mentioned/Tagged in chat
+
+Used flask-signals with Blinker library
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Ubuntu 20.08
+- Postman
+- Pie Socket IO CLient Tool
+
+
+https://user-images.githubusercontent.com/76858666/180320589-834659d2-2433-4e2e-b337-1f70f9520ac1.mp4
+
+![Screenshot (156)](https://user-images.githubusercontent.com/76858666/180320733-2b53975d-fc6f-41d7-b28e-520a99da8801.png)
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,662,https://api.github.com/repos/scorelab/LabelLab/pulls/662,https://github.com/scorelab/LabelLab/pull/662,closed,298,73,14,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-07-21 21:47:18+00:00,2022-07-24 10:08:48+00:00,217290.0,"2 days, 12:21:30",[],"[{'commit_sha': 'a9bc42c61eca0e25aaa97739ef22e59c7f8bdfbf', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1013112022,Add notification system in frontend,"# Description
+
+Added a notification system in frontend. Added a button in navigation bar to view all the notifications relevant to user. Also added toast notifications.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+[notification.webm](https://user-images.githubusercontent.com/76858666/182044047-22f3b152-2bc9-4866-aae3-9321a42d5158.webm)
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,663,https://api.github.com/repos/scorelab/LabelLab/pulls/663,https://github.com/scorelab/LabelLab/pull/663,closed,326,48,14,1,0,0,2,0,"[{'name': 'GSoC 2022'}, {'name': 'frontend'}]",2022-07-31 20:29:26+00:00,2022-08-02 12:48:04+00:00,145118.0,"1 day, 16:18:38",[],"[{'commit_sha': '8256ff1d252af7c4d2edffd9e1e898be4720f062', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1018750068,Add emailing system,"# Description
+
+Add an emailing system to notify user about the updates like team membership, admin status, issue assigning through emails.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+![image](https://user-images.githubusercontent.com/76858666/183097624-a58a0cff-a2d3-4fe8-b9ea-0fc72bf5627c.png)
+![image](https://user-images.githubusercontent.com/76858666/183097899-85b56c10-9a17-4b8d-91b6-03011e6fcfc7.png)
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,664,https://api.github.com/repos/scorelab/LabelLab/pulls/664,https://github.com/scorelab/LabelLab/pull/664,closed,128,2,5,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-08-05 14:27:41+00:00,2022-08-05 17:14:43+00:00,10022.0,2:47:02,[],"[{'commit_sha': 'c83c6c6010c7dab617531536d7ecbfcb850a80e6', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1025649815,Implement issue analytics and fixed Label Counts analytics,"# Description
+
+- Added issue analytics : Added three doughnut charts displaying issue proportions according to their priority, category and status
+- Fixed Label Counts analytics
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+https://user-images.githubusercontent.com/76858666/184507694-2f193ccb-a079-494c-9130-e6e94f29a2b3.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,665,https://api.github.com/repos/scorelab/LabelLab/pulls/665,https://github.com/scorelab/LabelLab/pull/665,closed,258,22,9,2,2,0,3,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}, {'name': 'frontend'}]",2022-08-13 19:16:17+00:00,2022-08-14 11:48:36+00:00,59539.0,16:32:19,[],"[{'commit_sha': '0a9c685199cce32162c1bfc17197b6137b16a927', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0195e3daabfabe1fc61a08d1fb99e617c5fefa1f', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+997412791,Add unit tests for Issue and Comment Endpoints,"# Description
+
+Add unit tests for Issue and comment API endpoints.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+![image](https://user-images.githubusercontent.com/76858666/179166208-627ce0bb-64fe-479c-9ac1-4634187af43f.png)
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,660,https://api.github.com/repos/scorelab/LabelLab/pulls/660,https://github.com/scorelab/LabelLab/pull/660,closed,413,0,2,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-07-15 06:41:11+00:00,2022-07-17 13:45:10+00:00,198239.0,"2 days, 7:03:59",[],"[{'commit_sha': '0481c95070eaa186b1317352871f2bc0f3d37d49', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1043993992,Add frontend tests in enzyme,"# Description
+
+Added frontend tests in enzyme for issue tracking system.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+![Screenshot (224)](https://user-images.githubusercontent.com/76858666/187969649-c0d5ca0f-e3a7-4310-8d33-f2fe93469146.png)
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,671,https://api.github.com/repos/scorelab/LabelLab/pulls/671,https://github.com/scorelab/LabelLab/pull/671,closed,468,72,6,2,1,0,0,0,[],2022-09-01 16:55:12+00:00,2022-09-03 13:26:26+00:00,160274.0,"1 day, 20:31:14",[],"[{'commit_sha': '941b5936290807099198c6afdd3d0f5bf4cb79ef', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc8e847d410b7d95753a89fc0a99a57ce40a7026', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1035783208,Add custom 404 and 401 error pages,"# Description
+
+Added custom 404 (Not found) and 401 (Unauthorized) error pages for urls/routes that does not exist. Earlier, going to project/issues/team and urls which did not exist, landed in a blank white page giving bad user experience.
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+[error handling.webm](https://user-images.githubusercontent.com/76858666/186482123-8f87343e-af6d-487b-a5e8-f054e5e36f52.webm)
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,668,https://api.github.com/repos/scorelab/LabelLab/pulls/668,https://github.com/scorelab/LabelLab/pull/668,closed,184,36,10,1,0,0,0,0,[],2022-08-24 17:20:21+00:00,2022-08-25 14:24:17+00:00,75836.0,21:03:56,[],"[{'commit_sha': '4f29c9ac6f60e72969680e824135aac82c721057', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+1033200925,Fix websockets ( Convert connection to polling),"# Description
+
+Updated following backend and frontend packages for websocket compatibility -
+### Backend
+- Flask-SocketIO
+- python-engineio
+- python-socketio
+
+### Frontend
+- socket.io-client
+
+## Type of change
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,667,https://api.github.com/repos/scorelab/LabelLab/pulls/667,https://github.com/scorelab/LabelLab/pull/667,closed,6,6,3,1,0,0,0,0,[],2022-08-22 18:28:32+00:00,2022-08-24 15:16:28+00:00,161276.0,"1 day, 20:47:56",[],"[{'commit_sha': 'd69ca1dc72a767d712f9250392ceef7ebe91f9f6', 'committer_username': 'vaishnavi-gupta18', 'committer_name': 'Vaishnavi Gupta', 'committer_email': None, 'commit_date': datetime.datetime(2021, 1, 2, 3, 41, 25, tzinfo=datetime.timezone.utc)}]",Vaishnavi Gupta,76858666,,User,,21,,13,19
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+167497070,LabelLab,scorelab/LabelLab,JavaScript,112,79,22,32,713,21,5,0,"[{'id': 1043993992, 'number': 671, 'closed': datetime.datetime(2022, 9, 3, 13, 26, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 1, 16, 55, 12, tzinfo=datetime.timezone.utc), 'time_taken': 160274.0, 'time_delta': '1 day, 20:31:14', 'additions': 468, 'deletions': 72, 'state': 'closed'}, {'id': 1035783208, 'number': 668, 'closed': datetime.datetime(2022, 8, 25, 14, 24, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 24, 17, 20, 21, tzinfo=datetime.timezone.utc), 'time_taken': 75836.0, 'time_delta': '21:03:56', 'additions': 184, 'deletions': 36, 'state': 'closed'}, {'id': 1033200925, 'number': 667, 'closed': datetime.datetime(2022, 8, 24, 15, 16, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 22, 18, 28, 32, tzinfo=datetime.timezone.utc), 'time_taken': 161276.0, 'time_delta': '1 day, 20:47:56', 'additions': 6, 'deletions': 6, 'state': 'closed'}, {'id': 1025649815, 'number': 665, 'closed': datetime.datetime(2022, 8, 14, 11, 48, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 13, 19, 16, 17, tzinfo=datetime.timezone.utc), 'time_taken': 59539.0, 'time_delta': '16:32:19', 'additions': 258, 'deletions': 22, 'state': 'closed'}, {'id': 1018750068, 'number': 664, 'closed': datetime.datetime(2022, 8, 5, 17, 14, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 5, 14, 27, 41, tzinfo=datetime.timezone.utc), 'time_taken': 10022.0, 'time_delta': '2:47:02', 'additions': 128, 'deletions': 2, 'state': 'closed'}, {'id': 1013112022, 'number': 663, 'closed': datetime.datetime(2022, 8, 2, 12, 48, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 31, 20, 29, 26, tzinfo=datetime.timezone.utc), 'time_taken': 145118.0, 'time_delta': '1 day, 16:18:38', 'additions': 326, 'deletions': 48, 'state': 'closed'}, {'id': 1004717743, 'number': 662, 'closed': datetime.datetime(2022, 7, 24, 10, 8, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 21, 21, 47, 18, tzinfo=datetime.timezone.utc), 'time_taken': 217290.0, 'time_delta': '2 days, 12:21:30', 'additions': 298, 'deletions': 73, 'state': 'closed'}, {'id': 997412791, 'number': 660, 'closed': datetime.datetime(2022, 7, 17, 13, 45, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 15, 6, 41, 11, tzinfo=datetime.timezone.utc), 'time_taken': 198239.0, 'time_delta': '2 days, 7:03:59', 'additions': 413, 'deletions': 0, 'state': 'closed'}, {'id': 995403819, 'number': 659, 'closed': datetime.datetime(2022, 7, 13, 17, 30, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 11, 55, 49, tzinfo=datetime.timezone.utc), 'time_taken': 20108.0, 'time_delta': '5:35:08', 'additions': 145, 'deletions': 51, 'state': 'closed'}, {'id': 991262602, 'number': 657, 'closed': datetime.datetime(2022, 7, 8, 15, 56, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 8, 6, 48, 2, tzinfo=datetime.timezone.utc), 'time_taken': 32909.0, 'time_delta': '9:08:29', 'additions': 216, 'deletions': 44, 'state': 'closed'}, {'id': 985801721, 'number': 656, 'closed': datetime.datetime(2022, 7, 4, 18, 1, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 19, 39, 50, tzinfo=datetime.timezone.utc), 'time_taken': 80513.0, 'time_delta': '22:21:53', 'additions': 992, 'deletions': 176, 'state': 'closed'}, {'id': 982448194, 'number': 654, 'closed': datetime.datetime(2022, 6, 29, 16, 15, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 29, 11, 15, 19, tzinfo=datetime.timezone.utc), 'time_taken': 17992.0, 'time_delta': '4:59:52', 'additions': 1450, 'deletions': 42, 'state': 'closed'}, {'id': 978583834, 'number': 651, 'closed': datetime.datetime(2022, 6, 25, 2, 49, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 24, 18, 2, 47, tzinfo=datetime.timezone.utc), 'time_taken': 31627.0, 'time_delta': '8:47:07', 'additions': 25, 'deletions': 1, 'state': 'closed'}, {'id': 977599939, 'number': 650, 'closed': datetime.datetime(2022, 6, 24, 13, 37, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 23, 20, 22, 13, tzinfo=datetime.timezone.utc), 'time_taken': 62143.0, 'time_delta': '17:15:43', 'additions': 43, 'deletions': 16, 'state': 'closed'}, {'id': 971261926, 'number': 647, 'closed': datetime.datetime(2022, 6, 19, 10, 33, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 18, 11, 20, 52, tzinfo=datetime.timezone.utc), 'time_taken': 83574.0, 'time_delta': '23:12:54', 'additions': 136, 'deletions': 30, 'state': 'closed'}, {'id': 964500196, 'number': 643, 'closed': datetime.datetime(2022, 6, 11, 15, 6, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 10, 20, 10, 15, tzinfo=datetime.timezone.utc), 'time_taken': 68192.0, 'time_delta': '18:56:32', 'additions': 35, 'deletions': 2, 'state': 'closed'}, {'id': 962989256, 'number': 641, 'closed': datetime.datetime(2022, 6, 9, 17, 20, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 9, 14, 52, 3, tzinfo=datetime.timezone.utc), 'time_taken': 8927.0, 'time_delta': '2:28:47', 'additions': 195, 'deletions': 12, 'state': 'closed'}, {'id': 959266576, 'number': 639, 'closed': datetime.datetime(2022, 6, 7, 13, 41, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 6, 15, 46, 57, tzinfo=datetime.timezone.utc), 'time_taken': 78870.0, 'time_delta': '21:54:30', 'additions': 155, 'deletions': 19, 'state': 'closed'}, {'id': 950885873, 'number': 637, 'closed': datetime.datetime(2022, 5, 30, 12, 22, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 30, 11, 41, 41, tzinfo=datetime.timezone.utc), 'time_taken': 2460.0, 'time_delta': '0:41:00', 'additions': 128, 'deletions': 1, 'state': 'closed'}, {'id': 898053249, 'number': 635, 'closed': datetime.datetime(2022, 4, 7, 3, 5, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 2, 12, 45, 34, tzinfo=datetime.timezone.utc), 'time_taken': 397172.0, 'time_delta': '4 days, 14:19:32', 'additions': 5, 'deletions': 0, 'state': 'closed'}]"

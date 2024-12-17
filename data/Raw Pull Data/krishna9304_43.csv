@@ -1,0 +1,524 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+885661954,fix (components/widgets/input): Warning while loading delete user page,"## Description
+
+This PR is in reference to the issue #167 . A warning in the console stated an error like below,
+```
+Warning: Select elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled select element and remove one of these props. More info: https://reactjs.org/link/controlled-components
+select
+```
+This occurs when we try to use `value` and `defaultValue` prop inside a select tag simultaneously.
+
+### Changes
+
+The solution is to remove one of the `value` or `defaultValue` prop.
+
+Note: This PR also have the fixes for [undefined value for currentGroup in local storage](https://github.com/fossology/FOSSologyUI/pull/179#issuecomment-1073585315)
+
+This PR closes #167 .",True,187,https://api.github.com/repos/fossology/FOSSologyUI/pulls/187,https://github.com/fossology/FOSSologyUI/pull/187,closed,0,3,1,1,1,2,1,0,[{'name': 'ready'}],2022-03-22 06:44:56+00:00,2022-06-13 10:58:42+00:00,7186426.0,"83 days, 4:13:46","[{'comment_id': 886534862, 'comment_body': '@krishna9304 this change can be reverted now. The PR https://github.com/fossology/fossology/pull/2209 expose the parameter from API now.', 'comment_created': datetime.datetime(2022, 6, 1, 8, 30, 52, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 891245795, 'comment_body': 'Done! @GMishx ', 'comment_created': datetime.datetime(2022, 6, 7, 13, 41, 25, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': 'c0a86e01aecf4c5c4c3f3a168ee5950519aed69d', 'committer_username': 'krishna1742', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2021, 11, 2, 10, 31, 20, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+894078005,feat(delete user): Disabled deletion of default users,"## Description
+
+This PR is in reference to the issue #195 and discussion on [preventing the deletion of default users](https://github.com/fossology/FOSSologyUI/issues/195#issuecomment-1082661293). 
+
+## Changes Done
+- Greyed out the default users in the dropdown. 
+- Added the feature to set defaults for delete user data so that the api request doesn't go invalid.
+
+## Screenshots
+
+https://user-images.githubusercontent.com/71918441/160777807-61cdcf87-a77e-47ec-af3c-91afb21efa0c.mov
+
+
+This PR closes #195.",True,196,https://api.github.com/repos/fossology/FOSSologyUI/pulls/196,https://github.com/fossology/FOSSologyUI/pull/196,closed,23,3,1,1,1,5,1,0,[{'name': 'needs test'}],2022-03-30 07:43:48+00:00,2022-05-30 10:27:20+00:00,5280212.0,"61 days, 2:43:32","[{'comment_id': 838250734, 'comment_body': 'Can we have the `disabled` property based on username rather than index? Feels to me the index depends on REST API and it can change.', 'comment_created': datetime.datetime(2022, 3, 30, 8, 18, 36, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 838274576, 'comment_body': ""Yes, my initial thought was to do the same, but I wasn't sure whether there is any possibility in future that we might change the default username then we have to do the code changes again. \r\n\r\nKeeping it index based would be an advantage, as I tested it multiple times and the default users were always at index 0 and 1 and it would never change since the users are sorted on the basis of ID, and we won't be deleting the default users causing no change in the position of default users in the users array. \r\n\r\nAny users which will be added manually will always have ID greater that IDs of each of default users, so the position will be always after index 1."", 'comment_created': datetime.datetime(2022, 3, 30, 8, 39, 19, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 838306298, 'comment_body': 'The username as hard coded in FOSSology and they will not change. I can assure you that 😃 \r\n\r\nBut depending on index means depending on user id from FOSSology which again depends on database index. During migration, it can change (has happened before).', 'comment_created': datetime.datetime(2022, 3, 30, 9, 8, 1, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 838308914, 'comment_body': ""Okay, then I'll do the required changes and add to the PR."", 'comment_created': datetime.datetime(2022, 3, 30, 9, 10, 41, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 838380574, 'comment_body': ""I did the required changes, everything's working as expected. Also, I Amended the existing commit rather than creating a new one. @GMishx "", 'comment_created': datetime.datetime(2022, 3, 30, 10, 23, 44, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': 'cae0ed10d2a71d6d7efa238f26a661f827041b8b', 'committer_username': 'krishna1742', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2021, 11, 2, 10, 31, 20, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+950204345,refactor(api): removed credentials from api request module ,"## Issue
+This error appears in the console when we navigate to the delete user page.
+<img width=""359"" alt=""Screenshot 2022-05-26 at 9 31 55 PM"" src=""https://user-images.githubusercontent.com/71918441/170857266-20b02998-f58e-4e9d-bc59-644e910403a5.png"">
+
+## Description
+
+This PR concerns with the fact that fossology API now doesn't require credentials to work and has been removed from the backend. So, the header needs to be removed from the frontend as well.
+
+### Changes
+
+~~`credentials: ""includes""`~~
+
+## How to test
+
+`yarn test`",True,209,https://api.github.com/repos/fossology/FOSSologyUI/pulls/209,https://github.com/fossology/FOSSologyUI/pull/209,closed,0,33,6,1,6,0,1,0,[{'name': 'ready'}],2022-05-29 07:33:26+00:00,2022-06-07 08:14:35+00:00,780069.0,"9 days, 0:41:09",[],"[{'commit_sha': '16f01cbac0f741c9637a380d67ee427420315d09', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+958687844,update(ui): Design related fixes (Navbar and browse page),"## Description
+
+There were design related issues in the Navbar and browse page. Below screenshots will make it more clearer.
+
+This PR contains design fixes concerned with.
+- Navbar
+- Browse page
+
+### Changes
+# NavBar
+### Before:
+The icons were in column alignment which took more space in tablet or mobile view.
+
+<img width=""549"" alt=""Screenshot 2022-06-06 at 12 03 42 AM"" src=""https://user-images.githubusercontent.com/71918441/172065319-e8c0b277-a827-4925-a30c-6c2741941aaa.png"">
+
+### After:
+
+<img width=""549"" alt=""Screenshot 2022-06-06 at 12 05 38 AM"" src=""https://user-images.githubusercontent.com/71918441/172065394-50356d60-079d-4f8d-9608-81617c21cd2a.png"">
+
+# Browse Page
+### Before:
+By default the height was `50rem` for the folders navigation which gave extra space for no reason and didn't looked good from ui perspective
+ 
+https://user-images.githubusercontent.com/71918441/172065518-f59bd0ae-1179-4735-80ed-c87fb5b3d6a7.mov
+
+### After:
+This change contains dynamic height value assignment based on number of folders and subfolders which solves this issue.
+
+https://user-images.githubusercontent.com/71918441/172065539-54858e6a-ce12-4a69-9e1d-cd70a3b4a2a0.mov
+
+
+
+
+
+",True,215,https://api.github.com/repos/fossology/FOSSologyUI/pulls/215,https://github.com/fossology/FOSSologyUI/pull/215,closed,112,71,5,1,0,2,1,0,[{'name': 'ready'}],2022-06-06 05:37:59+00:00,2022-06-13 11:01:34+00:00,624215.0,"7 days, 5:23:35","[{'comment_id': 890887293, 'comment_body': 'Please add a license header to the file.', 'comment_created': datetime.datetime(2022, 6, 7, 7, 58, 31, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 891350209, 'comment_body': 'Done!', 'comment_created': datetime.datetime(2022, 6, 7, 15, 2, 40, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': 'd07dbbd0d9267bd1b71458161f924a0e5bf5beeb', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+971419495,feature(ui): ui and formdata implementation for the `add user` page,"Signed-off-by: Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+Ui and API Implementation is done for the `Add User page`.
+
+### Screenshots and UI Demo
+
+https://user-images.githubusercontent.com/71918441/188308143-a586c90c-f093-41b9-8f0d-5476b6e228d8.mov
+
+## How to test
+
+In the UI Go to `Admin > Users > Add User`
+- Install the api from this PR https://github.com/fossology/fossology/pull/2256 in the fossology backend.
+
+This closes #224 .
+PTAL : @shaheemazmalmmd @sjha2048 @GMishx @Shruti3004 ",True,229,https://api.github.com/repos/fossology/FOSSologyUI/pulls/229,https://github.com/fossology/FOSSologyUI/pull/229,closed,426,8,11,1,3,20,1,0,[{'name': 'needs test'}],2022-06-19 06:39:12+00:00,2022-08-25 10:49:40+00:00,5803828.0,"67 days, 4:10:28","[{'comment_id': 902265928, 'comment_body': 'Please explain the reason to remove `isRequired` from the fields.', 'comment_created': datetime.datetime(2022, 6, 21, 7, 43, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 902274600, 'comment_body': 'The default values for the checkboxes can be read from `agents` object of `user`\r\n\r\n![image](https://user-images.githubusercontent.com/18077542/174746135-d92b4d2a-4b83-4e9b-b7bb-50bf3869dd6a.png)\r\n', 'comment_created': datetime.datetime(2022, 6, 21, 7, 52, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 902551038, 'comment_body': ""This is a common fields component, i.e., This is a single component which can control how and when to render different common fields. We do not need every component to be rendered every time within this component. Let's say that we only want the AccessLevel Component to be rendered so we should pass only the accessLevel flag prop that would ensure that only the access level component s rendered. Marking all the props as required will throw error in the console if even a single prop is not being passed through the component."", 'comment_created': datetime.datetime(2022, 6, 21, 12, 22, 40, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 902551357, 'comment_body': 'Got it, Will add this!', 'comment_created': datetime.datetime(2022, 6, 21, 12, 23, 3, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 902571511, 'comment_body': 'Done! @GMishx ', 'comment_created': datetime.datetime(2022, 6, 21, 12, 43, 57, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 904669448, 'comment_body': 'Ah, understood. Thanks for explaining it.', 'comment_created': datetime.datetime(2022, 6, 23, 7, 25, 2, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 904670904, 'comment_body': 'Any specific reasons to use `1 & 0` instead of `true & false`?', 'comment_created': datetime.datetime(2022, 6, 23, 7, 26, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 904673381, 'comment_body': 'Works perfectly :+1:', 'comment_created': datetime.datetime(2022, 6, 23, 7, 29, 35, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 905220814, 'comment_body': 'Yes @GMishx , because I checked the old fossology ui and it sent these fields in this format only. So, to match how the backend would accept these fields I kept the payload to be the exact same way it was there in the old ui.', 'comment_created': datetime.datetime(2022, 6, 23, 16, 12, 57, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 905225103, 'comment_body': ""But the REST API gonna accept true/false so you don't need to worry about this translation.\n\nP.s. Hence you design API first ;-) "", 'comment_created': datetime.datetime(2022, 6, 23, 16, 17, 32, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 905233013, 'comment_body': 'Yes, On it!', 'comment_created': datetime.datetime(2022, 6, 23, 16, 25, 39, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 905245709, 'comment_body': 'It can also move to constants.js?', 'comment_created': datetime.datetime(2022, 6, 23, 16, 39, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 905256868, 'comment_body': 'Changed to `true & false` instead of `0 & 1`.', 'comment_created': datetime.datetime(2022, 6, 23, 16, 51, 51, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 905257126, 'comment_body': 'Done @GMishx .', 'comment_created': datetime.datetime(2022, 6, 23, 16, 52, 9, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 908348822, 'comment_body': 'Again same thing. Can use `true/false` instead of `y/n`.', 'comment_created': datetime.datetime(2022, 6, 28, 11, 8, 7, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 908350567, 'comment_body': 'Can it be done similar to following messages?\r\nhttps://github.com/fossology/FOSSologyUI/blob/main/src/constants/messages.js', 'comment_created': datetime.datetime(2022, 6, 28, 11, 10, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 908481849, 'comment_body': 'Okay, will change it!', 'comment_created': datetime.datetime(2022, 6, 28, 13, 29, 9, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 908483850, 'comment_body': 'Yes it can be done. Will have to define constants for these values. Should I do that? @GMishx ', 'comment_created': datetime.datetime(2022, 6, 28, 13, 30, 49, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 911397843, 'comment_body': 'Done! @GMishx ', 'comment_created': datetime.datetime(2022, 6, 30, 19, 55, 8, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': '62a68ec66be455b61fc11ccb6bfe8ff9789b80f4', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+984200806,feature(ui): ui and styling for the `edit user page`,"## Description
+
+Ui and API Implementation of the `Edit user page`. 
+
+### Changes
+Added all the UI components for the Edit user page and wrote frontend logic for data collection and better UX.
+
+## Implementation demo
+https://user-images.githubusercontent.com/71918441/184528131-2ff0e6bd-ab48-43fc-99d1-6a9d7c036268.mp4
+
+## How to test
+Go to `Admin > Users > Edit User Account` to see the new UI
+1. For testing changes related to modifying user details, you need to install changes from this PR 👉 : https://github.com/fossology/fossology/pull/2262
+2. For testing the token apis, you need to install changes from this PR 👉 : https://github.com/fossology/fossology/pull/2266
+
+PTAL : @Shruti3004 @GMishx @shaheemazmalmmd @sjha2048 
+
+This closes #231 .",True,236,https://api.github.com/repos/fossology/FOSSologyUI/pulls/236,https://github.com/fossology/FOSSologyUI/pull/236,closed,1075,5,16,1,5,3,1,0,[{'name': 'ready'}],2022-06-30 19:19:17+00:00,2022-08-30 06:23:23+00:00,5223846.0,"60 days, 11:04:06",[],"[{'commit_sha': 'd58d734bb9227507b5fd4cced0531f4b1ab99097', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+1025739586,feat(UI): Upload permissions page UI and API Implementation done,"## Description
+
+Ui and API Implementation of the `Upload Permissions` page.
+
+## Tasks Done
+
+- [x] Create the static UI.
+- [x] Implement data retrieval from html forms.
+- [x] Implement the new API in PR [#2275](https://github.com/fossology/fossology/pull/2275).
+- [x] Test everything.
+
+### Demo Screenshots
+
+https://user-images.githubusercontent.com/71918441/184526229-9f333dc6-d573-4b57-9171-80d1bfe30163.mp4
+
+## How to test
+- Install the API from -> [#2275](https://github.com/fossology/fossology/pull/2275) in the fossology backend.
+- In the UI Go to `admin`>`Upload Permissions`
+- The route is available at `/admin/upload-permissions`
+
+cc: @Shruti3004 @GMishx
+This closes #247 .",False,251,https://api.github.com/repos/fossology/FOSSologyUI/pulls/251,https://github.com/fossology/FOSSologyUI/pull/251,open,540,4,11,1,8,1,2,0,"[{'name': 'needs review'}, {'name': 'needs test'}]",2022-08-14 07:07:54+00:00,,0.0,,[],"[{'commit_sha': 'f63d0b3a64fc3d91056609b882f7809958fd1cce', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+1043316046,feat(UI): added show jobs page to view all the jobs queued for the upload,"## Description
+
+This PR contains two tasks
+- [x] Creation of a new page that will show all the jobs queued for an upload and all other useful information.
+  - [x] Create the static UI using reusable components.
+  - [x] Integrate the API from https://github.com/fossology/fossology/pull/2307
+  - [x] Test Everything.
+- [x] Reading the main licenses and status parameter from the backend and showing it in the browse table for each upload.
+
+## Changes (Demo)
+https://user-images.githubusercontent.com/71918441/187855237-c84d4552-e7c8-4d59-b5fb-717c5a2d0188.mov
+
+This fixes #255 .
+PTAL @Shruti3004 @GMishx @shaheemazmalmmd .
+",False,256,https://api.github.com/repos/fossology/FOSSologyUI/pulls/256,https://github.com/fossology/FOSSologyUI/pull/256,open,210,28,8,1,1,0,3,0,"[{'name': 'needs review'}, {'name': 'needs test'}, {'name': 'has merge conflicts'}]",2022-09-01 07:20:55+00:00,,0.0,,[],"[{'commit_sha': '7d0bf1e5df91a5f650e844285595d5adf53867ba', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+1055855769,feat(ui): Added logical components to the report import page and Integrated the API,"Signed-off-by: Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+Importing an existing report to an upload functionality is now implemented. 
+
+The page is available from 2 places in the UI
+1. In the navbar, Go to `Upload > Import Report`.
+2. Directly from the browse page. Choose the upload and select `Import Report` option from the actions dropdown.
+
+Tasks completed ---
+- [x] Added logical components to the `Import Report` page
+- [x] Integrated the API from https://github.com/fossology/fossology/pull/2317
+- [x] Tested Everything.
+
+## Working demo
+
+https://user-images.githubusercontent.com/71918441/190134484-0aa5ee23-632c-4724-8467-b50fef1bba21.mp4
+
+This fixes #264 .
+cc: @GMishx @Shruti3004 @shaheemazmalmmd ",True,265,https://api.github.com/repos/fossology/FOSSologyUI/pulls/265,https://github.com/fossology/FOSSologyUI/pull/265,closed,228,59,9,1,0,0,0,0,[],2022-09-14 10:48:42+00:00,2022-09-29 07:55:37+00:00,1285615.0,"14 days, 21:06:55",[],"[{'commit_sha': 'bc8b15ace9515797e77552d16727a9bad7338b24', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+992732115,feat(API): `users/` post route for adding a new user,"Signed-off-by : Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+
+Now, there is a POST route which is available at `/api/v1/users` that will create a new user.
+
+## How to test
+
+- Use any API platform like postman.
+- Pull the changes from this PR.
+- Provide the request body as following ----
+<img width=""311"" alt=""Screenshot 2022-07-23 at 2 04 44 PM"" src=""https://user-images.githubusercontent.com/71918441/180597426-b67e3d74-c734-47b2-b5b7-0d312af4f9cd.png"">
+
+- You can expect a response like this
+<img width=""331"" alt=""Screenshot 2022-07-23 at 2 05 10 PM"" src=""https://user-images.githubusercontent.com/71918441/180597440-64be4ac8-38ab-49c7-a0b5-622456a9e0bd.png"">
+
+PTAL : @GMishx @Shruti3004 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2256""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+This closes #2255 .",True,2256,https://api.github.com/repos/fossology/fossology/pulls/2256,https://github.com/fossology/fossology/pull/2256,closed,345,165,10,1,4,21,3,0,"[{'name': 'enhancement'}, {'name': 'needs test'}, {'name': 'GSoC-22'}]",2022-07-11 06:53:19+00:00,2022-08-25 08:46:00+00:00,3894761.0,"45 days, 1:52:41","[{'comment_id': 919966114, 'comment_body': 'Please do not read new parameters in headers. It should ideally be in the body of post request.\r\nSpecially the password, which is a sensitive information.', 'comment_created': datetime.datetime(2022, 7, 13, 11, 27, 7, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919967022, 'comment_body': 'Description looks like an error message. So the response code should be in 4xx\r\n\r\nIdeally, `409`\r\n\r\nPlease check https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for more.', 'comment_created': datetime.datetime(2022, 7, 13, 11, 28, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919967679, 'comment_body': '```suggestion\r\n            description: Username for new user.\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 29, 4, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919967870, 'comment_body': '```suggestion\r\n            description: Email of the new user.\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 29, 17, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919968393, 'comment_body': 'There should be only 1 password. The front end should match the passwords and not push it to backend.', 'comment_created': datetime.datetime(2022, 7, 13, 11, 29, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919968707, 'comment_body': '```suggestion\r\n            description: Permission level of the user\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 30, 16, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919970789, 'comment_body': '```suggestion\r\n            schema:\r\n              type: integer\r\n              enum:\r\n                - 0\r\n                - 1\r\n                - 3\r\n                - 5\r\n                - 10\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 32, 52, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919971462, 'comment_body': '```suggestion\r\n            description: Default folder for the new user.\r\n            schema:\r\n              type: integer\r\n              default: 1\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 33, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919972096, 'comment_body': '```suggestion\r\n            description: Email notifications enabled for new user?\r\n            schema:\r\n              type: boolean\r\n              default: false\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 34, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 919973602, 'comment_body': '```suggestion\r\n            description: Default bucketpool for new user.\r\n            schema:\r\n              type: integer\r\n              default: 2\r\n```', 'comment_created': datetime.datetime(2022, 7, 13, 11, 36, 23, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920026585, 'comment_body': 'This function can be simplified heavily by importing the following, ""existing"" function instead of copying the content of the function:\r\n\r\nhttps://github.com/fossology/fossology/blob/011573743304b3a56a858fcbb77083c4eebcdfd1/src/www/ui/user-add.php#L44-L141', 'comment_created': datetime.datetime(2022, 7, 13, 12, 37, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920035536, 'comment_body': 'There might be some changes required in `user-add.php` to handle outside requests.\r\n\r\n1. The base class has to be changed from `FO_Plugin` to `DefaultPlugin`.\r\n2. Function `Output()` has to be changed to `function handle(Request $request)`.\r\n3. The function `Add()` will now be `public` and accept `Request` object from `handle()`.\r\n\r\nFor similar implementation, see https://github.com/fossology/fossology/blob/master/src/www/ui/user-edit.php', 'comment_created': datetime.datetime(2022, 7, 13, 12, 46, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920089040, 'comment_body': ""Technically, It's not an error. As the email already exists, an info response should be sent via status code `200`. Although, I'm not sure about it."", 'comment_created': datetime.datetime(2022, 7, 13, 13, 37, 38, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 920100588, 'comment_body': 'It is ""technically"" an error as the record was not created for a `POST` request. `POST` request is supposed to make some change in the state of the server. And if email already exists, the backend will not be accepting it in DB.\r\n\r\nResponse code `200` means ""All good""\r\n\r\n![image](https://user-images.githubusercontent.com/18077542/178749178-c6760de2-3499-4f6a-9f39-11f898344e40.png)\r\n\r\nTherefore, it should be reported appropriately to the client.\r\n\r\n![image](https://user-images.githubusercontent.com/18077542/178749725-d259fc68-b959-4180-9c6b-fa81a4bf8a12.png)\r\n', 'comment_created': datetime.datetime(2022, 7, 13, 13, 47, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 920149593, 'comment_body': ""Okay, Got it! Thanks for the info. I'll make changes accordingly."", 'comment_created': datetime.datetime(2022, 7, 13, 14, 28, 17, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 920150404, 'comment_body': 'okay, will be adding changes soon.', 'comment_created': datetime.datetime(2022, 7, 13, 14, 28, 58, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 920152106, 'comment_body': 'Changing base class to `DefaultPlugin` seems to cause error in the application.', 'comment_created': datetime.datetime(2022, 7, 13, 14, 30, 22, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 944355206, 'comment_body': 'These agents can not be chosen by the user. And thus makes no sense to put them in `user_agent_list`', 'comment_created': datetime.datetime(2022, 8, 12, 11, 0, 45, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 945115169, 'comment_body': ""@GMishx These changes were included in the patch that you sent. I assumed it to be of some significance so didn't removed it. Should I remove these agents from the list?"", 'comment_created': datetime.datetime(2022, 8, 13, 8, 53, 22, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 954053626, 'comment_body': 'I am not sure they were in my patch. But please remove them anyways.\r\n\r\nThe branch can then be merged @krishna9304 ', 'comment_created': datetime.datetime(2022, 8, 24, 17, 1, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 954067931, 'comment_body': ""Sure @GMishx , I'm removing it."", 'comment_created': datetime.datetime(2022, 8, 24, 17, 14, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': '79c6f57823f74ed38867e7f76cf911a3f17f1921', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+997893462,feat(api): Added `users/{id}` PUT route to modify user details,"Signed-off-by : Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+
+Now, there is a PUT route which is available at `/api/v1/users/{id}` that will edit the user details of a given user id. 
+
+## How to test
+
+- Use any API platform like postman.
+- Pull the changes from this PR.
+- Provide the request body as following ----
+<img width=""401"" alt=""Screenshot 2022-07-18 at 10 49 24 PM"" src=""https://user-images.githubusercontent.com/71918441/179567244-75b3ffb0-7c83-4cb8-aa7d-4acc199c1c5d.png"">
+
+
+- You can expect a response like this
+<img width=""433"" alt=""Screenshot 2022-07-15 at 9 13 36 PM"" src=""https://user-images.githubusercontent.com/71918441/179258687-3fda5df7-2303-4bb3-b54d-5f4746a69fae.png"">
+
+PTAL : @GMishx @Shruti3004 
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2256""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+This closes #2257 .
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2262""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2262,https://api.github.com/repos/fossology/fossology/pulls/2262,https://github.com/fossology/fossology/pull/2262,closed,333,34,11,1,5,14,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-07-15 15:46:29+00:00,2022-08-12 11:06:42+00:00,2402413.0,"27 days, 19:20:13","[{'comment_id': 922829918, 'comment_body': ""Please remove Siemens's copyright and add yours 😃 "", 'comment_created': datetime.datetime(2022, 7, 17, 12, 57, 54, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922830063, 'comment_body': '```suggestion\r\n    $sessionOwnerUser_pk = $restHelper->getUserId();\r\n```', 'comment_created': datetime.datetime(2022, 7, 17, 12, 58, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922830274, 'comment_body': ""Please reuse existing data models instead of creating new ones to keep consistent models.\r\n\r\nhttps://github.com/fossology/fossology/blob/5eaca363ca51c212038939acc98c24672b6392e0/src/www/ui/api/documentation/openapi.yaml#L1669\r\n\r\n```suggestion\r\n            schema:\r\n              $ref: '#/components/schemas/User'\r\n```"", 'comment_created': datetime.datetime(2022, 7, 17, 13, 0, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 923493874, 'comment_body': 'Okay!', 'comment_created': datetime.datetime(2022, 7, 18, 15, 14, 4, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 923494243, 'comment_body': 'Okay', 'comment_created': datetime.datetime(2022, 7, 18, 15, 14, 22, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 923502505, 'comment_body': 'I tried reusing that, but there are couple of new parameters that needs to be added  without which the API wont work.', 'comment_created': datetime.datetime(2022, 7, 18, 15, 22, 16, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 923621194, 'comment_body': '[Update]: I learnt how we can add more parameters to an existing schema using `allOf`. Will do the required changes.', 'comment_created': datetime.datetime(2022, 7, 18, 17, 10, 15, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 925614510, 'comment_body': ""```suggestion\r\n      $agents['Check_agent_mimetype'] = isset($userDetails['agents']['mimetype']) && $userDetails['agents']['mimetype'] ? 1 : 0;\r\n```"", 'comment_created': datetime.datetime(2022, 7, 20, 13, 34, 9, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 925623135, 'comment_body': 'Can you please add `default_group_fk` from `users` table as well to the model, preferable called as `defaultGroup`?\r\n\r\nIt denotes the default group selected by the user.\r\n\r\nDoing so, it will be available from `GET /api/v1/users[/self|{id}]` endpoint as well and while `PUT /api/v1/users/{id}`, it can be read to update the default group id for the user.', 'comment_created': datetime.datetime(2022, 7, 20, 13, 41, 58, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 926566774, 'comment_body': 'You mean, adding a parameter to the `User` model which will be called `defaultGroup` so as to allow the admin to edit the default group of the user? right?', 'comment_created': datetime.datetime(2022, 7, 21, 11, 32, 3, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 926582677, 'comment_body': 'I think this will break existing `/jobs` POST API for creating jobs, as `agents` model is also being used there. As of now, do you suggest to change this, as more code changes needs to done to adapt this literal change?', 'comment_created': datetime.datetime(2022, 7, 21, 11, 52, 17, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 926590351, 'comment_body': 'I have done the change and updated the PR. Please have a look.', 'comment_created': datetime.datetime(2022, 7, 21, 12, 1, 45, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 938541704, 'comment_body': '```suggestion\r\n/*\r\n SPDX-FileCopyrightText: © 2022 Krishna Mahato <krishhtrishh9304@gmail.com>\r\n \r\n SPDX-License-Identifier: GPL-2.0-only\r\n*/\r\n```', 'comment_created': datetime.datetime(2022, 8, 5, 7, 46, 10, tzinfo=datetime.timezone.utc), 'commenter': 'rohitpandey49', 'type': 'User'}, {'comment_id': 939500031, 'comment_body': 'sure!', 'comment_created': datetime.datetime(2022, 8, 6, 8, 5, 43, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': '74689fd875f05410fccb857dc37e8a54b2a5450f', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+998361264,feat(api): added `/users/tokens` POST Route  and `/users/tokens/{type}` GET Route,"Signed-off-by : Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+
+The following REST routes have been implemented.
+
+- There is a POST route which is available at `/api/v1/users/tokens` that will Create a new REST API Token. 
+- There is a GET route which is available at `/api/v1/users/tokens/{type}` that will Get all the REST API tokens based on the type specified (active | expired). 
+
+## How to test
+
+- Use any API platform like postman.
+- Pull the changes from this PR.
+
+## Testing `/api/v1/users/tokens`
+- Provide the request body as following ----
+<img width=""460"" alt=""Screenshot 2022-07-19 at 1 03 11 AM"" src=""https://user-images.githubusercontent.com/71918441/179602804-2471c3ba-338d-4322-a387-2a3bade9b727.png"">
+
+- You can expect a response like this
+<img width=""999"" alt=""Screenshot 2022-07-16 at 11 30 36 AM"" src=""https://user-images.githubusercontent.com/71918441/179342194-6bcbce95-16a3-4beb-b123-67a788578192.png"">
+
+## Testing `/api/v1/users/tokens/{type}`
+- You can expect a response like this
+   - type = `active`
+<img width=""1058"" alt=""Screenshot 2022-07-19 at 1 05 00 AM"" src=""https://user-images.githubusercontent.com/71918441/179603078-d13d9593-3412-48f3-995f-48d195581412.png"">
+
+   - type = `expired`
+<img width=""1058"" alt=""Screenshot 2022-07-19 at 1 05 40 AM"" src=""https://user-images.githubusercontent.com/71918441/179603127-7afa0cd5-921d-4989-9dc0-084ea7672324.png"">
+
+PTAL : @GMishx @Shruti3004 
+
+This closes #2265 .
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2266""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2266,https://api.github.com/repos/fossology/fossology/pulls/2266,https://github.com/fossology/fossology/pull/2266,closed,212,18,5,1,5,23,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-07-16 06:05:32+00:00,2022-08-24 17:06:53+00:00,3409281.0,"39 days, 11:01:21","[{'comment_id': 922830931, 'comment_body': 'Please deprecate the old endpoint if there is a new endpoint to create tokens.\r\n\r\nhttps://github.com/fossology/fossology/blob/5eaca363ca51c212038939acc98c24672b6392e0/src/www/ui/api/documentation/openapi.yaml#L60', 'comment_created': datetime.datetime(2022, 7, 17, 13, 5, 28, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922831078, 'comment_body': ""Use the existing data model instead of creating a new one.\r\nhttps://github.com/fossology/fossology/blob/5eaca363ca51c212038939acc98c24672b6392e0/src/www/ui/api/documentation/openapi.yaml#L1791\r\n```suggestion\r\n            schema:\r\n              $ref: '#/components/schemas/TokenRequest'\r\n```"", 'comment_created': datetime.datetime(2022, 7, 17, 13, 6, 31, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922831465, 'comment_body': 'Please define what are the allowed values of `type`.\r\nConsider using [enum](https://spec.openapis.org/oas/v3.1.0#serverVariableEnum) type.', 'comment_created': datetime.datetime(2022, 7, 17, 13, 9, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 922831819, 'comment_body': 'Can you please describe the expected response here?\r\n\r\nI am assuming, asking for active tokens, I should see names of all my active tokens.\r\n\r\nBut, `Info` data model does not allow that 😕 ', 'comment_created': datetime.datetime(2022, 7, 17, 13, 12, 1, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 923650932, 'comment_body': ""Sure, I'll do the change!"", 'comment_created': datetime.datetime(2022, 7, 18, 17, 44, 20, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 923653123, 'comment_body': ""Yes, I misunderstood that. I'll add new parameters accordingly"", 'comment_created': datetime.datetime(2022, 7, 18, 17, 45, 39, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 923780682, 'comment_body': 'I think there are two different use-cases for these endpoints. `/tokens` is called when a user tries to login so we provide the `username` and `password` in the request body. `/token/users` route which I created is used to create a customised REST API token directly from the Admin page without the need of any username or password.\r\n\r\nAlso, if we want to merge functionalities of these two routes there are only two parameters i.e., `username` and `password` which is required and not required in either cases, I would like to know how to confirm whether the user the user is already authenticated and requesting for the creation of new token and in other case the user is not authenticated and we need to check the `username` and `password`?', 'comment_created': datetime.datetime(2022, 7, 18, 19, 29, 33, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 925229462, 'comment_body': '[UPDATE]: Marked the old endpoint as deprecated. @GMishx ', 'comment_created': datetime.datetime(2022, 7, 20, 6, 40, 45, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 925229893, 'comment_body': 'Did the required changes. PR is updated now!', 'comment_created': datetime.datetime(2022, 7, 20, 6, 41, 22, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 928271677, 'comment_body': 'Any reason to remove `application/json` requests?', 'comment_created': datetime.datetime(2022, 7, 24, 15, 3, 42, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928272562, 'comment_body': ""Please use efficient array assignment instead of a function call.\r\n```suggestion\r\n        $finalTokens[] = array_merge($token, ['token' => $tokenVal['token']]);\r\n```"", 'comment_created': datetime.datetime(2022, 7, 24, 15, 10, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928272754, 'comment_body': 'Please do not expose native token IDs. It can cause security issues.', 'comment_created': datetime.datetime(2022, 7, 24, 15, 11, 2, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928708784, 'comment_body': 'Please change name to be consistent with token creation request.\r\n```suggestion\r\n        token_name:\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 21, 18, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928709258, 'comment_body': 'Please change name to be consistent with token creation request.\r\n```suggestion\r\n        scope:\r\n          type: string\r\n          enum:\r\n          - read\r\n          - write\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 21, 51, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928710008, 'comment_body': 'Please change name to be consistent with token creation request.\r\n```suggestion\r\n        token_expire:\r\n          type: string\r\n          format: date\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 22, 46, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928710308, 'comment_body': 'Please add date format\r\n```suggestion\r\n          type: string\r\n          format: date\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 23, 7, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 929094241, 'comment_body': 'I felt there is no such specific need of following the JSON encoding as all the sent parameters are in the form of string.', 'comment_created': datetime.datetime(2022, 7, 25, 16, 46, 26, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929103360, 'comment_body': 'sure!', 'comment_created': datetime.datetime(2022, 7, 25, 16, 56, 59, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929105111, 'comment_body': 'okay!', 'comment_created': datetime.datetime(2022, 7, 25, 16, 58, 54, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929105691, 'comment_body': 'okay!', 'comment_created': datetime.datetime(2022, 7, 25, 16, 59, 38, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929109375, 'comment_body': 'sure!', 'comment_created': datetime.datetime(2022, 7, 25, 17, 3, 27, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 940133936, 'comment_body': '@krishna9304 I think I missed that new end point requires an existing token to create a new one. If that is the case, this endpoint can not be deprecated then as there will be no way to create token for a user logging in first time then.', 'comment_created': datetime.datetime(2022, 8, 8, 11, 32, 12, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940645121, 'comment_body': 'okay, got it! ', 'comment_created': datetime.datetime(2022, 8, 8, 20, 40, 24, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': '2817ef90b51918f57ad716e41ec03a9770ac1d46', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+1006151862,feat(api): PUT api to Set permissions for a upload and GET API to fetch respective permissions of groups,"Signed-off-by : Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+
+Now, 
+- There is a PUT route which is available at `/api/v1/uploads/{id}/permissions` that will Set permissions for a upload in a folder for different groups.
+- There is a GET route which is available at `/api/v1/uploads/{id}/perm-groups` that will return all the groups with their respective permissions for a upload.
+Here `{id} : is the upload Id`.
+
+## How to test
+- Use any API platform like postman.
+- Pull the changes from this PR.
+
+### To test `PUT /api/v1/uploads/{id}/permissions`
+- Provide the request body as following ----
+<img width=""469"" alt=""Screenshot 2022-07-23 at 2 25 39 AM"" src=""https://user-images.githubusercontent.com/71918441/180567280-72c2ddbb-9089-4013-8489-066147867af2.png"">
+
+- You can expect a response like this
+<img width=""469"" alt=""Screenshot 2022-07-23 at 2 26 11 AM"" src=""https://user-images.githubusercontent.com/71918441/180567337-c9261701-de78-4ba7-b7fe-8c12a831419d.png"">
+
+### To test `GET /api/v1/uploads/{id}/perm-groups`
+- If your upload exists, you can expect a response like this.
+<img width=""379"" alt=""Screenshot 2022-08-24 at 11 43 23 PM"" src=""https://user-images.githubusercontent.com/71918441/186492712-58361493-e7ec-484e-8ec2-8ffe98b94501.png"">
+
+PTAL : @GMishx @Shruti3004 
+
+This closes #2270 .
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2275""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2275,https://api.github.com/repos/fossology/fossology/pulls/2275,https://github.com/fossology/fossology/pull/2275,closed,297,33,4,2,8,27,2,0,"[{'name': 'ready'}, {'name': 'GSoC-22'}]",2022-07-22 20:58:38+00:00,2022-09-02 08:10:50+00:00,3582732.0,"41 days, 11:12:12","[{'comment_id': 928739831, 'comment_body': 'Better response code will be [503 Service Unavailable](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503)', 'comment_created': datetime.datetime(2022, 7, 25, 10, 49, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928740227, 'comment_body': 'Better response will be [202 Accepted](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/202)', 'comment_created': datetime.datetime(2022, 7, 25, 10, 50, 14, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928740901, 'comment_body': 'Is `folderId` required even when I am trying to update permission of a single upload?', 'comment_created': datetime.datetime(2022, 7, 25, 10, 51, 1, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928741279, 'comment_body': 'Should be boolean instead of `yes`/`no`', 'comment_created': datetime.datetime(2022, 7, 25, 10, 51, 25, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928741908, 'comment_body': 'Please change values to be consistent with other endpoints.\r\n```suggestion\r\n                  - read_only\r\n                  - read_write\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 52, 10, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928742163, 'comment_body': 'Same here\r\n```suggestion\r\n                  - read_only\r\n                  - read_write\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 52, 29, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928743503, 'comment_body': '```suggestion\r\n        description: Enter any upload id\r\n```', 'comment_created': datetime.datetime(2022, 7, 25, 10, 53, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928744623, 'comment_body': 'Unused variable. Please remove.', 'comment_created': datetime.datetime(2022, 7, 25, 10, 54, 35, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 928746717, 'comment_body': '`permupk` and `perm` are not sent from the client.', 'comment_created': datetime.datetime(2022, 7, 25, 10, 56, 56, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 929114324, 'comment_body': 'Okay!', 'comment_created': datetime.datetime(2022, 7, 25, 17, 9, 39, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929114461, 'comment_body': 'Sure!', 'comment_created': datetime.datetime(2022, 7, 25, 17, 9, 49, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929119693, 'comment_body': ""Yes! I think because, Let's say that we're doing this action from UI. The upload list is only shown based on which folder we have selected."", 'comment_created': datetime.datetime(2022, 7, 25, 17, 16, 4, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929119995, 'comment_body': ""Sure, i'll change it!"", 'comment_created': datetime.datetime(2022, 7, 25, 17, 16, 25, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929120435, 'comment_body': 'Yes, got it', 'comment_created': datetime.datetime(2022, 7, 25, 17, 16, 58, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929123784, 'comment_body': 'okay', 'comment_created': datetime.datetime(2022, 7, 25, 17, 21, 4, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929123948, 'comment_body': ""Yes, I'll remove it!"", 'comment_created': datetime.datetime(2022, 7, 25, 17, 21, 17, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 929129347, 'comment_body': '[UPDATE]: I checked that the folderId is just significant for the UI in order to organise the uploads. The function in the backend works irrespective of any folderId constraint.', 'comment_created': datetime.datetime(2022, 7, 25, 17, 27, 31, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 940137356, 'comment_body': '```suggestion\r\n                groupId:\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 11, 36, 40, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940137615, 'comment_body': '```suggestion\r\n                  description: Select the permission for selected group\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 11, 36, 59, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940138970, 'comment_body': 'As per the yaml file\r\n```suggestion\r\n      $returnVal = new Info(503, ""Scheduler is not running!"", InfoType::ERROR);\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 11, 38, 46, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940140436, 'comment_body': ""As per the yaml\r\n```suggestion\r\n      case 'read_only':\r\n        return Auth::PERM_READ;\r\n      case 'read_write':\r\n```"", 'comment_created': datetime.datetime(2022, 8, 8, 11, 40, 34, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940141938, 'comment_body': 'Query is prone to SQL injection. Use safer methods.\r\n```suggestion\r\n      $query = ""SELECT perm, perm_upload_pk FROM perm_upload WHERE upload_fk=$1 and group_fk=$2;"";\r\n      $result = $dbManager->getSingleRow($query, [$upload_pk, $newgroup], __METHOD__."".getOldPerm"");\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 11, 42, 25, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940142364, 'comment_body': 'Use safer check\r\n```suggestion\r\n      if (!empty($result)) {\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 11, 43, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940144185, 'comment_body': 'As per yaml\r\n```suggestion\r\n      $returnVal = new Info(202, ""Permissions updated successfully!"", InfoType::INFO);\r\n```', 'comment_created': datetime.datetime(2022, 8, 8, 11, 45, 27, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 940655481, 'comment_body': 'Sure!', 'comment_created': datetime.datetime(2022, 8, 8, 20, 54, 24, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 944370917, 'comment_body': 'Please add the missing documentation for the endpoint in `src/www/ui/api/documentation/openapi.yaml`', 'comment_created': datetime.datetime(2022, 8, 12, 11, 24, 38, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 945114743, 'comment_body': ""Yess, I'll add them in the next PR update."", 'comment_created': datetime.datetime(2022, 8, 13, 8, 48, 51, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': '54f80533cda611a74d306b595b39c0d615b4f0c0', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f88a614ec89b7e09bdc80a48fe4df93b3c4939bb', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+1043297088,feat(API): `/jobs/history?upload={id}` GET route to get the history of all the jobs queued based on an upload,"Signed-off-by: Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+This development of this PR is in reference to two tasks ---
+- [x] Fixing the bug that caused `GET uploads/{id}/summary` to give a `500` response when requesting the summary of an upload which was a file.
+- [x] Exposing `GET /jobs/history?upload={id}` route to get the history of all the jobs queued based on an upload. 
+   - P.S.: Here {id} is the upload id.
+
+## How to test
+- Use any API platform like postman.
+- Pull the changes from this PR.
+
+### Testing `GET /jobs/history?upload={id}`
+You can expect a response like this ----
+
+`````
+[
+    {
+        ""jobId"": 8,
+        ""jobName"": ""hotels.json"",
+        ""jobQueue"": [
+            {
+                ""jobQueueId"": 16,
+                ""jobQueueType"": ""ununpack"",
+                ""startTime"": ""2022-08-22 14:17:48"",
+                ""endTime"": ""2022-08-22 14:17:48"",
+                ""status"": ""Completed"",
+                ""itemsProcessed"": 1,
+                ""dependencies"": [
+                    null
+                ],
+                ""itemsPerSec"": 1,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": true,
+                ""download"": """"
+            },
+            {
+                ""jobQueueId"": 17,
+                ""jobQueueType"": ""adj2nest"",
+                ""startTime"": ""2022-08-22 14:17:49"",
+                ""endTime"": ""2022-08-22 14:17:49"",
+                ""status"": ""Completed"",
+                ""itemsProcessed"": 1,
+                ""dependencies"": [
+                    ""16""
+                ],
+                ""itemsPerSec"": 1,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": true,
+                ""download"": """"
+            },
+            {
+                ""jobQueueId"": 18,
+                ""jobQueueType"": ""monk"",
+                ""startTime"": ""2022-08-22 14:17:50"",
+                ""endTime"": ""2022-08-22 14:17:51"",
+                ""status"": ""Completed"",
+                ""itemsProcessed"": 1,
+                ""dependencies"": [
+                    ""17""
+                ],
+                ""itemsPerSec"": 1,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": true,
+                ""download"": """"
+            },
+            {
+                ""jobQueueId"": 19,
+                ""jobQueueType"": ""nomos"",
+                ""startTime"": ""2022-08-22 14:17:50"",
+                ""endTime"": ""2022-08-22 14:17:51"",
+                ""status"": ""Completed"",
+                ""itemsProcessed"": 1,
+                ""dependencies"": [
+                    ""17""
+                ],
+                ""itemsPerSec"": 1,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": true,
+                ""download"": """"
+            },
+            {
+                ""jobQueueId"": 20,
+                ""jobQueueType"": ""ojo"",
+                ""startTime"": ""2022-08-22 14:17:50"",
+                ""endTime"": ""2022-08-22 14:17:50"",
+                ""status"": ""Completed"",
+                ""itemsProcessed"": 1,
+                ""dependencies"": [
+                    ""17""
+                ],
+                ""itemsPerSec"": 1,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": true,
+                ""download"": """"
+            }
+        ],
+        ""upload"": {
+            ""uploadName"": ""hotels.json"",
+            ""uploadId"": ""4"",
+            ""uploadDesc"": """",
+            ""uploadItem"": ""91"",
+            ""uploadEta"": """"
+        }
+    },
+    {
+        ""jobId"": 9,
+        ""jobName"": ""hotels.json"",
+        ""jobQueue"": [
+            {
+                ""jobQueueId"": 21,
+                ""jobQueueType"": ""clixml"",
+                ""startTime"": ""2022-09-01 17:08:52"",
+                ""endTime"": ""2022-09-01 17:08:52"",
+                ""status"": ""Failed"",
+                ""itemsProcessed"": 0,
+                ""dependencies"": [
+                    null
+                ],
+                ""itemsPerSec"": 0,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": false,
+                ""download"": ""Clixml Report""
+            }
+        ],
+        ""upload"": {
+            ""uploadName"": ""hotels.json"",
+            ""uploadId"": ""4"",
+            ""uploadDesc"": """",
+            ""uploadItem"": ""91"",
+            ""uploadEta"": """"
+        }
+    },
+    {
+        ""jobId"": 37,
+        ""jobName"": ""hotels.json"",
+        ""jobQueue"": [
+            {
+                ""jobQueueId"": 49,
+                ""jobQueueType"": ""reportImport"",
+                ""startTime"": null,
+                ""endTime"": ""2022-09-03 19:28:19"",
+                ""status"": ""killed by fossy"",
+                ""itemsProcessed"": 0,
+                ""dependencies"": [
+                    null
+                ],
+                ""itemsPerSec"": 0,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": false,
+                ""download"": ""uploaded SPDX2 report""
+            }
+        ],
+        ""upload"": {
+            ""uploadName"": ""hotels.json"",
+            ""uploadId"": ""4"",
+            ""uploadDesc"": """",
+            ""uploadItem"": ""91"",
+            ""uploadEta"": """"
+        }
+    },
+    {
+        ""jobId"": 45,
+        ""jobName"": ""hotels.json"",
+        ""jobQueue"": [
+            {
+                ""jobQueueId"": 57,
+                ""jobQueueType"": ""reportImport"",
+                ""startTime"": ""2022-09-03 21:45:19"",
+                ""endTime"": ""2022-09-03 21:45:19"",
+                ""status"": ""Failed"",
+                ""itemsProcessed"": 0,
+                ""dependencies"": [
+                    null
+                ],
+                ""itemsPerSec"": 0,
+                ""canDoActions"": true,
+                ""isInProgress"": false,
+                ""isReady"": false,
+                ""download"": ""uploaded SPDX2 report""
+            }
+        ],
+        ""upload"": {
+            ""uploadName"": ""hotels.json"",
+            ""uploadId"": ""4"",
+            ""uploadDesc"": """",
+            ""uploadItem"": ""91"",
+            ""uploadEta"": """"
+        }
+    }
+]
+`````
+This fixes #2306 .
+@GMishx @shaheemazmalmmd @Shruti3004 PTAL.
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2307""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2307,https://api.github.com/repos/fossology/fossology/pulls/2307,https://github.com/fossology/fossology/pull/2307,closed,766,44,8,2,1,15,1,0,[{'name': 'ready'}],2022-09-01 07:02:56+00:00,2023-03-08 15:21:44+00:00,16273128.0,"188 days, 8:18:48","[{'comment_id': 962487052, 'comment_body': 'The `id` parameter in the path should be related to the path itself. Therefore, the `id` parameter can only be job ID here and not any other id.', 'comment_created': datetime.datetime(2022, 9, 5, 5, 23, 44, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962487296, 'comment_body': 'Also, can you please explain how this endpoint is going to be different from `GET /jobs?upload={id}`?', 'comment_created': datetime.datetime(2022, 9, 5, 5, 24, 15, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962488128, 'comment_body': '# PLEASE DO NOT EXPOSE DB INTERNALS\r\nin the REST endpoints!\r\nPlease change the names of the parameters at the minimum to be consistent with other REST endpoints.', 'comment_created': datetime.datetime(2022, 9, 5, 5, 26, 22, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962488733, 'comment_body': 'Can you please explain how `jq_job_fk`, `jq_type`, `jq_args` be helpful to the end user for this endpoint?', 'comment_created': datetime.datetime(2022, 9, 5, 5, 27, 39, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962488946, 'comment_body': ""Aren't both properties `jdep_jq_depends_fk` and `depends` give out same information in different format?"", 'comment_created': datetime.datetime(2022, 9, 5, 5, 28, 13, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962489995, 'comment_body': 'Please create model classes for `JobQueue` and `ShowJob` in `src/www/ui/api/Models/`', 'comment_created': datetime.datetime(2022, 9, 5, 5, 30, 50, tzinfo=datetime.timezone.utc), 'commenter': 'GMishx', 'type': 'User'}, {'comment_id': 962495199, 'comment_body': ""> The `id` parameter in the path should be related to the path itself. Therefore, the `id` parameter can only be job ID here and not any other id.\r\n\r\nActually all these jobs are related to a particular upload ID, but If that's the case, should I change it to `/uploads/{id}/history`?"", 'comment_created': datetime.datetime(2022, 9, 5, 5, 41, 58, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 962502000, 'comment_body': '> Also, can you please explain how this endpoint is going to be different from `GET /jobs?upload={id}`?\r\n\r\nYes sure! so this API provides all the components that is required to view the stats in the `show jobs` page\r\n<img width=""1422"" alt=""Screenshot 2022-09-05 at 11 14 39 AM"" src=""https://user-images.githubusercontent.com/71918441/188368804-2faf261d-4f88-4ce3-b9d5-498fb35f7123.png"">\r\n\r\nOn the other hand `GET jobs?upload={id}` didn\'t provide all these info\r\n```\r\n[{\r\n        ""id"": 59,\r\n        ""name"": ""Nirjas-master.zip"",\r\n        ""queueDate"": ""2022-09-04 22:22:40.452792+05:30"",\r\n        ""uploadId"": ""3"",\r\n        ""userId"": ""3"",\r\n        ""groupId"": ""3"",\r\n        ""eta"": 0,\r\n        ""status"": ""Failed""\r\n    }, ....]\r\n```\r\nThe above response isn\'t enough to get all the required info in the show jobs page. \r\nMoreover `GET jobs?upload={id}` only provides the jobs scheduled, It doesn\'t give relation between what are the sub jobs queued for a particular job. Also we do not get information like `items processed per second`, `type of job`,  `report download information`,  `job dependency` etc.', 'comment_created': datetime.datetime(2022, 9, 5, 5, 53, 55, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 962502821, 'comment_body': ""Sure, I'll do that!"", 'comment_created': datetime.datetime(2022, 9, 5, 5, 55, 9, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 962508714, 'comment_body': 'Yes sure! \r\n- `jq_type` is the agent name that is scheduled (_eg - nomos, spdx2, ojo, monk, etc._), which is a parameter that will let the end user know about the kind of job it is. \r\n- `jq_args` gives us the `uploadId`. So, It might be significant in some places where we just want to use the `jobQueue` parameter for a particular job as it will let us know about the upload it is associated with. Same goes for `jq_job_fk`. Else we will have backtrack and get the `jobId` and `uploadId`.', 'comment_created': datetime.datetime(2022, 9, 5, 6, 7, 11, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 962509307, 'comment_body': ""Yes, Actually I wasn't sure about that as `depends` is an array, and I thought there can be multiple dependencies. Should I remove one of these?"", 'comment_created': datetime.datetime(2022, 9, 5, 6, 8, 28, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 962509453, 'comment_body': ""Sure, I'll do that!"", 'comment_created': datetime.datetime(2022, 9, 5, 6, 8, 46, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 963106484, 'comment_body': '[UPDATED] Done!', 'comment_created': datetime.datetime(2022, 9, 5, 19, 47, 14, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 963106768, 'comment_body': '[UPDATE] Removed `jq_job_fk ` and `jq_args `.', 'comment_created': datetime.datetime(2022, 9, 5, 19, 48, 14, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}, {'comment_id': 963113692, 'comment_body': ""> > The `id` parameter in the path should be related to the path itself. Therefore, the `id` parameter can only be job ID here and not any other id.\r\n> \r\n> Actually all these jobs are related to a particular upload ID, but If that's the case, should I change it to `/uploads/{id}/history`?\r\n\r\n@GMishx Changing the route to `/jobs/history?upload={id}`. Make more sense now."", 'comment_created': datetime.datetime(2022, 9, 5, 20, 15, 37, tzinfo=datetime.timezone.utc), 'commenter': 'krishna9304', 'type': 'User'}]","[{'commit_sha': 'e40e7ae37bd4c49eeec483b94be7a79491c2474c', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73c471438e909d26bfec58854af04d7cb6838d30', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+1055579080,feat(API): `POST report/import?upload={id}` route for initiating a reportImport job for a given upload,"Signed-off-by: Krishna Mahato <krishhtrishh9304@gmail.com>
+
+## Description
+There is a new POST route which is available at `/report/import?upload={id}` which will initiate a reportImport job for a given upload.
+
+## How to test
+- Use any API platform like postman.
+- Pull the changes from this PR.
+
+### Testing `POST /report/import?upload={id}` . Refer the below example ----
+
+- Provide the request body as the following. (_Make sure the type is multipart/form-data_)
+<img width=""887"" alt=""Screenshot 2022-09-14 at 12 22 47 PM"" src=""https://user-images.githubusercontent.com/71918441/190082100-326ec60c-84e5-4e08-84cd-f939e4278208.png"">
+
+- You can expect a response like this 
+<img width=""603"" alt=""Screenshot 2022-09-14 at 12 23 27 PM"" src=""https://user-images.githubusercontent.com/71918441/190082249-bd5e7df3-b225-484f-b7a1-2013734be19f.png"">
+
+This fixes #2308 .
+@GMishx @shaheemazmalmmd @Shruti3004 PTAL.
+
+
+
+<a href=""https://gitpod.io/#https://github.com/fossology/fossology/pull/2317""><img src=""https://gitpod.io/button/open-in-gitpod.svg""/></a>
+
+",True,2317,https://api.github.com/repos/fossology/fossology/pulls/2317,https://github.com/fossology/fossology/pull/2317,closed,179,39,3,2,1,0,3,0,"[{'name': 'needs code review'}, {'name': 'needs test'}, {'name': 'GSoC-22'}]",2022-09-14 06:56:03+00:00,2023-03-20 07:07:37+00:00,16157494.0,"187 days, 0:11:34",[],"[{'commit_sha': '987b2774a27e4e3293769364e062070d181fdbc1', 'committer_username': 'krishna9304', 'committer_name': 'Krishna Mahato', 'committer_email': None, 'commit_date': datetime.datetime(2020, 9, 26, 6, 14, 57, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd1bd7b55d049344ed3b0863838130716f3084d16', 'committer_username': 'GMishx', 'committer_name': 'Gaurav Mishra', 'committer_email': 'gmishx@gmishx.in', 'commit_date': datetime.datetime(2016, 3, 25, 21, 43, 54, tzinfo=datetime.timezone.utc)}]",Krishna Mahato,71918441,,User,,61,,14,33
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+374651287,FOSSologyUI,fossology/FOSSologyUI,HTML,85,47,16,20,406,49,7,19,"[{'id': 1055855769, 'number': 265, 'closed': datetime.datetime(2022, 9, 29, 7, 55, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 14, 10, 48, 42, tzinfo=datetime.timezone.utc), 'time_taken': 1285615.0, 'time_delta': '14 days, 21:06:55', 'additions': 228, 'deletions': 59, 'state': 'closed'}, {'id': 1043316046, 'number': 256, 'closed': None, 'created': datetime.datetime(2022, 9, 1, 7, 20, 55, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 210, 'deletions': 28, 'state': 'open'}, {'id': 1025739586, 'number': 251, 'closed': None, 'created': datetime.datetime(2022, 8, 14, 7, 7, 54, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 540, 'deletions': 4, 'state': 'open'}, {'id': 984200806, 'number': 236, 'closed': datetime.datetime(2022, 8, 30, 6, 23, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 30, 19, 19, 17, tzinfo=datetime.timezone.utc), 'time_taken': 5223846.0, 'time_delta': '60 days, 11:04:06', 'additions': 1075, 'deletions': 5, 'state': 'closed'}, {'id': 971419495, 'number': 229, 'closed': datetime.datetime(2022, 8, 25, 10, 49, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 19, 6, 39, 12, tzinfo=datetime.timezone.utc), 'time_taken': 5803828.0, 'time_delta': '67 days, 4:10:28', 'additions': 426, 'deletions': 8, 'state': 'closed'}, {'id': 958687844, 'number': 215, 'closed': datetime.datetime(2022, 6, 13, 11, 1, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 6, 5, 37, 59, tzinfo=datetime.timezone.utc), 'time_taken': 624215.0, 'time_delta': '7 days, 5:23:35', 'additions': 112, 'deletions': 71, 'state': 'closed'}, {'id': 958479534, 'number': 214, 'closed': datetime.datetime(2022, 6, 6, 4, 37, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 5, 18, 48, 12, tzinfo=datetime.timezone.utc), 'time_taken': 35335.0, 'time_delta': '9:48:55', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 950204345, 'number': 209, 'closed': datetime.datetime(2022, 6, 7, 8, 14, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 29, 7, 33, 26, tzinfo=datetime.timezone.utc), 'time_taken': 780069.0, 'time_delta': '9 days, 0:41:09', 'additions': 0, 'deletions': 33, 'state': 'closed'}, {'id': 894078005, 'number': 196, 'closed': datetime.datetime(2022, 5, 30, 10, 27, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 30, 7, 43, 48, tzinfo=datetime.timezone.utc), 'time_taken': 5280212.0, 'time_delta': '61 days, 2:43:32', 'additions': 23, 'deletions': 3, 'state': 'closed'}, {'id': 885661954, 'number': 187, 'closed': datetime.datetime(2022, 6, 13, 10, 58, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 22, 6, 44, 56, tzinfo=datetime.timezone.utc), 'time_taken': 7186426.0, 'time_delta': '83 days, 4:13:46', 'additions': 0, 'deletions': 3, 'state': 'closed'}]"
+15866170,fossology,fossology/fossology,PHP,397,777,64,142,9788,394,76,21,"[{'id': 1055579080, 'number': 2317, 'closed': datetime.datetime(2023, 3, 20, 7, 7, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 14, 6, 56, 3, tzinfo=datetime.timezone.utc), 'time_taken': 16157494.0, 'time_delta': '187 days, 0:11:34', 'additions': 179, 'deletions': 39, 'state': 'closed'}, {'id': 1043297088, 'number': 2307, 'closed': datetime.datetime(2023, 3, 8, 15, 21, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 1, 7, 2, 56, tzinfo=datetime.timezone.utc), 'time_taken': 16273128.0, 'time_delta': '188 days, 8:18:48', 'additions': 766, 'deletions': 44, 'state': 'closed'}, {'id': 1006151862, 'number': 2275, 'closed': datetime.datetime(2022, 9, 2, 8, 10, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 22, 20, 58, 38, tzinfo=datetime.timezone.utc), 'time_taken': 3582732.0, 'time_delta': '41 days, 11:12:12', 'additions': 297, 'deletions': 33, 'state': 'closed'}, {'id': 998361264, 'number': 2266, 'closed': datetime.datetime(2022, 8, 24, 17, 6, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 16, 6, 5, 32, tzinfo=datetime.timezone.utc), 'time_taken': 3409281.0, 'time_delta': '39 days, 11:01:21', 'additions': 212, 'deletions': 18, 'state': 'closed'}, {'id': 997893462, 'number': 2262, 'closed': datetime.datetime(2022, 8, 12, 11, 6, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 15, 15, 46, 29, tzinfo=datetime.timezone.utc), 'time_taken': 2402413.0, 'time_delta': '27 days, 19:20:13', 'additions': 333, 'deletions': 34, 'state': 'closed'}, {'id': 992732115, 'number': 2256, 'closed': datetime.datetime(2022, 8, 25, 8, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 11, 6, 53, 19, tzinfo=datetime.timezone.utc), 'time_taken': 3894761.0, 'time_delta': '45 days, 1:52:41', 'additions': 345, 'deletions': 165, 'state': 'closed'}, {'id': 883183141, 'number': 2189, 'closed': datetime.datetime(2022, 3, 21, 10, 18, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 18, 7, 36, 9, tzinfo=datetime.timezone.utc), 'time_taken': 268939.0, 'time_delta': '3 days, 2:42:19', 'additions': 3, 'deletions': 3, 'state': 'closed'}]"

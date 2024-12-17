@@ -1,0 +1,1177 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+419905657,GangaGUI - Initial Server Set Up using GangaThread,"### Summary
+
+__Project Structure__
+We are going be using the Flask web framework for serving GUI to the user. In this Pull Request, I have created a `GangaGUI` a top-level package containing the Flask application. The entire Flask application resides inside the directory `GangaGUI/gui` and only it's configuration file `GangaGUI/config.py` and the start file `GangaGUI/start.py` resides outside of the `GangaGUI/gui` directory. All the tests related to the package are present under `GangaGUI/test` directory. 
+
+__How To Start The Server__
+After cloning the repository and downloading the updated requirements. The user can start the Flask server in 2 following ways:
+
+* While starting ganga command line interface use the `--webgui` flag. 
+* By setting `RUNTIME_PATH = GangaGUI` in the `.gangarc` and then after starting the ganga command-line interface use `start_gui()` function to start the Flask server and `stop_gui()` to stop the Flask server.
+
+After starting the server, open the browser and navigate to `127.0.0.1:5000/`. In either case, when exiting ganga, a check will be performed if the Flask server GangaThread is alive or not, if alive the Flask server is stopped ultimately stopping the GangaThread.
+
+__Understanding The Code - Review In The Following Order__ 
+
+__`GangaGUI/gui`__
+* This is where the Flask server is set up. The `__init__.py` creates a Flask application which is then used all over the other modules. 
+* The `routes.py` is rather an important file containing what should be done when the user tries to access the specific route. For example after seeing the file, you may understand that when a user tries to access the `https://127.0.0.1/` routes, it executes the dashboard function and returns the output to the user's browser. 
+
+__`config.py`__
+* Contains all the config configuration of the Flask app which is used by `GangaGUI/gui/__init__.py`
+
+__`start.py`__
+* Contain code to start the Flask server on a GangaThread so it can access the ganga namespace while the command line interface is running without stopping the monitoring.
+* A `GUIServerThread` is defined which is a typeof `GangaThread`. It need the `self.host` and `self.port` in order to start the Flask server on that specific `host` and `port`.
+* It has a `run` method that logs the `host` and `port` to the `stdout` and starts the Flask server.
+* It has a `shutdown` method, which makes the request to the Flask app on `https://host:port/shutdown` route to stop the Flask app.
+* The `start_gui` function creates a GUIServerThread and starts it and the `stop_gui` function stop the already existing GUIServerThread. 
+* Additional take note than the `start_gui()` function can take additional arguments of `host` and `port`, but they have a default value if they aren't provided.
+
+__`GangaCore/Core/InternalServices/ShutdownManager.py`__
+* Added a check if the webserver is running then call the `stop_gui()` function to stop the webserver for the smooth shutdown of ganga.
+
+__`GangaCore/Runtime/bootstrap.py`__
+* Modified `--webgui` flag to run `start_gui()` function.
+
+__`BOOT.py`__
+* Exports the `start_gui()` and `stop_gui` to the GPI.
+
+__`GangaGUI/test`__
+* Contains the tests for the Flask application.
+* The test uses `GangaUnitTest` and during `setUp` it creates an app test client (which is built into the Flask` which tests the application without starting the server.
+
+__Would need help in setting up the Jenkin CI for testing.__
+
+__What's Next?__
+In the next following week, I plan to
+- [x] Creation of `secret_key` which is returned to the user after starting the server.
+- [x] Implement token-based authentication for accessing the APIs. 
+- [ ] Creation of job APIs. - Moved to #1683 
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1675,https://api.github.com/repos/ganga-devs/ganga/pulls/1675,https://github.com/ganga-devs/ganga/pull/1675,closed,144,3,12,17,0,6,1,0,[{'name': 'GUI'}],2020-05-19 06:27:38+00:00,2020-05-20 08:45:49+00:00,94691.0,"1 day, 2:18:11","[{'comment_id': 427821262, 'comment_body': 'I guess this is just something temporary ...', 'comment_created': datetime.datetime(2020, 5, 20, 8, 12, 17, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 427822175, 'comment_body': 'Put all imports at the start (unless there is an issue with it).', 'comment_created': datetime.datetime(2020, 5, 20, 8, 13, 47, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 427823317, 'comment_body': 'As these functions will be exported to the user, it is important that the doc lines explain well what is going on. For now it is fine though.', 'comment_created': datetime.datetime(2020, 5, 20, 8, 15, 39, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 427883024, 'comment_body': 'Yes, but the user will always need to specify a secret key in order to run Flask. We can maybe generate it in `.gangarc`, and then take it from there in the future?', 'comment_created': datetime.datetime(2020, 5, 20, 9, 50, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 427883788, 'comment_body': 'In Flask, due to the circular import issue, we have to import routes are the bottom. (It has become a kind of a convention)', 'comment_created': datetime.datetime(2020, 5, 20, 9, 51, 9, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 427884164, 'comment_body': 'Okay, I will add the usage section also in the docstring along with more details on how it runs.', 'comment_created': datetime.datetime(2020, 5, 20, 9, 51, 49, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '60547ad3e603f6bf908b1ab36d420a979e7b1ad1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '54ec90cd59b1c4e28ded45c87d44d82c7dacac4c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4989aa417dd2c67e036ef95216bfc3738548ac6d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5464c7df6f2bd7bf8d146e1ecd39f745af1db89a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '205f4aafbb3b3d36428213dfd500f98ad7bcc936', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '066e6fc10a4c1ae5fcb5b1fb28fe60d522119533', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b07ec65ed2ff915d6fe76c70eac61437e85949df', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '39f7236bea781a6239837ebd9a7c3194e563aeed', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3baf82151c9d9b5e419bf2bd8ca691c93339abc0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c77c73ae5f1222520beb3aaab904ac1655c81735', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24209431524740756f391c0f5e89915e5ac43499', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dd8377a79ac620853c052cf1fb83621fd41f20f', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0216499474b2c74d9536b2cd3b7527b93fb45bbd', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9701104d8ac290927ade531eaf060cc26f5babed', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '670ffdb4242e102184d36933a1eebd427439cdbf', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be9209c5e94d079185962b93b4db7794fc0bd394', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29c2f93d3a92afa6090feb4b7e0f4c62dda94fe4', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+425860839,GangaGUI - Token Based Authentication,"### Summary
+
+__Background__
+This PR aims at adding token-based authentication which will be used by the web APIs during the GangaGUI project.
+
+__What is Token Based Authentication?__
+The creation of web APIs for Ganga will enable access to its data over the network. The access to such sensitive data cannot be given to all and hence to limit the access to specific users, token-based authentication is implemented. 
+
+__How Does It Work?__
+Whenever a user will start the GUI server either by using `--webgui` flag or `start_gui()` in the command-line interface, he will be returned a tuple containing `(host, port, user, password)` data. This information will be also displayed to the user when they start the server. This is sensitive information and must not be shared publicly.
+
+When the `start_gui()` function is invoked, under the hood, it generates a default user `GangaGUIAdmin`, a 7 character `password` and a unique `public_id`. All of this information is stored in an SQLite database named `gui_db.sqlite` and a tuple containing `(host, port, user, password)` is returned.
+
+__Note:__ `start_gui()` can take custom `host`, `port` and `password` values, if the user wishes to set it themselves. 
+
+Now in order to access the protected resource, the user will need to first generate a JWT token using the `/token` route using the authentication details that were generated above. The token contains information about the `public_id` and the `expiration_date` of the generating user. The `expiration_date` by default has be set to `5 days`.
+
+__Example:__
+
+For this example, we will take the `host`=`127.0.0.1` and `port`=`5000`.
+
+* `User A` invokes `start_gui()` function in command-line interface.
+*  `User A` is returned with `('127.0.0.1', 5000, 'GangaGUIAdmin', 'H7UN99L')` - password is randomly generated each time `start_gui()` function is called.
+* `User A` wants to access the API at `http://127.0.0.1:5000/resource` but it is protected.
+*  `User A` generated a token by making a `POST` request to `http://127.0.0.0.1:5000/token` with the data `{""user"": ""GangaGUIAdmin"", ""password"": ""H7UN99L""}`
+* `User A` received a response like `{""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiI3Y2MxYjdjOS0wYzJmLTRjZGUtOTkyZC04MzJiYWRmM2ZlYjAiLCJleHAiOjE1OTEyNzQ1Nzd9.hU44_42ThLCGgWqIGC4zAktE2EZvKK8lhFVFH_r2MAo""}`
+* `User A` uses the `token` in each request header that he makes to the protected route `http://127.0.0.1:5000/resource`. The header's name is `X-Access-Token`.
+* `User A` in now granted access to the protected API and is happy.
+
+---
+
+### Understanding The Code
+
+__`GangaGUI/gui/__init__.py`__:
+* Added support for Flask-SQLAlchemy (ORM for Flask).
+* Created a db instance of SQLAlchemy.
+
+__`GangaGUI/config.py`__:
+* Added configuration for SQLAlchemy - location of the SQLite database.
+
+__`GangaGUI/gui/models.py`__:
+* Created a Users model - which will, in turn, create a table in SQLite database with the columns: `id, public_id, user, password_hash, role`.
+* Passwords are not stored directly but their hashed values are stored - additional security layer.
+* Added a method to the `User` class to generate PyJWT token using the `public_id` information and expiration date of `5` days from creation.
+
+__`GangaGUI/gui/routes.py`__:
+* Created a `/token` route to the authenticated user and accordingly send an error message or token.
+* Create a `@token_requred` which will be later used by the API to authenticate the token and identify the user.
+
+__`GangaGUI/start.py`__:
+* Updated the docstring to be more elaborate.
+* Added random `public_id` and `password` generation at each startup and stored in a separate database.
+* `start_gui()` now returns a tuple containing (host, port, user, password) information.
+*  User can set his own password.
+* Added database creation for development server startup.
+
+__`GangaGUI/test/`__:
+* Created test to test database creation and modifications.
+* Created test to test token authentication system.
+
+Other than this, updated few docstrings, added comments, and added new dependencies to `setup.py`.
+
+---
+
+### What's Next
+- [ ] Creation of `/job` endpoint
+- [ ] Creation of `/jobs` endpoint
+- [ ] Creation of `/config` endpoint
+- [ ] Creation of `/templates` endpoint
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+
+---
+__Footnotes:__
+I apologize for the delay with this PR, it should not have taken this long. Next week I will try to make up for the delay.
+
+",True,1683,https://api.github.com/repos/ganga-devs/ganga/pulls/1683,https://github.com/ganga-devs/ganga/pull/1683,closed,291,18,10,16,1,4,1,0,[{'name': 'GUI'}],2020-06-01 09:32:06+00:00,2020-06-02 23:06:06+00:00,135240.0,"1 day, 13:34:00","[{'comment_id': 433573309, 'comment_body': 'Please add newlines at the end of all files.', 'comment_created': datetime.datetime(2020, 6, 2, 1, 31, 41, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 433573896, 'comment_body': 'What happens if the user runs the Ganga session and GUI for more than 5 days? Do they need to stop and start the GUI again?', 'comment_created': datetime.datetime(2020, 6, 2, 1, 33, 56, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 433603427, 'comment_body': ""Nope, simply renew the token. If the user is just using the GUI, then no worries I'll add one popup just re-enter the password and token will be renewed."", 'comment_created': datetime.datetime(2020, 6, 2, 3, 43, 19, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 433603491, 'comment_body': 'Okay, will do', 'comment_created': datetime.datetime(2020, 6, 2, 3, 43, 39, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '680d428f9c563716ba913910cf3307c8d96731ae', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3299ce2a3d09c38b4c3f5ae729b267823e5c48ef', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca9652359a79b0cc9727a52ca6fea7e8188842fe', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd038e5a437ae093f01d67a72c7b75a517e68c3cc', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7017a797208064b9699fb83c569776f279395ed4', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'deb5a3a7e799eef3375c7770f4fdc6498e18c762', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6bd29b4a5cb6cd4f56a444eb72508f17881b0453', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ba1f3374a6c992fc3f05572855f9072cf8f3137', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f4b0d3b8ac07709a22e1293317ab57ba9d56469', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '922cbbed9afd744e8451f47d08cf44618654f5cb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48bdc6e45cb7fdd2de4f1b3818f3a957eaa3d4c4', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '361225a3231afc476f4911dd7fbc4fbe3c8fb74d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '682949685ba1ce5464e5c33f83e9a5ce6514866b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b84526d67d630853e20abad997d1a01524ce278c', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e82b4ab227b8e7acb704fb8080657b879c7d3cab', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e059989a05f0677c84819d49f6249c57352805c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+426405048,Update 'ShutdownManager.py' To Conditionally Run 'stop_gui()',This provides a fix by adding a conditional check to only run `stop_gui()` function is the GUIServerThread is running when shutting down Ganga.,True,1685,https://api.github.com/repos/ganga-devs/ganga/pulls/1685,https://github.com/ganga-devs/ganga/pull/1685,closed,14,7,2,4,1,0,1,0,[{'name': 'GUI'}],2020-06-02 07:34:37+00:00,2020-06-03 12:20:28+00:00,103551.0,"1 day, 4:45:51",[],"[{'commit_sha': 'c75872c272b35848279ebe84074f3af654c1905e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f206254458246c907fd4c2bc67a696bb31243e7e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c5c169bfd7db1769c25a84b425effb4a1b4d0929', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '998e1076a2fe302e3901cd0943a9a4ed3a7d5b94', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+437896272,GangaGUI - Job API,"### Summary
+
+**Background**
+In order to keep updating the job monitoring data without refreshing the whole web page, `Job` API endpoints are required. The front end makes requests to these APIs and can get information about the job, create a job, perform a certain action on the job, delete the job. These API endpoints can also be consumed by other applications with proper authentication.
+
+**Work Overview (5 Endpoints | 37 Tests | 91% Test Coverage)**
+Following endpoints are created for the `Job` API:
+* `/api/job/<job_id>` - `GET` - Retrieves the general details about the job which is seen when `jobs` command is used in the command-line interface.
+* `/api/job/<job_id>/<attribute>` - `GET` - Retrieves the details about the specific attribute of the job (can be any attribute of the Job object).
+* `/api/job/create` - `POST` - Need to provide `template_id` value in the request body. Using the `template_id` create a job in the `new` state.
+* `api/job/<job_id>/<action>` - `PUT` - Performs certain action on the job. Any method that the Job object has can be called using this endpoint. Just replace the placeholder `<action>` with the method name. Ex. To call the `submit` method on the job (with ID 13), the endpoint will be `/api/job/13/submit`.
+    * If the method takes an argument then it can be passed in the body of the HTTP request in the field with same name as the method and the value of the field as the value to be passed in the method as an argument. Ex. `force_status` method on the job (ID: 13) takes an argument `failed`, so the request will be made to the endpoint `/api/job/13/force_status` with `force_status=""killed""` in the request body. 
+        * Please note that the value of the argument in the request body, if it is a `string` then it must be enclosed between `""""` (double quotes), if it is is an `integer` then it shouldn't be enclosed between `""""`, similarly even the boolean value `true` and `false` shouldn't be enclosed between `""""` (double quotes).
+    * With this endpoint, the user can also change the attributes of the job. Ex. User can change the `do_auto_resubmit` value to `False` for job (ID 13) by making a `PUT` request to `/api/job/13/do_auto_resubmit` with `do_auto_resubmit=false` in the request body.
+* `/api/job/<job_id>` - `DELETE` - Deletes the job.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/job/<job_id>` - `GET` Endpoint**
+
+![ganga_get_job_info](https://user-images.githubusercontent.com/47035057/85282827-06381480-b4aa-11ea-9dc1-aa3bc53a3fd1.gif)
+
+**Step 3b: `/api/job/<job_id>/<attribute>` - `GET` Endpoint**
+
+![ganga_job_attribute_info](https://user-images.githubusercontent.com/47035057/85285184-0fc37b80-b4ae-11ea-9f5c-14fbcdb4bc8e.gif)
+
+**Step 3c: `/api/job/create` - `POST` Endpoint**
+
+![ganga_create_job](https://user-images.githubusercontent.com/47035057/85284768-5d8bb400-b4ad-11ea-9ac1-d15e4e302441.gif)
+
+**Step 3d: `/api/job/<job_id>/<action>` - `PUT` Endpoint**
+
+![ganga_job_action](https://user-images.githubusercontent.com/47035057/85285220-2073f180-b4ae-11ea-851f-34765baf7f98.gif)
+
+**Step 3e: `/api/job/<job_id>` - `DELETE` Endpoint**
+
+![ganga_job_delete](https://user-images.githubusercontent.com/47035057/85285245-2f5aa400-b4ae-11ea-9528-d00a3ad57b97.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1700,https://api.github.com/repos/ganga-devs/ganga/pulls/1700,https://github.com/ganga-devs/ganga/pull/1700,closed,1029,10,3,10,3,19,1,0,[{'name': 'GUI'}],2020-06-22 12:06:06+00:00,2020-07-07 22:48:15+00:00,1334529.0,"15 days, 10:42:09","[{'comment_id': 444665536, 'comment_body': ""This seems to replicate information that is already in the Job class, see https://github.com/ganga-devs/ganga/blob/92c6ac046b8b323d5428434289ee430c7dd2375a/ganga/GangaCore/GPIDev/Lib/Job/Job.py#L233. Can't we just take it from there to avoid having to maintain the same information in two different places?"", 'comment_created': datetime.datetime(2020, 6, 24, 6, 11, 18, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444665869, 'comment_body': 'Is this list of information available elsewhere?', 'comment_created': datetime.datetime(2020, 6, 24, 6, 12, 14, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444667109, 'comment_body': 'This type checking should be factored out to make the code more readable.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 15, 47, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444672128, 'comment_body': 'Can we get all the attributes from the schema of the `GangaObject`, in this case the `Job`. See https://github.com/ganga-devs/ganga/blob/92c6ac046b8b323d5428434289ee430c7dd2375a/ganga/GangaCore/GPIDev/Lib/Job/Job.py#L201 . If there is a `SimpleType` in the schema, it seems to me that we could just auto generate the code for it here.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 28, 47, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444672535, 'comment_body': 'Maybe again some way to get this information automatically.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 29, 55, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444674055, 'comment_body': 'Or maybe we should not do it at all. Python in general is duck typed and type checking can become very heavy. In this specific case, the only thing you care about is probably if the argument can evaluate to True or False (but it could be an int).', 'comment_created': datetime.datetime(2020, 6, 24, 6, 33, 44, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444749676, 'comment_body': 'Actually the list is just to identify what attribute info is the user requesting. But essentially we are taking the data from the actual attribute implementation of the Job only so if any changes are made to the internal working of the attribute in the GangaCore, they will be reflected in the GUI. \r\n\r\nBut if a case comes that a new attribute is added to the Job class, then it will be needed to add that in this list for it to be accessible to the GUI.', 'comment_created': datetime.datetime(2020, 6, 24, 9, 1, 16, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 444754075, 'comment_body': 'The supported_actions list is just for validating that the action the user wants to perform is actually allowed or not. \r\n\r\nEg: Suppose a user tries to change the name of the job (with ID 13), then they will make a `PUT` request at the endpoint `/job/13/name`. The `name` part of the endpoint is checked if it exists in the supported_actions list so that it is allowed. Which in this case of is allowed. But suppose, if the user uses the endpoint `/job/13/newname`, here the `newname` action is not allowed, and the user is returned with the HTTP code 400.\r\n\r\n', 'comment_created': datetime.datetime(2020, 6, 24, 9, 8, 49, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 444814058, 'comment_body': 'I can refactor it, as the value that comes from the client-side is basically of type `str`, and in order to set the value of `do_auto_submit` it needs to be of type `bool`. This is just the type conversion.', 'comment_created': datetime.datetime(2020, 6, 24, 11, 0, 51, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 444815296, 'comment_body': ""This is just creating the response object to be returned. As each the values to be sent back as the response in JSON format needs to be `str`. It's just making sure that the values are `str` and the server doesn't give an error."", 'comment_created': datetime.datetime(2020, 6, 24, 11, 3, 14, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 447651956, 'comment_body': 'Since you already know the information you are going to show: `id, fqid, status, name, subjobs, application, backend, backend.actualCE, comments, subjob_statuses]`, I believe a good strat would be to loop over the displayed attr and use `getattr` to fetch them..\r\n```python\r\nfor attr in [id, fqid, status, name, subjobs, application, backend, backend.actualCE, comments, subjob_statuses]:\r\n  value = getattr(job, attr)\r\n  job_data[attr] = value\r\n```', 'comment_created': datetime.datetime(2020, 6, 30, 12, 43, 4, tzinfo=datetime.timezone.utc), 'commenter': 'DumbMachine', 'type': 'User'}, {'comment_id': 447655294, 'comment_body': 'Same can be done with the multiple `functions` called in `/action`. \r\n```rust\r\ngetattr(job, actioname)() # equivalent to job.actioname()\r\n```\r\n', 'comment_created': datetime.datetime(2020, 6, 30, 12, 48, 39, tzinfo=datetime.timezone.utc), 'commenter': 'DumbMachine', 'type': 'User'}, {'comment_id': 447902070, 'comment_body': 'This is really helpful, thanks a lot @DumbMachine ', 'comment_created': datetime.datetime(2020, 6, 30, 18, 42, 36, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 448696163, 'comment_body': 'Delete line or change to describe how it works now.', 'comment_created': datetime.datetime(2020, 7, 2, 1, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 448696734, 'comment_body': 'As above', 'comment_created': datetime.datetime(2020, 7, 2, 1, 21, 31, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 448696826, 'comment_body': 'Delete', 'comment_created': datetime.datetime(2020, 7, 2, 1, 21, 51, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 448699573, 'comment_body': 'How does this work if there is an optional argument? Like the `resubmit` or `peek` methods?', 'comment_created': datetime.datetime(2020, 7, 2, 1, 32, 28, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 449473976, 'comment_body': ""Is this a placeholder, shouldn't it be returning the main dashboard?"", 'comment_created': datetime.datetime(2020, 7, 3, 9, 13, 43, tzinfo=datetime.timezone.utc), 'commenter': 'alexanderrichards', 'type': 'User'}, {'comment_id': 449889424, 'comment_body': 'Yes it is actually placeholder, I am working on the view route as of now', 'comment_created': datetime.datetime(2020, 7, 5, 15, 25, 48, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '53fd9b9aea1d43d643d25cfac92862c35272e1fa', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49a185a6fd2d94659610ef39ceda71edd04855fb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '54e534fd94dcc88e161c1bdc9497a52ec951d42b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e10c476f98d29cb523b23ca3110d08c77883a6c1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6830eccf9e5ae724d298c2debd82f30f0ccda3ac', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20c6cd2ee15f0296ca274063e6da7721781dec38', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7f235bc3874c2eeb8d162633f406ef3187872de', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '891753f83be1d402c251649a068dbbcd6011da21', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b3d108375b9cf83323630a7cc2daacf026bae6b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5effc841bfa1beeca21bcb9c999d24b868d5a45c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438061062,GangaGUI - Subjobs API,"### Summary
+
+**Background**
+In order to keep the subjobs monitoring data updating, `Subjobs` API endpoints are required. The front end makes requests to these APIs and can get information about the subjobs. These API endpoints can also be consumed by other applications with proper authentication.
+
+**Work Overview (3 Endpoints | 17 Tests)**
+Following endpoints are created for the `Subjobs` API:
+* `/api/job/<job_id>/subjobs` - `GET` - Returns a list containing the subjobs info of a job.
+* `/api/job/<job_id>/subjob/<subjob_id>` - `GET` - Returns information related to single subjob of the job.
+* `/api/job/<job_id>/subjob/<subjob_id>/<attribute>` - `GET` - Returns information related to single subjob attribute of the job.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/job/<job_id>/subjobs` - `GET` Endpoint**
+
+![ganga_subjob_list](https://user-images.githubusercontent.com/47035057/85313112-5f696d80-b4d5-11ea-9c3a-ece0ef37fd0c.gif)
+
+**Step 3b: `/api/job/<job_id>/subjob/<subjob_id>` - `GET` Endpoint**
+
+![ganga_single_subjob](https://user-images.githubusercontent.com/47035057/85313145-67291200-b4d5-11ea-9a22-dbc30b3af118.gif)
+
+
+**Step 3c: `/api/job/<job_id>/subjob/<subjob_id>/<attribute>` - `GET` Endpoint**
+
+![ganga_subjobs_attribute](https://user-images.githubusercontent.com/47035057/85313165-6b552f80-b4d5-11ea-8253-571e8dcd318b.gif)
+
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1702,https://api.github.com/repos/ganga-devs/ganga/pulls/1702,https://github.com/ganga-devs/ganga/pull/1702,closed,347,1,2,8,0,0,1,0,[{'name': 'GUI'}],2020-06-22 16:45:44+00:00,2020-07-08 06:46:36+00:00,1346452.0,"15 days, 14:00:52",[],"[{'commit_sha': '9f7f6baede506206aae26103093648dab1fbfd9d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a8088d09cfe64ab02731bab4519bfeee53a2b41', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ad44a4b6fe33bff7cc0a211fc236540d194e7e3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab8d50de56ce4cb91d9f44b815767641828046cd', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aea21ca1fca18781b0e98a49e290412a001d4fee', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0f363617681a95bc9759e0e05f8f783c3ccebcf', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b997ae18936bc0fb3bb8aa6f6d9c80422cb5eda', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb40d3a10aad16c731eff1f9eb22e8dcb7a81ab0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438069716,GangaGUI - Jobs API,"### Summary
+
+**Background**
+`Jobs` API can be used to get the list of jobs (along with their general information) from the jobs repository. It can also be used to just get a list of ids of the jobs or a list of ids of the incomplete jobs.
+
+**Work Overview (3 Endpoints | 3 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/jobs` - `GET` - Get a list of jobs (along with their general information) in the jobs repository.
+* `/api/jobs/ids` - `GET` - Get the list of ids of the jobs in the jobs repository.
+* `/api/jobs/incomplete_ids` - `GET` - Get the list of ids of the jobs that are incomplete in the jobs repository.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/jobs` - `GET` Endpoint**
+
+![ganga_jobs](https://user-images.githubusercontent.com/47035057/85315108-123acb00-b4d8-11ea-9ab0-5a8540d29b70.gif)
+
+
+**Step 3b: `/api/jobs/ids` - `GET` Endpoint**
+
+![ganga_jobs_ids](https://user-images.githubusercontent.com/47035057/85315120-17981580-b4d8-11ea-893e-9af7411f80e4.gif)
+
+**Step 3c: `/api/jobs/incomplete_ids` - `GET` Endpoint**
+
+![ganga_jobs_incomplete](https://user-images.githubusercontent.com/47035057/85315223-431b0000-b4d8-11ea-998a-9adc6f828a4a.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1703,https://api.github.com/repos/ganga-devs/ganga/pulls/1703,https://github.com/ganga-devs/ganga/pull/1703,closed,191,10,2,7,2,2,1,0,[{'name': 'GUI'}],2020-06-22 17:04:19+00:00,2020-07-08 06:57:58+00:00,1346019.0,"15 days, 13:53:39","[{'comment_id': 444675539, 'comment_body': 'Try to avoid self-evident comment lines.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 37, 46, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444816493, 'comment_body': 'Okay, I will make the changes in the next PRs', 'comment_created': datetime.datetime(2020, 6, 24, 11, 5, 26, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': 'c9fe1e7144a43fb94c2acd46c837315347e7956c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9117ea10691eb84e06598cd078d121e26070cfd', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '911cdfa133487347f17323ce6a80027026272462', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fcaab33b9c7c74b69e7bb41dca791c087c8f6b76', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2642dfc037acc0ac01680d21f61b5befea23001d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8f8b057bdb92a4d70ea607c204aa75a6e338a28', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '57e417cc7367365ad4e80ff84d852705f5fe152d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438074721,GangaGUI - Config API,"### Summary
+
+**Background**
+With the `Config` API, users can get a list of config sections and their options as well as effective value in JSON format.
+
+**Work Overview (1 Endpoints | 1 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/config` - `GET` - Get a list of config sections, their docstring, their options, effective value and option's docstring.
+
+---
+
+### How to Use the API
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3: `/api/config` - `GET` Endpoint**
+
+![ganga_config](https://user-images.githubusercontent.com/47035057/85315870-74e09680-b4d9-11ea-9819-8cee856984cc.gif)
+
+---
+
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1704,https://api.github.com/repos/ganga-devs/ganga/pulls/1704,https://github.com/ganga-devs/ganga/pull/1704,closed,126,1,2,6,1,0,1,0,[{'name': 'GUI'}],2020-06-22 17:12:06+00:00,2020-07-08 07:01:48+00:00,1345782.0,"15 days, 13:49:42",[],"[{'commit_sha': 'dd8399690c3b62bc188dd221b206b68b75872540', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e0b1776e788617aada8132699ea51c0487b5087', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '306909ab783fe209dba5d67bf36e083912d64a38', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8f7b84911a70cffdee50e34a9c69243e517fe9d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2f5d7cc6d697c933f96262b1ddfff610d5be169', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6282b27822de34b4af1b0f1ad16b62c76f40df95', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438080130,GangaGUI - Template API,"### Summary
+
+**Background**
+`Templates` API can be used to get a list of templates (along with their general information) from the templates repository. It can also be used to delete a specific template.
+
+**Work Overview (2 Endpoints | 5 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/templates` - `GET` - Get a list of templates (along with their general information) from the templates repository.
+* `/api/template/<template_id>` - `DELETE` - Delete the template from the templates repository.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/templates` - `GET` Endpoint**
+
+![ganga_templates](https://user-images.githubusercontent.com/47035057/85316728-d7866200-b4da-11ea-8e9b-4d8c47e5aed3.gif)
+
+**Step 3b: `/api/template/<template_id>/delete` - `DELETE` Endpoint**
+
+![ganga_template_delete](https://user-images.githubusercontent.com/47035057/85316734-da815280-b4da-11ea-899a-91635d352554.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1705,https://api.github.com/repos/ganga-devs/ganga/pulls/1705,https://github.com/ganga-devs/ganga/pull/1705,closed,185,2,2,8,0,0,1,0,[{'name': 'GUI'}],2020-06-22 17:23:41+00:00,2020-07-08 07:04:46+00:00,1345265.0,"15 days, 13:41:05",[],"[{'commit_sha': '179db617951d13669df507480bb99d1bc390a12a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46c11387cfdff132fd999e37d10494bb95c9e8c9', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80107c80f447a3b67f46b76deceb7d931e9a23cc', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82dd347918c860da1e8acc059ba9800a2d5733e6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dc4b9d634925cf7b8c63a09b032e0eac9394bc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04746681cdcf55ac9907d1a4cb0227142cf5675c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '226d7680ae3e4f60cf790b28d67d4ba2c880d661', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed5f7e25ae89081e1817d2f6ab30976a55259792', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438083939,GangaGUI - Credential Store API,"### Summary
+
+**Background**
+`Credential Store` API can be used to get information of the stored credentials. It can also be used to renew expired credentials.
+
+**Work Overview (2 Endpoints | 2 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/credential_store` - `GET` - Get a list of all the stored credentials in the credential store.
+* `/api/credential_store/renew` - `PUT` - Renew expired credentials in the credential store.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/credential_store` - `GET` Endpoint**
+
+![ganga_cr](https://user-images.githubusercontent.com/47035057/85317612-44e6c280-b4dc-11ea-8240-0f1669f66e0e.gif)
+
+**Step 3b: `/api/credential_store/renew` - `PUT` Endpoint**
+
+![ganga_cr_renew](https://user-images.githubusercontent.com/47035057/85317602-41533b80-b4dc-11ea-8b09-ebe8cd6367c3.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1706,https://api.github.com/repos/ganga-devs/ganga/pulls/1706,https://github.com/ganga-devs/ganga/pull/1706,closed,200,0,2,6,0,2,1,0,[{'name': 'GUI'}],2020-06-22 17:32:11+00:00,2020-07-08 07:08:06+00:00,1344955.0,"15 days, 13:35:55","[{'comment_id': 449945201, 'comment_body': 'Could this be built in some dynamic way (to avoid the hard coding of the method names and attributes)?', 'comment_created': datetime.datetime(2020, 7, 6, 1, 31, 22, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 450277152, 'comment_body': ""I can shorten this, but this is the monitoring information that is fixed and would be need for the front end. I could have made another route more generic use, in a sense users could just ask what they want like in case of `job` API but I looked into `ICredentialInfo` it didn't have a `schema` or `exportmethods`."", 'comment_created': datetime.datetime(2020, 7, 6, 14, 52, 23, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '4e4d7bfb8be6092e4a931062b77693656e402acb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fec5e086d9119eb79b88da4e578325d0b9113022', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dba8a408c8a4086a147418e7e79f205f1f35627b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e331a66168ace840cf6e5f84d9de2d32cb7f009', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dcfa138d674dab8095193f644be27321f906adc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0749d60915239148eb131deed799a111dbefda93', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438086531,GangaGUI - Job Tree API,"### Summary
+
+**Background**
+`Job Tree` API returns a JSON format of the dictionary version of the Job Tree.
+
+**Work Overview (1 Endpoints | 1 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/jobtree` - `GET` - Get the jobtree and the job ids in each tree.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3: `/api/jobtree` - `GET` Endpoint**
+
+![ganga_jobtree](https://user-images.githubusercontent.com/47035057/85318123-14ebef00-b4dd-11ea-922e-96759abd1053.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1707,https://api.github.com/repos/ganga-devs/ganga/pulls/1707,https://github.com/ganga-devs/ganga/pull/1707,closed,93,0,2,8,0,0,1,0,[{'name': 'GUI'}],2020-06-22 17:38:02+00:00,2020-07-08 07:09:58+00:00,1344716.0,"15 days, 13:31:56",[],"[{'commit_sha': 'fb54fc1f15a3016699f2adb7c868e23b982cb39b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed47f40994a207d76b5d48e083d9d46282144607', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '482a784b18ba7918172ff46111121488d00e64e6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da34b1b327babf8ad8b8190edacbbdc6ee0beaee', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ebcba042a31106e1a34460117598533da7e6950', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50bec6365090dd28c16c7fbb54b59212755c7c1a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4c78e88be4f4749957ccc9dbddcffa82d688fe57', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73f4b3c28a6a15ea696d8c30a41325cba259fef3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+444902602,GangaGUI - Dashboard View,"## Summary
+
+Dashboard view of the GUI. Haven't added dynamicity with AJAX as of now, will be adding in further updates at once when the APIs have been merged.
+
+**View**
+
+![dashboard_view](https://user-images.githubusercontent.com/47035057/86620177-83e73e80-bfd9-11ea-8ae3-8c044c566074.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1716,https://api.github.com/repos/ganga-devs/ganga/pulls/1716,https://github.com/ganga-devs/ganga/pull/1716,closed,238,3,7,5,0,0,1,0,[{'name': 'GUI'}],2020-07-06 17:11:21+00:00,2020-07-08 07:13:18+00:00,136917.0,"1 day, 14:01:57",[],"[{'commit_sha': '6587af52b08362898d6e43a906e06629605bef4e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e49d2d08c92ae9da5729b2bd10bb9a45c7dcbfeb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6acba7d91eab88e96a338c0fb443d426a1bd3e05', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a791fc25b8410ae0cba16e509ab8025b742e8447', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'abb3bb2a6f90f1607f22106bd2ce04388f9f8557', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+444914331,GangaGUI - Config View,"## Summary
+
+Create config view to view Ganga Config sections, their options, and their effective value.
+
+**View**
+
+![config_view](https://user-images.githubusercontent.com/47035057/86622316-53090880-bfdd-11ea-9426-a8c77c080598.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1717,https://api.github.com/repos/ganga-devs/ganga/pulls/1717,https://github.com/ganga-devs/ganga/pull/1717,closed,77,1,2,4,0,0,1,0,[{'name': 'GUI'}],2020-07-06 17:38:25+00:00,2020-07-09 06:11:08+00:00,217963.0,"2 days, 12:32:43",[],"[{'commit_sha': '49bc433af95a3dba126991b2c9a150889d8754a6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8252329206f4ded680210b4456502c5b7f245fd6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '885b19556ca68019161183199b81599a96468d04', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b574e514990406bcfcf8aa6efa59606cbefd3d9', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+446046301,GangaGUI - APIs,"This PR is just a combination of following PRs:
+* Subjobs API #1702 
+* Jobs API #1703 
+* Config API #1704 
+* Templates API #1705 
+* Credential Store API #1706 
+* Job Tree API #1707 
+* Dashboard View #1716 
+---
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1721,https://api.github.com/repos/ganga-devs/ganga/pulls/1721,https://github.com/ganga-devs/ganga/pull/1721,closed,1360,6,13,58,0,0,1,0,[{'name': 'GUI'}],2020-07-08 07:17:54+00:00,2020-07-08 23:18:55+00:00,57661.0,16:01:01,[],"[{'commit_sha': '9f7f6baede506206aae26103093648dab1fbfd9d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a8088d09cfe64ab02731bab4519bfeee53a2b41', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c9fe1e7144a43fb94c2acd46c837315347e7956c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9117ea10691eb84e06598cd078d121e26070cfd', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd8399690c3b62bc188dd221b206b68b75872540', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e0b1776e788617aada8132699ea51c0487b5087', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '179db617951d13669df507480bb99d1bc390a12a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46c11387cfdff132fd999e37d10494bb95c9e8c9', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e4d7bfb8be6092e4a931062b77693656e402acb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fec5e086d9119eb79b88da4e578325d0b9113022', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb54fc1f15a3016699f2adb7c868e23b982cb39b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed47f40994a207d76b5d48e083d9d46282144607', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ad44a4b6fe33bff7cc0a211fc236540d194e7e3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '911cdfa133487347f17323ce6a80027026272462', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '306909ab783fe209dba5d67bf36e083912d64a38', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80107c80f447a3b67f46b76deceb7d931e9a23cc', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dba8a408c8a4086a147418e7e79f205f1f35627b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '482a784b18ba7918172ff46111121488d00e64e6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82dd347918c860da1e8acc059ba9800a2d5733e6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dc4b9d634925cf7b8c63a09b032e0eac9394bc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fcaab33b9c7c74b69e7bb41dca791c087c8f6b76', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab8d50de56ce4cb91d9f44b815767641828046cd', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2642dfc037acc0ac01680d21f61b5befea23001d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04746681cdcf55ac9907d1a4cb0227142cf5675c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8f7b84911a70cffdee50e34a9c69243e517fe9d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e331a66168ace840cf6e5f84d9de2d32cb7f009', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da34b1b327babf8ad8b8190edacbbdc6ee0beaee', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6587af52b08362898d6e43a906e06629605bef4e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e49d2d08c92ae9da5729b2bd10bb9a45c7dcbfeb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8f8b057bdb92a4d70ea607c204aa75a6e338a28', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2f5d7cc6d697c933f96262b1ddfff610d5be169', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dcfa138d674dab8095193f644be27321f906adc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aea21ca1fca18781b0e98a49e290412a001d4fee', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0f363617681a95bc9759e0e05f8f783c3ccebcf', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '226d7680ae3e4f60cf790b28d67d4ba2c880d661', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ebcba042a31106e1a34460117598533da7e6950', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50bec6365090dd28c16c7fbb54b59212755c7c1a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6acba7d91eab88e96a338c0fb443d426a1bd3e05', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a791fc25b8410ae0cba16e509ab8025b742e8447', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b997ae18936bc0fb3bb8aa6f6d9c80422cb5eda', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4c78e88be4f4749957ccc9dbddcffa82d688fe57', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb40d3a10aad16c731eff1f9eb22e8dcb7a81ab0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c51919f2078a8d084bea1f80ac332428a1ca0531', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '57e417cc7367365ad4e80ff84d852705f5fe152d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '197807d9bdcb4507fd24243682d0b21391a64d26', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6282b27822de34b4af1b0f1ad16b62c76f40df95', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f63fac0335bd3705e2313982cad060a411e575b1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed5f7e25ae89081e1817d2f6ab30976a55259792', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0fb67ae015fcf96809c0593b5eeca43e8d0c80e3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0749d60915239148eb131deed799a111dbefda93', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6682de4d618ca54cec1623b7eab1e32aa650adb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73f4b3c28a6a15ea696d8c30a41325cba259fef3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '229b9688a994b30a1d98a9181cdacd53d776d04e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'abb3bb2a6f90f1607f22106bd2ce04388f9f8557', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a9f2ed5417c2608f2147ef81f63ef0afc27d522', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '66f2a91699247ae0ebfb6c778f5522d751bd0c46', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20ffef968d6f9f2a6eb650d2a29718d5e6c29914', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40928bc56a035c990a55914e0b5e178e8a9a9a5d', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+448680475,GangaGUI - Views & Web CLI,"# Ganga GUI - Views & Web CLI
+
+### Summary
+This PR contains the code for Ganga GUI view routes like (dashboard, create, jobs, config, etc.) and web CLI implementation. This PR also contains a major restructuring of the project over the previous code. Earlier there was just a single-threaded weak Flask webserver which ran on a GangaThread in the Ganga thread pool allowing it to access all the GPI functions (while keeping the CLI running) when Ganga was running. In this PR the project was restructured to make use of two web servers in order to server the GUI to the user. The way it works is, there are two separate Flask applications, one is called the `internal`, and the second one is called the `gui`. The `internal` Flask instance uses a single-threaded weak web server and runs on the GangaThread in the Ganga thread pool. This Flask instance has access to all the Ganga GPI functions in the background and its only work is to act as a RESTful interface between Ganga and the `gui` Flask instance. The `internal` server is only accessible from the local machine and not over the network and it is meant for internal use by the `gui` server in order to get information from the Ganga and render web pages according to it. The communication between the `gui` server and the `internal` server occurs in JSON format. The `gui` Flask instance is completely decoupled from Ganga and it runs as a separate process on a Gunicorn server (production-ready server). 
+
+The series of events that happens when Ganga is called with the `--webgui` flag or `start_gui` function is invoked within the Ganga CLI is as follows:
+* User instructs Ganga to start the GUI.
+* A `GangaGUIAdmin` user is created for the user to be able to access the GUI using its credentials.
+* The `internal` Flask instance is started first on a GangaThread and is attached to the Ganga thread pool. The `internal` server listens to internal HTTP requests on a port specified by the user or `5000` by default. (inaccessible over the network)
+* Afterwards, a subprocess invokes the `gui` Flask instance on a Gunicorn server. This `gui` server listens to outside HTTP requests on a port specified by the user or `5500` by default. This is accessible over the network and this is the server that is exposed to the outside world.
+* The credentials and the `gui` server information is displayed to the user.
+* The user then makes an HTTP request to `gui` server on the server IP address and specified GUI port.
+* The `gui` server listens to the request made by the user and then depending on the type of the information requested by the user, the `gui` server makes an internal HTTP to the `internal` Flask server in order to get the information from Ganga.
+* The `internal` server listens to the HTTP request made by the `gui` server and accordingly gets the requested information from Ganga and returns it back to the `gui` server in a JSON format.
+* The `gui` server then parses the JSON response of the `internal` server and uses this information to render the web page that is to be displayed to the user. (or forwards the JSON as is in case of API calls to the `gui` server).
+* The `gui` server serves rendered web page to the user and it is then displayed in the user's browser.
+
+---
+
+### About `internal` Web Server
+
+The `internal` is used by the `gui` server in order to get information from Ganga. The `internal` server is a single-threaded Flask application running on a GangaThread. It implements the following APIs for internal use. Check documentation for more information regarding these APIs.
+
+**Job API**
+* `/internal/jobs/<int:job_id>` - `GET`
+* `/internal/jobs/<int:job_id>/<attribute>` - `GET`
+* `/internal/jobs/<int:job_id>/full-print` - `GET`
+* `/internal/jobs/create` - `POST`
+* `/internal/jobs/<int:job_id>/copy` - `PUT`
+* `/internal/jobs/<int:job_id>/<action>` - `PUT`
+* `/internal/jobs/<int:job_id>` - `DELETE`
+* `/internal/jobs/<int:job_id>/export` - `GET`
+
+**Subjobs API**
+* `/internal/jobs/<int:job_id>/subjobs` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/length` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>/<attribute>` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>/copy` - `PUT`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>/full-print` - `GET`
+
+**Jobs API**
+* `/internal/jobs` - `GET`
+* `/internal/jobs/length` - `GET`
+* `/internal/jobs/statistics` - `GET`
+* `/internal/jobs/incomplete-ids` - `GET`
+* `/internal/jobs/recent` - `GET`
+
+**Config API**
+* `/internal/config` - `GET`
+* `/internal/config/<section>` - `GET`
+
+**Templates API**
+* `/internal/templates` - `GET`
+* `/internal/templates/<int:template_id>/full-print` - `GET`
+* `/internal/templates/length` - `GET`
+* `/internal/templates/<int:template_id>` - `DELETE`
+
+**Credentials API**
+* `/internal/credentials` - `GET`
+* `/internal/credentials/renew` - `PUT`
+
+**Jobtree API**
+* `/internal/jobtree` - `GET`
+
+**Plugins API**
+* `/internal/plugins` - `GET`
+* `/internal/plugins/<plugin_name>` - `GET`
+
+**Other API**
+* `/internal/jobs/actions` - `GET`
+* `/internal/load` - `GET`
+* `/internal/runfile` - `GET`
+* `/ping` - `GET`
+
+---
+
+### About `gui` Web Server
+
+The `gui` server is what the user interacts with, it handles the rendering and serving of HTML, CSS, JS files. It also manages authentication states and other security features. The `gui` server has the following view routes implemented as well as the API routes, these APIs are accessible by the user with a valid token. Refer to the documentation for more information.
+
+**View Routes**
+* `/login`
+* `/logout`
+* `/`
+* `/config`
+* `/create`
+* `/create/runfile`
+* `/templates`
+* `/jobs`
+* `/jobs/<int:job_id>`
+* `/jobs/<int:job_id>/export`
+* `/jobs/<int:job_id>/edit`
+* `/job/<int:job_id>/browse`
+* `/job/<int:job_id>/browse/<path:path>`
+* `/jobs/<int:job_id>/subjobs`
+* `/jobs/<int:job_id>/subjobs/<int:subjob_id>`
+* `/credentials`
+* `/plugins`
+* `/plugin/<plugin_name>`
+* `/logs`
+* `/storage`
+* `/storage/<path:path>`
+* `/cli`
+* `connect` - `Websocket`
+* `pty-input` - `Websocket`
+* `resize` - `Websocket`
+* `/shutdown` 
+
+
+**Web APIs**
+
+* Token
+    * `/token` - `POST`
+* Job Web API
+    * `/api/jobs/<int:job_id>` - `GET`
+    * `/api/jobs/<int:job_id>/<attribute>` - `GET`
+    * `/api/jobs/<int:job_id>/full-print` - `GET`
+    * `/api/jobs/create` - `POST`
+    * `/api/jobs/<int:job_id>/copy` - `PUT`
+    * `/api/jobs/<int:job_id>/<action>` - `PUT`
+    * `/api/jobs/<int:job_id>` - `DELETE`
+    * `/api/jobs/<int:job_id>/pin` - `GET`
+    * `/api/jobs/<int:job_id>/unpin` - `GET`
+* Subjobs Web API
+    * `/api/jobs/<int:job_id>/subjobs` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>/<attribute>` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>/full-print` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>/copy` - `PUT`
+* Jobs Web API
+    * `/api/jobs` - `GET`
+    * `/api/jobs/statistics` - `GET`
+    * `/api/jobs/incomplete_ids` - `GET`
+* Config Web API
+    * `/api/config` - `GET`
+    * `/api/config/<section>` - `GET`
+* Tempaltes Web API
+    * `/api/templates` - `GET`
+    * `/api/templates/<int:template_id>/full-print` - `GET`
+    * `/api/templates/<int:template_id>` - `DELETE`
+* Credentails Web API
+    * `/api/credentials` - `GET`
+    * `/api/credentials/renew` - `PUT`
+* Jobtree Web API
+    * `/api/jobtree` - `GET`
+* Plugins Web API
+    * `/api/plugins` - `GET`
+    * `/api/plugins/<plugin_name>` - `GET`
+
+All the communication with `gui` Web API will happen in JSON format with a valid token in request headers as `X-Access-Token`. 
+
+---
+
+### About Web CLI
+
+The usual pattern of starting the Ganga GUI is by starting it using `--webgui` flag while starting Ganga or `start_gui` function in the Ganga CLI. This method starts a Ganga session first and then the `internal` server and then the `gui` server. 
+
+In the case when the user wants to access the Ganga CLI on their browser over the network. They will need to start the Ganga using a special binary called `ganga-gui`. It takes `host`, `port`, `internal-port`, `--quite` and `ganga-args` as the command line arguments. What this script does is, it starts the `gui` server first and then when the first HTTP request is made to the server, it start a Ganga session in a pseudo-terminal with the `--webgui` flag (in this case the webgui flag just starts the internal server). With this approach, the `gui` server has access to the pseudo terminal's file descriptor in which the Ganga session is running which is then used to interact with Ganga.
+
+---
+
+### TODO
+
+- [ ] Add ability to auto search free port for starting the servers.
+- [ ]  Write internal and user documentation
+- [ ] Minor ease of use changes like sorting of tables, etc.
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+
+
+",True,1728,https://api.github.com/repos/ganga-devs/ganga/pulls/1728,https://github.com/ganga-devs/ganga/pull/1728,closed,6065,1137,59,21,2,10,0,0,[],2020-07-14 06:40:40+00:00,2020-08-27 20:59:43+00:00,3853143.0,"44 days, 14:19:03","[{'comment_id': 477896898, 'comment_body': 'What is this SECRET_KEY used for? As it sits in the publicly viewable code on GitHub, it is not very secret!', 'comment_created': datetime.datetime(2020, 8, 27, 1, 48, 16, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477902183, 'comment_body': 'This script should be moved to the `bin` directory where the main binary for starting Ganga is also located. ', 'comment_created': datetime.datetime(2020, 8, 27, 1, 52, 6, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477908046, 'comment_body': 'How is this related to the SECRET_KEY above?', 'comment_created': datetime.datetime(2020, 8, 27, 1, 56, 20, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477911441, 'comment_body': 'What happens if the job has a status that is not in this table? We have two other statuses that a job can be in for a short time (`submitting` and `completing`).', 'comment_created': datetime.datetime(2020, 8, 27, 1, 58, 49, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477916664, 'comment_body': 'Why is this duplicated in different places?', 'comment_created': datetime.datetime(2020, 8, 27, 2, 2, 33, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 478690905, 'comment_body': 'This SECRET_KEY is used by the `internal` RESTful server to which the `gui` server communicates in order to get data from Ganga, The SECRET_KEY is used by the server for validating the integrity of the requests if it had sent some encoded data in it (eg. the token-based authentication uses this SECREY_KEY to encrypt and decrypt the tokens). I will merge this PR and create a new one where I will fix this secret key by randomly creating it for the user.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 56, 41, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478690947, 'comment_body': 'Okay, I will shift this.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 56, 45, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478690974, 'comment_body': 'This is the SECRET_KEY used by the `gui` server which is what the user interacts with.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 56, 48, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478691541, 'comment_body': ""The status will be shown, it just won't have a color. It will be shown a plain text instead of green background (which you see in completed jobs) or such."", 'comment_created': datetime.datetime(2020, 8, 27, 20, 57, 57, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478692315, 'comment_body': 'The above one is used by the server when rendering HTML pages whereas this one is used on the client-side (the browser). It is the JavaScript version.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 59, 23, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '7d8a5667b78f3ea77fd40f3ee745b789be169d1f', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9796804a67288162aeb76dd0080ac1b30d66eb7', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43972f0d2ad02f22aa53ad41ef597ce064a71cbe', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bb3d5e40f54567b8608ca0d260e5926a4bdc3cdf', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0aa7dad395e329d8685cbd5d6dc9b4d340ba2b5b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd9a7d247c75bf8792d8f75463138a4f7356361a4', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d14718abcdc706c39aff30479d5db04bc0909a0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd056791d0a7ba22ec46a7d392a531e2fa2ac2ce', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85671efecb202fd95552ae1aac7d222fcbc7711f', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1cb94ed48ec835d5b657a10b3e62ce77f7f57c11', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9331528baef6742fd8e777d0daea459818de6b01', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50d49aeb5c30086e8863c2037eb07609edbf19ce', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f51f295d031575f9dc60734e3f1bfaa85fc1f07d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '376c1d47764918b57422b8246af06125821e2fc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cbd329ca71b14baf8880772f1b45927d40b47186', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fe9bcd7e87ec5627e7b127e509477acff787a44', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '370fc1f27fea7bc181c2435fdfc75d5ab8b77fc1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a676dd2c451c23eb2a695f360fe5ed281211350b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '221c39191c682a013cbab5f8897be403ea01cc25', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d5432dd861a10f85cbd31a66603a23a0b32bf62', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b4eaeb95b0c6cfd47a769f197158fb1d5785bcb6', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+419905657,GangaGUI - Initial Server Set Up using GangaThread,"### Summary
+
+__Project Structure__
+We are going be using the Flask web framework for serving GUI to the user. In this Pull Request, I have created a `GangaGUI` a top-level package containing the Flask application. The entire Flask application resides inside the directory `GangaGUI/gui` and only it's configuration file `GangaGUI/config.py` and the start file `GangaGUI/start.py` resides outside of the `GangaGUI/gui` directory. All the tests related to the package are present under `GangaGUI/test` directory. 
+
+__How To Start The Server__
+After cloning the repository and downloading the updated requirements. The user can start the Flask server in 2 following ways:
+
+* While starting ganga command line interface use the `--webgui` flag. 
+* By setting `RUNTIME_PATH = GangaGUI` in the `.gangarc` and then after starting the ganga command-line interface use `start_gui()` function to start the Flask server and `stop_gui()` to stop the Flask server.
+
+After starting the server, open the browser and navigate to `127.0.0.1:5000/`. In either case, when exiting ganga, a check will be performed if the Flask server GangaThread is alive or not, if alive the Flask server is stopped ultimately stopping the GangaThread.
+
+__Understanding The Code - Review In The Following Order__ 
+
+__`GangaGUI/gui`__
+* This is where the Flask server is set up. The `__init__.py` creates a Flask application which is then used all over the other modules. 
+* The `routes.py` is rather an important file containing what should be done when the user tries to access the specific route. For example after seeing the file, you may understand that when a user tries to access the `https://127.0.0.1/` routes, it executes the dashboard function and returns the output to the user's browser. 
+
+__`config.py`__
+* Contains all the config configuration of the Flask app which is used by `GangaGUI/gui/__init__.py`
+
+__`start.py`__
+* Contain code to start the Flask server on a GangaThread so it can access the ganga namespace while the command line interface is running without stopping the monitoring.
+* A `GUIServerThread` is defined which is a typeof `GangaThread`. It need the `self.host` and `self.port` in order to start the Flask server on that specific `host` and `port`.
+* It has a `run` method that logs the `host` and `port` to the `stdout` and starts the Flask server.
+* It has a `shutdown` method, which makes the request to the Flask app on `https://host:port/shutdown` route to stop the Flask app.
+* The `start_gui` function creates a GUIServerThread and starts it and the `stop_gui` function stop the already existing GUIServerThread. 
+* Additional take note than the `start_gui()` function can take additional arguments of `host` and `port`, but they have a default value if they aren't provided.
+
+__`GangaCore/Core/InternalServices/ShutdownManager.py`__
+* Added a check if the webserver is running then call the `stop_gui()` function to stop the webserver for the smooth shutdown of ganga.
+
+__`GangaCore/Runtime/bootstrap.py`__
+* Modified `--webgui` flag to run `start_gui()` function.
+
+__`BOOT.py`__
+* Exports the `start_gui()` and `stop_gui` to the GPI.
+
+__`GangaGUI/test`__
+* Contains the tests for the Flask application.
+* The test uses `GangaUnitTest` and during `setUp` it creates an app test client (which is built into the Flask` which tests the application without starting the server.
+
+__Would need help in setting up the Jenkin CI for testing.__
+
+__What's Next?__
+In the next following week, I plan to
+- [x] Creation of `secret_key` which is returned to the user after starting the server.
+- [x] Implement token-based authentication for accessing the APIs. 
+- [ ] Creation of job APIs. - Moved to #1683 
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1675,https://api.github.com/repos/ganga-devs/ganga/pulls/1675,https://github.com/ganga-devs/ganga/pull/1675,closed,144,3,12,17,0,6,1,0,[{'name': 'GUI'}],2020-05-19 06:27:38+00:00,2020-05-20 08:45:49+00:00,94691.0,"1 day, 2:18:11","[{'comment_id': 427821262, 'comment_body': 'I guess this is just something temporary ...', 'comment_created': datetime.datetime(2020, 5, 20, 8, 12, 17, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 427822175, 'comment_body': 'Put all imports at the start (unless there is an issue with it).', 'comment_created': datetime.datetime(2020, 5, 20, 8, 13, 47, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 427823317, 'comment_body': 'As these functions will be exported to the user, it is important that the doc lines explain well what is going on. For now it is fine though.', 'comment_created': datetime.datetime(2020, 5, 20, 8, 15, 39, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 427883024, 'comment_body': 'Yes, but the user will always need to specify a secret key in order to run Flask. We can maybe generate it in `.gangarc`, and then take it from there in the future?', 'comment_created': datetime.datetime(2020, 5, 20, 9, 50, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 427883788, 'comment_body': 'In Flask, due to the circular import issue, we have to import routes are the bottom. (It has become a kind of a convention)', 'comment_created': datetime.datetime(2020, 5, 20, 9, 51, 9, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 427884164, 'comment_body': 'Okay, I will add the usage section also in the docstring along with more details on how it runs.', 'comment_created': datetime.datetime(2020, 5, 20, 9, 51, 49, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '60547ad3e603f6bf908b1ab36d420a979e7b1ad1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '54ec90cd59b1c4e28ded45c87d44d82c7dacac4c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4989aa417dd2c67e036ef95216bfc3738548ac6d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5464c7df6f2bd7bf8d146e1ecd39f745af1db89a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '205f4aafbb3b3d36428213dfd500f98ad7bcc936', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '066e6fc10a4c1ae5fcb5b1fb28fe60d522119533', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b07ec65ed2ff915d6fe76c70eac61437e85949df', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '39f7236bea781a6239837ebd9a7c3194e563aeed', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3baf82151c9d9b5e419bf2bd8ca691c93339abc0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c77c73ae5f1222520beb3aaab904ac1655c81735', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24209431524740756f391c0f5e89915e5ac43499', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dd8377a79ac620853c052cf1fb83621fd41f20f', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0216499474b2c74d9536b2cd3b7527b93fb45bbd', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9701104d8ac290927ade531eaf060cc26f5babed', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '670ffdb4242e102184d36933a1eebd427439cdbf', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be9209c5e94d079185962b93b4db7794fc0bd394', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29c2f93d3a92afa6090feb4b7e0f4c62dda94fe4', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+425860839,GangaGUI - Token Based Authentication,"### Summary
+
+__Background__
+This PR aims at adding token-based authentication which will be used by the web APIs during the GangaGUI project.
+
+__What is Token Based Authentication?__
+The creation of web APIs for Ganga will enable access to its data over the network. The access to such sensitive data cannot be given to all and hence to limit the access to specific users, token-based authentication is implemented. 
+
+__How Does It Work?__
+Whenever a user will start the GUI server either by using `--webgui` flag or `start_gui()` in the command-line interface, he will be returned a tuple containing `(host, port, user, password)` data. This information will be also displayed to the user when they start the server. This is sensitive information and must not be shared publicly.
+
+When the `start_gui()` function is invoked, under the hood, it generates a default user `GangaGUIAdmin`, a 7 character `password` and a unique `public_id`. All of this information is stored in an SQLite database named `gui_db.sqlite` and a tuple containing `(host, port, user, password)` is returned.
+
+__Note:__ `start_gui()` can take custom `host`, `port` and `password` values, if the user wishes to set it themselves. 
+
+Now in order to access the protected resource, the user will need to first generate a JWT token using the `/token` route using the authentication details that were generated above. The token contains information about the `public_id` and the `expiration_date` of the generating user. The `expiration_date` by default has be set to `5 days`.
+
+__Example:__
+
+For this example, we will take the `host`=`127.0.0.1` and `port`=`5000`.
+
+* `User A` invokes `start_gui()` function in command-line interface.
+*  `User A` is returned with `('127.0.0.1', 5000, 'GangaGUIAdmin', 'H7UN99L')` - password is randomly generated each time `start_gui()` function is called.
+* `User A` wants to access the API at `http://127.0.0.1:5000/resource` but it is protected.
+*  `User A` generated a token by making a `POST` request to `http://127.0.0.0.1:5000/token` with the data `{""user"": ""GangaGUIAdmin"", ""password"": ""H7UN99L""}`
+* `User A` received a response like `{""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiI3Y2MxYjdjOS0wYzJmLTRjZGUtOTkyZC04MzJiYWRmM2ZlYjAiLCJleHAiOjE1OTEyNzQ1Nzd9.hU44_42ThLCGgWqIGC4zAktE2EZvKK8lhFVFH_r2MAo""}`
+* `User A` uses the `token` in each request header that he makes to the protected route `http://127.0.0.1:5000/resource`. The header's name is `X-Access-Token`.
+* `User A` in now granted access to the protected API and is happy.
+
+---
+
+### Understanding The Code
+
+__`GangaGUI/gui/__init__.py`__:
+* Added support for Flask-SQLAlchemy (ORM for Flask).
+* Created a db instance of SQLAlchemy.
+
+__`GangaGUI/config.py`__:
+* Added configuration for SQLAlchemy - location of the SQLite database.
+
+__`GangaGUI/gui/models.py`__:
+* Created a Users model - which will, in turn, create a table in SQLite database with the columns: `id, public_id, user, password_hash, role`.
+* Passwords are not stored directly but their hashed values are stored - additional security layer.
+* Added a method to the `User` class to generate PyJWT token using the `public_id` information and expiration date of `5` days from creation.
+
+__`GangaGUI/gui/routes.py`__:
+* Created a `/token` route to the authenticated user and accordingly send an error message or token.
+* Create a `@token_requred` which will be later used by the API to authenticate the token and identify the user.
+
+__`GangaGUI/start.py`__:
+* Updated the docstring to be more elaborate.
+* Added random `public_id` and `password` generation at each startup and stored in a separate database.
+* `start_gui()` now returns a tuple containing (host, port, user, password) information.
+*  User can set his own password.
+* Added database creation for development server startup.
+
+__`GangaGUI/test/`__:
+* Created test to test database creation and modifications.
+* Created test to test token authentication system.
+
+Other than this, updated few docstrings, added comments, and added new dependencies to `setup.py`.
+
+---
+
+### What's Next
+- [ ] Creation of `/job` endpoint
+- [ ] Creation of `/jobs` endpoint
+- [ ] Creation of `/config` endpoint
+- [ ] Creation of `/templates` endpoint
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+
+---
+__Footnotes:__
+I apologize for the delay with this PR, it should not have taken this long. Next week I will try to make up for the delay.
+
+",True,1683,https://api.github.com/repos/ganga-devs/ganga/pulls/1683,https://github.com/ganga-devs/ganga/pull/1683,closed,291,18,10,16,1,4,1,0,[{'name': 'GUI'}],2020-06-01 09:32:06+00:00,2020-06-02 23:06:06+00:00,135240.0,"1 day, 13:34:00","[{'comment_id': 433573309, 'comment_body': 'Please add newlines at the end of all files.', 'comment_created': datetime.datetime(2020, 6, 2, 1, 31, 41, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 433573896, 'comment_body': 'What happens if the user runs the Ganga session and GUI for more than 5 days? Do they need to stop and start the GUI again?', 'comment_created': datetime.datetime(2020, 6, 2, 1, 33, 56, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 433603427, 'comment_body': ""Nope, simply renew the token. If the user is just using the GUI, then no worries I'll add one popup just re-enter the password and token will be renewed."", 'comment_created': datetime.datetime(2020, 6, 2, 3, 43, 19, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 433603491, 'comment_body': 'Okay, will do', 'comment_created': datetime.datetime(2020, 6, 2, 3, 43, 39, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '680d428f9c563716ba913910cf3307c8d96731ae', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3299ce2a3d09c38b4c3f5ae729b267823e5c48ef', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ca9652359a79b0cc9727a52ca6fea7e8188842fe', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd038e5a437ae093f01d67a72c7b75a517e68c3cc', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7017a797208064b9699fb83c569776f279395ed4', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'deb5a3a7e799eef3375c7770f4fdc6498e18c762', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6bd29b4a5cb6cd4f56a444eb72508f17881b0453', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ba1f3374a6c992fc3f05572855f9072cf8f3137', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6f4b0d3b8ac07709a22e1293317ab57ba9d56469', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '922cbbed9afd744e8451f47d08cf44618654f5cb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48bdc6e45cb7fdd2de4f1b3818f3a957eaa3d4c4', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '361225a3231afc476f4911dd7fbc4fbe3c8fb74d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '682949685ba1ce5464e5c33f83e9a5ce6514866b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b84526d67d630853e20abad997d1a01524ce278c', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e82b4ab227b8e7acb704fb8080657b879c7d3cab', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e059989a05f0677c84819d49f6249c57352805c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+426405048,Update 'ShutdownManager.py' To Conditionally Run 'stop_gui()',This provides a fix by adding a conditional check to only run `stop_gui()` function is the GUIServerThread is running when shutting down Ganga.,True,1685,https://api.github.com/repos/ganga-devs/ganga/pulls/1685,https://github.com/ganga-devs/ganga/pull/1685,closed,14,7,2,4,1,0,1,0,[{'name': 'GUI'}],2020-06-02 07:34:37+00:00,2020-06-03 12:20:28+00:00,103551.0,"1 day, 4:45:51",[],"[{'commit_sha': 'c75872c272b35848279ebe84074f3af654c1905e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f206254458246c907fd4c2bc67a696bb31243e7e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c5c169bfd7db1769c25a84b425effb4a1b4d0929', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '998e1076a2fe302e3901cd0943a9a4ed3a7d5b94', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+437896272,GangaGUI - Job API,"### Summary
+
+**Background**
+In order to keep updating the job monitoring data without refreshing the whole web page, `Job` API endpoints are required. The front end makes requests to these APIs and can get information about the job, create a job, perform a certain action on the job, delete the job. These API endpoints can also be consumed by other applications with proper authentication.
+
+**Work Overview (5 Endpoints | 37 Tests | 91% Test Coverage)**
+Following endpoints are created for the `Job` API:
+* `/api/job/<job_id>` - `GET` - Retrieves the general details about the job which is seen when `jobs` command is used in the command-line interface.
+* `/api/job/<job_id>/<attribute>` - `GET` - Retrieves the details about the specific attribute of the job (can be any attribute of the Job object).
+* `/api/job/create` - `POST` - Need to provide `template_id` value in the request body. Using the `template_id` create a job in the `new` state.
+* `api/job/<job_id>/<action>` - `PUT` - Performs certain action on the job. Any method that the Job object has can be called using this endpoint. Just replace the placeholder `<action>` with the method name. Ex. To call the `submit` method on the job (with ID 13), the endpoint will be `/api/job/13/submit`.
+    * If the method takes an argument then it can be passed in the body of the HTTP request in the field with same name as the method and the value of the field as the value to be passed in the method as an argument. Ex. `force_status` method on the job (ID: 13) takes an argument `failed`, so the request will be made to the endpoint `/api/job/13/force_status` with `force_status=""killed""` in the request body. 
+        * Please note that the value of the argument in the request body, if it is a `string` then it must be enclosed between `""""` (double quotes), if it is is an `integer` then it shouldn't be enclosed between `""""`, similarly even the boolean value `true` and `false` shouldn't be enclosed between `""""` (double quotes).
+    * With this endpoint, the user can also change the attributes of the job. Ex. User can change the `do_auto_resubmit` value to `False` for job (ID 13) by making a `PUT` request to `/api/job/13/do_auto_resubmit` with `do_auto_resubmit=false` in the request body.
+* `/api/job/<job_id>` - `DELETE` - Deletes the job.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/job/<job_id>` - `GET` Endpoint**
+
+![ganga_get_job_info](https://user-images.githubusercontent.com/47035057/85282827-06381480-b4aa-11ea-9dc1-aa3bc53a3fd1.gif)
+
+**Step 3b: `/api/job/<job_id>/<attribute>` - `GET` Endpoint**
+
+![ganga_job_attribute_info](https://user-images.githubusercontent.com/47035057/85285184-0fc37b80-b4ae-11ea-9f5c-14fbcdb4bc8e.gif)
+
+**Step 3c: `/api/job/create` - `POST` Endpoint**
+
+![ganga_create_job](https://user-images.githubusercontent.com/47035057/85284768-5d8bb400-b4ad-11ea-9ac1-d15e4e302441.gif)
+
+**Step 3d: `/api/job/<job_id>/<action>` - `PUT` Endpoint**
+
+![ganga_job_action](https://user-images.githubusercontent.com/47035057/85285220-2073f180-b4ae-11ea-851f-34765baf7f98.gif)
+
+**Step 3e: `/api/job/<job_id>` - `DELETE` Endpoint**
+
+![ganga_job_delete](https://user-images.githubusercontent.com/47035057/85285245-2f5aa400-b4ae-11ea-9528-d00a3ad57b97.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1700,https://api.github.com/repos/ganga-devs/ganga/pulls/1700,https://github.com/ganga-devs/ganga/pull/1700,closed,1029,10,3,10,3,19,1,0,[{'name': 'GUI'}],2020-06-22 12:06:06+00:00,2020-07-07 22:48:15+00:00,1334529.0,"15 days, 10:42:09","[{'comment_id': 444665536, 'comment_body': ""This seems to replicate information that is already in the Job class, see https://github.com/ganga-devs/ganga/blob/92c6ac046b8b323d5428434289ee430c7dd2375a/ganga/GangaCore/GPIDev/Lib/Job/Job.py#L233. Can't we just take it from there to avoid having to maintain the same information in two different places?"", 'comment_created': datetime.datetime(2020, 6, 24, 6, 11, 18, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444665869, 'comment_body': 'Is this list of information available elsewhere?', 'comment_created': datetime.datetime(2020, 6, 24, 6, 12, 14, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444667109, 'comment_body': 'This type checking should be factored out to make the code more readable.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 15, 47, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444672128, 'comment_body': 'Can we get all the attributes from the schema of the `GangaObject`, in this case the `Job`. See https://github.com/ganga-devs/ganga/blob/92c6ac046b8b323d5428434289ee430c7dd2375a/ganga/GangaCore/GPIDev/Lib/Job/Job.py#L201 . If there is a `SimpleType` in the schema, it seems to me that we could just auto generate the code for it here.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 28, 47, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444672535, 'comment_body': 'Maybe again some way to get this information automatically.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 29, 55, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444674055, 'comment_body': 'Or maybe we should not do it at all. Python in general is duck typed and type checking can become very heavy. In this specific case, the only thing you care about is probably if the argument can evaluate to True or False (but it could be an int).', 'comment_created': datetime.datetime(2020, 6, 24, 6, 33, 44, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444749676, 'comment_body': 'Actually the list is just to identify what attribute info is the user requesting. But essentially we are taking the data from the actual attribute implementation of the Job only so if any changes are made to the internal working of the attribute in the GangaCore, they will be reflected in the GUI. \r\n\r\nBut if a case comes that a new attribute is added to the Job class, then it will be needed to add that in this list for it to be accessible to the GUI.', 'comment_created': datetime.datetime(2020, 6, 24, 9, 1, 16, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 444754075, 'comment_body': 'The supported_actions list is just for validating that the action the user wants to perform is actually allowed or not. \r\n\r\nEg: Suppose a user tries to change the name of the job (with ID 13), then they will make a `PUT` request at the endpoint `/job/13/name`. The `name` part of the endpoint is checked if it exists in the supported_actions list so that it is allowed. Which in this case of is allowed. But suppose, if the user uses the endpoint `/job/13/newname`, here the `newname` action is not allowed, and the user is returned with the HTTP code 400.\r\n\r\n', 'comment_created': datetime.datetime(2020, 6, 24, 9, 8, 49, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 444814058, 'comment_body': 'I can refactor it, as the value that comes from the client-side is basically of type `str`, and in order to set the value of `do_auto_submit` it needs to be of type `bool`. This is just the type conversion.', 'comment_created': datetime.datetime(2020, 6, 24, 11, 0, 51, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 444815296, 'comment_body': ""This is just creating the response object to be returned. As each the values to be sent back as the response in JSON format needs to be `str`. It's just making sure that the values are `str` and the server doesn't give an error."", 'comment_created': datetime.datetime(2020, 6, 24, 11, 3, 14, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 447651956, 'comment_body': 'Since you already know the information you are going to show: `id, fqid, status, name, subjobs, application, backend, backend.actualCE, comments, subjob_statuses]`, I believe a good strat would be to loop over the displayed attr and use `getattr` to fetch them..\r\n```python\r\nfor attr in [id, fqid, status, name, subjobs, application, backend, backend.actualCE, comments, subjob_statuses]:\r\n  value = getattr(job, attr)\r\n  job_data[attr] = value\r\n```', 'comment_created': datetime.datetime(2020, 6, 30, 12, 43, 4, tzinfo=datetime.timezone.utc), 'commenter': 'DumbMachine', 'type': 'User'}, {'comment_id': 447655294, 'comment_body': 'Same can be done with the multiple `functions` called in `/action`. \r\n```rust\r\ngetattr(job, actioname)() # equivalent to job.actioname()\r\n```\r\n', 'comment_created': datetime.datetime(2020, 6, 30, 12, 48, 39, tzinfo=datetime.timezone.utc), 'commenter': 'DumbMachine', 'type': 'User'}, {'comment_id': 447902070, 'comment_body': 'This is really helpful, thanks a lot @DumbMachine ', 'comment_created': datetime.datetime(2020, 6, 30, 18, 42, 36, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 448696163, 'comment_body': 'Delete line or change to describe how it works now.', 'comment_created': datetime.datetime(2020, 7, 2, 1, 19, 24, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 448696734, 'comment_body': 'As above', 'comment_created': datetime.datetime(2020, 7, 2, 1, 21, 31, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 448696826, 'comment_body': 'Delete', 'comment_created': datetime.datetime(2020, 7, 2, 1, 21, 51, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 448699573, 'comment_body': 'How does this work if there is an optional argument? Like the `resubmit` or `peek` methods?', 'comment_created': datetime.datetime(2020, 7, 2, 1, 32, 28, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 449473976, 'comment_body': ""Is this a placeholder, shouldn't it be returning the main dashboard?"", 'comment_created': datetime.datetime(2020, 7, 3, 9, 13, 43, tzinfo=datetime.timezone.utc), 'commenter': 'alexanderrichards', 'type': 'User'}, {'comment_id': 449889424, 'comment_body': 'Yes it is actually placeholder, I am working on the view route as of now', 'comment_created': datetime.datetime(2020, 7, 5, 15, 25, 48, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '53fd9b9aea1d43d643d25cfac92862c35272e1fa', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49a185a6fd2d94659610ef39ceda71edd04855fb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '54e534fd94dcc88e161c1bdc9497a52ec951d42b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e10c476f98d29cb523b23ca3110d08c77883a6c1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6830eccf9e5ae724d298c2debd82f30f0ccda3ac', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '20c6cd2ee15f0296ca274063e6da7721781dec38', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7f235bc3874c2eeb8d162633f406ef3187872de', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '891753f83be1d402c251649a068dbbcd6011da21', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b3d108375b9cf83323630a7cc2daacf026bae6b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5effc841bfa1beeca21bcb9c999d24b868d5a45c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438061062,GangaGUI - Subjobs API,"### Summary
+
+**Background**
+In order to keep the subjobs monitoring data updating, `Subjobs` API endpoints are required. The front end makes requests to these APIs and can get information about the subjobs. These API endpoints can also be consumed by other applications with proper authentication.
+
+**Work Overview (3 Endpoints | 17 Tests)**
+Following endpoints are created for the `Subjobs` API:
+* `/api/job/<job_id>/subjobs` - `GET` - Returns a list containing the subjobs info of a job.
+* `/api/job/<job_id>/subjob/<subjob_id>` - `GET` - Returns information related to single subjob of the job.
+* `/api/job/<job_id>/subjob/<subjob_id>/<attribute>` - `GET` - Returns information related to single subjob attribute of the job.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/job/<job_id>/subjobs` - `GET` Endpoint**
+
+![ganga_subjob_list](https://user-images.githubusercontent.com/47035057/85313112-5f696d80-b4d5-11ea-9c3a-ece0ef37fd0c.gif)
+
+**Step 3b: `/api/job/<job_id>/subjob/<subjob_id>` - `GET` Endpoint**
+
+![ganga_single_subjob](https://user-images.githubusercontent.com/47035057/85313145-67291200-b4d5-11ea-9a22-dbc30b3af118.gif)
+
+
+**Step 3c: `/api/job/<job_id>/subjob/<subjob_id>/<attribute>` - `GET` Endpoint**
+
+![ganga_subjobs_attribute](https://user-images.githubusercontent.com/47035057/85313165-6b552f80-b4d5-11ea-8253-571e8dcd318b.gif)
+
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1702,https://api.github.com/repos/ganga-devs/ganga/pulls/1702,https://github.com/ganga-devs/ganga/pull/1702,closed,347,1,2,8,0,0,1,0,[{'name': 'GUI'}],2020-06-22 16:45:44+00:00,2020-07-08 06:46:36+00:00,1346452.0,"15 days, 14:00:52",[],"[{'commit_sha': '9f7f6baede506206aae26103093648dab1fbfd9d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a8088d09cfe64ab02731bab4519bfeee53a2b41', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ad44a4b6fe33bff7cc0a211fc236540d194e7e3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab8d50de56ce4cb91d9f44b815767641828046cd', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aea21ca1fca18781b0e98a49e290412a001d4fee', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a0f363617681a95bc9759e0e05f8f783c3ccebcf', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b997ae18936bc0fb3bb8aa6f6d9c80422cb5eda', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb40d3a10aad16c731eff1f9eb22e8dcb7a81ab0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438069716,GangaGUI - Jobs API,"### Summary
+
+**Background**
+`Jobs` API can be used to get the list of jobs (along with their general information) from the jobs repository. It can also be used to just get a list of ids of the jobs or a list of ids of the incomplete jobs.
+
+**Work Overview (3 Endpoints | 3 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/jobs` - `GET` - Get a list of jobs (along with their general information) in the jobs repository.
+* `/api/jobs/ids` - `GET` - Get the list of ids of the jobs in the jobs repository.
+* `/api/jobs/incomplete_ids` - `GET` - Get the list of ids of the jobs that are incomplete in the jobs repository.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/jobs` - `GET` Endpoint**
+
+![ganga_jobs](https://user-images.githubusercontent.com/47035057/85315108-123acb00-b4d8-11ea-9ab0-5a8540d29b70.gif)
+
+
+**Step 3b: `/api/jobs/ids` - `GET` Endpoint**
+
+![ganga_jobs_ids](https://user-images.githubusercontent.com/47035057/85315120-17981580-b4d8-11ea-893e-9af7411f80e4.gif)
+
+**Step 3c: `/api/jobs/incomplete_ids` - `GET` Endpoint**
+
+![ganga_jobs_incomplete](https://user-images.githubusercontent.com/47035057/85315223-431b0000-b4d8-11ea-998a-9adc6f828a4a.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1703,https://api.github.com/repos/ganga-devs/ganga/pulls/1703,https://github.com/ganga-devs/ganga/pull/1703,closed,191,10,2,7,2,2,1,0,[{'name': 'GUI'}],2020-06-22 17:04:19+00:00,2020-07-08 06:57:58+00:00,1346019.0,"15 days, 13:53:39","[{'comment_id': 444675539, 'comment_body': 'Try to avoid self-evident comment lines.', 'comment_created': datetime.datetime(2020, 6, 24, 6, 37, 46, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 444816493, 'comment_body': 'Okay, I will make the changes in the next PRs', 'comment_created': datetime.datetime(2020, 6, 24, 11, 5, 26, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': 'c9fe1e7144a43fb94c2acd46c837315347e7956c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9117ea10691eb84e06598cd078d121e26070cfd', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '911cdfa133487347f17323ce6a80027026272462', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fcaab33b9c7c74b69e7bb41dca791c087c8f6b76', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2642dfc037acc0ac01680d21f61b5befea23001d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8f8b057bdb92a4d70ea607c204aa75a6e338a28', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '57e417cc7367365ad4e80ff84d852705f5fe152d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438074721,GangaGUI - Config API,"### Summary
+
+**Background**
+With the `Config` API, users can get a list of config sections and their options as well as effective value in JSON format.
+
+**Work Overview (1 Endpoints | 1 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/config` - `GET` - Get a list of config sections, their docstring, their options, effective value and option's docstring.
+
+---
+
+### How to Use the API
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3: `/api/config` - `GET` Endpoint**
+
+![ganga_config](https://user-images.githubusercontent.com/47035057/85315870-74e09680-b4d9-11ea-9819-8cee856984cc.gif)
+
+---
+
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1704,https://api.github.com/repos/ganga-devs/ganga/pulls/1704,https://github.com/ganga-devs/ganga/pull/1704,closed,126,1,2,6,1,0,1,0,[{'name': 'GUI'}],2020-06-22 17:12:06+00:00,2020-07-08 07:01:48+00:00,1345782.0,"15 days, 13:49:42",[],"[{'commit_sha': 'dd8399690c3b62bc188dd221b206b68b75872540', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e0b1776e788617aada8132699ea51c0487b5087', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '306909ab783fe209dba5d67bf36e083912d64a38', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8f7b84911a70cffdee50e34a9c69243e517fe9d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2f5d7cc6d697c933f96262b1ddfff610d5be169', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6282b27822de34b4af1b0f1ad16b62c76f40df95', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438080130,GangaGUI - Template API,"### Summary
+
+**Background**
+`Templates` API can be used to get a list of templates (along with their general information) from the templates repository. It can also be used to delete a specific template.
+
+**Work Overview (2 Endpoints | 5 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/templates` - `GET` - Get a list of templates (along with their general information) from the templates repository.
+* `/api/template/<template_id>` - `DELETE` - Delete the template from the templates repository.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/templates` - `GET` Endpoint**
+
+![ganga_templates](https://user-images.githubusercontent.com/47035057/85316728-d7866200-b4da-11ea-8e9b-4d8c47e5aed3.gif)
+
+**Step 3b: `/api/template/<template_id>/delete` - `DELETE` Endpoint**
+
+![ganga_template_delete](https://user-images.githubusercontent.com/47035057/85316734-da815280-b4da-11ea-899a-91635d352554.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+",True,1705,https://api.github.com/repos/ganga-devs/ganga/pulls/1705,https://github.com/ganga-devs/ganga/pull/1705,closed,185,2,2,8,0,0,1,0,[{'name': 'GUI'}],2020-06-22 17:23:41+00:00,2020-07-08 07:04:46+00:00,1345265.0,"15 days, 13:41:05",[],"[{'commit_sha': '179db617951d13669df507480bb99d1bc390a12a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46c11387cfdff132fd999e37d10494bb95c9e8c9', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80107c80f447a3b67f46b76deceb7d931e9a23cc', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82dd347918c860da1e8acc059ba9800a2d5733e6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dc4b9d634925cf7b8c63a09b032e0eac9394bc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04746681cdcf55ac9907d1a4cb0227142cf5675c', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '226d7680ae3e4f60cf790b28d67d4ba2c880d661', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed5f7e25ae89081e1817d2f6ab30976a55259792', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438083939,GangaGUI - Credential Store API,"### Summary
+
+**Background**
+`Credential Store` API can be used to get information of the stored credentials. It can also be used to renew expired credentials.
+
+**Work Overview (2 Endpoints | 2 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/credential_store` - `GET` - Get a list of all the stored credentials in the credential store.
+* `/api/credential_store/renew` - `PUT` - Renew expired credentials in the credential store.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3a: `/api/credential_store` - `GET` Endpoint**
+
+![ganga_cr](https://user-images.githubusercontent.com/47035057/85317612-44e6c280-b4dc-11ea-8240-0f1669f66e0e.gif)
+
+**Step 3b: `/api/credential_store/renew` - `PUT` Endpoint**
+
+![ganga_cr_renew](https://user-images.githubusercontent.com/47035057/85317602-41533b80-b4dc-11ea-8b09-ebe8cd6367c3.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1706,https://api.github.com/repos/ganga-devs/ganga/pulls/1706,https://github.com/ganga-devs/ganga/pull/1706,closed,200,0,2,6,0,2,1,0,[{'name': 'GUI'}],2020-06-22 17:32:11+00:00,2020-07-08 07:08:06+00:00,1344955.0,"15 days, 13:35:55","[{'comment_id': 449945201, 'comment_body': 'Could this be built in some dynamic way (to avoid the hard coding of the method names and attributes)?', 'comment_created': datetime.datetime(2020, 7, 6, 1, 31, 22, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 450277152, 'comment_body': ""I can shorten this, but this is the monitoring information that is fixed and would be need for the front end. I could have made another route more generic use, in a sense users could just ask what they want like in case of `job` API but I looked into `ICredentialInfo` it didn't have a `schema` or `exportmethods`."", 'comment_created': datetime.datetime(2020, 7, 6, 14, 52, 23, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '4e4d7bfb8be6092e4a931062b77693656e402acb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fec5e086d9119eb79b88da4e578325d0b9113022', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dba8a408c8a4086a147418e7e79f205f1f35627b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e331a66168ace840cf6e5f84d9de2d32cb7f009', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dcfa138d674dab8095193f644be27321f906adc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0749d60915239148eb131deed799a111dbefda93', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+438086531,GangaGUI - Job Tree API,"### Summary
+
+**Background**
+`Job Tree` API returns a JSON format of the dictionary version of the Job Tree.
+
+**Work Overview (1 Endpoints | 1 Tests)**
+Following endpoints are created for the `Jobs` API:
+* `/api/jobtree` - `GET` - Get the jobtree and the job ids in each tree.
+
+---
+
+### How to Use the API
+
+**Step 1: Start the GUI Server**
+
+![ganga_start_webserver](https://user-images.githubusercontent.com/47035057/85281810-48f8ed00-b4a8-11ea-9b88-26a215d8d71d.gif)
+
+**Step 2: Generate the Token**
+
+![ganga_generate_token](https://user-images.githubusercontent.com/47035057/85282240-07b50d00-b4a9-11ea-9310-fd3627877f08.gif)
+
+**Step 3: `/api/jobtree` - `GET` Endpoint**
+
+![ganga_jobtree](https://user-images.githubusercontent.com/47035057/85318123-14ebef00-b4dd-11ea-922e-96759abd1053.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1707,https://api.github.com/repos/ganga-devs/ganga/pulls/1707,https://github.com/ganga-devs/ganga/pull/1707,closed,93,0,2,8,0,0,1,0,[{'name': 'GUI'}],2020-06-22 17:38:02+00:00,2020-07-08 07:09:58+00:00,1344716.0,"15 days, 13:31:56",[],"[{'commit_sha': 'fb54fc1f15a3016699f2adb7c868e23b982cb39b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed47f40994a207d76b5d48e083d9d46282144607', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '482a784b18ba7918172ff46111121488d00e64e6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'da34b1b327babf8ad8b8190edacbbdc6ee0beaee', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ebcba042a31106e1a34460117598533da7e6950', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50bec6365090dd28c16c7fbb54b59212755c7c1a', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4c78e88be4f4749957ccc9dbddcffa82d688fe57', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73f4b3c28a6a15ea696d8c30a41325cba259fef3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+444902602,GangaGUI - Dashboard View,"## Summary
+
+Dashboard view of the GUI. Haven't added dynamicity with AJAX as of now, will be adding in further updates at once when the APIs have been merged.
+
+**View**
+
+![dashboard_view](https://user-images.githubusercontent.com/47035057/86620177-83e73e80-bfd9-11ea-8ae3-8c044c566074.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1716,https://api.github.com/repos/ganga-devs/ganga/pulls/1716,https://github.com/ganga-devs/ganga/pull/1716,closed,238,3,7,5,0,0,1,0,[{'name': 'GUI'}],2020-07-06 17:11:21+00:00,2020-07-08 07:13:18+00:00,136917.0,"1 day, 14:01:57",[],"[{'commit_sha': '6587af52b08362898d6e43a906e06629605bef4e', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e49d2d08c92ae9da5729b2bd10bb9a45c7dcbfeb', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6acba7d91eab88e96a338c0fb443d426a1bd3e05', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a791fc25b8410ae0cba16e509ab8025b742e8447', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'abb3bb2a6f90f1607f22106bd2ce04388f9f8557', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+444914331,GangaGUI - Config View,"## Summary
+
+Create config view to view Ganga Config sections, their options, and their effective value.
+
+**View**
+
+![config_view](https://user-images.githubusercontent.com/47035057/86622316-53090880-bfdd-11ea-9426-a8c77c080598.gif)
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__",True,1717,https://api.github.com/repos/ganga-devs/ganga/pulls/1717,https://github.com/ganga-devs/ganga/pull/1717,closed,77,1,2,4,0,0,1,0,[{'name': 'GUI'}],2020-07-06 17:38:25+00:00,2020-07-09 06:11:08+00:00,217963.0,"2 days, 12:32:43",[],"[{'commit_sha': '49bc433af95a3dba126991b2c9a150889d8754a6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8252329206f4ded680210b4456502c5b7f245fd6', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '885b19556ca68019161183199b81599a96468d04', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b574e514990406bcfcf8aa6efa59606cbefd3d9', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+448680475,GangaGUI - Views & Web CLI,"# Ganga GUI - Views & Web CLI
+
+### Summary
+This PR contains the code for Ganga GUI view routes like (dashboard, create, jobs, config, etc.) and web CLI implementation. This PR also contains a major restructuring of the project over the previous code. Earlier there was just a single-threaded weak Flask webserver which ran on a GangaThread in the Ganga thread pool allowing it to access all the GPI functions (while keeping the CLI running) when Ganga was running. In this PR the project was restructured to make use of two web servers in order to server the GUI to the user. The way it works is, there are two separate Flask applications, one is called the `internal`, and the second one is called the `gui`. The `internal` Flask instance uses a single-threaded weak web server and runs on the GangaThread in the Ganga thread pool. This Flask instance has access to all the Ganga GPI functions in the background and its only work is to act as a RESTful interface between Ganga and the `gui` Flask instance. The `internal` server is only accessible from the local machine and not over the network and it is meant for internal use by the `gui` server in order to get information from the Ganga and render web pages according to it. The communication between the `gui` server and the `internal` server occurs in JSON format. The `gui` Flask instance is completely decoupled from Ganga and it runs as a separate process on a Gunicorn server (production-ready server). 
+
+The series of events that happens when Ganga is called with the `--webgui` flag or `start_gui` function is invoked within the Ganga CLI is as follows:
+* User instructs Ganga to start the GUI.
+* A `GangaGUIAdmin` user is created for the user to be able to access the GUI using its credentials.
+* The `internal` Flask instance is started first on a GangaThread and is attached to the Ganga thread pool. The `internal` server listens to internal HTTP requests on a port specified by the user or `5000` by default. (inaccessible over the network)
+* Afterwards, a subprocess invokes the `gui` Flask instance on a Gunicorn server. This `gui` server listens to outside HTTP requests on a port specified by the user or `5500` by default. This is accessible over the network and this is the server that is exposed to the outside world.
+* The credentials and the `gui` server information is displayed to the user.
+* The user then makes an HTTP request to `gui` server on the server IP address and specified GUI port.
+* The `gui` server listens to the request made by the user and then depending on the type of the information requested by the user, the `gui` server makes an internal HTTP to the `internal` Flask server in order to get the information from Ganga.
+* The `internal` server listens to the HTTP request made by the `gui` server and accordingly gets the requested information from Ganga and returns it back to the `gui` server in a JSON format.
+* The `gui` server then parses the JSON response of the `internal` server and uses this information to render the web page that is to be displayed to the user. (or forwards the JSON as is in case of API calls to the `gui` server).
+* The `gui` server serves rendered web page to the user and it is then displayed in the user's browser.
+
+---
+
+### About `internal` Web Server
+
+The `internal` is used by the `gui` server in order to get information from Ganga. The `internal` server is a single-threaded Flask application running on a GangaThread. It implements the following APIs for internal use. Check documentation for more information regarding these APIs.
+
+**Job API**
+* `/internal/jobs/<int:job_id>` - `GET`
+* `/internal/jobs/<int:job_id>/<attribute>` - `GET`
+* `/internal/jobs/<int:job_id>/full-print` - `GET`
+* `/internal/jobs/create` - `POST`
+* `/internal/jobs/<int:job_id>/copy` - `PUT`
+* `/internal/jobs/<int:job_id>/<action>` - `PUT`
+* `/internal/jobs/<int:job_id>` - `DELETE`
+* `/internal/jobs/<int:job_id>/export` - `GET`
+
+**Subjobs API**
+* `/internal/jobs/<int:job_id>/subjobs` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/length` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>/<attribute>` - `GET`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>/copy` - `PUT`
+* `/internal/jobs/<int:job_id>/subjobs/<int:subjob_id>/full-print` - `GET`
+
+**Jobs API**
+* `/internal/jobs` - `GET`
+* `/internal/jobs/length` - `GET`
+* `/internal/jobs/statistics` - `GET`
+* `/internal/jobs/incomplete-ids` - `GET`
+* `/internal/jobs/recent` - `GET`
+
+**Config API**
+* `/internal/config` - `GET`
+* `/internal/config/<section>` - `GET`
+
+**Templates API**
+* `/internal/templates` - `GET`
+* `/internal/templates/<int:template_id>/full-print` - `GET`
+* `/internal/templates/length` - `GET`
+* `/internal/templates/<int:template_id>` - `DELETE`
+
+**Credentials API**
+* `/internal/credentials` - `GET`
+* `/internal/credentials/renew` - `PUT`
+
+**Jobtree API**
+* `/internal/jobtree` - `GET`
+
+**Plugins API**
+* `/internal/plugins` - `GET`
+* `/internal/plugins/<plugin_name>` - `GET`
+
+**Other API**
+* `/internal/jobs/actions` - `GET`
+* `/internal/load` - `GET`
+* `/internal/runfile` - `GET`
+* `/ping` - `GET`
+
+---
+
+### About `gui` Web Server
+
+The `gui` server is what the user interacts with, it handles the rendering and serving of HTML, CSS, JS files. It also manages authentication states and other security features. The `gui` server has the following view routes implemented as well as the API routes, these APIs are accessible by the user with a valid token. Refer to the documentation for more information.
+
+**View Routes**
+* `/login`
+* `/logout`
+* `/`
+* `/config`
+* `/create`
+* `/create/runfile`
+* `/templates`
+* `/jobs`
+* `/jobs/<int:job_id>`
+* `/jobs/<int:job_id>/export`
+* `/jobs/<int:job_id>/edit`
+* `/job/<int:job_id>/browse`
+* `/job/<int:job_id>/browse/<path:path>`
+* `/jobs/<int:job_id>/subjobs`
+* `/jobs/<int:job_id>/subjobs/<int:subjob_id>`
+* `/credentials`
+* `/plugins`
+* `/plugin/<plugin_name>`
+* `/logs`
+* `/storage`
+* `/storage/<path:path>`
+* `/cli`
+* `connect` - `Websocket`
+* `pty-input` - `Websocket`
+* `resize` - `Websocket`
+* `/shutdown` 
+
+
+**Web APIs**
+
+* Token
+    * `/token` - `POST`
+* Job Web API
+    * `/api/jobs/<int:job_id>` - `GET`
+    * `/api/jobs/<int:job_id>/<attribute>` - `GET`
+    * `/api/jobs/<int:job_id>/full-print` - `GET`
+    * `/api/jobs/create` - `POST`
+    * `/api/jobs/<int:job_id>/copy` - `PUT`
+    * `/api/jobs/<int:job_id>/<action>` - `PUT`
+    * `/api/jobs/<int:job_id>` - `DELETE`
+    * `/api/jobs/<int:job_id>/pin` - `GET`
+    * `/api/jobs/<int:job_id>/unpin` - `GET`
+* Subjobs Web API
+    * `/api/jobs/<int:job_id>/subjobs` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>/<attribute>` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>/full-print` - `GET`
+    * `/api/jobs/<int:job_id>/subjobs/<int:subjob_id>/copy` - `PUT`
+* Jobs Web API
+    * `/api/jobs` - `GET`
+    * `/api/jobs/statistics` - `GET`
+    * `/api/jobs/incomplete_ids` - `GET`
+* Config Web API
+    * `/api/config` - `GET`
+    * `/api/config/<section>` - `GET`
+* Tempaltes Web API
+    * `/api/templates` - `GET`
+    * `/api/templates/<int:template_id>/full-print` - `GET`
+    * `/api/templates/<int:template_id>` - `DELETE`
+* Credentails Web API
+    * `/api/credentials` - `GET`
+    * `/api/credentials/renew` - `PUT`
+* Jobtree Web API
+    * `/api/jobtree` - `GET`
+* Plugins Web API
+    * `/api/plugins` - `GET`
+    * `/api/plugins/<plugin_name>` - `GET`
+
+All the communication with `gui` Web API will happen in JSON format with a valid token in request headers as `X-Access-Token`. 
+
+---
+
+### About Web CLI
+
+The usual pattern of starting the Ganga GUI is by starting it using `--webgui` flag while starting Ganga or `start_gui` function in the Ganga CLI. This method starts a Ganga session first and then the `internal` server and then the `gui` server. 
+
+In the case when the user wants to access the Ganga CLI on their browser over the network. They will need to start the Ganga using a special binary called `ganga-gui`. It takes `host`, `port`, `internal-port`, `--quite` and `ganga-args` as the command line arguments. What this script does is, it starts the `gui` server first and then when the first HTTP request is made to the server, it start a Ganga session in a pseudo-terminal with the `--webgui` flag (in this case the webgui flag just starts the internal server). With this approach, the `gui` server has access to the pseudo terminal's file descriptor in which the Ganga session is running which is then used to interact with Ganga.
+
+---
+
+### TODO
+
+- [ ] Add ability to auto search free port for starting the servers.
+- [ ]  Write internal and user documentation
+- [ ] Minor ease of use changes like sorting of tables, etc.
+
+---
+
+__The start page for this project can be accessed [here](https://github.com/ganga-devs/ganga/issues/1663).__
+
+
+",True,1728,https://api.github.com/repos/ganga-devs/ganga/pulls/1728,https://github.com/ganga-devs/ganga/pull/1728,closed,6065,1137,59,21,2,10,0,0,[],2020-07-14 06:40:40+00:00,2020-08-27 20:59:43+00:00,3853143.0,"44 days, 14:19:03","[{'comment_id': 477896898, 'comment_body': 'What is this SECRET_KEY used for? As it sits in the publicly viewable code on GitHub, it is not very secret!', 'comment_created': datetime.datetime(2020, 8, 27, 1, 48, 16, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477902183, 'comment_body': 'This script should be moved to the `bin` directory where the main binary for starting Ganga is also located. ', 'comment_created': datetime.datetime(2020, 8, 27, 1, 52, 6, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477908046, 'comment_body': 'How is this related to the SECRET_KEY above?', 'comment_created': datetime.datetime(2020, 8, 27, 1, 56, 20, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477911441, 'comment_body': 'What happens if the job has a status that is not in this table? We have two other statuses that a job can be in for a short time (`submitting` and `completing`).', 'comment_created': datetime.datetime(2020, 8, 27, 1, 58, 49, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 477916664, 'comment_body': 'Why is this duplicated in different places?', 'comment_created': datetime.datetime(2020, 8, 27, 2, 2, 33, tzinfo=datetime.timezone.utc), 'commenter': 'egede', 'type': 'User'}, {'comment_id': 478690905, 'comment_body': 'This SECRET_KEY is used by the `internal` RESTful server to which the `gui` server communicates in order to get data from Ganga, The SECRET_KEY is used by the server for validating the integrity of the requests if it had sent some encoded data in it (eg. the token-based authentication uses this SECREY_KEY to encrypt and decrypt the tokens). I will merge this PR and create a new one where I will fix this secret key by randomly creating it for the user.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 56, 41, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478690947, 'comment_body': 'Okay, I will shift this.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 56, 45, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478690974, 'comment_body': 'This is the SECRET_KEY used by the `gui` server which is what the user interacts with.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 56, 48, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478691541, 'comment_body': ""The status will be shown, it just won't have a color. It will be shown a plain text instead of green background (which you see in completed jobs) or such."", 'comment_created': datetime.datetime(2020, 8, 27, 20, 57, 57, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}, {'comment_id': 478692315, 'comment_body': 'The above one is used by the server when rendering HTML pages whereas this one is used on the client-side (the browser). It is the JavaScript version.', 'comment_created': datetime.datetime(2020, 8, 27, 20, 59, 23, tzinfo=datetime.timezone.utc), 'commenter': 'varunbankar', 'type': 'User'}]","[{'commit_sha': '7d8a5667b78f3ea77fd40f3ee745b789be169d1f', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9796804a67288162aeb76dd0080ac1b30d66eb7', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '43972f0d2ad02f22aa53ad41ef597ce064a71cbe', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bb3d5e40f54567b8608ca0d260e5926a4bdc3cdf', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0aa7dad395e329d8685cbd5d6dc9b4d340ba2b5b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd9a7d247c75bf8792d8f75463138a4f7356361a4', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d14718abcdc706c39aff30479d5db04bc0909a0', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd056791d0a7ba22ec46a7d392a531e2fa2ac2ce', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85671efecb202fd95552ae1aac7d222fcbc7711f', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1cb94ed48ec835d5b657a10b3e62ce77f7f57c11', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9331528baef6742fd8e777d0daea459818de6b01', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50d49aeb5c30086e8863c2037eb07609edbf19ce', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f51f295d031575f9dc60734e3f1bfaa85fc1f07d', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '376c1d47764918b57422b8246af06125821e2fc3', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cbd329ca71b14baf8880772f1b45927d40b47186', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fe9bcd7e87ec5627e7b127e509477acff787a44', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '370fc1f27fea7bc181c2435fdfc75d5ab8b77fc1', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a676dd2c451c23eb2a695f360fe5ed281211350b', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '221c39191c682a013cbab5f8897be403ea01cc25', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8d5432dd861a10f85cbd31a66603a23a0b32bf62', 'committer_username': 'varunbankar', 'committer_name': 'Varun Bankar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 1, 25, 15, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b4eaeb95b0c6cfd47a769f197158fb1d5785bcb6', 'committer_username': 'egede', 'committer_name': 'Ulrik Egede', 'committer_email': None, 'commit_date': datetime.datetime(2013, 5, 2, 7, 44, 6, tzinfo=datetime.timezone.utc)}]",Varun Bankar,47035057,,User,,5,,17,18
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43645564,ganga,ganga-devs/ganga,Python,159,97,13,122,14751,37,38,0,"[{'id': 480523947, 'number': 1771, 'closed': datetime.datetime(2020, 9, 7, 22, 34, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 5, 13, 58, 55, tzinfo=datetime.timezone.utc), 'time_taken': 203751.0, 'time_delta': '2 days, 8:35:51', 'additions': 19, 'deletions': 4, 'state': 'closed'}, {'id': 448680475, 'number': 1728, 'closed': datetime.datetime(2020, 8, 27, 20, 59, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 14, 6, 40, 40, tzinfo=datetime.timezone.utc), 'time_taken': 3853143.0, 'time_delta': '44 days, 14:19:03', 'additions': 6065, 'deletions': 1137, 'state': 'closed'}, {'id': 446046301, 'number': 1721, 'closed': datetime.datetime(2020, 7, 8, 23, 18, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 8, 7, 17, 54, tzinfo=datetime.timezone.utc), 'time_taken': 57661.0, 'time_delta': '16:01:01', 'additions': 1360, 'deletions': 6, 'state': 'closed'}, {'id': 444914331, 'number': 1717, 'closed': datetime.datetime(2020, 7, 9, 6, 11, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 6, 17, 38, 25, tzinfo=datetime.timezone.utc), 'time_taken': 217963.0, 'time_delta': '2 days, 12:32:43', 'additions': 77, 'deletions': 1, 'state': 'closed'}, {'id': 444902602, 'number': 1716, 'closed': datetime.datetime(2020, 7, 8, 7, 13, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 6, 17, 11, 21, tzinfo=datetime.timezone.utc), 'time_taken': 136917.0, 'time_delta': '1 day, 14:01:57', 'additions': 238, 'deletions': 3, 'state': 'closed'}, {'id': 438086531, 'number': 1707, 'closed': datetime.datetime(2020, 7, 8, 7, 9, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 17, 38, 2, tzinfo=datetime.timezone.utc), 'time_taken': 1344716.0, 'time_delta': '15 days, 13:31:56', 'additions': 93, 'deletions': 0, 'state': 'closed'}, {'id': 438083939, 'number': 1706, 'closed': datetime.datetime(2020, 7, 8, 7, 8, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 17, 32, 11, tzinfo=datetime.timezone.utc), 'time_taken': 1344955.0, 'time_delta': '15 days, 13:35:55', 'additions': 200, 'deletions': 0, 'state': 'closed'}, {'id': 438080130, 'number': 1705, 'closed': datetime.datetime(2020, 7, 8, 7, 4, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 17, 23, 41, tzinfo=datetime.timezone.utc), 'time_taken': 1345265.0, 'time_delta': '15 days, 13:41:05', 'additions': 185, 'deletions': 2, 'state': 'closed'}, {'id': 438074721, 'number': 1704, 'closed': datetime.datetime(2020, 7, 8, 7, 1, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 17, 12, 6, tzinfo=datetime.timezone.utc), 'time_taken': 1345782.0, 'time_delta': '15 days, 13:49:42', 'additions': 126, 'deletions': 1, 'state': 'closed'}, {'id': 438069716, 'number': 1703, 'closed': datetime.datetime(2020, 7, 8, 6, 57, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 17, 4, 19, tzinfo=datetime.timezone.utc), 'time_taken': 1346019.0, 'time_delta': '15 days, 13:53:39', 'additions': 191, 'deletions': 10, 'state': 'closed'}, {'id': 438061062, 'number': 1702, 'closed': datetime.datetime(2020, 7, 8, 6, 46, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 16, 45, 44, tzinfo=datetime.timezone.utc), 'time_taken': 1346452.0, 'time_delta': '15 days, 14:00:52', 'additions': 347, 'deletions': 1, 'state': 'closed'}, {'id': 437896272, 'number': 1700, 'closed': datetime.datetime(2020, 7, 7, 22, 48, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 12, 6, 6, tzinfo=datetime.timezone.utc), 'time_taken': 1334529.0, 'time_delta': '15 days, 10:42:09', 'additions': 1029, 'deletions': 10, 'state': 'closed'}, {'id': 426405048, 'number': 1685, 'closed': datetime.datetime(2020, 6, 3, 12, 20, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 2, 7, 34, 37, tzinfo=datetime.timezone.utc), 'time_taken': 103551.0, 'time_delta': '1 day, 4:45:51', 'additions': 14, 'deletions': 7, 'state': 'closed'}, {'id': 425860839, 'number': 1683, 'closed': datetime.datetime(2020, 6, 2, 23, 6, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 1, 9, 32, 6, tzinfo=datetime.timezone.utc), 'time_taken': 135240.0, 'time_delta': '1 day, 13:34:00', 'additions': 291, 'deletions': 18, 'state': 'closed'}, {'id': 419905657, 'number': 1675, 'closed': datetime.datetime(2020, 5, 20, 8, 45, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 19, 6, 27, 38, tzinfo=datetime.timezone.utc), 'time_taken': 94691.0, 'time_delta': '1 day, 2:18:11', 'additions': 144, 'deletions': 3, 'state': 'closed'}, {'id': 406713174, 'number': 1646, 'closed': datetime.datetime(2020, 4, 22, 7, 18, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 21, 14, 30, 45, tzinfo=datetime.timezone.utc), 'time_taken': 60491.0, 'time_delta': '16:48:11', 'additions': 15, 'deletions': 15, 'state': 'closed'}, {'id': 406658125, 'number': 1645, 'closed': datetime.datetime(2020, 4, 21, 22, 41, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 21, 12, 59, 18, tzinfo=datetime.timezone.utc), 'time_taken': 34905.0, 'time_delta': '9:41:45', 'additions': 13, 'deletions': 21, 'state': 'closed'}, {'id': 390087508, 'number': 1619, 'closed': datetime.datetime(2020, 3, 18, 4, 15, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 17, 21, 29, 41, tzinfo=datetime.timezone.utc), 'time_taken': 24349.0, 'time_delta': '6:45:49', 'additions': 102, 'deletions': 119, 'state': 'closed'}, {'id': 389647640, 'number': 1618, 'closed': datetime.datetime(2020, 3, 17, 17, 59, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 17, 6, 22, 39, tzinfo=datetime.timezone.utc), 'time_taken': 41786.0, 'time_delta': '11:36:26', 'additions': 176, 'deletions': 66, 'state': 'closed'}, {'id': 388828105, 'number': 1616, 'closed': datetime.datetime(2020, 3, 16, 3, 36, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 15, 20, 51, 13, tzinfo=datetime.timezone.utc), 'time_taken': 24318.0, 'time_delta': '6:45:18', 'additions': 196, 'deletions': 238, 'state': 'closed'}, {'id': 388795032, 'number': 1615, 'closed': datetime.datetime(2020, 3, 18, 1, 2, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 15, 18, 56, 57, tzinfo=datetime.timezone.utc), 'time_taken': 194745.0, 'time_delta': '2 days, 6:05:45', 'additions': 193, 'deletions': 66, 'state': 'closed'}, {'id': 388014624, 'number': 1614, 'closed': datetime.datetime(2020, 3, 16, 0, 59, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 13, 21, 55, 35, tzinfo=datetime.timezone.utc), 'time_taken': 183808.0, 'time_delta': '2 days, 3:03:28', 'additions': 135, 'deletions': 0, 'state': 'closed'}, {'id': 387464153, 'number': 1612, 'closed': datetime.datetime(2020, 3, 13, 2, 10, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 12, 20, 45, 26, tzinfo=datetime.timezone.utc), 'time_taken': 19508.0, 'time_delta': '5:25:08', 'additions': 97, 'deletions': 89, 'state': 'closed'}, {'id': 385324395, 'number': 1609, 'closed': datetime.datetime(2020, 3, 9, 0, 12, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 8, 22, 51, 30, tzinfo=datetime.timezone.utc), 'time_taken': 4838.0, 'time_delta': '1:20:38', 'additions': 73, 'deletions': 4, 'state': 'closed'}, {'id': 383652327, 'number': 1607, 'closed': datetime.datetime(2020, 3, 5, 4, 58, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 4, 15, 42, 33, tzinfo=datetime.timezone.utc), 'time_taken': 47730.0, 'time_delta': '13:15:30', 'additions': 120, 'deletions': 87, 'state': 'closed'}, {'id': 383578829, 'number': 1605, 'closed': datetime.datetime(2020, 3, 5, 7, 56, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 4, 14, 8, 25, tzinfo=datetime.timezone.utc), 'time_taken': 64070.0, 'time_delta': '17:47:50', 'additions': 7, 'deletions': 8, 'state': 'closed'}, {'id': 383148640, 'number': 1601, 'closed': datetime.datetime(2020, 3, 4, 3, 22, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 3, 20, 5, 36, tzinfo=datetime.timezone.utc), 'time_taken': 26192.0, 'time_delta': '7:16:32', 'additions': 15, 'deletions': 37, 'state': 'closed'}, {'id': 382441821, 'number': 1599, 'closed': datetime.datetime(2020, 3, 3, 3, 42, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 2, 15, 16, 26, tzinfo=datetime.timezone.utc), 'time_taken': 44772.0, 'time_delta': '12:26:12', 'additions': 34, 'deletions': 31, 'state': 'closed'}, {'id': 381892733, 'number': 1597, 'closed': datetime.datetime(2020, 3, 1, 22, 32, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 29, 17, 24, 10, tzinfo=datetime.timezone.utc), 'time_taken': 104891.0, 'time_delta': '1 day, 5:08:11', 'additions': 32, 'deletions': 29, 'state': 'closed'}, {'id': 381856027, 'number': 1596, 'closed': datetime.datetime(2020, 2, 29, 17, 5, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 29, 14, 7, 52, tzinfo=datetime.timezone.utc), 'time_taken': 10633.0, 'time_delta': '2:57:13', 'additions': 9, 'deletions': 29, 'state': 'closed'}]"

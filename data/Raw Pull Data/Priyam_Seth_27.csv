@@ -1,0 +1,444 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+705631150,compose: Fix compose fade not updating on deleting user pill.,"This commit makes the compose.update_fade as an exported
+function and adds the listener to update the fade manually
+as deleting the pill was not calling this functions.
+
+Fixes #18865
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this manually and with node tests.
+Try testing as @alya  mentioned in the issue description.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,19534,https://api.github.com/repos/zulip/zulip/pulls/19534,https://github.com/zulip/zulip/pull/19534,closed,4,1,2,1,1,0,4,0,"[{'name': 'bug'}, {'name': 'area: compose (misc)'}, {'name': 'area: message feed (uncategorized)'}, {'name': 'size: XS'}]",2021-08-06 17:11:28+00:00,2021-08-06 21:22:56+00:00,15088.0,4:11:28,[],"[{'commit_sha': 'b29c83045ebbdfa43cba193f26c93be7361b74a3', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+685335756,compose: Fix compose box getting close on copying code.,"This commit adds an exception in click-handlers.js so that
+when mouse clicks on .copy-codeblock, the composebox is not
+closed.
+
+Fixes #19130
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this manually on chrome browser.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+![copy-bug](https://user-images.githubusercontent.com/56730716/124794950-2fb8c680-df6d-11eb-8b12-a2da9e4e827f.gif)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+@alya FYI",True,19154,https://api.github.com/repos/zulip/zulip/pulls/19154,https://github.com/zulip/zulip/pull/19154,closed,10,3,1,1,2,0,0,0,[],2021-07-07 16:19:28+00:00,2021-07-07 17:47:44+00:00,5296.0,1:28:16,[],"[{'commit_sha': 'e976512b3cac919c32d278dd29fc7971896d09f2', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+683550572,compose: Add trigger for new private message.,"This commit adds a new trigger for compose.start that is
+""new private message"". It will clear the message recipients
+whenever compose.start is called with this trigger.
+
+This solves the bug, when a person is in a PM narrow and
+clicks the new private message button, it opens the
+composebox with the recipients filled out with whoever
+you're narrowed to, rather than opening a new, blank PM.
+
+CZO link for the issue
+https://chat.zulip.org/#narrow/stream/9-issues/topic/.22New.20private.20message.22.20isn't/near/1222712
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this manually and with node tests. Also added tests for this.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+![new_private_message](https://user-images.githubusercontent.com/56730716/124453544-1a913b80-dda5-11eb-8d73-2c8bab363fa9.gif)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+
+@timabbott @WesleyAC FYI",True,19118,https://api.github.com/repos/zulip/zulip/pulls/19118,https://github.com/zulip/zulip/pull/19118,closed,17,2,3,1,1,0,0,0,[],2021-07-05 09:56:19+00:00,2021-07-05 18:56:46+00:00,32427.0,9:00:27,[],"[{'commit_sha': '5810a8c41f69987695424fb71185be6db2fbfb25', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+676413667,Fix behavior of PM list with deactivated users,"<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+Fixes #13766
+Follow-up PR #13795 
+Rebase the PR and tested properly.
+1. Allowing deactivated users pill in the compose box. thus prevents pm-list from collapsing.
+2. Showing the deactivated user pill in red.
+3. Showing compose error with deactivated user detail.
+
+**Testing plan:** <!-- How have you tested? -->
+Tested properly with node tests. Also tested manually as mentioned in the issue.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+When you try to send a message to a deactivated user.
+![image](https://user-images.githubusercontent.com/56730716/123335937-cf845680-d562-11eb-9720-38def6db28d2.png)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,18970,https://api.github.com/repos/zulip/zulip/pulls/18970,https://github.com/zulip/zulip/pull/18970,closed,98,16,13,3,5,18,1,0,[{'name': 'size: XL'}],2021-06-23 15:46:22+00:00,2021-06-26 01:07:22+00:00,206460.0,"2 days, 9:21:00","[{'comment_id': 658310365, 'comment_body': 'We should add a comment here noting that we need to allow deactivated users in compose so that one can attempt to reply to threads that contained them.', 'comment_created': datetime.datetime(2021, 6, 24, 21, 58, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658311370, 'comment_body': 'This function seems to mostly duplicate the original; could we just have `is_active` be a parameter to the ""render a user pill"" function?', 'comment_created': datetime.datetime(2021, 6, 24, 21, 59, 31, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658311890, 'comment_body': ""I think it might read more cleanly to just do this `return` inside the above `for` loop, since we don't display more than one.  "", 'comment_created': datetime.datetime(2021, 6, 24, 22, 0, 35, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658315176, 'comment_body': 'Added the comment.', 'comment_created': datetime.datetime(2021, 6, 24, 22, 8, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658325230, 'comment_body': 'I have created an option `deactivated_user_pill` that handles this properly. Yes I was also feeling that the code was almost repeated.', 'comment_created': datetime.datetime(2021, 6, 24, 22, 26, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658325742, 'comment_body': ""Okay sure. Didn't noticed this much. Updated the logic here."", 'comment_created': datetime.datetime(2021, 6, 24, 22, 27, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658328834, 'comment_body': 'Why does this code switch from referencing `item.foo` to `payload.item.foo`?  If we need to do that, it might be worth doing in its own commit for readability.', 'comment_created': datetime.datetime(2021, 6, 24, 22, 34, 13, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658329275, 'comment_body': 'I think this belongs in `user_pill.js` somewhere, not in this file, right?', 'comment_created': datetime.datetime(2021, 6, 24, 22, 35, 21, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658337504, 'comment_body': ""This was actually done by the old PR. While rebasing didn't noticed this. I will undo this."", 'comment_created': datetime.datetime(2021, 6, 24, 22, 48, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658337806, 'comment_body': 'I need to understand more of a bit why that PR added this check here. I just updated the check to be more better. I will see and let you know.\r\n', 'comment_created': datetime.datetime(2021, 6, 24, 22, 49, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658356666, 'comment_body': 'Yes, so I researched more about this. I understood the whole code how `input_pills.js` is just for handling pills and we pass different functions in it. I debugged and found the right place to add it. Add this code in `user_pill.js`', 'comment_created': datetime.datetime(2021, 6, 24, 23, 44, 34, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658357449, 'comment_body': 'Now updating the test is left for commit 2.\r\n', 'comment_created': datetime.datetime(2021, 6, 24, 23, 46, 52, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658375460, 'comment_body': ""This is a general template for pills everywhere in the app; I think we should make at least the `title` a parameter passed in from the caller.  And probably we should consider having a `deactivated-pill` class rather than `deactivated-user-pill`, since the styling seems like it'd be appropriate for a deactivated stream (or something) as well in the future.\r\n\r\nFinally, we should call the variable `deactivated` rather than `not_active`, to avoid adding new terminology.\r\n\r\n@m-e-l-u-h-a-n may have some ideas for how to do this nicely."", 'comment_created': datetime.datetime(2021, 6, 25, 0, 42, 13, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658407874, 'comment_body': 'I updated the name. However, I have removed `title` for now. As I think, certain pills having title and certain not will not be a good idea. So, we should pass the title to every pill. Will add it in some other commit.', 'comment_created': datetime.datetime(2021, 6, 25, 1, 36, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658761109, 'comment_body': 'I think we should show title only for deactivated pills, as users may be curious to know why their color is different. From changes in the most recent push, it appears the title is same as the display value for normal pills so that does not add much information here 🤔.', 'comment_created': datetime.datetime(2021, 6, 25, 13, 24, 39, tzinfo=datetime.timezone.utc), 'commenter': 'm-e-l-u-h-a-n', 'type': 'User'}, {'comment_id': 658769262, 'comment_body': 'Is this only for recipient box pills? Because user pills can also be from\r\nhttps://github.com/zulip/zulip/blob/87fc2bbe50da15ebcbecfb710e1ef928224bcaa0/static/js/user_pill.js#L60\r\nin `user_pill.js`, which is not changed. \r\nMost of the pill widgets (Adding members to streams, user group setting, custom profile type with user) use this for creating pills, so if we want this behavior for pills of deactivated users to be the same everywhere we should change this as well to show ""(deactivated)"" in display value. Maybe we should wait for @timabbott\'s suggestion here.', 'comment_created': datetime.datetime(2021, 6, 25, 13, 36, tzinfo=datetime.timezone.utc), 'commenter': 'm-e-l-u-h-a-n', 'type': 'User'}, {'comment_id': 658778429, 'comment_body': 'I have already updated the way. see 4th commit (latest commit) for what change I did. I searched for where these pills and used and added condition based on that.\r\nIf the title is passed, it will use that title. Else it will use the display_value as the title.', 'comment_created': datetime.datetime(2021, 6, 25, 13, 49, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 659096472, 'comment_body': 'I changed this string, both for consistency and to add a `.` at the end of the error message.  Can you do a follow-up pass to make that `.` appear at the end of all of these?', 'comment_created': datetime.datetime(2021, 6, 26, 0, 58, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '7b9ed4ff2e0839ed0b2a51c570de7dd37176e732', 'committer_username': 'hashirsarwar', 'committer_name': 'Hashir Sarwar', 'committer_email': 'hashirsarwarch@gmail.com', 'commit_date': datetime.datetime(2018, 12, 7, 8, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': '130f1d715337d59e005b7fb847648560f1576531', 'committer_username': 'hashirsarwar', 'committer_name': 'Hashir Sarwar', 'committer_email': 'hashirsarwarch@gmail.com', 'commit_date': datetime.datetime(2018, 12, 7, 8, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd1b18d2c07291add2d0efbdcdaba1269afc8788e', 'committer_username': 'hashirsarwar', 'committer_name': 'Hashir Sarwar', 'committer_email': 'hashirsarwarch@gmail.com', 'commit_date': datetime.datetime(2018, 12, 7, 8, 11, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+671475321,compose_area: Fix compose_area cut pasted message bigger than max_length.,"Follow up for https://github.com/zulip/zulip/pull/16061
+
+I have changed the way we were going to solve a bit. The highlighter feature was using a wrapper and I don't think it is good way to fake the highlight. Instead what this does it, it allows writing longer than MAX_LIMIT but also show the error above until, the length is more than the limit and removes it as it gets back in limit.
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+Fixes #15909
+
+**Testing plan:** <!-- How have you tested? -->
+In progress. I will add tests soon. Tested with node tests. Once finalized the behavior, will add node tests.
+
+
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+[CZO link here](https://chat.zulip.org/#narrow/stream/6-frontend/topic/compose.20long.20message.20.2318871)
+",True,18871,https://api.github.com/repos/zulip/zulip/pulls/18871,https://github.com/zulip/zulip/pull/18871,closed,109,1,6,1,5,5,3,0,"[{'name': 'bug'}, {'name': 'area: compose (misc)'}, {'name': 'size: M'}]",2021-06-16 13:35:24+00:00,2021-07-07 19:20:01+00:00,1835077.0,"21 days, 5:44:37","[{'comment_id': 652695901, 'comment_body': 'This needs to be moved to page params. Will move it with some planning.', 'comment_created': datetime.datetime(2021, 6, 16, 13, 35, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 653062036, 'comment_body': ""Sure; feel free to coordinate with @ligmitz who's moved a bunch of similar things in recent weeks."", 'comment_created': datetime.datetime(2021, 6, 16, 21, 20, 21, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 665640785, 'comment_body': 'This is more naturally a span; changed that detail.', 'comment_created': datetime.datetime(2021, 7, 7, 19, 13, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 665641152, 'comment_body': 'I changed this to a box-shadow, which fixes the artifacts on the right corners.', 'comment_created': datetime.datetime(2021, 7, 7, 19, 13, 44, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 665644725, 'comment_body': ""I think we don't need this error message; the red box and red warning tell you what you did wrong, and it's kinda ugly :).  So I just removed the error message part and replaced it with a comment explaining that reasoning."", 'comment_created': datetime.datetime(2021, 7, 7, 19, 19, 28, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '62d9f282119c7077ab01b0284c13adb4cd9424da', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+594398834,compose: Add support for full-screen compose box,"<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+Fixes #17660
+
+- [x] Adds a default max-height which will facilitate scrolling.
+- [x] Add a expansion/collapsing button for toggling full-screen view.
+- [x] Make the CSS needed for making textarea occupy full height.
+- [x] Find a way to handle auto-resize properly.
+- [x] Test properly for different use cases.
+- [x] On the close of the compose box, it should be restored to its original width.
+- [x] Add tests once we are ready that the intended behaviour is correct. (Also make the CI tests pass)
+
+**Testing plan:** <!-- How have you tested? -->
+Tested manually:
+Open the compose box, toggle the height using the toggler button added just below the compose area.
+To check autosize doesnot interfare is that when the compose height state is true, it is destroyed as this is the way to stop all the listeners added by it (check on docs of autosize) and particularly checked for changing messages and drafts while having full size compose box.
+The save and copy also doesn't not have any problems as the autosize has been destroyed.
+For node tests, I think for the compose_height file some basic tests needs to be defined.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+The design of full height text-area currently.
+![image](https://user-images.githubusercontent.com/56730716/111416298-a3f30400-8709-11eb-8fdd-70adf7e45de4.png)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,17667,https://api.github.com/repos/zulip/zulip/pulls/17667,https://github.com/zulip/zulip/pull/17667,closed,153,11,7,2,6,45,1,0,[{'name': 'size: XL'}],2021-03-17 04:46:20+00:00,2021-07-07 23:47:59+00:00,9745299.0,"112 days, 19:01:39","[{'comment_id': 612886918, 'comment_body': ""This might be done more cleanly by having different IDs for the toggle buttons in the two cases, and having each just call the appropriate function; it's harder to reason about code that does this sort of toggling logic rather than setting the state to what's desired."", 'comment_created': datetime.datetime(2021, 4, 14, 2, 4, 32, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 612887081, 'comment_body': '(Or by checking for the presence of an outer CSS class that controls the size of the compose box).', 'comment_created': datetime.datetime(2021, 4, 14, 2, 5, 8, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 612887455, 'comment_body': 'Would it work to change the `compose_textarea` CSS changes to instead just add a CSS class on the object that declares some properties on `compose_textarea.full_height` or similar (possibly with `!important` if needed?)', 'comment_created': datetime.datetime(2021, 4, 14, 2, 6, 15, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 612950045, 'comment_body': 'Sure that would be a great idea.', 'comment_created': datetime.datetime(2021, 4, 14, 5, 39, 4, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 612960012, 'comment_body': 'Well, I remember why I used this way. The panels are variable. Sometimes panels are there and sometimes they are not. So the height of the compose box really depends on this. So, I used javascript here as the height will be different.\r\nIs there any way to do this with CSS?', 'comment_created': datetime.datetime(2021, 4, 14, 6, 6, 1, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 612963282, 'comment_body': 'I have made two different IDs for toggle buttons with different icons. This now looks better.', 'comment_created': datetime.datetime(2021, 4, 14, 6, 13, 53, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652100807, 'comment_body': 'I have done this one with classes.', 'comment_created': datetime.datetime(2021, 6, 15, 19, 45, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652272588, 'comment_body': 'Can you paste before/after some screenshots to support this change with different screen sizes?', 'comment_created': datetime.datetime(2021, 6, 16, 1, 2, 49, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652272931, 'comment_body': ""Did we rename `#panels`?  If not, let's add a prep commit renaming that to `#navbar_alerts`."", 'comment_created': datetime.datetime(2021, 6, 16, 1, 4, 7, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652273389, 'comment_body': ""Looks good.  What do you think about moving these functions to `compose_ui.js`, and having `compose_height.js` be a section in that module?  I think that'd result in more intuitive naming, and that's already where we have `compose_ui.autosize_textarea`."", 'comment_created': datetime.datetime(2021, 6, 16, 1, 5, 45, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652273600, 'comment_body': 'I think `compose_ui.is_full_size()` and `compose_ui.set_full_size(value)` would be better names for these functions, assuming we put them in that module.', 'comment_created': datetime.datetime(2021, 6, 16, 1, 6, 33, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652273822, 'comment_body': 'We can call this `full_size_status` if we need a new variable name as discussed below.', 'comment_created': datetime.datetime(2021, 6, 16, 1, 7, 18, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652273928, 'comment_body': ""We don't use abbreviations, so call this `get_element_height` if you need a function of this form."", 'comment_created': datetime.datetime(2021, 6, 16, 1, 7, 38, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652274467, 'comment_body': 'Overall, this CSS class approach is much nicer and I recommend squashing this commit into its parent and proceeding from there.\r\n\r\nCould we replace the `floating_recipient_bar` show/hide logic with just having the `compose-fullscreen` class set a z-index that is statically 1 higher than that for the `floating_recipient_bar`?  \r\n\r\n(Or even just have `compose` have a z-index that happens to be higher?  These elements otherwise do not overlap)', 'comment_created': datetime.datetime(2021, 6, 16, 1, 9, 18, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652275074, 'comment_body': 'The hover behavior seems to not be working when testing this, both for this element and the ""X"".  A few other notes on the icon:\r\n* It seems a bit misaligned with the ""X"", and might need a small vertical alignment adjustment.\r\n* We should scale icons with %, not a number of `font-size` pixels, since that will work better when support multiple font sizes.\r\n* We might want to use a different icon element that feels bolder; ideally it\'d feel consistent with the ""X"" icon in terms of its line width.', 'comment_created': datetime.datetime(2021, 6, 16, 1, 11, 19, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652275311, 'comment_body': 'What is the `flex` logic needed for?  \r\n\r\nI would hope that we can figure out how to reduce the amount of special CSS for this mode, e.g. if there are refactors we can do to the existing compose box CSS that would make these unnecessary.', 'comment_created': datetime.datetime(2021, 6, 16, 1, 12, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 652532863, 'comment_body': 'In case of this change, when the height is less, it ensures some space is left above.\r\n**NOW**\r\n![image](https://user-images.githubusercontent.com/56730716/122197313-af46fe80-ceb5-11eb-8cd9-332e83566aff.png)\r\n\r\nwhereas before it was `22em` **BEFORE**\r\n![image](https://user-images.githubusercontent.com/56730716/122197506-e1f0f700-ceb5-11eb-8fcc-ceddb8d3e2c4.png)\r\n\r\nThese screenshots are taken with max height possible.\r\n\r\nIn case of devices having some height,\r\n**Now**\r\n![image](https://user-images.githubusercontent.com/56730716/122197824-34caae80-ceb6-11eb-8026-191931cbd23e.png)\r\n\r\n**Before** it was\r\n![image](https://user-images.githubusercontent.com/56730716/122197710-1a90d080-ceb6-11eb-8a75-1d8f7e30125d.png)\r\n', 'comment_created': datetime.datetime(2021, 6, 16, 9, 49, 25, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652536301, 'comment_body': 'Outdated, squashing this.', 'comment_created': datetime.datetime(2021, 6, 16, 9, 53, 55, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652536764, 'comment_body': 'Sure, will take care next time. However, outdated as now not needed.', 'comment_created': datetime.datetime(2021, 6, 16, 9, 54, 30, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652537038, 'comment_body': 'Yes, I fixed it. `floating_recipient_bar` has 98 z-index. I added 99 accordingly.\r\n', 'comment_created': datetime.datetime(2021, 6, 16, 9, 54, 52, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652544657, 'comment_body': 'Sure, changed it.', 'comment_created': datetime.datetime(2021, 6, 16, 10, 5, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652546533, 'comment_body': 'Sure, updated.', 'comment_created': datetime.datetime(2021, 6, 16, 10, 7, 57, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652548054, 'comment_body': 'Checking this one.', 'comment_created': datetime.datetime(2021, 6, 16, 10, 10, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652551173, 'comment_body': 'flex logic is needed for automatically setting the maximum height possible in the compose box. Like I give a height to #compose and then, make flex inside it. The element that needs to be stretched are given `flex: 1` to automtically fill all the spaces left. and height: 100% so, that height comes down. \r\nThis makes it possible to make the height fit according to percentage of height available and parent elements.\r\n\r\nI changed the approach for the following reasons:\r\n1. The alerts get handled automatically.\r\n2. The elements position itself, so no need to calculate height.\r\n3. This way also makes the height change automatically even without autosize in full screen mode if the device height is changed.\r\n\r\nThe approach of css can be simplified as start with #compose with the height the element that is fixed. Now for every element inside it, check if it is unique or have multiple children. Then look for which children needs to get stretched to obtain the left over space and give `flex: 1` to it. Following this sequence, the textarea finally got the height to get maximum stretch possible and it will handle it properly.', 'comment_created': datetime.datetime(2021, 6, 16, 10, 14, 38, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 652567223, 'comment_body': 'For the hover behavior, fixed that here.\r\n1. Fixing this one\r\n2. Actually the close `x` has the font size of 20px, so used that value as if we have different values, it will not look better. If we need to change it to percent, a seprate PR changing this for both will be good.\r\n3. Increasing font weight will do the job, so changed that.', 'comment_created': datetime.datetime(2021, 6, 16, 10, 38, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 658425940, 'comment_body': 'I will see for the refracter tomorrow.', 'comment_created': datetime.datetime(2021, 6, 25, 2, 20, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 660865287, 'comment_body': 'OK, looks great.', 'comment_created': datetime.datetime(2021, 6, 29, 18, 27, 47, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 660868276, 'comment_body': ""Let's drop this commit given #16038; I think we can consider changing the default height of `bottom_whitespace` separately, but there's no need to change it in this PR."", 'comment_created': datetime.datetime(2021, 6, 29, 18, 32, 8, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 660870974, 'comment_body': ""What's the thinking around this function?  It's only called once, when opening compose; is it impossible for compose to be full-size at the moment it's opened?  \r\n\r\nAlso, do we need to do any scrolling when doing fullsize compose?  This generally needs a comment explaining the reasoning."", 'comment_created': datetime.datetime(2021, 6, 29, 18, 36, 13, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 660871697, 'comment_body': 'Sorry, to be clear, my proposal was to put this code in `compose_ui.js`, not have a new module.', 'comment_created': datetime.datetime(2021, 6, 29, 18, 37, 19, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 660872238, 'comment_body': 'This way of setting the color for the `a` tag results in our needing to do something for the night theme as well.  I wonder if we can do `color: inherit` or something?  Or more generally have it share color/opacity CSS with the `x`, rather than copying it', 'comment_created': datetime.datetime(2021, 6, 29, 18, 38, 9, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 660873839, 'comment_body': 'These should be `button type=""button""`, not `a` tags, since they\'re not links.  Fixing this will let you use the same CSS as you have for `#compose_close`.  \r\n\r\nAlso, is there a reason this div is after the `Cancel compose` button?  If you position them in the right order with respect to each other, you may be able to use `float: right` with some margins, rather than absolute positioning (which we generally want to avoid wherever possible)', 'comment_created': datetime.datetime(2021, 6, 29, 18, 40, 33, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 660874321, 'comment_body': 'Should these two headings both be `#compose.compose-fullscreen`?  You can have properties in the top-level element in an SCSS block.', 'comment_created': datetime.datetime(2021, 6, 29, 18, 41, 17, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 663471549, 'comment_body': 'Yes, it is impossible. The user need to explicitly toggle the full screen mode and only for a particular message.\r\n\r\nWell I thought so scrolling may be required, but it isn\'t required actually.\r\n\r\nI actually just added this condition here as we destroy `autosize` when full screen is toggled. So, as a preventive measure if someones calls this function when `autosize` is not declared, it does not give error.\r\n\r\nSo, I feel this should be done this way. Not adding the change right now, see if this seems good?\r\n```js\r\nif (!compose_height.is_full_size()) {\r\n        autosize($(""#compose-textarea""), {\r\n            callback() {\r\n                maybe_scroll_up_selected_message();\r\n            },\r\n        });\r\n    }\r\n```', 'comment_created': datetime.datetime(2021, 7, 4, 8, 59, 40, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663471601, 'comment_body': 'Sure!\r\n\r\nDone\r\n', 'comment_created': datetime.datetime(2021, 7, 4, 9, 0, 2, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663475253, 'comment_body': ""Updated to buttons.\r\n\r\n> Also, is there a reason this div is after the Cancel compose button? If you position them in the right order with respect to each other, you may be able to use float: right with some margins, rather than absolute positioning (which we generally want to avoid wherever possible)\r\n\r\nYes, actually i copied the behavior of `#compose_close`, it used absolute positioning, so I used.\r\nIf I don't use absolute positioning and use only `float: right`, a weird space in the right comes as shown.\r\n![image](https://user-images.githubusercontent.com/56730716/124380081-7641c300-dcd8-11eb-8b84-7028114b7563.png)\r\n\r\nAlso, now I have moved the `#compose_close` also in this menu. This menu can have new buttons in future with ease now.\r\n"", 'comment_created': datetime.datetime(2021, 7, 4, 9, 30, 26, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663475789, 'comment_body': 'Changing it to buttons, so no removed this CSS.', 'comment_created': datetime.datetime(2021, 7, 4, 9, 35, 3, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663475997, 'comment_body': 'Dropped.', 'comment_created': datetime.datetime(2021, 7, 4, 9, 36, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663476087, 'comment_body': 'Yes, my mistake. Fixed this.', 'comment_created': datetime.datetime(2021, 7, 4, 9, 37, 19, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663476909, 'comment_body': 'This is possible, clearly. Refractored accordingly.', 'comment_created': datetime.datetime(2021, 7, 4, 9, 43, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 663478548, 'comment_body': 'I have added another commit, so that you can see if that looks good.', 'comment_created': datetime.datetime(2021, 7, 4, 9, 58, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 665772770, 'comment_body': ""Yeah, that's what I'd had in mind; I'll change that and commit."", 'comment_created': datetime.datetime(2021, 7, 7, 23, 40, 5, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 665773003, 'comment_body': 'OK; probably we can fix that but it seems fine to leave that idea for future work.  ', 'comment_created': datetime.datetime(2021, 7, 7, 23, 40, 47, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 665773434, 'comment_body': ""I added a line in both of these functions to move focus back to the compose box, since that's almost always what you want."", 'comment_created': datetime.datetime(2021, 7, 7, 23, 42, 4, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 665878102, 'comment_body': 'Great!', 'comment_created': datetime.datetime(2021, 7, 8, 5, 22, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': '6cf33c4275169f768a89f503b9d05dedd6d4379a', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98b5f01d14e151d106c2a49034ff74c98075f380', 'committer_username': 'timabbott', 'committer_name': 'Tim Abbott', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 7, 21, 18, 39, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+685696641,compose: Fix the color or expand/collapse compose box in night mode.,"Follow-up: #17667
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested hover effect also.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+![image](https://user-images.githubusercontent.com/56730716/124866934-dab39980-dfda-11eb-98b2-7ea8134cb432.png)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,19167,https://api.github.com/repos/zulip/zulip/pulls/19167,https://github.com/zulip/zulip/pull/19167,closed,4,0,1,1,1,0,0,0,[],2021-07-08 05:24:46+00:00,2021-07-08 18:33:37+00:00,47331.0,13:08:51,[],"[{'commit_sha': 'a2cd0d462ca98602b2b0f53b074b69f209b6a4db', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+677909384,"compose: Extracting ""compose_validate.js"".","This commit first moves the compose.validate() function out
+with the functions that are needed by it. Then one by one
+checked for which function is now not needed in compose.js.
+
+This moves all validation related functions out of ""compose.js""
+to ""compose_validate.js"".
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this with `tools/lint` and `tools/test-js-with-node`
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+
+@showell @timabbott FYI",True,19003,https://api.github.com/repos/zulip/zulip/pulls/19003,https://github.com/zulip/zulip/pull/19003,closed,592,574,7,1,6,1,1,0,[{'name': 'size: XL'}],2021-06-25 13:19:56+00:00,2021-07-06 02:22:55+00:00,910979.0,"10 days, 13:02:59","[{'comment_id': 663455430, 'comment_body': 'Moved this test to `node_tests/compose_validate.js` as all wildcard mentions right now are used by it. So, testing there will be better.', 'comment_created': datetime.datetime(2021, 7, 4, 6, 40, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': '57340a888c4aed129be004f155e7aed02a05007f', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+677304184,compose: Split compose.js - move compose_error outside it.,"This moves `compose_error()` out of the compose.js
+Next I plan to move `compose_not_subscribed_error()`
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+See https://chat.zulip.org/#narrow/stream/6-frontend/topic/splitting.20compose.2Ejs for discussion.
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this with node tests mainly.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,18982,https://api.github.com/repos/zulip/zulip/pulls/18982,https://github.com/zulip/zulip/pull/18982,closed,68,51,4,1,1,4,1,0,[{'name': 'size: XL'}],2021-06-24 17:32:49+00:00,2021-06-24 23:21:33+00:00,20924.0,5:48:44,"[{'comment_id': 658299338, 'comment_body': 'What if we call this `compose_error.show()`?  `compose_error.compose_error` feels awkward to read.', 'comment_created': datetime.datetime(2021, 6, 24, 21, 39, 14, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658299905, 'comment_body': ""I think we also need a `compose_error.hide()` method, for clearing the error when we're done with it?\r\n\r\nAnd  any click handlers for e.g. closing them via the `x` should go in this file too."", 'comment_created': datetime.datetime(2021, 6, 24, 21, 40, 20, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658300504, 'comment_body': ""I'd call this `compose_error.show_not_subscribed(...)`.\r\n\r\nThat said, is the only difference here the `home-error-bar` class?  If so, we should think about a refactoring to let us pass an `error_class` parameter as well once this is merged.\r\n\r\n"", 'comment_created': datetime.datetime(2021, 6, 24, 21, 41, 25, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 658312445, 'comment_body': ""I also thought the same first. But it also does another task, so right now didn't changed it. I will see if that will be possible and change it."", 'comment_created': datetime.datetime(2021, 6, 24, 22, 1, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': '939d8dab7b453d744d2bc5b40529591f9ff2eb01', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+677849267,compose: Make a function to hide compose error.,"Follow up #18982
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested with node tests.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,19001,https://api.github.com/repos/zulip/zulip/pulls/19001,https://github.com/zulip/zulip/pull/19001,closed,13,1,3,1,2,0,1,0,[{'name': 'size: S'}],2021-06-25 11:41:06+00:00,2021-07-06 22:15:26+00:00,988460.0,"11 days, 10:34:20",[],"[{'commit_sha': '4c7ed624ec9e4540e52273d8fc882de50c5ccc2b', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+698815727,compose : Move warn functions from compose.js to compose_validate.js.,"This commit moves the warn_if_private_stream_is_linked,
+needs_subscribe_warning, and warn_if_mentioning_unsubscribed_user
+to compose_validate.js from compose.js.
+
+Part of splitting compose.js.
+[CZO Link](https://chat.zulip.org/#narrow/stream/6-frontend/topic/splitting.20compose.2Ejs/near/1228506)
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this with `tools/lint` and `tools/test-js-with-node`.
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,19414,https://api.github.com/repos/zulip/zulip/pulls/19414,https://github.com/zulip/zulip/pull/19414,closed,380,380,6,1,2,0,1,0,[{'name': 'size: XL'}],2021-07-28 15:52:59+00:00,2021-07-29 22:22:54+00:00,109795.0,"1 day, 6:29:55",[],"[{'commit_sha': '3ce7a9dd0844d0d959c0ed1ea511a6f5c56b6d84', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+698839755,compose: Move keydown and keyup from compose.js to compose_ui.js.,"This commit moves the handle_keydown and handle_keydown functions
+of compose.js to compose_ui.js.
+
+Part of splitting compose.js.
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+[CZO link](https://chat.zulip.org/#narrow/stream/6-frontend/topic/splitting.20compose.2Ejs/near/1216109)
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this with `tools/lint` and `tools/test-js-with-node`.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,19416,https://api.github.com/repos/zulip/zulip/pulls/19416,https://github.com/zulip/zulip/pull/19416,closed,265,260,6,1,3,0,1,0,[{'name': 'size: XL'}],2021-07-28 16:26:57+00:00,2021-07-28 21:02:37+00:00,16540.0,4:35:40,[],"[{'commit_sha': '3ec55e79762cd740fea7150e95f75e457b669a31', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+654052382,docs: Add syntax highlighting in api docs.,"This commit adds the language of code snippets in api
+markdowns wherever it was left.
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+CZO link here https://chat.zulip.org/#narrow/stream/19-documentation/topic/no.20code.20highlight
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,18612,https://api.github.com/repos/zulip/zulip/pulls/18612,https://github.com/zulip/zulip/pull/18612,closed,31,31,4,1,5,3,1,0,[{'name': 'size: L'}],2021-05-26 17:21:11+00:00,2021-06-01 17:03:25+00:00,517334.0,"5 days, 23:42:14","[{'comment_id': 639974688, 'comment_body': '```suggestion\r\n```console\r\n```\r\n\r\n(see https://pygments.org/docs/lexers/#pygments.lexers.shell.BashSessionLexer)', 'comment_created': datetime.datetime(2021, 5, 26, 17, 32, 41, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 639976050, 'comment_body': '```suggestion\r\n```console\r\n```', 'comment_created': datetime.datetime(2021, 5, 26, 17, 33, 48, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 639976435, 'comment_body': '```suggestion\r\n```console\r\n```', 'comment_created': datetime.datetime(2021, 5, 26, 17, 34, 7, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}]","[{'commit_sha': '071c730ad5f6085b246433f403fbae1453b3cdd8', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+668818576,"login: Remove browser show password in IE, edge.","The Microsoft browsers such as IE and Edge has their own
+show password that is a bit bugy and also conflicts with
+the show password in Zulip that was added in #17305.
+This fixes the issue by making the display none for the
+ms-reveal that comes in the input.
+
+More details can be found at
+https://chat.zulip.org/#narrow/stream/101-design/topic/Show.20password/near/1173890
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this manually on MS Edge Dev based on chromium on Ubuntu 18.04.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+Now the browser  show password doesn't come
+![image](https://user-images.githubusercontent.com/56730716/121770990-54966580-cb8a-11eb-908b-f63b4596b987.png)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,18815,https://api.github.com/repos/zulip/zulip/pulls/18815,https://github.com/zulip/zulip/pull/18815,closed,6,0,1,1,1,0,1,0,[{'name': 'size: S'}],2021-06-12 08:58:18+00:00,2021-06-14 23:35:50+00:00,225452.0,"2 days, 14:37:32",[],"[{'commit_sha': 'c1833b74f09b6295db4013a4215f9c01f3287af9', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+614720549,avatar: show loading animation while deleting profile picture.,"This commit displays the loading animation and hides other
+avatar options as delete_user_avatar is called and as we get
+response from the server, we show the options back and hide
+the loading animation.
+
+[CZO link here](https://chat.zulip.org/#narrow/stream/6-frontend/topic/Bootstrap.20modal.20race.20condition/near/1161378)
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+![user_avatar](https://user-images.githubusercontent.com/56730716/114612348-a8d2b580-9cbf-11eb-8677-c53c17bec1ae.gif)
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested manually.
+
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,18129,https://api.github.com/repos/zulip/zulip/pulls/18129,https://github.com/zulip/zulip/pull/18129,closed,19,2,1,1,2,3,1,0,[{'name': 'size: S'}],2021-04-13 19:51:24+00:00,2021-05-04 17:11:17+00:00,1804793.0,"20 days, 21:19:53","[{'comment_id': 612851281, 'comment_body': ""This needs to hide the spinner too, right?  You can simulate an error to confirm, but I believe you'll have a perpetual spinner with this implementation."", 'comment_created': datetime.datetime(2021, 4, 14, 0, 6, 55, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 613299277, 'comment_body': 'Ah yes, missed it. This also needs to call `display_user_avatar_complete()`.\r\n\r\nAlso before there was no error handling, so I am not 100% sure if this is correct. I read the `channel.del` to get the idea that error() callback will be used. So, probably I am correct.', 'comment_created': datetime.datetime(2021, 4, 14, 14, 29, 10, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 613305961, 'comment_body': 'Changed!', 'comment_created': datetime.datetime(2021, 4, 14, 14, 36, 50, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': '9fe2c21556676e6fc9224741c1c3d841566d7201', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+669404085,compose: Make the route of message sending through drafts.,"Fixes #17697
+See the commit description for more details. I will remove the console logs after few checks.
+
+[CZO Link here](https://chat.zulip.org/#narrow/stream/2-general/topic/Ease.20of.20message.20recovery.20.2317697)
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this manually right now. Here  I am adding some details on how to test:
+1. Testing of locally echoed message -
+Try to send a message first simply, it should have sent successfully and the message should not be in the drafts.
+Now prepare another message,  and before sending it. In the developer tools -> network tab -> Make the network offline and then try sending the message. The message will get failed, and see the draft of that message will be in the drafts tab.
+Now make the network again to no throttling in the network tab of developer tools. And retry sending the message, the message will be sent successfully and the draft will be deleted.
+
+2. Testing of a non locally echoed message (eg. a message including an image)
+The draft will not be saved for these messages and they remain in the compose box until the server gives a success signal for it. So, no need to save draft for these. Test by simply following the above procedure.
+
+A gif of the above testing
+![draft-message](https://user-images.githubusercontent.com/56730716/121870429-aa9d1180-cd20-11eb-924d-db34c6659fa0.gif)
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+Some questions:
+1. What if the user deletes the draft and resend the message successfully?
+> Well in this case, the draft when doesn't exists. It does not matter, it also do not create any error.
+
+2. If the user again opens the message from draft and tries to send it.
+> This is also not creating any problem as it will not allow to locally echo the message in that case. It will allow when the network is good without locally echoing it. Also care is taken that no multiple drafts get created.
+
+3. ",True,18827,https://api.github.com/repos/zulip/zulip/pulls/18827,https://github.com/zulip/zulip/pull/18827,closed,65,22,6,1,4,0,3,0,"[{'name': 'area: compose (misc)'}, {'name': 'priority: high'}, {'name': 'size: L'}]",2021-06-14 09:27:10+00:00,2021-09-07 21:37:05+00:00,7387795.0,"85 days, 12:09:55",[],"[{'commit_sha': '459ce92109fb6f06008d71c8a94b480ad1e58286', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+705757826,message_edit: Show indicators for max message length limits.,"This commit is in continuation to the PR #18871 for adding indicators that will tell the user when he or she exceeds the allowed maximum limit while composing a message.
+
+Part of #15909
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested this manually for now.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+![image](https://user-images.githubusercontent.com/56730716/128573152-02304ba3-7701-4e19-b07f-93ffad9dbc9a.png)
+
+
+Currently I am seeing a way to make the code same for both, by using same function if possible.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",False,19535,https://api.github.com/repos/zulip/zulip/pulls/19535,https://github.com/zulip/zulip/pull/19535,closed,94,18,4,2,6,0,3,0,"[{'name': 'area: message-editing'}, {'name': 'size: XL'}, {'name': 'has conflicts'}]",2021-08-06 21:32:45+00:00,2023-10-02 05:53:37+00:00,67940452.0,"786 days, 8:20:52",[],"[{'commit_sha': 'fd94e67ed05deab14c63cfa137f691f401bfa42f', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09133e4462c3475e93432c42f0ae243b0efc993a', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+685529147,compose: Add alert for resolved topic.,"<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+#18751
+
+**Testing plan:** <!-- How have you tested? -->
+
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+I am currently stuck at:
+1. When I change the URL, or say click on some other topic, the `input change` listener is not called. How the topic is changed, etc, so manually add the function there. [**Fixed**]
+
+A gif to show what I am talking about where I am stuck.
+![resolve_toppic](https://user-images.githubusercontent.com/56730716/127218942-d2d4ef25-a5ce-4b8a-a9f8-ade1446a2e18.gif)
+",False,19163,https://api.github.com/repos/zulip/zulip/pulls/19163,https://github.com/zulip/zulip/pull/19163,closed,169,39,10,2,19,5,2,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}]",2021-07-07 21:38:06+00:00,2023-10-02 05:38:04+00:00,70531198.0,"816 days, 7:59:58","[{'comment_id': 684179850, 'comment_body': ""@timabbott I also need to add a check here that the topic exists in stream already or not. If topic doesn't in the stream and one clicks the unresolve button, error comes. So need to see that.\r\n\r\nThis also enables us to question one thing, should we show the warning even if the topic already doesn't exist and starts with the `RESOLVED_TOPIC_PREFIX`. what are your views?"", 'comment_created': datetime.datetime(2021, 8, 6, 12, 1, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 684180655, 'comment_body': 'check When someone is editing the topic/stream manually.', 'comment_created': datetime.datetime(2021, 8, 6, 12, 2, 31, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 684181129, 'comment_body': 'Checking While opening the compose-box.', 'comment_created': datetime.datetime(2021, 8, 6, 12, 3, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 684181600, 'comment_body': 'Check when the topic is changed, mainly when topic is resolved/unresolved.', 'comment_created': datetime.datetime(2021, 8, 6, 12, 4, 3, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 684182335, 'comment_body': 'When narrow is changed and topic changes.', 'comment_created': datetime.datetime(2021, 8, 6, 12, 5, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': '82f0c7a7cf0ddcd558aad025dab87d2f9e03fadf', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a13288ae10cd0d97a2c97f95239bc777cc16b7ff', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+674928780,hotkey: Preview shortcut,"<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+Fixes #18471
+
+When composing a message if someone uses ctrl + shift + P, it checks the preview or edit and calls the desired function.
+
+**Testing plan:** <!-- How have you tested? -->
+Tested manually right now, will adds tests soon.
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",False,18938,https://api.github.com/repos/zulip/zulip/pulls/18938,https://github.com/zulip/zulip/pull/18938,closed,36,11,3,2,9,2,4,0,"[{'name': 'area: keyboard UI'}, {'name': 'size: M'}, {'name': 'has conflicts'}, {'name': 'area: compose (formatting)'}]",2021-06-21 22:13:35+00:00,2024-01-15 01:54:21+00:00,80970046.0,"937 days, 3:40:46","[{'comment_id': 656469295, 'comment_body': ""I think this logic belongs with the other `compose.js` `handle_keydown` handlers, not here.  Also `compose_state.composing()` doesn't tell us whether focus is in the compose box, which is what we actually want to know."", 'comment_created': datetime.datetime(2021, 6, 22, 18, 14, 52, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 656492772, 'comment_body': ""I don't think that this belongs to `handle_keydown`, the reason being when we are in in the preview state, that `handle_keydown` will not work. \r\nAlso regarding the focus, the compose box is open whenever `compose_state.compising()` is true. And as soon as the user shifts the focus to something, else. The compose box is closed. \r\nAlso I feel that instead of checking if the focus is on the composebox or not. The user will be able to get a better idea when `ctrl+shift+P` will work in case of compose box is open."", 'comment_created': datetime.datetime(2021, 6, 22, 18, 47, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': 'a0d8dfe16ccc918b0a0ed2f38e4f758753a6bb22', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2a8ea9645ae06053d3384757662e82da0ecaa16', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+568764600,user docs: Replace right simplebar with browser scrollbar,"This commit removes the simplebar implementation for the right.
+Thus using the default browser scrollbar. Removes simplebar class
+and functions scrollToHash with this commit.
+
+Fixes #10732 
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+
+**Testing plan:** <!-- How have you tested? -->
+Tested manually and with node-tests.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+How it looks now
+![image](https://user-images.githubusercontent.com/56730716/107115928-fed94600-6895-11eb-8b12-d6d2051fb7ad.png)
+
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,17227,https://api.github.com/repos/zulip/zulip/pulls/17227,https://github.com/zulip/zulip/pull/17227,closed,8,11,5,2,24,18,4,0,"[{'name': 'bug'}, {'name': 'area: documentation (user)'}, {'name': 'size: M'}, {'name': 'integration review'}]",2021-02-06 10:42:31+00:00,2023-08-30 22:34:35+00:00,80826724.0,"935 days, 11:52:04","[{'comment_id': 571471402, 'comment_body': 'Why was this needed? We want to use the `html` scrollbar in small browsers too.', 'comment_created': datetime.datetime(2021, 2, 6, 18, 56, 3, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 571471458, 'comment_body': 'This is `width >= 800px`, but the opposite of `width <= 800px` should be `width > 800px`.', 'comment_created': datetime.datetime(2021, 2, 6, 18, 56, 47, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 571472055, 'comment_body': 'Instead of this override, we can just remove `overflow: auto` from `.markdown` in static/styles/portico/markdown.css. The other users of `.markdown` don’t need the `overflow: auto`.', 'comment_created': datetime.datetime(2021, 2, 6, 19, 2, 28, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 571487949, 'comment_body': ""Sure, that was one of my major concerns. That's why I didn't change there. I will remove the overflow: auto from .markdown"", 'comment_created': datetime.datetime(2021, 2, 6, 20, 58, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 571489101, 'comment_body': 'Oh got it, I will control this from `@media max-width` block then.', 'comment_created': datetime.datetime(2021, 2, 6, 21, 5, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 571490969, 'comment_body': 'Actually, first I tried without this, but for better view in smaller devices this is needed. \r\nThat is using html scrollbar in small screens too, but that actually disrupts the view as you can see in this picture\r\n![image](https://user-images.githubusercontent.com/56730716/107129741-99b13f00-68ed-11eb-90f8-0c8166ef4e37.png)\r\n\r\nHaving the overflow auto for that element itself works better for smaller devices and touch-based also. So as you can see in this picture, even becoming small it will not disrupt the view.\r\n![image](https://user-images.githubusercontent.com/56730716/107129900-c9147b80-68ee-11eb-9197-b291dc272b06.png)\r\n\r\nAnd yes simplebar is completely removed from the right scrollbar.', 'comment_created': datetime.datetime(2021, 2, 6, 21, 18, 19, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 571491058, 'comment_body': 'Solved.', 'comment_created': datetime.datetime(2021, 2, 6, 21, 19, 3, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 571491064, 'comment_body': 'Solved.', 'comment_created': datetime.datetime(2021, 2, 6, 21, 19, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 571491372, 'comment_body': 'Sure to hear from you what feels better. We can do that way.', 'comment_created': datetime.datetime(2021, 2, 6, 21, 22, 11, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 571494271, 'comment_body': 'I think the only problem in your “disrupted” screenshot is that the left sidebar is too narrow, right? This seems to be a problem with `100vw` vs. `100%`, and this fixes it:\r\n\r\n```diff\r\n--- a/static/styles/portico/portico.css\r\n+++ b/static/styles/portico/portico.css\r\n@@ -1353,15 +1353,10 @@ input.new-organization-button {\r\n }\r\n \r\n @media (width <= 800px) {\r\n-    .app {\r\n-        overflow: hidden;\r\n-    }\r\n-\r\n     .app.help {\r\n         .markdown {\r\n             width: 100vw;\r\n             margin-left: 0;\r\n-            overflow: auto;\r\n \r\n             .content {\r\n                 max-width: none;\r\n@@ -1383,7 +1378,7 @@ input.new-organization-button {\r\n         .sidebar {\r\n             position: fixed;\r\n             top: 59px;\r\n-            right: calc(100vw - 50px);\r\n+            right: calc(100% - 50px);\r\n             width: 100%;\r\n             min-width: unset;\r\n             height: calc(100vh - 59px);\r\n```', 'comment_created': datetime.datetime(2021, 2, 6, 21, 53, 28, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 571496142, 'comment_body': 'Cool! This works awesome. Got it, making this change quickly.', 'comment_created': datetime.datetime(2021, 2, 6, 22, 12, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 602712622, 'comment_body': 'If the page content is updated and the hash remains empty, this function scrolls the page to the top. If there is any hash in the link, it is automatically handled by the browser scrollbar. So, no need to add that case.', 'comment_created': datetime.datetime(2021, 3, 27, 12, 23, 52, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 602712689, 'comment_body': 'This adds a scroll margin for the element so that when the links are opened using hash, it correctly positions the page.', 'comment_created': datetime.datetime(2021, 3, 27, 12, 24, 46, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 602712817, 'comment_body': ""The body height should be removed, as the height isn't fixed now and is automatic handles by the content on the page. Having this line, the page where the scrollbar was not needed was also having one scrollbar.\r\nFixes this bug."", 'comment_created': datetime.datetime(2021, 3, 27, 12, 26, 6, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 602712909, 'comment_body': 'Make the sidebar fixed position, so that the html scrollbar does not scrolls this and sidebar remains fixed. it has its own simplebar.', 'comment_created': datetime.datetime(2021, 3, 27, 12, 26, 59, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 602713071, 'comment_body': 'The default height is removed from the .markdown as now the scroll is handled by the html, not the .markdown. This solves the issue of some wried grey patches coming.', 'comment_created': datetime.datetime(2021, 3, 27, 12, 27, 58, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 602713377, 'comment_body': 'Making mobile friendly.', 'comment_created': datetime.datetime(2021, 3, 27, 12, 30, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 639736952, 'comment_body': 'changed it to right as right was performing better than transition and working on both mobile and desktop with less width.\r\n\r\n@vinitS101 as pointed by you. This was happening.\r\n![image](https://user-images.githubusercontent.com/56730716/119663233-cdd64e80-be4f-11eb-9cf4-daaf834646c1.png)\r\n\r\nThis shifts a bit to left so that there will be no overlap in anycase.\r\n![image](https://user-images.githubusercontent.com/56730716/119663328-e21a4b80-be4f-11eb-9d3b-7e72982c0d05.png)\r\nAlso on mobile devices, it looks fine and fixes both the problems.\r\n', 'comment_created': datetime.datetime(2021, 5, 26, 13, 40, 53, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}]","[{'commit_sha': '8dcd66095d72b24a1be29fc68b4b67fb38323bfd', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90c3819e54dad88cd8a128eaddad22ffcd1d8a0b', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+670347497,hotkeys: Quote selected text when > hotkey is pressed.,"Follow up for https://github.com/zulip/zulip/pull/15235 (See this for details on the issue)
+Rebased and tested.
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+[CZO link here](https://chat.zulip.org/#narrow/stream/6-frontend/topic/select.20and.20reply)
+
+**Testing plan:** <!-- How have you tested? -->
+Tested manually selecting and works as shown in the original PR.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+
+
+![select-reply](https://user-images.githubusercontent.com/56730716/122050611-40a86900-ce01-11eb-9098-a563d3cf1e97.gif)
+Ignore the `search | copy` that  comes in the gif, it is a browser feature of opera.
+",False,18850,https://api.github.com/repos/zulip/zulip/pulls/18850,https://github.com/zulip/zulip/pull/18850,closed,38,5,3,1,2,1,2,0,"[{'name': 'size: M'}, {'name': 'has conflicts'}]",2021-06-15 12:10:36+00:00,2024-07-19 16:58:15+00:00,97649259.0,"1130 days, 4:47:39","[{'comment_id': 654685098, 'comment_body': 'We should definitely not be doing the hacky `message.raw_content` logic here -- refactor the `replace_content` function to support a way to pass the raw content to use as a second parameter.', 'comment_created': datetime.datetime(2021, 6, 18, 21, 32, 21, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '42ac9effcc82bd7fcde59ebfb0d72b38b5599acb', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+648308526,refactor: Create a color palette for Zulip.,"This commit tries to have certain css variable that will hold the general
+most used colors of Zulip. They can be easily set at the top of the night
+mode css file and this will reduce the overwriting of css properties.
+
+One great feature of this PR that I liked is, if someone is designing something, it can happen that he just write the light theme css, and variables will automatically handle the color in dark theme.
+
+For right now the first version of this task, I have created the following variables
+```CSS
+--color-background: hsl(0, 0%, 100%);
+--color-background-highlight: hsl(0, 0%, 88%);
+--color-background-modal: hsl(0, 0%, 98%);
+--color-placeholder: hsl(0, 0%, 45%);
+--color-hotspot-before: hsl(0, 0%, 80%);
+--color-text: hsl(0, 0%, 0%);
+```
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+Link to [CZO here](https://chat.zulip.org/#narrow/stream/6-frontend/topic/variables.20in.20scss/near/1184419)
+
+**Testing plan:** <!-- How have you tested? -->
+Have tested the elements from which I remove the property and added the css.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",False,18557,https://api.github.com/repos/zulip/zulip/pulls/18557,https://github.com/zulip/zulip/pull/18557,open,83,156,14,1,1,1,2,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}]",2021-05-20 01:45:10+00:00,,0.0,,"[{'comment_id': 639118740, 'comment_body': ""I think the end result for this PR looks pretty reasonable. The way I'd want to write commits for this sort of migration is to have smaller commits migrating individual types of components, e.g. this line feels complicated enough that it'd be nice to have it in the in small commit that changes this and adjusts `zulip.css` appropriately.\r\n\r\n(And it'd be nice for the hotspots changes to be one commit)\r\n\r\nI imagine you can do that split somewhat quickly using `git checkout -p` to grab bundles of hunks and commit them if you know how to do that."", 'comment_created': datetime.datetime(2021, 5, 25, 19, 20, 37, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '343d2e06823f92c552195253adf52de648ed3d15', 'committer_username': 'Signior-X', 'committer_name': 'Priyam', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 18, 14, 23, 10, tzinfo=datetime.timezone.utc)}]",Priyam,56730716,,User,,64,,93,104
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43160685,zulip,zulip/zulip,Python,7618,21015,375,1134,60300,2471,28,803,"[{'id': 705757826, 'number': 19535, 'closed': datetime.datetime(2023, 10, 2, 5, 53, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 21, 32, 45, tzinfo=datetime.timezone.utc), 'time_taken': 67940452.0, 'time_delta': '786 days, 8:20:52', 'additions': 94, 'deletions': 18, 'state': 'closed'}, {'id': 705631150, 'number': 19534, 'closed': datetime.datetime(2021, 8, 6, 21, 22, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 6, 17, 11, 28, tzinfo=datetime.timezone.utc), 'time_taken': 15088.0, 'time_delta': '4:11:28', 'additions': 4, 'deletions': 1, 'state': 'closed'}, {'id': 698839755, 'number': 19416, 'closed': datetime.datetime(2021, 7, 28, 21, 2, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 28, 16, 26, 57, tzinfo=datetime.timezone.utc), 'time_taken': 16540.0, 'time_delta': '4:35:40', 'additions': 265, 'deletions': 260, 'state': 'closed'}, {'id': 698815727, 'number': 19414, 'closed': datetime.datetime(2021, 7, 29, 22, 22, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 28, 15, 52, 59, tzinfo=datetime.timezone.utc), 'time_taken': 109795.0, 'time_delta': '1 day, 6:29:55', 'additions': 380, 'deletions': 380, 'state': 'closed'}, {'id': 685696641, 'number': 19167, 'closed': datetime.datetime(2021, 7, 8, 18, 33, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 8, 5, 24, 46, tzinfo=datetime.timezone.utc), 'time_taken': 47331.0, 'time_delta': '13:08:51', 'additions': 4, 'deletions': 0, 'state': 'closed'}, {'id': 685529147, 'number': 19163, 'closed': datetime.datetime(2023, 10, 2, 5, 38, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 7, 21, 38, 6, tzinfo=datetime.timezone.utc), 'time_taken': 70531198.0, 'time_delta': '816 days, 7:59:58', 'additions': 169, 'deletions': 39, 'state': 'closed'}, {'id': 685335756, 'number': 19154, 'closed': datetime.datetime(2021, 7, 7, 17, 47, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 7, 16, 19, 28, tzinfo=datetime.timezone.utc), 'time_taken': 5296.0, 'time_delta': '1:28:16', 'additions': 10, 'deletions': 3, 'state': 'closed'}, {'id': 683550572, 'number': 19118, 'closed': datetime.datetime(2021, 7, 5, 18, 56, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 5, 9, 56, 19, tzinfo=datetime.timezone.utc), 'time_taken': 32427.0, 'time_delta': '9:00:27', 'additions': 17, 'deletions': 2, 'state': 'closed'}, {'id': 677965977, 'number': 19006, 'closed': datetime.datetime(2021, 6, 25, 22, 7, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 25, 14, 39, 13, tzinfo=datetime.timezone.utc), 'time_taken': 26910.0, 'time_delta': '7:28:30', 'additions': 180, 'deletions': 163, 'state': 'closed'}, {'id': 677909384, 'number': 19003, 'closed': datetime.datetime(2021, 7, 6, 2, 22, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 25, 13, 19, 56, tzinfo=datetime.timezone.utc), 'time_taken': 910979.0, 'time_delta': '10 days, 13:02:59', 'additions': 592, 'deletions': 574, 'state': 'closed'}, {'id': 677849267, 'number': 19001, 'closed': datetime.datetime(2021, 7, 6, 22, 15, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 25, 11, 41, 6, tzinfo=datetime.timezone.utc), 'time_taken': 988460.0, 'time_delta': '11 days, 10:34:20', 'additions': 13, 'deletions': 1, 'state': 'closed'}, {'id': 677304184, 'number': 18982, 'closed': datetime.datetime(2021, 6, 24, 23, 21, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 24, 17, 32, 49, tzinfo=datetime.timezone.utc), 'time_taken': 20924.0, 'time_delta': '5:48:44', 'additions': 68, 'deletions': 51, 'state': 'closed'}, {'id': 676413667, 'number': 18970, 'closed': datetime.datetime(2021, 6, 26, 1, 7, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 23, 15, 46, 22, tzinfo=datetime.timezone.utc), 'time_taken': 206460.0, 'time_delta': '2 days, 9:21:00', 'additions': 98, 'deletions': 16, 'state': 'closed'}, {'id': 674928780, 'number': 18938, 'closed': datetime.datetime(2024, 1, 15, 1, 54, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 21, 22, 13, 35, tzinfo=datetime.timezone.utc), 'time_taken': 80970046.0, 'time_delta': '937 days, 3:40:46', 'additions': 36, 'deletions': 11, 'state': 'closed'}, {'id': 671475321, 'number': 18871, 'closed': datetime.datetime(2021, 7, 7, 19, 20, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 16, 13, 35, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1835077.0, 'time_delta': '21 days, 5:44:37', 'additions': 109, 'deletions': 1, 'state': 'closed'}, {'id': 670347497, 'number': 18850, 'closed': datetime.datetime(2024, 7, 19, 16, 58, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 15, 12, 10, 36, tzinfo=datetime.timezone.utc), 'time_taken': 97649259.0, 'time_delta': '1130 days, 4:47:39', 'additions': 38, 'deletions': 5, 'state': 'closed'}, {'id': 670272570, 'number': 18849, 'closed': datetime.datetime(2021, 7, 7, 8, 22, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 15, 10, 20, 10, tzinfo=datetime.timezone.utc), 'time_taken': 1893759.0, 'time_delta': '21 days, 22:02:39', 'additions': 54, 'deletions': 9, 'state': 'closed'}, {'id': 669404085, 'number': 18827, 'closed': datetime.datetime(2021, 9, 7, 21, 37, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 14, 9, 27, 10, tzinfo=datetime.timezone.utc), 'time_taken': 7387795.0, 'time_delta': '85 days, 12:09:55', 'additions': 65, 'deletions': 22, 'state': 'closed'}, {'id': 668818576, 'number': 18815, 'closed': datetime.datetime(2021, 6, 14, 23, 35, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 12, 8, 58, 18, tzinfo=datetime.timezone.utc), 'time_taken': 225452.0, 'time_delta': '2 days, 14:37:32', 'additions': 6, 'deletions': 0, 'state': 'closed'}, {'id': 654052382, 'number': 18612, 'closed': datetime.datetime(2021, 6, 1, 17, 3, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 26, 17, 21, 11, tzinfo=datetime.timezone.utc), 'time_taken': 517334.0, 'time_delta': '5 days, 23:42:14', 'additions': 31, 'deletions': 31, 'state': 'closed'}, {'id': 648308526, 'number': 18557, 'closed': None, 'created': datetime.datetime(2021, 5, 20, 1, 45, 10, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 83, 'deletions': 156, 'state': 'open'}, {'id': 648170855, 'number': 18551, 'closed': datetime.datetime(2021, 6, 12, 8, 39, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 19, 22, 51, 14, tzinfo=datetime.timezone.utc), 'time_taken': 2022512.0, 'time_delta': '23 days, 9:48:32', 'additions': 78, 'deletions': 69, 'state': 'closed'}, {'id': 645297720, 'number': 18518, 'closed': datetime.datetime(2021, 6, 12, 9, 0, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 16, 10, 50, 2, tzinfo=datetime.timezone.utc), 'time_taken': 2326256.0, 'time_delta': '26 days, 22:10:56', 'additions': 20, 'deletions': 0, 'state': 'closed'}, {'id': 615601132, 'number': 18156, 'closed': datetime.datetime(2021, 6, 14, 9, 45, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 14, 23, 4, 59, tzinfo=datetime.timezone.utc), 'time_taken': 5222454.0, 'time_delta': '60 days, 10:40:54', 'additions': 8, 'deletions': 0, 'state': 'closed'}, {'id': 614985548, 'number': 18143, 'closed': datetime.datetime(2021, 4, 14, 16, 42, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 14, 7, 7, 59, tzinfo=datetime.timezone.utc), 'time_taken': 34480.0, 'time_delta': '9:34:40', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 614720549, 'number': 18129, 'closed': datetime.datetime(2021, 5, 4, 17, 11, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 13, 19, 51, 24, tzinfo=datetime.timezone.utc), 'time_taken': 1804793.0, 'time_delta': '20 days, 21:19:53', 'additions': 19, 'deletions': 2, 'state': 'closed'}, {'id': 610282004, 'number': 18019, 'closed': datetime.datetime(2021, 5, 1, 8, 11, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 7, 2, 32, 43, tzinfo=datetime.timezone.utc), 'time_taken': 2093936.0, 'time_delta': '24 days, 5:38:56', 'additions': 27, 'deletions': 1, 'state': 'closed'}, {'id': 610175321, 'number': 18016, 'closed': datetime.datetime(2021, 4, 7, 6, 41, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 6, 21, 17, 27, tzinfo=datetime.timezone.utc), 'time_taken': 33857.0, 'time_delta': '9:24:17', 'additions': 10, 'deletions': 1, 'state': 'closed'}, {'id': 605596723, 'number': 17905, 'closed': datetime.datetime(2021, 3, 31, 14, 49, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 31, 11, 48, 56, tzinfo=datetime.timezone.utc), 'time_taken': 10852.0, 'time_delta': '3:00:52', 'additions': 3, 'deletions': 6, 'state': 'closed'}, {'id': 600365198, 'number': 17784, 'closed': datetime.datetime(2021, 9, 7, 21, 42, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 25, 1, 49, 57, tzinfo=datetime.timezone.utc), 'time_taken': 14413957.0, 'time_delta': '166 days, 19:52:37', 'additions': 35, 'deletions': 3, 'state': 'closed'}, {'id': 596025434, 'number': 17699, 'closed': datetime.datetime(2021, 3, 22, 0, 38, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 18, 23, 16, 46, tzinfo=datetime.timezone.utc), 'time_taken': 264088.0, 'time_delta': '3 days, 1:21:28', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 595117045, 'number': 17677, 'closed': datetime.datetime(2021, 5, 1, 0, 59, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 17, 23, 43, 14, tzinfo=datetime.timezone.utc), 'time_taken': 3806174.0, 'time_delta': '44 days, 1:16:14', 'additions': 175, 'deletions': 0, 'state': 'closed'}, {'id': 594398834, 'number': 17667, 'closed': datetime.datetime(2021, 7, 7, 23, 47, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 17, 4, 46, 20, tzinfo=datetime.timezone.utc), 'time_taken': 9745299.0, 'time_delta': '112 days, 19:01:39', 'additions': 153, 'deletions': 11, 'state': 'closed'}, {'id': 594345245, 'number': 17666, 'closed': datetime.datetime(2021, 3, 18, 21, 51, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 17, 1, 58, 56, tzinfo=datetime.timezone.utc), 'time_taken': 157950.0, 'time_delta': '1 day, 19:52:30', 'additions': 4, 'deletions': 7, 'state': 'closed'}, {'id': 594329776, 'number': 17663, 'closed': datetime.datetime(2021, 3, 18, 0, 21, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 17, 1, 5, 44, tzinfo=datetime.timezone.utc), 'time_taken': 83759.0, 'time_delta': '23:15:59', 'additions': 13, 'deletions': 12, 'state': 'closed'}, {'id': 576896682, 'number': 17363, 'closed': datetime.datetime(2022, 12, 13, 22, 59, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 20, 8, 46, 8, tzinfo=datetime.timezone.utc), 'time_taken': 57161587.0, 'time_delta': '661 days, 14:13:07', 'additions': 7, 'deletions': 7, 'state': 'closed'}, {'id': 576871703, 'number': 17359, 'closed': datetime.datetime(2021, 2, 25, 22, 38, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 20, 5, 30, 44, tzinfo=datetime.timezone.utc), 'time_taken': 493644.0, 'time_delta': '5 days, 17:07:24', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 568764600, 'number': 17227, 'closed': datetime.datetime(2023, 8, 30, 22, 34, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 6, 10, 42, 31, tzinfo=datetime.timezone.utc), 'time_taken': 80826724.0, 'time_delta': '935 days, 11:52:04', 'additions': 8, 'deletions': 11, 'state': 'closed'}, {'id': 568755453, 'number': 17226, 'closed': datetime.datetime(2021, 3, 12, 5, 27, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 6, 9, 40, 6, tzinfo=datetime.timezone.utc), 'time_taken': 2922453.0, 'time_delta': '33 days, 19:47:33', 'additions': 34, 'deletions': 62, 'state': 'closed'}, {'id': 568737267, 'number': 17224, 'closed': datetime.datetime(2021, 2, 9, 1, 27, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 6, 7, 12, 22, tzinfo=datetime.timezone.utc), 'time_taken': 238513.0, 'time_delta': '2 days, 18:15:13', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 568735308, 'number': 17223, 'closed': datetime.datetime(2021, 2, 25, 18, 53, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 6, 6, 57, 39, tzinfo=datetime.timezone.utc), 'time_taken': 1684556.0, 'time_delta': '19 days, 11:55:56', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 558981608, 'number': 17097, 'closed': datetime.datetime(2021, 1, 21, 22, 50, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 21, 8, 47, 21, tzinfo=datetime.timezone.utc), 'time_taken': 50588.0, 'time_delta': '14:03:08', 'additions': 6, 'deletions': 0, 'state': 'closed'}, {'id': 558498479, 'number': 17093, 'closed': datetime.datetime(2021, 1, 22, 19, 43, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 20, 20, 10, 27, tzinfo=datetime.timezone.utc), 'time_taken': 171156.0, 'time_delta': '1 day, 23:32:36', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 557479744, 'number': 17085, 'closed': datetime.datetime(2021, 4, 6, 0, 34, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 19, 14, 42, 36, tzinfo=datetime.timezone.utc), 'time_taken': 6601908.0, 'time_delta': '76 days, 9:51:48', 'additions': 20, 'deletions': 1, 'state': 'closed'}, {'id': 552110857, 'number': 17032, 'closed': None, 'created': datetime.datetime(2021, 1, 9, 10, 34, 39, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 12, 'deletions': 6, 'state': 'open'}, {'id': 550648109, 'number': 17023, 'closed': None, 'created': datetime.datetime(2021, 1, 6, 20, 8, 16, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 61, 'deletions': 3, 'state': 'open'}]"

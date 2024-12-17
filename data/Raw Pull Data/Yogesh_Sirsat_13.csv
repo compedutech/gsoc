@@ -1,0 +1,993 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1060468270,settings: Replace extraneous pointer cursors on text with text cursor.,"<!-- Describe your pull request here.-->
+**settings: Fix the relation between label and input fields where appropriate.**
+In some places in settings clicking on the label was not focusing on an input field,
+and this commit will fix that.
+
+**settings: Deduplicate class attr from custom user profile fields label.**
+
+**settings: Replace extraneous pointer cursors on text with text cursors.**
+Replacing label tags with div tags where there are no input fields, 
+automatically fixes cursors, and adds text cursor CSS where there are
+input fields.
+
+Fixes: <!-- Issue link, or clear description.--> #21769
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+Example from create new stream section.
+
+![Peek 2022-09-19 21-06](https://user-images.githubusercontent.com/41695888/191056607-2d80ea37-2f46-427e-a248-3bde0170d084.gif)
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",False,22995,https://api.github.com/repos/zulip/zulip/pulls/22995,https://github.com/zulip/zulip/pull/22995,open,78,74,19,3,2,0,7,0,"[{'name': 'bug'}, {'name': 'area: settings (user)'}, {'name': 'area: channel settings'}, {'name': 'area: settings (admin/org)'}, {'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'completion candidate'}]",2022-09-19 15:26:48+00:00,,0.0,,[],"[{'commit_sha': 'b8c23f5ae7971067c794e01c2892491157513c14', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '11993383a93a2cb48a61bf1ca79e314eb5f419cb', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49574732cecb65bbfeda6801a12ea726af07770d', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1051803326,custom_profile_fields: Fix empty field choices issue of select field.,"While editing select type profile field, if we submit empty or zero
+choices it fails silently, current implementation for this issue does
+not work for some cases, and this commit will fix that.
+
+This will disable dialog submit button in case of empty field choices.
+
+Also removing code of all calls making to `update_choice_delete_btn`
+as that function have no more use-case for empty field choices, still
+keeping the function because it gets used in `settings_streams.js`..
+
+<!-- Describe your pull request here.-->
+
+Fixes: GH [comment](https://github.com/zulip/zulip/pull/22818#issuecomment-1239000262)<!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshot/Gifs**:
+![field_choices](https://github.com/zulip/zulip/assets/41695888/4a0db4c0-8f2e-4077-b920-ee729a272db1)
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22903,https://api.github.com/repos/zulip/zulip/pulls/22903,https://github.com/zulip/zulip/pull/22903,closed,30,28,3,2,13,5,3,0,"[{'name': 'area: settings (admin/org)'}, {'name': 'size: L'}, {'name': 'integration review'}]",2022-09-09 16:53:45+00:00,2023-08-28 15:52:43+00:00,30495538.0,"352 days, 22:58:58","[{'comment_id': 1287439416, 'comment_body': 'I think we can name this something better like `atleast_one_choice_valid`, `atleast_one_non_empty_choice` or `non_empty_choice_present`.', 'comment_created': datetime.datetime(2023, 8, 8, 17, 23, 42, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 1288028596, 'comment_body': 'I don\'t think this is the correct function to have this code for showing/hiding the choice.\r\n\r\nTo be clear, the ""value"" here is to set the `data-value` attribute of the choice element and not the value inside the input.\r\n\r\nI think a more cleaner way to handle the display of delete buttons is to just hide the button for the new row (which I guess is handled using `create_choice_row` and `add_choice_row` functions) and then show the button for the row above the newly added row.', 'comment_created': datetime.datetime(2023, 8, 9, 6, 52, 42, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 1296919729, 'comment_body': 'This comment is confusing. We do not show the delete button on the new choice, which is actually created after this code. ', 'comment_created': datetime.datetime(2023, 8, 17, 9, 16, 36, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 1298234037, 'comment_body': ""It is for the empty choice field after we type some text in it, we don't display the delete button of the very last bottom choice field(the extra empty one).\r\n\r\nI'll change it  to `Display delete button on text input in the extra empty choice field`"", 'comment_created': datetime.datetime(2023, 8, 18, 9, 31, 33, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 1298473209, 'comment_body': '""extra empty choice"" still seems not clear enough without manually testing the UI. Probably being some more verbose and having something like below would be better -\r\n`Display delete buttons for all existing choices before creating the new row, which will not have the delete button so that there is at least one option present.`', 'comment_created': datetime.datetime(2023, 8, 18, 13, 46, 18, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}]","[{'commit_sha': '5ab3b6735a6a425fe63a675019c156e19d28a6c8', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f521a0d289aed14ade8b02b685fece29dac5ed8d', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1045117806,"settings_users: Migrate ""Manage user"" and ""Manage bot"" modal to full profile modal.","<!-- Describe your pull request here.-->
+
+Fixes: #21806<!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+<details>
+
+**<summary>Screenshots and screen captures:</summary>**
+
+  <details>
+  
+  **<summary>Manage user:</summary>**
+  
+  
+![edit_user_info_from_full_profile_modal](https://user-images.githubusercontent.com/41695888/188204320-cb1a3ffa-c7b5-48e5-bf4f-3ca5e8af42c2.gif)
+![edit_user_info_from_full_profile_modal_error](https://user-images.githubusercontent.com/41695888/188204328-5d7fe556-8220-4e5e-8f6c-9b56855e58c3.gif)
+![manage_user](https://user-images.githubusercontent.com/41695888/188204331-4503a659-f619-4d98-bccc-4724e9b54a1f.png)
+
+  
+  </details>
+
+   <details>
+  
+  **<summary>Manage bot:</summary>**
+  
+  
+![manage_bot](https://user-images.githubusercontent.com/41695888/188204362-96b7fbb1-c146-471d-97c5-4684b1777e30.png)
+![manage_bot_edit](https://user-images.githubusercontent.com/41695888/188204367-f89c7960-94c7-4ebc-947a-e21c96b088fd.gif)
+
+  
+  </details>
+  
+  <details>
+  
+   **<summary>Only modal content scrollable:</summary>**
+  
+   
+![only_tab_content_scrollable](https://user-images.githubusercontent.com/41695888/190725408-84e88af5-fd17-4c21-8f65-3569f634defe.gif)
+
+
+
+  </details>
+
+
+</details>
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",False,22853,https://api.github.com/repos/zulip/zulip/pulls/22853,https://github.com/zulip/zulip/pull/22853,closed,171,107,9,6,23,1,5,0,"[{'name': 'area: settings (admin/org)'}, {'name': 'priority: high'}, {'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'area: popovers'}]",2022-09-02 16:54:48+00:00,2023-09-11 00:20:08+00:00,32253920.0,"373 days, 7:25:20","[{'comment_id': 964703671, 'comment_body': 'A more descriptive variable name would be better.', 'comment_created': datetime.datetime(2022, 9, 7, 11, 1, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}]","[{'commit_sha': '55f98c7a2311b9fb201073d827cd44bffa6d318a', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ddf616e1c5eef2cc8d3bc9e7e6c5eda1025dcbba', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '35a00ddb35b26fdfede2d0cdc0d53c6c95a259b8', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f406a73cf802f1679a4099608f269786ab436b4b', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82489fdae3fa2117a4f4ef808c78a562ace0bcad', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f18f72b86bdabd7eedd51bab121570d2ba8a0091', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+998071787,tables: Remove the use of bootstrap from tables.,"<!-- Describe your pull request here.-->
+**Remove the use of bootstrap from tables.**
+Reimplement bootstrap table CSS which we currently use for zulip-web
+to `app_components.css` and `markdown.css`(for help center tables),
+and removing that CSS from `bootstrap.css`.
+
+**Remove the use of bootstrap from table-bordered class.**
+Reimplement bootstrap table-bordered CSS which we currently use
+for zulip-web to `app_components.css` and remove that CSS from
+`bootstrap.css`.
+
+**Remove table and table-striped class from help center tables.**
+We don't need `.table` and `.table-striped` class anymore on
+help center pages as we direct applying CSS on `table` tag from
+`markdown.css`.
+
+Moving usable CSS of `.table` from `portico.css` to `mardown.css`.
+
+**Remove unused bootstrap table CSS.**
+Remove CSS from `bootstrap.css` which we applied on `.table` but
+have no use of them currently.
+
+**Remove unneeded CSS from table-bordered class.**
+Currently as we are not making use of `tfoot` tag on `.table-bordered`,
+this commit will remove CSS applied on `.table-bordered tfoot`.
+
+Fixes: [CZO](https://chat.zulip.org/#narrow/stream/6-frontend/topic/Remove.20the.20use.20of.20Bootstrap.20from.20our.20tables.20.2E)
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",False,22497,https://api.github.com/repos/zulip/zulip/pulls/22497,https://github.com/zulip/zulip/pull/22497,open,126,123,5,5,1,6,3,0,"[{'name': 'size: XL'}, {'name': 'has conflicts'}, {'name': 'completion candidate'}]",2022-07-15 19:05:18+00:00,,0.0,,"[{'comment_id': 922568789, 'comment_body': ""So, this will apply to all tables in the portico, which is not our goal. Part of the goal of removing bootstrap is remove all unscoped CSS like the block you're adding here. We should apply this CSS only to tables inside a portico markdown block."", 'comment_created': datetime.datetime(2022, 7, 15, 23, 5, 6, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 922568951, 'comment_body': 'How did you check that these were unused?', 'comment_created': datetime.datetime(2022, 7, 15, 23, 5, 39, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 922569445, 'comment_body': ""We'll want to do a follow-up project to replace this `table` CSS with inlining it into `table-striped` (or something), so that we're not longer resetting the CSS for tables.  It might be useful to add a comment above this indicating that."", 'comment_created': datetime.datetime(2022, 7, 15, 23, 7, 24, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 923111184, 'comment_body': ""I inspected(from chrome) every table element and checked is there this CSS is being used and I didn't find any use on those table elements."", 'comment_created': datetime.datetime(2022, 7, 18, 8, 55, 44, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 923142217, 'comment_body': 'Okay, I moved this CSS to `markdown.css`.\r\n\r\n-- I used `background-color` from `portico.css` file, as currently on help center pages applies from this same file by overriding `background_color` coming from `bootstrap.css`.', 'comment_created': datetime.datetime(2022, 7, 18, 9, 31, 37, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 923144932, 'comment_body': 'Done, I placed these same words above mentioned inside a comment.', 'comment_created': datetime.datetime(2022, 7, 18, 9, 34, 48, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}]","[{'commit_sha': '768fe0d3798e6857fad1cd65416d3d32121ed5d6', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fb567f475a3b349c43ce574db8c65757623b66e2', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fbf651092f26105d7a3117f1ff86de3625a2bd73', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4871ae7a0e6d8af3e395d3074e0e6c430835f2d3', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6403edec2c3d9b63f058cb103efd0dba14b3ec60', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1012257307,settings_bots: Make it possible to add bots from Organization settings > Bots.,"<!-- Describe your pull request here.-->
+**Move the ""Add a new bot"" tab inside a modal.**
+""Add a new bot"" tab from personal `settings > bots` moving this
+into a modal form, so we can trigger this form from other places
+too without duplicating the code.
+
+**Make it possible to add new bots from org settings.**
+Adding an ""Add a new bot"" button to Organization `settings > Bots`,
+which opens a `Add a new bot` form modal from `settings_bots.js`.
+
+Fixes: <!-- Issue link, or clear description.-->#20309
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+<details>
+
+<summary>Screenshots</summary>
+
+![add_bot_button](https://user-images.githubusercontent.com/41695888/181826678-244f82c9-5106-4ac3-b111-0ccd1ccdfe00.png)
+![add_bot_button_from_org](https://user-images.githubusercontent.com/41695888/181826683-00c3ca71-2f27-4936-8abf-d8e5e05a3c94.png)
+![add_new_bot_modal](https://user-images.githubusercontent.com/41695888/181826686-25669d29-bef3-472f-89e7-ddbe2090b580.png)
+
+</details>
+
+<details>
+
+<summary>Gifs</summary>
+
+![add_new_bot](https://user-images.githubusercontent.com/41695888/181826828-87b1dbbf-b033-49ea-a545-27b16ae3bb36.gif)
+![add_new_bot_from_org](https://user-images.githubusercontent.com/41695888/181826834-7fc27c19-e2e3-4107-bb85-651fd358d23d.gif)
+
+</details>
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22629,https://api.github.com/repos/zulip/zulip/pulls/22629,https://github.com/zulip/zulip/pull/22629,closed,270,311,9,4,22,28,4,0,"[{'name': 'area: settings (user)'}, {'name': 'area: settings (admin/org)'}, {'name': 'size: XL'}, {'name': 'integration review'}]",2022-07-29 18:41:20+00:00,2022-09-23 19:09:51+00:00,4840111.0,"56 days, 0:28:31","[{'comment_id': 936925321, 'comment_body': 'I think we should pass only the required parameters here, and not the whole `page_params` object.', 'comment_created': datetime.datetime(2022, 8, 3, 16, 50, 28, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 936931377, 'comment_body': 'Closing the modal would remove the widget from the DOM, so clearing it is redundant. Same for `hide_errors`', 'comment_created': datetime.datetime(2022, 8, 3, 16, 57, 16, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 936933410, 'comment_body': 'Focusing on the `Full name` input would be better.', 'comment_created': datetime.datetime(2022, 8, 3, 16, 59, 34, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 937875202, 'comment_body': '`hide_errors()` hides errors from the bots section, will it be still redundant?', 'comment_created': datetime.datetime(2022, 8, 4, 14, 38, 33, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 937883056, 'comment_body': 'I think while creating a new bot, the user will first select what bot type he wants to create, and also bot types select field is on the top of the other fields', 'comment_created': datetime.datetime(2022, 8, 4, 14, 45, 1, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 938020192, 'comment_body': 'and this widget does not get clear when the model is closed we need to clear it, you can refer bots edit modal', 'comment_created': datetime.datetime(2022, 8, 4, 16, 34, 6, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 967033971, 'comment_body': 'We can remove this. Since this calls `render_item` which replaces the existing row with new html and there is no existing row in case of adding a new bot.', 'comment_created': datetime.datetime(2022, 9, 9, 12, 49, 44, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 967627550, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2022, 9, 10, 9, 43, 30, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 970696241, 'comment_body': 'We are not checking email characters currently. For example having ""@"" in email used to raise error previously, but it succeeds currently.', 'comment_created': datetime.datetime(2022, 9, 14, 11, 43, 38, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 970954063, 'comment_body': 'Should we handle this at the backend?', 'comment_created': datetime.datetime(2022, 9, 14, 15, 14, 30, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 971060521, 'comment_body': 'At backend we only check string empty or not.', 'comment_created': datetime.datetime(2022, 9, 14, 16, 39, 55, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 971914687, 'comment_body': 'that deleted regex allows special characters, it does not allow ""@"" but it allows ""#"", ""["" etc, is it okay for bot email, as on form has mentioned that (a-z, 0-9, and dashes only), should I modify that regex or just use the same?', 'comment_created': datetime.datetime(2022, 9, 15, 12, 20, 13, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 972228681, 'comment_body': 'You would still need to add this condition here, otherwise the button will be shown after a reload even if user is not allowed to create bot.', 'comment_created': datetime.datetime(2022, 9, 15, 16, 56, 25, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 972236245, 'comment_body': 'I am not sure about the error handling here. The API parameters here is `short_name` while in webapp the input is labelled as email, I am not sure what would be the correct error message. ', 'comment_created': datetime.datetime(2022, 9, 15, 17, 5, 15, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 972241488, 'comment_body': 'One possible solution could be to check the validity of email in frontend only before making the request to server like we did before and showing the error accordingly.', 'comment_created': datetime.datetime(2022, 9, 15, 17, 9, 33, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 972310329, 'comment_body': 'Wouldn\'t we need the same validator for the backend as well because via API we are able to send `short_name` with ""@""?', 'comment_created': datetime.datetime(2022, 9, 15, 18, 34, 8, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 972883183, 'comment_body': 'I meant we would be validating the email both in backend as well as frontend. And in webapp, we would not be sending the API request to server if the email is incorrect.', 'comment_created': datetime.datetime(2022, 9, 16, 10, 30, 30, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 972940126, 'comment_body': 'Okay done.', 'comment_created': datetime.datetime(2022, 9, 16, 11, 48, 18, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 972940398, 'comment_body': 'Updated both commits.', 'comment_created': datetime.datetime(2022, 9, 16, 11, 48, 44, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 975673756, 'comment_body': 'I am not sure how can we reproduce this or whether it is possible at all now since we have added regex validation, but would be better if we can find how this can be reproduced and add tests for this. It was probably because of using `""my\\nbot""` as short name from what I can understand from the tests you modified above. We can check the concerned documentation to check for the invalid values of username.\r\n\r\nI am not sure about how we should move forward though, so we can wait for feedback from Tim and others. ', 'comment_created': datetime.datetime(2022, 9, 20, 18, 9, 29, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 977997321, 'comment_body': ""I don't understand why we're adding that regular expression at all; the regular expression is very hard to read, AFAIK may have bugs in it since I don't understand it, whereas here we're using the language's standard email address validator. We should only do one of the two checks, since they're redundant, but the existing `Address()` check is the correct one to keep."", 'comment_created': datetime.datetime(2022, 9, 22, 19, 7, 59, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 977998553, 'comment_body': ""What's the source for this regular expression? I imagine you got it from StackOverflow or something; if so, we should make a function `is_valid_email_address_username` that does that check, and cite the source for the code in a comment in that function."", 'comment_created': datetime.datetime(2022, 9, 22, 19, 9, 38, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 978001357, 'comment_body': ""We should debug why `settings_users.update_bot_data` isn't working, not adding a duplicate rerendering. As noted above, the `render_item` function should add the new bot."", 'comment_created': datetime.datetime(2022, 9, 22, 19, 13, 7, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 978015705, 'comment_body': 'OK I figured out what the actual bug was here, and fixed it in 09c6ee6468e302b5c9d09fb40e6955c1d928e408', 'comment_created': datetime.datetime(2022, 9, 22, 19, 32, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 978019190, 'comment_body': 'I see, it was present in main but deleted in the previous commit; and the original copy had a comment explaining where it came from. Having re-adding this be a separate commit from the commit where you removed that validation was very confusing. ', 'comment_created': datetime.datetime(2022, 9, 22, 19, 36, 54, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 978019595, 'comment_body': ""```\r\n-function is_local_part(value, element) {\r\n-    // Adapted from Django's EmailValidator\r\n-    return (\r\n-        this.optional(element) ||\r\n-        /^[\\w!#$%&'*+/=?^`{|}~-]+(\\.[\\w!#$%&'*+/=?^`{|}~-]+)*$/i.test(value)\r\n-    );\r\n-}\r\n```"", 'comment_created': datetime.datetime(2022, 9, 22, 19, 37, 27, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 978583800, 'comment_body': 'Hmm, I agree regular expression is difficult to understand and should be avoided.\r\n\r\nBut yeah we should at least have consistent checks in both frontend and backend I think. As per the current checks, ""@"" is not allowed in email field when creating bots using webapp UI but if I remove the check (i.e. the `is_local_part` code), I can create bots having ""@"" in email.', 'comment_created': datetime.datetime(2022, 9, 23, 12, 31, 20, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 978844211, 'comment_body': 'I will take care of the comments next time.', 'comment_created': datetime.datetime(2022, 9, 23, 16, 13, 15, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}]","[{'commit_sha': '6db88f0d394fc825a157ecfa24f2a7d7b7cd2218', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0b3dd4755eb8eea8ed6a9f18243c303c0471a70c', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '601bd796a13b435c93679aaa0fcf5bf9fdb21cd1', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5248f1c40bb2ce8f7437adf780656640b608af87', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1058471200,i18n: Add translation tags to default external accounts name.,"<!-- Describe your pull request here.-->
+
+Fixes: [CZO](https://chat.zulip.org/#narrow/stream/378-api-design/topic/Name.20and.20Hint.20editable.20of.20default.20external.20account.20.2322371/near/1434321)
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [ ] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [ ] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [ ] Each commit is a coherent idea.
+- [ ] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [ ] Visual appearance of the changes.
+- [ ] Responsiveness and internationalization.
+- [ ] Strings and tooltips.
+- [ ] End-to-end functionality of buttons, interactions and flows.
+- [ ] Corner cases, error conditions, and easily imagined bugs.
+",True,22977,https://api.github.com/repos/zulip/zulip/pulls/22977,https://github.com/zulip/zulip/pull/22977,closed,17,4,2,1,2,4,1,0,[{'name': 'size: S'}],2022-09-16 10:33:41+00:00,2022-09-20 17:42:34+00:00,371333.0,"4 days, 7:08:53","[{'comment_id': 973304219, 'comment_body': 'You need to remove the `str()` calls -- they make the string no longer lazy.', 'comment_created': datetime.datetime(2022, 9, 16, 18, 49, 55, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 973317435, 'comment_body': ""I am getting this error if I pass without `str()`\r\n```\r\nTypeError: Object of type '__proxy__' is not JSON serializable\r\n```"", 'comment_created': datetime.datetime(2022, 9, 16, 19, 11, 11, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 973318608, 'comment_body': 'Will it work if I assign `gettext_lazy(""Twitter username"")` to some variable first?', 'comment_created': datetime.datetime(2022, 9, 16, 19, 13, 10, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 974687481, 'comment_body': ""Two issues with this:\r\n* You need to make a new object copying the original -- using, say, `copy.deepcopy` -- otherwise, this won't work after the first request\r\n* We should loop over the first key, so that the code won't break if we add a new default external account.\r\n"", 'comment_created': datetime.datetime(2022, 9, 19, 21, 2, 21, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '5bfe541fa3e017bb5b01564834573ced74aa572f', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1054756128,custom_profile_fields: Display data of default external account type in edit form modal.,"Remove redundant `Val("" "")` from an edit form modal of the custom
+external account type field.
+
+Display values of the ""name"" and ""hint"" field in a non-editable way while
+editing default external account type profile fields.
+
+<!-- Describe your pull request here.-->
+
+Fixes: <!-- Issue link, or clear description.-->[CZO](https://chat.zulip.org/#narrow/stream/378-api-design/topic/Name.20and.20Hint.20editable.20of.20default.20external.20account.20.2322371/near/1434321)
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+![edit_form](https://user-images.githubusercontent.com/41695888/189922382-469905b6-fe61-4ef2-b111-f86b16e90f23.png)
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22942,https://api.github.com/repos/zulip/zulip/pulls/22942,https://github.com/zulip/zulip/pull/22942,closed,4,4,1,2,1,0,0,0,[],2022-09-13 14:05:01+00:00,2022-09-13 18:38:48+00:00,16427.0,4:33:47,[],"[{'commit_sha': '8671bdde856432f0f49125c35fda191fb9be8612', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a175947c2ce9b763a09b82c93d9057ee61ece57b', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1041106399,custom_profile_fields: Some improvements in settings > custom profile fields.,"<!-- Describe your pull request here.-->
+**Display success status after add/edit fields.**
+Display success status ""Saved"" for consistency in settings UI, after
+a successful request of Add or Edit custom profile fields.
+
+**Confirmation modal for delete profile field.**
+
+**Display deleted options in the confirmation modal.**
+While editing custom profile fields, when the user delete option(s) of
+select the type profile field, display that deleted option(s) in delete
+option confirmation modal.
+
+
+Follow-up: #21878 <!-- Issue link, or clear description.-->
+[CZO
+](https://chat.zulip.org/#narrow/stream/101-design/topic/Make.20.22Add.20and.20Edit.20custom.20profile.20field.22.20a.20modal.20.2321634/near/1415879)
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+<details>
+
+**<summary>Screenshots and screen captures:</summary>**
+
+![success_status](https://user-images.githubusercontent.com/41695888/187473269-089f0fab-424d-437f-84dd-c9ed9dbef1d8.gif)
+
+
+![delete_profile_field_confirmation_modal](https://user-images.githubusercontent.com/41695888/187472597-fb9e2dfd-5749-4c81-a268-624a90c59247.png)
+
+![0_users](https://user-images.githubusercontent.com/41695888/187472469-41db2945-6879-4949-a1e2-8f826707c53b.png)
+![confirmation_modal_delete_option](https://user-images.githubusercontent.com/41695888/187472474-506b0d99-f957-4f49-ad87-ed0a319a5cf5.png)
+
+</details>
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22818,https://api.github.com/repos/zulip/zulip/pulls/22818,https://github.com/zulip/zulip/pull/22818,closed,122,28,4,4,11,0,2,0,"[{'name': 'size: XL'}, {'name': 'integration review'}]",2022-08-30 14:56:07+00:00,2022-09-16 22:04:02+00:00,1494475.0,"17 days, 7:07:55",[],"[{'commit_sha': '583e551f488b9683137794b5c34672739a36fb04', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4cb3d3987aeae6d948d82462cd33dcf808968aa4', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9ed4f1176961b6d1fc6d9bb7720dc31bfd4ad7f', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1b24b8316a08196770321c4e5b0cc00b1118926', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1008826143,settings_users: Change text of deactivate confirmation modals.,"<!-- Describe your pull request here.-->
+**settings_bots: Change text of bot deactivate confirmation modal.**
+Also, add `?` at the end of title of the this modal.
+
+**settings_users: Add `?` in deactivate confirmation modal title.**
+
+**deactivate_users: Change submit button text of confirmation modal.**
+Change submit button text of both bot and user deactivation confirm
+modal from ""Confirm"" to ""Deactivate"".
+Calling `launch()` function from `dialog_widget.js` because
+`confirm_dialog.js` set submit button text to ""Confirm"".
+
+Fixes: <!-- Issue link, or clear description.-->[CZO](https://chat.zulip.org/#narrow/stream/101-design/topic/Confirmation.20modal.20of.20.22Deactivate.22.20bot.2E/near/1409338)
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+![bot_deactivate_confirmation](https://user-images.githubusercontent.com/41695888/181095709-f12baaba-9290-47d8-abb0-d35f4806a74d.png)
+![user_deactivate_confirmation](https://user-images.githubusercontent.com/41695888/181095712-2a56e029-0742-4931-a230-9be278402554.png)
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22592,https://api.github.com/repos/zulip/zulip/pulls/22592,https://github.com/zulip/zulip/pull/22592,closed,13,21,4,3,4,0,1,0,[{'name': 'size: M'}],2022-07-26 18:11:19+00:00,2022-07-28 00:09:49+00:00,107910.0,"1 day, 5:58:30",[],"[{'commit_sha': '7a4ad0e5be2d6a6757ddefde37a8f97feb05e6bd', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9abafa2db119ef206b2c6db8656bb9d6486a7017', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '522044c57a87e9ee23bcf166592c123657fb51d9', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+1006123547,bots: Improve bots profile summary.,"<!-- Describe your pull request here.-->
+Clarify the ""Bot"" user in the bot profile summary.
+
+Display ""Manage bot"" modal from bots profile summary.
+
+Display the ""Deactivate bot"" button inside the bot edit modal.
+
+Fixes: #22482
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+<details>
+
+<summary>Screenshots</summary>
+
+![bot_profile_popover](https://user-images.githubusercontent.com/41695888/180570252-bef2e905-f810-4963-ad4b-a476db9cd522.png)
+![manage_bot](https://user-images.githubusercontent.com/41695888/180570258-9cf0a93c-2de4-45bb-9ab6-d10ed059f6d2.png)
+![bot_deactivate_modal](https://user-images.githubusercontent.com/41695888/180570247-c0dc2c59-a363-48f7-88b5-583eb159b860.png)
+![bot_profile_popover_deactivated](https://user-images.githubusercontent.com/41695888/180570256-7e94bf41-da34-484c-a891-90d73ec8950d.png)
+ 
+</details>
+
+<details>
+
+<summary>Gif</summary>
+
+![working](https://user-images.githubusercontent.com/41695888/180570446-5c8be8af-3e9d-4f88-a42e-0c2bb9dc495c.gif)
+
+</details>
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22567,https://api.github.com/repos/zulip/zulip/pulls/22567,https://github.com/zulip/zulip/pull/22567,closed,97,73,4,3,1,0,1,0,[{'name': 'size: XL'}],2022-07-22 20:12:30+00:00,2022-07-22 23:57:40+00:00,13510.0,3:45:10,[],"[{'commit_sha': '7eea94d3218c1eb8a5681463290c82905565aa93', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '673d3c077d53ffb71d6503377d547048b36af053', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '78e0dcb3fd69400d5d1d6e9c982a4c2bbe509ee9', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+986613288,"custom_profile_fields: Some changes for default ""External account"" type profile fields.","<!-- Describe your pull request here.-->
+**custom_profile_fields: Change data of default external account type.**
+change the names of ""github"" and ""twitter"" external account fields to
+""GitHub username"" and ""Twitter username"" respectively and remove the
+hints of them.
+
+**custom_profile_fields: Backend tests for default external account type.**
+
+**custom_profile_fields: Display data of default external type fields.**
+Display default values of ""name"" and ""hint"" field in uneditable way
+while creating new default external account type profile fields.
+
+
+**custom_profile_fields: Disable ""External account type"" select field.**
+Disable ""External account type"" select field from External account type
+profile field edit form, doing it because this select field is not
+editable and it is incorrectly looks like editable.
+
+Fixes: [CZO](https://chat.zulip.org/#narrow/stream/378-api-design/topic/Name.20and.20Hint.20editable.20of.20default.20external.20account.20.2322371/near/1431570) <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+![Screenshot from 2022-09-13 01-24-38](https://user-images.githubusercontent.com/41695888/189744116-fc09c717-cf00-4cbe-bed2-dd61e78d5a77.png)
+
+![Peek 2022-09-13 01-39](https://user-images.githubusercontent.com/41695888/189748198-893eaa10-6db7-4461-8b3f-86691cf11e6c.gif)
+
+
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22371,https://api.github.com/repos/zulip/zulip/pulls/22371,https://github.com/zulip/zulip/pull/22371,closed,84,25,5,4,11,10,3,0,"[{'name': 'area: settings (admin/org)'}, {'name': 'size: XL'}, {'name': 'integration review'}]",2022-07-04 15:45:29+00:00,2022-09-12 21:29:11+00:00,6068622.0,"70 days, 5:43:42","[{'comment_id': 922705401, 'comment_body': 'You can write `return existing_field_data[""subtype""] != requested_field_data[""subtype""]`', 'comment_created': datetime.datetime(2022, 7, 16, 17, 59, 6, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 923848628, 'comment_body': 'I thought it was easier to read, but okay done I did as you suggested.', 'comment_created': datetime.datetime(2022, 7, 18, 20, 49, 31, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 939443827, 'comment_body': 'These tests should then read the custom profile field via the API and verify the name is actually modified when reading the custom profile field back from the API.\r\n\r\nOne could easily imagine that not being the case, if the way that we reconcile a different `name` and `hint` was to always use the default strings.', 'comment_created': datetime.datetime(2022, 8, 5, 23, 26, 14, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 939443857, 'comment_body': ""What's the purpose of this block? I'm not sure what it is verifying -- is it that passing the subtype that is already set is a noop?  Generally one should put a comment above each block, like you've done for half of them, to answer that sort of question."", 'comment_created': datetime.datetime(2022, 8, 5, 23, 26, 23, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 939444658, 'comment_body': ""This needs a block comment above it that explains __why__ we're doing this -- specifically that we allow changing the name and hint fields, but not the field type.\r\n\r\nAlso ... where are you validating that the URL pattern, or other fields, can't be changed via this API? We really only want to support modifying name and hint, right?"", 'comment_created': datetime.datetime(2022, 8, 5, 23, 29, 48, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 948051845, 'comment_body': 'I am attempting to change the ""subtype"" field here', 'comment_created': datetime.datetime(2022, 8, 17, 14, 56, 45, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 948054647, 'comment_body': 'Yeah, thanks for the suggestion, I updated the PR including this suggested change.', 'comment_created': datetime.datetime(2022, 8, 17, 14, 58, 42, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 948064220, 'comment_body': "">This needs a block comment above it that explains why we're doing this -- specifically that we allow changing the name and hint fields, but not the field type.\r\n\r\nDone, I updated the PR.\r\n\r\n>Also ... where are you validating that the URL pattern, or other fields, can't be changed via this API? We really only want to support modifying name and hint, right?\r\n\r\nI shouldn't remove this line, I think I did mistake here\r\n[`if is_default_external_field(field.field_type, orjson.loads(field.field_data)):`\r\n](https://github.com/zulip/zulip/blob/bc5896e0098cc8a28bb3f3b06b1fa7bdcaff0f04/zerver/views/custom_profile_fields.py#L173)as the change from PR is only for the default external account type fields, and in its `field_data` only the `subtype` field is present."", 'comment_created': datetime.datetime(2022, 8, 17, 15, 6, 19, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 948505868, 'comment_body': 'This function needs to be changed to no longer skip validation for name/hint on default external fields.', 'comment_created': datetime.datetime(2022, 8, 17, 22, 47, 20, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 948506121, 'comment_body': ""This check incorrect, since `subtype` isn't the only thing that cap appear in these."", 'comment_created': datetime.datetime(2022, 8, 17, 22, 47, 39, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': 'becdc3c9129bfccd3b786dfc9feb9f61fec0a8e8', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a6d5979adf6dd748197346db514478a27d52842', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0be3345ca6fe1239b339821173693023de6be3d0', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48f581cb2776661c57a73b460cca715aa78c41b1', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+980559151,bots: Allow bot owners to unsubscribe their own bots from streams using UI.,"<!-- Describe your pull request here.-->
+This PR allows bot owners to unsubscribe their own bots from subscribed streams using UI.
+The process is the same as normal users: Profile info popover > View full profile > streams tab 
+
+Admins can unsubscribe bots from streams using this UI like normal users.
+
+[CZO](https://chat.zulip.org/#narrow/stream/2-general/topic/Unsubscribe.20own.20bot.20from.20streams/near/1353629)
+
+Fixes:  #21402, #22460
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+
+
+<details>
+<summary> 
+
+**Screenshots and screen captures:**
+
+</summary>
+
+![bot_profile_popover](https://user-images.githubusercontent.com/41695888/176038110-96c6952f-6964-4ed6-9e5b-2ac4d66c8acd.png)
+
+![bot_profile_modal](https://user-images.githubusercontent.com/41695888/176038108-a259a893-9498-4189-a649-7cab52e8ccc0.png)
+
+![full_profile_modal_from_bot_card](https://user-images.githubusercontent.com/41695888/186401210-94bb80ba-524e-4531-9fc7-ffd96a7dd5d6.gif)
+
+![unsubscribing_own_bot_from_stream](https://user-images.githubusercontent.com/41695888/176038113-d881f6c2-35eb-455c-9b48-9cd4e8aedbf4.gif)
+</details>
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22333,https://api.github.com/repos/zulip/zulip/pulls/22333,https://github.com/zulip/zulip/pull/22333,closed,224,74,15,6,25,19,2,0,"[{'name': 'size: XL'}, {'name': 'integration review'}]",2022-06-27 21:01:00+00:00,2022-09-17 00:51:35+00:00,7012235.0,"81 days, 3:50:35","[{'comment_id': 913376527, 'comment_body': 'Why is this query count updated?\r\nRest all looks good to me.', 'comment_created': datetime.datetime(2022, 7, 5, 4, 30, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 913398610, 'comment_body': 'Because in this test case it checks one more `condition` now in `views/streams.py` which leads to an increase in query_count', 'comment_created': datetime.datetime(2022, 7, 5, 5, 29, 54, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 930368389, 'comment_body': 'Yes I get it. Looks good to me', 'comment_created': datetime.datetime(2022, 7, 26, 20, 9, 14, tzinfo=datetime.timezone.utc), 'commenter': 'Signior-X', 'type': 'User'}, {'comment_id': 956047030, 'comment_body': 'You can do\r\n```js\r\nconst is_under_my_access = (user.is_bot && user.bot_owner_id && user.bot_owner_id === page_params.user_id) || people.is_my_user_id(user.user_id);\r\n```', 'comment_created': datetime.datetime(2022, 8, 26, 13, 31, 39, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 956108715, 'comment_body': ""It's better to have this CSS in a CSS file."", 'comment_created': datetime.datetime(2022, 8, 26, 14, 33, 35, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 957201467, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2022, 8, 29, 11, 23, 49, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 957201730, 'comment_body': 'That was not needed CSS, fixed it.', 'comment_created': datetime.datetime(2022, 8, 29, 11, 24, 10, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 966513188, 'comment_body': ""This construction feels hard to understand. I think it's reasonable to construct `people_to_unsub` before calling `list_to_streams`; but then we should remove `removing_someone_else = check_if_removing_someone_else(user_profile, principals)`, and instead just compute `unsubscribing_others` by looping through `people_to_unsub` and checking if each user is either the current user or a bot owned by it."", 'comment_created': datetime.datetime(2022, 9, 9, 0, 1, 23, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966513443, 'comment_body': 'Why is this function in this file?', 'comment_created': datetime.datetime(2022, 9, 9, 0, 2, 2, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966514109, 'comment_body': ""I think this belongs in `static/js/user_profile.js`. \r\n\r\nThe function above it should possibly also move to some place like `profile_fields.js` eventually, but let's not try to do that not."", 'comment_created': datetime.datetime(2022, 9, 9, 0, 4, 1, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966514914, 'comment_body': ""Let's extract this computation as a new `people.can_admin_user(user)` function defined just after `get_bot_owner_user` in `people.js`, and just write:\r\n```\r\n    const show_unsubscribe_button =\r\n        people.can_admin_user(user) || settings_data.user_can_unsubscribe_other_users();\r\n\r\n```"", 'comment_created': datetime.datetime(2022, 9, 9, 0, 6, 19, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966515105, 'comment_body': ""Let's remove this comment rather than changing it -- it's more confusing than helpful."", 'comment_created': datetime.datetime(2022, 9, 9, 0, 6, 52, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966515877, 'comment_body': 'The `1` parameter is not great for readability; can we pass the key for the tab, `user-profile-streams-tab`, instead?', 'comment_created': datetime.datetime(2022, 9, 9, 0, 8, 19, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966516457, 'comment_body': 'Can we replace this block with just calling the function to select the target tab after or when initializing the tab widget? It seems a bit weird to do be duplicating a bit of the `callback` logic defined for the tab switcher with the couple lines above this.', 'comment_created': datetime.datetime(2022, 9, 9, 0, 10, 10, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 966516768, 'comment_body': ""Relardly, do the calls to `settings_account.initialize_custom_user_type_fields`, below, need to be moved inside the `callback`? I don't think we want to be doing that initialization work when not visiting the target tab."", 'comment_created': datetime.datetime(2022, 9, 9, 0, 10, 58, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 967827826, 'comment_body': 'Added new commit for that 76863830be457d2a915c1246933e3f6ccd172b90.', 'comment_created': datetime.datetime(2022, 9, 11, 13, 19, 31, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 967827881, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2022, 9, 11, 13, 19, 53, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 967828138, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2022, 9, 11, 13, 21, 58, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 973508179, 'comment_body': ""This block looks like it duplicates one that already exists in `user_info_popover_content.hbs`; probably should be deduplicated. It's fine to do this in a follow-up PR, since it'll require some care to do."", 'comment_created': datetime.datetime(2022, 9, 16, 23, 52, 29, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': 'ce71e5668b1c4e2727fe0abae523836e59a482bf', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9444bcc2286af65f76c7ef831bc214a8653386f7', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '563c76cff71f686755b72fe59907101e1438c637', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '004ad081ac940d4413ccc971e5d067cf8c53f2e4', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a7267f7c7d6c14e2d6d59326ed4515beb3e2e8e', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6df83b76c57d7a3edf8de9356bea59d600f9c898', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+882849417,popovers: Design changes for user profile popover.,"Almost all design changes ideas are from the discussion on CZO,
+""design > pronouns in profile card"" for more information.
+
+Move the local time just below the status if present else into that 
+the same status block regardless of whether the status is set.
+
+Move the management commands ""Mute this user"" and ""Manage this user""
+into a three-dot menu. The three dots would be in the upper right.
+
+Implement a new popover for a three-dot menu.
+
+Change the private message link icon.
+
+And some small design changes.
+
+[CZO discussion](https://chat.zulip.org/#narrow/stream/101-design/topic/pronouns.20in.20profile.20card)
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+**Testing plan:** Manually tested In both themes.
+
+**GIFs or screenshots:** 
+<details>
+<summary>Other user</summary>
+
+![normal_user_popover](https://user-images.githubusercontent.com/41695888/193571751-560e85f8-553d-4126-b761-1e25ef0c4686.png)
+
+</details>
+
+<details>
+<summary>Self user</summary>
+
+![self_user_popover](https://user-images.githubusercontent.com/41695888/193571899-228a0f93-5a78-4af9-9b7d-e13a7d65fb3c.png)
+
+
+</details>
+<details>
+<summary>Bot user</summary>
+
+![bot_user_popover](https://user-images.githubusercontent.com/41695888/193571978-c9c3282d-39b6-4f59-8eb2-bd6f3b4aab2f.png)
+)
+</details>
+<details>
+<summary>Three-dot menu and overall working</summary>
+
+![three_dot_menu_view](https://user-images.githubusercontent.com/41695888/193572081-5a65b92c-7b7c-4935-a076-40da77fa62ce.png)
+![overall_working_of_popover](https://user-images.githubusercontent.com/41695888/193572068-f24eb07c-f8a7-400a-8457-2ef1e1902c95.gif)
+
+</details>",True,21465,https://api.github.com/repos/zulip/zulip/pulls/21465,https://github.com/zulip/zulip/pull/21465,closed,340,162,8,2,25,8,3,0,"[{'name': 'size: XL'}, {'name': 'release goal'}, {'name': 'chat.zulip.org review'}]",2022-03-17 20:23:46+00:00,2022-10-07 22:52:57+00:00,17634551.0,"204 days, 2:29:11","[{'comment_id': 979127920, 'comment_body': 'This `Joined` string is incorrectly not tagged for translation. ', 'comment_created': datetime.datetime(2022, 9, 24, 0, 23, 24, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 979128113, 'comment_body': ""I'm pretty sure the user_time variable should be inside the translation box; this is required for languages with a different word order. Fixing this will also remove the need to add anything to `capitalization.py`.\r\n\r\nSe https://zulip.readthedocs.io/en/latest/translating/internationalization.html for details.\r\n\r\nProbably best to fix both of these bugs in a separate commit, since they're preexisting."", 'comment_created': datetime.datetime(2022, 9, 24, 0, 24, 33, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 980362386, 'comment_body': 'Just like the other case in this PR, the entire phrase ""Joined {date_joined}""  needs to be inside the translation tag. This is a truth about all translateable strings in any produce; please take the time to read and understand the word order discussion in  \r\nhttps://zulip.readthedocs.io/en/latest/translating/internationalization.html', 'comment_created': datetime.datetime(2022, 9, 26, 18, 16, 49, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 980501262, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2022, 9, 26, 21, 3, 3, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 989544433, 'comment_body': ""What's the story with this change?"", 'comment_created': datetime.datetime(2022, 10, 6, 23, 0, 37, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 990116661, 'comment_body': 'Three-dot menus `<a>` tag is inside `<span>` tag unlike other items in the user info popover which are just inside `<li>` tag and because of that this selector was not capturing three-dot menus `<a>` tag\r\n\r\nOther user info popovers capture a three-dot menu as they are not specifying `<a>` tag like that above line.\r\nhttps://github.com/zulip/zulip/blob/da8817889bbd024656b39db0c98f30b95bd4de82/static/js/popovers.js#L381-L393', 'comment_created': datetime.datetime(2022, 10, 7, 13, 53, 4, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 990538900, 'comment_body': ""OK. The risk of course is that if there's somehow another link inside one of these places, it might create different unexpected behavior, but this is probably fine."", 'comment_created': datetime.datetime(2022, 10, 7, 22, 48, 41, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 990539709, 'comment_body': 'These index calculations were wrong; if you clicked on a popover that didn\'t have the new vdots menu (say, your own popover menu), we\'d start with the second item incorrectly. The right way to write this check in general is to have the code say what you mean: The index should be increased the `\\vdots` element is visible.\r\n\r\n```\r\ndiff --git a/static/js/popovers.js b/static/js/popovers.js\r\nindex 42c68d37e4..424898c636 100644\r\n--- a/static/js/popovers.js\r\n+++ b/static/js/popovers.js\r\n@@ -714,7 +714,7 @@ export function popover_items_handle_keyboard(key, $items) {\r\n         return;\r\n     }\r\n     if (index === -1) {\r\n-        if (message_info_popped() || user_info_popped() || user_sidebar_popped()) {\r\n+        if ($("".user_info_popover_manage_menu_btn"").is("":visible"")) {\r\n             index = 1;\r\n         } else {\r\n             index = 0;\r\n@@ -847,8 +847,12 @@ function focus_user_info_popover_item() {\r\n     // For now I recommend only calling this when the user opens the menu with a hotkey.\r\n     // Our popup menus act kind of funny when you mix keyboard and mouse.\r\n     const $items = get_user_info_popover_for_message_items();\r\n-    // Focus element at index 1 first, skipping three-dot menu which is on index 0.\r\n-    focus_first_popover_item($items, 1);\r\n+\r\n+    if ($("".user_info_popover_manage_menu_btn"").is("":visible"")) {\r\n+        focus_first_popover_item($items, 1);\r\n+    } else {\r\n+        focus_first_popover_item($items);\r\n+    }\r\n }\r\n \r\n function get_user_sidebar_popover_items() {\r\n```\r\n\r\nThere\'s probably some generalization refactoring we could do to make such a `\\vdots` menu a general component, but I\'m not going to block this PR on that.', 'comment_created': datetime.datetime(2022, 10, 7, 22, 51, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': 'eb6ca1437770b74de4a1da4145f3fd16de835ebf', 'committer_username': 'timabbott', 'committer_name': 'Tim Abbott', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 7, 21, 18, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8b6976331adc89bd695e2a0650868d996bc71f7f', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+855113358,compose: Disable send button while uploads are in progress.,"In `upload.js` there is already code for disabling send button while uploading(works for saving when we edit, but not for send),
+when I inspect in chrome, `disabled` attr comes and goes for saving button but not in the case for send button and the reason behind it is, The function `check_overflow_text()` from `compose_validate.js` removes `disabled` attr when message text not
+overflowing after overflowing error, I just added if condition to remove `disabled` attr only if the text was overflowing before.
+
+Added some CSS on the button to look disabled.
+
+Fixes: #21135
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+**Testing plan:** Manually tested for both themes.
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+**Gifs And Screenshots:** I had to upload lots of files because files were uploading too fast and 25MB is the file size limit.
+<details>
+<summary>LIght Mode</summary>
+
+![light_mode](https://user-images.githubusercontent.com/41695888/155326213-3089da49-390a-4825-a688-0b23349babcf.gif)
+![light_mode_screenshot](https://user-images.githubusercontent.com/41695888/155330712-53c8234c-0006-4ef9-a5bf-22a4df8f7734.png)
+
+
+</details>
+<details>
+<summary>Dark Mode</summary>
+
+![dark_mode](https://user-images.githubusercontent.com/41695888/155326259-42a1db14-313a-473d-8a96-74c44d1000b2.gif)
+![dark_mode_screenshot](https://user-images.githubusercontent.com/41695888/155330795-8122c92d-c6b7-4c82-874b-305c9900bd4c.png)
+
+
+</details>",False,21166,https://api.github.com/repos/zulip/zulip/pulls/21166,https://github.com/zulip/zulip/pull/21166,closed,9,1,3,1,4,0,4,0,"[{'name': 'size: S'}, {'name': 'has conflicts'}, {'name': 'post release'}, {'name': 'area: compose (uploads)'}]",2022-02-17 06:12:36+00:00,2023-10-02 05:12:22+00:00,51145186.0,"591 days, 22:59:46",[],"[{'commit_sha': 'db3fcd5989a2e95ccbaf485961f702de9f5d3897', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+932693523,tables: Cleanup of table-striped CSS block.,"<!-- Describe your pull request here.-->
+Making `table-striped` CSS block as a top level shared CSS inside
+`app_components.css`, trying to make use of this block on every
+table and also removing some dublicated CSS.
+
+Follow-up of https://github.com/zulip/zulip/pull/21144
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+
+",True,22032,https://api.github.com/repos/zulip/zulip/pulls/22032,https://github.com/zulip/zulip/pull/22032,closed,52,59,5,2,13,0,2,0,"[{'name': 'size: XL'}, {'name': 'integration review'}]",2022-05-10 17:18:57+00:00,2022-06-30 18:25:26+00:00,4410389.0,"51 days, 1:06:29",[],"[{'commit_sha': '5bf9b28ba548a325006be5425fb2b210cf1e7165', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8baeb37db853cfdd47184ba7950f6c68a2cc03a6', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+915779439,"custom_profile_fields: Make ""Add and Edit custom profile field"" form into modals.","The implementation is approximately the same as before I just migrated
+""Add/Edit custom profile field"" forms into modals, status update
+notifications about these forms will be displayed inside their modal.
+
+Issue #21634 describes pretty much everything about these new changes.
+- [x] At present, the UI for editing a custom profile field opens directly inside the table. This is confusing, especially if you have more than one open, which is possible. Instead, clicking the pencil icon should open a modal to edit the field. The modal heading can be ""Edit custom profile field"".
+- [x] Similarly, the ""Add custom profile field"" form should be migrated to a modal as well. The field labels in the modal should be above (on a separate line) from the text boxes. The button to open the modal should be on the same line as the ""Custom profile fields"" table heading; we can try right-aligning it.
+
+Fixes: #21634
+
+[CZO](https://chat.zulip.org/#narrow/stream/101-design/topic/Make.20.22Add.20and.20Edit.20custom.20profile.20field.22.20a.20modal.20.2321634)
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+**Screenshots and screen captures:**
+![custom_profile_fields](https://user-images.githubusercontent.com/41695888/164549643-694f3feb-389b-44ae-a68a-8cfeab81a18b.png)
+![delete_button_inside_modal](https://user-images.githubusercontent.com/41695888/164549648-646cda2c-4191-44bf-9b6e-813891722cb9.gif)
+![working](https://user-images.githubusercontent.com/41695888/164549649-caa48a14-cac8-442e-b95d-14c11dd7dc52.gif)
+<details><summary>Error inside modal</summary>
+
+![status_update_error](https://user-images.githubusercontent.com/41695888/164550468-e5e4d4a3-4020-476b-bf44-72a009365587.png)
+
+</details>
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] Self-reviewed the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,21878,https://api.github.com/repos/zulip/zulip/pulls/21878,https://github.com/zulip/zulip/pull/21878,closed,269,252,8,6,32,18,3,0,"[{'name': 'area: settings (admin/org)'}, {'name': 'size: XL'}, {'name': 'integration review'}]",2022-04-21 20:53:29+00:00,2022-08-06 00:26:57+00:00,9171208.0,"106 days, 3:33:28","[{'comment_id': 878076525, 'comment_body': 'Why `btn-danger` class is removed? I think we should keep it to make all delete buttons consistent.', 'comment_created': datetime.datetime(2022, 5, 20, 12, 7, 55, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 878091672, 'comment_body': 'You have not changed `control-group` here to `input-group` and also in `set_up_create_field_form` due to which the fields are not hidden/shown correctly for `External account` type fields. Also, we can make this change in a prep commit as Tim mentioned, as margin CSS for both the classes is same and is the only thing used here.', 'comment_created': datetime.datetime(2022, 5, 20, 12, 28, 5, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 878180600, 'comment_body': 'This was discussed here [CZO](https://chat.zulip.org/#narrow/stream/101-design/topic/Make.20.22Add.20and.20Edit.20custom.20profile.20field.22.20a.20modal.20.2321634)', 'comment_created': datetime.datetime(2022, 5, 20, 14, 1, 39, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 878215796, 'comment_body': 'Ok, thanks.', 'comment_created': datetime.datetime(2022, 5, 20, 14, 34, 22, tzinfo=datetime.timezone.utc), 'commenter': 'sahil839', 'type': 'User'}, {'comment_id': 900704990, 'comment_body': ""I don't think testing this is necessary."", 'comment_created': datetime.datetime(2022, 6, 18, 6, 24, 35, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 900705245, 'comment_body': 'You can just do `$(""#add-custom-profile-field-btn"").on(""click"", open_custom_profile_field_form_modal);`', 'comment_created': datetime.datetime(2022, 6, 18, 6, 27, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 900787857, 'comment_body': 'We test other existing models like this, so I did the same for these new models too.', 'comment_created': datetime.datetime(2022, 6, 18, 9, 58, 59, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 923450012, 'comment_body': ""small nit: It's better to use the id of the specific modal you are testing, just to make sure the modal that is present is the one you want."", 'comment_created': datetime.datetime(2022, 7, 18, 14, 36, 36, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 923455011, 'comment_body': ""IDs are unique in the DOM, so you don't need to scope them. You can write\r\n`#add-custom-profile-field-btn {`"", 'comment_created': datetime.datetime(2022, 7, 18, 14, 41, 11, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 923489513, 'comment_body': 'You can add a [help link](https://github.com/zulip/zulip/blob/7d8be670a58016ef7258deaee19451e92dd31023/static/js/dialog_widget.js#L81) (https://zulip.com/help/add-custom-profile-fields) ', 'comment_created': datetime.datetime(2022, 7, 18, 15, 9, 58, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 923500924, 'comment_body': 'This `div` seems unnecessary. You can just have the `form` element.', 'comment_created': datetime.datetime(2022, 7, 18, 15, 20, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ganpa3', 'type': 'User'}, {'comment_id': 924657234, 'comment_body': 'https://github.com/zulip/zulip/blob/63db380caa0ebcbee40ab2f4b7f53f28e0eb7abd/frontend_tests/puppeteer_tests/custom-profile.ts#L12-L26\r\n\r\nI think the above lines made it clear, still should I add a new id to the form?', 'comment_created': datetime.datetime(2022, 7, 19, 15, 31, 17, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 924943210, 'comment_body': 'Done', 'comment_created': datetime.datetime(2022, 7, 19, 20, 47, 1, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 924943319, 'comment_body': 'Done', 'comment_created': datetime.datetime(2022, 7, 19, 20, 47, 11, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 924943397, 'comment_body': 'Done', 'comment_created': datetime.datetime(2022, 7, 19, 20, 47, 18, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 939436148, 'comment_body': 'This string needs to be tagged for translation.', 'comment_created': datetime.datetime(2022, 8, 5, 22, 57, 48, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 939436865, 'comment_body': 'The missing leading `/` here on `/help/add-...` is a bug; probably one we need a linter for.', 'comment_created': datetime.datetime(2022, 8, 5, 23, 0, 43, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 939439726, 'comment_body': ""I agree it'd be more readable to use a less generic selector, but it's hard to think of a specific bug where the difference would matter."", 'comment_created': datetime.datetime(2022, 8, 5, 23, 11, 14, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': 'fdaece748c88409bd2a44460a4aa42baf3447bcb', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '921dd1de489aa4c83ec05da87517bc4fbe80a35f', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98f3a80908716dd317353035d50c20c0e7fcc0f8', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '81ab293487dfd58a216aee81aadcda55a4518726', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '19750f1d070f281c238f316e073da5370520aac5', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63ff2589febc4572cd94d4c44b77ee117b328a96', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+897811858,"compose: Improve tooltip on compose box ""x"" button.","In compose box, the ""x"" button tooltip text changed to
+""Cancel compose and save draft"" except when unsent
+message length is short(<3).
+
+Also in help(?) > keyboard shortcuts, text for `Esc`
+changed to ""Cancel compose and save draft"".
+
+The help center page updated with the above changes.
+
+Fixes: #21599
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+**Testing plan:** Manually.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+<details>
+<summary>Keyboard-Shortcut Text</summary>
+
+![Cancel_compose_and_save_draft](https://user-images.githubusercontent.com/41695888/161340577-de0cee78-43ff-4a9d-9f2f-1557eb813844.png)
+</details>
+<details>
+<summary>Tooltip</summary>
+
+![tooltip](https://user-images.githubusercontent.com/41695888/161340589-d221996c-727d-44c0-bd06-babd465d034c.png)
+</details>
+<details>
+<summary>Help page</summary>
+
+![help_center](https://user-images.githubusercontent.com/41695888/161340588-2e29bf58-d213-4c4e-8fb7-82e12d8a0d87.png)
+</details>
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,21655,https://api.github.com/repos/zulip/zulip/pulls/21655,https://github.com/zulip/zulip/pull/21655,closed,15,5,5,1,6,1,3,0,"[{'name': 'area: compose (misc)'}, {'name': 'size: S'}, {'name': 'integration review'}]",2022-04-01 21:03:28+00:00,2022-08-07 03:46:46+00:00,10996998.0,"127 days, 6:43:18","[{'comment_id': 930523223, 'comment_body': 'I\'d prefer to not add a second code path, in addition to the existing `compose_validate.check_overflow_text`, that measures the length of the message on every keypress -- they can be 10k characters, and thus this could be potentially expensive.\r\n\r\nI think the right solution might be to have `compose_validate.check_overflow_text` return the message\'s length (already trimmed, since it reads `compose_state.message_content()`), and then move the couple lines below to extend this block in `compose.js`:\r\n\r\n```\r\n    $(""#compose-textarea"").on(""input propertychange"", () => {                                            \r\n        compose_validate.warn_if_topic_resolved(false);                                                  \r\n        compose_validate.check_overflow_text();                                                          \r\n    });                                                                                                  \r\n```', 'comment_created': datetime.datetime(2022, 7, 27, 0, 44, 33, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': 'b917d98f6f40b8da7a732a79aab5efbb73377662', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+892292291,custom_profile_fields: Allow display in user profile popover.,"* Backend changes.
+
+To allow `custom_profile_field` to display in user profile popover, added a new boolean field in its model class.
+
+In `custom_profile_fields.py`, functions are edited as per conditions, like currently we can display max 2 `custom_profile_fields` except `LONG_TEXT` and `USER` type fields.
+
+The default custom profile field is now updatable but for only the ""display_in_profile_summary"" field.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Frontend settings changes.
+
+Custom profile fields table `CSS` changed to fit the new ""Display"" column of editable checkboxes, checkboxes are for select/deselect custom profile field to display in profile popover.
+
+New option ""Display in profile summary"" added in create and edit custom profile fields form, with the help of this the user can pick max of 2 custom profile fields except for `LONG_TEXT` and `USER` fields to be displayed in his user profile popover.
+
+Checkboxes will go in a disabled state(Adding tooltip) except for selected when the max limit of displaying custom profile fields reaches.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Frontend profile popover changes.
+
+Displaying custom profile fields in user profile popover, as mentioned in the issue.
+
+In `popovers.js` filtering out only those custom profile fields, which are not `LONG_TEXT` or `USER` fields and their values are not empty.
+
+Custom profile fields rendering in profile popover the same way(code-wise) as in the user's full profile modal.
+
+Using the custom profile field's name in lower case in the `fa` class, to get an icon of the external account.
+
+`fa-{platform name}` this is the format of `fa` to fetch icon.
+Created a new handlebar to convert a word into lower case.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[CZO discussion on #design](https://chat.zulip.org/#narrow/stream/101-design/topic/pronouns.20in.20profile.20card)
+
+[CZO discussion on #api design](https://chat.zulip.org/#narrow/stream/378-api-design/topic/custom.20profile.20fields.20in.20small.20profile/near/1390650)
+
+Fixes: #21215
+
+<!-- What's this PR for?  (Just a link to an issue is fine.) -->
+
+**Testing plan:** Manually and automated.
+
+**GIFs or screenshots:** <!-- If a UI change.  See:
+  https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+  -->
+<details>
+<summary>User profile popover</summary>
+
+![user_profile_popover](https://user-images.githubusercontent.com/41695888/160485763-f8dffa2f-9490-486e-af8a-0dccd11d4b4c.png)
+</details>
+<details>
+<summary>Checkboxes working</summary>
+
+![checkboxes_working](https://user-images.githubusercontent.com/41695888/160485841-80ffd217-2b02-491e-bbd3-8cad982b332b.gif)
+</details>
+<details>
+<summary>Custom profile fields settings</summary>
+
+![custom_profile_fields_settings](https://user-images.githubusercontent.com/41695888/160485855-a0565031-dcef-456e-aaf2-4386951471aa.png)
+</details>
+
+<details>
+<summary>Create/Edit custom profile field</summary>
+
+![edit_custom_profile_field](https://user-images.githubusercontent.com/41695888/160485860-b296cf57-2df6-410b-b5fa-0ba9d4f27b19.png)
+![new_profile_field](https://user-images.githubusercontent.com/41695888/160485865-23c77992-7580-4e3a-8627-3c883f026f5e.gif)
+</details>
+
+<!-- Also be sure to make clear, coherent commits:
+  https://zulip.readthedocs.io/en/latest/contributing/version-control.html
+  -->
+",True,21588,https://api.github.com/repos/zulip/zulip/pulls/21588,https://github.com/zulip/zulip/pull/21588,closed,509,23,25,3,50,19,6,0,"[{'name': 'area: settings (admin/org)'}, {'name': 'priority: high'}, {'name': 'size: XL'}, {'name': 'release goal'}, {'name': 'area: popovers'}, {'name': 'integration review'}]",2022-03-28 21:05:54+00:00,2022-09-21 00:03:57+00:00,15217083.0,"176 days, 2:58:03","[{'comment_id': 841081678, 'comment_body': 'Duplicate migration number `0387`, this should be `388`. ', 'comment_created': datetime.datetime(2022, 4, 2, 14, 18, 34, tzinfo=datetime.timezone.utc), 'commenter': 'amanagr', 'type': 'User'}, {'comment_id': 841082147, 'comment_body': 'I think I need to rebase here because locally 387 is the last migration.', 'comment_created': datetime.datetime(2022, 4, 2, 14, 23, 56, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 841115391, 'comment_body': 'Do not name numbers using `$`. That’s for jQuery objects only.', 'comment_created': datetime.datetime(2022, 4, 2, 20, 18, 6, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 841115737, 'comment_body': 'These duplicate branches are unnecessary. Create a boolean `multiple = page_params.display_in_profile_popover_fields_count >= 2` and use `.prop(""disabled"", multiple)` and `.toggleClass(""tippy-zulip-tooltip"", multiple)`.', 'comment_created': datetime.datetime(2022, 4, 2, 20, 22, 23, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 841115826, 'comment_body': '`const data = {display_in_profile_popover: field.display_in_profile_popover}`.', 'comment_created': datetime.datetime(2022, 4, 2, 20, 23, 37, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 841219997, 'comment_body': 'After using this method, I am getting a test error while running test-js-with-node.\r\n```\r\ntest failed: /srv/zulip/frontend_tests/node_tests/settings_profile_fields.js > populate_profile_fields\r\n\r\nError: You must create a stub for $(""#add-new-profile-field .checkbox"").toggleClass\r\n    at Object.get (/srv/zulip/frontend_tests/zjsunit/zjquery.js:72:27)\r\n    at update_profile_fields_checkboxes (/srv/zulip/static/js/settings_profile_fields.js:386:5)\r\n    at Object.do_populate_profile_fields (/srv/zulip/static/js/settings_profile_fields.js:502:5)\r\n    at test_populate (/srv/zulip/frontend_tests/node_tests/settings_profile_fields.js:64:29)\r\n    at /srv/zulip/frontend_tests/node_tests/settings_profile_fields.js:199:5\r\n    at /srv/zulip/frontend_tests/zjsunit/test.js:34:13\r\n    at Object.exports.with_overrides (/srv/zulip/frontend_tests/zjsunit/namespace.js:490:9)\r\n    at exports.run_test (/srv/zulip/frontend_tests/zjsunit/test.js:33:19)\r\n    at Object.<anonymous> (/srv/zulip/frontend_tests/node_tests/settings_profile_fields.js:71:1)\r\n    at Module._compile (node:internal/modules/cjs/loader:1103:14)\r\n    at Module._compile (/srv/zulip-npm-cache/18b43a2b2537b651d00677b0f92d76223b4cfd3a/node_modules/pirates/lib/index.js:136:24)\r\n    at Module._extensions..js (node:internal/modules/cjs/loader:1157:10)\r\n    at Object.newLoader [as .js] (/srv/zulip-npm-cache/18b43a2b2537b651d00677b0f92d76223b4cfd3a/node_modules/pirates/lib/index.js:141:7)\r\n    at Module.load (node:internal/modules/cjs/loader:981:32)\r\n    at Module._load (node:internal/modules/cjs/loader:822:12)\r\n    at Function.load [as _load] (/srv/zulip/frontend_tests/zjsunit/namespace.js:90:12)\r\n    at Module.require (node:internal/modules/cjs/loader:1005:19)\r\n    at require (node:internal/modules/cjs/helpers:102:18)\r\n    at run_one_module (/srv/zulip/frontend_tests/zjsunit/index.js:78:5)\r\n(...)\r\n\r\n```\r\nWill adding these lines to the test file will be fine?\r\n```\r\n    $(""#add-new-profile-field .checkbox"").toggleClass = () => {};\r\n    $(""#admin_profile_fields_table .display_in_profile_popover_false"").toggleClass = () => {};\r\n```', 'comment_created': datetime.datetime(2022, 4, 3, 13, 6, 20, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 892978647, 'comment_body': ""I don't think it makes sense to define a new endpoint -- we should just use the existing `update_realm_custom_profile_field` function / endpoint. \r\n\r\nFrom a design standpoint, that endpoint is for updating properties of a custom profile field, and this is just one of those properties."", 'comment_created': datetime.datetime(2022, 6, 9, 0, 49, 28, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 899447859, 'comment_body': 'Yeah, this thing was in my mind while defining a new endpoint here, and yes I am using `update_realm_custom_profile_field` for updating custom profile fields, this new endpoint I defined is just for toggle checkboxes for the `display_in_profile_popover` field in the settings UI.', 'comment_created': datetime.datetime(2022, 6, 16, 19, 24, 42, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 899456823, 'comment_body': 'And yes I see doing both these things using only the existing `update_realm_custom_profile_field` function/endpoint makes more sense, and I am working on it.', 'comment_created': datetime.datetime(2022, 6, 16, 19, 31, 15, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 915140606, 'comment_body': ""Let's leave this out from `realm_default_external_accounts`. I don't think it'll make sense for these server-level defaults to ever specify that a field should display in the profile summary; it should be something the realm admins choose when they enable the field.\r\n\r\nThat's especially so given that we plan to limit the number of fields in the profile summary to something like two of them."", 'comment_created': datetime.datetime(2022, 7, 6, 18, 30, 45, tzinfo=datetime.timezone.utc), 'commenter': 'gnprice', 'type': 'User'}, {'comment_id': 919383282, 'comment_body': 'done.', 'comment_created': datetime.datetime(2022, 7, 12, 20, 11, 29, tzinfo=datetime.timezone.utc), 'commenter': 'yogesh-sirsat', 'type': 'User'}, {'comment_id': 975872401, 'comment_body': ""I don't think these hunks are necessary; all the contexts in which this function is used ignore the field. I'm not entirely sure, but I think it'd be clearer to skip this change."", 'comment_created': datetime.datetime(2022, 9, 20, 22, 45, 16, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975872861, 'comment_body': 'Moved this constant to be a property of `CustomProfileField` and be capitalized, for better consistency with our style.', 'comment_created': datetime.datetime(2022, 9, 20, 22, 46, 15, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975873087, 'comment_body': 'I rewrote this to be a bit more readable, and be able to be reused rather than duplicated in `create_realm_custom_profile_field` .', 'comment_created': datetime.datetime(2022, 9, 20, 22, 46, 45, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975873928, 'comment_body': 'I changed this to use an early return pattern, and rewrote the comment.', 'comment_created': datetime.datetime(2022, 9, 20, 22, 48, 27, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975879677, 'comment_body': ""This is broken for any fields that have the `custom` subtype; I'll fix this."", 'comment_created': datetime.datetime(2022, 9, 20, 23, 2, 6, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975882650, 'comment_body': ""Doing so also eliminates the need for the `lowerCase` helper; I'll remove that."", 'comment_created': datetime.datetime(2022, 9, 20, 23, 9, 7, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975883185, 'comment_body': ""This HTML block very much duplicates a block in `user_profile_modal.hbs` ; this is probably not desired but it may require some care to refactor, so I'm OK merging this as written. \r\n\r\n@sahil839 FYI in case you have ideas for how to deduplicate this nicely."", 'comment_created': datetime.datetime(2022, 9, 20, 23, 10, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 975883444, 'comment_body': 'I fixed a couple styling issues with whitespace and hover behavior; this is now:\r\n```\r\n+.popover_info .custom_user_field {\r\n+    text-overflow: ellipsis;\r\n+    overflow: hidden;\r\n+\r\n+    a i {\r\n+        /* Override margin on top-level icons */\r\n+        margin-right: 0;\r\n+    }\r\n+\r\n+    a:hover {\r\n+        text-decoration: none;\r\n+    }\r\n+}\r\n```', 'comment_created': datetime.datetime(2022, 9, 20, 23, 10, 56, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '5e535d3e90395668523e92d2db2b62d5c54c906e', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae49113704d66bbef007fef12c2cb31223a1a583', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef18a9a96e585e6e7aa1ad3b24c43b6d72682199', 'committer_username': 'yogesh-sirsat', 'committer_name': 'Yogesh Sirsat', 'committer_email': None, 'commit_date': datetime.datetime(2018, 7, 25, 15, 31, 8, tzinfo=datetime.timezone.utc)}]",Yogesh Sirsat,41695888,,User,,52,,29,6
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43160685,zulip,zulip/zulip,Python,7618,21010,375,1133,60288,2476,28,798,"[{'id': 1092179097, 'number': 23287, 'closed': datetime.datetime(2022, 10, 20, 17, 35, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 19, 11, 21, 57, tzinfo=datetime.timezone.utc), 'time_taken': 108794.0, 'time_delta': '1 day, 6:13:14', 'additions': 13, 'deletions': 2, 'state': 'closed'}, {'id': 1086129836, 'number': 23228, 'closed': datetime.datetime(2022, 10, 14, 20, 8, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 13, 13, 51, 56, tzinfo=datetime.timezone.utc), 'time_taken': 108998.0, 'time_delta': '1 day, 6:16:38', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1069892952, 'number': 23081, 'closed': datetime.datetime(2022, 9, 29, 17, 19, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 28, 11, 37, 54, tzinfo=datetime.timezone.utc), 'time_taken': 106887.0, 'time_delta': '1 day, 5:41:27', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1060468270, 'number': 22995, 'closed': None, 'created': datetime.datetime(2022, 9, 19, 15, 26, 48, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 78, 'deletions': 74, 'state': 'open'}, {'id': 1058471200, 'number': 22977, 'closed': datetime.datetime(2022, 9, 20, 17, 42, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 16, 10, 33, 41, tzinfo=datetime.timezone.utc), 'time_taken': 371333.0, 'time_delta': '4 days, 7:08:53', 'additions': 17, 'deletions': 4, 'state': 'closed'}, {'id': 1055081469, 'number': 22947, 'closed': datetime.datetime(2022, 9, 14, 16, 55, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 13, 19, 6, 31, tzinfo=datetime.timezone.utc), 'time_taken': 78558.0, 'time_delta': '21:49:18', 'additions': 14, 'deletions': 3, 'state': 'closed'}, {'id': 1054756128, 'number': 22942, 'closed': datetime.datetime(2022, 9, 13, 18, 38, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 13, 14, 5, 1, tzinfo=datetime.timezone.utc), 'time_taken': 16427.0, 'time_delta': '4:33:47', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 1051803326, 'number': 22903, 'closed': datetime.datetime(2023, 8, 28, 15, 52, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 9, 16, 53, 45, tzinfo=datetime.timezone.utc), 'time_taken': 30495538.0, 'time_delta': '352 days, 22:58:58', 'additions': 30, 'deletions': 28, 'state': 'closed'}, {'id': 1045117806, 'number': 22853, 'closed': datetime.datetime(2023, 9, 11, 0, 20, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 2, 16, 54, 48, tzinfo=datetime.timezone.utc), 'time_taken': 32253920.0, 'time_delta': '373 days, 7:25:20', 'additions': 171, 'deletions': 107, 'state': 'closed'}, {'id': 1041106399, 'number': 22818, 'closed': datetime.datetime(2022, 9, 16, 22, 4, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 30, 14, 56, 7, tzinfo=datetime.timezone.utc), 'time_taken': 1494475.0, 'time_delta': '17 days, 7:07:55', 'additions': 122, 'deletions': 28, 'state': 'closed'}, {'id': 1012257307, 'number': 22629, 'closed': datetime.datetime(2022, 9, 23, 19, 9, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 29, 18, 41, 20, tzinfo=datetime.timezone.utc), 'time_taken': 4840111.0, 'time_delta': '56 days, 0:28:31', 'additions': 270, 'deletions': 311, 'state': 'closed'}, {'id': 1008826143, 'number': 22592, 'closed': datetime.datetime(2022, 7, 28, 0, 9, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 26, 18, 11, 19, tzinfo=datetime.timezone.utc), 'time_taken': 107910.0, 'time_delta': '1 day, 5:58:30', 'additions': 13, 'deletions': 21, 'state': 'closed'}, {'id': 1006123547, 'number': 22567, 'closed': datetime.datetime(2022, 7, 22, 23, 57, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 22, 20, 12, 30, tzinfo=datetime.timezone.utc), 'time_taken': 13510.0, 'time_delta': '3:45:10', 'additions': 97, 'deletions': 73, 'state': 'closed'}, {'id': 998071787, 'number': 22497, 'closed': None, 'created': datetime.datetime(2022, 7, 15, 19, 5, 18, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 126, 'deletions': 123, 'state': 'open'}, {'id': 986613288, 'number': 22371, 'closed': datetime.datetime(2022, 9, 12, 21, 29, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 4, 15, 45, 29, tzinfo=datetime.timezone.utc), 'time_taken': 6068622.0, 'time_delta': '70 days, 5:43:42', 'additions': 84, 'deletions': 25, 'state': 'closed'}, {'id': 980559151, 'number': 22333, 'closed': datetime.datetime(2022, 9, 17, 0, 51, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 27, 21, 1, tzinfo=datetime.timezone.utc), 'time_taken': 7012235.0, 'time_delta': '81 days, 3:50:35', 'additions': 224, 'deletions': 74, 'state': 'closed'}, {'id': 932693523, 'number': 22032, 'closed': datetime.datetime(2022, 6, 30, 18, 25, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 10, 17, 18, 57, tzinfo=datetime.timezone.utc), 'time_taken': 4410389.0, 'time_delta': '51 days, 1:06:29', 'additions': 52, 'deletions': 59, 'state': 'closed'}, {'id': 916721088, 'number': 21895, 'closed': datetime.datetime(2022, 5, 5, 21, 3, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 22, 18, 52, tzinfo=datetime.timezone.utc), 'time_taken': 1131071.0, 'time_delta': '13 days, 2:11:11', 'additions': 10, 'deletions': 4, 'state': 'closed'}, {'id': 915779439, 'number': 21878, 'closed': datetime.datetime(2022, 8, 6, 0, 26, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 21, 20, 53, 29, tzinfo=datetime.timezone.utc), 'time_taken': 9171208.0, 'time_delta': '106 days, 3:33:28', 'additions': 269, 'deletions': 252, 'state': 'closed'}, {'id': 914650320, 'number': 21866, 'closed': datetime.datetime(2022, 4, 21, 15, 22, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 20, 20, 54, 39, tzinfo=datetime.timezone.utc), 'time_taken': 66456.0, 'time_delta': '18:27:36', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 914543229, 'number': 21864, 'closed': datetime.datetime(2022, 5, 5, 0, 32, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 20, 18, 41, 51, tzinfo=datetime.timezone.utc), 'time_taken': 1230622.0, 'time_delta': '14 days, 5:50:22', 'additions': 103, 'deletions': 77, 'state': 'closed'}, {'id': 910282350, 'number': 21809, 'closed': datetime.datetime(2022, 5, 6, 0, 43, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 14, 19, 38, 21, tzinfo=datetime.timezone.utc), 'time_taken': 1832707.0, 'time_delta': '21 days, 5:05:07', 'additions': 9, 'deletions': 9, 'state': 'closed'}, {'id': 897811858, 'number': 21655, 'closed': datetime.datetime(2022, 8, 7, 3, 46, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 4, 1, 21, 3, 28, tzinfo=datetime.timezone.utc), 'time_taken': 10996998.0, 'time_delta': '127 days, 6:43:18', 'additions': 15, 'deletions': 5, 'state': 'closed'}, {'id': 892292291, 'number': 21588, 'closed': datetime.datetime(2022, 9, 21, 0, 3, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 28, 21, 5, 54, tzinfo=datetime.timezone.utc), 'time_taken': 15217083.0, 'time_delta': '176 days, 2:58:03', 'additions': 509, 'deletions': 23, 'state': 'closed'}, {'id': 889560822, 'number': 21558, 'closed': datetime.datetime(2022, 3, 25, 17, 43, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 25, 14, 40, 25, tzinfo=datetime.timezone.utc), 'time_taken': 10992.0, 'time_delta': '3:03:12', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 886214729, 'number': 21510, 'closed': datetime.datetime(2022, 3, 22, 18, 18, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 22, 15, 36, 40, tzinfo=datetime.timezone.utc), 'time_taken': 9715.0, 'time_delta': '2:41:55', 'additions': 14, 'deletions': 13, 'state': 'closed'}, {'id': 885615087, 'number': 21508, 'closed': datetime.datetime(2022, 3, 24, 19, 12, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 22, 5, 24, 47, tzinfo=datetime.timezone.utc), 'time_taken': 222459.0, 'time_delta': '2 days, 13:47:39', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 884165115, 'number': 21490, 'closed': datetime.datetime(2022, 3, 24, 19, 39, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 20, 12, 44, 51, tzinfo=datetime.timezone.utc), 'time_taken': 370461.0, 'time_delta': '4 days, 6:54:21', 'additions': 44, 'deletions': 16, 'state': 'closed'}, {'id': 883497994, 'number': 21475, 'closed': datetime.datetime(2022, 3, 18, 21, 54, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 18, 14, 31, 42, tzinfo=datetime.timezone.utc), 'time_taken': 26539.0, 'time_delta': '7:22:19', 'additions': 1, 'deletions': 0, 'state': 'closed'}, {'id': 882849417, 'number': 21465, 'closed': datetime.datetime(2022, 10, 7, 22, 52, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 17, 20, 23, 46, tzinfo=datetime.timezone.utc), 'time_taken': 17634551.0, 'time_delta': '204 days, 2:29:11', 'additions': 340, 'deletions': 162, 'state': 'closed'}, {'id': 882733443, 'number': 21460, 'closed': datetime.datetime(2022, 3, 20, 23, 14, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 17, 18, 15, 43, tzinfo=datetime.timezone.utc), 'time_taken': 277127.0, 'time_delta': '3 days, 4:58:47', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 880963140, 'number': 21436, 'closed': datetime.datetime(2022, 3, 18, 22, 19, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 16, 5, 39, 50, tzinfo=datetime.timezone.utc), 'time_taken': 232794.0, 'time_delta': '2 days, 16:39:54', 'additions': 67, 'deletions': 10, 'state': 'closed'}, {'id': 866886832, 'number': 21263, 'closed': datetime.datetime(2022, 3, 1, 0, 31, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 28, 15, 8, 11, tzinfo=datetime.timezone.utc), 'time_taken': 33777.0, 'time_delta': '9:22:57', 'additions': 4, 'deletions': 3, 'state': 'closed'}, {'id': 866786153, 'number': 21261, 'closed': datetime.datetime(2022, 3, 2, 5, 8, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 28, 13, 21, 38, tzinfo=datetime.timezone.utc), 'time_taken': 143217.0, 'time_delta': '1 day, 15:46:57', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 855572325, 'number': 21172, 'closed': datetime.datetime(2022, 2, 17, 23, 49, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 17, 14, 56, 27, tzinfo=datetime.timezone.utc), 'time_taken': 31994.0, 'time_delta': '8:53:14', 'additions': 11, 'deletions': 2, 'state': 'closed'}, {'id': 855113358, 'number': 21166, 'closed': datetime.datetime(2023, 10, 2, 5, 12, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 17, 6, 12, 36, tzinfo=datetime.timezone.utc), 'time_taken': 51145186.0, 'time_delta': '591 days, 22:59:46', 'additions': 9, 'deletions': 1, 'state': 'closed'}, {'id': 853531061, 'number': 21144, 'closed': datetime.datetime(2022, 4, 26, 1, 1, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 15, 17, 36, 33, tzinfo=datetime.timezone.utc), 'time_taken': 5988276.0, 'time_delta': '69 days, 7:24:36', 'additions': 6, 'deletions': 0, 'state': 'closed'}, {'id': 853085929, 'number': 21138, 'closed': datetime.datetime(2022, 2, 16, 1, 47, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 2, 15, 10, 28, 19, tzinfo=datetime.timezone.utc), 'time_taken': 55176.0, 'time_delta': '15:19:36', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 835946328, 'number': 20996, 'closed': datetime.datetime(2023, 6, 6, 4, 43, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 31, 9, 54, 47, tzinfo=datetime.timezone.utc), 'time_taken': 42403736.0, 'time_delta': '490 days, 18:48:56', 'additions': 31, 'deletions': 18, 'state': 'closed'}, {'id': 835403156, 'number': 20993, 'closed': datetime.datetime(2023, 9, 13, 22, 8, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 1, 30, 15, 18, 49, tzinfo=datetime.timezone.utc), 'time_taken': 51086994.0, 'time_delta': '591 days, 6:49:54', 'additions': 51, 'deletions': 14, 'state': 'closed'}]"

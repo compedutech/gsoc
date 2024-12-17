@@ -1,0 +1,226 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+653821756,ROS2 Foxy inside Docker container,"Solves #2 
+
+Environment has been validated using the Navigation2 task from ROS2 challenge. Exhaustive steps to replicate have been provided in the [README.md](https://github.com/TheRoboticsClub/gsoc2021-Siddharth_Saha/blob/main/README.md).",True,3,https://api.github.com/repos/TheRoboticsClub/gsoc2021-Siddharth_Saha/pulls/3,https://github.com/TheRoboticsClub/gsoc2021-Siddharth_Saha/pull/3,closed,1121,1,39,3,0,0,0,0,[],2021-05-26 14:11:00+00:00,2021-05-26 15:24:48+00:00,4428.0,1:13:48,[],"[{'commit_sha': '7c746e1840eb19fbf53e58bf6c48358e2cd9d808', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44a0ed03de982020130f7f4faf0d9ef0aa60e806', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8948d94afe1502711781dac89c27847e25aff163', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+671933617,[foxy] Fix to enable amazon_robot_controller package to successfully build,"Two edits were performed inside robot_controller.cpp:
+1. Changed buildTreeFromText to createTreeFromText
+Reason: Change in API name inside the Navigation2 source code
+
+2. Commented out the if (use_bond_) clause inside on_activate and on_deactivate functions
+Reason: No matching function calls to nav2_util::LifecycleNode::createBond() and destroyBond()
+
+Solves: Issue #79",True,80,https://api.github.com/repos/JdeRobot/RoboticsInfrastructure/pulls/80,https://github.com/JdeRobot/RoboticsInfrastructure/pull/80,closed,9,9,1,1,0,0,0,0,[],2021-06-16 21:46:31+00:00,2021-06-18 08:30:10+00:00,125019.0,"1 day, 10:43:39",[],"[{'commit_sha': '99905e33bfca2d7513cef509f5e73b8d98e6f36f', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+671962357,[foxy] Fix to successfully build amazon_robot_rviz_plugins,"Modification in nav2_panel.cpp:
+Added `std::chrono::nanoseconds(-1)` as an additional std::bind argument for the functions onStartup, onShutdown, onCancel, onPause, onResume
+Reason: `nav2_lifecycle_manager::LifecycleManagerClient` API's have been modified to take in a timeout duration argument (default argument). The intended effect, as per my understanding, is to never timeout.
+
+Solves: Issue #81 ",True,82,https://api.github.com/repos/JdeRobot/RoboticsInfrastructure/pulls/82,https://github.com/JdeRobot/RoboticsInfrastructure/pull/82,closed,16,8,1,1,0,0,0,0,[],2021-06-16 22:25:54+00:00,2021-06-17 15:11:14+00:00,60320.0,16:45:20,[],"[{'commit_sha': '172f41578336e56d5fdf6325909be8a6b4cbab82', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+675259720,Updated url & version of VirtualGL in Dockerfile-2.4.base,"Tested using the following commands (inside `scripts` directory) and successfully ran my solution on the *Follow-line* exercise
+```bash
+./build-2.4.sh melodic-radi
+docker run -it --name=container_name -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 1108:1108 jderobot/robotics-academy:melodic-radi ./start.sh
+```
+
+Solves #1045 for RADI 2.4 (master branch)",True,1046,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1046,https://github.com/JdeRobot/RoboticsAcademy/pull/1046,closed,7,3,2,2,0,0,0,0,[],2021-06-22 09:48:34+00:00,2021-06-22 09:58:21+00:00,587.0,0:09:47,[],"[{'commit_sha': '487fc065dce2cab6fa4c286d2729bd3f907cb5f6', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa4d630bcd7ed598ceb1d5375d4643b449c29447', 'committer_username': 'pariaspe', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 30, 10, 14, 24, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+675283165,Updated url and version of VirtualGL in Dockerfile-noetic-3.1,"Steps to test-
+```bash
+./build.sh
+docker run -it --rm -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 1108:1108 jderobot/robotics-academy:3.1 ./start-3.1.sh
+```
+
+Solves #1045 for RADI 3.1 (noetic branch)",True,1047,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1047,https://github.com/JdeRobot/RoboticsAcademy/pull/1047,closed,3,3,1,1,1,0,0,0,[],2021-06-22 10:19:14+00:00,2021-06-22 10:22:46+00:00,212.0,0:03:32,[],"[{'commit_sha': 'ee8fb3f0925890731ac8ee7be9ca8196c05ab880', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+680869690,new RADI-4.0.0 for ROS2,"### Steps to replicate
+Steps to replicate as well as video of expected behavior have been mentioned in [this blog post](https://theroboticsclub.github.io/gsoc2021-Siddharth_Saha/milestones/2021/06/23/week-4#steps-to-replicate)
+
+For reference, the step are as follows
+```sh
+git clone https://github.com/trunc8/RoboticsAcademy.git
+cd RoboticsAcademy/scripts
+git checkout issue-796
+./build.sh
+docker run -it \
+      --rm \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --name foxy_radi_container \
+      -v $PWD/../:/RoboticsAcademy \
+      -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 1108:1108 \
+      foxy-radi ./start.sh
+```
+The steps after merging are mentioned in the [scripts/README.md](https://github.com/trunc8/RoboticsAcademy/blob/issue-796/scripts/README.md#installation)
+
+The [direct method via DockerHub](https://github.com/trunc8/RoboticsAcademy/blob/issue-796/scripts/README.md#direct-method-via-dockerhub) mentioned in the README would be active after it pushed onto RoboticsAcademy's DockerHub account.
+
+Presently, _tb3_teleop_ and _color_filter_ exercises connect successfully.
+
+Solves Issue #796  
+Also solves Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#5",True,1074,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1074,https://github.com/JdeRobot/RoboticsAcademy/pull/1074,closed,2521,5011666,15852,28,0,0,0,0,[],2021-06-30 13:19:11+00:00,2021-07-01 13:44:05+00:00,87894.0,"1 day, 0:24:54",[],"[{'commit_sha': '7290b774063d3afe2786a7a23b831f42d640425e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cdbdb9568184fb25da6c1faba2254019af6a5097', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8fdbbfc137cd04a9a850d667ff19234f6969d78', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e3a84a72c06dce9404a4da6845bddd753e15a4b', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '39b744c55845a61483e37b7987fa26ea6ff1c896', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '598fc614870431729fa4371afbefd3e3ba66a697', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0719a6a06fa2cedb5c3c5092fa85e2b14826e6cb', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2fb4667c1d0079bc89fcd0ca1c086887fff20a8a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cee5b620ca30ed1121f22ef3ef22df8f03c37f3d', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e776290db3ff04a520bba912f75f21ebfd68406', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '073d6be9008e9736c55868f1271e485e57b290a6', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ae5ab9987410d16499739808cebddf9ddc1985e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7098c4910d19b7606464434d2c71ad0e3f44f355', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0003f7896393e5b90c5ab6b51323c483d4a9921e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6b9c8466c6ca2de83854272f9e806ba22139e68', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0a4bc51e22af50ee1bf2260dcdab45e3b531e67e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5c8ad895c4015ed626615ba58fba5e83af68fce', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c160d165080738a42fb5bc3edeee6b4b696d9cc', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82fee1634fa231406f8b76206aad1c0ffe5f5966', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b31e29c4d81e15746c1540572142a9dd6286bb2d', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '250fb67ab46baa31afd0ba044d8c9c06f226c007', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4cae4962f9c7c2faff534fcbff9a354a7723699', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9019b0e4376c061d7716021c03f5b61638cc4120', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e84ec2aa4a360d99de40be7b4b3283df8e263ca6', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '75b18fd675a466871e4ec9b0ab438de85891e024', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '34b6dc8c0e6f445da83bedd03dcb722e7f909f1f', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2590e20cd0e3727fe7a50e34eeafa60b99cf8c2', 'committer_username': 'pariaspe', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 30, 10, 14, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8ad8d18525c47ea0f4c60123328ffac4d89aa7a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+682707815,RViz2 web template for ROS2 RADI,"### Steps to replicate
+Steps to replicate as well as video of expected behavior have been mentioned in [this blog post](https://theroboticsclub.github.io/gsoc2021-Siddharth_Saha/milestones/2021/07/01/week-6)
+
+For reference, the step are as follows
+```sh
+git clone https://github.com/trunc8/RoboticsAcademy.git
+cd RoboticsAcademy/scripts
+git checkout issue-801
+./build.sh
+docker run -it \
+      --rm \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --name foxy_radi_container \
+      -v $PWD/../:/RoboticsAcademy \
+      -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 6081:6081 -p 1108:1108 \
+      foxy-radi ./start.sh
+```
+- Click the Django server URL presented
+- Click the Turtlebot3 Map Building exercise
+- Press connect
+- After successful connection, press the Rviz button followed by the Gazebo button
+- RViz, the Turtlebot3 world and the bot should be visible
+- Press the console button and run `ros2 run turtlebot3_teleop teleop_keyboard` to teleoperate the bot
+
+### Comments
+Introduces a map-building exercise named tb3_nav. This exercise enables us to test the RViz connections.
+
+Solves Issue #801   
+Also solves Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#6",True,1094,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1094,https://github.com/JdeRobot/RoboticsAcademy/pull/1094,closed,689692,134,1926,10,3,0,0,0,[],2021-07-02 15:16:13+00:00,2021-07-07 09:54:32+00:00,412699.0,"4 days, 18:38:19",[],"[{'commit_sha': 'a3c2c7adabc94631129763a44ff5d3f00758e5ac', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a33a2f0e7a16d42cb99104e3caa47e52ef6d959b', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f0d892cf41a019486e9a17c2ee2cffc05c3bd3a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd33e733f76e997e2dc9cb2af4f32318c015999da', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae655d18e23f0c9a37386d0e537d854b36dd5ee5', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b684a205507d07f7d34ecf1a691a396bcf6e63e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '020de9a8474807e49feef11d8c6d766c7deb4f28', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '68a697d468ad63549deeccbbda8c65b2a1166fd1', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa221dead78037661f69ef80c83e097b938eb0bc', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48489eb42c060cd58da8ba1688ebd0ed58bd4491', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+694750047,RADI web template for Amazon warehouse Single Robot exercise,"### Steps to replicate
+Steps to replicate as well as video of expected behavior have been included in [this blog post](https://theroboticsclub.github.io/gsoc2021-Siddharth_Saha/milestones/2021/07/21/week-7-8)
+
+For reference, the steps are as follows
+```sh
+git clone https://github.com/JdeRobot/RoboticsAcademy.git
+cd RoboticsAcademy/scripts
+git checkout issue-1126
+./build.sh
+docker run -it \
+      --rm \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --name foxy_radi_container \
+      -v $PWD/../:/RoboticsAcademy \
+      -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 6081:6081 -p 1108:1108 \
+      foxy-radi ./start.sh
+```
+- Click the Django server URL presented
+- Click the Amazon Warehouse Single Robot exercise
+- Press connect
+- After successful connection, press the Rviz button followed by the Gazebo button
+- Press the startup button in RViz
+- Inside RViz, press the pause button, then again the resume button (bug in the existing amazon warehouse exercise code, will be tackled in a different issue)
+- Give ""2D Pose Estimate"" at the origin in RViz
+- Give ""Goal/Nav"" destination anywhere in the map in RViz
+- You should be able to see the robot navigating to the goal location in RViz as well as Gazebo
+
+### Comments
+Creates web template for amazon warehouse single robot exercise
+
+Solves Issue #1126   
+Also solves Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#8",True,1184,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1184,https://github.com/JdeRobot/RoboticsAcademy/pull/1184,closed,690473,3,1927,4,0,0,0,0,[],2021-07-21 22:31:59+00:00,2021-08-22 07:11:28+00:00,2709569.0,"31 days, 8:39:29",[],"[{'commit_sha': '8aff8e9bb3f7ebc6e494c245f291e14edaa1c0eb', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58e0fb53189ec48e2de5aa04f4fdf9d1cd16ce1d', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b172e11ffeac166faa22c2fa8b6e9ae1c1c9233a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ba5ef5d8ac4e5321e77c10d6fc334bcc707d6dd', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+700911763,Modified the no_roof_small_warehouse.world,"Made the pallets aligned, and increased elevation of lamp and light source in the no_roof_small_warehouse.world
+
+Solves: Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#10",True,1,https://api.github.com/repos/shreyasgokhale/aws-robomaker-small-warehouse-world/pulls/1,https://github.com/shreyasgokhale/aws-robomaker-small-warehouse-world/pull/1,closed,7,7,1,1,0,0,0,0,[],2021-08-01 13:41:58+00:00,2021-08-01 13:46:22+00:00,264.0,0:04:24,[],"[{'commit_sha': '79e036c98676a6219863fb1cac74a108c86662e9', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+700933838,[foxy] Updated git submodule aws-robomaker-small-warehouse-world,Solves: Issues #91 & TheRoboticsClub/gsoc2021-Siddharth_Saha#10,True,92,https://api.github.com/repos/JdeRobot/RoboticsInfrastructure/pulls/92,https://github.com/JdeRobot/RoboticsInfrastructure/pull/92,closed,1,1,1,1,0,0,0,0,[],2021-08-01 15:45:10+00:00,2021-08-01 16:37:38+00:00,3148.0,0:52:28,[],"[{'commit_sha': 'c5a2750860f4f2ff89a9fdc1d2a9863d747805d7', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+700988021,Fixed Behavior Tree in Amazon warehouse package,"The following edits were made:
+
+1. Modified follow_waypoints_and_load.xml BT navigator in amazon_robot_controller.
+2. Added corresponding plugin libraries to nav2_params_with_control.yaml in amazon_robot_bringup
+
+Steps to test: Follow the steps mentioned in Issue #93 
+
+---
+Solves Issues: 
+
+-  #93
+- TheRoboticsClub/gsoc2021-Siddharth_Saha#12
+- TheRoboticsClub/gsoc2021-Siddharth_Saha#13",True,94,https://api.github.com/repos/JdeRobot/RoboticsInfrastructure/pulls/94,https://github.com/JdeRobot/RoboticsInfrastructure/pull/94,closed,4,2,2,1,0,0,0,0,[],2021-08-01 21:28:01+00:00,2021-08-01 21:36:46+00:00,525.0,0:08:45,[],"[{'commit_sha': 'b2b06110aa8cf8460b3f6dff41cd720b85ee8885', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+680869690,new RADI-4.0.0 for ROS2,"### Steps to replicate
+Steps to replicate as well as video of expected behavior have been mentioned in [this blog post](https://theroboticsclub.github.io/gsoc2021-Siddharth_Saha/milestones/2021/06/23/week-4#steps-to-replicate)
+
+For reference, the step are as follows
+```sh
+git clone https://github.com/trunc8/RoboticsAcademy.git
+cd RoboticsAcademy/scripts
+git checkout issue-796
+./build.sh
+docker run -it \
+      --rm \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --name foxy_radi_container \
+      -v $PWD/../:/RoboticsAcademy \
+      -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 1108:1108 \
+      foxy-radi ./start.sh
+```
+The steps after merging are mentioned in the [scripts/README.md](https://github.com/trunc8/RoboticsAcademy/blob/issue-796/scripts/README.md#installation)
+
+The [direct method via DockerHub](https://github.com/trunc8/RoboticsAcademy/blob/issue-796/scripts/README.md#direct-method-via-dockerhub) mentioned in the README would be active after it pushed onto RoboticsAcademy's DockerHub account.
+
+Presently, _tb3_teleop_ and _color_filter_ exercises connect successfully.
+
+Solves Issue #796  
+Also solves Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#5",True,1074,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1074,https://github.com/JdeRobot/RoboticsAcademy/pull/1074,closed,2521,5011666,15852,28,0,0,0,0,[],2021-06-30 13:19:11+00:00,2021-07-01 13:44:05+00:00,87894.0,"1 day, 0:24:54",[],"[{'commit_sha': '7290b774063d3afe2786a7a23b831f42d640425e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cdbdb9568184fb25da6c1faba2254019af6a5097', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8fdbbfc137cd04a9a850d667ff19234f6969d78', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e3a84a72c06dce9404a4da6845bddd753e15a4b', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '39b744c55845a61483e37b7987fa26ea6ff1c896', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '598fc614870431729fa4371afbefd3e3ba66a697', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0719a6a06fa2cedb5c3c5092fa85e2b14826e6cb', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2fb4667c1d0079bc89fcd0ca1c086887fff20a8a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cee5b620ca30ed1121f22ef3ef22df8f03c37f3d', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e776290db3ff04a520bba912f75f21ebfd68406', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '073d6be9008e9736c55868f1271e485e57b290a6', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ae5ab9987410d16499739808cebddf9ddc1985e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7098c4910d19b7606464434d2c71ad0e3f44f355', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0003f7896393e5b90c5ab6b51323c483d4a9921e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6b9c8466c6ca2de83854272f9e806ba22139e68', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0a4bc51e22af50ee1bf2260dcdab45e3b531e67e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5c8ad895c4015ed626615ba58fba5e83af68fce', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c160d165080738a42fb5bc3edeee6b4b696d9cc', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '82fee1634fa231406f8b76206aad1c0ffe5f5966', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b31e29c4d81e15746c1540572142a9dd6286bb2d', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '250fb67ab46baa31afd0ba044d8c9c06f226c007', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4cae4962f9c7c2faff534fcbff9a354a7723699', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9019b0e4376c061d7716021c03f5b61638cc4120', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e84ec2aa4a360d99de40be7b4b3283df8e263ca6', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '75b18fd675a466871e4ec9b0ab438de85891e024', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '34b6dc8c0e6f445da83bedd03dcb722e7f909f1f', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2590e20cd0e3727fe7a50e34eeafa60b99cf8c2', 'committer_username': 'pariaspe', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2018, 1, 30, 10, 14, 24, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8ad8d18525c47ea0f4c60123328ffac4d89aa7a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+682707815,RViz2 web template for ROS2 RADI,"### Steps to replicate
+Steps to replicate as well as video of expected behavior have been mentioned in [this blog post](https://theroboticsclub.github.io/gsoc2021-Siddharth_Saha/milestones/2021/07/01/week-6)
+
+For reference, the step are as follows
+```sh
+git clone https://github.com/trunc8/RoboticsAcademy.git
+cd RoboticsAcademy/scripts
+git checkout issue-801
+./build.sh
+docker run -it \
+      --rm \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --name foxy_radi_container \
+      -v $PWD/../:/RoboticsAcademy \
+      -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 6081:6081 -p 1108:1108 \
+      foxy-radi ./start.sh
+```
+- Click the Django server URL presented
+- Click the Turtlebot3 Map Building exercise
+- Press connect
+- After successful connection, press the Rviz button followed by the Gazebo button
+- RViz, the Turtlebot3 world and the bot should be visible
+- Press the console button and run `ros2 run turtlebot3_teleop teleop_keyboard` to teleoperate the bot
+
+### Comments
+Introduces a map-building exercise named tb3_nav. This exercise enables us to test the RViz connections.
+
+Solves Issue #801   
+Also solves Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#6",True,1094,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1094,https://github.com/JdeRobot/RoboticsAcademy/pull/1094,closed,689692,134,1926,10,3,0,0,0,[],2021-07-02 15:16:13+00:00,2021-07-07 09:54:32+00:00,412699.0,"4 days, 18:38:19",[],"[{'commit_sha': 'a3c2c7adabc94631129763a44ff5d3f00758e5ac', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a33a2f0e7a16d42cb99104e3caa47e52ef6d959b', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f0d892cf41a019486e9a17c2ee2cffc05c3bd3a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd33e733f76e997e2dc9cb2af4f32318c015999da', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ae655d18e23f0c9a37386d0e537d854b36dd5ee5', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b684a205507d07f7d34ecf1a691a396bcf6e63e', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '020de9a8474807e49feef11d8c6d766c7deb4f28', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '68a697d468ad63549deeccbbda8c65b2a1166fd1', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fa221dead78037661f69ef80c83e097b938eb0bc', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '48489eb42c060cd58da8ba1688ebd0ed58bd4491', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+694750047,RADI web template for Amazon warehouse Single Robot exercise,"### Steps to replicate
+Steps to replicate as well as video of expected behavior have been included in [this blog post](https://theroboticsclub.github.io/gsoc2021-Siddharth_Saha/milestones/2021/07/21/week-7-8)
+
+For reference, the steps are as follows
+```sh
+git clone https://github.com/JdeRobot/RoboticsAcademy.git
+cd RoboticsAcademy/scripts
+git checkout issue-1126
+./build.sh
+docker run -it \
+      --rm \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --name foxy_radi_container \
+      -v $PWD/../:/RoboticsAcademy \
+      -p 8000:8000 -p 2303:2303 -p 1905:1905 -p 8765:8765 -p 6080:6080 -p 6081:6081 -p 1108:1108 \
+      foxy-radi ./start.sh
+```
+- Click the Django server URL presented
+- Click the Amazon Warehouse Single Robot exercise
+- Press connect
+- After successful connection, press the Rviz button followed by the Gazebo button
+- Press the startup button in RViz
+- Inside RViz, press the pause button, then again the resume button (bug in the existing amazon warehouse exercise code, will be tackled in a different issue)
+- Give ""2D Pose Estimate"" at the origin in RViz
+- Give ""Goal/Nav"" destination anywhere in the map in RViz
+- You should be able to see the robot navigating to the goal location in RViz as well as Gazebo
+
+### Comments
+Creates web template for amazon warehouse single robot exercise
+
+Solves Issue #1126   
+Also solves Issue TheRoboticsClub/gsoc2021-Siddharth_Saha#8",True,1184,https://api.github.com/repos/JdeRobot/RoboticsAcademy/pulls/1184,https://github.com/JdeRobot/RoboticsAcademy/pull/1184,closed,690473,3,1927,4,0,0,0,0,[],2021-07-21 22:31:59+00:00,2021-08-22 07:11:28+00:00,2709569.0,"31 days, 8:39:29",[],"[{'commit_sha': '8aff8e9bb3f7ebc6e494c245f291e14edaa1c0eb', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58e0fb53189ec48e2de5aa04f4fdf9d1cd16ce1d', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b172e11ffeac166faa22c2fa8b6e9ae1c1c9233a', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ba5ef5d8ac4e5321e77c10d6fc334bcc707d6dd', 'committer_username': 'trunc8', 'committer_name': 'Siddharth Saha', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 10, 12, 22, 6, tzinfo=datetime.timezone.utc)}]",Siddharth Saha,50488330,,User,,66,,68,66
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+368553656,gsoc2021-Siddharth_Saha,TheRoboticsClub/gsoc2021-Siddharth_Saha,Shell,1,5,4,3,148,2,2,0,"[{'id': 653821756, 'number': 3, 'closed': datetime.datetime(2021, 5, 26, 15, 24, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 5, 26, 14, 11, tzinfo=datetime.timezone.utc), 'time_taken': 4428.0, 'time_delta': '1:13:48', 'additions': 1121, 'deletions': 1, 'state': 'closed'}]"
+277535606,RoboticsInfrastructure,JdeRobot/RoboticsInfrastructure,Python,39,33,10,27,576,30,40,4,"[{'id': 982163523, 'number': 170, 'closed': datetime.datetime(2022, 6, 29, 6, 49, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 29, 6, 23, 51, tzinfo=datetime.timezone.utc), 'time_taken': 1539.0, 'time_delta': '0:25:39', 'additions': 6488, 'deletions': 0, 'state': 'closed'}, {'id': 700988021, 'number': 94, 'closed': datetime.datetime(2021, 8, 1, 21, 36, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 1, 21, 28, 1, tzinfo=datetime.timezone.utc), 'time_taken': 525.0, 'time_delta': '0:08:45', 'additions': 4, 'deletions': 2, 'state': 'closed'}, {'id': 700933838, 'number': 92, 'closed': datetime.datetime(2021, 8, 1, 16, 37, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 1, 15, 45, 10, tzinfo=datetime.timezone.utc), 'time_taken': 3148.0, 'time_delta': '0:52:28', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 671962357, 'number': 82, 'closed': datetime.datetime(2021, 6, 17, 15, 11, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 16, 22, 25, 54, tzinfo=datetime.timezone.utc), 'time_taken': 60320.0, 'time_delta': '16:45:20', 'additions': 16, 'deletions': 8, 'state': 'closed'}, {'id': 671933617, 'number': 80, 'closed': datetime.datetime(2021, 6, 18, 8, 30, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 16, 21, 46, 31, tzinfo=datetime.timezone.utc), 'time_taken': 125019.0, 'time_delta': '1 day, 10:43:39', 'additions': 9, 'deletions': 9, 'state': 'closed'}]"
+39567107,RoboticsAcademy,JdeRobot/RoboticsAcademy,Python,221,310,28,92,4136,97,175,45,"[{'id': 742969203, 'number': 1298, 'closed': datetime.datetime(2021, 10, 13, 5, 14, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 26, 23, 33, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1402890.0, 'time_delta': '16 days, 5:41:30', 'additions': 80, 'deletions': 52, 'state': 'closed'}, {'id': 694750047, 'number': 1184, 'closed': datetime.datetime(2021, 8, 22, 7, 11, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 21, 22, 31, 59, tzinfo=datetime.timezone.utc), 'time_taken': 2709569.0, 'time_delta': '31 days, 8:39:29', 'additions': 690473, 'deletions': 3, 'state': 'closed'}, {'id': 682707815, 'number': 1094, 'closed': datetime.datetime(2021, 7, 7, 9, 54, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 2, 15, 16, 13, tzinfo=datetime.timezone.utc), 'time_taken': 412699.0, 'time_delta': '4 days, 18:38:19', 'additions': 689692, 'deletions': 134, 'state': 'closed'}, {'id': 680869690, 'number': 1074, 'closed': datetime.datetime(2021, 7, 1, 13, 44, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 30, 13, 19, 11, tzinfo=datetime.timezone.utc), 'time_taken': 87894.0, 'time_delta': '1 day, 0:24:54', 'additions': 2521, 'deletions': 5011666, 'state': 'closed'}, {'id': 675283165, 'number': 1047, 'closed': datetime.datetime(2021, 6, 22, 10, 22, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 22, 10, 19, 14, tzinfo=datetime.timezone.utc), 'time_taken': 212.0, 'time_delta': '0:03:32', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 675259720, 'number': 1046, 'closed': datetime.datetime(2021, 6, 22, 9, 58, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 22, 9, 48, 34, tzinfo=datetime.timezone.utc), 'time_taken': 587.0, 'time_delta': '0:09:47', 'additions': 7, 'deletions': 3, 'state': 'closed'}, {'id': 612863472, 'number': 844, 'closed': datetime.datetime(2021, 4, 16, 6, 10, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 10, 8, 54, 52, tzinfo=datetime.timezone.utc), 'time_taken': 508563.0, 'time_delta': '5 days, 21:16:03', 'additions': 68, 'deletions': 77, 'state': 'closed'}, {'id': 611571030, 'number': 840, 'closed': datetime.datetime(2021, 4, 9, 17, 0, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 8, 13, 43, 50, tzinfo=datetime.timezone.utc), 'time_taken': 98183.0, 'time_delta': '1 day, 3:16:23', 'additions': 25, 'deletions': 0, 'state': 'closed'}, {'id': 608483162, 'number': 808, 'closed': datetime.datetime(2021, 4, 4, 8, 19, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 4, 4, 4, 6, 16, tzinfo=datetime.timezone.utc), 'time_taken': 15192.0, 'time_delta': '4:13:12', 'additions': 10, 'deletions': 0, 'state': 'closed'}]"
+289492957,aws-robomaker-small-warehouse-world,shreyasgokhale/aws-robomaker-small-warehouse-world,CMake,1,0,1,6,10,0,1,0,"[{'id': 700911763, 'number': 1, 'closed': datetime.datetime(2021, 8, 1, 13, 46, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 1, 13, 41, 58, tzinfo=datetime.timezone.utc), 'time_taken': 264.0, 'time_delta': '0:04:24', 'additions': 7, 'deletions': 7, 'state': 'closed'}]"

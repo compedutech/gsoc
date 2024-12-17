@@ -1,0 +1,789 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+671627616,[Backend] Improved Team Management,"# Description
+
+This PR brings a number of improvements to the Teams System in the backend. The detailed changes are listed below commit-wise -
+
+*Commit 1*
+- Created various access decorators which can be used on routes to restrict who can access it.
+- E.g. Route with @project_owner_only can only be accessed by the creator of a project
+
+*Commit 2*
+- Added access decorators on appropriate routes
+- Removed redundant code on those routes
+
+*Commit 3*
+- Created a route for a member to leave a project
+- Added message for this route in the logs decorator
+
+*Commit 4*
+- Created routes for granting and revoking admin access to users in a project
+- Added messages for both routes in the logs decorator
+
+*Commit 5*
+- Resolved merge conflicts
+
+*Commit 6 & 7*
+- Modified get team by id route to also fetch last 5 logs and details of team members for showing in the TeamDetailsScreen in mobile application
+
+*Commit 8*
+- Created a route to get the roles the current user has in a project 
+- This route will help in restricting access in the Mobile Application, regulating which actions the user can perform based on their roles
+
+Fixes #592 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo Video has been provided below
+
+**Test Configuration**:
+
+- Postman
+- Windows 10
+
+*Granting and revoking admin access*
+
+![make-remove-admin](https://user-images.githubusercontent.com/45410599/122252588-19c56200-cee9-11eb-80ea-bf123bf4578d.gif)
+
+*Leaving a project*
+
+![leave-project](https://user-images.githubusercontent.com/45410599/122252617-2053d980-cee9-11eb-9755-9fd0e3ec8a7c.gif)
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,607,https://api.github.com/repos/scorelab/LabelLab/pulls/607,https://github.com/scorelab/LabelLab/pull/607,closed,550,125,19,7,2,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2021'}]",2021-06-16 15:55:07+00:00,2021-06-20 07:06:35+00:00,313888.0,"3 days, 15:11:28",[],"[{'commit_sha': 'd50c21a6c676f03d4d680d1f98801b3bb6ab4f58', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '29f8c0e6ee0c09a7c2fc9a6f9a6be1be80077d7e', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b000f573d46efa99969914b76159230abcb26a1b', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be09457cfe13199262805619a8966d8e95408484', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8e7ec928882f2ddd9723e6e7b73fba5db044ab3', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b29f32d62d2fc7f52a3b2f7f467d231c60fd353', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '907f5c22aecd03962f7794add636493fb6deea21', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+674185995,[Mobile] Improved Team Management,"# Description
+
+This PR brings improvements in the Teams system in the Mobile Application and also implements the new routes created in #607 
+The detailed changes are listed below, commit-wise.
+
+*Commit 1*
+- Changed Project model and crated Team and TeamMember models.
+- Displayed teams on ProjectDetailsScreen
+
+<img src='https://user-images.githubusercontent.com/45410599/122702581-525c9700-d26d-11eb-8a03-a5b755ab1855.jpg' height='400px' style=""margin-right: 10px;"" />
+
+*Commit 2*
+- Added role based access control in ProjectDetailsScreen
+- E.g only admin or models can add/edit/delete models
+- Given below are 2 screenshots, 1st as admin, 2nd as models
+
+<div style=""flex-direction: row; margin-bottom: 60px;"">
+<img src='https://user-images.githubusercontent.com/45410599/122702918-14ac3e00-d26e-11eb-8185-4adf78d669b8.jpg' height='400px' style=""margin-right: 10px;"" />
+<img src='https://user-images.githubusercontent.com/45410599/122702926-1aa21f00-d26e-11eb-8505-04f279eb2547.jpg' height='400px' />
+</div>
+
+*Commit 3*
+- Implemented the functionality to add teams
+
+https://user-images.githubusercontent.com/45410599/122704275-f72ca380-d270-11eb-8274-992294d80d13.mp4
+
+*Commit 4*
+- Implemented the functionality to add project member
+
+https://user-images.githubusercontent.com/45410599/122704330-20e5ca80-d271-11eb-8ef6-2a84dd38cffb.mp4
+
+*Commit 5*
+- Implemented the functionality to leave a project
+
+https://user-images.githubusercontent.com/45410599/122704397-4541a700-d271-11eb-8bbe-490bfbf92d73.mp4
+
+*Commit 6*
+- Created the TeamDetailsScreen
+
+<img src='https://user-images.githubusercontent.com/45410599/122704002-5ccc6000-d270-11eb-88cc-4d8cfc820c72.jpg' height='400px' style=""margin-right: 10px;"" />
+
+*Commit 7*
+- Added role based access control in TeamDetailsScreen
+- Implemented functionality to view team specific logs from TeamDetailsScreen
+
+<img src='https://user-images.githubusercontent.com/45410599/122705109-b2097100-d272-11eb-8639-c6e7c2094d5e.jpg' height='400px' style=""margin-right: 10px;"" />
+
+*Commit 8*
+- Implemented the functionality to add/remove team members
+
+https://user-images.githubusercontent.com/45410599/122705213-e2e9a600-d272-11eb-843c-ec3dc4fb9c8d.mp4
+
+*Commit 9*
+- Implemented functionality to grant/revoke admin access to a project member
+
+https://user-images.githubusercontent.com/45410599/122705433-5be8fd80-d273-11eb-83a6-e5902d31fc07.mp4
+
+Fixes #592
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Screenshots and videos have been provided above
+
+**Test Configuration**:
+
+- Realme 3 Pro
+- Android 10
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,608,https://api.github.com/repos/scorelab/LabelLab/pulls/608,https://github.com/scorelab/LabelLab/pull/608,closed,1466,192,26,9,0,0,2,0,"[{'name': 'android'}, {'name': 'GSoC 2021'}]",2021-06-21 03:32:08+00:00,2021-06-22 02:24:33+00:00,82345.0,22:52:25,[],"[{'commit_sha': 'b76a57b3cb69d67b077b84f5cd0da7b0781847bd', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4437be7d6560bf162b43f69bcfde77bd43df7d02', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '95de63ca3e6d9ba94d4c556bdcde0f51cf0467be', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b05ec541eefcc83fd53b87f6c7f848ff151d0505', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '56328656de7a421a5e2744fd78f43ec3415dea84', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f535edc37b7aed0095433b1fe88846492ec80977', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6efcaa3d720130edb610ccc6a3bb380c0d20d460', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9a0f6a45cfee66ac32180af8bab9ccda0242e4a0', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '15c2529466bae3b565606f80d326a9143b9cb2be', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+695311255,[Frontend] Improved Team Management,"# Description
+
+This PR includes the frontend implementation for improving team management. The detailed changes are provided below commit-wise.
+
+**Commit 1**
+- Created Team Details Page which can be visited by clicking on a Team in the Project Details Page
+
+![team details](https://user-images.githubusercontent.com/45410599/126672915-8230b3ac-bb45-4619-aab0-db47436bfa06.png)
+
+**Commit 2**
+- Implemented the functionality to delete a team
+
+![delete team](https://user-images.githubusercontent.com/45410599/126672964-7f8b0f63-7ee5-4498-864b-526c45d8707d.gif)
+
+**Commit 3**
+- Implemented the functionality to update a team
+
+![edit team](https://user-images.githubusercontent.com/45410599/126673095-76e6948b-452b-4523-aeaa-c5908511efb0.gif)
+
+**Commit 4**
+- Implemented the functionality to add a team member
+
+![add member](https://user-images.githubusercontent.com/45410599/126673118-2386ef2b-6680-4957-8558-8da86bf11032.gif)
+
+**Commit 5**
+- Implemented the functionality to remove a team member
+
+![remove member](https://user-images.githubusercontent.com/45410599/126673146-0d4de033-774e-4e9f-b4ea-4a1f38e5e583.gif)
+
+**Commit 6**
+- Add minor UI changes in Team Details Page
+
+**Commit 7**
+- Implemented the functionality to leave a project
+
+![leave project](https://user-images.githubusercontent.com/45410599/126673176-64bf8f77-d346-4ef9-90d8-943c1c90e5bf.gif)
+
+**Commit 8**
+- Implemented role-based access control so that specific actions within a project can only be done by members with suitable role
+- E.g models can be added/deleted/edited by members who have 'admin' or 'models' role
+
+![role control](https://user-images.githubusercontent.com/45410599/126673203-32373d68-4b03-423a-a86e-0cbfccfcf467.png)
+
+Fixes #592
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo Video and Screenshots have been provided
+
+**Test Configuration**:
+
+- Google Chrome
+- Windows 10
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,613,https://api.github.com/repos/scorelab/LabelLab/pulls/613,https://github.com/scorelab/LabelLab/pull/613,closed,1145,167,20,8,0,0,2,0,"[{'name': 'web'}, {'name': 'GSoC 2021'}]",2021-07-22 16:04:12+00:00,2021-07-24 03:26:51+00:00,127359.0,"1 day, 11:22:39",[],"[{'commit_sha': '52d4c305fd89dd757535975408612a372b676061', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4caa5c7c68c2652969badf358ca0ec58d5346f90', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7a9728b14105961c08ae6b47d6cc9a7bbace2a7d', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0ff6202464fde6760d83f2f9be8749c9c3a894a9', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc86d8136a9eca7f8305347e1a7224dea4d10866', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ff55fc52c44d3e3c16bc989eb351d8eea613be2', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3be3bccaa5b00bf47b747244095fd21ff85ec380', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '66d1a0fd7c4174e7f991faa18efeefedc62d5715', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+660590070,[Backend] Implemented Project Activity Tracking System,"# Description
+
+This Pull Request contains the backend implementation of the Project Activity Tracking System. The detailed changes are provided below commit-wise.
+
+*Commit 1*
+- Created the db model for a Log
+
+*Commit 2*
+- Created the log decorator
+- Created a log helpers file
+
+*Commit 3*
+- Added the logs decorator on route whose activity needs to be tracked
+- Areas covered - projects, teams, images, labels, mlclassifiers
+
+*Commit 4*
+- Created the logs controller to fetch the logs project-wise, category-wise, user-wise, entity-wise
+- Created additional helper functions
+
+*Commit 5*
+- Modified fetch project by id route to also show the last 5 logs of a project
+- These logs can then be shown as recent activity in project details screen
+
+*Commit 6*
+- Added username field to Log model
+
+Fixes #593 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+# How Has This Been Tested?
+
+Tested using the Postman App
+
+**Test Configuration**:
+
+- Postman
+- Windows 10
+
+https://user-images.githubusercontent.com/45410599/120593439-24014e00-c45d-11eb-9c2c-4c61d31a6ed1.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,604,https://api.github.com/repos/scorelab/LabelLab/pulls/604,https://github.com/scorelab/LabelLab/pull/604,closed,463,2,13,6,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2021'}]",2021-06-03 05:47:09+00:00,2021-06-05 06:37:23+00:00,175814.0,"2 days, 0:50:14",[],"[{'commit_sha': 'd88a3f70574ba3fe4da1d457c57e7c03a6a3c3d2', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2294bfbaeff7267243efa5d89c28a24f31ec707', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e99a65cae21030934d0bc8f06ebc81c943f14e62', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3f8bb4ca9acdca5e57e38cc8a294fb8a3d139541', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1a5e6559359e5aac2b89161a305a94637f2ed30', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd172c6126a357e9864df1de251b8cbf36e42345c', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+666636279,[Mobile] Implemented Project Activity Tracking System,"# Description
+
+This PR implements the Project Activity Tracking System in the Mobile Application, using the backend features implemented in #604 . The detailed changes are listed below commit-wise:
+
+*Commit 1*
+- Created Log model
+- Added recent activtity logs list to Project model
+
+*Commit 2*
+- Created recent activity section in ProjectDetailsScreen which shows last 5 logs of the project
+- Added a 'More' button option which goes to an empty ProjectActivityScreen when clicked
+- Created routing for the ActivityLogsScreen
+
+*Commit 3*
+- Created route for fetching all activity logs of a project
+- Created a ProjectActivityBloc and ProjectActivityState for state management
+- Implemented the functionality to view all activity logs in ProjectActivityScreen
+
+*Commit 4*
+- Added a loading indicator in ProjectActivityScreen
+- Implemented color coding in logs in ProjectActivityScreen
+
+*Commit 5*
+- Created UI for the filters bottom sheet
+- Created a reusable dropdown widget
+
+*Commit 6*
+- Used ProjectDetailBloc in the bottom sheet to get names of all project members for member-specific filtering
+- Replaced text field for member name with dropdown for better experience
+
+*Commit 7*
+- Implemented routes for fetching category-specific and member-specific logs
+- Completed the filtering functionality in ProjectActivityScreen
+
+*Commit 8*
+- Ran into a small issue during development. That in the logs controller in API, we were fetching member specific logs using user_id. But in the ProjectDetailBloc, we only had email of members.
+- So, I modified the API route to fetch member logs using email
+
+*Commit 9*
+- Implemented the functionality to view logs specific to a particular entity (image, model, label etc).
+- Implemented the route to fetch entity specific logs
+- Created a new to route to view ProjectActivityScreen only for entities
+- Added functionality to view these logs for models, images and labels.
+
+*Commit 10*
+- Added a empty placeholder in ProjectActivityScreen to show when there are no logs.
+
+Fixes #593 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo video has been provided below
+
+**Test Configuration**:
+
+- Realme 3 Pro
+- Android 10
+
+https://user-images.githubusercontent.com/45410599/121487751-064d5f00-c9f0-11eb-9c9c-55d2b236db26.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,606,https://api.github.com/repos/scorelab/LabelLab/pulls/606,https://github.com/scorelab/LabelLab/pull/606,closed,816,18,20,10,0,0,2,0,"[{'name': 'android'}, {'name': 'GSoC 2021'}]",2021-06-10 08:12:00+00:00,2021-06-12 05:23:41+00:00,162701.0,"1 day, 21:11:41",[],"[{'commit_sha': '94885e07f679994ee213307bac232244c9a68c0b', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c07427ff580611c57e6b3c7eae3d472de59b2355', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '067c48d93e8b3e63d0302a98ae70f646d2070822', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '475935cc8c60d98cc1fb403b2c51ae533b4f218c', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5c401aef713995a772d5751c44b41dcd350f9ea', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ec8d2cd5ca16a114f671075e714d7447b7afbd60', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e2eb72c8a0bf3cb4a64a71e6f1a6dea18e7e8fa', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a55a262a7ed815fa908d649d56f75fca3829f67a', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f887aab1876f260f7090d97fc17390bb62103c77', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04a849cd306981d46f1143d13645373707cbef65', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+696334711,[Frontend] Implemented Project Activity Tracking,"# Description
+
+This PR implements Project Activity Tracking in the Frontend. The detailed changes can be found below commit-wise.
+
+*Commit 1*
+- Setup new logs section in redux state management
+- Implemented route for fetching project logs
+
+*Commit 2*
+- Created the UI for logs page
+- Completed the functionality to view logs of a project
+
+*Commit 3*
+- Fetching a project's details also provides the last 5 logs of it. Displayed them in the project details screen
+
+*Commit 4*
+- Implemented the functionality to filter logs by category
+
+*Commit 5*
+- Implemented the functionality to filter logs by project member
+
+*Commit 6*
+- Implemented the functionality to view logs of a team only
+
+*Commit 7*
+- Implemented the functionality to view logs of a specific entity
+
+*Commit 8*
+- Minor changes in UI of Project Details Page
+
+*Commit 9*
+- Added empty banner to Logs Page
+
+Fixes #593
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo Video has been provided below
+
+**Test Configuration**:
+
+- Windows 10
+- Google Chrome
+
+![Frontend Project Activity Tracking](https://user-images.githubusercontent.com/45410599/126866771-2584c384-142e-42ff-90f5-ba5f0f39ce0b.gif)
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,614,https://api.github.com/repos/scorelab/LabelLab/pulls/614,https://github.com/scorelab/LabelLab/pull/614,closed,585,27,16,9,0,0,2,0,"[{'name': 'web'}, {'name': 'GSoC 2021'}]",2021-07-24 11:12:22+00:00,2021-07-25 05:17:37+00:00,65115.0,18:05:15,[],"[{'commit_sha': '88cacbddf8cb1ec608a701911d0f30831aedcefb', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf4370c9b84be79ea135c60a627c5955e2aadc51', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '721e8b689902ea96b1c7ea3c8060184d725d4f28', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b4440f9911457eeff45f63f164e2631ba8c74485', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c227c2f7bbef6ef1ba8108f9540fdb4cf410f855', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df836618d1a83bf18a91ba654ff7ca14b73d75ec', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0502b48300437b04b16b7e7fd5e128cfb583497b', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f17f6c95ad9a71ab9cfaf6543335388056bf66c8', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7bcac6cba84f4969db6710b9868bfbafe69c4044', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+678283143,Implemented Team-wise Chat System,"# Description
+
+This PR implemented a team-wise chatsystem in the backend and mobile application. The detailed changes can be found below, listed commit-wise.
+
+*Commit 1*
+- Started work on backend implementation
+- Created Message db model
+
+*Commit 2*
+- Created a separator chatroom controller which has route for fetching messages of a team chatroom
+- Added websocket support and created a 'send_message' event
+- Backend implementation complete
+
+*Commit 3*
+- Mobile implementation started
+- Implemented route for fetching chatroom messages
+
+*Commit 4*
+- Created ChatScreen
+- Added socketio client package for recieving and emitting events
+- Mobile implementation complete
+
+Fixes #609 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Android 10
+- Realme 3 Pro
+- Windows 10
+- Postman
+
+https://user-images.githubusercontent.com/45410599/123503718-478d7200-d672-11eb-8203-ad363a499a8a.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,610,https://api.github.com/repos/scorelab/LabelLab/pulls/610,https://github.com/scorelab/LabelLab/pull/610,closed,585,14,23,4,1,0,3,0,"[{'name': 'android'}, {'name': 'backend'}, {'name': 'GSoC 2021'}]",2021-06-26 06:04:21+00:00,2021-07-05 13:58:18+00:00,806037.0,"9 days, 7:53:57",[],"[{'commit_sha': 'c950b3fcbfa5d2387bdccdac935c4f3229354939', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41cabb1d511d53ee5bdf19b092e291550ad1947a', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98b324e6070136245874ba4d348eb022ed49feca', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '45dc4307e0860a0f3c4dd813a0532ae7f10a4863', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+704816578,[Frontend] Implemented Team-wise Chat System,"# Description
+
+This PR implements team-wise chat functionality in the frontend. The detailed changes are listed below commit-wise.
+
+*Commit 1*
+- Created actions and reducer for fetching all previous chat messages of a team
+
+*Commit 2*
+- Created the UI for Chatroom Page
+
+*Commit 3*
+- Added empty banner to Chatroom Page which will be shown when there are no messages
+
+*Commit 4*
+- Added `socket.io-client` package for connecting to the websocket in the Flask backend.
+- Created redux actions and reducer for handling `send_message` and `receive_message` websocket events.
+
+Fixes #609
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo Video has been provided below
+
+**Test Configuration**:
+
+- Google Chrome
+- Windows
+
+![Chat System](https://user-images.githubusercontent.com/45410599/128378626-0f37d041-9e8f-4d88-84a3-8fc7686ffcf2.gif)
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,615,https://api.github.com/repos/scorelab/LabelLab/pulls/615,https://github.com/scorelab/LabelLab/pull/615,closed,20730,47,10,4,0,0,2,0,"[{'name': 'web'}, {'name': 'GSoC 2021'}]",2021-08-05 15:38:09+00:00,2021-08-06 14:15:08+00:00,81419.0,22:36:59,[],"[{'commit_sha': 'af0715023f4a3f2a26f44fd719870bde5d1f117a', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e6c59eafa276e0cf19a9521b7849ba3eda2c3372', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e81f5c90c87d139d160865fda0ad2b7d1564d54b', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f7ba4f515211b097d90d7fdafdcaf8c6a9dcb7a5', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+658633336,Migrate to Flutter 2.0 and fix Dependency Versions,"# Description
+
+This PR involves migrating the Mobile Application to Flutter 2.0, while fixing dependency versions and bringing Null Safety support. The detailed changes are provided below, commit-wise:
+
+*Commit 1*
+- Upgraded all packages to their null safe versions, if available.
+- Fixed errors caused due to the upgrades.
+
+*Commit 2*
+- Migrated the application to Null Safety using the Migration Tool
+
+*Commit 3*
+- Removed unused imports
+
+*Commit 4*
+- Removed deprecation warnings caused due to the migration
+
+*Commit 5*
+- Due to changes in button styling, the color of buttons had changed to default blue
+- Fixed it by defining a TextButton theme
+
+*Commit 6*
+- The provider package has undergone some changes and now, when we are only using it trigger an action (e.g. button click) , we have explicity write ```listen: false```
+- Made that change throughout the application wherever necessary
+
+*Commit 7*
+- ```page_view_indicator``` package being used by the app doesn't support Null Safety yet. 
+- Replaced it with another compatible package.
+- Changes can be viewed in the GIF provided below.
+
+*Commit 8*
+- ```charts_flutter``` package also doesn't support Null Safety yet.
+- Commented out the parts where it was being used, as it's only being used in a dummy class
+
+*Commit 9*
+- Some provider calls related to the issue in Commit 6 were still remaining, fixed those.
+- Fixed a remaining issue in the TextFormField to support Null Safety
+
+Fixes #596 
+
+## Type of change
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Used and explored the app extensively to make sure that no existing functionality has been broken.
+
+**Test Configuration**:
+
+- Realme 3 Pro
+- Android 10
+
+<img src=""https://user-images.githubusercontent.com/45410599/120264587-b9fd7300-c2bb-11eb-9182-136646e4564e.gif"" height=""700px"" />
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,603,https://api.github.com/repos/scorelab/LabelLab/pulls/603,https://github.com/scorelab/LabelLab/pull/603,closed,1367,1303,119,9,0,0,2,0,"[{'name': 'android'}, {'name': 'GSoC 2021'}]",2021-06-01 04:23:36+00:00,2021-06-01 07:37:26+00:00,11630.0,3:13:50,[],"[{'commit_sha': 'fefe914df942b7a1d7e2b32381e3399989dcbd17', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e0cc4ff554f54b7c977e558a68be4f64e0ce7eb8', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ff363a2d50a29c637ed96eb27f06a6f90bdd5d10', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '956c482706ca73cbaff1c9d88657f96f9a5e169a', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd92e7d489b285cd113aa4f4041f087ca25404b07', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a78627ed1a11035d3de62c9471b4a336b9b08bc4', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '22ed60b42630421dab0d4c6b8450064c8ca47724', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c584da9b1fb72edb75be96d6f72dacd31953bdb0', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a40d679b2e23d05a314cf5b23e453b42f84085ef', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+660952064,Implemented Backend Service Selection functionality in Mobile Application,"# Description
+
+This PR includes the implementation of Backend Service Selection functionality in the Mobile Application. The detailed changes are provided below commit-wise:
+
+*Commit 1*
+- Created the UI for backend selection screen
+- Created the route for backend selection screen
+- Also add option in profile screen to access the backend selection screen
+
+*Commit 2*
+- Created init screen, which will now be the home screen of the application
+- Every time the app start, the init screen will check if there is a url present in the local storage
+- If yes, load main screen like before
+- If no, load backend selection screen
+
+*Commit 3*
+- Implemented the functionality to save url to local storage
+
+*Commit 4*
+- Implemented the functionality to edit the url stored in local storage
+
+*Commit 5*
+- Created a Dio interceptor which will intercept each request, fetch base url from local storage, and then set that url as base url for each request.
+- Deleted ```config_example.dart``` file which was earlier used for storing base url
+
+Fixes #597
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo is provided below
+
+**Test Configuration**:
+
+- Realme 3 Pro
+- Android 10
+
+https://user-images.githubusercontent.com/45410599/120663079-5899f780-c4a7-11eb-8f37-6077996e3eb8.mp4
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,605,https://api.github.com/repos/scorelab/LabelLab/pulls/605,https://github.com/scorelab/LabelLab/pull/605,closed,254,16,11,5,0,0,2,0,"[{'name': 'android'}, {'name': 'GSoC 2021'}]",2021-06-03 14:25:47+00:00,2021-06-03 16:27:53+00:00,7326.0,2:02:06,[],"[{'commit_sha': '6a7267a4a8894f2faf51382d19994ac454ba2060', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '34fe958c511aa570c2b642c3388286bd3bede35c', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '79dfa12168b11606ff9f1e443e272c927d735e7b', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dd4fe4e0ebd478874257833e788852895dec1070', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fd842b5f72cd064b446ce8befcf040631e501f9', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+684188627,Fixed bugs and implemented missed features,"# Description
+
+This PR includes minor changes such as missing tests, bug fixes and adding features that were missed earlier. The details are provided below commit-wise.
+
+*Commit 1*
+- Added test for chatroom messages route
+
+*Commit 2*
+- Earlier one could access the edit backend url screen only when authenticated. Added a link so that it can also be accessed when unauthenticated.
+
+*Commit 3*
+- Made changes so that only admin / user with images role can upload images in a project.
+
+*Commit 4*
+- A bug I found was that if a user held multiple roles inside a project, then in the project list screen. That project will appear multiple times, once for each role. Fixed it to only show each project once.
+
+*Commit 5*
+- Added placeholder for when there are no logs in a project
+
+*Commit 6*
+- Added restriction so that only admins/team members can access Team Details Screen of that particular team
+
+https://user-images.githubusercontent.com/45410599/124572293-2bee4c80-de66-11eb-82a2-fdcfb5f489bc.mp4
+
+*Commit 7*
+- Implemented functionality to update a team
+
+https://user-images.githubusercontent.com/45410599/124572342-3577b480-de66-11eb-8431-696037e96c85.mp4
+
+*Commit 8*
+- Implemented functionality to delete a team
+
+https://user-images.githubusercontent.com/45410599/124572597-62c46280-de66-11eb-8637-346f5d60fd11.mp4
+
+*Commit 9*
+- Added tests for update and delete team
+
+## Type of change
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Demo videos have been provided above
+
+**Test Configuration**:
+
+- Realme 3 Pro
+- Android 10
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,612,https://api.github.com/repos/scorelab/LabelLab/pulls/612,https://github.com/scorelab/LabelLab/pull/612,closed,379,94,12,9,0,0,2,0,"[{'name': 'android'}, {'name': 'GSoC 2021'}]",2021-07-06 09:00:13+00:00,2021-07-13 02:19:55+00:00,580782.0,"6 days, 17:19:42",[],"[{'commit_sha': '1de4262ee43e15041f1898f537301bb9759f6f31', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f404a2c8c6cd73bc747f8fb14390ffe73ab88a7f', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e7f9e5cce69b927e74fcc68b9c6fe39bcc312fe', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '51582aae5d5d959a899128f45ac8642881a86bc7', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f860893617b7ee900002e57e8371f195923257f0', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '26f1272755e731ecbc4d0ed9f9d868aea11eddad', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e375ec7e9eed452403446ea3410a05d8d9824627', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80c5e6c62460c0d4ffd5d6691ab0841f5e3bdb54', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '522338ea0765c6f549afe974d0d9b2f57534bb50', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+683132594,[Mobile] Added tests for all used API Endpoints,"# Description
+
+This PR adds Unit Tests for all the endpoints being used by the Mobile Application. Each commit covers tests for a separate section of the API (profile. project, team etc).
+Also ```build_runner``` package had to be added as a dev dependancy as after null safety, the Mock API class has to be created using it.
+
+Fixes #595
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+![testing](https://user-images.githubusercontent.com/45410599/124377824-b0f12e80-dccb-11eb-8663-c92efff78e47.png)
+
+**Test Configuration**:
+
+- VSCode Testing Extension
+- Windows 10
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,611,https://api.github.com/repos/scorelab/LabelLab/pulls/611,https://github.com/scorelab/LabelLab/pull/611,closed,1055,0,12,8,0,0,2,0,"[{'name': 'android'}, {'name': 'GSoC 2021'}]",2021-07-04 07:59:41+00:00,2021-07-05 13:59:30+00:00,107989.0,"1 day, 5:59:49",[],"[{'commit_sha': '1ac8c048e20af0215d691d63c542d7d4cd6d4f66', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9912462965979f50d39e62b49a1098f06e921a50', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aab4c38f254ad047735caf89e0932b11a9f0ae05', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6c7821256f6b5d4aae33b9b01f8ae11326832925', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3c4601ea7ae76de16d932749069b14ea27c467c0', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e2c32a335149f013bb0bbba4a211436ac45a9dbc', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a64e7ef6ea2757a2fde47ecaf6cdd180fd578358', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '245ac9289df5894e0fd0fd1291b63596b236d0dc', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+710655103,Update Documentation,"# Description
+
+This PR updates the documentation of the project.
+- Most of the documentation has been moved to the [Project Wiki](https://github.com/scorelab/LabelLab/wiki) with the main readme only containing basic information now.
+- Labeller documentation has also been moved to the Wiki, so its corresponding Readme has been removed.
+
+Fixes #594 
+Fixes #598
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [x] This change requires a documentation update
+
+# How Has This Been Tested?
+
+N/A
+
+**Test Configuration**:
+
+N/A
+
+# Checklist:
+
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,616,https://api.github.com/repos/scorelab/LabelLab/pulls/616,https://github.com/scorelab/LabelLab/pull/616,closed,50,324,3,4,0,0,4,0,"[{'name': 'android'}, {'name': 'web'}, {'name': 'backend'}, {'name': 'GSoC 2021'}]",2021-08-12 10:34:17+00:00,2021-08-12 15:53:40+00:00,19163.0,5:19:23,[],"[{'commit_sha': '8664f0117106b26f4b38437e77461d5a3167c693', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '12c25ad45aac4e4c54c5f3284feb7a09e4360aad', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': '75c9e719b54a56f744db40082cae8eb96105cdf0', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef7aabf45c10f90eafe0aa264fc6e98d80607b1d', 'committer_username': 'amlannandy', 'committer_name': 'Amlan Kumar Nandy', 'committer_email': None, 'commit_date': datetime.datetime(2018, 11, 28, 1, 52, 12, tzinfo=datetime.timezone.utc)}]",Amlan Kumar Nandy,45410599,,User,,80,,29,51
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+167497070,LabelLab,scorelab/LabelLab,JavaScript,112,79,22,32,713,21,5,0,"[{'id': 971158372, 'number': 646, 'closed': datetime.datetime(2022, 6, 19, 10, 34, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 18, 2, 0, 8, tzinfo=datetime.timezone.utc), 'time_taken': 117239.0, 'time_delta': '1 day, 8:33:59', 'additions': 2, 'deletions': 3, 'state': 'closed'}, {'id': 710655103, 'number': 616, 'closed': datetime.datetime(2021, 8, 12, 15, 53, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 12, 10, 34, 17, tzinfo=datetime.timezone.utc), 'time_taken': 19163.0, 'time_delta': '5:19:23', 'additions': 50, 'deletions': 324, 'state': 'closed'}, {'id': 704816578, 'number': 615, 'closed': datetime.datetime(2021, 8, 6, 14, 15, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 5, 15, 38, 9, tzinfo=datetime.timezone.utc), 'time_taken': 81419.0, 'time_delta': '22:36:59', 'additions': 20730, 'deletions': 47, 'state': 'closed'}, {'id': 696334711, 'number': 614, 'closed': datetime.datetime(2021, 7, 25, 5, 17, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 24, 11, 12, 22, tzinfo=datetime.timezone.utc), 'time_taken': 65115.0, 'time_delta': '18:05:15', 'additions': 585, 'deletions': 27, 'state': 'closed'}, {'id': 695311255, 'number': 613, 'closed': datetime.datetime(2021, 7, 24, 3, 26, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 22, 16, 4, 12, tzinfo=datetime.timezone.utc), 'time_taken': 127359.0, 'time_delta': '1 day, 11:22:39', 'additions': 1145, 'deletions': 167, 'state': 'closed'}, {'id': 684188627, 'number': 612, 'closed': datetime.datetime(2021, 7, 13, 2, 19, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 6, 9, 0, 13, tzinfo=datetime.timezone.utc), 'time_taken': 580782.0, 'time_delta': '6 days, 17:19:42', 'additions': 379, 'deletions': 94, 'state': 'closed'}, {'id': 683132594, 'number': 611, 'closed': datetime.datetime(2021, 7, 5, 13, 59, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 4, 7, 59, 41, tzinfo=datetime.timezone.utc), 'time_taken': 107989.0, 'time_delta': '1 day, 5:59:49', 'additions': 1055, 'deletions': 0, 'state': 'closed'}, {'id': 678283143, 'number': 610, 'closed': datetime.datetime(2021, 7, 5, 13, 58, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 26, 6, 4, 21, tzinfo=datetime.timezone.utc), 'time_taken': 806037.0, 'time_delta': '9 days, 7:53:57', 'additions': 585, 'deletions': 14, 'state': 'closed'}, {'id': 674185995, 'number': 608, 'closed': datetime.datetime(2021, 6, 22, 2, 24, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 21, 3, 32, 8, tzinfo=datetime.timezone.utc), 'time_taken': 82345.0, 'time_delta': '22:52:25', 'additions': 1466, 'deletions': 192, 'state': 'closed'}, {'id': 671627616, 'number': 607, 'closed': datetime.datetime(2021, 6, 20, 7, 6, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 16, 15, 55, 7, tzinfo=datetime.timezone.utc), 'time_taken': 313888.0, 'time_delta': '3 days, 15:11:28', 'additions': 550, 'deletions': 125, 'state': 'closed'}, {'id': 666636279, 'number': 606, 'closed': datetime.datetime(2021, 6, 12, 5, 23, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 10, 8, 12, tzinfo=datetime.timezone.utc), 'time_taken': 162701.0, 'time_delta': '1 day, 21:11:41', 'additions': 816, 'deletions': 18, 'state': 'closed'}, {'id': 660952064, 'number': 605, 'closed': datetime.datetime(2021, 6, 3, 16, 27, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 3, 14, 25, 47, tzinfo=datetime.timezone.utc), 'time_taken': 7326.0, 'time_delta': '2:02:06', 'additions': 254, 'deletions': 16, 'state': 'closed'}, {'id': 660590070, 'number': 604, 'closed': datetime.datetime(2021, 6, 5, 6, 37, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 3, 5, 47, 9, tzinfo=datetime.timezone.utc), 'time_taken': 175814.0, 'time_delta': '2 days, 0:50:14', 'additions': 463, 'deletions': 2, 'state': 'closed'}, {'id': 658633336, 'number': 603, 'closed': datetime.datetime(2021, 6, 1, 7, 37, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 1, 4, 23, 36, tzinfo=datetime.timezone.utc), 'time_taken': 11630.0, 'time_delta': '3:13:50', 'additions': 1367, 'deletions': 1303, 'state': 'closed'}, {'id': 599549353, 'number': 591, 'closed': datetime.datetime(2021, 4, 6, 5, 6, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 24, 10, 3, 54, tzinfo=datetime.timezone.utc), 'time_taken': 1105330.0, 'time_delta': '12 days, 19:02:10', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 598866346, 'number': 589, 'closed': datetime.datetime(2021, 3, 23, 14, 15, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 23, 13, 39, 16, tzinfo=datetime.timezone.utc), 'time_taken': 2162.0, 'time_delta': '0:36:02', 'additions': 190, 'deletions': 1, 'state': 'closed'}, {'id': 597288755, 'number': 586, 'closed': datetime.datetime(2021, 6, 4, 2, 9, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 20, 14, 11, 36, tzinfo=datetime.timezone.utc), 'time_taken': 6523051.0, 'time_delta': '75 days, 11:57:31', 'additions': 21, 'deletions': 9, 'state': 'closed'}, {'id': 597254094, 'number': 584, 'closed': datetime.datetime(2021, 3, 23, 20, 46, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 20, 10, 9, 48, tzinfo=datetime.timezone.utc), 'time_taken': 297414.0, 'time_delta': '3 days, 10:36:54', 'additions': 10, 'deletions': 1, 'state': 'closed'}, {'id': 596222126, 'number': 582, 'closed': datetime.datetime(2021, 3, 22, 12, 59, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 19, 5, 32, 51, tzinfo=datetime.timezone.utc), 'time_taken': 286010.0, 'time_delta': '3 days, 7:26:50', 'additions': 82, 'deletions': 3, 'state': 'closed'}, {'id': 577085929, 'number': 580, 'closed': datetime.datetime(2021, 3, 20, 5, 52, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 21, 10, 14, 47, tzinfo=datetime.timezone.utc), 'time_taken': 2317046.0, 'time_delta': '26 days, 19:37:26', 'additions': 50, 'deletions': 6, 'state': 'closed'}, {'id': 577048809, 'number': 578, 'closed': datetime.datetime(2021, 3, 20, 5, 49, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 21, 4, 31, 17, tzinfo=datetime.timezone.utc), 'time_taken': 2337480.0, 'time_delta': '27 days, 1:18:00', 'additions': 2, 'deletions': 1, 'state': 'closed'}, {'id': 573376011, 'number': 575, 'closed': datetime.datetime(2021, 3, 20, 5, 47, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 15, 8, 27, 18, tzinfo=datetime.timezone.utc), 'time_taken': 2841607.0, 'time_delta': '32 days, 21:20:07', 'additions': 30, 'deletions': 0, 'state': 'closed'}, {'id': 573120057, 'number': 569, 'closed': datetime.datetime(2021, 2, 14, 20, 28, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 14, 17, 5, 20, tzinfo=datetime.timezone.utc), 'time_taken': 12166.0, 'time_delta': '3:22:46', 'additions': 66, 'deletions': 2, 'state': 'closed'}, {'id': 572944990, 'number': 563, 'closed': datetime.datetime(2021, 6, 4, 2, 9, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 13, 14, 35, 59, tzinfo=datetime.timezone.utc), 'time_taken': 9545582.0, 'time_delta': '110 days, 11:33:02', 'additions': 166, 'deletions': 6, 'state': 'closed'}, {'id': 572900156, 'number': 561, 'closed': datetime.datetime(2021, 2, 13, 9, 32, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 13, 7, 35, 10, tzinfo=datetime.timezone.utc), 'time_taken': 7028.0, 'time_delta': '1:57:08', 'additions': 12, 'deletions': 8, 'state': 'closed'}, {'id': 572565416, 'number': 559, 'closed': datetime.datetime(2021, 2, 14, 20, 30, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 12, 14, 43, 11, tzinfo=datetime.timezone.utc), 'time_taken': 193619.0, 'time_delta': '2 days, 5:46:59', 'additions': 12, 'deletions': 0, 'state': 'closed'}, {'id': 572404283, 'number': 557, 'closed': datetime.datetime(2021, 2, 14, 20, 30, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 12, 9, 58, 53, tzinfo=datetime.timezone.utc), 'time_taken': 210717.0, 'time_delta': '2 days, 10:31:57', 'additions': 35, 'deletions': 26, 'state': 'closed'}, {'id': 570260468, 'number': 555, 'closed': datetime.datetime(2021, 3, 19, 5, 52, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 9, 12, 24, 50, tzinfo=datetime.timezone.utc), 'time_taken': 3259647.0, 'time_delta': '37 days, 17:27:27', 'additions': 27, 'deletions': 10, 'state': 'closed'}, {'id': 568737960, 'number': 553, 'closed': datetime.datetime(2021, 3, 19, 5, 49, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 6, 7, 18, 33, tzinfo=datetime.timezone.utc), 'time_taken': 3537085.0, 'time_delta': '40 days, 22:31:25', 'additions': 3, 'deletions': 3, 'state': 'closed'}, {'id': 568239002, 'number': 551, 'closed': datetime.datetime(2021, 3, 19, 5, 46, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 5, 10, 0, 56, tzinfo=datetime.timezone.utc), 'time_taken': 3613518.0, 'time_delta': '41 days, 19:45:18', 'additions': 163, 'deletions': 1, 'state': 'closed'}, {'id': 567627626, 'number': 546, 'closed': datetime.datetime(2021, 6, 4, 2, 8, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 4, 13, 31, 23, tzinfo=datetime.timezone.utc), 'time_taken': 10327033.0, 'time_delta': '119 days, 12:37:13', 'additions': 182, 'deletions': 66, 'state': 'closed'}, {'id': 567422588, 'number': 544, 'closed': datetime.datetime(2021, 3, 18, 9, 41, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 4, 8, 7, 45, tzinfo=datetime.timezone.utc), 'time_taken': 3634404.0, 'time_delta': '42 days, 1:33:24', 'additions': 28, 'deletions': 17, 'state': 'closed'}, {'id': 566591533, 'number': 540, 'closed': datetime.datetime(2021, 3, 18, 9, 33, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 3, 6, 58, 45, tzinfo=datetime.timezone.utc), 'time_taken': 3724500.0, 'time_delta': '43 days, 2:35:00', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 565764947, 'number': 538, 'closed': datetime.datetime(2021, 3, 18, 9, 19, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 2, 8, 28, 47, tzinfo=datetime.timezone.utc), 'time_taken': 3804668.0, 'time_delta': '44 days, 0:51:08', 'additions': 65, 'deletions': 35, 'state': 'closed'}, {'id': 563232848, 'number': 535, 'closed': datetime.datetime(2021, 2, 4, 14, 57, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 28, 12, 48, 32, tzinfo=datetime.timezone.utc), 'time_taken': 612540.0, 'time_delta': '7 days, 2:09:00', 'additions': 82, 'deletions': 2, 'state': 'closed'}, {'id': 562217108, 'number': 533, 'closed': datetime.datetime(2021, 6, 1, 4, 24, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 27, 4, 18, 42, tzinfo=datetime.timezone.utc), 'time_taken': 10800359.0, 'time_delta': '125 days, 0:05:59', 'additions': 18, 'deletions': 23, 'state': 'closed'}, {'id': 561793711, 'number': 531, 'closed': datetime.datetime(2021, 2, 4, 14, 58, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 26, 13, 47, 16, tzinfo=datetime.timezone.utc), 'time_taken': 781868.0, 'time_delta': '9 days, 1:11:08', 'additions': 111, 'deletions': 62, 'state': 'closed'}, {'id': 560564796, 'number': 529, 'closed': datetime.datetime(2021, 3, 19, 3, 20, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 24, 8, 37, 31, tzinfo=datetime.timezone.utc), 'time_taken': 4646603.0, 'time_delta': '53 days, 18:43:23', 'additions': 11, 'deletions': 8, 'state': 'closed'}, {'id': 558999525, 'number': 527, 'closed': datetime.datetime(2021, 1, 23, 7, 54, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 21, 9, 15, tzinfo=datetime.timezone.utc), 'time_taken': 167941.0, 'time_delta': '1 day, 22:39:01', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 557168756, 'number': 525, 'closed': datetime.datetime(2021, 1, 20, 15, 2, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 1, 19, 5, 4, 55, tzinfo=datetime.timezone.utc), 'time_taken': 122263.0, 'time_delta': '1 day, 9:57:43', 'additions': 35, 'deletions': 35, 'state': 'closed'}]"

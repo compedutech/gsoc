@@ -1,0 +1,64 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1396111383,Make org.apache.pinot.client.BrokerResponse public,"bugfix #10924 
+
+The org.apache.pinot.client.PinotClientTransport class is an interface to implement the client transport for Pinot Java Client connections. Currently, there is a default implementation provided by Pinot Java client which uses AsyncHttpClient.
+
+We want to implement the PinotClientTransport interface to provide a Vert.x adapter for the Pinot Java Client but currently it is not possible because the interface methods return BrokerResponse class which is package-private. Hence, making BrokerResponse public so that the interface can be implemented externally.
+
+cc @tsegismont",True,10932,https://api.github.com/repos/apache/pinot/pulls/10932,https://github.com/apache/pinot/pull/10932,closed,1,1,1,1,1,0,0,0,[],2023-06-16 17:54:23+00:00,2023-06-22 02:39:32+00:00,463509.0,"5 days, 8:45:09",[],"[{'commit_sha': '50e7b91550ee5ec7dec0bf758794cb454da9945a', 'committer_username': 'amCap1712', 'committer_name': 'Kartik Ohri', 'committer_email': 'kartikohri13@gmail.com', 'commit_date': datetime.datetime(2017, 4, 19, 2, 7, 5, tzinfo=datetime.timezone.utc)}]",,97942130,,User,,8,,0,2
+1252149448,Provide results in CompletableFuture for java clients and expose metrics,"`feature` https://github.com/apache/pinot/issues/10325
+`observability` Expose a new method to provide metrics from the transport layer implementation.
+`release-notes` 
+- Signature changes to public methods/interfaces
+* org.apache.pinot.client.Connection executeAsync(..) returns CompletableFuture<ResultSetGroup> instead of Future<ResultSetGroup>
+* org.apache.pinot.client.PreparedStatement executeAsync() returns CompletableFuture<ResultSetGroup> instead of Future<ResultSetGroup>
+* org.apache.pinot.client.Connection now has PinotClientTransport<?> getTransport()
+* org.apache.pinot.client.PinotClientTransport<METRICS> now has METRICS getClientMetrics()
+* java.util.concurrent.CompletionException will wrap any errors as with normal CompletableFuture use instead of ExecutionException as older versions did
+
+> The default implementation JsonAsyncHttpPinotClientTransport returns org.asynchttpclient.ClientStats
+
+Non-Blocking Async Usage:
+```java
+// CompletableFuture<ResultSetGroup> org.apache.pinot.client.Connection.executeAsync(String query)
+pinotConnection.executeAsync(query).thenApply(resultSetGroup -> {
+  // TODO convert org.apache.pinot.client.ResultSetGroup to the desired type and return it
+}).exceptionally(throwable -> {
+  // TODO handle exception and return appropriately populated return type matching thenApply response
+});
+```
+```java
+// This compares to old code that might have looked like
+try {
+  ResultSetGroup resultSetGroup = pinotConnection.executeAsync(query).get();
+  // TODO convert org.apache.pinot.client.ResultSetGroup to the desired type and return it
+} catch(Throwable t) {
+  // TODO handle exception
+}
+```
+",True,10326,https://api.github.com/repos/apache/pinot/pulls/10326,https://github.com/apache/pinot/pull/10326,closed,96,146,9,4,6,5,2,0,"[{'name': 'enhancement'}, {'name': 'release-notes'}]",2023-02-23 19:00:13+00:00,2023-06-27 02:05:50+00:00,10652737.0,"123 days, 7:05:37","[{'comment_id': 1117403802, 'comment_body': 'Better to throw `UnsupportedOperationException` here rather than returning null.', 'comment_created': datetime.datetime(2023, 2, 24, 17, 55, 48, tzinfo=datetime.timezone.utc), 'commenter': 'KKcorps', 'type': 'User'}, {'comment_id': 1117408073, 'comment_body': 'Is this correct exception to throw? Earlier we were throwing `ExecutionException` in this scenario.', 'comment_created': datetime.datetime(2023, 2, 24, 17, 57, 38, tzinfo=datetime.timezone.utc), 'commenter': 'KKcorps', 'type': 'User'}, {'comment_id': 1117618131, 'comment_body': 'Done.', 'comment_created': datetime.datetime(2023, 2, 24, 20, 39, 58, tzinfo=datetime.timezone.utc), 'commenter': 'cgenrich', 'type': 'User'}, {'comment_id': 1117621491, 'comment_body': ""@KKcorps The completable future will wrap exceptions other than CompletionException.\r\n\r\nIn the past there would have been ExecutionException wrapping JsonProcessingException.\r\n\r\nNow, we'll have CompletionException wrapping JsonProcessingException, however if I use CompletionException explicitly, we'll end up with CompletionException wrapping ExecutionException wrapping JsonProcessingException.\r\n\r\nI thought avoiding one level of wrapping would be preferred since there will be a change in the hierarchy regardless.\r\n\r\nPlease advise."", 'comment_created': datetime.datetime(2023, 2, 24, 20, 42, 46, tzinfo=datetime.timezone.utc), 'commenter': 'cgenrich', 'type': 'User'}, {'comment_id': 1117872339, 'comment_body': 'Your thought process is correct but I was thinking from backward compatibility perspective. e.g. Some user/lib was handling ExecutionException but after the upgrade, their handling block never gets triggered.', 'comment_created': datetime.datetime(2023, 2, 25, 5, 55, 59, tzinfo=datetime.timezone.utc), 'commenter': 'KKcorps', 'type': 'User'}]","[{'commit_sha': 'c1ab734457e0aab6c2fa339a3a929ee225a96d63', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '66319469a0a64911aff6e6b4f9312802d84a7200', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '295f57b8294d8c1b2e68612d0e0b02729d0ca1ad', 'committer_username': '', 'committer_name': '', 'committer_email': '', 'commit_date': ''}, {'commit_sha': '39d208122498a35d657223e10819248eed736f26', 'committer_username': 'cgenrich', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2016, 5, 25, 22, 44, 52, tzinfo=datetime.timezone.utc)}]",,19580024,,User,,15,,0,0
+1414366127,Add fromController method that accepts a PinotClientTransport,"`feature` (partially fixes #10924).
+
+`ConnectionFactory` class is used to create instances on pinot client's `Connection` class. There are different methods available depending upon the kind of broker that we want to use. All of these except `fromController` also provide a variant to accept a `PinotClientTransport` from the user.
+
+We are wrapping around the `ConnectionFactory` class in the Vert.x wrapper for pinot client to provide our custom transport. Since the constructors of the `Connection` class are package-private, we cannot directly add this method to an external package. Further, this method seems to be absent from the class only as a mistake (there are methods to specify custom transports with all other brokers).
+
+Hence, adding this method.
+",True,11013,https://api.github.com/repos/apache/pinot/pulls/11013,https://github.com/apache/pinot/pull/11013,closed,17,0,1,1,1,0,1,0,[{'name': 'feature'}],2023-06-30 06:38:45+00:00,2023-06-30 23:02:46+00:00,59041.0,16:24:01,[],"[{'commit_sha': '44f526b7a991f9e3e23a5619a3d00bafeef4c7e5', 'committer_username': 'lucifer4j', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 18, 7, 58, 28, tzinfo=datetime.timezone.utc)}]",,97942130,,User,,8,,0,2
+1414376700,Fix double-checked locking in ConnectionFactory,"`bugfix` `pinot-client`
+
+The `_defaultTransport` in `ConnectionFactory` is created using double-checked locking.
+
+https://github.com/apache/pinot/blob/03b9d4a708e6d09838e902857ebe1f255ced4ba1/pinot-clients/pinot-java-client/src/main/java/org/apache/pinot/client/ConnectionFactory.java#L211-L222
+
+However, the current implementation is buggy as described in https://rules.sonarsource.com/java/RSPEC-2168/. To fix it, make the field `volatile`.
+",True,11014,https://api.github.com/repos/apache/pinot/pulls/11014,https://github.com/apache/pinot/pull/11014,closed,1,1,1,1,3,0,2,0,"[{'name': 'pinot-client'}, {'name': 'bugfix'}]",2023-06-30 06:50:32+00:00,2023-07-08 04:57:40+00:00,684428.0,"7 days, 22:07:08",[],"[{'commit_sha': '60b5381b42b99cd01a598fcc4ba3d114dd8593aa', 'committer_username': 'lucifer4j', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 18, 7, 58, 28, tzinfo=datetime.timezone.utc)}]",,97942130,,User,,8,,0,2
+1455259437,Fix issues with demo setup,"1. There is an incompatible breaking change in one of the dependencies of streamlit. Pin it to avoid import/module errors so that the dashboard can start up.
+2. pinot image doesn't have `nc` command used for the healthchecks so those always failed. Replace those with using wget to query pinot `/health` endpoints.
+3. `depends_on` by default does not wait for the dependencies to be healthy but just to be started. Use `service_healthy` to ensure container is started only after dependencies are ready.
+4. The zookeeper healthcheck using `nc` can be insufficient in some cases. In particular, I noticed hangs with pinot waiting for zookeeper while it  was up but not ready to accept connections. The ruok/imok command is a better test.
+5. When run with the /deployments/run-java.sh script in the ubi-minimal image, the container exits mysteriously without no visible error. I have been unable to debug the cause of it so far but running the jar directly with java seems to work fine. **This is  not the right way to fix it but works for now.**",False,9,https://api.github.com/repos/startreedata/pizza-shop-demo/pulls/9,https://github.com/startreedata/pizza-shop-demo/pull/9,open,38,49,6,3,0,0,0,0,[],2023-07-30 20:24:14+00:00,,0.0,,[],"[{'commit_sha': '3fb37d8a214c2d54c1b63bfc604ca0347249cba2', 'committer_username': 'lucifer4j', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 18, 7, 58, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4ae58318a4e15876e832966094b668f177a1960f', 'committer_username': 'lucifer4j', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 18, 7, 58, 28, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1f7b2891f466bc7b08dc9bf7e642e0a5c13c9f7', 'committer_username': 'lucifer4j', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2022, 1, 18, 7, 58, 28, tzinfo=datetime.timezone.utc)}]",,97942130,,User,,8,,0,2
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+19961085,pinot,apache/pinot,Java,1247,5342,233,372,11987,1578,57,249,"[{'id': 1520136232, 'number': 11614, 'closed': datetime.datetime(2023, 9, 18, 23, 47, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 18, 19, 55, 49, tzinfo=datetime.timezone.utc), 'time_taken': 13918.0, 'time_delta': '3:51:58', 'additions': 0, 'deletions': 178, 'state': 'closed'}, {'id': 1501088777, 'number': 11506, 'closed': datetime.datetime(2023, 9, 5, 13, 21, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 4, 11, 4, 29, tzinfo=datetime.timezone.utc), 'time_taken': 94600.0, 'time_delta': '1 day, 2:16:40', 'additions': 9, 'deletions': 9, 'state': 'closed'}, {'id': 1414376700, 'number': 11014, 'closed': datetime.datetime(2023, 7, 8, 4, 57, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 30, 6, 50, 32, tzinfo=datetime.timezone.utc), 'time_taken': 684428.0, 'time_delta': '7 days, 22:07:08', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1414366127, 'number': 11013, 'closed': datetime.datetime(2023, 6, 30, 23, 2, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 30, 6, 38, 45, tzinfo=datetime.timezone.utc), 'time_taken': 59041.0, 'time_delta': '16:24:01', 'additions': 17, 'deletions': 0, 'state': 'closed'}, {'id': 1396111383, 'number': 10932, 'closed': datetime.datetime(2023, 6, 22, 2, 39, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 16, 17, 54, 23, tzinfo=datetime.timezone.utc), 'time_taken': 463509.0, 'time_delta': '5 days, 8:45:09', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"
+528818815,pizza-shop-demo,startreedata/pizza-shop-demo,Python,14,27,6,5,67,6,7,5,"[{'id': 1455259437, 'number': 9, 'closed': None, 'created': datetime.datetime(2023, 7, 30, 20, 24, 14, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 38, 'deletions': 49, 'state': 'open'}]"

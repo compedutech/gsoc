@@ -1,0 +1,491 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+951859774,backend: Initialize Issues Controller (LabelLab 4),"# Description
+
+Initialize Issues Controller
+Created a Controller to fetch all issue for the project 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+URL and Responses:- 
+ - Create New Issue:- `URL:- BASE_URL +api/v1/issue/create/<int:project_id>`
+     <img src=""https://user-images.githubusercontent.com/56160262/171360008-7c382489-c690-45eb-b50d-4326ab2bce84.png""  width=50% height=50%>
+  - Fetch all Issue in a project :- `URL:- BASE_URL +/api/v1/issue/<int:project_id>`
+     <img src=""https://user-images.githubusercontent.com/56160262/171165035-582c9f1d-914a-45e5-95f4-1bf3c9729b65.png""  width=50% height=50%>
+ - Get Issue by ID:- `URL:- BASE_URL +/api/v1/issue/issue_info/<int:project_id>/<int:issue_id>`
+     <img src=""https://user-images.githubusercontent.com/56160262/171361564-e8cefe52-c2a1-4107-a07e-d35622350a4f.png""  width=50% height=50%>
+ - Update Issue by ID: -`URL:- BASE_URL +/api/v1/issue/issue_info/<int:project_id>/<int:issue_id>`
+    <img src=""https://user-images.githubusercontent.com/56160262/171361829-7932cb7b-a732-452f-b862-e79f1ed20fd0.png""  width=50% height=50%>
+ - Delete issue by ID:- `URL:- BASE_URL +/api/v1/issue/issue_info/<int:project_id>/<int:issue_id>`
+   <img src=""https://user-images.githubusercontent.com/56160262/171362014-58a426b9-46bd-4237-a4d8-620ce4e73869.png""  width=50% height=50%>
+ - Fetch issue by Category :- `URL:- BASE_URL +/api/v1/issue/<int:project_id>/category/<string:category>`
+    <img src=""https://user-images.githubusercontent.com/56160262/171362885-d663672a-0c33-43cf-9901-a7efbba802fd.png""  width=50% height=50%>
+ - Fetch issue by Team :- `URL:- BASE_URL +/api/v1/issue/<int:project_id>/team/<int:team_id>`
+    <img src=""https://user-images.githubusercontent.com/56160262/171388547-adb7f0d9-8943-43f3-b630-3ec5e0388baf.png""  width=50% height=50%>
+
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,638,https://api.github.com/repos/scorelab/LabelLab/pulls/638,https://github.com/scorelab/LabelLab/pull/638,closed,224,3,5,3,0,8,2,1,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-05-31 11:42:12+00:00,2022-06-01 14:24:53+00:00,96161.0,"1 day, 2:42:41","[{'comment_id': 885862498, 'comment_body': 'Should be `/api/v1/issue/get/<int:project_id>`\r\nDo check other controllers and try to maintain consistency.', 'comment_created': datetime.datetime(2022, 5, 31, 16, 32, 26, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 886741826, 'comment_body': 'It should be `/api/v1/issue/<int:project_id>/team/<int:team_id>`. \r\nTeam id is the primary key here, not team.', 'comment_created': datetime.datetime(2022, 6, 1, 12, 24, 13, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 886742139, 'comment_body': 'Change the variable name also to `team_id`', 'comment_created': datetime.datetime(2022, 6, 1, 12, 24, 35, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 886742455, 'comment_body': 'Same change here', 'comment_created': datetime.datetime(2022, 6, 1, 12, 24, 53, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 886744881, 'comment_body': ""Should be `create_issue`. As we're following snake case."", 'comment_created': datetime.datetime(2022, 6, 1, 12, 27, 29, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 886745157, 'comment_body': 'Same change to snake case here', 'comment_created': datetime.datetime(2022, 6, 1, 12, 27, 47, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 886827678, 'comment_body': 'Actucally i took reference from the [`createproject`](https://github.com/scorelab/LabelLab/blob/1958ea79be880dc9d9d3f13cd9f762724677773d/labellab-flask/api/controllers/projectscontroller.py#L689) it was the not in snake case ,I changed that too in my new commit. Please Review the necessary changes', 'comment_created': datetime.datetime(2022, 6, 1, 13, 46, 6, tzinfo=datetime.timezone.utc), 'commenter': 'M-A-D-A-R-A', 'type': 'User'}, {'comment_id': 886870818, 'comment_body': 'Gotcha. Thanks for changing the other one too.', 'comment_created': datetime.datetime(2022, 6, 1, 14, 23, 18, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': '1ce4fe67f86584ab99e679feec4f37fd26aa05b2', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '71eaf8d9a2cc57954db3554d192532d5033aad5b', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '901cdabd892d4c67d4f0e39633d4cc602edc7ede', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+961197542,backend:Initialize Comment Controller (LabelLab17),"# Description
+
+Initialize Comment Controller
+Created a Controller to fetching/Creating all Comments for the project's issues. 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+URL and Responses:- 
+ - Create New Comments:- `URL:- BASE_URL +api/v1/comment/create/<int:issue_id>`
+     <img src=""https://user-images.githubusercontent.com/56160262/172538394-e250f184-086e-4703-87fb-62f8b7d6cbd6.png""  width=50% height=50%>
+  - Fetch all Comments in a issue:- `URL:- BASE_URL +/api/v1/comment/get/<int:issue_id>`
+     <img src=""https://user-images.githubusercontent.com/56160262/172538760-4bf8b19c-dc9f-4e10-ae8f-9640aa9ac6ff.png""  width=50% height=50%>
+ - Get Comment by ID:- `URL:- BASE_URL +/api/v1/comment/comment_info/<int:issue_id>/<int:comment_id>`
+     <img src=""https://user-images.githubusercontent.com/56160262/172538493-cbed1463-986b-47c5-b194-bb6872949393.png""  width=50% height=50%>
+ - Update Comment by ID: -`URL:- BASE_URL +/api/v1/comment/comment_info/<int:issue_id>/<int:comment_id>`
+    <img src=""https://user-images.githubusercontent.com/56160262/172538535-615f0797-2924-4b83-982a-0948b05983b3.png""  width=50% height=50%>
+ - Delete Comment by ID:- `URL:- BASE_URL +/api/v1/comment/comment_info/<int:issue_id>/<int:comment_id>`
+   <img src=""https://user-images.githubusercontent.com/56160262/172538558-70a96609-eaba-44ed-ac59-1a81a5217ccf.png""  width=50% height=50%>
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,640,https://api.github.com/repos/scorelab/LabelLab/pulls/640,https://github.com/scorelab/LabelLab/pull/640,closed,154,1,3,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-08 05:29:44+00:00,2022-06-08 13:44:23+00:00,29679.0,8:14:39,[],"[{'commit_sha': 'f87b44df529aea394fc94d04990c9d142924cd1b', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+965750742,backend:Implement Listing Issues Endpoints (LabelLab 13),"# Description
+Implement Listing Issues Endpoints
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+URL and Responses:- 
+  - Fetch all Issue in a project :- `URL:- BASE_URL +/api/v1/issue/get/<int:project_id>`
+     Example URL: `URL:- BASE_URL +/api/v1/issue/get/1`
+     <img src=""https://user-images.githubusercontent.com/56160262/173087313-299d8954-adfb-449f-94f1-c178a9f28212.png""  width=50% height=50%>
+ - Fetch Issue by Catergory:- `URL:- BASE_URL +/api/v1/issue/<int:project_id>/category/<string:category>`
+    Example URL: `URL:- BASE_URL +/api/v1/issue/1/category/images`
+     <img src=""https://user-images.githubusercontent.com/56160262/173087358-f9f2bac4-5214-4087-9043-97b6b9298e50.png""  width=50% height=50%>
+ - Update Issue by team ID: -`URL:- BASE_URL +/api/v1/issue/<int:project_id>/team/<int:team_id>`
+    Example URL: `URL:- BASE_URL +/api/v1/issue/1/team/1`
+    <img src=""https://user-images.githubusercontent.com/56160262/173088087-7652f4f2-0bfa-4a43-9371-d00b6f1cf2c9.png""  width=50% height=50%>
+ - Fetch issue by Entity Type and ID:- `URL:- BASE_URL +/api/v1/issue/<int:project_id>/entity/<string:entity_type>/<int:entity_id>`
+   Example URL: `URL:- BASE_URL +/api/v1/issue/1/entity/label/1` 
+   <img src=""https://user-images.githubusercontent.com/56160262/173088125-ca198381-99b9-446a-bf2b-3c43298dbe06.png""  width=50% height=50%>
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,644,https://api.github.com/repos/scorelab/LabelLab/pulls/644,https://github.com/scorelab/LabelLab/pull/644,closed,154,16,3,1,0,0,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-13 13:42:14+00:00,2022-06-13 14:11:39+00:00,1765.0,0:29:25,[],"[{'commit_sha': '9ae1d0190eec04c5a1b1e4f312e1eee51738922e', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+969663613,backend: Implement Endpoint for Add Comment (labellab19),"# Description
+Implement Endpoint for Add Comment and added decorator 
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+URL and Responses:- 
+  - Post Comment on an issue:- `URL:- BASE_URL +//api/v1/comment/create/<int:issue_id>`
+     Example URL: `URL:- BASE_URL +/api/v1/comment/create/1`
+
+
+https://user-images.githubusercontent.com/56160262/174245250-de838141-9f76-4fe0-8bab-1a32434b0a3b.mp4
+
+SQL entry:- 
+<img src=""https://user-images.githubusercontent.com/56160262/174245453-87367779-156f-495b-8182-80dd83a27d43.png""  width=100% height=100%>
+
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,645,https://api.github.com/repos/scorelab/LabelLab/pulls/645,https://github.com/scorelab/LabelLab/pull/645,closed,94,13,5,3,0,5,2,0,"[{'name': 'backend'}, {'name': 'GSoC 2022'}]",2022-06-16 18:37:31+00:00,2022-06-18 01:13:25+00:00,110154.0,"1 day, 6:35:54","[{'comment_id': 899722016, 'comment_body': ""Keep `find_by_user_id` out of the try catch block. We're only catching KeyError here so this won't be handled here anyway."", 'comment_created': datetime.datetime(2022, 6, 17, 2, 58, 50, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 899724625, 'comment_body': ""This log is not getting recorded as the `project_id` is not being set here.\r\n\r\n`project_id` is set automatically if the API route contains it. Our create comment API route doesn't have `project_id` in its URL.\r\n\r\nSo, we have to get `project_id` manually here inside this if statement.\r\nSomething like this -\r\n\r\n```\r\nissue_id = kwargs.get('issue_id')\r\n# Fetch issue from id and get project_id from there\r\nissue = find_issue_by_id(issue_idi)\r\nproject_id = issue['project_id']\r\n```"", 'comment_created': datetime.datetime(2022, 6, 17, 3, 6, 16, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 900393974, 'comment_body': 'you missed this change', 'comment_created': datetime.datetime(2022, 6, 17, 17, 54, 20, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 900396245, 'comment_body': ""Doesn't make much sense to show issue id in message. Show the project title instead of it"", 'comment_created': datetime.datetime(2022, 6, 17, 17, 57, 45, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 900636972, 'comment_body': 'Ah shit I meant issue title. Will fix this one myself.', 'comment_created': datetime.datetime(2022, 6, 18, 1, 13, 3, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': 'd2af82f44bd4893997fdacc22fff5fcf6ed48c72', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0f37aadef75d499fb58bbb479e7a264fbdd108ca', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2d27fc5f93ef9b54cc747a18b7de2af9aa2f6ba8', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+971459504,Backend: Implement Endpoint for listing all comments in an issue,"# Description
+Implement Endpoint for listing all comments in an issue
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+URL and Responses:- 
+  - Post Comment on an issue:- `URL:- BASE_URL +/api/v1/comment/get/<int:issue_id>`
+     Example URL: `URL:- BASE_URL +/api/v1/comment/get/1`
+<img src=""https://user-images.githubusercontent.com/56160262/174477723-c3ace40d-8695-49c1-a1f8-814b7de02675.png""  width=100% height=100%>
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,648,https://api.github.com/repos/scorelab/LabelLab/pulls/648,https://github.com/scorelab/LabelLab/pull/648,closed,19,3,2,2,0,1,0,0,[],2022-06-19 11:02:06+00:00,2022-06-21 06:41:00+00:00,157134.0,"1 day, 19:38:54","[{'comment_id': 901823490, 'comment_body': 'Why is there so much space after the assignment operator? Fix it please', 'comment_created': datetime.datetime(2022, 6, 20, 16, 3, 12, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': 'ca88b775295a8c5406e1333d605451946f114ef6', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23c1acd0b257fb2d3222ad0618da68f64ac31662', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+992399858,Mobile Implementation:  Implement the screens for displaying all issues,"# Description
+Implemented issues listing screen within the project. (Mobile Frontend)
+(Work in Progress)
+
+
+https://user-images.githubusercontent.com/56160262/178544261-9632e619-911c-4431-af84-bea17d396452.mp4
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [x] Breaking change (fix or feature that would cause existing functionality not to work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+
+- [ ] Test A
+- [ ] Test B
+
+
+*Test Configuration*:
+
+- Firmware version: Windows
+- Hardware: SM M426B
+- SDK: Flutter SDK (v 3.0.2)
+
+Also, include screenshots of the app for verification and reviewing purposes.
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented on my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules",True,658,https://api.github.com/repos/scorelab/LabelLab/pulls/658,https://github.com/scorelab/LabelLab/pull/658,closed,1086,8,16,10,5,2,0,0,[],2022-07-10 11:00:53+00:00,2022-07-13 17:29:09+00:00,282496.0,"3 days, 6:28:16",[],"[{'commit_sha': 'bcfa8d00ad8985f956fc141128b3f11422f50761', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dfedc81bb2ed6c84622dcb8166ee62bfffbacc90', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce0a84b9e2eea8e1c85bdd429b496b5922e1785c', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '13c4394a295dbb5424edf327f88a3466bf163409', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc14adef92e7a0e92f1294f4d9220f7a34dd04b0', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dca61d4d6991684659494c225e7ba84a940613b', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cd18f94ff811468be0c3b2fc536d493207ea8222', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7083c3b6b5bf3681071e7ae8b30ef623cb9a702a', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09051bfe08fd83c1db51e43f5ae41468e9454e9b', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b755de954957cc3a52398c854943819e32d36b38', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+1025809143,Mobile Implementation: Issue List TIle UI,"# Description
+Issue List TIle UI
+
+https://user-images.githubusercontent.com/56160262/184696588-89c68a18-f316-46e2-bc83-2922d49c105c.mp4
+
+
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [x] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+*Test Configuration*:
+
+- Firmware version: Windows
+- Hardware: SM M426B
+- SDK: Flutter SDK (v 3.0.2)
+
+Also, include screenshots of the app for verification and reviewing purposes.
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented on my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules",True,666,https://api.github.com/repos/scorelab/LabelLab/pulls/666,https://github.com/scorelab/LabelLab/pull/666,closed,159,187,7,2,1,5,0,0,[],2022-08-14 13:41:52+00:00,2022-08-16 04:05:08+00:00,138196.0,"1 day, 14:23:16","[{'comment_id': 945547408, 'comment_body': 'Remove the blank line on 193', 'comment_created': datetime.datetime(2022, 8, 15, 9, 4, 35, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 945548197, 'comment_body': 'Variable name should be `priority` or something similar. `category` does not make sense here.', 'comment_created': datetime.datetime(2022, 8, 15, 9, 5, 53, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 945548560, 'comment_body': 'Remove the comment', 'comment_created': datetime.datetime(2022, 8, 15, 9, 6, 26, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}, {'comment_id': 945573140, 'comment_body': ""If it's a priority specific function, name the variable `priority` otherwise something generic like `type`."", 'comment_created': datetime.datetime(2022, 8, 15, 9, 44, 33, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': 'c74c188aa1d30107d582cf4853831d717c8b7f35', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed35cafc8ae54c8561253d207b3881359073bc58', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+1039917150,Mobile Implementation: Issue detail screen and Comment Feature,"# Description
+ - Filtering the issue by selected category
+ - Created Bloc for updating and deleting the issue 
+ - Issue Detail UI (create an issue. delete issue)
+ - Comment Feature (Post,update,delete comment)
+
+https://user-images.githubusercontent.com/56160262/185641634-175bdd13-8eb2-4410-bd96-79139d95fd85.mp4
+
+
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [x] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+*Test Configuration*:
+
+- Firmware version: Windows
+- Hardware: SM M426B
+- SDK: Flutter SDK (v 3.0.2)
+
+Also, include screenshots of the app for verification and reviewing purposes.
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented on my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules",True,669,https://api.github.com/repos/scorelab/LabelLab/pulls/669,https://github.com/scorelab/LabelLab/pull/669,closed,1590,213,25,12,2,0,0,0,[],2022-08-29 16:13:56+00:00,2022-08-30 12:02:38+00:00,71322.0,19:48:42,[],"[{'commit_sha': 'ce940f5411269ab7895f447a77188d2b93e84baa', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2c7407d47c5ac8e278d29f24a5bb581e67337be', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '85dd459fa2f1c571e03f9a0b24d8db82d4169bbd', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f867096a4a52625690803f11a3e35aa486e8ed21', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a52bb9747825211e90e6fb8e96def277e3094b0', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f59d228381b13fc1a266917139f54b6eb8ff913', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e142effd04c2b31c5a3f25965a425d79f1b73d78', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6203078a883ea87c8de969f17991683745a5e5cc', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9e6730f75661620faeb3f41c0eb4294d6db82e20', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e32c0683af87208e8e520c8700f71f04bae6d84a', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c547fab689f1feaa5c70f0cb30b9480494309e4a', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '05d2a4ae264e0d6ce3c7ae1744ccf296f2b5e36d', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+981394504,Flutter CI workflow,"# Description
+
+Added WorkFlow for making PRs better and in Flutter to and validated on a frequent basis without resorting to manual review.
+
+Fixes #627 
+
+## Further Changes in future
+Right Now I setup Basic workflow in future we can work on these issue too
+- [x] Basic formatting issues
+- [ ] Build and Release APK
+- [ ] Test Coverage
+- [ ] Jobs on Multiple Platforms
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [x] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+I tried pushing on my forked repo and the workflow was working,
+![image](https://user-images.githubusercontent.com/56160262/176177064-599f978a-1fb8-4caf-9cb6-26c9191a4391.png)
+
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,653,https://api.github.com/repos/scorelab/LabelLab/pulls/653,https://github.com/scorelab/LabelLab/pull/653,closed,36,0,1,1,0,0,0,0,[],2022-06-28 13:14:57+00:00,2022-06-28 16:18:54+00:00,11037.0,3:03:57,[],"[{'commit_sha': '147d54fddc427289ef10fb3ccd10c194e21930d7', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+977045252,flutter version upgrade to 3.0,"# Description
+
+Upgrading flutter version to 3.0
+
+Fixes #628 
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [x] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+**Test Configuration**:
+
+- Firmware version: Flutter 3.0.2 • channel stable 
+- Hardware:SM M426B
+
+After making the Required changes, The app is working as it was in flutter 2.8
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,649,https://api.github.com/repos/scorelab/LabelLab/pulls/649,https://github.com/scorelab/LabelLab/pull/649,closed,15,15,5,1,3,0,0,0,[],2022-06-23 11:52:38+00:00,2022-06-24 14:36:44+00:00,96246.0,"1 day, 2:44:06",[],"[{'commit_sha': 'ac3b44db3e7f584652ca7e0acadef2c010b47baf', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+982655568,Restoring the App Theme ,"# Description
+After Upgrading the mobile application to version 3.0, there were some theme changes we noticed, this PR is to Restore those changes.
+
+##Video Recording(after upgrading to v3.0)
+
+https://user-images.githubusercontent.com/56160262/176645771-286b6535-b4ec-433d-a8bd-13eac86f5622.mp4
+
+
+##Video Recording(after making changes in v3.0)
+
+https://user-images.githubusercontent.com/56160262/176745250-894b11c0-354f-4946-a4a9-a6706c2e967f.mp4
+
+
+## Type of change
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+
+**Test Configuration**:
+
+- Firmware version: Windows
+- Hardware: SM M426B
+- SDK: Flutter SDK (v 3.0.2)
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
+",True,655,https://api.github.com/repos/scorelab/LabelLab/pulls/655,https://github.com/scorelab/LabelLab/pull/655,closed,45,13,13,4,4,0,0,0,[],2022-06-29 14:08:54+00:00,2022-07-01 13:35:10+00:00,170776.0,"1 day, 23:26:16",[],"[{'commit_sha': '161a5abbc081d33bd126a2b66942e6f6b3e27ace', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '323fd244844e39ffbc2df3f4fe67ef0a7b2f781b', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a6855ff02e43ebf517bec519c417a1b96fe71452', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '222489b758fdd37f41264360d5355a6663ba0710', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+1045728140,Tag user in comments,"# Description
+Tag user functionality in the message input field
+
+
+https://user-images.githubusercontent.com/56160262/188942821-35363c8d-99cf-41f4-b23a-438019563b2f.mp4
+
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [x] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+Test Configuration:
+
+- Firmware version: Windows
+- Hardware: SM M426B
+- SDK: Flutter SDK (v 3.0.2)
+
+Also, include screenshots of the app for verification and reviewing purposes.
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented on my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules",True,672,https://api.github.com/repos/scorelab/LabelLab/pulls/672,https://github.com/scorelab/LabelLab/pull/672,closed,159,69,4,4,6,1,0,0,[],2022-09-04 15:15:24+00:00,2022-09-08 09:15:50+00:00,324026.0,"3 days, 18:00:26","[{'comment_id': 962449564, 'comment_body': 'Remove the commented line', 'comment_created': datetime.datetime(2022, 9, 5, 3, 31, 43, tzinfo=datetime.timezone.utc), 'commenter': 'amlannandy', 'type': 'User'}]","[{'commit_sha': '576c82b71743473d1161916b4fd81c86919ba6c5', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b9eca55f76fc05dc971c38acf83796ca45558526', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63c3ffd73de7f8ba410109e74774653cdceabb2d', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5078efd863106bbcd18ebbd2156b3e5891bbe93', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+1042573858,API Test For Mobile ,"# Description
+
+This PR adds Unit Tests for issues and Comments the endpoints being used by the Mobile Application.
+
+![image](https://user-images.githubusercontent.com/56160262/187723565-0799e5af-68ce-4b3c-9f07-a996186208b3.png)
+
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+
+
+**Test Configuration**:
+
+- VSCode Testing Extension
+- Windows 10
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,670,https://api.github.com/repos/scorelab/LabelLab/pulls/670,https://github.com/scorelab/LabelLab/pull/670,closed,425,205,3,2,1,0,0,0,[],2022-08-31 15:55:15+00:00,2022-09-01 13:05:29+00:00,76214.0,21:10:14,[],"[{'commit_sha': '347f9d0d7b139ca9a12d6ad6b3e0e396fec6e91c', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3cff6954bc592710fcd4b8dbf788bfaf1c3529a', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+1045847613,widget test for Create issue screen,"# Description
+
+This PR adds Widget Tests for creating issues Application.
+
+
+## Type of change
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# How Has This Been Tested?
+
+
+
+**Test Configuration**:
+
+- VSCode Testing Extension
+- Windows 10
+
+# Checklist:
+
+- [x] My code follows the style guidelines of this project
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] My changes generate no new warnings
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests pass locally with my changes
+- [x] Any dependent changes have been merged and published in downstream modules
+",True,674,https://api.github.com/repos/scorelab/LabelLab/pulls/674,https://github.com/scorelab/LabelLab/pull/674,closed,63,5,2,1,0,0,0,0,[],2022-09-05 01:54:09+00:00,2022-09-05 03:30:18+00:00,5769.0,1:36:09,[],"[{'commit_sha': 'ab1d56b840d3bc37cf027c8618639f44cc602e39', 'committer_username': 'M-A-D-A-R-A', 'committer_name': 'Nishant Andoriya', 'committer_email': None, 'commit_date': datetime.datetime(2019, 10, 4, 12, 31, 22, tzinfo=datetime.timezone.utc)}]",Nishant Andoriya,56160262,,User,,47,,49,65
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+167497070,LabelLab,scorelab/LabelLab,JavaScript,112,79,22,32,713,21,5,0,"[{'id': 1045847613, 'number': 674, 'closed': datetime.datetime(2022, 9, 5, 3, 30, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 5, 1, 54, 9, tzinfo=datetime.timezone.utc), 'time_taken': 5769.0, 'time_delta': '1:36:09', 'additions': 63, 'deletions': 5, 'state': 'closed'}, {'id': 1045728140, 'number': 672, 'closed': datetime.datetime(2022, 9, 8, 9, 15, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 4, 15, 15, 24, tzinfo=datetime.timezone.utc), 'time_taken': 324026.0, 'time_delta': '3 days, 18:00:26', 'additions': 159, 'deletions': 69, 'state': 'closed'}, {'id': 1042573858, 'number': 670, 'closed': datetime.datetime(2022, 9, 1, 13, 5, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 31, 15, 55, 15, tzinfo=datetime.timezone.utc), 'time_taken': 76214.0, 'time_delta': '21:10:14', 'additions': 425, 'deletions': 205, 'state': 'closed'}, {'id': 1039917150, 'number': 669, 'closed': datetime.datetime(2022, 8, 30, 12, 2, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 29, 16, 13, 56, tzinfo=datetime.timezone.utc), 'time_taken': 71322.0, 'time_delta': '19:48:42', 'additions': 1590, 'deletions': 213, 'state': 'closed'}, {'id': 1025809143, 'number': 666, 'closed': datetime.datetime(2022, 8, 16, 4, 5, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 14, 13, 41, 52, tzinfo=datetime.timezone.utc), 'time_taken': 138196.0, 'time_delta': '1 day, 14:23:16', 'additions': 159, 'deletions': 187, 'state': 'closed'}, {'id': 999374149, 'number': 661, 'closed': datetime.datetime(2022, 8, 30, 12, 2, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 18, 13, 8, 10, tzinfo=datetime.timezone.utc), 'time_taken': 3711287.0, 'time_delta': '42 days, 22:54:47', 'additions': 1601, 'deletions': 218, 'state': 'closed'}, {'id': 992399858, 'number': 658, 'closed': datetime.datetime(2022, 7, 13, 17, 29, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 10, 11, 0, 53, tzinfo=datetime.timezone.utc), 'time_taken': 282496.0, 'time_delta': '3 days, 6:28:16', 'additions': 1086, 'deletions': 8, 'state': 'closed'}, {'id': 982655568, 'number': 655, 'closed': datetime.datetime(2022, 7, 1, 13, 35, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 29, 14, 8, 54, tzinfo=datetime.timezone.utc), 'time_taken': 170776.0, 'time_delta': '1 day, 23:26:16', 'additions': 45, 'deletions': 13, 'state': 'closed'}, {'id': 981394504, 'number': 653, 'closed': datetime.datetime(2022, 6, 28, 16, 18, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 28, 13, 14, 57, tzinfo=datetime.timezone.utc), 'time_taken': 11037.0, 'time_delta': '3:03:57', 'additions': 36, 'deletions': 0, 'state': 'closed'}, {'id': 981336454, 'number': 652, 'closed': datetime.datetime(2022, 6, 28, 13, 14, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 28, 12, 24, 38, tzinfo=datetime.timezone.utc), 'time_taken': 2963.0, 'time_delta': '0:49:23', 'additions': 37, 'deletions': 0, 'state': 'closed'}, {'id': 977045252, 'number': 649, 'closed': datetime.datetime(2022, 6, 24, 14, 36, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 23, 11, 52, 38, tzinfo=datetime.timezone.utc), 'time_taken': 96246.0, 'time_delta': '1 day, 2:44:06', 'additions': 15, 'deletions': 15, 'state': 'closed'}, {'id': 971459504, 'number': 648, 'closed': datetime.datetime(2022, 6, 21, 6, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 19, 11, 2, 6, tzinfo=datetime.timezone.utc), 'time_taken': 157134.0, 'time_delta': '1 day, 19:38:54', 'additions': 19, 'deletions': 3, 'state': 'closed'}, {'id': 969663613, 'number': 645, 'closed': datetime.datetime(2022, 6, 18, 1, 13, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 16, 18, 37, 31, tzinfo=datetime.timezone.utc), 'time_taken': 110154.0, 'time_delta': '1 day, 6:35:54', 'additions': 94, 'deletions': 13, 'state': 'closed'}, {'id': 965750742, 'number': 644, 'closed': datetime.datetime(2022, 6, 13, 14, 11, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 13, 13, 42, 14, tzinfo=datetime.timezone.utc), 'time_taken': 1765.0, 'time_delta': '0:29:25', 'additions': 154, 'deletions': 16, 'state': 'closed'}, {'id': 964213527, 'number': 642, 'closed': datetime.datetime(2022, 6, 13, 13, 1, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 10, 14, 32, 48, tzinfo=datetime.timezone.utc), 'time_taken': 253744.0, 'time_delta': '2 days, 22:29:04', 'additions': 156, 'deletions': 16, 'state': 'closed'}, {'id': 961197542, 'number': 640, 'closed': datetime.datetime(2022, 6, 8, 13, 44, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 8, 5, 29, 44, tzinfo=datetime.timezone.utc), 'time_taken': 29679.0, 'time_delta': '8:14:39', 'additions': 154, 'deletions': 1, 'state': 'closed'}, {'id': 951859774, 'number': 638, 'closed': datetime.datetime(2022, 6, 1, 14, 24, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 5, 31, 11, 42, 12, tzinfo=datetime.timezone.utc), 'time_taken': 96161.0, 'time_delta': '1 day, 2:42:41', 'additions': 224, 'deletions': 3, 'state': 'closed'}, {'id': 880928114, 'number': 630, 'closed': datetime.datetime(2022, 3, 16, 4, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 16, 4, 29, 20, tzinfo=datetime.timezone.utc), 'time_taken': 1780.0, 'time_delta': '0:29:40', 'additions': 5, 'deletions': 1, 'state': 'closed'}, {'id': 876635550, 'number': 621, 'closed': datetime.datetime(2022, 3, 12, 15, 41, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 10, 17, 0, 42, tzinfo=datetime.timezone.utc), 'time_taken': 168060.0, 'time_delta': '1 day, 22:41:00', 'additions': 1, 'deletions': 1, 'state': 'closed'}]"

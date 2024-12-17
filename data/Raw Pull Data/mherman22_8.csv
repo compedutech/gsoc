@@ -1,0 +1,1675 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1442901577,FM2-582: Add Support for Patching on Immunization Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensures support of patch operations on the Immunization resource
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-582
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,513,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/513,https://github.com/openmrs/openmrs-module-fhir2/pull/513,closed,149,32,7,2,3,2,0,0,[],2023-07-20 13:37:23+00:00,2023-07-28 17:03:38+00:00,703575.0,"8 days, 3:26:15","[{'comment_id': 1270925670, 'comment_body': '@Getter(AccessLevel.Protected)', 'comment_created': datetime.datetime(2023, 7, 21, 17, 38, 17, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1271296186, 'comment_body': 'removed the `update` aswell as `patch` since on addition of `applyUpdate`() override here, the rest of the stuff is duplication which can be minimized.\r\n\r\ni.e\r\n```\r\n\t@Override\r\n\tprotected Immunization applyUpdate(Obs existingObject, Immunization updatedResource) {\r\n\t\tOpenmrsFhirTranslator<Obs, Immunization> translator = getTranslator();\r\n\t\t\r\n\t\torg.openmrs.Obs updatedObject;\r\n\t\tif (translator instanceof OpenmrsFhirUpdatableTranslator) {\r\n\t\t\tUpdatableOpenmrsTranslator<org.openmrs.Obs, Immunization> updatableOpenmrsTranslator = (OpenmrsFhirUpdatableTranslator<org.openmrs.Obs, Immunization>) translator;\r\n\t\t\tupdatedObject = updatableOpenmrsTranslator.toOpenmrsType(existingObject, updatedResource);\r\n\t\t} else {\r\n\t\t\tupdatedObject = translator.toOpenmrsType(updatedResource);\r\n\t\t}\r\n\t\t\r\n\t\tvalidateObject(updatedObject);\r\n\t\t\r\n\t\treturn translator.toFhirResource(Context.getObsService().saveObs(updatedObject, ""Updated via the FHIR2 API""));\r\n\t}\r\n```\r\n\r\n', 'comment_created': datetime.datetime(2023, 7, 22, 13, 24, 57, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '0801084c04c4b103914d84a2f21093f4f7bce77e', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '437e86371b108adffe2cbcdceca538b415918a7f', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1431086845,FM2-603: Add Support for UPDATE on the Observation Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+- In the first commit, i am ensuring the Observation resource supports UPDATE(PUT) which is solves the issue at https://issues.openmrs.org/browse/FM2-603
+- In the second commit, i am ensuring the Observation resource supports PATCH operations which solves the issue at https://issues.openmrs.org/browse/FM2-578
+
+## Short demo showing PATCHing on Observation
+[Screencast from 18-07-23 10:23:34.webm](https://github.com/openmrs/openmrs-module-fhir2/assets/47120265/95afb4dc-00d3-47e0-95a1-85fbb626eca7)
+
+
+
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-603
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,509,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/509,https://github.com/openmrs/openmrs-module-fhir2/pull/509,closed,391,0,9,4,1,6,0,0,[],2023-07-12 11:18:48+00:00,2023-07-24 18:52:33+00:00,1064025.0,"12 days, 7:33:45","[{'comment_id': 1270918789, 'comment_body': '```suggestion\r\n\t@Getter(AccessLevel.Protected)\r\n\tprivate FhirContext fhirContext;\r\n```\r\n\r\nThen in a subclass, call `getFhirContext()`.', 'comment_created': datetime.datetime(2023, 7, 21, 17, 29, 30, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1270921327, 'comment_body': 'Do we need this and `patch()`?', 'comment_created': datetime.datetime(2023, 7, 21, 17, 32, 37, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1270922426, 'comment_body': ""1. This should go after all the update methods\r\n2. Ideally we'd have one for each type of patch, since that should already be supported."", 'comment_created': datetime.datetime(2023, 7, 21, 17, 34, 1, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1271457730, 'comment_body': ""i didn't actually need this change after removing the update() and patch() from `observationServiceImpl`"", 'comment_created': datetime.datetime(2023, 7, 23, 14, 30, 24, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1271457747, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 7, 23, 14, 30, 33, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1271457762, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 7, 23, 14, 30, 42, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '5a00f88f97d763f74a24172d94c5114fc1a6e398', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '445ebfd220da968e9d86ebbe24444f3f1256ed5a', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e3bcdc35cba7f28a03f22e5fc763c91c1091a8bd', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf6e2cabdcf2a66fb2026d3fd1a0116cca3369aa', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1430213515,FM2-592: Add support for XML PATCH operation - Location Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations on the Location Resource.
+
+For example the following xml doc should be supported:
+```
+<?xml version=""1.0"" encoding=""UTF-8"" ?>
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public License,
+    v. 2.0. If a copy of the MPL was not distributed with this file, You can
+    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+    graphic logo is a trademark of OpenMRS Inc.
+-->
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+	<replace sel=""/fhir:Location/fhir:name/@value"">Patched Location</replace>
+	<replace sel=""/fhir:Location/fhir:address"">
+		<address>
+			<city value=""Wakiso""/>
+			<country value=""Uganda""/>
+			<postalCode value=""0000 WK""/>
+			<state value=""Central Region""/>
+		</address>
+	</replace>
+</diff>
+```
+
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-592
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,507,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/507,https://github.com/openmrs/openmrs-module-fhir2/pull/507,closed,50,0,2,1,1,0,0,0,[],2023-07-11 21:31:01+00:00,2023-07-21 17:35:11+00:00,849850.0,"9 days, 20:04:10",[],"[{'commit_sha': '768dbe3e79b6907090ab6be741c80a3df7a56139', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1430085599,FM2-602: Add support for XML PATCHing operations - Encounter Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations on the Encounter Resource.
+
+For example the following xml doc should be supported:
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir""> 
+   <replace sel=""/fhir:Encounter/fhir:period/fhir:start/@value"">                  
+        2005-02-01T00:00:00+05:30       
+   </replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-602
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,506,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/506,https://github.com/openmrs/openmrs-module-fhir2/pull/506,closed,46,2,2,1,1,0,0,0,[],2023-07-11 19:36:58+00:00,2023-07-21 17:26:26+00:00,856168.0,"9 days, 21:49:28",[],"[{'commit_sha': '849f6c3c55b7f1c5081b9161dd2d6727e47b7769', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1421593789,FM2-597: Add support for XML PATCHing operations-MedicationDispense Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations to the `MedicationDispense` Resource.
+
+For example the xml document below should be supported:
+
+```
+<?xml version=""1.0"" encoding=""UTF-8"" ?>
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public License,
+    v. 2.0. If a copy of the MPL was not distributed with this file, You can
+    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+    graphic logo is a trademark of OpenMRS Inc.
+-->
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+	<replace sel=""/fhir:MedicationDispense/fhir:status/@value"">
+		completed
+	</replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-597
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,503,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/503,https://github.com/openmrs/openmrs-module-fhir2/pull/503,closed,40,0,2,1,1,0,0,0,[],2023-07-05 18:56:30+00:00,2023-07-07 17:13:26+00:00,166616.0,"1 day, 22:16:56",[],"[{'commit_sha': 'b282b1f89a208593a1a62e8242745a16cb476a44', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1421564486,FM2-598: Add support for XML PATCHing operations-Task Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations to the Task Resource.
+
+For example the xml document below should be supported:
+```
+<?xml version=""1.0"" encoding=""UTF-8"" ?>
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public License,
+    v. 2.0. If a copy of the MPL was not distributed with this file, You can
+    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+    graphic logo is a trademark of OpenMRS Inc.
+-->
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+	<replace sel=""/fhir:Task/fhir:status/@value"">
+		requested
+	</replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-598
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [ ] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [ ] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [ ] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [ ] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [ ] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,502,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/502,https://github.com/openmrs/openmrs-module-fhir2/pull/502,closed,40,2,2,1,1,0,0,0,[],2023-07-05 18:30:57+00:00,2023-07-07 17:12:41+00:00,168104.0,"1 day, 22:41:44",[],"[{'commit_sha': 'ea1bea33a4336018e289b2c04cbaa48042da5322', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1421202332,FM2-599: Add support for XML PATCHing operations - Medication Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations to the Medication Resource.
+
+For example the xml document below should be supported:
+```
+<?xml version=""1.0"" encoding=""UTF-8"" ?>
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public License,
+    v. 2.0. If a copy of the MPL was not distributed with this file, You can
+    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+    graphic logo is a trademark of OpenMRS Inc.
+-->
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+	<replace sel=""/fhir:Medication/fhir:ingredient/fhir:itemCodeableConcept/fhir:coding/fhir:code/@value"">
+		5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	</replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-599
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,501,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/501,https://github.com/openmrs/openmrs-module-fhir2/pull/501,closed,65,6,4,1,1,0,0,0,[],2023-07-05 14:17:17+00:00,2023-07-07 17:12:20+00:00,183303.0,"2 days, 2:55:03",[],"[{'commit_sha': '9bf5d748258ac5625cc69df181d761cd11f99a2e', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1420885621,FM2-600: Add support for XML PATCHing operations - DiagnosticReport Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations to the DiagnosticReport Resource.
+
+For example the xml document below should be supported:
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir""> 
+      <replace sel=""/fhir:DiagnosticReport/fhir:status/@value"">
+         registered
+      </replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-600
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,500,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/500,https://github.com/openmrs/openmrs-module-fhir2/pull/500,closed,40,0,2,1,1,0,0,0,[],2023-07-05 11:02:50+00:00,2023-07-07 17:11:50+00:00,194940.0,"2 days, 6:09:00",[],"[{'commit_sha': '22677490bfbdc7b569a524e41ac19d9411a44f7c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1420819953,Add support for XML PATCHing operations - MedicationRequest Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations to the MedicationRequest Resource.
+
+For example the xml document below should be supported:
+```
+<?xml version=""1.0"" encoding=""UTF-8"" ?>
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public License,
+    v. 2.0. If a copy of the MPL was not distributed with this file, You can
+    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+    graphic logo is a trademark of OpenMRS Inc.
+-->
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+	<replace sel=""/fhir:MedicationRequest/fhir:extension/fhir:valueCode"">
+		<valueCode value=""COMPLETED""/>
+	</replace>
+</diff>
+```
+
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-601
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,499,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/499,https://github.com/openmrs/openmrs-module-fhir2/pull/499,closed,92,3,3,2,1,0,0,0,[],2023-07-05 10:18:22+00:00,2023-07-07 17:11:29+00:00,197587.0,"2 days, 6:53:07",[],"[{'commit_sha': '5c6425e49a1505b192b7a94e179432b47dd1c194', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91c72db91a6059012f0062a0d925294a8458ca98', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1419240858,FM2-593: Add support for XML patching operations - Condition Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This pull request introduces integration test for [XML PATCHing](https://www.rfc-editor.org/rfc/rfc7351) operations on the Condition Resource.
+
+For example the xml document below should be supported:
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+   <replace sel=""/fhir:Condition/fhir:clinicalStatus/fhir:coding/fhir:system/@value"">
+      http://terminology.hl7.org/CodeSystem/condition-clinical
+   </replace>
+   <replace sel=""/fhir:Condition/fhir:clinicalStatus/fhir:coding/fhir:code/@value"">
+      inactive
+   </replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-593
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,498,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/498,https://github.com/openmrs/openmrs-module-fhir2/pull/498,closed,52,6,2,2,1,3,0,0,[],2023-07-04 08:48:13+00:00,2023-07-07 17:17:19+00:00,289746.0,"3 days, 8:29:06","[{'comment_id': 1253138473, 'comment_body': '```suggestion\r\n\t\tString xmlConditionPatch;\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 48, 26, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1253138887, 'comment_body': '```suggestion\r\n\t\t\txmlConditionPatch = inputStreamToString(is, UTF_8);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 48, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1253139400, 'comment_body': '```suggestion\r\n\t\t\t\t.xmlPatch(xmlConditionPatch).accept(FhirMediaTypes.XML).go();\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 49, 6, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '868eb787dbb9bd0acf427d43749789033e20a865', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'acb5360b0e39b11f042f23f435a8ff844fbc86aa', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1419163775,FM2-594: Add support for XML patching operations - Person Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This ticket introduces integration tests for [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations on the Person Resource.
+
+For example the xml document below should be supported:
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir""> 
+      <replace sel=""/fhir:Person/fhir:gender/@value"">
+         female
+      </replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-594
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,497,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/497,https://github.com/openmrs/openmrs-module-fhir2/pull/497,closed,44,4,2,2,0,3,0,0,[],2023-07-04 07:55:15+00:00,2023-07-07 17:22:43+00:00,293248.0,"3 days, 9:27:28","[{'comment_id': 1253135917, 'comment_body': '```suggestion\r\n\t\tString xmlPersonPatch;\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 46, 30, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1253136364, 'comment_body': '```suggestion\r\n\t\t\txmlPersonPatch = inputStreamToString(is, UTF_8);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 46, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1253136857, 'comment_body': '```suggestion\r\n\t\tMockHttpServletResponse response = patch(""/Person/"" + PERSON_UUID).xmlPatch(xmlPersonPatch)\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 47, 8, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': 'e0a4af721490552c2db745297a7d1b1e0a92afb6', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80cc3c0dd53de7245e5e9b66fc68d8ba6e591eb2', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1419138233,FM2-595: Add support for XML patching operations - AllergyIntolerance Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This pull request introduces integration tests for the [XML PATCHing](https://www.rfc-editor.org/rfc/rfc7351) operations on the Allergy Intolerance Resource.
+
+For example the xml document below should be supported:
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir""> 
+      <replace sel=""/fhir:AllergyIntolerance/fhir:category/@value"">
+         food
+      </replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-595
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,496,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/496,https://github.com/openmrs/openmrs-module-fhir2/pull/496,closed,41,0,2,2,1,3,0,0,[],2023-07-04 07:37:39+00:00,2023-07-07 17:22:13+00:00,294274.0,"3 days, 9:44:34","[{'comment_id': 1253132300, 'comment_body': '```suggestion\r\n\t\tString xmlAllergyPatch;\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 43, 51, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1253133046, 'comment_body': '```suggestion\r\n\t\t\txmlAllergyPatch = inputStreamToString(is, UTF_8);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 44, 25, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1253134051, 'comment_body': '```suggestion\r\n\t\t\t\t.xmlPatch(xmlAllergyPatch).accept(FhirMediaTypes.XML).go();\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 13, 45, 8, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '68ef6981cb88c3e001fec8f623119420e54baaa4', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '98c661b20ee5437dc680dae758789acf1ccf2ad3', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1419047493,FM2-596: Add support for XML patching operations - Practitioner Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+This pull request introduces [XML PATCHing](https://www.rfc-editor.org/rfc/rfc7351) operations to the Practitioner Resource.
+
+For example the xml document below should be supported:
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir""> 
+      <replace sel=""/fhir:Practitioner/fhir:gender/@value"">
+         female
+      </replace>
+</diff>
+```
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-596
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,495,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/495,https://github.com/openmrs/openmrs-module-fhir2/pull/495,closed,40,0,2,2,1,3,0,0,[],2023-07-04 06:31:55+00:00,2023-07-07 17:18:26+00:00,297991.0,"3 days, 10:46:31","[{'comment_id': 1252944605, 'comment_body': '```suggestion\r\n\t\tString xmlPractitionerPatch;\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 11, 8, 20, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1252945411, 'comment_body': '```suggestion\r\n\t\t\txmlPractitionerPatch = inputStreamToString(is, UTF_8);\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 11, 8, 47, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1252945869, 'comment_body': '```suggestion\r\n\t\tMockHttpServletResponse response = patch(""/Practitioner/"" + PRACTITIONER_UUID).xmlPatch(xmlPractitionerPatch)\r\n```', 'comment_created': datetime.datetime(2023, 7, 5, 11, 9, 3, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '68d8ece5ca7b1401a808f890c45e5ed05deb2008', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '87df37096babc538355568910b8d500d46695eba', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1401725844,FM2-588: Add support for XML Patch operations - Patient Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+introduces [XML PATCH](https://www.rfc-editor.org/rfc/rfc7351) operations on the Patient Resource which can later be implemented on other resources that support patch operations.
+
+e.g should support something as shown below that does a replace operation onto the patient resource's gender attribute.
+
+```
+<diff xmlns:fhir=""http://hl7.org/fhir"">
+	<replace sel=""/fhir:Patient/fhir:gender/@value"">
+		female
+	</replace>
+</diff>
+```
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-588
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,493,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/493,https://github.com/openmrs/openmrs-module-fhir2/pull/493,closed,117,6,7,6,1,5,0,0,[],2023-06-21 13:39:36+00:00,2023-06-30 19:14:36+00:00,797700.0,"9 days, 5:35:00","[{'comment_id': 1245596543, 'comment_body': 'Could you put some Javadocs in here? E.g.,\r\n\r\n```suggestion\r\n\t * Applies an XML Patch to a FHIR Resource\r\n\t *\r\n\t * @param\r\n```', 'comment_created': datetime.datetime(2023, 6, 28, 18, 19, 48, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1245597636, 'comment_body': ""We don't need the `default` case anymore do we?"", 'comment_created': datetime.datetime(2023, 6, 28, 18, 21, 4, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1245703712, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 6, 28, 20, 7, 39, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1245703845, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 6, 28, 20, 7, 49, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1248103216, 'comment_body': '```suggestion\r\n\t * Applies an XML Patch to a FHIR Resource\r\n\t *\r\n```', 'comment_created': datetime.datetime(2023, 6, 30, 17, 13, 27, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}]","[{'commit_sha': 'dbe260e6534b90331ac0923991a7f5fb512754b2', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3eee5c3817819ac4412ec131a501043b6a08393', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '91c964105652aaf8b28aea106e8c90cb192b2ce6', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a947a543b85584a63fceafba1f02d2d3e5e12c2', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '33e7929b0345ecfcd723783bb60bf46cfb02b571', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2fd587628dd266ae8296f5721df3c574fee76110', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1401248911,FM2-587: Add Support for JSON patching operations — MedicationDispense Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensure the MedicationDispense Resource Provider(R4) can support JSON_MERGE_PATCH and JSON_PATCH patch operations.
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-587
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,492,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/492,https://github.com/openmrs/openmrs-module-fhir2/pull/492,closed,82,0,4,2,1,1,0,0,[],2023-06-21 08:46:14+00:00,2023-06-30 17:36:22+00:00,809408.0,"9 days, 8:50:08","[{'comment_id': 1242525573, 'comment_body': '```suggestion\r\n\t\t\tthrow new InvalidRequestException(""id must be specified to update MedicationDispense resource"");\r\n```', 'comment_created': datetime.datetime(2023, 6, 26, 17, 31, 8, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}]","[{'commit_sha': '2edaff4c451f2e3c85df5408a0ffb5dc3c4c6cee', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3808b1ea01f077fddd40ca6970af0c5196ae0891', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1399893760,FM2-583: Add support for Json Merge Patch operations - Practitioner Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensure the Practitioner Resource Provider(R4) can support JSON_MERGE_PATCH and JSON_PATCH patch operations.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-583
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,491,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/491,https://github.com/openmrs/openmrs-module-fhir2/pull/491,closed,77,0,4,2,1,0,0,0,[],2023-06-20 13:36:58+00:00,2023-06-30 17:19:21+00:00,877343.0,"10 days, 3:42:23",[],"[{'commit_sha': '3b902ccfbd63b3dfcfb4e2c3ff15f5cab1fea7ae', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24ecb672f13e2c3d6a8d415734f29c1988efa974', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1390583416,FM2-586: Add support for Json Patching operations - DiagnosticReport Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-586
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,490,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/490,https://github.com/openmrs/openmrs-module-fhir2/pull/490,closed,77,0,4,5,1,0,0,0,[],2023-06-13 13:06:45+00:00,2023-06-30 17:16:16+00:00,1483771.0,"17 days, 4:09:31",[],"[{'commit_sha': '0f1c094358c1e51ee4bb656d6e5abd0d649616be', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd7609adcef52442a7e06d6716f7cc50b85a6558b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bc3139fa18ab8947a5d93970ee5e1a6815702480', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab8a15ad239f58b81a6b587d8f257390de9815fd', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '21906921bd3536eead8788a2f8ef81c5bcf08849', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1387620139,FM2-589: Add support for Json patching operations - Encounter Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensure Encounter resource(R4) supports json merge patch operations.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-589
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,489,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/489,https://github.com/openmrs/openmrs-module-fhir2/pull/489,closed,113,7,5,8,1,5,0,0,[],2023-06-11 17:39:56+00:00,2023-07-07 17:09:42+00:00,2244586.0,"25 days, 23:29:46","[{'comment_id': 1242524822, 'comment_body': 'Check the naming of functions. These should also be immediately after the `update` tests.', 'comment_created': datetime.datetime(2023, 6, 26, 17, 30, 38, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1248122158, 'comment_body': 'Could you rearrange these so it goes:\r\n\r\n1. Create\r\n1a. Create JSON\r\n1b. Create XML\r\n2. Patch\r\n2a. Patch JSON\r\n\r\nThanks', 'comment_created': datetime.datetime(2023, 6, 30, 17, 38, 39, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1248199317, 'comment_body': 'Done', 'comment_created': datetime.datetime(2023, 6, 30, 19, 1, 58, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1259940173, 'comment_body': '@mherman22 I missed this when reviewing. Could you submit a new PR renaming these methods?', 'comment_created': datetime.datetime(2023, 7, 11, 15, 52, 35, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1262251556, 'comment_body': 'changes are part of https://github.com/openmrs/openmrs-module-fhir2/pull/506', 'comment_created': datetime.datetime(2023, 7, 13, 9, 2, 12, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '699c5c6fb3f29ede741150aec5ba041e260746c8', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c85a85f861c1d895f3dac970441bab792f883d7e', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2c15c55a40f19675dc3900f9aa6d178c503db11', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c656e0649dc660d8574c4fc88b3e9881547233ec', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6734e008ed9198522d98096e6b93e8484ef7347b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '147f93f949f0f92a6c3d0f18b689f602cf35d074', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0b7237d8b12608652ea089ec1cf79f146496fdc3', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c1b51d324d7b51a1b4536c130a2f3abd5a311a92', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1387544647,FM2-590: Add support for Json Merge Patch operations - Medication Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensure medication resource(R4) supports json merge patch operations.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-590
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,488,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/488,https://github.com/openmrs/openmrs-module-fhir2/pull/488,closed,77,0,4,4,1,0,0,0,[],2023-06-11 13:56:27+00:00,2023-06-30 17:14:49+00:00,1653502.0,"19 days, 3:18:22",[],"[{'commit_sha': '65a293f580c663be96157700c9b51a0573ba635c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5b5e2947af9a61a422c8bb8fa12afe2c00e99cf', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '56206b419aea62c11db87f15c6e3bc1811b47d80', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0c0f66e4bc770c8c449bb119a3aa36f87db28366', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1386696627, Add support for Json Merge Patch operations - Patient Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-574
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,487,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/487,https://github.com/openmrs/openmrs-module-fhir2/pull/487,closed,100,41,5,6,1,0,0,0,[],2023-06-09 20:23:36+00:00,2023-06-30 17:28:55+00:00,1803919.0,"20 days, 21:05:19",[],"[{'commit_sha': 'fbae3a37f59847fd8e6ab27f947a10a4c949d7be', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7683cea3da87d2109217a65922d44897f949e500', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de51cbe587567e834349359c522969941f05061c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '19005e173c1dd7e5158b980033582cb2fe5775e7', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b2cf527b8c30c5cd3b46cfeb7af01360374acfe', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5d8bb6486fe58139836c3478d3f1eee35b6fc050', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1380508162,"FM2-570: toOpenmrsType translators should set uuid to id part of id, not full id","<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+The `toOpenmrsType` translators have been changed to set the **uuid** to the id part of the id, not the full id._**ie**_, the uuid should be set to:`cea2cff8-ab6d-42a1-a6fc-e3edb7b39631` not: `Encounter/cea2cff8-ab6d-42a1-a6fc-e3edb7b39631`.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-570
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,485,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/485,https://github.com/openmrs/openmrs-module-fhir2/pull/485,closed,42,15,13,2,1,0,0,0,[],2023-06-06 09:35:20+00:00,2023-06-09 17:17:52+00:00,286952.0,"3 days, 7:42:32",[],"[{'commit_sha': '19a6b42e4a27e39d9b6260f6d0ed180fc82d1cdc', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '523407dbdbfb91dbebf8d1e2457f0898622458fd', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1378805348,FM2-585: Add support for Json Merge Patch operations - Task Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensured Task resource can supporting json merge patching operations. Created an integration test for it.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-585
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,484,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/484,https://github.com/openmrs/openmrs-module-fhir2/pull/484,closed,77,0,4,6,1,0,0,0,[],2023-06-05 11:18:53+00:00,2023-06-30 17:21:24+00:00,2181751.0,"25 days, 6:02:31",[],"[{'commit_sha': '80539564a9131cbc6015a2883656783e7d9fa066', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ea942cb2ba9ec8d8a2e2b79af6cebe3136ccf9a9', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f0f2049119449cea059ad67c113a263cde74aa5b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6caba14ea41ad362d3cce3b7af486b766d5fcaa', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd611d0f792d622ab34422ad7901b5e4cb5c99513', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7edcc7106ec05acd5687dc94c84c0a079bc87799', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1376954277,Fm2-579-impl: Add support for Json Patch operations - Patient Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensure that we can support json patches too  since json merge patches have a limitation when it comes to patching attributes inside Arrays, Lists, etc..
+
+**Previously**
+Since the Hapi/fhir PatchTypeEnum enum class doesn't really cater for `JSON MERGE PATCH`, in the previous implementation in this module, Mark sort of shoe-horned it in hence why Json merge patch and Json patch were both coming across as the same type since we needed to use one of the values in PatchTypeEnum (which doesn’t support Merge Patch), so we hack around this by temporarily making it appear that a merge patch request is actually a JSON patch request. The logic for that is here.
+
+**Now**
+We have an `if-else` statement under `JSON_PATCH` because both merge patches and normal patches will come in under that. What i did is to get the RequestDetails object (add it as a parameter to the patch method on the provider and then pass it to the service method call and check the Content-Type. If it’s `application/merge-patch+json`, then it’s a merge patch, otherwise, treat it as a JSON patch.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-579
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,483,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/483,https://github.com/openmrs/openmrs-module-fhir2/pull/483,closed,100,16,8,3,1,1,0,0,[],2023-06-03 12:28:47+00:00,2023-06-09 17:27:08+00:00,536301.0,"6 days, 4:58:21","[{'comment_id': 1224553778, 'comment_body': '```suggestion\r\n\t\t\t\tthrow new InvalidRequestException(""only JSON-formatted patches are currently supported"");\r\n```', 'comment_created': datetime.datetime(2023, 6, 9, 17, 6, 37, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}]","[{'commit_sha': 'd4d0a0b0f3b4bfa551a57107131faf207a7c0a2c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1f09c3e9a86ddcaafe7abe22a1836d1379e2225', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef5a262f3cea0cefc59e05f5da3aa1d663afb5a1', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1372071273,FM2-580: Add support for Json Merge Patch operations - Allergy Intolerance Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensured the allergy intolerance resource supports json merge patches.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-580
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,481,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/481,https://github.com/openmrs/openmrs-module-fhir2/pull/481,closed,80,0,4,5,1,0,0,0,[],2023-05-31 12:05:17+00:00,2023-06-30 17:22:41+00:00,2611044.0,"30 days, 5:17:24",[],"[{'commit_sha': 'c5887945203b40bbfa75c134ce3d1c8d7e921eed', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cfaf0bf43c314b52b1af48a53bc36dcc9738083a', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf2ab9bde90118882e9b95f720c4fe7ab9b941a5', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5ef3c691599af314e666a180524dba34ce0d56d', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'efff44f078aabe92351a5f35714f85f5a1132f5a', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1369571446,FM2-577: Add support for Json patching operations - Person Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensured person resource can supporting json merge patching operations. Created an integration test for it.
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-577
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,480,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/480,https://github.com/openmrs/openmrs-module-fhir2/pull/480,closed,76,0,4,5,1,0,0,0,[],2023-05-29 21:30:03+00:00,2023-06-30 17:30:56+00:00,2750453.0,"31 days, 20:00:53",[],"[{'commit_sha': '188453c0b06421dd5f83ae9fd58fd088fcee70db', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0d393edb5a8b414db5f116009c0a5dc515f8f41b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6c8398c66ecbadf2d6904804a13d56a01026db8', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '266ffbdad2b44b1cef1308883aa2ccaf7d356a45', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd5c842fdcc9bb981827d5ec78c23383f7a3f0a90', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1368767606,FM2-576: Add support for Json patching operations - Condition Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Ensured the condition resource can support json merge patch operations and this has been tested using the integration test as well as on an openmrs instance.
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-576
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,479,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/479,https://github.com/openmrs/openmrs-module-fhir2/pull/479,closed,95,0,4,4,1,0,0,0,[],2023-05-29 08:52:18+00:00,2023-06-30 17:30:00+00:00,2795862.0,"32 days, 8:37:42",[],"[{'commit_sha': 'd04d8b53909d1666d9cd25ec2dc9543dad50e1f6', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '36b7725f25bb29d9735af547c5406f52703b39df', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c6c133b4c38cd565f91c82a4b7dca368fe61cea4', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e3f8dee952ed612b7ad44b4903ae61cff8229083', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1368020996,FM2-575: Add support for Json patching operations - Location Resource,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+I implemented the json merge patch opeations on the Location Resource, created an integration test to test the functionality.
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-575
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,478,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/478,https://github.com/openmrs/openmrs-module-fhir2/pull/478,closed,124,41,5,6,1,3,0,0,[],2023-05-28 15:04:37+00:00,2023-07-07 17:09:16+00:00,3463479.0,"40 days, 2:04:39","[{'comment_id': 1242521913, 'comment_body': 'Could you move these to after the last `update` integration test?', 'comment_created': datetime.datetime(2023, 6, 26, 17, 27, 40, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1242523666, 'comment_body': 'Is it possible to make this and the merge patch mirror one another so that we have some better examples, e.g.,\r\n\r\n```\r\n{\r\n  ""op"": ""add"",\r\n  ""path"": ""/address""\r\n}\r\n```\r\n\r\nEtc.', 'comment_created': datetime.datetime(2023, 6, 26, 17, 29, 24, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1248119558, 'comment_body': '```suggestion\r\n\tprivate static final String XML_CREATE_LOCATION_DOCUMENT = ""org/openmrs/module/fhir2/providers/LocationWebTest_create.xml"";\r\n\r\n\tprivate static final String JSON_MERGE_PATCH_LOCATION_PATH = ""org/openmrs/module/fhir2/providers/Location_merge_json_patch.json"";\r\n\t\r\n\tprivate static final String JSON_PATCH_LOCATION_PATH= ""org/openmrs/module/fhir2/providers/Location_json_patch.json"";\r\n```', 'comment_created': datetime.datetime(2023, 6, 30, 17, 34, 56, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}]","[{'commit_sha': 'df9731ffe219e6e2c291e120d81b0a5d7fe28ca2', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'aef17422b22a86f3ac9ab307ab84c1892f7ead96', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'df35aeea9d329ef6837501a75bfe564e17250046', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd0d84793f8f49aea855d47b98d009a8baeb1da9c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '52071d1c956dbe486c5e753e81f4a3501ca41674', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3f095ef15c5ad597fae4aa0d338b15bd223d33f8', 'committer_username': 'ibacher', 'committer_name': 'Ian', 'committer_email': None, 'commit_date': datetime.datetime(2019, 7, 3, 16, 23, 10, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1387542540,FM2-548: Add medication resource to the index page,"Follow up commit for https://issues.openmrs.org/browse/FM2-548
+
+cc: @sherrif10 @abertnamanya ",True,59,https://api.github.com/repos/openmrs/openmrs-contrib-fhir2-ig/pulls/59,https://github.com/openmrs/openmrs-contrib-fhir2-ig/pull/59,closed,7,6,1,2,2,0,0,0,[],2023-06-11 13:48:17+00:00,2023-06-23 17:17:49+00:00,1049372.0,"12 days, 3:29:32",[],"[{'commit_sha': 'f8a527ef6811e45e19260ea13803904797b4f06a', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb29c6649fb36c9f1cb6fcdfede7402aea955b6e', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1399996874,FM2-549: Adding MedicationDispense to index.md,"Follow up commit to https://issues.openmrs.org/browse/FM2-549 to add `MedicationDispense` to the landing page so as to make navigation easy.
+
+cc: @abertnamanya @sherrif10 ",True,60,https://api.github.com/repos/openmrs/openmrs-contrib-fhir2-ig/pulls/60,https://github.com/openmrs/openmrs-contrib-fhir2-ig/pull/60,closed,5,4,1,1,0,0,0,0,[],2023-06-20 14:35:10+00:00,2023-06-22 11:14:07+00:00,160737.0,"1 day, 20:38:57",[],"[{'commit_sha': 'a4dbe3c9dd1c94460091dc851d431b745dacf8ff', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1463807244,FM2-606: Mapping ContactPoints to OpenMRS,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Add support for Fhir ContactPoint's `system`, `use` and `rank` in openmrs model.
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-606
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,517,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/517,https://github.com/openmrs/openmrs-module-fhir2/pull/517,closed,831,39,15,5,2,6,0,0,[],2023-08-05 12:49:59+00:00,2023-08-16 12:10:13+00:00,948014.0,"10 days, 23:20:14","[{'comment_id': 1293422123, 'comment_body': 'Maybe a better implementation here (because we can support more than just hard-coded values):\r\n\r\n```java\r\nString attributeTypeClassName = attributeType.getClass().getSimpleName();\r\nif (attributeTypeClassName == null || """".equals(attributeTypeClassName) || !attributeTypeClassName.endsWith(""AttributeType"")) {\r\n\treturn Optional.empty();\r\n}\r\n\r\nString attributeTypeDomain = StringUtils.removeEnd(attributeTypeClassName.toLowerCase(), ""attributetype"");\r\n```', 'comment_created': datetime.datetime(2023, 8, 14, 12, 54, 26, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1293423291, 'comment_body': 'This is covered by having the `@Transactional` annotation on the class-level. We need to demarcate the read-only classes, because otherwise the transaction is a read-write transaction.\r\n\r\n```suggestion\r\n```', 'comment_created': datetime.datetime(2023, 8, 14, 12, 55, 32, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1293425693, 'comment_body': 'We probably need to add some logic in here to ensure that the combination of attribute_type_domain and attribute_type_id are unique. I would suggest trying to load the existing value and updating it if it exists.', 'comment_created': datetime.datetime(2023, 8, 14, 12, 57, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1294635960, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 8, 15, 14, 0, 7, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1294636223, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 8, 15, 14, 0, 21, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1294636410, 'comment_body': 'done!', 'comment_created': datetime.datetime(2023, 8, 15, 14, 0, 30, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': 'edeafcbea2b882b69f8f36bd26902d00cba34cc2', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fbe72ff7c2b627ecd47c95a29ae01255026cea1b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e28bba9938391ef64d7ebf29eca5ce6f661dfb4d', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b6892398df3402c53b8f6b7146f5621d3ac62188', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8ae6f7c278b4cd8015ed0c638765a0d92a03d82b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1446547346,FM2-605: Add Support for ETags in the FHIR API,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+The purpose here is to trigger HAPI FHIR's support for FHIR's ETag spec using weak ETag's for the version id.
+
+Note that this algorithm could result in the FHIR API reporting a changed ETag where the REST API does not. This is because in the FHIR API the ETag / versionId is derived entirely from the lastUpdated timestamp.
+
+This pull request adds support for etags on all resources supported by the `openmrs fhir2 module`
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-605
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,515,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/515,https://github.com/openmrs/openmrs-module-fhir2/pull/515,closed,1707,156,78,17,3,0,0,0,[],2023-07-24 11:24:51+00:00,2023-07-28 17:08:16+00:00,366205.0,"4 days, 5:43:25",[],"[{'commit_sha': '6a3c757510da163b02fe4384fb3136896eea9937', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e68d28433939c389895634448a08c87d4bc06a5d', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a48adb137f7292a1e09248674a3b1b4935384018', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '496d28c6e6deeedc3323bc6a11985a1c35cfe30a', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ada0fe307fce31d1b8ef290b873f666176bce6b0', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e534d23395be565413a58d61dced72627064e94', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '22ef36cefee5213012b41bb1cb1928fe718b7433', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '50e1b5be5fdf6310178853aef60135e79e4c0a0b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b206de8143dd3e1266535bec9bbb5601a7e5a3ed', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b60f938d87149f085ba1481bf82f9f56c7dcee0c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1382fa0a2cbdf6a064a3065372742ef575985d60', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f2573356cbbfb7c30e395691a578c7628da23a12', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c2912358356962ae98e1508ee23fbe88510d3e6', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24071286f035530c35a62e222fa678339e06636e', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ffbefbf35e7f8fd4074a7ad899fadc6310779edc', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '18bff9b45f641565d06ba2a1d21c454ea954b740', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3fa633b6ecf6b0b4e5463a892cfcf1b21bb45b5c', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1435880758,FM2-481: Clean up parameter passing for Condition Service Search,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,510,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/510,https://github.com/openmrs/openmrs-module-fhir2/pull/510,closed,275,312,14,2,1,6,0,0,[],2023-07-15 14:03:33+00:00,2023-07-24 18:49:43+00:00,794770.0,"9 days, 4:46:10","[{'comment_id': 1264440263, 'comment_body': '@ibacher i added the check to ensure that in versions lower than 2.2.0, clinicalStatus is not required. Any thoughts?', 'comment_created': datetime.datetime(2023, 7, 15, 14, 23, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1264532767, 'comment_body': 'handled `onsetDate` here instead of adding it in `ConditionSearchParams`. because we have `onsetDate` and `obsDatetime` properties for `FhirConditionServiceImpl` and `FhirConditionServiceImpl_2_2`.', 'comment_created': datetime.datetime(2023, 7, 15, 19, 21, 55, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1264621374, 'comment_body': 'I handled each of those two properties in their own repaective class', 'comment_created': datetime.datetime(2023, 7, 16, 6, 53, 46, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1264658535, 'comment_body': 'Not sure why previously this was written to include clinical status yet in versions lower than 2.2 its not possible since in versions than 2.2, the FHIR translation of the Condition was based on the OpenMRS `Obs` object which clearly didnt have clinical statuses.', 'comment_created': datetime.datetime(2023, 7, 16, 10, 40, 8, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1270907600, 'comment_body': ""We probably don't need this."", 'comment_created': datetime.datetime(2023, 7, 21, 17, 15, 13, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1271463860, 'comment_body': 'added back `Condition?clinical-status=active` since it will be ignored anyway', 'comment_created': datetime.datetime(2023, 7, 23, 14, 50, 58, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': 'eca771d7264a6aae02e80a2d35533669b454d8fd', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f3b4e90daab667a9220b81b8fd33a693b774bb52', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1477245392,FM2-481: Clean up parameter passing for AllergyIntolerance Service Search,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,518,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/518,https://github.com/openmrs/openmrs-module-fhir2/pull/518,closed,383,341,11,1,1,0,0,0,[],2023-08-16 10:43:37+00:00,2023-08-18 14:48:13+00:00,187476.0,"2 days, 4:04:36",[],"[{'commit_sha': '3b4cd9a846a1e4afbdeb774f7bcf26fb2498d8d5', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1439809271,FM2-481: Clean up parameter passing for DiagnosticReport Service Search,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,511,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/511,https://github.com/openmrs/openmrs-module-fhir2/pull/511,closed,316,344,11,1,1,0,0,0,[],2023-07-18 19:23:33+00:00,2023-07-21 17:37:12+00:00,252819.0,"2 days, 22:13:39",[],"[{'commit_sha': '835ebc9942524e46ec343e1b7a1603049742a269', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1440774279,FM2-481: Clean up parameter passing for MedicationRequest Service Search,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,512,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/512,https://github.com/openmrs/openmrs-module-fhir2/pull/512,closed,662,604,11,2,1,0,0,0,[],2023-07-19 10:31:19+00:00,2023-07-21 17:36:13+00:00,198294.0,"2 days, 7:04:54",[],"[{'commit_sha': 'be739b10b887368d8249826877eb60b1f0049c35', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3ff62ada7f10aaedca32379b803ef04a42bb0ff8', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1422907899,FM2-481: Clean up parameter passing for Practitioner Service Search method,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,504,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/504,https://github.com/openmrs/openmrs-module-fhir2/pull/504,closed,433,432,11,1,1,0,0,0,[],2023-07-06 13:31:26+00:00,2023-07-07 17:21:50+00:00,100224.0,"1 day, 3:50:24",[],"[{'commit_sha': '32bad75fb7993260ae2d154e68a70494cec051c3', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1423927255,FM2-481: Clean up parameter passing for Medication Service Search method,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,505,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/505,https://github.com/openmrs/openmrs-module-fhir2/pull/505,closed,176,166,11,1,0,0,0,0,[],2023-07-07 03:52:46+00:00,2023-07-07 17:21:27+00:00,48521.0,13:28:41,[],"[{'commit_sha': '68b865f1e867f85d3748b522bafdd50ebca51450', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1111889997,FM2-481: Clean up parameter passing for Task Service class search method,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+    Added TaskSearchParams class that extends the BaseResourceSearchParams.
+    Refactor all provider classes (r3 and r4).
+    Ensure all tests are passing
+
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see  https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,442,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/442,https://github.com/openmrs/openmrs-module-fhir2/pull/442,closed,234,210,13,7,1,4,0,0,[],2022-11-06 07:48:06+00:00,2023-06-30 17:24:32+00:00,20424986.0,"236 days, 9:36:26","[{'comment_id': 1210170208, 'comment_body': 'It would be nice to at least keep the text part of the Javadoc comment.', 'comment_created': datetime.datetime(2023, 5, 30, 12, 1, 54, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1210170535, 'comment_body': 'Please retain the Javadoc comments, removing the parts that are no longer relevant and adding for the new parameters.', 'comment_created': datetime.datetime(2023, 5, 30, 12, 2, 12, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1210897783, 'comment_body': 'Done', 'comment_created': datetime.datetime(2023, 5, 30, 22, 46, 17, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}, {'comment_id': 1210897858, 'comment_body': 'Done', 'comment_created': datetime.datetime(2023, 5, 30, 22, 46, 27, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': 'a4236593db7a662b888089e9f90647b4b93533b0', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '79a80feb9fddc2d5fbaf3fb8b5b8ac8a029ab7bc', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9600066050817a502bd481f879f71e87f04e4bb9', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2f8e9cbb8ee937b146f68d9a3f2426e40474b84b', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b5f29d44c166f91a1a223716ce15e81493d7b9e6', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '752f06fdeb28c4500e791b2a4aa578fbd5b3642a', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f6b36720a29418971988944c13ab09c31f2303da', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+1110780043,FM2-481: Clean up parameter passing in Person Service class search method,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'FM2-8: Implement the Person Resource' -->
+<!--- 'FM2-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+- Added PersonSearchParams class that extends the BaseResourceSearchParams.
+- Refactor all provider classes (r3 and r4).
+- Ensure all tests are passing
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/FM2-481
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+",True,441,https://api.github.com/repos/openmrs/openmrs-module-fhir2/pulls/441,https://github.com/openmrs/openmrs-module-fhir2/pull/441,closed,381,359,10,8,1,2,0,0,[],2022-11-04 12:43:14+00:00,2023-05-12 17:10:27+00:00,16345633.0,"189 days, 4:27:13","[{'comment_id': 1014123203, 'comment_body': ""These should all be using the `ADDRESS_SEARCH_HANDLER`, shouldn't they?"", 'comment_created': datetime.datetime(2022, 11, 4, 14, 53, 28, tzinfo=datetime.timezone.utc), 'commenter': 'ibacher', 'type': 'User'}, {'comment_id': 1014238898, 'comment_body': 'My bad, will update that', 'comment_created': datetime.datetime(2022, 11, 4, 16, 30, 33, tzinfo=datetime.timezone.utc), 'commenter': 'mherman22', 'type': 'User'}]","[{'commit_sha': '3928ceea8b89303c2370a7c0dff621aa7c15fdf5', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '16089733610d3b56f2b80676385f49a791def4af', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '866e1d0a246559cd5e39d88642bcc524a09c7aa5', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '47dc9746df81ff91358136dbd1a005e849dfc9a0', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bf67ae3c5c701d77189c5bd98b95cec7fa62ffb7', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '19d6c81dcda2ab0c0ea6621807bc0a418f60b1ec', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5ddcfd287e1c339f8cd0ddb122f7e042e6c5f76e', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}, {'commit_sha': '172a98657d07269c44fc2825528396cd954e7e61', 'committer_username': 'mherman22', 'committer_name': 'Herman Muhereza', 'committer_email': 'hermanmuhereza22@gmail.com', 'commit_date': datetime.datetime(2019, 1, 28, 18, 50, 32, tzinfo=datetime.timezone.utc)}]",Herman Muhereza,47120265,hermanmuhereza22@gmail.com,User,,84,,55,18
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+232160993,openmrs-module-fhir2,openmrs/openmrs-module-fhir2,Java,108,66,50,46,765,24,17,24,"[{'id': 1737758792, 'number': 535, 'closed': datetime.datetime(2024, 2, 22, 22, 0, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2024, 2, 21, 21, 52, 27, tzinfo=datetime.timezone.utc), 'time_taken': 86899.0, 'time_delta': '1 day, 0:08:19', 'additions': 24, 'deletions': 2, 'state': 'closed'}, {'id': 1629770292, 'number': 530, 'closed': None, 'created': datetime.datetime(2023, 12, 5, 8, 0, 45, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 2252, 'deletions': 1369, 'state': 'open'}, {'id': 1594312349, 'number': 528, 'closed': datetime.datetime(2023, 11, 28, 18, 20, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 11, 9, 12, 21, 6, tzinfo=datetime.timezone.utc), 'time_taken': 1663155.0, 'time_delta': '19 days, 5:59:15', 'additions': 1164, 'deletions': 781, 'state': 'closed'}, {'id': 1580354473, 'number': 527, 'closed': datetime.datetime(2023, 11, 21, 6, 37, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 10, 31, 7, 9, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1812480.0, 'time_delta': '20 days, 23:28:00', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1518278830, 'number': 524, 'closed': datetime.datetime(2023, 10, 17, 16, 50, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 16, 17, 18, 27, tzinfo=datetime.timezone.utc), 'time_taken': 2676709.0, 'time_delta': '30 days, 23:31:49', 'additions': 2510, 'deletions': 10212, 'state': 'closed'}, {'id': 1500307353, 'number': 521, 'closed': datetime.datetime(2023, 10, 30, 18, 18, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 9, 3, 15, 36, 26, tzinfo=datetime.timezone.utc), 'time_taken': 4934523.0, 'time_delta': '57 days, 2:42:03', 'additions': 402, 'deletions': 365, 'state': 'closed'}, {'id': 1491083390, 'number': 520, 'closed': datetime.datetime(2023, 8, 29, 16, 10, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 27, 21, 56, 50, tzinfo=datetime.timezone.utc), 'time_taken': 152038.0, 'time_delta': '1 day, 18:13:58', 'additions': 68, 'deletions': 1, 'state': 'closed'}, {'id': 1481861769, 'number': 519, 'closed': datetime.datetime(2023, 9, 15, 17, 7, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 20, 17, 50, 8, tzinfo=datetime.timezone.utc), 'time_taken': 2243848.0, 'time_delta': '25 days, 23:17:28', 'additions': 378, 'deletions': 341, 'state': 'closed'}, {'id': 1477245392, 'number': 518, 'closed': datetime.datetime(2023, 8, 18, 14, 48, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 16, 10, 43, 37, tzinfo=datetime.timezone.utc), 'time_taken': 187476.0, 'time_delta': '2 days, 4:04:36', 'additions': 383, 'deletions': 341, 'state': 'closed'}, {'id': 1463807244, 'number': 517, 'closed': datetime.datetime(2023, 8, 16, 12, 10, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 5, 12, 49, 59, tzinfo=datetime.timezone.utc), 'time_taken': 948014.0, 'time_delta': '10 days, 23:20:14', 'additions': 831, 'deletions': 39, 'state': 'closed'}, {'id': 1456188823, 'number': 516, 'closed': datetime.datetime(2023, 8, 2, 6, 1, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 31, 12, 48, 6, tzinfo=datetime.timezone.utc), 'time_taken': 148405.0, 'time_delta': '1 day, 17:13:25', 'additions': 358, 'deletions': 454, 'state': 'closed'}, {'id': 1446547346, 'number': 515, 'closed': datetime.datetime(2023, 7, 28, 17, 8, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 11, 24, 51, tzinfo=datetime.timezone.utc), 'time_taken': 366205.0, 'time_delta': '4 days, 5:43:25', 'additions': 1707, 'deletions': 156, 'state': 'closed'}, {'id': 1446277687, 'number': 514, 'closed': datetime.datetime(2023, 7, 24, 11, 23, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 24, 8, 32, 9, tzinfo=datetime.timezone.utc), 'time_taken': 10270.0, 'time_delta': '2:51:10', 'additions': 167, 'deletions': 0, 'state': 'closed'}, {'id': 1442901577, 'number': 513, 'closed': datetime.datetime(2023, 7, 28, 17, 3, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 20, 13, 37, 23, tzinfo=datetime.timezone.utc), 'time_taken': 703575.0, 'time_delta': '8 days, 3:26:15', 'additions': 149, 'deletions': 32, 'state': 'closed'}, {'id': 1440774279, 'number': 512, 'closed': datetime.datetime(2023, 7, 21, 17, 36, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 19, 10, 31, 19, tzinfo=datetime.timezone.utc), 'time_taken': 198294.0, 'time_delta': '2 days, 7:04:54', 'additions': 662, 'deletions': 604, 'state': 'closed'}, {'id': 1439809271, 'number': 511, 'closed': datetime.datetime(2023, 7, 21, 17, 37, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 18, 19, 23, 33, tzinfo=datetime.timezone.utc), 'time_taken': 252819.0, 'time_delta': '2 days, 22:13:39', 'additions': 316, 'deletions': 344, 'state': 'closed'}, {'id': 1435880758, 'number': 510, 'closed': datetime.datetime(2023, 7, 24, 18, 49, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 15, 14, 3, 33, tzinfo=datetime.timezone.utc), 'time_taken': 794770.0, 'time_delta': '9 days, 4:46:10', 'additions': 275, 'deletions': 312, 'state': 'closed'}, {'id': 1431086845, 'number': 509, 'closed': datetime.datetime(2023, 7, 24, 18, 52, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 11, 18, 48, tzinfo=datetime.timezone.utc), 'time_taken': 1064025.0, 'time_delta': '12 days, 7:33:45', 'additions': 391, 'deletions': 0, 'state': 'closed'}, {'id': 1430706024, 'number': 508, 'closed': datetime.datetime(2023, 7, 12, 11, 17, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 12, 7, 11, 20, tzinfo=datetime.timezone.utc), 'time_taken': 14752.0, 'time_delta': '4:05:52', 'additions': 278, 'deletions': 0, 'state': 'closed'}, {'id': 1430213515, 'number': 507, 'closed': datetime.datetime(2023, 7, 21, 17, 35, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 11, 21, 31, 1, tzinfo=datetime.timezone.utc), 'time_taken': 849850.0, 'time_delta': '9 days, 20:04:10', 'additions': 50, 'deletions': 0, 'state': 'closed'}, {'id': 1430085599, 'number': 506, 'closed': datetime.datetime(2023, 7, 21, 17, 26, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 11, 19, 36, 58, tzinfo=datetime.timezone.utc), 'time_taken': 856168.0, 'time_delta': '9 days, 21:49:28', 'additions': 46, 'deletions': 2, 'state': 'closed'}, {'id': 1423927255, 'number': 505, 'closed': datetime.datetime(2023, 7, 7, 17, 21, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 7, 3, 52, 46, tzinfo=datetime.timezone.utc), 'time_taken': 48521.0, 'time_delta': '13:28:41', 'additions': 176, 'deletions': 166, 'state': 'closed'}, {'id': 1422907899, 'number': 504, 'closed': datetime.datetime(2023, 7, 7, 17, 21, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 6, 13, 31, 26, tzinfo=datetime.timezone.utc), 'time_taken': 100224.0, 'time_delta': '1 day, 3:50:24', 'additions': 433, 'deletions': 432, 'state': 'closed'}, {'id': 1421593789, 'number': 503, 'closed': datetime.datetime(2023, 7, 7, 17, 13, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 18, 56, 30, tzinfo=datetime.timezone.utc), 'time_taken': 166616.0, 'time_delta': '1 day, 22:16:56', 'additions': 40, 'deletions': 0, 'state': 'closed'}, {'id': 1421564486, 'number': 502, 'closed': datetime.datetime(2023, 7, 7, 17, 12, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 18, 30, 57, tzinfo=datetime.timezone.utc), 'time_taken': 168104.0, 'time_delta': '1 day, 22:41:44', 'additions': 40, 'deletions': 2, 'state': 'closed'}, {'id': 1421202332, 'number': 501, 'closed': datetime.datetime(2023, 7, 7, 17, 12, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 14, 17, 17, tzinfo=datetime.timezone.utc), 'time_taken': 183303.0, 'time_delta': '2 days, 2:55:03', 'additions': 65, 'deletions': 6, 'state': 'closed'}, {'id': 1420885621, 'number': 500, 'closed': datetime.datetime(2023, 7, 7, 17, 11, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 11, 2, 50, tzinfo=datetime.timezone.utc), 'time_taken': 194940.0, 'time_delta': '2 days, 6:09:00', 'additions': 40, 'deletions': 0, 'state': 'closed'}, {'id': 1420819953, 'number': 499, 'closed': datetime.datetime(2023, 7, 7, 17, 11, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 5, 10, 18, 22, tzinfo=datetime.timezone.utc), 'time_taken': 197587.0, 'time_delta': '2 days, 6:53:07', 'additions': 92, 'deletions': 3, 'state': 'closed'}, {'id': 1419240858, 'number': 498, 'closed': datetime.datetime(2023, 7, 7, 17, 17, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 8, 48, 13, tzinfo=datetime.timezone.utc), 'time_taken': 289746.0, 'time_delta': '3 days, 8:29:06', 'additions': 52, 'deletions': 6, 'state': 'closed'}, {'id': 1419163775, 'number': 497, 'closed': datetime.datetime(2023, 7, 7, 17, 22, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 7, 55, 15, tzinfo=datetime.timezone.utc), 'time_taken': 293248.0, 'time_delta': '3 days, 9:27:28', 'additions': 44, 'deletions': 4, 'state': 'closed'}, {'id': 1419138233, 'number': 496, 'closed': datetime.datetime(2023, 7, 7, 17, 22, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 7, 37, 39, tzinfo=datetime.timezone.utc), 'time_taken': 294274.0, 'time_delta': '3 days, 9:44:34', 'additions': 41, 'deletions': 0, 'state': 'closed'}, {'id': 1419047493, 'number': 495, 'closed': datetime.datetime(2023, 7, 7, 17, 18, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 7, 4, 6, 31, 55, tzinfo=datetime.timezone.utc), 'time_taken': 297991.0, 'time_delta': '3 days, 10:46:31', 'additions': 40, 'deletions': 0, 'state': 'closed'}, {'id': 1401725844, 'number': 493, 'closed': datetime.datetime(2023, 6, 30, 19, 14, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 21, 13, 39, 36, tzinfo=datetime.timezone.utc), 'time_taken': 797700.0, 'time_delta': '9 days, 5:35:00', 'additions': 117, 'deletions': 6, 'state': 'closed'}, {'id': 1401248911, 'number': 492, 'closed': datetime.datetime(2023, 6, 30, 17, 36, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 21, 8, 46, 14, tzinfo=datetime.timezone.utc), 'time_taken': 809408.0, 'time_delta': '9 days, 8:50:08', 'additions': 82, 'deletions': 0, 'state': 'closed'}, {'id': 1399893760, 'number': 491, 'closed': datetime.datetime(2023, 6, 30, 17, 19, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 20, 13, 36, 58, tzinfo=datetime.timezone.utc), 'time_taken': 877343.0, 'time_delta': '10 days, 3:42:23', 'additions': 77, 'deletions': 0, 'state': 'closed'}, {'id': 1390583416, 'number': 490, 'closed': datetime.datetime(2023, 6, 30, 17, 16, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 13, 13, 6, 45, tzinfo=datetime.timezone.utc), 'time_taken': 1483771.0, 'time_delta': '17 days, 4:09:31', 'additions': 77, 'deletions': 0, 'state': 'closed'}, {'id': 1387620139, 'number': 489, 'closed': datetime.datetime(2023, 7, 7, 17, 9, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 11, 17, 39, 56, tzinfo=datetime.timezone.utc), 'time_taken': 2244586.0, 'time_delta': '25 days, 23:29:46', 'additions': 113, 'deletions': 7, 'state': 'closed'}, {'id': 1387544647, 'number': 488, 'closed': datetime.datetime(2023, 6, 30, 17, 14, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 11, 13, 56, 27, tzinfo=datetime.timezone.utc), 'time_taken': 1653502.0, 'time_delta': '19 days, 3:18:22', 'additions': 77, 'deletions': 0, 'state': 'closed'}, {'id': 1386696627, 'number': 487, 'closed': datetime.datetime(2023, 6, 30, 17, 28, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 9, 20, 23, 36, tzinfo=datetime.timezone.utc), 'time_taken': 1803919.0, 'time_delta': '20 days, 21:05:19', 'additions': 100, 'deletions': 41, 'state': 'closed'}, {'id': 1384449863, 'number': 486, 'closed': datetime.datetime(2023, 7, 7, 4, 20, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 8, 13, 20, 19, tzinfo=datetime.timezone.utc), 'time_taken': 2473194.0, 'time_delta': '28 days, 14:59:54', 'additions': 208, 'deletions': 1, 'state': 'closed'}, {'id': 1380508162, 'number': 485, 'closed': datetime.datetime(2023, 6, 9, 17, 17, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 6, 9, 35, 20, tzinfo=datetime.timezone.utc), 'time_taken': 286952.0, 'time_delta': '3 days, 7:42:32', 'additions': 42, 'deletions': 15, 'state': 'closed'}, {'id': 1378805348, 'number': 484, 'closed': datetime.datetime(2023, 6, 30, 17, 21, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 5, 11, 18, 53, tzinfo=datetime.timezone.utc), 'time_taken': 2181751.0, 'time_delta': '25 days, 6:02:31', 'additions': 77, 'deletions': 0, 'state': 'closed'}, {'id': 1376954277, 'number': 483, 'closed': datetime.datetime(2023, 6, 9, 17, 27, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 3, 12, 28, 47, tzinfo=datetime.timezone.utc), 'time_taken': 536301.0, 'time_delta': '6 days, 4:58:21', 'additions': 100, 'deletions': 16, 'state': 'closed'}, {'id': 1374187583, 'number': 482, 'closed': datetime.datetime(2023, 6, 2, 12, 45, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 1, 14, 16, 35, tzinfo=datetime.timezone.utc), 'time_taken': 80933.0, 'time_delta': '22:28:53', 'additions': 107, 'deletions': 8, 'state': 'closed'}, {'id': 1372071273, 'number': 481, 'closed': datetime.datetime(2023, 6, 30, 17, 22, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 31, 12, 5, 17, tzinfo=datetime.timezone.utc), 'time_taken': 2611044.0, 'time_delta': '30 days, 5:17:24', 'additions': 80, 'deletions': 0, 'state': 'closed'}, {'id': 1369571446, 'number': 480, 'closed': datetime.datetime(2023, 6, 30, 17, 30, 56, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 29, 21, 30, 3, tzinfo=datetime.timezone.utc), 'time_taken': 2750453.0, 'time_delta': '31 days, 20:00:53', 'additions': 76, 'deletions': 0, 'state': 'closed'}, {'id': 1368767606, 'number': 479, 'closed': datetime.datetime(2023, 6, 30, 17, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 29, 8, 52, 18, tzinfo=datetime.timezone.utc), 'time_taken': 2795862.0, 'time_delta': '32 days, 8:37:42', 'additions': 95, 'deletions': 0, 'state': 'closed'}, {'id': 1368020996, 'number': 478, 'closed': datetime.datetime(2023, 7, 7, 17, 9, 16, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 28, 15, 4, 37, tzinfo=datetime.timezone.utc), 'time_taken': 3463479.0, 'time_delta': '40 days, 2:04:39', 'additions': 124, 'deletions': 41, 'state': 'closed'}, {'id': 1362779998, 'number': 477, 'closed': datetime.datetime(2023, 6, 9, 18, 38, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 24, 9, 57, 38, tzinfo=datetime.timezone.utc), 'time_taken': 1413679.0, 'time_delta': '16 days, 8:41:19', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 1349516180, 'number': 476, 'closed': datetime.datetime(2023, 6, 30, 18, 41, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 13, 12, 15, 34, tzinfo=datetime.timezone.utc), 'time_taken': 4170367.0, 'time_delta': '48 days, 6:26:07', 'additions': 364, 'deletions': 46, 'state': 'closed'}, {'id': 1275011692, 'number': 463, 'closed': datetime.datetime(2023, 3, 26, 22, 6, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 3, 14, 13, 6, 22, tzinfo=datetime.timezone.utc), 'time_taken': 1069182.0, 'time_delta': '12 days, 8:59:42', 'additions': 18, 'deletions': 0, 'state': 'closed'}, {'id': 1111889997, 'number': 442, 'closed': datetime.datetime(2023, 6, 30, 17, 24, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 6, 7, 48, 6, tzinfo=datetime.timezone.utc), 'time_taken': 20424986.0, 'time_delta': '236 days, 9:36:26', 'additions': 234, 'deletions': 210, 'state': 'closed'}, {'id': 1110780043, 'number': 441, 'closed': datetime.datetime(2023, 5, 12, 17, 10, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 4, 12, 43, 14, tzinfo=datetime.timezone.utc), 'time_taken': 16345633.0, 'time_delta': '189 days, 4:27:13', 'additions': 381, 'deletions': 359, 'state': 'closed'}, {'id': 1031906855, 'number': 426, 'closed': datetime.datetime(2022, 8, 23, 12, 33, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 20, 22, 51, 41, tzinfo=datetime.timezone.utc), 'time_taken': 222103.0, 'time_delta': '2 days, 13:41:43', 'additions': 425, 'deletions': 420, 'state': 'closed'}, {'id': 961237514, 'number': 409, 'closed': datetime.datetime(2022, 9, 26, 15, 22, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 8, 6, 29, 32, tzinfo=datetime.timezone.utc), 'time_taken': 9535972.0, 'time_delta': '110 days, 8:52:52', 'additions': 214, 'deletions': 156, 'state': 'closed'}]"
+406892776,openmrs-contrib-fhir2-ig,openmrs/openmrs-contrib-fhir2-ig,GLSL,8,3,53,8,97,0,5,0,"[{'id': 1399996874, 'number': 60, 'closed': datetime.datetime(2023, 6, 22, 11, 14, 7, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 20, 14, 35, 10, tzinfo=datetime.timezone.utc), 'time_taken': 160737.0, 'time_delta': '1 day, 20:38:57', 'additions': 5, 'deletions': 4, 'state': 'closed'}, {'id': 1387542540, 'number': 59, 'closed': datetime.datetime(2023, 6, 23, 17, 17, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 11, 13, 48, 17, tzinfo=datetime.timezone.utc), 'time_taken': 1049372.0, 'time_delta': '12 days, 3:29:32', 'additions': 7, 'deletions': 6, 'state': 'closed'}]"

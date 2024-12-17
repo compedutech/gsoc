@@ -1,0 +1,388 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+674601434,XF: Lockscreen feature Added - Fixes #180,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+Added Lockscreen feature to the LibVLCSharp.Forms project. When user clicks on the lock button, PlayBack Controls are hidden, SeekBar is in read-only mode and the device's orientation is locked. 
+<!-- Describe your changes here. -->
+
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/180
+
+### API Changes ###
+
+Added:
+ - SwipeToUnLockView : a custom view to unlock screen
+ - IOrientationHandler, OrientationHandler : Dependency to lock or unlock device's orientation.
+
+Updated:
+ - MediaPlayerElement.xaml.cs
+ - Generic.xaml, Generic.xaml.cs
+ - MediaPlayerElement.xaml.cs
+ - Strings.resx
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+
+- iOS
+- Android
+
+
+### Before/After Screenshots ### 
+<!-- If possible, take a screenshot of your test case before these changes were made and another screenshot after the changes were made to show possible visual changes. -->
+
+Before:
+
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/before/MainView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/before/MinView-iOS.png"" width=""200"" height=""400"" />
+
+After:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/mainView2-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/mainView-iOS.png"" width=""200"" height=""400"" />
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/LockSceenView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/LockSceenView-iOS.png"" width=""200"" height=""400"" />
+
+### Testing Procedure ###
+<!-- Please list the steps that should be taken to properly test these changes on each relevant platform. If you were unable to test these changes yourself on any or all platforms, please let us know. Also, if you are able to attach a video of your test run, you will be our personal hero. -->
+On iOS, you have to override the GetSupportedInterfaceOrientations method in AppDelegate.cs.
+(Refer to the sample LibVLCSharp.Forms.Sample.MediaElement)
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",True,222,https://api.github.com/repos/videolan/libvlcsharp/pulls/222,https://github.com/videolan/libvlcsharp/pull/222,closed,576,6,13,1,4,19,0,0,[],2021-06-21 14:24:30+00:00,2021-06-30 02:46:04+00:00,735694.0,"8 days, 12:21:34","[{'comment_id': 655919830, 'comment_body': 'You can remove this I guess.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 41, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655921761, 'comment_body': ""Not sure about the naming for `OrientationChangeSuscriber` yet. You're missing a `b` though.\r\n\r\n`OrientationChangeSubscriber` and `Subscribe` namely.\r\n\r\nAre we doing anything with the `this` parameter? Do we really need it?"", 'comment_created': datetime.datetime(2021, 6, 22, 6, 45, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922534, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 46, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922611, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 46, 58, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922776, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 47, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655923646, 'comment_body': '>  Refer to the sample LibVLCSharp.Forms.Sample.MediaElement to see how to use it.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 48, 44, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924121, 'comment_body': 'nit: iOS', 'comment_created': datetime.datetime(2021, 6, 22, 6, 49, 32, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924319, 'comment_body': 'you can cache those parameters in the class', 'comment_created': datetime.datetime(2021, 6, 22, 6, 49, 52, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924374, 'comment_body': 'same', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924644, 'comment_body': 'also for messaging keys', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 27, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924657, 'comment_body': ':+1:', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 28, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924743, 'comment_body': '`Subscribe`', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 40, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655925194, 'comment_body': '> On size allocated, subscribe the page to the lock screen message which will be sent by PlaybackControls.cs.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 51, 19, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655926007, 'comment_body': 'The Thumb string can be cached as constants, same for TrackBar etc.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 52, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655950115, 'comment_body': 'Yes, sorry :(', 'comment_created': datetime.datetime(2021, 6, 22, 7, 29, 26, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 655962473, 'comment_body': ""For the naming, OrientationChangeSuscriber listens to the orinetationchange event, that's why I call it so. `b` is missing.\r\nAny proposal for the name ?\r\n`this` is the subscriber that really lock the screen on iOS."", 'comment_created': datetime.datetime(2021, 6, 22, 7, 46, 7, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 655966724, 'comment_body': 'I have to remove this comment because i moved all MessagingCenter to the library.', 'comment_created': datetime.datetime(2021, 6, 22, 7, 51, 49, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 660422112, 'comment_body': ""`GetSupportedInterfaceOrientations` is called every time the device orientation changes, causing multiple subscribes and potential leaks. That's not expected, right?"", 'comment_created': datetime.datetime(2021, 6, 29, 9, 1, 22, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 661024833, 'comment_body': '`GetSupportedInterfaceOrientations`  works like that https://developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations.\r\nBut in the `Subscribe` method, all subscriptions using MessagingCenter shoud be done one time.\r\nI just fixed it.', 'comment_created': datetime.datetime(2021, 6, 29, 23, 18, 4, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}]","[{'commit_sha': 'f1a2a50d2b8f36ccf057a1ebafb6b6636e063d0d', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+696808040,MediaElement XF: Improve track management - Fixes #196,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+
+<!-- Describe your changes here. -->
+An Overlay View is used to display all tracks like it is done on VLC Android. User can select any track from the tracks list which will be automatically applied to the media.
+This feature was initially implemented using Popup.
+
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/196
+
+### API Changes ###
+
+
+Added:
+ - VideoTracksManager 
+
+Changed:
+ - MediaPlayerElement.xaml.cs
+ - PlaybackControls.xaml.cs
+ - Strings.Designer.cs 
+ - Generic.xaml 
+ - MediaPlayerElementManager.cs
+ 
+ Removed:
+ - SelectTrackAsync method of PlaybackControls.xaml.cs
+ 
+
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+- iOS
+- Android
+
+
+### Before/After Screenshots ### 
+Before:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/before/MainView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/before/MainView-iOS.png"" width=""200"" height=""400"" />
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/before/AudioTracks-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/before/AudioTracks-iOS.png "" width=""200"" height=""400"" />
+
+
+After:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/after/MainView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/after/MainView-iOS.png"" width=""200"" height=""400"" />
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/after/Tracks-Android.png "" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/after/Tracks-iOS.png"" width=""200"" height=""400"" />
+
+
+### Testing Procedure ###
+None
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",True,225,https://api.github.com/repos/videolan/libvlcsharp/pulls/225,https://github.com/videolan/libvlcsharp/pull/225,closed,473,251,13,1,26,35,0,0,[],2021-07-26 08:28:09+00:00,2021-08-11 06:53:49+00:00,1376740.0,"15 days, 22:25:40","[{'comment_id': 677140178, 'comment_body': ""I'm not sure I'm seeing that button anywhere?"", 'comment_created': datetime.datetime(2021, 7, 27, 5, 56, 28, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 678133913, 'comment_body': 'Yeah, I just removed all unused style.', 'comment_created': datetime.datetime(2021, 7, 28, 9, 29, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 680787789, 'comment_body': 'I\'d prefer `TracksOverlayView`, as I\'d write ""Overlay"" in a single word.', 'comment_created': datetime.datetime(2021, 8, 2, 8, 46, 34, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 680795408, 'comment_body': 'index does not seem to be used anywhere and could be removed', 'comment_created': datetime.datetime(2021, 8, 2, 8, 57, 6, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 680797789, 'comment_body': ""I don't get why you compare on the name, where `*` is appended if it is the current track... Why not using the Track Id ?"", 'comment_created': datetime.datetime(2021, 8, 2, 9, 0, 21, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 680798659, 'comment_body': 'Seems like this foreach could have been replaced by ` var foundTrack = tracks.FirstOrDefault(t => ...)` and a if/else depending on if it was found.', 'comment_created': datetime.datetime(2021, 8, 2, 9, 1, 38, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 680800296, 'comment_body': ""I'm not a huge fan of replacing the item in the collection for the purpose of adding an asterisk for the selected track.\r\n\r\nThe asterisk should have been a converter or something, to allow different styles to show the current track the way they want."", 'comment_created': datetime.datetime(2021, 8, 2, 9, 3, 57, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 680825322, 'comment_body': 'see https://github.com/videolan/libvlcsharp/pull/225#issuecomment-887233659', 'comment_created': datetime.datetime(2021, 8, 2, 9, 39, 59, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 680828553, 'comment_body': 'Done locally', 'comment_created': datetime.datetime(2021, 8, 2, 9, 44, 38, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 680830320, 'comment_body': 'Yeah, sorry !\r\n', 'comment_created': datetime.datetime(2021, 8, 2, 9, 46, 58, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 680843785, 'comment_body': 'The trackDescription Ids are not are not ordered like 0,1,2  so that I can index my Itemsource.\r\nFor VideoTrack IDs for example, you can see 0, -1, 3.\r\nSo when creating the Itemsource for a ListView, I change the index: -1 become 0, -1 become 1, ...\r\nThat is why I make the comparison using this name.\r\nYou will notice that currently in the 3.x branch, the Track Id is used for the comparaion and as result the selected track is not applied to the media.\r\n', 'comment_created': datetime.datetime(2021, 8, 2, 10, 6, 25, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 681624214, 'comment_body': 'PR updated.', 'comment_created': datetime.datetime(2021, 8, 3, 10, 11, 44, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 682238091, 'comment_body': 'Is this code still relevant? Ditto for `IsAudioTracksSelectionButtonVisibleProperty` and `IsAudioTracksSelectionButtonVisible`', 'comment_created': datetime.datetime(2021, 8, 4, 2, 23, 21, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 682238211, 'comment_body': 'incorrect copy pasted comment', 'comment_created': datetime.datetime(2021, 8, 4, 2, 23, 46, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 682388043, 'comment_body': 'Removed.', 'comment_created': datetime.datetime(2021, 8, 4, 8, 8, 29, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 682388239, 'comment_body': 'Updated', 'comment_created': datetime.datetime(2021, 8, 4, 8, 8, 44, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 684962222, 'comment_body': ""```suggestion\r\n                previousTrack.Selected = false;\r\n                selectedTrack.Selected = true;\r\n```\r\n\r\nYou already have the viewModel object references, you don't need to perform another lookup in the object."", 'comment_created': datetime.datetime(2021, 8, 9, 7, 16, 29, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 684963060, 'comment_body': 'Either you use `.First()` here, or you need to handle the (unlikely) case where previousTrack is null', 'comment_created': datetime.datetime(2021, 8, 9, 7, 18, 9, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 684963724, 'comment_body': ""Wondering if we shouldn't hide these if there are 0 subtitle tracks (or 0 audio/video tracks, unlikely for video at least).\r\nBut then, if one is dynamically added, it should appear again. What do you think?\r\n\r\nThe benefit might not be worth the added complexity though."", 'comment_created': datetime.datetime(2021, 8, 9, 7, 19, 34, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 684965115, 'comment_body': ""This should be tested right after the `var tracks = manager.Tracks;` line (return immediately in case it's null."", 'comment_created': datetime.datetime(2021, 8, 9, 7, 22, 11, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 684966455, 'comment_body': ""It's not an id, it's an index, not to be confused with the track id in the VLC side.\r\nCan you explain again why the VLC track id doesn't fit our need?"", 'comment_created': datetime.datetime(2021, 8, 9, 7, 24, 47, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 684967442, 'comment_body': ""If we can't use the VLC track id, then we should:\r\n- Change the name here to avoid confusion\r\n- Document in the comments why it's not the same number"", 'comment_created': datetime.datetime(2021, 8, 9, 7, 26, 51, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 684968680, 'comment_body': ""> if one is dynamically added, it should appear again\r\n\r\nDoesn't seem complex if it's a data binding with a Converter\r\n\r\nCan tracks be added dynamically ? If so, can they be removed ? If it can be removed, what's the stability of an index-based track identification?"", 'comment_created': datetime.datetime(2021, 8, 9, 7, 29, 6, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 684972443, 'comment_body': ""> Can tracks be added dynamically ?  If so, can they be removed ? \r\n\r\nThe user could add an external .srt file for example. I think some streams can dynamically add/remove ES too...\r\n\r\n>  If it can be removed, what's the stability of an index-based track identification?\r\n\r\nThat's fixed in v4 (one of the reasons this PR won't apply nicely to master)\r\nhttps://github.com/videolan/libvlcsharp/blob/a6816208f29792685373eb556034721ac0684681/src/LibVLCSharp/Structures/MediaTrack.cs#L23"", 'comment_created': datetime.datetime(2021, 8, 9, 7, 36, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 685006604, 'comment_body': 'this should be `internal`', 'comment_created': datetime.datetime(2021, 8, 9, 8, 33, 35, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 685015016, 'comment_body': 'Still a string comparison here. Can we be sure that the name is unique?', 'comment_created': datetime.datetime(2021, 8, 9, 8, 47, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 685016245, 'comment_body': 'If a match is not found, foundTrack is null, not its Name property.', 'comment_created': datetime.datetime(2021, 8, 9, 8, 49, 14, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 685026635, 'comment_body': ""I don't really know is the names come from the Media will always be unique. May be in my ViewModel, I must include the TrackId in addition to the custom Id ?"", 'comment_created': datetime.datetime(2021, 8, 9, 9, 5, 39, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 685026693, 'comment_body': ""foundTrack is a struct. Struct are considered value types, and by definition can't be null."", 'comment_created': datetime.datetime(2021, 8, 9, 9, 5, 46, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 685028002, 'comment_body': 'Please disregard my comment then.\nHow do you expect the name to be null then? Do you display a ""Disable"" button that is bound to a fake ViewModel?', 'comment_created': datetime.datetime(2021, 8, 9, 9, 7, 52, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 685053118, 'comment_body': 'If a match is not found, all string properties will be null. That\'s why I do the null check on the name.\r\nI think These checks should be removed since I deleted the ""*""  in front of the track name ( in the previous implementation of the Track feature).\r\nWe have to replace FirstOrDefault() by First() also because I don\'t see why foundTrack can not exist.\r\n', 'comment_created': datetime.datetime(2021, 8, 9, 9, 46, 6, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 685056229, 'comment_body': 'If Selected is not updated here, It will always remain false because It is not updated anywhere.\r\n(I used Selected to hide or display the check buttons on the ListView).', 'comment_created': datetime.datetime(2021, 8, 9, 9, 50, 58, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 685061532, 'comment_body': ""I'm not telling you not to set the Selected property, I'm telling you that you don't need to search for things in the itemsSource (espacially based on the index), because you already have the ViewModel instance"", 'comment_created': datetime.datetime(2021, 8, 9, 9, 59, 20, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 685067258, 'comment_body': ""Ooh sorry. You're right. I just removed it."", 'comment_created': datetime.datetime(2021, 8, 9, 10, 8, 51, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 685075785, 'comment_body': ""> Wondering if we shouldn't hide these if there are 0 subtitle tracks (or 0 audio/video tracks, unlikely for video at least).\r\n> But then, if one is dynamically added, it should appear again. What do you think?\r\n\r\nGood idea ! I am currently updating the PR :-)"", 'comment_created': datetime.datetime(2021, 8, 9, 10, 23, 17, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}]","[{'commit_sha': '31e1022c8f22decbbd047a2543df53207fcd911f', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+713215886,MediaElement XF: Fixes customization regression,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+
+<!-- Describe your changes here. -->
+Add IsLockButtonVisible and IsTracksButtonVisible properties which allow to hide or show the LockButton and the TracksButton.
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/494
+
+### API Changes ###
+<!-- List all API changes here (or just put None), example:
+
+Added:
+ - IsLockButtonVisible  { get; set; } //Bindable Property
+ - int ListView.GroupId { get; set; } // Bindable Property
+ - void ListView.Clear ();
+
+Changed:
+ - object ListView.SelectedItem => Cell ListView.SelectedItem
+ 
+ Removed:
+ - object ListView.SelectedItem => Cell ListView.SelectedItem
+ 
+ -->
+ 
+ None
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+- iOS
+- Android
+
+
+### Behavioral/Visual Changes ###
+<!-- Describe any changes that may change how a user's app behaves or appears when upgrading to this version of the codebase. -->
+
+None
+
+### Before/After Screenshots ### 
+<!-- If possible, take a screenshot of your test case before these changes were made and another screenshot after the changes were made to show possible visual changes. -->
+![image](https://user-images.githubusercontent.com/26142591/129534661-eaca5ccb-363c-4d95-9a9e-1fa1ad191141.png)
+
+
+### Testing Procedure ###
+<!-- Please list the steps that should be taken to properly test these changes on each relevant platform. If you were unable to test these changes yourself on any or all platforms, please let us know. Also, if you are able to attach a video of your test run, you will be our personal hero. -->
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",True,229,https://api.github.com/repos/videolan/libvlcsharp/pulls/229,https://github.com/videolan/libvlcsharp/pull/229,closed,30,15,2,1,1,10,0,0,[],2021-08-16 08:13:45+00:00,2021-08-18 07:49:27+00:00,171342.0,"1 day, 23:35:42","[{'comment_id': 689417520, 'comment_body': ""This is a change in the behavior. What if people don't want to link the seekbar and the remaining/elapsed time visibility? I'd be in favor of having separate properties for that, and avoid doing that in this bugfix PR"", 'comment_created': datetime.datetime(2021, 8, 16, 10, 27, 48, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 689432647, 'comment_body': 'We discussed this internally on discord, was my idea. It does not make much sense IMHO to have the time labels (which are relative to the seekbar UI-wise) without the seekbar. But no strong feelings.', 'comment_created': datetime.datetime(2021, 8, 16, 10, 52, 17, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689434564, 'comment_body': ""It doesn't make much sense to have a seekbar for infinite/live streams where the duration is unknown. Having the elasped time may be interesting though.\nNo strong feeling either, just wondering about the behavior change in a bugfix version."", 'comment_created': datetime.datetime(2021, 8, 16, 10, 55, 28, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 689437574, 'comment_body': '> just wondering about the behavior change in a bugfix version.\r\n\r\nSure :-) Happened because Laurent initially opened this PR with this screenshot and that got me wondering.\r\n\r\n![](https://user-images.githubusercontent.com/26142591/129532254-223b68e4-c76e-4013-bfbc-e39fc3507354.png)\r\n\r\n> for infinite/live streams where the duration is unknown. Having the elasped time may be interesting though.\r\n\r\nFair enough. One property for both labels though to keep it simple. We can revisit this later if needed.', 'comment_created': datetime.datetime(2021, 8, 16, 11, 0, 17, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689441298, 'comment_body': 'We could also hide the remaining time if the duration is unknown. The behavior is yet to be defined, and I suggest to revert this change and  take the time to discuss more about the wanted new behavior 🙂', 'comment_created': datetime.datetime(2021, 8, 16, 11, 6, 29, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 689441997, 'comment_body': 'Sure. /cc @egbakou ', 'comment_created': datetime.datetime(2021, 8, 16, 11, 7, 48, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 690095300, 'comment_body': 'You mean hide the remaining time label if the MediaPlayer Length=0 ?', 'comment_created': datetime.datetime(2021, 8, 17, 7, 9, 58, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 690099358, 'comment_body': ""Yes, but that's a topic for another PR I guess"", 'comment_created': datetime.datetime(2021, 8, 17, 7, 14, 58, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 690116344, 'comment_body': ""Okay thanks !\r\nSo I guess it's ok for this PR ."", 'comment_created': datetime.datetime(2021, 8, 17, 7, 40, 24, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 690218029, 'comment_body': ""@mfkl  It's done"", 'comment_created': datetime.datetime(2021, 8, 17, 9, 56, 37, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}]","[{'commit_sha': '12bbf08341ac204a61031f503f4855b08c340cda', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+674601434,XF: Lockscreen feature Added - Fixes #180,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+Added Lockscreen feature to the LibVLCSharp.Forms project. When user clicks on the lock button, PlayBack Controls are hidden, SeekBar is in read-only mode and the device's orientation is locked. 
+<!-- Describe your changes here. -->
+
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/180
+
+### API Changes ###
+
+Added:
+ - SwipeToUnLockView : a custom view to unlock screen
+ - IOrientationHandler, OrientationHandler : Dependency to lock or unlock device's orientation.
+
+Updated:
+ - MediaPlayerElement.xaml.cs
+ - Generic.xaml, Generic.xaml.cs
+ - MediaPlayerElement.xaml.cs
+ - Strings.resx
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+
+- iOS
+- Android
+
+
+### Before/After Screenshots ### 
+<!-- If possible, take a screenshot of your test case before these changes were made and another screenshot after the changes were made to show possible visual changes. -->
+
+Before:
+
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/before/MainView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/before/MinView-iOS.png"" width=""200"" height=""400"" />
+
+After:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/mainView2-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/mainView-iOS.png"" width=""200"" height=""400"" />
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/LockSceenView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/LockSceenView-iOS.png"" width=""200"" height=""400"" />
+
+### Testing Procedure ###
+<!-- Please list the steps that should be taken to properly test these changes on each relevant platform. If you were unable to test these changes yourself on any or all platforms, please let us know. Also, if you are able to attach a video of your test run, you will be our personal hero. -->
+On iOS, you have to override the GetSupportedInterfaceOrientations method in AppDelegate.cs.
+(Refer to the sample LibVLCSharp.Forms.Sample.MediaElement)
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",True,222,https://api.github.com/repos/videolan/libvlcsharp/pulls/222,https://github.com/videolan/libvlcsharp/pull/222,closed,576,6,13,1,4,19,0,0,[],2021-06-21 14:24:30+00:00,2021-06-30 02:46:04+00:00,735694.0,"8 days, 12:21:34","[{'comment_id': 655919830, 'comment_body': 'You can remove this I guess.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 41, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655921761, 'comment_body': ""Not sure about the naming for `OrientationChangeSuscriber` yet. You're missing a `b` though.\r\n\r\n`OrientationChangeSubscriber` and `Subscribe` namely.\r\n\r\nAre we doing anything with the `this` parameter? Do we really need it?"", 'comment_created': datetime.datetime(2021, 6, 22, 6, 45, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922534, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 46, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922611, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 46, 58, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922776, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 47, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655923646, 'comment_body': '>  Refer to the sample LibVLCSharp.Forms.Sample.MediaElement to see how to use it.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 48, 44, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924121, 'comment_body': 'nit: iOS', 'comment_created': datetime.datetime(2021, 6, 22, 6, 49, 32, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924319, 'comment_body': 'you can cache those parameters in the class', 'comment_created': datetime.datetime(2021, 6, 22, 6, 49, 52, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924374, 'comment_body': 'same', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924644, 'comment_body': 'also for messaging keys', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 27, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924657, 'comment_body': ':+1:', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 28, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924743, 'comment_body': '`Subscribe`', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 40, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655925194, 'comment_body': '> On size allocated, subscribe the page to the lock screen message which will be sent by PlaybackControls.cs.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 51, 19, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655926007, 'comment_body': 'The Thumb string can be cached as constants, same for TrackBar etc.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 52, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655950115, 'comment_body': 'Yes, sorry :(', 'comment_created': datetime.datetime(2021, 6, 22, 7, 29, 26, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 655962473, 'comment_body': ""For the naming, OrientationChangeSuscriber listens to the orinetationchange event, that's why I call it so. `b` is missing.\r\nAny proposal for the name ?\r\n`this` is the subscriber that really lock the screen on iOS."", 'comment_created': datetime.datetime(2021, 6, 22, 7, 46, 7, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 655966724, 'comment_body': 'I have to remove this comment because i moved all MessagingCenter to the library.', 'comment_created': datetime.datetime(2021, 6, 22, 7, 51, 49, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 660422112, 'comment_body': ""`GetSupportedInterfaceOrientations` is called every time the device orientation changes, causing multiple subscribes and potential leaks. That's not expected, right?"", 'comment_created': datetime.datetime(2021, 6, 29, 9, 1, 22, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 661024833, 'comment_body': '`GetSupportedInterfaceOrientations`  works like that https://developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations.\r\nBut in the `Subscribe` method, all subscriptions using MessagingCenter shoud be done one time.\r\nI just fixed it.', 'comment_created': datetime.datetime(2021, 6, 29, 23, 18, 4, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}]","[{'commit_sha': 'f1a2a50d2b8f36ccf057a1ebafb6b6636e063d0d', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+674601434,XF: Lockscreen feature Added - Fixes #180,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+Added Lockscreen feature to the LibVLCSharp.Forms project. When user clicks on the lock button, PlayBack Controls are hidden, SeekBar is in read-only mode and the device's orientation is locked. 
+<!-- Describe your changes here. -->
+
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/180
+
+### API Changes ###
+
+Added:
+ - SwipeToUnLockView : a custom view to unlock screen
+ - IOrientationHandler, OrientationHandler : Dependency to lock or unlock device's orientation.
+
+Updated:
+ - MediaPlayerElement.xaml.cs
+ - Generic.xaml, Generic.xaml.cs
+ - MediaPlayerElement.xaml.cs
+ - Strings.resx
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+
+- iOS
+- Android
+
+
+### Before/After Screenshots ### 
+<!-- If possible, take a screenshot of your test case before these changes were made and another screenshot after the changes were made to show possible visual changes. -->
+
+Before:
+
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/before/MainView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/before/MinView-iOS.png"" width=""200"" height=""400"" />
+
+After:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/mainView2-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/mainView-iOS.png"" width=""200"" height=""400"" />
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/LockSceenView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/lockscreen-feature/after/LockSceenView-iOS.png"" width=""200"" height=""400"" />
+
+### Testing Procedure ###
+<!-- Please list the steps that should be taken to properly test these changes on each relevant platform. If you were unable to test these changes yourself on any or all platforms, please let us know. Also, if you are able to attach a video of your test run, you will be our personal hero. -->
+On iOS, you have to override the GetSupportedInterfaceOrientations method in AppDelegate.cs.
+(Refer to the sample LibVLCSharp.Forms.Sample.MediaElement)
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",True,222,https://api.github.com/repos/videolan/libvlcsharp/pulls/222,https://github.com/videolan/libvlcsharp/pull/222,closed,576,6,13,1,4,19,0,0,[],2021-06-21 14:24:30+00:00,2021-06-30 02:46:04+00:00,735694.0,"8 days, 12:21:34","[{'comment_id': 655919830, 'comment_body': 'You can remove this I guess.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 41, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655921761, 'comment_body': ""Not sure about the naming for `OrientationChangeSuscriber` yet. You're missing a `b` though.\r\n\r\n`OrientationChangeSubscriber` and `Subscribe` namely.\r\n\r\nAre we doing anything with the `this` parameter? Do we really need it?"", 'comment_created': datetime.datetime(2021, 6, 22, 6, 45, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922534, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 46, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922611, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 46, 58, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655922776, 'comment_body': 'remove extra space', 'comment_created': datetime.datetime(2021, 6, 22, 6, 47, 16, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655923646, 'comment_body': '>  Refer to the sample LibVLCSharp.Forms.Sample.MediaElement to see how to use it.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 48, 44, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924121, 'comment_body': 'nit: iOS', 'comment_created': datetime.datetime(2021, 6, 22, 6, 49, 32, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924319, 'comment_body': 'you can cache those parameters in the class', 'comment_created': datetime.datetime(2021, 6, 22, 6, 49, 52, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924374, 'comment_body': 'same', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924644, 'comment_body': 'also for messaging keys', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 27, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924657, 'comment_body': ':+1:', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 28, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655924743, 'comment_body': '`Subscribe`', 'comment_created': datetime.datetime(2021, 6, 22, 6, 50, 40, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655925194, 'comment_body': '> On size allocated, subscribe the page to the lock screen message which will be sent by PlaybackControls.cs.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 51, 19, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655926007, 'comment_body': 'The Thumb string can be cached as constants, same for TrackBar etc.', 'comment_created': datetime.datetime(2021, 6, 22, 6, 52, 43, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 655950115, 'comment_body': 'Yes, sorry :(', 'comment_created': datetime.datetime(2021, 6, 22, 7, 29, 26, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 655962473, 'comment_body': ""For the naming, OrientationChangeSuscriber listens to the orinetationchange event, that's why I call it so. `b` is missing.\r\nAny proposal for the name ?\r\n`this` is the subscriber that really lock the screen on iOS."", 'comment_created': datetime.datetime(2021, 6, 22, 7, 46, 7, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 655966724, 'comment_body': 'I have to remove this comment because i moved all MessagingCenter to the library.', 'comment_created': datetime.datetime(2021, 6, 22, 7, 51, 49, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 660422112, 'comment_body': ""`GetSupportedInterfaceOrientations` is called every time the device orientation changes, causing multiple subscribes and potential leaks. That's not expected, right?"", 'comment_created': datetime.datetime(2021, 6, 29, 9, 1, 22, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 661024833, 'comment_body': '`GetSupportedInterfaceOrientations`  works like that https://developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations.\r\nBut in the `Subscribe` method, all subscriptions using MessagingCenter shoud be done one time.\r\nI just fixed it.', 'comment_created': datetime.datetime(2021, 6, 29, 23, 18, 4, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}]","[{'commit_sha': 'f1a2a50d2b8f36ccf057a1ebafb6b6636e063d0d', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+713269050,MediaElement XF: Add Equalizer UI - Fixes #197,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+<!-- Describe your changes here. -->
+Add Equalizer UI
+
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/197
+
+### API Changes ###
+<!-- List all API changes here (or just put None), example: -->
+
+Added:
+ - BindableStackLayout (custom control)
+ - EqualizerUtils, Band and Preset (classes)
+ - AmplificationToStringConverter and FrequencyToStringConverter (Converters)
+
+Changed:
+ - MediaPlayerElement.xaml and MediaPlayerElement.xaml.cs
+ - Generic.xaml
+ - PlaybackControls.xaml.cs
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+- iOS
+- Android
+
+### Behavioral/Visual Changes ###
+<!-- Describe any changes that may change how a user's app behaves or appears when upgrading to this version of the codebase. -->
+
+None
+
+### Before/After Screenshots ### 
+Before:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/after/MainView-Android.png"" width=""200"" height=""400"" /> |  <img src=""https://raw.githubusercontent.com/egbakou/libvlcsharp-assets/master/trackmanagement/after/MainView-iOS.png"" width=""200"" height=""400"" />
+
+After:
+Android          |  iOS
+:-------------------------:|:-------------------------:
+<img src=""https://user-images.githubusercontent.com/26142591/129540367-6d555e34-4114-44e4-bf20-1cb1a8404a0c.png"" width=""200"" height=""400"" /> |  <img src=""https://user-images.githubusercontent.com/26142591/129542133-8080eacc-bbb1-4674-a863-0e3b44b7d150.png"" width=""200"" height=""400"" />
+<img src=""https://user-images.githubusercontent.com/26142591/129540934-6e019503-84dc-46cf-964c-57cc50f0d022.png"" width=""200"" height=""400"" /> |  <img src=""https://user-images.githubusercontent.com/26142591/129541109-b0c6d0cb-cdfe-4ece-ac61-bae7104d704d.png"" width=""200"" height=""400"" />
+
+
+### Testing Procedure ###
+<!-- Please list the steps that should be taken to properly test these changes on each relevant platform. If you were unable to test these changes yourself on any or all platforms, please let us know. Also, if you are able to attach a video of your test run, you will be our personal hero. -->
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",False,230,https://api.github.com/repos/videolan/libvlcsharp/pulls/230,https://github.com/videolan/libvlcsharp/pull/230,closed,845,3,11,19,7,22,0,0,[],2021-08-16 09:29:56+00:00,2022-02-23 08:27:26+00:00,16498650.0,"190 days, 22:57:30","[{'comment_id': 689385851, 'comment_body': 'If this does not depend on XF and it may be useful to other GUI integrations, it should be located in the main LibVLCSharp package, likely at `libvlcsharp/src/LibVLCSharp/Shared/MediaPlayerElement`', 'comment_created': datetime.datetime(2021, 8, 16, 9, 38, 30, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689388158, 'comment_body': 'you want to be using `using` here, as `Equalizer` is a native resource that needs to be released.', 'comment_created': datetime.datetime(2021, 8, 16, 9, 41, 47, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689388361, 'comment_body': 'Same here. You want to be using `using` here, as `Equalizer` is a native resource that needs to be released.', 'comment_created': datetime.datetime(2021, 8, 16, 9, 42, 3, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689388913, 'comment_body': 'This should be in the main package, as well.', 'comment_created': datetime.datetime(2021, 8, 16, 9, 42, 47, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689389996, 'comment_body': 'extra space', 'comment_created': datetime.datetime(2021, 8, 16, 9, 44, 23, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689390306, 'comment_body': 'can you be more specific about which issues exactly please?', 'comment_created': datetime.datetime(2021, 8, 16, 9, 44, 49, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689391560, 'comment_body': 'who disposes of it?', 'comment_created': datetime.datetime(2021, 8, 16, 9, 46, 44, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689391612, 'comment_body': 'who disposes of it?', 'comment_created': datetime.datetime(2021, 8, 16, 9, 46, 48, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689391810, 'comment_body': '👌 ', 'comment_created': datetime.datetime(2021, 8, 16, 9, 47, 7, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689392368, 'comment_body': 'do we want to check the return value for this?', 'comment_created': datetime.datetime(2021, 8, 16, 9, 47, 54, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689393185, 'comment_body': ""Most of this class, except for one function, could be located in the main libvlcsharp package. Let's do it?"", 'comment_created': datetime.datetime(2021, 8, 16, 9, 49, 8, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689393487, 'comment_body': 'Can it be internal? As well as all its methods? We want to expose as little as possible generally.', 'comment_created': datetime.datetime(2021, 8, 16, 9, 49, 35, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 689393857, 'comment_body': 'typo SetEqualizerToMediaPl**a**yer', 'comment_created': datetime.datetime(2021, 8, 16, 9, 50, 10, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 690097012, 'comment_body': 'Should I keep the INPC inheritance ? ', 'comment_created': datetime.datetime(2021, 8, 17, 7, 12, 7, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 690103172, 'comment_body': 'Not sure we need to check the returned value because if the returned value is false for example, there is nothing to do.', 'comment_created': datetime.datetime(2021, 8, 17, 7, 20, 49, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 690106345, 'comment_body': ""I guess not, this smells like a `Model` class, doesn't it?"", 'comment_created': datetime.datetime(2021, 8, 17, 7, 25, 25, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 690115197, 'comment_body': 'I use these classes as `ViewModel` .', 'comment_created': datetime.datetime(2021, 8, 17, 7, 38, 43, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 690236569, 'comment_body': ""The Slider ValueChanged event(`BandAmplificationValueChanged`) triggers 2 times when it value changes. That's why I created the `IsTheSameAmplification `method in the Utility class because the newValue is the same when the event triggers at the second time. If there was a DragCompleted event for the Slider, it will be ok.\r\n\r\nNow I used `EqualizerViewIsOpening`, `IgnoreAmpValueChanged`, `AmpSliderTriggerCount` to prevent the call of `BandAmplificationValueChanged` method when I set values to the amplifications(The ten vertical sliders). This behavior is caused by INPC."", 'comment_created': datetime.datetime(2021, 8, 17, 10, 23, 3, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 691937742, 'comment_body': 'ok', 'comment_created': datetime.datetime(2021, 8, 19, 9, 19, 21, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 698287380, 'comment_body': 'This whole diff should probably be in `Generic.xaml` instead, with the rest of the playback control styles.', 'comment_created': datetime.datetime(2021, 8, 30, 8, 16, 25, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 698287506, 'comment_body': 'Same here.', 'comment_created': datetime.datetime(2021, 8, 30, 8, 16, 38, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}, {'comment_id': 698288407, 'comment_body': 'This feels like it should be in `PlaybackControls.xaml.cs`. Why only the equalizer logic is in the `MediaPlayerElement` while all other controls logic are in the PlaybackControls?', 'comment_created': datetime.datetime(2021, 8, 30, 8, 18, 2, tzinfo=datetime.timezone.utc), 'commenter': 'mfkl', 'type': 'User'}]","[{'commit_sha': 'e00216c8f85c0e276b9f9aee5e26389cc670df50', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '06e30726bbad8b558719a695d38609c3915abab6', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70c0e2733d6477320dbae59a8606d15146119e78', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '280fa4e346d783245359dcb4134fe8f200374b0c', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dbc9a9f01b734463ae91a0bf1cb640c4093c4af4', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3dbb69e0d1d738a84817c50def4a62c9f0e100ec', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5482f817ee660b2f81cdac345fc875015722f078', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8653f000623ed96585d87ddb522546c5c070337', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b5b322ff5d35ea4dea2fdfb8dcc2261ef14b5dd5', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2ca7de4a5da3a8126733fcd2fc3958cccc95e8c', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '99bc292ce4350e865fd6b840f56c62e2d42beac3', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f8fed23b96c1b70fd86949b64092b431c578507', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a1ba56b3730e45976e4e6701f2b370d7b576abf1', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '891c07f5eb90ac121b4e28304a000adc031ddd40', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49d5ccca04854e5d72543f1d575d8da5a0a163ad', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1b829fc7d3b545fb95f7a2b3ec85aa9a772e8352', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c655cad21bedf4f43ed2dbf23a9163078ff081f', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b2976fb34bd82dd2f933d3270d7ed64643347dc', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5bb6cb4fa41fe1468b0640eadff00834683990fd', 'committer_username': 'mfkl', 'committer_name': 'mfkl', 'committer_email': None, 'commit_date': datetime.datetime(2013, 3, 21, 7, 59, 34, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+717715149,MediaElement XF: Tracks Selection too much space fixed - Fixes #497,"<!-- Please target use the correct target branch for your PR (3.x for LibVLCSharp 3, current master is for LibVLCSharp/LibVLC 4). -->
+
+### Description of Change ###
+Fixes Trackselection layout issue on mkv files with many tracks.
+<!-- Describe your changes here. -->
+
+### Issues Resolved ### 
+<!-- Please use the format ""fixes #xxxx"" for each issue from https://code.videolan.org/videolan/LibVLCSharp/issues this PR addresses -->
+
+- fixes https://code.videolan.org/videolan/LibVLCSharp/-/issues/497
+
+### API Changes ###
+
+Changed:
+ - Generic.xaml
+
+ 
+ None
+
+### Platforms Affected ### 
+<!-- Please list all platforms affected by these changes -->
+
+- iOS
+- Android
+
+### Behavioral/Visual Changes ###
+<!-- Describe any changes that may change how a user's app behaves or appears when upgrading to this version of the codebase. -->
+
+None
+
+### Before/After Screenshots ### 
+Before|  After
+:-------------------------:|:-------------------------:
+<img src=""https://user-images.githubusercontent.com/26142591/130434197-2daaf5d5-bc79-4fca-9504-e3142ef98c43.png"" width=""200"" height=""400"" /> |  <img src=""https://user-images.githubusercontent.com/26142591/130434523-d504ee55-68a1-4073-88ea-749605f63e9e.png"" width=""200"" height=""400"" />
+
+
+![Screenshot_1629715297](https://user-images.githubusercontent.com/26142591/130434726-83aae4ba-fb13-4641-a997-7733d5accfd4.png)
+### Testing Procedure ###
+<!-- Please list the steps that should be taken to properly test these changes on each relevant platform. If you were unable to test these changes yourself on any or all platforms, please let us know. Also, if you are able to attach a video of your test run, you will be our personal hero. -->
+
+### PR Checklist ###
+
+- [x] Rebased on top of the target branch at time of PR
+- [x] Changes adhere to coding standard
+",True,231,https://api.github.com/repos/videolan/libvlcsharp/pulls/231,https://github.com/videolan/libvlcsharp/pull/231,closed,5,0,1,1,1,4,0,0,[],2021-08-23 10:44:51+00:00,2021-08-24 07:53:57+00:00,76146.0,21:09:06,"[{'comment_id': 693869900, 'comment_body': 'Please revert that change 🙂', 'comment_created': datetime.datetime(2021, 8, 23, 10, 57, 35, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 693873239, 'comment_body': 'Done', 'comment_created': datetime.datetime(2021, 8, 23, 11, 3, 13, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}, {'comment_id': 693874448, 'comment_body': ""Isn't there a StackPanel on X.F? wouldn't that work here?"", 'comment_created': datetime.datetime(2021, 8, 23, 11, 5, 18, tzinfo=datetime.timezone.utc), 'commenter': 'jeremyVignelles', 'type': 'User'}, {'comment_id': 693881731, 'comment_body': 'With the StackLayout, we will need to define its height, which can cause issues because we do not know in advance the number of tracks in every ListView.\r\nSo the Grid is more suitable. The listViews will occupy heights according to the number of tracks in their ItemSource.', 'comment_created': datetime.datetime(2021, 8, 23, 11, 17, 41, tzinfo=datetime.timezone.utc), 'commenter': 'egbakou', 'type': 'User'}]","[{'commit_sha': '0734ea309a7457863b3767e727b603255664f553', 'committer_username': 'egbakou', 'committer_name': 'Laurent Egbakou', 'committer_email': None, 'commit_date': datetime.datetime(2017, 3, 2, 14, 4, 58, tzinfo=datetime.timezone.utc)}]",Laurent Egbakou,26142591,,User,,40,,261,366
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+136175474,libvlcsharp,videolan/libvlcsharp,C#,266,1452,55,38,1161,6,2,6,"[{'id': 717715149, 'number': 231, 'closed': datetime.datetime(2021, 8, 24, 7, 53, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 23, 10, 44, 51, tzinfo=datetime.timezone.utc), 'time_taken': 76146.0, 'time_delta': '21:09:06', 'additions': 5, 'deletions': 0, 'state': 'closed'}, {'id': 713269050, 'number': 230, 'closed': datetime.datetime(2022, 2, 23, 8, 27, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 9, 29, 56, tzinfo=datetime.timezone.utc), 'time_taken': 16498650.0, 'time_delta': '190 days, 22:57:30', 'additions': 845, 'deletions': 3, 'state': 'closed'}, {'id': 713215886, 'number': 229, 'closed': datetime.datetime(2021, 8, 18, 7, 49, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 8, 16, 8, 13, 45, tzinfo=datetime.timezone.utc), 'time_taken': 171342.0, 'time_delta': '1 day, 23:35:42', 'additions': 30, 'deletions': 15, 'state': 'closed'}, {'id': 696808040, 'number': 225, 'closed': datetime.datetime(2021, 8, 11, 6, 53, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 26, 8, 28, 9, tzinfo=datetime.timezone.utc), 'time_taken': 1376740.0, 'time_delta': '15 days, 22:25:40', 'additions': 473, 'deletions': 251, 'state': 'closed'}, {'id': 674601434, 'number': 222, 'closed': datetime.datetime(2021, 6, 30, 2, 46, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 21, 14, 24, 30, tzinfo=datetime.timezone.utc), 'time_taken': 735694.0, 'time_delta': '8 days, 12:21:34', 'additions': 576, 'deletions': 6, 'state': 'closed'}, {'id': 673169818, 'number': 220, 'closed': datetime.datetime(2021, 6, 22, 6, 40, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 18, 5, 7, 9, tzinfo=datetime.timezone.utc), 'time_taken': 351219.0, 'time_delta': '4 days, 1:33:39', 'additions': 549, 'deletions': 3, 'state': 'closed'}]"

@@ -1,0 +1,109 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+449511565,Capture bounds validation before recognition in contentRecog,"### Link to issue number:
+fixes https://github.com/nvaccess/nvda/issues/11380
+
+### Summary of the issue:
+`contentRecog.recogUI.recognizeNavigatorObject` currently has no mechanism for validating the bounds of the navigator object before capturing an image of it and passing it to the recognizer for content recognition. This allows images that are known to not work or those that produce bad results to be processed for content recognition and waste user time.
+
+### Description of how this pull request fixes the issue:
+This pull request adds a `validateCaptureBounds` function to `contentRecog.ContentRecognizer` that can then be overridden by users to define validation code for their application and also define what to do when validation fails. This function is then called in `contentRecog.recogUI.recognizeNavigatorObject` to ensure that the bounds of the currently focused navigator object are valid before it is passed to the `recognizer` for content recognition.
+This PR is different from #11381 as it validates the bounds of the navigator object and hence the image captured and not the navigator object itself. It avoids code duplication of getting the navigator objects bounds again and offers greater flexibility for validation
+
+### Testing performed:
+I overrode the `validateCaptureBounds` function when creating a class that derives from `contentRecog.ContentRecognizer` to ensure that the width and height of the navigator object are greater than a specific threshold. I then tested the code on navigator objects with dimensions both greater and lower than the specified threshold and got expected results. Which is, content recognition was performed for navigator objects that passed the validation test and not on navigator objects that failed the test.
+
+### Known issues with pull request:
+None",True,11382,https://api.github.com/repos/nvaccess/nvda/pulls/11382,https://github.com/nvaccess/nvda/pull/11382,closed,7,0,2,6,3,4,0,0,[],2020-07-15 14:17:47+00:00,2020-07-21 14:54:38+00:00,520611.0,"6 days, 0:36:51","[{'comment_id': 455938406, 'comment_body': 'Rather than putting the types in the doc string, the current code style we tend to use is type annotations.\r\n\r\n```suggestion\r\n\tdef validateCaptureBounds(self, left: int, top: int, width: int, height: int) -> bool:\r\n```\r\n\r\nI think ideally, this would handle a locationHelper.RectLTWH object as parameter instead, but I noticed that we use left, top, width and height as parameters all over the place in the module, so I think this is fine.', 'comment_created': datetime.datetime(2020, 7, 16, 17, 5, 52, tzinfo=datetime.timezone.utc), 'commenter': 'LeonarddeR', 'type': 'User'}, {'comment_id': 456208229, 'comment_body': '>Rather than putting the types in the doc string, the current code style we tend to use is type annotations.\r\n\r\nI just tried to mimic the docstrings used for other methods in the same class. Would it be ok to use a different style for only this method?\r\n\r\n>I think ideally, this would handle a locationHelper.RectLTWH object as parameter instead, but I noticed that we use left, top, width and height as parameters all over the place in the module, so I think this is fine.\r\n\r\nYes, I only decided to use left, top, width and height specifically since the code already extracts these values from the `locationHelper.RectLTWH` object.', 'comment_created': datetime.datetime(2020, 7, 17, 4, 13, 23, tzinfo=datetime.timezone.utc), 'commenter': 'ShubhamJain7', 'type': 'User'}, {'comment_id': 456234167, 'comment_body': ""> Would it be ok to use a different style for only this method?\r\n\r\nIn my opinion, yes. The other style was necessary before we used Python 3, as it didn't support type annotations. Now we're at Python 3 and it does support them, it is the ideal way to work as it also allows IDEs to validate the input you're throwing at these methods is correct."", 'comment_created': datetime.datetime(2020, 7, 17, 5, 57, 46, tzinfo=datetime.timezone.utc), 'commenter': 'LeonarddeR', 'type': 'User'}, {'comment_id': 457928443, 'comment_body': 'I think it would be cleaner to pass this as a `locationHelper.RectLTWH` object. ', 'comment_created': datetime.datetime(2020, 7, 21, 8, 31, 43, tzinfo=datetime.timezone.utc), 'commenter': 'feerrenrut', 'type': 'User'}]","[{'commit_sha': 'e4ebcaaab4b1f873954e51f5c28705a11ad4881a', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70408ce9bc0ec681987b2b85356712641a88a44a', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8aa06b3ce82da161e2cbd7abf5718f5aa3898308', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '424281660163ce15b0e52fd9b0e26aa18cee245a', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c05ee326f5e249b6f65564ddf2816fd60d5ea91d', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e616e961735b6cec163caf3c362145946ac238e6', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}]",Shubham Jain,30282054,,User,,16,,2,4
+449458693,Navigator object vaidation before recognition in contentRecog,"<!--
+Please fill in the following template, for an explanation of the sections see:
+https://github.com/nvaccess/nvda/wiki/Github-pull-request-template-explanation-and-examples
+-->
+
+### Link to issue number:
+fixes https://github.com/nvaccess/nvda/issues/11380
+
+### Summary of the issue:
+`contentRecog.recogUI.recognizeNavigatorObject` currently has no mechanism for validating the navigator object before passing it to the recognizer for content recognition. This allows navigator objects that are known to produce bad or no results to be processed for content recognition and waste user time.
+
+### Description of how this pull request fixes the issue:
+This pull request adds a `validateNavigatorObject` to `contentRecog.ContentRecognizer` that can then be overridden by users to define validation code for their application and also define what to do when validation fails. This function is then called in `contentRecog.recogUI.recognizeNavigatorObject` to ensure that the currently focused navigator object is valid before it is passed to the `recognizer` for content recognition.
+
+### Testing performed:
+I overrode the `validateNavigatorObject` function when creating a class that derives from `contentRecog.ContentRecognizer` to ensure that the width and height of the navigator object are greater than a specific threshold. I then tested the code on navigator objects with dimensions both greater and lower than the specified threshold and got expected results. Which is, content recognition was performed for navigator objects that passed the validation test and not on navigator objects that failed the test.
+
+### Known issues with pull request:
+None",True,11381,https://api.github.com/repos/nvaccess/nvda/pulls/11381,https://github.com/nvaccess/nvda/pull/11381,closed,12,0,2,2,8,0,0,0,[],2020-07-15 12:47:35+00:00,2020-07-21 11:22:28+00:00,513293.0,"5 days, 22:34:53",[],"[{'commit_sha': '4d8851a8d7eb3520c368cc62d4229f1762d7ce43', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '14e61eb6d076af0f01a5c46da8069805e222ea7c', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}]",Shubham Jain,30282054,,User,,16,,2,4
+420087766,Pitch: Changed range from 0-100 to 1-101 to avoid ZeroDivisionError,"### Link to issue number:
+https://github.com/nvaccess/nvda/issues/10940
+
+### Summary of the issue:
+When the pitch is set to 0, a `ZeroDivisionError` occurs when trying to speak capital letters. This is because the `baseProsodyCommand.multiplier` property used to calculate the new value of pitch, to be used when speaking capital letters, relies on a division operation with the original pitch (`defaultVal`) in the denominator.
+
+### Description of how this pull request fixes the issue:
+The first solution I tried, was to use `baseProsodyCommand.offset` instead of the `baseProsodyCommand.multiplier` to perform all calculations but this was infeasible since the values for the prosody attribute Rate must be a relative non-negative-percentage value (refer [here](https://www.w3.org/TR/2010/REC-speech-synthesis11-20100907/#number_values)) in the SSML. Using `baseProsodyCommand.offset` to calculate this value would replicate the logic in `baseProsodyCommand.multiplier` and thus result in the same error. Another issue with this solution is that a lot of other code was written to be used with the `baseProsodyCommand.multiplier`.
+
+The second solution I tried, was to catch the `ZeroDivisionError` in `baseProsodyCommand.multiplier`  and raise it again to be handled by any code that calls it. Although the exception had to be handled a little differently for each case, the most common method was to set the multiplier to a fixed value (0 and multiplier values for other possible values of `baseProsodyCommand.defaultValue` or the pitch value stored in the config). The pitch value stored in the config is multiplied with `baseProsodyCommand.multiplier * 100` to calculate the new pitch to be used for speaking capital letters. Since the pitch value stored in the config is still 0 in this case, the result is 0 too and hence there is no pitch change.
+
+The third solution was to change the range of pitch from 0-100 to 1-101, this way, a pitch value of 0 is avoided entirely. It was necessary to use a range of 1-101 and not 1-100 because it caused scaling issues and the value of 99 was omitted. This is apparent in speech settings GUI as the pitch slider announces all values except 99 when incrementing the slider by 1 from 0 to 100. An artefact of this solution is that the value for pitch stored in the config is 1 more than what the user sets in the speech settings GUI. For example, if the pitch is set to 0, the value stored in the config is 1 and if the pitch is set to 100, the value stored in the config is 101. Since pitch values of 0 are now invalid,
+this change also required a profile upgrade step so the program won't crash for users who have pitch set to 0. 
+This change of range was not applied for the other prosody attributes (Rate and Volume) since they do not cause errors when they are set to zero. However, as a precaution, a warning is logged for the two prosody settings if set to zero and created using non-default values of offset or multiplier.
+Although not perfect, it was found that this solution had the least negative user impact and code change.
+
+### Testing performed:
+
+1. Set Pitch=0 CapPitchChange percentage=0
+2. Open notepad and type lowercase and uppercase letters and check if pitch change could be heard
+3. Repeat the previous steps with negative and positive values of CapPitchChange percentage (-100, -50, 50, 100)
+4. Repeat the previous steps with different values of pitch (25, 50, 75,100)
+5. Repeat the previous steps for the other prosody attributes: Rate and Volume 
+6. Repeat the above test with different synth drivers: espeak, oneCore and sapi5
+
+### Known issues with pull request:
+None
+
+### Change log entry:
+not necessary
+
+Section: New features, Changes, Bug fixes
+
+",False,11178,https://api.github.com/repos/nvaccess/nvda/pulls/11178,https://github.com/nvaccess/nvda/pull/11178,closed,68,12,4,3,20,1,0,0,[],2020-05-19 12:30:13+00:00,2020-06-10 13:24:17+00:00,1904044.0,"22 days, 0:54:04","[{'comment_id': 437417626, 'comment_body': ""I don't think this warning is very helpful at the moment. The condition should also check if defaultVal is 0. Better yet would be to consider the implications of taking the same approach for Volume and Rate."", 'comment_created': datetime.datetime(2020, 6, 9, 13, 30, 4, tzinfo=datetime.timezone.utc), 'commenter': 'feerrenrut', 'type': 'User'}]","[{'commit_sha': '9ac6c238143cfd3728bd207509f6fd87b785555f', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7f07d1de42b2faf0ca9c0c871915ea5fe0aa9e7a', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': '38ca9dc6b5a3bf99265e8885c8411ebce99ca128', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}]",Shubham Jain,30282054,,User,,16,,2,4
+417402530,"Readme: Updated the ""Running the Source Code"" section to make it clea…","### Link to issue number:
+None
+
+### Summary of the issue:
+The ""Running From Source"" section of the Readme was a bit unclear as it didn't mention the exact commands needed to run the source code.
+
+### Description of how this pull request fixes the issue:
+The ""Running From Source"" section of the Readme now mentions the commands for running from source and the reason for using `pythonw.exe` is now a note that immediately follows the commands. 
+
+### Testing performed:
+None
+
+### Known issues with pull request:
+None
+
+### Change log entry:
+not necessary
+
+",True,11160,https://api.github.com/repos/nvaccess/nvda/pulls/11160,https://github.com/nvaccess/nvda/pull/11160,closed,8,3,1,1,6,0,0,0,[],2020-05-13 14:29:57+00:00,2020-05-15 07:46:28+00:00,148591.0,"1 day, 17:16:31",[],"[{'commit_sha': 'f74e69dd5b53de11dee9839c1e437ba8da898309', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}]",Shubham Jain,30282054,,User,,16,,2,4
+414035104,Userdocs: clarify whole word radio for speech dictionaries,"### Link to issue number: 
+fixes #10959
+
+### Summary of the issue: 
+User doc entry for whole word radio button was unclear.
+
+### Description of how this pull request fixes the issue: 
+Replaces current user doc entry with the suggestion made [here](https://github.com/nvaccess/nvda/issues/10959#issue-596224560).
+
+### Testing performed:
+
+### Known issues with pull request:
+
+### Change log entry:
+
+Section: not necessary
+
+",True,11119,https://api.github.com/repos/nvaccess/nvda/pulls/11119,https://github.com/nvaccess/nvda/pull/11119,closed,2,1,1,2,0,2,1,0,[{'name': 'component/documentation'}],2020-05-06 11:23:21+00:00,2020-05-06 13:05:48+00:00,6147.0,1:42:27,"[{'comment_id': 420741690, 'comment_body': 'To make translation of this file easier, we like each sentence to be on a new line. Could you split this line please?', 'comment_created': datetime.datetime(2020, 5, 6, 12, 12, 37, tzinfo=datetime.timezone.utc), 'commenter': 'feerrenrut', 'type': 'User'}, {'comment_id': 420749431, 'comment_body': 'Ok!', 'comment_created': datetime.datetime(2020, 5, 6, 12, 26, 11, tzinfo=datetime.timezone.utc), 'commenter': 'ShubhamJain7', 'type': 'User'}]","[{'commit_sha': '28a9dcc01c5b37c8c217f8f143ccb199ba23cc6b', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b8278cc53fd7f31a20584c0db5cc1c2cfaf7c845', 'committer_username': 'ShubhamJain7', 'committer_name': 'Shubham Jain', 'committer_email': None, 'commit_date': datetime.datetime(2017, 7, 19, 5, 12, 54, tzinfo=datetime.timezone.utc)}]",Shubham Jain,30282054,,User,,16,,2,4
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+45885732,nvda,nvaccess/nvda,Python,625,2064,146,215,23828,2291,757,39,"[{'id': 479514731, 'number': 11556, 'closed': datetime.datetime(2022, 1, 10, 4, 9, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 4, 9, 45, 45, tzinfo=datetime.timezone.utc), 'time_taken': 42575010.0, 'time_delta': '492 days, 18:23:30', 'additions': 16, 'deletions': 3, 'state': 'closed'}, {'id': 449511565, 'number': 11382, 'closed': datetime.datetime(2020, 7, 21, 14, 54, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 15, 14, 17, 47, tzinfo=datetime.timezone.utc), 'time_taken': 520611.0, 'time_delta': '6 days, 0:36:51', 'additions': 7, 'deletions': 0, 'state': 'closed'}, {'id': 449458693, 'number': 11381, 'closed': datetime.datetime(2020, 7, 21, 11, 22, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 15, 12, 47, 35, tzinfo=datetime.timezone.utc), 'time_taken': 513293.0, 'time_delta': '5 days, 22:34:53', 'additions': 12, 'deletions': 0, 'state': 'closed'}, {'id': 420087766, 'number': 11178, 'closed': datetime.datetime(2020, 6, 10, 13, 24, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 19, 12, 30, 13, tzinfo=datetime.timezone.utc), 'time_taken': 1904044.0, 'time_delta': '22 days, 0:54:04', 'additions': 68, 'deletions': 12, 'state': 'closed'}, {'id': 417402530, 'number': 11160, 'closed': datetime.datetime(2020, 5, 15, 7, 46, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 13, 14, 29, 57, tzinfo=datetime.timezone.utc), 'time_taken': 148591.0, 'time_delta': '1 day, 17:16:31', 'additions': 8, 'deletions': 3, 'state': 'closed'}, {'id': 414035104, 'number': 11119, 'closed': datetime.datetime(2020, 5, 6, 13, 5, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 6, 11, 23, 21, tzinfo=datetime.timezone.utc), 'time_taken': 6147.0, 'time_delta': '1:42:27', 'additions': 2, 'deletions': 1, 'state': 'closed'}]"

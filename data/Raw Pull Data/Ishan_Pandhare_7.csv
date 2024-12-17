@@ -1,0 +1,145 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1364802038,[GSoC] Modified methods of the Truss class to accept multiple inputs in a single call,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+The methods in Truss class were modified to accept multiple inputs in a single call.
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers. Formerly, `log(-x)` incorrectly gave `-log(x)`.
+
+* physics.units
+  * Corrected a semantical error in the conversion between volt and statvolt which
+    reported the volt as being larger than the statvolt.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+  * Methods of Truss class now accept multiple inputs
+<!-- END RELEASE NOTES -->
+",True,25171,https://api.github.com/repos/sympy/sympy/pulls/25171,https://github.com/sympy/sympy/pull/25171,closed,335,339,3,10,9,7,1,0,[{'name': 'physics.continuum_mechanics'}],2023-05-25 13:58:52+00:00,2023-07-17 13:11:13+00:00,4576341.0,"52 days, 23:12:21","[{'comment_id': 1216954609, 'comment_body': 'Instead of `_node_labels`, try using a dictionary like `_node_coordinates` for the same because of the lookup time complexity in a dictionary', 'comment_created': datetime.datetime(2023, 6, 4, 17, 44, 13, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1216956671, 'comment_body': ""Try decreasing the size of this conditional statement by using `_node_coordinates` here. Won't help the time complexity here though because of the fact that we are searching through values here and not keys."", 'comment_created': datetime.datetime(2023, 6, 4, 17, 46, 32, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1216958556, 'comment_body': 'This condition has been used here too and in many more methods. The same suggestions can be applied here too. ', 'comment_created': datetime.datetime(2023, 6, 4, 17, 48, 23, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1216960846, 'comment_body': 'Just using the `find` method is better here for the same reasons as above.', 'comment_created': datetime.datetime(2023, 6, 4, 17, 50, 54, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1217721753, 'comment_body': '```suggestion\r\n                        raise ValueError(""The given node already has members attached to it"")\r\n```\r\nseems more clear and straightforward.', 'comment_created': datetime.datetime(2023, 6, 5, 8, 33, 12, tzinfo=datetime.timezone.utc), 'commenter': 'faze-geek', 'type': 'User'}, {'comment_id': 1218453195, 'comment_body': 'Thank you for pointing it out, I have made the change, as suggested', 'comment_created': datetime.datetime(2023, 6, 5, 18, 41, 18, tzinfo=datetime.timezone.utc), 'commenter': 'Ishanned', 'type': 'User'}, {'comment_id': 1233021978, 'comment_body': 'Just like the `_members` dictionary, using `list` can be avoided here for `_loads` and `_supports` for time complexity reasons. ', 'comment_created': datetime.datetime(2023, 6, 17, 11, 0, 33, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}]","[{'commit_sha': '256473653067afd7d24a67c8a2a48975a70686d7', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d2ac2d4edd144e330304fb17d21a5c80947dd93', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5f1c20fe06625152be8a83e3fa5c3ac3653c5e2c', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a866a03a26b480666677b53b1eae5b7473f4daa5', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8da2b8814f5bcdffd83867fdf4f621aa2a05f23', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3a79363e03dbe8b6663aef70f6498330761f2846', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9ecfae067c752a07b65bf27f7820932e196d09eb', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ba9421363a9320391a62adeb95fba07de6d47dd8', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd42d35fe52864058c066513d273f1778a38c9536', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e09fb0d4434e975dce8a67a402b6f0d6ea966122', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}]",Ishan Pandhare,91841626,,User,,20,,8,11
+1400044351,[GSoC] Implemented the cable class,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+This is the first PR for the proposed Cable class, which allows uses to:
+1) initialize the cable object
+2) add/remove/change supports for the object
+3) add/remove loads to the object
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers. Formerly, `log(-x)` incorrectly gave `-log(x)`.
+
+* physics.units
+  * Corrected a semantical error in the conversion between volt and statvolt which
+    reported the volt as being larger than the statvolt.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+  * Implemented the cable class, along with methods to add/remove/change supports and loads
+<!-- END RELEASE NOTES -->
+",True,25272,https://api.github.com/repos/sympy/sympy/pulls/25272,https://github.com/sympy/sympy/pull/25272,closed,453,1,5,8,8,12,1,0,[{'name': 'physics.continuum_mechanics'}],2023-06-20 15:00:40+00:00,2023-07-08 10:44:44+00:00,1539844.0,"17 days, 19:44:04","[{'comment_id': 1236885808, 'comment_body': 'should be tensile !', 'comment_created': datetime.datetime(2023, 6, 21, 12, 1, 6, tzinfo=datetime.timezone.utc), 'commenter': 'faze-geek', 'type': 'User'}, {'comment_id': 1237258635, 'comment_body': ""Thanks for pointing it out, I'll make the changes soon!"", 'comment_created': datetime.datetime(2023, 6, 21, 16, 11, 58, tzinfo=datetime.timezone.utc), 'commenter': 'Ishanned', 'type': 'User'}, {'comment_id': 1240704892, 'comment_body': 'I am not so sure about having left and right supports as separate lists. There will be a lot of containers to maintain after other methods are implemented', 'comment_created': datetime.datetime(2023, 6, 24, 10, 45, 43, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 1240706739, 'comment_body': 'While applying a support you should also apply variable reaction forces in X and Y direction. You can use the `apply_load` method for this.  These variables will be calculated later by the solve method. See how beam and truss implement this:\r\n\r\nhttps://github.com/sympy/sympy/blob/9d4517c6b1840aa2c2dfd1617aea32ccedc7041d/sympy/physics/continuum_mechanics/truss.py#L576\r\n\r\nhttps://github.com/sympy/sympy/blob/9d4517c6b1840aa2c2dfd1617aea32ccedc7041d/sympy/physics/continuum_mechanics/beam.py#L455', 'comment_created': datetime.datetime(2023, 6, 24, 10, 56, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 1240707266, 'comment_body': 'change method name to apply_support and add one support at a time.', 'comment_created': datetime.datetime(2023, 6, 24, 10, 58, 14, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 1240707554, 'comment_body': 'change method name to `apply_load` to make it similar to beams and truss classes.', 'comment_created': datetime.datetime(2023, 6, 24, 10, 59, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 1240707810, 'comment_body': 'There should be another argument called order, for distributed loads', 'comment_created': datetime.datetime(2023, 6, 24, 11, 0, 19, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 1240709944, 'comment_body': 'Instead of having `*args`, specify each parameter. See how beam does it\r\nhttps://github.com/sympy/sympy/blob/9d4517c6b1840aa2c2dfd1617aea32ccedc7041d/sympy/physics/continuum_mechanics/truss.py#L452', 'comment_created': datetime.datetime(2023, 6, 24, 11, 7, 21, tzinfo=datetime.timezone.utc), 'commenter': 'Psycho-Pirate', 'type': 'User'}, {'comment_id': 1240734230, 'comment_body': 'Instead of throwing this error, a better alternative would be to just check which support has a lesser x-coordinate and designate that as the left support instead of just sticking to the first support as the left one.', 'comment_created': datetime.datetime(2023, 6, 24, 11, 52, 37, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1240734644, 'comment_body': 'Add a few docstrings at the end here giving a gist of methods of the class & how one can initialise the class and also maybe an image to help with the documentation. ', 'comment_created': datetime.datetime(2023, 6, 24, 11, 53, 59, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1240735350, 'comment_body': 'Currently, this class takes in no arguments which initializing. Adding supports while initializing itself would be better just like the `Beam` class. ', 'comment_created': datetime.datetime(2023, 6, 24, 11, 56, 29, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}, {'comment_id': 1240741692, 'comment_body': 'As you mentioned in the meeting, throw another error when an existing load goes out of range on changing a support. ', 'comment_created': datetime.datetime(2023, 6, 24, 12, 4, 47, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}]","[{'commit_sha': '24635adf4c59d1ae1aea09e0273b260d752f695c', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e23ca322466c8650e84ef1bf750bbbe4ddc17df', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd4f5a05e7610095362bed8e6527c9109abe4d8ee', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bf4b85e20e590bf70ed6199bf20d942d9767362', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f616aa45b911349bf23ad1064f9eceeaf3e7c149', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1fc93d25862d5bfa75cdf4e45a1309d252d2424d', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ed52347d0c19dd526db4173a5e300797ac5b9412', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '129855effcb6ac8b5f903f74f736ea2dd7223d70', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}]",Ishan Pandhare,91841626,,User,,20,,8,11
+1459459212,[GSoC] solve method for cable class,"<!-- Your title above should be a short description of what
+was changed. Do not include the issue number in the title. -->
+
+#### References to other Issues or PRs
+<!-- If this pull request fixes an issue, write ""Fixes #NNNN"" in that exact
+format, e.g. ""Fixes #1234"" (see
+https://tinyurl.com/auto-closing for more information). Also, please
+write a comment on that issue linking back to this pull request once it is
+open. -->
+
+
+#### Brief description of what is fixed or changed
+Implemented the solve method for the cable class. For point loads, this method computes the tensions in the segments of the cable, the reaction forces at the supports and updates the length. For distributed load, this method computes the tension at each point using tension_at() method, and the reaction forces at the supports.
+
+#### Other comments
+
+
+#### Release Notes
+
+<!-- Write the release notes for this release below between the BEGIN and END
+statements. The basic format is a bulleted list with the name of the subpackage
+and the release note for this PR. For example:
+
+* solvers
+  * Added a new solver for logarithmic equations.
+
+* functions
+  * Fixed a bug with log of integers. Formerly, `log(-x)` incorrectly gave `-log(x)`.
+
+* physics.units
+  * Corrected a semantical error in the conversion between volt and statvolt which
+    reported the volt as being larger than the statvolt.
+
+or if no release note(s) should be included use:
+
+NO ENTRY
+
+See https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more
+information on how to write release notes. The bot will check your release
+notes automatically to see if they are formatted correctly. -->
+
+<!-- BEGIN RELEASE NOTES -->
+* physics.continuum_mechanics
+   * solve method implemented in the cable class
+<!-- END RELEASE NOTES -->
+",True,25461,https://api.github.com/repos/sympy/sympy/pulls/25461,https://github.com/sympy/sympy/pull/25461,closed,236,0,2,12,11,1,1,0,[{'name': 'physics.continuum_mechanics'}],2023-08-02 09:36:22+00:00,2024-05-29 17:55:34+00:00,26036352.0,"301 days, 8:19:12","[{'comment_id': 1285029566, 'comment_body': 'Try changing the name of this variable to a more descriptive one', 'comment_created': datetime.datetime(2023, 8, 5, 11, 42, 16, tzinfo=datetime.timezone.utc), 'commenter': 'AdvaitPote', 'type': 'User'}]","[{'commit_sha': 'e9c7c9af4e746d75658272f898708e9b0502e0f9', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4fa3cbdc57759902eccd0ef21b201055b314d377', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b724992dc1899ced692a0928bcae09205a824e95', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '145b374a18ffebef1bec51634620a8cff73f73b6', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de11cf8b10578c81a18b3ed66e8a5e210ed38471', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e794f030bf108b47210407cbe23ab7ea44bcfcd3', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afc9fd2780ab9ed21cb34aa818b6a184ebc51f84', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a721825d2ba178a50989ca97c26471ce04987631', 'committer_username': 'shishir-11', 'committer_name': 'Shishir Kushwaha', 'committer_email': None, 'commit_date': datetime.datetime(2023, 7, 1, 14, 58, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': '77da3e0fd5e52501e2ee74e83a935781bc6bfd8e', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd6af67e09932a301373cde22a16d4153488aabf2', 'committer_username': 'shishir-11', 'committer_name': 'Shishir Kushwaha', 'committer_email': None, 'commit_date': datetime.datetime(2023, 7, 1, 14, 58, 13, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53f60dbad1b552d3a11dbfbc968f2cb672f2689c', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3cd6098a7cb26cb4fd8ec65302745d1412de544e', 'committer_username': 'Ishanned', 'committer_name': 'Ishan Pandhare', 'committer_email': None, 'commit_date': datetime.datetime(2021, 10, 3, 16, 29, 19, tzinfo=datetime.timezone.utc)}]",Ishan Pandhare,91841626,,User,,20,,8,11
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+640534,sympy,sympy/sympy,Python,4363,12693,293,1320,58674,5121,14,717,"[{'id': 1459459212, 'number': 25461, 'closed': datetime.datetime(2024, 5, 29, 17, 55, 34, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 2, 9, 36, 22, tzinfo=datetime.timezone.utc), 'time_taken': 26036352.0, 'time_delta': '301 days, 8:19:12', 'additions': 236, 'deletions': 0, 'state': 'closed'}, {'id': 1400044351, 'number': 25272, 'closed': datetime.datetime(2023, 7, 8, 10, 44, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 20, 15, 0, 40, tzinfo=datetime.timezone.utc), 'time_taken': 1539844.0, 'time_delta': '17 days, 19:44:04', 'additions': 453, 'deletions': 1, 'state': 'closed'}, {'id': 1364802038, 'number': 25171, 'closed': datetime.datetime(2023, 7, 17, 13, 11, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 25, 13, 58, 52, tzinfo=datetime.timezone.utc), 'time_taken': 4576341.0, 'time_delta': '52 days, 23:12:21', 'additions': 335, 'deletions': 339, 'state': 'closed'}, {'id': 1229931273, 'number': 24665, 'closed': datetime.datetime(2024, 8, 18, 19, 33, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 6, 6, 32, 18, tzinfo=datetime.timezone.utc), 'time_taken': 48344467.0, 'time_delta': '559 days, 13:01:07', 'additions': 12, 'deletions': 6, 'state': 'closed'}, {'id': 1165318096, 'number': 24387, 'closed': None, 'created': datetime.datetime(2022, 12, 14, 14, 44, 1, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 60, 'deletions': 1, 'state': 'open'}, {'id': 1159149077, 'number': 24371, 'closed': datetime.datetime(2022, 12, 14, 14, 37, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 12, 11, 14, 17, 57, tzinfo=datetime.timezone.utc), 'time_taken': 260374.0, 'time_delta': '3 days, 0:19:34', 'additions': 74, 'deletions': 0, 'state': 'closed'}, {'id': 1111124324, 'number': 24219, 'closed': datetime.datetime(2022, 11, 9, 11, 51, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 4, 17, 30, 45, tzinfo=datetime.timezone.utc), 'time_taken': 411666.0, 'time_delta': '4 days, 18:21:06', 'additions': 7, 'deletions': 5, 'state': 'closed'}, {'id': 1103590286, 'number': 24194, 'closed': datetime.datetime(2022, 10, 29, 3, 27, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 28, 20, 44, 42, tzinfo=datetime.timezone.utc), 'time_taken': 24173.0, 'time_delta': '6:42:53', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 1050742431, 'number': 24030, 'closed': datetime.datetime(2022, 10, 7, 15, 39, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 8, 19, 15, 34, tzinfo=datetime.timezone.utc), 'time_taken': 2492663.0, 'time_delta': '28 days, 20:24:23', 'additions': 7, 'deletions': 4, 'state': 'closed'}, {'id': 1050593863, 'number': 24029, 'closed': datetime.datetime(2022, 9, 8, 18, 50, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 8, 17, 11, 50, tzinfo=datetime.timezone.utc), 'time_taken': 5915.0, 'time_delta': '1:38:35', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1020657064, 'number': 23900, 'closed': datetime.datetime(2022, 8, 25, 12, 31, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 8, 19, 12, 47, tzinfo=datetime.timezone.utc), 'time_taken': 1444720.0, 'time_delta': '16 days, 17:18:40', 'additions': 2, 'deletions': 0, 'state': 'closed'}, {'id': 1020545707, 'number': 23896, 'closed': datetime.datetime(2022, 8, 8, 18, 24, 47, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 8, 17, 12, 17, tzinfo=datetime.timezone.utc), 'time_taken': 4350.0, 'time_delta': '1:12:30', 'additions': 2, 'deletions': 0, 'state': 'closed'}]"

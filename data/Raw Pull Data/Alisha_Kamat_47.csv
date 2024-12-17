@@ -1,0 +1,870 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+965013929,Create SEO tab,"### Summary of Changes
+
+- Make a separate SEO tab under the ```Article Edit section``` and include all the related SEO options for users (currently only placeholders have been created for this)
+- This new feature will assist developers to structure, maintain and extend the current functionality as the SEO requirements evolve
+- Right now this feature has been added only on the administration section. It can be added on the frontend after discussion with mentors.
+
+![image](https://user-images.githubusercontent.com/84401192/173231414-012c43a8-a8f5-4893-80d5-0ae9120d7cb3.png)
+
+
+### Testing Instructions
+ - Login from the backend and move over to the ```Article Edit section``` for any article. The SEO tab will be visible.
+ - Try to edit an article after logging in from the frontend. SEO tab will not be visible.
+
+
+### Actual result BEFORE applying this Pull Request
+
+- The SEO tab should not be present on the ```Article Edit section```
+
+### Expected result AFTER applying this Pull Request
+
+- The new SEO tab should be present with placeholders for Article Review, Page Performance, Paragraph Structure and Outgoing Link-checker
+
+
+",False,1,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/1,https://github.com/joomla-projects/gsoc22_seo/pull/1,open,163,125,6,4,0,0,0,0,[],2022-06-12 14:22:34+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '566a98b146b8d9d4df94301bcc0e8809b2ef5cff', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9c69431b0e853d9429da3de30bedbaca442abad1', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+966576263,Add Nofollow-Dofollow Link checker,"### Summary of Changes
+
+- Add Outgoing Nofollow-Dofollow Link Checker under the SEO tab under ```Article Edit Section```
+- The new feature will allow the admin to monitor the external links of the article and categorize them as dofollow and nofollow
+- It will enable developers to prevent ‘link juice’ from flowing out to unwanted sites based on the external site's credibility
+- Admins can choose to retain or change the ‘rel’ directive (from dofollow to nofollow or vice versa) by going to the 'Content' tab on the same page
+
+![image](https://user-images.githubusercontent.com/84401192/173516703-aa20abc0-a375-4668-8382-41071f76186c.png)
+
+
+### Testing Instructions
+
+- Go to the 'Content' tab under ```Article Edit Section```
+- Click on 'Toggle Editor' and add a few anchor tags to the article
+- Change some of the 'rel' attributes of these tags to nofollow
+- Now move over to the 'SEO' tab and take a look at the Outgoing Link Checker section
+- A list of all the outgoing nofollow and dofollow links will appear
+
+
+### Actual result BEFORE applying this Pull Request
+
+- The Outgoing Nofollow-Dofollow Link Checker section should not be present under the SEO tab
+
+
+### Expected result AFTER applying this Pull Request
+
+- The newly added Outgoing Nofollow-Dofollow Link Checker section should be visible 
+
+
+",False,3,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/3,https://github.com/joomla-projects/gsoc22_seo/pull/3,open,178,0,5,3,1,0,0,0,[],2022-06-14 07:50:55+00:00,,0.0,,[],"[{'commit_sha': 'f0ea7876e80a8c32537554469b0ea488ec98fd9a', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76a0a4e5fd6f9b70266b8edfb3618af319522cda', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59d4c9b44599418db31e28272ee0a4399927ff47', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+970409406,Integrate Page Performance Analyser,"### Summary of Changes
+
+- Add Page Performance Checker under the SEO tab under ```Article Edit``` View on the backend
+- This feature will allow the admin to analyze and review the article's page performance on mobile and desktops
+- This enables the user to review a range of performance parameters including the core web vitals assessment - an extremely important parameter for SEO, including ranking on Search Engine Results Page (SERPs) for organic traffic
+- The feature will be enabled only if the following conditions are met-
+  - The article has been published
+  - The article has not expired yet
+  - The website has been hosted on a public server (as it works only on live sites)
+- It will be disabled if the article has been archived, trashed or unpublished
+
+### Testing Instructions
+
+#### CASE 1
+- Check the article status on the publicly hosted site and make sure that it is published and has not expired
+- Go to the 'SEO' tab under ```Article Edit``` View
+- Click on the 'Start' button to start analyzing your website's performance
+
+![image](https://user-images.githubusercontent.com/84401192/174264504-248734ed-2fd3-4f81-b841-a091d3b4fe21.png)
+
+#### CASE 2
+- Check the article status on the publicly hosted site and change it to either unpublished, trashed, archived, expired
+- Go to the 'SEO' tab under ```Article Edit``` View
+- The 'Start' button should be disabled in this case and a message is displayed
+
+![image](https://user-images.githubusercontent.com/84401192/174264594-7bd4dafd-2eb9-4057-8224-c11046001937.png)
+
+#### CASE 3
+- If you are testing this feature on a local server, change the article status to any value
+- Go to the 'SEO' tab under ```Article Edit``` View
+- The page performance feature will be disabled in this case
+
+![image](https://user-images.githubusercontent.com/84401192/174264752-62e5cc81-028b-4bc4-8757-ca0fc96ff900.png)
+
+
+
+
+
+",False,4,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/4,https://github.com/joomla-projects/gsoc22_seo/pull/4,open,100,0,4,4,1,0,0,0,[],2022-06-17 09:21:01+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1e080306295fd92c8550bacc0f9d61c536b21aa8', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5e8f9c8dedd5b303d85982feca04fefbfa7aa10', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+972446212,Include Paragraph structure section,"### Summary of Changes
+
+- Paragraph structure section on the SEO tab in ```Article Edit``` View on the backend
+- Having an ideal paragraph structure improves an article's searchability on search engines
+- This feature assists in keeping article paragraphs short and easy to read for viewers
+- It will list down the top 5 paragraphs that exceed the word limit along with the word count in brackets
+- Currently the limit for each paragraph has been set to a maximum of 200 words
+- The admin can then switch over to the Content tab to make the required changes
+
+
+
+### Testing Instructions
+
+#### CASE 1
+- If all the paragraphs of the article are well formed
+
+![image](https://user-images.githubusercontent.com/84401192/174645934-b945cba8-8047-4aed-b14c-85781151d6a2.png)
+
+#### CASE 2
+- Some of the paragraphs have their word count exceeding the limit
+
+![image](https://user-images.githubusercontent.com/84401192/174646195-5800a447-4ec5-4c78-920c-766dc0041cce.png)
+
+#### CASE 3
+- In case more than 5 paragraphs have word count exceeding the maximum limit, only the first 5 paragraphs will be listed
+
+![image](https://user-images.githubusercontent.com/84401192/174646475-a1f701c8-c9b9-4344-ae35-a47e8ab04763.png)
+
+
+
+
+### Actual result BEFORE applying this Pull Request
+
+- This section does not exist in the SEO tab
+
+
+### Expected result AFTER applying this Pull Request
+
+- Paragraph structure section appears under SEO tab
+
+",False,5,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/5,https://github.com/joomla-projects/gsoc22_seo/pull/5,open,122,0,4,3,1,0,0,0,[],2022-06-20 16:45:43+00:00,,0.0,,[],"[{'commit_sha': '2e1120dac3fe16636152e583a8bda19e3236ab55', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44371ffd0db92f8010e4844d4a6c58e68854ee46', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a846c4b9c1d851f62012772fa060e8de8f58b76', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+978607342,Analyse Sentence Structure,"### Summary of Changes
+- This section will be present under the SEO tab in the ```Article Edit``` View on the backend
+- Having a concise sentence structure is ideal for SEO and also improves the article's readability especially on smaller screens
+- This feature helps identify the first 5 sentences that are too long and lists them
+- The admin can then switch to the Content tab and make the desired changes
+- Currently the limit for each sentence has been set to a maximum of 20 words
+
+
+
+### Testing Instructions
+#### CASE 1
+- If more than 5 sentences have word count exceeding 20, only the first 5 sentences will be listed to avoid clutter
+
+![image](https://user-images.githubusercontent.com/84401192/175633460-2a7b6786-5c91-494a-9c9e-0fc7c808901f.png)
+
+
+#### CASE 2
+- Only a few of the sentences have their word count exceeding the limit
+
+![image](https://user-images.githubusercontent.com/84401192/175634061-ac8155b0-3eef-44f6-afd6-d1154ca4c6a3.png)
+
+
+#### CASE 3
+- All sentences of the article are well structured
+
+![image](https://user-images.githubusercontent.com/84401192/175634680-f6cebc53-8072-4bdd-89b2-a333ba6d741e.png)
+",False,6,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/6,https://github.com/joomla-projects/gsoc22_seo/pull/6,open,131,0,4,5,0,0,0,0,[],2022-06-24 18:29:27+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b2636c1cc38aaff1f08445dd17363e83e89aab6', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ee60641058e20fdad32e62727a150569c095528', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b65ade10f283ebf289eb8c1fd292e19609268e82', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+986526681,Google SERP preview and Content Analysis,"### Summary of Changes
+- Two new sections added under the ```Article Edit View``` on the backend - Google SERP Preview and Content Analysis
+- Provides a glimpse of how the article will appear in Google search results along with suggestions for improvement
+- Judges the article's SEO parameters which include the following
+  - Article Title Length
+  - Article Meta description Length
+  - Article Word Count
+- Improving these can make a considerable difference to an article's on-page SEO
+
+### Testing Instructions
+#### 1. Google SERP Preview
+#### CASE 1
+An ideal case where both the article title as well as meta description are within the specified limits. Since the article URL is too long, it will be truncated.
+
+![image](https://user-images.githubusercontent.com/84401192/177165748-058109fc-525f-401d-b5ef-1b830b68b6d6.png)
+
+#### CASE 2
+If the article title is too long, the SERP will truncate it to only 70 characters followed by ellipsis.
+
+![image](https://user-images.githubusercontent.com/84401192/177166637-1748dbac-4c5c-487b-9135-ac4981bacb61.png)
+
+#### CASE 3
+When no meta description has been set, a small chunk of the article's first paragraph will be extracted and displayed. Only the first 160 characters of text will be displayed followed by ellipsis.
+
+![image](https://user-images.githubusercontent.com/84401192/177166864-367dcaaa-a9e1-40b6-88dc-61d3a4210ffc.png)
+
+
+#### 2. Content Analysis
+Given the numerous combinations possible, this section covers only a representative set of use-cases
+
+#### CASE 1
+This section analyses various article parameters. It also displays the recommended range for these values at the bottom.
+
+![image](https://user-images.githubusercontent.com/84401192/177169353-e5bc2e07-2df4-4434-a569-9d9f70875841.png)
+
+#### CASE 2 
+In case no meta description has been specified, it indicates this under this section
+
+![image](https://user-images.githubusercontent.com/84401192/177171922-d4ccb6fb-b7a1-4c98-bfb4-a3e2a0e0917d.png)
+
+
+#### CASE 3
+If any field exceeds the specified limit, a warning message (Too Long - Can Improve) is displayed.
+
+![image](https://user-images.githubusercontent.com/84401192/177171494-42c30673-ebfb-494c-a533-275e0fd9b5fd.png)
+
+
+",False,7,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/7,https://github.com/joomla-projects/gsoc22_seo/pull/7,open,263,0,5,4,2,0,0,0,[],2022-07-04 14:12:49+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23915b4b6fb3c8a88c115b74b747edd96d2e5fb7', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2a31abcd7a851df3744e0d73419c783b6f58da4', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+993101481,Reading Ease Rating,"### Summary of Changes
+- This section is under the SEO Tab in ```Article Edit View``` on the backend
+- It analyses the Article and provides a score based on its readability and difficulty level
+- Users are also provided with a reference table to understand and interpret their readability scores
+- Currently this section works only for English Articles
+
+
+### Testing Instructions
+#### CASE 1
+
+When the article is 'easy to read' and has high readability, the score will be highlighted in green.
+
+![image](https://user-images.githubusercontent.com/84401192/178268122-2c9ddf4b-1f20-439c-84d6-75c8a67f8b9a.png)
+
+#### CASE 2
+
+For articles that may not be too difficult or too easy to read, their score is indicated in yellow as shown.
+
+![image](https://user-images.githubusercontent.com/84401192/178268167-e94c4a1a-1797-42d6-86c0-7b2f7b3b4934.png)
+
+#### CASE 3
+
+For articles that are difficult to read, the ratings are highlighted in red.
+
+![image](https://user-images.githubusercontent.com/84401192/178268203-d301b76a-56b4-4521-9228-4d78ba75f0b0.png)
+
+#### CASE 4
+
+A case where the article's readability exceeds the limit (100).
+
+![image](https://user-images.githubusercontent.com/84401192/178268270-dd967b69-25fd-4f79-a038-f9eb69d57e6c.png)
+
+#### CASE 5
+
+For articles that have really long sentence and paragraph structures, their readability ratings will be negative.
+
+![image](https://user-images.githubusercontent.com/84401192/178268308-233612ca-99ec-4816-a5b8-b48c86ce65a7.png)
+
+",False,8,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/8,https://github.com/joomla-projects/gsoc22_seo/pull/8,open,143,0,4,3,1,0,0,0,[],2022-07-11 13:22:34+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dfb4cfc6f9b0f7707402deee2068f42951702152', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+1004230887,Open Graph,"### Summary of Changes
+- Make a separate 'Open Graph' tab under the Article Edit section on the backend
+- Provides users the flexibility to modify each article's open graph data, which in turn can be used by social media platforms to display <i>rich objects</i>
+- Some of these parameters include
+  - Article Type
+  - Article Title
+  - Article Description
+  - Article Image
+  - Published Date
+  - Article Author
+- If any field of the 'Open Graph' tab is left blank, it will use the article's default/original parameters
+- Modifications to any of the open graph fields will override the article's default parameters
+
+
+### Testing Instructions
+
+Perform the following steps for each of the cases defined below
+1. Change the parameters as described
+2. Save the settings
+3. Open the article on the frontend
+4. Right click on the article and select 'View page source'
+5. Verify the open graph parameters included in the HTML header section
+
+#### CASE 1 - Open Graph tab not used
+
+When all fields in the open graph tab are blank, the article's default parameters are set as its open graph parameters. 
+If the article does not use any images, it hasn't been set in the 'Images and Links' tab and it hasn't been set in the OG tab either, the og: image tag does not appear in the screenshot below.
+
+![image](https://user-images.githubusercontent.com/84401192/180204547-f9ae0249-474e-4060-9b7d-d4000566e2a9.png)
+![image](https://user-images.githubusercontent.com/84401192/180205432-88959b49-e902-4c27-bb2d-833f0dd27758.png)
+
+#### CASE 2 - Open Graph tab used for all parameters except image
+
+Changing the og parameters under the 'Open Graph' tab will override the default parameters for the article.
+
+![image](https://user-images.githubusercontent.com/84401192/180208472-6cd10a5c-3773-4276-9c0e-1d1057b99232.png)
+![image](https://user-images.githubusercontent.com/84401192/180208665-78871dd4-afcc-43ed-b31e-05f309781620.png)
+
+
+#### CASE 3 - Dealing with multiple images
+For the 'og: image' parameter in the HTML header, the following hierarchy is maintained
+<ol>
+<li>Open Graph Image</li>
+<li>Full Article Image</li>
+<li>Intro Image</li>
+</ol>
+
+For the selected image URL, metadata such as the image type (PNG, JPEG, GIF), height, width don't need to be specified separately by the user. They are extracted automatically from the specified image.
+
+1. When only the article _intro image_ (sample1.png) is set in 'Images and Links' tab, and all other image fields are empty, then the og:image parameter is set to the _intro image_ URL
+
+![image](https://user-images.githubusercontent.com/84401192/180209618-3e47bdc9-6665-44ea-9cdc-7b2bfeeb73f3.png)
+![image](https://user-images.githubusercontent.com/84401192/180209809-255eb804-a2a6-4254-b06a-7629c9bf9f85.png)
+
+
+2. When the article _intro image_ (sample1.png) and the _full article image_ (sample2.png) both are set in 'Images and Links' tab, then the og:image parameter is set to the _full article image_ URL
+
+![image](https://user-images.githubusercontent.com/84401192/180210212-fedb747b-2bea-48a7-b79b-c5947151e259.png)
+![image](https://user-images.githubusercontent.com/84401192/180210162-ed418634-78bf-4af0-a5df-b0749a0349fb.png)
+
+
+3. When the _open graph image_ (sample3.jpg) is set (Open Graph tab) in addition to the above fields, then the og:image parameter is set to the _open graph image_ URL
+
+![image](https://user-images.githubusercontent.com/84401192/180210368-c0b3106f-fe8f-4949-bceb-020e40c00b68.png)
+![image](https://user-images.githubusercontent.com/84401192/180210471-6e5da4f5-4034-4c2d-946e-b2570feb1f84.png)
+
+
+
+",False,9,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/9,https://github.com/joomla-projects/gsoc22_seo/pull/9,open,214,1,4,3,0,0,0,0,[],2022-07-21 13:50:59+00:00,,0.0,,[],"[{'commit_sha': '6b7b4e04fac46aeacd6cf717a63c57e7b708999d', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '552a588894c445b979fb2ddca6526c2763ae65a2', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dec0719be31fa3795c235ea3f6e5b884a25d2fd0', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+1015380019,Image Compression,"### Summary of Changes
+- Images are among the biggest ‘on-page’ factors for a slow loading page
+- This new feature helps compress large, unoptimized images to improve the page load time
+- Currently the proof of concept works for 
+  - The image fields under the ```Images and Links``` tab in Article Edit view
+  - Two formats, 'png' and 'jpeg'
+- The compression feature is optional (controlled using the enable/disable toggle) and gets triggered when the user saves the article. For a successful compression operation, it also stores a backup of the original image as ```filename_orig``` 
+- It provides the user with 3 compression options
+  - Low Compression - High quality
+  - Medium Compression - Medium quality
+  - High Compression - Low quality
+
+
+### Testing Instructions
+Follow the steps described below for each of the mentioned cases
+1. Change the settings as shown
+2. Save these settings
+
+#### CASE 1
+
+When an image is selected but the compression is turned off, no compression options will be displayed and the file remains untouched. However, if compression is turned on, the following three options are displayed under the dropdown
+
+![image](https://user-images.githubusercontent.com/84401192/182413563-ced91bc9-e430-4555-aa1a-e677f11cfc2f.png)
+
+#### CASE 2
+
+On saving the article, a message is displayed at the top indicating the status of the compression. 
+- If the compression was successful, it highlights the percentage of compression. 
+- If the compression failed, it displays a '_Can't compress further_' message.
+
+![image](https://user-images.githubusercontent.com/84401192/182431185-adce5d2c-7b45-4b15-b240-6e4dff68c1bb.png)
+
+On opening the image gallery, you'll find a backup of the original image called '_filename_orig_'.
+
+![image](https://user-images.githubusercontent.com/84401192/182431484-5268855f-aea1-4c09-b243-83e664acf98d.png)
+
+Download both of these images, 'filename' and 'filename_orig'. Open file explorer to view their size before and after compression. 
+
+![image](https://user-images.githubusercontent.com/84401192/182431857-7b3ed897-167f-486b-9c50-d857a4d016c2.png)
+
+
+
+#### CASE 3 - Testing for formats other than '.png' and '.jpeg'
+
+If an unsupported file format (such as .gif) is selected and the compression is turned on, the image undergoes no compression after saving.
+
+![image](https://user-images.githubusercontent.com/84401192/182408789-d6cb0b2b-fe9c-414b-b789-9a12b6fb8e3b.png)
+
+
+",False,14,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/14,https://github.com/joomla-projects/gsoc22_seo/pull/14,open,130,0,4,2,6,0,0,0,[],2022-08-02 17:22:28+00:00,,0.0,,[],"[{'commit_sha': 'cee08ed5758e5eb096c87bf1abe8343752b121fc', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de12c20c485d825e20bc2391ad29059daf9e6163', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+1031800602,Add Social Media Share buttons,"### Summary of Changes
+- This feature helps users share Joomla pages on social media platforms
+- Social media is one of the most popular ways to gain visitors to any website. But currently Joomla doesn't offer any sharing feature. 
+- This feature attempts to bridge that gap by offering options for single-click sharing to the most commonly used social media platforms
+- Currently this feature allows sharing to only 3 social media platforms. This feature can then be extended to include additional social media icons as required
+- Instead of providing a rigid set of options, the _Social Media Share_ tab offers several settings that allows the user to select the preferred list of social media icons to display on the article page. This is done as follows.
+  - Clicking on _show sharebox_ will display all the available social media platforms for sharing
+  - The user can then choose to enable social media sharing for the selected list of platforms
+  - If the user chooses to hide the sharebox options, no social media icon is displayed on the article's frontend
+- These settings can be updated by going to System->Global Configuration->Articles->Social Media Share
+
+![image](https://user-images.githubusercontent.com/84401192/185749992-e7ec298b-17e5-4b27-a05e-6e3fcc4b20c4.png)
+
+
+
+
+### Testing Instructions
+#### CASE 1
+
+The user chooses to show the social media share icons for all articles, and all the icons have been enabled.
+
+![image](https://user-images.githubusercontent.com/84401192/185748748-b4a240f2-32cc-4535-9244-4b6286589cc7.png)
+
+The article on the frontend will allow social media sharing for all platforms
+
+![image](https://user-images.githubusercontent.com/84401192/185748759-e7aad1b6-5593-454c-86cd-f8ef03ddf672.png)
+
+Here's how that looks on Twitter and Facebook
+
+![image](https://user-images.githubusercontent.com/84401192/185748878-bdca1237-3ad1-4451-afe5-a4369c06a1d4.png)
+
+![image](https://user-images.githubusercontent.com/84401192/185748890-494ec794-c702-421d-9c6f-cf5b4b030c66.png)
+
+#### CASE 2
+
+The user chooses to show the social media share icons for each Article, and one of the icons have been disabled.
+
+![image](https://user-images.githubusercontent.com/84401192/185748818-e40c59d0-7178-401b-a6c0-e46951f8fa19.png)
+
+The Article's frontend will then only display the social media icons that have been enabled.
+
+![image](https://user-images.githubusercontent.com/84401192/185748839-f4fdfc48-2537-454c-bbdd-3041d51e2817.png)
+
+ #### CASE 3
+
+The social media sharing option is disabled for all platforms
+
+![image](https://user-images.githubusercontent.com/84401192/185748782-28697dca-55f3-421e-83a4-87b9b518e2b6.png)
+
+The article's frontend does not display any social media sharing icon
+
+![image](https://user-images.githubusercontent.com/84401192/185748796-356b0525-dc6a-4f97-b48d-c6cfeccde53e.png)
+
+",False,15,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/15,https://github.com/joomla-projects/gsoc22_seo/pull/15,open,134,0,5,1,3,0,0,0,[],2022-08-20 14:59:49+00:00,,0.0,,[],"[{'commit_sha': '2b10d9aaf1e7c10a9afe44d618fe8f10c8e7eb4a', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+986526681,Google SERP preview and Content Analysis,"### Summary of Changes
+- Two new sections added under the ```Article Edit View``` on the backend - Google SERP Preview and Content Analysis
+- Provides a glimpse of how the article will appear in Google search results along with suggestions for improvement
+- Judges the article's SEO parameters which include the following
+  - Article Title Length
+  - Article Meta description Length
+  - Article Word Count
+- Improving these can make a considerable difference to an article's on-page SEO
+
+### Testing Instructions
+#### 1. Google SERP Preview
+#### CASE 1
+An ideal case where both the article title as well as meta description are within the specified limits. Since the article URL is too long, it will be truncated.
+
+![image](https://user-images.githubusercontent.com/84401192/177165748-058109fc-525f-401d-b5ef-1b830b68b6d6.png)
+
+#### CASE 2
+If the article title is too long, the SERP will truncate it to only 70 characters followed by ellipsis.
+
+![image](https://user-images.githubusercontent.com/84401192/177166637-1748dbac-4c5c-487b-9135-ac4981bacb61.png)
+
+#### CASE 3
+When no meta description has been set, a small chunk of the article's first paragraph will be extracted and displayed. Only the first 160 characters of text will be displayed followed by ellipsis.
+
+![image](https://user-images.githubusercontent.com/84401192/177166864-367dcaaa-a9e1-40b6-88dc-61d3a4210ffc.png)
+
+
+#### 2. Content Analysis
+Given the numerous combinations possible, this section covers only a representative set of use-cases
+
+#### CASE 1
+This section analyses various article parameters. It also displays the recommended range for these values at the bottom.
+
+![image](https://user-images.githubusercontent.com/84401192/177169353-e5bc2e07-2df4-4434-a569-9d9f70875841.png)
+
+#### CASE 2 
+In case no meta description has been specified, it indicates this under this section
+
+![image](https://user-images.githubusercontent.com/84401192/177171922-d4ccb6fb-b7a1-4c98-bfb4-a3e2a0e0917d.png)
+
+
+#### CASE 3
+If any field exceeds the specified limit, a warning message (Too Long - Can Improve) is displayed.
+
+![image](https://user-images.githubusercontent.com/84401192/177171494-42c30673-ebfb-494c-a533-275e0fd9b5fd.png)
+
+
+",False,7,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/7,https://github.com/joomla-projects/gsoc22_seo/pull/7,open,263,0,5,4,2,0,0,0,[],2022-07-04 14:12:49+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23915b4b6fb3c8a88c115b74b747edd96d2e5fb7', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2a31abcd7a851df3744e0d73419c783b6f58da4', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+986526681,Google SERP preview and Content Analysis,"### Summary of Changes
+- Two new sections added under the ```Article Edit View``` on the backend - Google SERP Preview and Content Analysis
+- Provides a glimpse of how the article will appear in Google search results along with suggestions for improvement
+- Judges the article's SEO parameters which include the following
+  - Article Title Length
+  - Article Meta description Length
+  - Article Word Count
+- Improving these can make a considerable difference to an article's on-page SEO
+
+### Testing Instructions
+#### 1. Google SERP Preview
+#### CASE 1
+An ideal case where both the article title as well as meta description are within the specified limits. Since the article URL is too long, it will be truncated.
+
+![image](https://user-images.githubusercontent.com/84401192/177165748-058109fc-525f-401d-b5ef-1b830b68b6d6.png)
+
+#### CASE 2
+If the article title is too long, the SERP will truncate it to only 70 characters followed by ellipsis.
+
+![image](https://user-images.githubusercontent.com/84401192/177166637-1748dbac-4c5c-487b-9135-ac4981bacb61.png)
+
+#### CASE 3
+When no meta description has been set, a small chunk of the article's first paragraph will be extracted and displayed. Only the first 160 characters of text will be displayed followed by ellipsis.
+
+![image](https://user-images.githubusercontent.com/84401192/177166864-367dcaaa-a9e1-40b6-88dc-61d3a4210ffc.png)
+
+
+#### 2. Content Analysis
+Given the numerous combinations possible, this section covers only a representative set of use-cases
+
+#### CASE 1
+This section analyses various article parameters. It also displays the recommended range for these values at the bottom.
+
+![image](https://user-images.githubusercontent.com/84401192/177169353-e5bc2e07-2df4-4434-a569-9d9f70875841.png)
+
+#### CASE 2 
+In case no meta description has been specified, it indicates this under this section
+
+![image](https://user-images.githubusercontent.com/84401192/177171922-d4ccb6fb-b7a1-4c98-bfb4-a3e2a0e0917d.png)
+
+
+#### CASE 3
+If any field exceeds the specified limit, a warning message (Too Long - Can Improve) is displayed.
+
+![image](https://user-images.githubusercontent.com/84401192/177171494-42c30673-ebfb-494c-a533-275e0fd9b5fd.png)
+
+
+",False,7,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/7,https://github.com/joomla-projects/gsoc22_seo/pull/7,open,263,0,5,4,2,0,0,0,[],2022-07-04 14:12:49+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '23915b4b6fb3c8a88c115b74b747edd96d2e5fb7', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c2a31abcd7a851df3744e0d73419c783b6f58da4', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+970409406,Integrate Page Performance Analyser,"### Summary of Changes
+
+- Add Page Performance Checker under the SEO tab under ```Article Edit``` View on the backend
+- This feature will allow the admin to analyze and review the article's page performance on mobile and desktops
+- This enables the user to review a range of performance parameters including the core web vitals assessment - an extremely important parameter for SEO, including ranking on Search Engine Results Page (SERPs) for organic traffic
+- The feature will be enabled only if the following conditions are met-
+  - The article has been published
+  - The article has not expired yet
+  - The website has been hosted on a public server (as it works only on live sites)
+- It will be disabled if the article has been archived, trashed or unpublished
+
+### Testing Instructions
+
+#### CASE 1
+- Check the article status on the publicly hosted site and make sure that it is published and has not expired
+- Go to the 'SEO' tab under ```Article Edit``` View
+- Click on the 'Start' button to start analyzing your website's performance
+
+![image](https://user-images.githubusercontent.com/84401192/174264504-248734ed-2fd3-4f81-b841-a091d3b4fe21.png)
+
+#### CASE 2
+- Check the article status on the publicly hosted site and change it to either unpublished, trashed, archived, expired
+- Go to the 'SEO' tab under ```Article Edit``` View
+- The 'Start' button should be disabled in this case and a message is displayed
+
+![image](https://user-images.githubusercontent.com/84401192/174264594-7bd4dafd-2eb9-4057-8224-c11046001937.png)
+
+#### CASE 3
+- If you are testing this feature on a local server, change the article status to any value
+- Go to the 'SEO' tab under ```Article Edit``` View
+- The page performance feature will be disabled in this case
+
+![image](https://user-images.githubusercontent.com/84401192/174264752-62e5cc81-028b-4bc4-8757-ca0fc96ff900.png)
+
+
+
+
+
+",False,4,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/4,https://github.com/joomla-projects/gsoc22_seo/pull/4,open,100,0,4,4,1,0,0,0,[],2022-06-17 09:21:01+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1e080306295fd92c8550bacc0f9d61c536b21aa8', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e5e8f9c8dedd5b303d85982feca04fefbfa7aa10', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+966576263,Add Nofollow-Dofollow Link checker,"### Summary of Changes
+
+- Add Outgoing Nofollow-Dofollow Link Checker under the SEO tab under ```Article Edit Section```
+- The new feature will allow the admin to monitor the external links of the article and categorize them as dofollow and nofollow
+- It will enable developers to prevent ‘link juice’ from flowing out to unwanted sites based on the external site's credibility
+- Admins can choose to retain or change the ‘rel’ directive (from dofollow to nofollow or vice versa) by going to the 'Content' tab on the same page
+
+![image](https://user-images.githubusercontent.com/84401192/173516703-aa20abc0-a375-4668-8382-41071f76186c.png)
+
+
+### Testing Instructions
+
+- Go to the 'Content' tab under ```Article Edit Section```
+- Click on 'Toggle Editor' and add a few anchor tags to the article
+- Change some of the 'rel' attributes of these tags to nofollow
+- Now move over to the 'SEO' tab and take a look at the Outgoing Link Checker section
+- A list of all the outgoing nofollow and dofollow links will appear
+
+
+### Actual result BEFORE applying this Pull Request
+
+- The Outgoing Nofollow-Dofollow Link Checker section should not be present under the SEO tab
+
+
+### Expected result AFTER applying this Pull Request
+
+- The newly added Outgoing Nofollow-Dofollow Link Checker section should be visible 
+
+
+",False,3,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/3,https://github.com/joomla-projects/gsoc22_seo/pull/3,open,178,0,5,3,1,0,0,0,[],2022-06-14 07:50:55+00:00,,0.0,,[],"[{'commit_sha': 'f0ea7876e80a8c32537554469b0ea488ec98fd9a', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76a0a4e5fd6f9b70266b8edfb3618af319522cda', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '59d4c9b44599418db31e28272ee0a4399927ff47', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+993101481,Reading Ease Rating,"### Summary of Changes
+- This section is under the SEO Tab in ```Article Edit View``` on the backend
+- It analyses the Article and provides a score based on its readability and difficulty level
+- Users are also provided with a reference table to understand and interpret their readability scores
+- Currently this section works only for English Articles
+
+
+### Testing Instructions
+#### CASE 1
+
+When the article is 'easy to read' and has high readability, the score will be highlighted in green.
+
+![image](https://user-images.githubusercontent.com/84401192/178268122-2c9ddf4b-1f20-439c-84d6-75c8a67f8b9a.png)
+
+#### CASE 2
+
+For articles that may not be too difficult or too easy to read, their score is indicated in yellow as shown.
+
+![image](https://user-images.githubusercontent.com/84401192/178268167-e94c4a1a-1797-42d6-86c0-7b2f7b3b4934.png)
+
+#### CASE 3
+
+For articles that are difficult to read, the ratings are highlighted in red.
+
+![image](https://user-images.githubusercontent.com/84401192/178268203-d301b76a-56b4-4521-9228-4d78ba75f0b0.png)
+
+#### CASE 4
+
+A case where the article's readability exceeds the limit (100).
+
+![image](https://user-images.githubusercontent.com/84401192/178268270-dd967b69-25fd-4f79-a038-f9eb69d57e6c.png)
+
+#### CASE 5
+
+For articles that have really long sentence and paragraph structures, their readability ratings will be negative.
+
+![image](https://user-images.githubusercontent.com/84401192/178268308-233612ca-99ec-4816-a5b8-b48c86ce65a7.png)
+
+",False,8,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/8,https://github.com/joomla-projects/gsoc22_seo/pull/8,open,143,0,4,3,1,0,0,0,[],2022-07-11 13:22:34+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dfb4cfc6f9b0f7707402deee2068f42951702152', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+972446212,Include Paragraph structure section,"### Summary of Changes
+
+- Paragraph structure section on the SEO tab in ```Article Edit``` View on the backend
+- Having an ideal paragraph structure improves an article's searchability on search engines
+- This feature assists in keeping article paragraphs short and easy to read for viewers
+- It will list down the top 5 paragraphs that exceed the word limit along with the word count in brackets
+- Currently the limit for each paragraph has been set to a maximum of 200 words
+- The admin can then switch over to the Content tab to make the required changes
+
+
+
+### Testing Instructions
+
+#### CASE 1
+- If all the paragraphs of the article are well formed
+
+![image](https://user-images.githubusercontent.com/84401192/174645934-b945cba8-8047-4aed-b14c-85781151d6a2.png)
+
+#### CASE 2
+- Some of the paragraphs have their word count exceeding the limit
+
+![image](https://user-images.githubusercontent.com/84401192/174646195-5800a447-4ec5-4c78-920c-766dc0041cce.png)
+
+#### CASE 3
+- In case more than 5 paragraphs have word count exceeding the maximum limit, only the first 5 paragraphs will be listed
+
+![image](https://user-images.githubusercontent.com/84401192/174646475-a1f701c8-c9b9-4344-ae35-a47e8ab04763.png)
+
+
+
+
+### Actual result BEFORE applying this Pull Request
+
+- This section does not exist in the SEO tab
+
+
+### Expected result AFTER applying this Pull Request
+
+- Paragraph structure section appears under SEO tab
+
+",False,5,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/5,https://github.com/joomla-projects/gsoc22_seo/pull/5,open,122,0,4,3,1,0,0,0,[],2022-06-20 16:45:43+00:00,,0.0,,[],"[{'commit_sha': '2e1120dac3fe16636152e583a8bda19e3236ab55', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '44371ffd0db92f8010e4844d4a6c58e68854ee46', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4a846c4b9c1d851f62012772fa060e8de8f58b76', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+978607342,Analyse Sentence Structure,"### Summary of Changes
+- This section will be present under the SEO tab in the ```Article Edit``` View on the backend
+- Having a concise sentence structure is ideal for SEO and also improves the article's readability especially on smaller screens
+- This feature helps identify the first 5 sentences that are too long and lists them
+- The admin can then switch to the Content tab and make the desired changes
+- Currently the limit for each sentence has been set to a maximum of 20 words
+
+
+
+### Testing Instructions
+#### CASE 1
+- If more than 5 sentences have word count exceeding 20, only the first 5 sentences will be listed to avoid clutter
+
+![image](https://user-images.githubusercontent.com/84401192/175633460-2a7b6786-5c91-494a-9c9e-0fc7c808901f.png)
+
+
+#### CASE 2
+- Only a few of the sentences have their word count exceeding the limit
+
+![image](https://user-images.githubusercontent.com/84401192/175634061-ac8155b0-3eef-44f6-afd6-d1154ca4c6a3.png)
+
+
+#### CASE 3
+- All sentences of the article are well structured
+
+![image](https://user-images.githubusercontent.com/84401192/175634680-f6cebc53-8072-4bdd-89b2-a333ba6d741e.png)
+",False,6,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/6,https://github.com/joomla-projects/gsoc22_seo/pull/6,open,131,0,4,5,0,0,0,0,[],2022-06-24 18:29:27+00:00,,0.0,,[],"[{'commit_sha': '4c577e3b9d4253d8ccd7d71adc5fa02fa6145c8b', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b7e86ac989faecc4d83be368c55ab1e13c23b090', 'committer_username': 'bembelimen', 'committer_name': 'Benjamin Trenkle', 'committer_email': None, 'commit_date': datetime.datetime(2011, 11, 30, 4, 21, 44, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4b2636c1cc38aaff1f08445dd17363e83e89aab6', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2ee60641058e20fdad32e62727a150569c095528', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b65ade10f283ebf289eb8c1fd292e19609268e82', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+1015380019,Image Compression,"### Summary of Changes
+- Images are among the biggest ‘on-page’ factors for a slow loading page
+- This new feature helps compress large, unoptimized images to improve the page load time
+- Currently the proof of concept works for 
+  - The image fields under the ```Images and Links``` tab in Article Edit view
+  - Two formats, 'png' and 'jpeg'
+- The compression feature is optional (controlled using the enable/disable toggle) and gets triggered when the user saves the article. For a successful compression operation, it also stores a backup of the original image as ```filename_orig``` 
+- It provides the user with 3 compression options
+  - Low Compression - High quality
+  - Medium Compression - Medium quality
+  - High Compression - Low quality
+
+
+### Testing Instructions
+Follow the steps described below for each of the mentioned cases
+1. Change the settings as shown
+2. Save these settings
+
+#### CASE 1
+
+When an image is selected but the compression is turned off, no compression options will be displayed and the file remains untouched. However, if compression is turned on, the following three options are displayed under the dropdown
+
+![image](https://user-images.githubusercontent.com/84401192/182413563-ced91bc9-e430-4555-aa1a-e677f11cfc2f.png)
+
+#### CASE 2
+
+On saving the article, a message is displayed at the top indicating the status of the compression. 
+- If the compression was successful, it highlights the percentage of compression. 
+- If the compression failed, it displays a '_Can't compress further_' message.
+
+![image](https://user-images.githubusercontent.com/84401192/182431185-adce5d2c-7b45-4b15-b240-6e4dff68c1bb.png)
+
+On opening the image gallery, you'll find a backup of the original image called '_filename_orig_'.
+
+![image](https://user-images.githubusercontent.com/84401192/182431484-5268855f-aea1-4c09-b243-83e664acf98d.png)
+
+Download both of these images, 'filename' and 'filename_orig'. Open file explorer to view their size before and after compression. 
+
+![image](https://user-images.githubusercontent.com/84401192/182431857-7b3ed897-167f-486b-9c50-d857a4d016c2.png)
+
+
+
+#### CASE 3 - Testing for formats other than '.png' and '.jpeg'
+
+If an unsupported file format (such as .gif) is selected and the compression is turned on, the image undergoes no compression after saving.
+
+![image](https://user-images.githubusercontent.com/84401192/182408789-d6cb0b2b-fe9c-414b-b789-9a12b6fb8e3b.png)
+
+
+",False,14,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/14,https://github.com/joomla-projects/gsoc22_seo/pull/14,open,130,0,4,2,6,0,0,0,[],2022-08-02 17:22:28+00:00,,0.0,,[],"[{'commit_sha': 'cee08ed5758e5eb096c87bf1abe8343752b121fc', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'de12c20c485d825e20bc2391ad29059daf9e6163', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+1004230887,Open Graph,"### Summary of Changes
+- Make a separate 'Open Graph' tab under the Article Edit section on the backend
+- Provides users the flexibility to modify each article's open graph data, which in turn can be used by social media platforms to display <i>rich objects</i>
+- Some of these parameters include
+  - Article Type
+  - Article Title
+  - Article Description
+  - Article Image
+  - Published Date
+  - Article Author
+- If any field of the 'Open Graph' tab is left blank, it will use the article's default/original parameters
+- Modifications to any of the open graph fields will override the article's default parameters
+
+
+### Testing Instructions
+
+Perform the following steps for each of the cases defined below
+1. Change the parameters as described
+2. Save the settings
+3. Open the article on the frontend
+4. Right click on the article and select 'View page source'
+5. Verify the open graph parameters included in the HTML header section
+
+#### CASE 1 - Open Graph tab not used
+
+When all fields in the open graph tab are blank, the article's default parameters are set as its open graph parameters. 
+If the article does not use any images, it hasn't been set in the 'Images and Links' tab and it hasn't been set in the OG tab either, the og: image tag does not appear in the screenshot below.
+
+![image](https://user-images.githubusercontent.com/84401192/180204547-f9ae0249-474e-4060-9b7d-d4000566e2a9.png)
+![image](https://user-images.githubusercontent.com/84401192/180205432-88959b49-e902-4c27-bb2d-833f0dd27758.png)
+
+#### CASE 2 - Open Graph tab used for all parameters except image
+
+Changing the og parameters under the 'Open Graph' tab will override the default parameters for the article.
+
+![image](https://user-images.githubusercontent.com/84401192/180208472-6cd10a5c-3773-4276-9c0e-1d1057b99232.png)
+![image](https://user-images.githubusercontent.com/84401192/180208665-78871dd4-afcc-43ed-b31e-05f309781620.png)
+
+
+#### CASE 3 - Dealing with multiple images
+For the 'og: image' parameter in the HTML header, the following hierarchy is maintained
+<ol>
+<li>Open Graph Image</li>
+<li>Full Article Image</li>
+<li>Intro Image</li>
+</ol>
+
+For the selected image URL, metadata such as the image type (PNG, JPEG, GIF), height, width don't need to be specified separately by the user. They are extracted automatically from the specified image.
+
+1. When only the article _intro image_ (sample1.png) is set in 'Images and Links' tab, and all other image fields are empty, then the og:image parameter is set to the _intro image_ URL
+
+![image](https://user-images.githubusercontent.com/84401192/180209618-3e47bdc9-6665-44ea-9cdc-7b2bfeeb73f3.png)
+![image](https://user-images.githubusercontent.com/84401192/180209809-255eb804-a2a6-4254-b06a-7629c9bf9f85.png)
+
+
+2. When the article _intro image_ (sample1.png) and the _full article image_ (sample2.png) both are set in 'Images and Links' tab, then the og:image parameter is set to the _full article image_ URL
+
+![image](https://user-images.githubusercontent.com/84401192/180210212-fedb747b-2bea-48a7-b79b-c5947151e259.png)
+![image](https://user-images.githubusercontent.com/84401192/180210162-ed418634-78bf-4af0-a5df-b0749a0349fb.png)
+
+
+3. When the _open graph image_ (sample3.jpg) is set (Open Graph tab) in addition to the above fields, then the og:image parameter is set to the _open graph image_ URL
+
+![image](https://user-images.githubusercontent.com/84401192/180210368-c0b3106f-fe8f-4949-bceb-020e40c00b68.png)
+![image](https://user-images.githubusercontent.com/84401192/180210471-6e5da4f5-4034-4c2d-946e-b2570feb1f84.png)
+
+
+
+",False,9,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/9,https://github.com/joomla-projects/gsoc22_seo/pull/9,open,214,1,4,3,0,0,0,0,[],2022-07-21 13:50:59+00:00,,0.0,,[],"[{'commit_sha': '6b7b4e04fac46aeacd6cf717a63c57e7b708999d', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '552a588894c445b979fb2ddca6526c2763ae65a2', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dec0719be31fa3795c235ea3f6e5b884a25d2fd0', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+1031800602,Add Social Media Share buttons,"### Summary of Changes
+- This feature helps users share Joomla pages on social media platforms
+- Social media is one of the most popular ways to gain visitors to any website. But currently Joomla doesn't offer any sharing feature. 
+- This feature attempts to bridge that gap by offering options for single-click sharing to the most commonly used social media platforms
+- Currently this feature allows sharing to only 3 social media platforms. This feature can then be extended to include additional social media icons as required
+- Instead of providing a rigid set of options, the _Social Media Share_ tab offers several settings that allows the user to select the preferred list of social media icons to display on the article page. This is done as follows.
+  - Clicking on _show sharebox_ will display all the available social media platforms for sharing
+  - The user can then choose to enable social media sharing for the selected list of platforms
+  - If the user chooses to hide the sharebox options, no social media icon is displayed on the article's frontend
+- These settings can be updated by going to System->Global Configuration->Articles->Social Media Share
+
+![image](https://user-images.githubusercontent.com/84401192/185749992-e7ec298b-17e5-4b27-a05e-6e3fcc4b20c4.png)
+
+
+
+
+### Testing Instructions
+#### CASE 1
+
+The user chooses to show the social media share icons for all articles, and all the icons have been enabled.
+
+![image](https://user-images.githubusercontent.com/84401192/185748748-b4a240f2-32cc-4535-9244-4b6286589cc7.png)
+
+The article on the frontend will allow social media sharing for all platforms
+
+![image](https://user-images.githubusercontent.com/84401192/185748759-e7aad1b6-5593-454c-86cd-f8ef03ddf672.png)
+
+Here's how that looks on Twitter and Facebook
+
+![image](https://user-images.githubusercontent.com/84401192/185748878-bdca1237-3ad1-4451-afe5-a4369c06a1d4.png)
+
+![image](https://user-images.githubusercontent.com/84401192/185748890-494ec794-c702-421d-9c6f-cf5b4b030c66.png)
+
+#### CASE 2
+
+The user chooses to show the social media share icons for each Article, and one of the icons have been disabled.
+
+![image](https://user-images.githubusercontent.com/84401192/185748818-e40c59d0-7178-401b-a6c0-e46951f8fa19.png)
+
+The Article's frontend will then only display the social media icons that have been enabled.
+
+![image](https://user-images.githubusercontent.com/84401192/185748839-f4fdfc48-2537-454c-bbdd-3041d51e2817.png)
+
+ #### CASE 3
+
+The social media sharing option is disabled for all platforms
+
+![image](https://user-images.githubusercontent.com/84401192/185748782-28697dca-55f3-421e-83a4-87b9b518e2b6.png)
+
+The article's frontend does not display any social media sharing icon
+
+![image](https://user-images.githubusercontent.com/84401192/185748796-356b0525-dc6a-4f97-b48d-c6cfeccde53e.png)
+
+",False,15,https://api.github.com/repos/joomla-projects/gsoc22_seo/pulls/15,https://github.com/joomla-projects/gsoc22_seo/pull/15,open,134,0,5,1,3,0,0,0,[],2022-08-20 14:59:49+00:00,,0.0,,[],"[{'commit_sha': '2b10d9aaf1e7c10a9afe44d618fe8f10c8e7eb4a', 'committer_username': 'alisha-kamat', 'committer_name': 'Alisha Kamat', 'committer_email': None, 'commit_date': datetime.datetime(2021, 5, 18, 15, 48, 39, tzinfo=datetime.timezone.utc)}]",Alisha Kamat,84401192,,User,,17,,19,49
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+500199959,gsoc22_seo,joomla-projects/gsoc22_seo,PHP,3,2,11,1086,48760,10,18,10,"[{'id': 1031800602, 'number': 15, 'closed': None, 'created': datetime.datetime(2022, 8, 20, 14, 59, 49, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 134, 'deletions': 0, 'state': 'open'}, {'id': 1015380019, 'number': 14, 'closed': None, 'created': datetime.datetime(2022, 8, 2, 17, 22, 28, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 130, 'deletions': 0, 'state': 'open'}, {'id': 1004230887, 'number': 9, 'closed': None, 'created': datetime.datetime(2022, 7, 21, 13, 50, 59, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 214, 'deletions': 1, 'state': 'open'}, {'id': 993101481, 'number': 8, 'closed': None, 'created': datetime.datetime(2022, 7, 11, 13, 22, 34, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 143, 'deletions': 0, 'state': 'open'}, {'id': 986526681, 'number': 7, 'closed': None, 'created': datetime.datetime(2022, 7, 4, 14, 12, 49, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 263, 'deletions': 0, 'state': 'open'}, {'id': 978607342, 'number': 6, 'closed': None, 'created': datetime.datetime(2022, 6, 24, 18, 29, 27, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 131, 'deletions': 0, 'state': 'open'}, {'id': 972446212, 'number': 5, 'closed': None, 'created': datetime.datetime(2022, 6, 20, 16, 45, 43, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 122, 'deletions': 0, 'state': 'open'}, {'id': 970409406, 'number': 4, 'closed': None, 'created': datetime.datetime(2022, 6, 17, 9, 21, 1, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 100, 'deletions': 0, 'state': 'open'}, {'id': 966576263, 'number': 3, 'closed': None, 'created': datetime.datetime(2022, 6, 14, 7, 50, 55, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 178, 'deletions': 0, 'state': 'open'}, {'id': 965013929, 'number': 1, 'closed': None, 'created': datetime.datetime(2022, 6, 12, 14, 22, 34, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 163, 'deletions': 125, 'state': 'open'}]"

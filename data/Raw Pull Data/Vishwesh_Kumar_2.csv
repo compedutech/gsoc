@@ -1,0 +1,35 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+428978572,Continue statements,"1.Adds support for continue statements 
+2.Break statements were producing wrong output on nested for loops , debugged that
+3.clean_cfg , was editing the block.exits ,while iterating over it (in the recursive calls), which sometimes led some empty blocks to be left .Created a copy of block.exits , which was then used to recursively call.
+Sample test which shows the wrong output in the current master 
+for 2)
+```:python
+def check():
+    for i in range(n):
+        for j in range(n):
+            if i==j:
+                break
+            print(1)
+        if i<10:
+            break
+        print(2)
+```
+for 3)
+```:python
+def f(x,t):
+    l=0
+    r=len(x)-1
+    while(l<=r):
+        mid=(l+r)//2 
+        if x[mid]==t:
+            break
+        if x[mid]>t:
+            r=mid-1
+        else:l=mid+1
+    return r
+```
+Also this is an amazing library.Thanks for putting this out there. :)",True,13,https://api.github.com/repos/coetaur0/staticfg/pulls/13,https://github.com/coetaur0/staticfg/pull/13,closed,13,7,1,3,1,0,0,0,[],2020-06-06 04:47:58+00:00,2020-06-11 08:03:18+00:00,443720.0,"5 days, 3:15:20",[],"[{'commit_sha': 'e9085b81a5d6bc2c424e72b3870f6ccc7f693ac8', 'committer_username': 'vishwesh-D-kumar', 'committer_name': 'Vishwesh Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 9, 10, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a2d6cca2ef64763286649e7828b768a697e15180', 'committer_username': 'vishwesh-D-kumar', 'committer_name': 'Vishwesh Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 9, 10, 11, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6d175b03f5d728a368d439533303f0678b70d25b', 'committer_username': 'vishwesh-D-kumar', 'committer_name': 'Vishwesh Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 10, 9, 10, 11, tzinfo=datetime.timezone.utc)}]",Vishwesh Kumar,47494639,,User,,33,,16,24
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+129404831,staticfg,coetaur0/staticfg,Python,31,182,7,6,59,2,1,0,"[{'id': 428978572, 'number': 13, 'closed': datetime.datetime(2020, 6, 11, 8, 3, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 6, 4, 47, 58, tzinfo=datetime.timezone.utc), 'time_taken': 443720.0, 'time_delta': '5 days, 3:15:20', 'additions': 13, 'deletions': 7, 'state': 'closed'}]"

@@ -1,0 +1,1580 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+431271220,TRUNK-5749: Drug Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5749
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+
+",False,3236,https://api.github.com/repos/openmrs/openmrs-core/pulls/3236,https://github.com/openmrs/openmrs-core/pull/3236,closed,51,107,5,2,6,13,1,0,[{'name': 'Stale'}],2020-06-08 16:54:05+00:00,2021-06-15 00:13:13+00:00,32080748.0,"371 days, 7:19:08","[{'comment_id': 436862471, 'comment_body': '@alinmihaila99, did you have to make this change?', 'comment_created': datetime.datetime(2020, 6, 8, 17, 10, 42, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 436864730, 'comment_body': 'You deleted this line with `*.hbm.xml` but is there reason why the actual file is not deleted?', 'comment_created': datetime.datetime(2020, 6, 8, 17, 14, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 436865522, 'comment_body': 'Can you format this line properly by placing `.addAnnotatedClass(Drug.class).getMetadataBuilder().build();` on a new line?', 'comment_created': datetime.datetime(2020, 6, 8, 17, 15, 16, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 436871426, 'comment_body': 'No, I will delete it, I was waiting for your review', 'comment_created': datetime.datetime(2020, 6, 8, 17, 24, 12, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}, {'comment_id': 436871456, 'comment_body': ""In drug's mapping there was property(name) that can be null, but using annotations drug extended that class, and was trying to add something null in it in a test. Is other way to change this only for drug?"", 'comment_created': datetime.datetime(2020, 6, 8, 17, 24, 15, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}, {'comment_id': 436871648, 'comment_body': 'Sure', 'comment_created': datetime.datetime(2020, 6, 8, 17, 24, 33, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}, {'comment_id': 437242493, 'comment_body': ""@alinmihaila99, did you confirm within the `Drug.hbm.xml` the corresponding field is not nullable?\r\nIf so, you could use `@AttributeOverride` on `Drug.java` by redefining the field's `@Column` to  resolve this? \r\n\r\nSee [documentation](https://docs.jboss.org/hibernate/jpa/2.1/api/javax/persistence/AttributeOverride.html#:~:text=Annotation%20Type%20AttributeOverride&text=May%20be%20applied%20to%20an,of%20one%20of%20its%20attributes)."", 'comment_created': datetime.datetime(2020, 6, 9, 8, 50, 40, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 437250304, 'comment_body': '@alinmihaila99   i am also going to look through Drug.hbm.xml  and make some comparison here ', 'comment_created': datetime.datetime(2020, 6, 9, 9, 1, 27, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 437279421, 'comment_body': ""@alinmihaila99 OpenMRS relies on liquibase to create the sequences and then maps these sequences to tables with hibernate. For MySQL its just autoincrement but for db relying on tables for sequences like postgresql it creates a [separate table for sequence](https://stackoverflow.com/questions/44744365/liquibase-postgresql-spring-jpa-id-auto-increment-issue). These sequence tables need to be properly mapped to id columns via annotations. For drug the name of sequence is [drug_drug_id_seq](https://github.com/openmrs/openmrs-core/blob/ef94f268f40e397c2e61dcd1d4b7b6147fa2adbf/api/src/main/resources/org/openmrs/api/db/hibernate/Drug.hbm.xml#L21) . Since we are now extending support to other db's as well, I think we should make this generic and properly specify and map the sequence with the created sequence else we won't be able to extend support to other db's . Also, I am working on extending support to PostgreSQL so this will become a blocker for me. \r\n\r\nThis might help you : https://thorben-janssen.com/hibernate-tips-use-custom-sequence/ \r\ncc. @dkayiwa  "", 'comment_created': datetime.datetime(2020, 6, 9, 9, 40, 33, tzinfo=datetime.timezone.utc), 'commenter': 'Am-Coder', 'type': 'User'}, {'comment_id': 438052709, 'comment_body': 'I did this and it worked! thanks @Ruhanga ', 'comment_created': datetime.datetime(2020, 6, 10, 11, 29, 50, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}, {'comment_id': 438097891, 'comment_body': 'I hope I did this in the right way. Thanks for review!', 'comment_created': datetime.datetime(2020, 6, 10, 12, 53, 58, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}, {'comment_id': 438126511, 'comment_body': '@alinmihaila99 , thanks for this. Just keep in mind whenever you are creating a sequence, ensure that it gets mapped to correct one. In OpenMRS, we have all the sequences created by ourselves and we never rely on hibernate to use its default sequence called hibernate_sequence.', 'comment_created': datetime.datetime(2020, 6, 10, 13, 35, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Am-Coder', 'type': 'User'}, {'comment_id': 479755832, 'comment_body': '@alinmihaila99, could you not plainly use `GenerationType.IDENTITY` here?', 'comment_created': datetime.datetime(2020, 8, 30, 11, 9, 48, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '99e35ffbfd4f48a35d5851126ceb3cc286c1d9ad', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '38e94ef8f71a8dbd1587395c7dbc2a9a147fde7d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+436388660,TRUNK-5782: Concept Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5782
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [ ] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [ ] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [ ] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [ ] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [ ] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3263,https://api.github.com/repos/openmrs/openmrs-core/pulls/3263,https://github.com/openmrs/openmrs-core/pull/3263,closed,117,151,6,5,5,2,1,0,[{'name': 'Stale'}],2020-06-18 10:47:44+00:00,2021-06-14 00:13:50+00:00,31152366.0,"360 days, 13:26:06","[{'comment_id': 442144674, 'comment_body': 'do you still need Concept.hbm.xml in any place,we shouldnt need this comment line', 'comment_created': datetime.datetime(2020, 6, 18, 11, 1, 57, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 442211267, 'comment_body': 'No, but I left it commented because I already have some errors to resolve and I will delete it after passing the tests. ', 'comment_created': datetime.datetime(2020, 6, 18, 13, 7, 11, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}]","[{'commit_sha': '8aadf006e47f228d17c27ed3413bccfe8eaf8763', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2a54a32266081683f840f2804cb71d9be8f02c67', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd60da20152b9eb96c9f473bba20d4322be706e00', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '979163667988eb6227ca4ffc3f657ac45e6f82f0', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9879e6e68355feb06e838d7bea86d9e79f89c28a', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+433697457,TRUNK-5796: CareSetting Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5796
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3243,https://api.github.com/repos/openmrs/openmrs-core/pulls/3243,https://github.com/openmrs/openmrs-core/pull/3243,closed,23,61,4,2,5,1,1,0,[{'name': 'Stale'}],2020-06-12 13:59:24+00:00,2021-06-15 00:13:09+00:00,31745625.0,"367 days, 10:13:45","[{'comment_id': 479755545, 'comment_body': '@alinmihaila99, could you not plainly use `GenerationType.IDENTITY` here?', 'comment_created': datetime.datetime(2020, 8, 30, 11, 7, 14, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': 'dbc9d67ec29ced5d2f2dae462d175174b92d8384', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be00224a08f22ce000209a8e6d83256771b01066', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+434150096,TRUNK-5797: Field Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5797
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3251,https://api.github.com/repos/openmrs/openmrs-core/pulls/3251,https://github.com/openmrs/openmrs-core/pull/3251,closed,29,91,4,2,4,1,1,0,[{'name': 'Stale'}],2020-06-14 14:09:56+00:00,2021-06-14 00:13:55+00:00,31485839.0,"364 days, 10:03:59","[{'comment_id': 479755396, 'comment_body': '@alinmihaila99, just a minor change, could you not plainly use `GenerationType.IDENTITY` here?', 'comment_created': datetime.datetime(2020, 8, 30, 11, 5, 56, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '97d9aebb977f9c145cacd9fd56a2c160f4422179', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '588bd7f993f489c11425721add3bb7c749e2a148', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+435209667,TRUNK-5799: EncounterProvider Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5799
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3255,https://api.github.com/repos/openmrs/openmrs-core/pulls/3255,https://github.com/openmrs/openmrs-core/pull/3255,closed,34,81,4,2,4,3,1,0,[{'name': 'Stale'}],2020-06-16 13:21:12+00:00,2021-06-14 00:13:53+00:00,31315961.0,"362 days, 10:52:41","[{'comment_id': 440913427, 'comment_body': '@alinmihaila99 what could be the reason behind this change?', 'comment_created': datetime.datetime(2020, 6, 16, 14, 52, 18, tzinfo=datetime.timezone.utc), 'commenter': 'gitcliff', 'type': 'User'}, {'comment_id': 442092360, 'comment_body': '@gitcliff  that change was necessary to make sure that EncounterProvider is also added to the list of the annotated classes,checkout the code snipet below that', 'comment_created': datetime.datetime(2020, 6, 18, 9, 25, 20, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 443594293, 'comment_body': '@alinmihaila99 do you need to use the `GeneratedValue` annotation here?', 'comment_created': datetime.datetime(2020, 6, 22, 14, 21, 35, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '53fd8969f620abfa9c8ef7e668c5304f2451b3fe', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8f2595c0a9de79648a7a46e6400a863e135ec663', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+438136792,TRUNK-5801: EncounterType Domain - Switching from Hibernate Mappings to Annotations,"
+<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+Reopened version of #3259
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5801
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3274,https://api.github.com/repos/openmrs/openmrs-core/pulls/3274,https://github.com/openmrs/openmrs-core/pull/3274,closed,28,58,4,3,10,0,1,0,[{'name': 'Stale'}],2020-06-22 19:33:40+00:00,2021-12-31 00:17:59+00:00,48055459.0,"556 days, 4:44:19",[],"[{'commit_sha': 'a1a87b47bacebc4b25544cf04cfeacda70772771', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f35639186ec8b900ce3c4e1c063a2ab63ebf1103', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '15a0ef9c092bca6694b6115a3e32fb5059b17fe2', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",Ian,52504170,,User,,64,,2,62
+436362093,TRUNK-5803: ConceptAnswer Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5803
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3261,https://api.github.com/repos/openmrs/openmrs-core/pulls/3261,https://github.com/openmrs/openmrs-core/pull/3261,closed,33,52,4,2,3,1,1,0,[{'name': 'Stale'}],2020-06-18 09:57:11+00:00,2021-06-14 00:13:51+00:00,31155400.0,"360 days, 14:16:40","[{'comment_id': 479755031, 'comment_body': '@alinmihaila99, could you not plainly use `GenerationType.IDENTITY` here?', 'comment_created': datetime.datetime(2020, 8, 30, 11, 2, 17, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '66e797402cb0100f2aa8550a82b8da72a5637b64', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b51ea02f55a3e8b3d8f0426e47c6ebe53df17eea', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+437090084,TRUNK-5804: Form Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5804
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3267,https://api.github.com/repos/openmrs/openmrs-core/pulls/3267,https://github.com/openmrs/openmrs-core/pull/3267,closed,32,90,4,2,4,2,1,0,[{'name': 'Stale'}],2020-06-19 13:03:42+00:00,2021-06-14 00:13:48+00:00,31057806.0,"359 days, 11:10:06","[{'comment_id': 443349229, 'comment_body': '@alinmihaila99  looking good to me,@Ruhanga how does this look to you.', 'comment_created': datetime.datetime(2020, 6, 22, 6, 51, 28, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 443580354, 'comment_body': 'Thanks @alinmihaila99, @HerbertYiga. This is good.', 'comment_created': datetime.datetime(2020, 6, 22, 14, 2, 15, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '35a6f865242a22fe27663d2571e0a85883087349', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '204590c939383c5a671927b63d6500414543555e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+437441050,TRUNK-5808: Location Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5808
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3270,https://api.github.com/repos/openmrs/openmrs-core/pulls/3270,https://github.com/openmrs/openmrs-core/pull/3270,closed,88,155,5,3,3,1,1,0,[{'name': 'Stale'}],2020-06-20 17:50:08+00:00,2021-06-14 00:13:45+00:00,30954217.0,"358 days, 6:23:37","[{'comment_id': 443345529, 'comment_body': 'you could run mvn clean package before pushing the code to avoid the unnecessary code formats @Ruhanga  how does this look to you?', 'comment_created': datetime.datetime(2020, 6, 22, 6, 41, 50, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': '9f44eef4ab1602ef9c9344799beddd9400c53d47', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3ad1b7f48314a8a390a49f6b506a67c429f0b9b', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'edf4dfd67c652eced749ec88230a523304083f29', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+441522197,TRUNK-5809: Program Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5809
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3281,https://api.github.com/repos/openmrs/openmrs-core/pulls/3281,https://github.com/openmrs/openmrs-core/pull/3281,closed,44,81,4,2,3,4,1,0,[{'name': 'Stale'}],2020-06-29 16:25:14+00:00,2021-12-30 00:17:44+00:00,47375550.0,"548 days, 7:52:30","[{'comment_id': 447409396, 'comment_body': 'Thanks for working on this,we could also have these mapping files on the same line', 'comment_created': datetime.datetime(2020, 6, 30, 4, 56, 57, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 447618254, 'comment_body': ""Yes I saw this, but I didn't know if it's ok to modify something that is not in my ticket"", 'comment_created': datetime.datetime(2020, 6, 30, 11, 42, 40, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}, {'comment_id': 448184634, 'comment_body': 'it is ok to align that', 'comment_created': datetime.datetime(2020, 7, 1, 7, 56, 55, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 479754375, 'comment_body': '@alinmihaila99, could you not plainly use `GenerationType.IDENTITY`?', 'comment_created': datetime.datetime(2020, 8, 30, 10, 55, 39, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': 'f6c7efea5e69b3bcf5153649fc173df56227a1e4', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9011f05ee7cb3ff9ef4e0b6b178002114063c975', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+441992413,TRUNK-5810: Relationship Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5810
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3283,https://api.github.com/repos/openmrs/openmrs-core/pulls/3283,https://github.com/openmrs/openmrs-core/pull/3283,closed,37,65,4,2,3,2,1,0,[{'name': 'Stale'}],2020-06-30 12:25:21+00:00,2021-06-14 00:13:42+00:00,30109701.0,"348 days, 11:48:21","[{'comment_id': 448182773, 'comment_body': 'looks good though with some code formats,you could use mvn clean  package before pushing to git', 'comment_created': datetime.datetime(2020, 7, 1, 7, 53, 30, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 479754257, 'comment_body': '@alinmihaila99, could you not plainly use `GenerationType.IDENTITY` as decided upon this earlier?', 'comment_created': datetime.datetime(2020, 8, 30, 10, 54, 36, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '1d2d1828df7c3f415caf07c472751ef3d58505fe', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1c71c5e014d92e5cbf127099bbd2f470756af10d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+438609229,TRUNK-5819: OrderFrequency Domain - Switching from Hibernate Mappings  to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5819
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3275,https://api.github.com/repos/openmrs/openmrs-core/pulls/3275,https://github.com/openmrs/openmrs-core/pull/3275,closed,25,56,4,2,4,1,1,0,[{'name': 'Stale'}],2020-06-23 14:27:13+00:00,2021-06-14 00:13:44+00:00,30707191.0,"355 days, 9:46:31","[{'comment_id': 479754606, 'comment_body': '@alinmihaila99, could you not plainly use `GenerationType.IDENTITY` here?', 'comment_created': datetime.datetime(2020, 8, 30, 10, 57, 55, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': 'd87b471dad30b5aede1cfa64e193e563db905f4f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3a6724a7e3ffff46a9b96dc93059e07d25bc929', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+468898011,TRUNK-5822: FormField Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5822
+
+## Checklist: I completed these to help reviewers :)
+
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3518,https://api.github.com/repos/openmrs/openmrs-core/pulls/3518,https://github.com/openmrs/openmrs-core/pull/3518,closed,50,94,4,1,2,1,1,0,[{'name': 'Stale'}],2020-08-17 15:18:00+00:00,2021-06-14 00:12:14+00:00,25952054.0,"300 days, 8:54:14","[{'comment_id': 474492886, 'comment_body': '@alinmihaila99   Thanks for working on this,though it came out with lots of code formats', 'comment_created': datetime.datetime(2020, 8, 21, 7, 57, 18, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': 'a85f4377dd21be89ae5b8904251626f88f04512b', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+442732434,TRUNK-5824: FieldAnswer Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5824
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3286,https://api.github.com/repos/openmrs/openmrs-core/pulls/3286,https://github.com/openmrs/openmrs-core/pull/3286,closed,66,116,3,1,7,0,1,0,[{'name': 'Stale'}],2020-07-01 14:19:43+00:00,2021-06-14 00:13:40+00:00,30016437.0,"347 days, 9:53:57",[],"[{'commit_sha': '6171c35f3815851de8d0190cf75a576ffc5e4c41', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+443524437,TRUNK-5828: EncounterRole Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5828
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3289,https://api.github.com/repos/openmrs/openmrs-core/pulls/3289,https://github.com/openmrs/openmrs-core/pull/3289,closed,26,58,4,2,3,1,1,0,[{'name': 'Stale'}],2020-07-02 13:40:06+00:00,2021-06-14 00:13:38+00:00,29932412.0,"346 days, 10:33:32","[{'comment_id': 449212415, 'comment_body': '@alinmihaila99  LGTM ,,,,\r\n\r\njust fixing the alignment here ', 'comment_created': datetime.datetime(2020, 7, 2, 18, 59, 43, tzinfo=datetime.timezone.utc), 'commenter': 'gitcliff', 'type': 'User'}]","[{'commit_sha': 'fab59017c01805951a76339f82d1890852d9e6d3', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a791b6c519b857b142e9097f352a23c991baab31', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+444074456,TRUNK-5830: FieldType Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5830
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3293,https://api.github.com/repos/openmrs/openmrs-core/pulls/3293,https://github.com/openmrs/openmrs-core/pull/3293,closed,26,45,4,2,3,1,1,0,[{'name': 'Stale'}],2020-07-03 14:01:54+00:00,2021-06-14 00:13:37+00:00,29844703.0,"345 days, 10:11:43","[{'comment_id': 479753409, 'comment_body': '@alinmihaila99, could you not just plainly use `GenerationType.IDENTITY` here as decided upon earlier?', 'comment_created': datetime.datetime(2020, 8, 30, 10, 45, 53, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': '0faf169098b9ac1bff0a723fb6f5763baa6c53fd', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '24ade752e0033ba8bf08079a5a5f31ed7a3a759f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+445381847,TRUNK-5833: ConceptDescription Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5833
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3303,https://api.github.com/repos/openmrs/openmrs-core/pulls/3303,https://github.com/openmrs/openmrs-core/pull/3303,closed,39,54,4,2,3,1,1,0,[{'name': 'Stale'}],2020-07-07 12:31:46+00:00,2021-06-14 00:13:35+00:00,29504509.0,"341 days, 11:41:49","[{'comment_id': 451304934, 'comment_body': 'mvn clean package could help you on the unwanted code formats', 'comment_created': datetime.datetime(2020, 7, 8, 6, 10, 52, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': '62e327abb24c42b0f0ce59105ee0fe00fcd4c890', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53a3a4e921e94144553c4d06b60e625ab36f372e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+446121745,TRUNK-5836: ConceptDatatype Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3312,https://api.github.com/repos/openmrs/openmrs-core/pulls/3312,https://github.com/openmrs/openmrs-core/pull/3312,closed,20,60,4,2,4,0,1,0,[{'name': 'Stale'}],2020-07-08 09:42:27+00:00,2021-06-14 00:13:33+00:00,29428266.0,"340 days, 14:31:06",[],"[{'commit_sha': '06b3f167e7819a9bdaf5c973698e427de78e05ff', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb3d4813596f2ec34d6b9b5f9ab59658bf2e689e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+446215065,TRUNK-5837: Cohort Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5837
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3313,https://api.github.com/repos/openmrs/openmrs-core/pulls/3313,https://github.com/openmrs/openmrs-core/pull/3313,closed,34,65,4,2,3,3,1,0,[{'name': 'Stale'}],2020-07-08 12:37:29+00:00,2021-06-14 00:13:31+00:00,29417762.0,"340 days, 11:36:02","[{'comment_id': 452076333, 'comment_body': '@alinmihaila99  thanks though this came out with a few unwanted code formats', 'comment_created': datetime.datetime(2020, 7, 9, 9, 10, 47, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 452396010, 'comment_body': 'Why did you add the length when you had specified as null', 'comment_created': datetime.datetime(2020, 7, 9, 18, 2, 20, tzinfo=datetime.timezone.utc), 'commenter': 'sherrif10', 'type': 'User'}, {'comment_id': 452715172, 'comment_body': ""The field can't be null"", 'comment_created': datetime.datetime(2020, 7, 10, 8, 56, 42, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}]","[{'commit_sha': '2be1fb90bed08f05cc214849e514e94c27a1e6ef', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a8c1c0117d54eadaccde2b2eeb7a67075bacf5c8', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+447310076,TRUNK-5840: OrderGroup Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5840
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3321,https://api.github.com/repos/openmrs/openmrs-core/pulls/3321,https://github.com/openmrs/openmrs-core/pull/3321,closed,52,90,4,4,4,0,1,0,[{'name': 'Stale'}],2020-07-10 08:43:19+00:00,2021-06-14 00:13:30+00:00,29259011.0,"338 days, 15:30:11",[],"[{'commit_sha': 'ee05bf0de0b63df55aa16f60d7c8ded51024c4e4', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd8f09ca9df2d0b48fa05d5ade09ae0f8e1e069b', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cc0c2fe9631f09427cf2b01ae654e3835f7812dd', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b2caf2f1b6bfb671cbf5af9cddd9e69e7c30cb0', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+447342533,TRUNK-5841: PatientProgram Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5841
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3322,https://api.github.com/repos/openmrs/openmrs-core/pulls/3322,https://github.com/openmrs/openmrs-core/pull/3322,closed,44,91,4,2,4,0,1,0,[{'name': 'Stale'}],2020-07-10 09:49:48+00:00,2021-06-14 00:13:28+00:00,29255020.0,"338 days, 14:23:40",[],"[{'commit_sha': '364d82fb3f8452190ec0d58840d7fec27757ff9f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b96e2d92b55a32d67e4b996b49816ddf4547e6e1', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+448953629,TRUNK-5842: ProgramWorkflow Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5842
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3356,https://api.github.com/repos/openmrs/openmrs-core/pulls/3356,https://github.com/openmrs/openmrs-core/pull/3356,closed,35,56,4,2,4,0,1,0,[{'name': 'Stale'}],2020-07-14 15:28:20+00:00,2021-06-14 00:13:25+00:00,28889105.0,"334 days, 8:45:05",[],"[{'commit_sha': 'ee9b0c47e93dba7693e0ef466d11bbe83f16b75f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1a86892838cd2a30f4c180de99eb770e7b859fb', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+448173048,TRUNK-5852: Provider Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5852
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3335,https://api.github.com/repos/openmrs/openmrs-core/pulls/3335,https://github.com/openmrs/openmrs-core/pull/3335,closed,57,81,4,2,3,2,1,0,[{'name': 'Stale'}],2020-07-13 10:45:24+00:00,2021-06-14 00:13:26+00:00,28992482.0,"335 days, 13:28:02","[{'comment_id': 454108996, 'comment_body': 'Looks good though it came with some small code formats', 'comment_created': datetime.datetime(2020, 7, 14, 5, 24, 39, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}, {'comment_id': 455533532, 'comment_body': 'cc @Ruhanga ', 'comment_created': datetime.datetime(2020, 7, 16, 6, 17, 6, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': 'dbd7766da64895850cf9cb34fb8e32fa32ce3787', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'edbb953dbe309c58b79e39ca2450b910da08cd6a', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+449697267,TRUNK-5865: FormResource Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5865
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3364,https://api.github.com/repos/openmrs/openmrs-core/pulls/3364,https://github.com/openmrs/openmrs-core/pull/3364,closed,49,66,3,1,4,1,1,0,[{'name': 'Stale'}],2020-07-15 19:49:43+00:00,2021-06-14 00:13:23+00:00,28787020.0,"333 days, 4:23:40","[{'comment_id': 455528051, 'comment_body': 'Looking good though it came with some small code formats', 'comment_created': datetime.datetime(2020, 7, 16, 6, 0, 51, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': '4efb5ecf8f6e4da27af0673ee2383980f9b37f6c', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+449914024,TRUNK-5866: OrderSet Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5866
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3367,https://api.github.com/repos/openmrs/openmrs-core/pulls/3367,https://github.com/openmrs/openmrs-core/pull/3367,closed,35,81,4,3,4,0,1,0,[{'name': 'Stale'}],2020-07-16 05:45:08+00:00,2021-06-14 00:13:22+00:00,28751294.0,"332 days, 18:28:14",[],"[{'commit_sha': '04e1b37a25e35fabb20748bc1741d04a077ae4dc', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd6f206ce421c820b9ef76c504e9bca5d0c6fdd5d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '939ffad7f5b0b76e0f32ef863d23a83ea9dbf98f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+452763462,TRUNK-5867: OrderSetMember Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5867
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3384,https://api.github.com/repos/openmrs/openmrs-core/pulls/3384,https://github.com/openmrs/openmrs-core/pull/3384,closed,29,72,4,2,4,1,1,0,[{'name': 'Stale'}],2020-07-19 20:40:50+00:00,2021-06-14 00:13:18+00:00,28438348.0,"329 days, 3:32:28","[{'comment_id': 457054558, 'comment_body': 'Looking good,thanks cc @Ruhanga ', 'comment_created': datetime.datetime(2020, 7, 20, 5, 6, 15, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': 'bdfe2d4731629a623fa5c46ddad868c0fb0d0ad5', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ff2f3082c33e4d27b05178115084a350330e1b02', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+454360268,TRUNK-5868: OrderType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5868
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+",False,3388,https://api.github.com/repos/openmrs/openmrs-core/pulls/3388,https://github.com/openmrs/openmrs-core/pull/3388,closed,40,69,5,6,7,1,1,0,[{'name': 'Stale'}],2020-07-21 10:25:39+00:00,2021-06-14 00:13:13+00:00,28302454.0,"327 days, 13:47:34","[{'comment_id': 460067313, 'comment_body': ""@alinmihaila99, you could probably transform and specify `conceptClasses` into a `Set` and provide the getter/setter in a backwards compatible way. This means you'd maintain the old setter/getter methods but add some casting to them so implementations specifically relying on these methods in a tightly coupled way might still use them. \r\n\r\nDo you have any thoughts or preference on this @ibacher, @dkayiwa?"", 'comment_created': datetime.datetime(2020, 7, 24, 13, 55, 12, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': 'a4d05b77d70aa0d739b31297993534670cacc38f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a5f00a5e21f8669645c33b7fb679280705b962a2', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e1106ca02ff6dd738b6caf52d568bf666b143410', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '31f6a8a9d2c7483a2ba678841e238091a0592ae6', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '63fa40348fa4a3f18d4b5274303e38475314fb6c', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '260c531c426d87b3379657610e376c5b7eda20a6', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+453661047,TRUNK-5874: Visit Domain - Switching from Hibernate Mappings to Annotations,"<!--- Add a pull request title above in this format -->
+<!--- real example: 'TRUNK-5111: Replace use of deprecated isVoided' -->
+<!--- 'TRUNK-JiraIssueNumber: JiraIssueTitle' -->
+## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5874
+
+## Checklist: I completed these to help reviewers :)
+<!--- Put an `x` in the box if you did the task -->
+<!--- If you forgot a task please follow the instructions below -->
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+  No? Unsure? -> [configure your IDE](https://wiki.openmrs.org/display/docs/How-To+Setup+And+Use+Your+IDE), format the code and add the changes with `git add . && git commit --amend`
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+  No? -> write tests and add them to this commit `git add . && git commit --amend`
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+  No? -> execute above command
+
+- [x] All new and existing **tests passed**.
+
+  No? -> figure out why and add the fix to your commit. It is your responsibility to make sure your code works.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+  No? Unsure? -> execute command `git pull --rebase upstream master`
+
+",False,3386,https://api.github.com/repos/openmrs/openmrs-core/pulls/3386,https://github.com/openmrs/openmrs-core/pull/3386,closed,10,2,1,1,4,0,1,0,[{'name': 'Stale'}],2020-07-20 17:22:02+00:00,2021-06-14 00:13:17+00:00,28363875.0,"328 days, 6:51:15",[],"[{'commit_sha': '99ee022052ef63b7a45fb3cee2bf53f9d32007cf', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+455628716,TRUNK-5881: Order Domain - Switching from Hibernate Mappings to Annotations,"
+## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5881
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+
+",False,3394,https://api.github.com/repos/openmrs/openmrs-core/pulls/3394,https://github.com/openmrs/openmrs-core/pull/3394,closed,121,4,5,1,3,1,1,0,[{'name': 'Stale'}],2020-07-23 10:53:34+00:00,2021-06-14 00:13:12+00:00,28127978.0,"325 days, 13:19:38","[{'comment_id': 465705622, 'comment_body': '@alinmihaila99, can you remove this comment?', 'comment_created': datetime.datetime(2020, 8, 5, 12, 55, 44, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': 'ce2d0ec589fa32774cd748c4ca8634c4ed9fce22', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+456217147,TRUNK-5884: LocationTag Domain - Switching from Hibernate Mappings to Annotations,"#2749  Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5884
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3396,https://api.github.com/repos/openmrs/openmrs-core/pulls/3396,https://github.com/openmrs/openmrs-core/pull/3396,closed,15,46,4,2,4,1,1,0,[{'name': 'Stale'}],2020-07-24 10:45:36+00:00,2021-06-14 00:13:10+00:00,28042054.0,"324 days, 13:27:34","[{'comment_id': 460883602, 'comment_body': 'looking  good,cc @Ruhanga ', 'comment_created': datetime.datetime(2020, 7, 27, 13, 19, 55, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': '78d8c3ede91be461b27846f3bac1ed79330916a1', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '02db04ec0ad0fccbd64e046e2baa0a60357e7f01', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+457709830,TRUNK-5890: Privilege Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+<!--- Describe your changes in detail -->
+<!--- It can simply be your commit message, which you must have -->
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5890
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+
+",False,3401,https://api.github.com/repos/openmrs/openmrs-core/pulls/3401,https://github.com/openmrs/openmrs-core/pull/3401,closed,22,2,3,2,4,0,1,0,[{'name': 'Stale'}],2020-07-28 10:11:16+00:00,2021-06-14 00:13:08+00:00,27698512.0,"320 days, 14:01:52",[],"[{'commit_sha': 'b68dfa96605eb25a2a215bbfb1dcccfacfc6e75d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '031486f6440f2359d8142e00ceb5773cbcdf40b8', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+457768683,TRUNK-5891: ProgramWorkflowState Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5891
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+",False,3402,https://api.github.com/repos/openmrs/openmrs-core/pulls/3402,https://github.com/openmrs/openmrs-core/pull/3402,closed,25,52,4,3,5,2,1,0,[{'name': 'Stale'}],2020-07-28 12:11:59+00:00,2021-06-14 00:13:06+00:00,27691267.0,"320 days, 12:01:07","[{'comment_id': 462155683, 'comment_body': '@alinmihaila99, can you run the `ValidateHibernateMappingsDatabaseIT` test locally. You might want to change the generation type to IDENTITY.', 'comment_created': datetime.datetime(2020, 7, 29, 9, 12, 44, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 462161010, 'comment_body': 'I used the generation type IDENTITY in my second commit, but the travis failed. I also ran the ValidateHibernateMappingsDatabaseIT test locally and it passed.', 'comment_created': datetime.datetime(2020, 7, 29, 9, 21, 39, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}]","[{'commit_sha': 'ceaf2459a946df69b82d3df01dc6c58106d49ae5', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4f9fb7bd16bfbad0aee720f73676a059e33b0963', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '71d3dfad3bec05b7477199a4dbff00432686d3b5', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+458320495,TRUNK-5893: VisitType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5893
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+
+- [x] All new and existing **tests passed**.
+
+- [x] My pull request is **based on the latest changes** of the master branch.
+",False,3406,https://api.github.com/repos/openmrs/openmrs-core/pulls/3406,https://github.com/openmrs/openmrs-core/pull/3406,closed,15,45,4,2,4,0,1,0,[{'name': 'Stale'}],2020-07-29 09:43:40+00:00,2021-06-14 00:13:04+00:00,27613764.0,"319 days, 14:29:24",[],"[{'commit_sha': 'efbd97ff5d70061d6b85c03744cbf42eaf7fbfa5', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6042d50b1f0b18ce9a27643ecd89b70c2d73fce4', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+462182566,TRUNK-5899: ConceptAttributeType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5899
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3415,https://api.github.com/repos/openmrs/openmrs-core/pulls/3415,https://github.com/openmrs/openmrs-core/pull/3415,closed,15,67,4,2,3,0,1,0,[{'name': 'Stale'}],2020-08-03 13:37:07+00:00,2021-06-14 00:13:00+00:00,27167753.0,"314 days, 10:35:53",[],"[{'commit_sha': '3de0c531d0de5907d01418290991e7345e13c802', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0bf382accd47e1e0918127e732c13a89637d69f7', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+462299263,TRUNK-5900: ConceptProposal Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5900
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.
+",False,3416,https://api.github.com/repos/openmrs/openmrs-core/pulls/3416,https://github.com/openmrs/openmrs-core/pull/3416,closed,38,62,4,2,3,0,1,0,[{'name': 'Stale'}],2020-08-03 17:18:14+00:00,2021-06-14 00:12:59+00:00,27154485.0,"314 days, 6:54:45",[],"[{'commit_sha': '86710213fe5cd62b481f2da9f0624d8e6d5eb16a', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cce373278bfcbbb31ce67aacc9dcf5ec462ed606', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+463928984,TRUNK-5902: CohortMembership Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5902
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [ ] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3453,https://api.github.com/repos/openmrs/openmrs-core/pulls/3453,https://github.com/openmrs/openmrs-core/pull/3453,closed,39,50,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-06 10:11:04+00:00,2021-06-14 00:12:46+00:00,26920902.0,"311 days, 14:01:42",[],"[{'commit_sha': '4ed2be9224e9c26d93c928355709711949e3fd52', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+462698044,TRUNK-5904: ConceptMap Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5904
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3427,https://api.github.com/repos/openmrs/openmrs-core/pulls/3427,https://github.com/openmrs/openmrs-core/pull/3427,closed,38,47,5,2,3,0,1,0,[{'name': 'Stale'}],2020-08-04 11:12:44+00:00,2021-06-14 00:12:57+00:00,27090013.0,"313 days, 13:00:13",[],"[{'commit_sha': '79006048b0312cc510a8fc155de98a8284d6f89f', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '46fcb0a7b8830e4f56d0a2b279e13d6a67878548', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+462733719,TRUNK-5905: ConceptMapType Domain - Switching from Hibernate Mappingsto Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5905
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3428,https://api.github.com/repos/openmrs/openmrs-core/pulls/3428,https://github.com/openmrs/openmrs-core/pull/3428,closed,16,55,4,2,3,0,1,0,[{'name': 'Stale'}],2020-08-04 12:26:17+00:00,2021-06-14 00:12:55+00:00,27085598.0,"313 days, 11:46:38",[],"[{'commit_sha': '00b00c87499c23661f83e343a0291ab9ce51cfec', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ce7f54dea2690b5dedc0b23aa4adbabfeb9587e3', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+463205921,TRUNK-5906: ConceptReferenceTerm Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5906
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3436,https://api.github.com/repos/openmrs/openmrs-core/pulls/3436,https://github.com/openmrs/openmrs-core/pull/3436,closed,33,70,4,1,3,2,1,0,[{'name': 'Stale'}],2020-08-05 07:39:51+00:00,2021-06-14 00:12:54+00:00,27016383.0,"312 days, 16:33:03","[{'comment_id': 465688475, 'comment_body': '@alinmihaila99, what are you overriding here?', 'comment_created': datetime.datetime(2020, 8, 5, 12, 26, 7, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 466254864, 'comment_body': 'I overrided the column ""name"" to allow null', 'comment_created': datetime.datetime(2020, 8, 6, 9, 3, 53, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}]","[{'commit_sha': 'c7a87e3909695e3f53dcce14b9e56ac42bdf000d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+463221780,TRUNK-5907: ConceptReferenceTermMap Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5907
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3437,https://api.github.com/repos/openmrs/openmrs-core/pulls/3437,https://github.com/openmrs/openmrs-core/pull/3437,closed,41,52,5,2,4,0,1,0,[{'name': 'Stale'}],2020-08-05 08:10:34+00:00,2021-06-14 00:12:52+00:00,27014538.0,"312 days, 16:02:18",[],"[{'commit_sha': 'ed32a8b0ad225a5660a920d7206b9f8d298aa8d4', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7c19ed3a666f665d032784686faf86b26e143468', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+463899185,TRUNK-5908: ConceptSet Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5908
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+ existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.
+",False,3451,https://api.github.com/repos/openmrs/openmrs-core/pulls/3451,https://github.com/openmrs/openmrs-core/pull/3451,closed,34,64,4,1,3,1,1,0,[{'name': 'Stale'}],2020-08-06 09:12:42+00:00,2021-06-14 00:12:50+00:00,26924408.0,"311 days, 15:00:08","[{'comment_id': 467920867, 'comment_body': '@alinmihaila99   well done,we can have the unwanted code formats cleared', 'comment_created': datetime.datetime(2020, 8, 10, 13, 55, 45, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': 'b11712bc275656b42b5b75259115b5fd3073bed6', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+463921118,TRUNK-5909: ConceptSource Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5909
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3452,https://api.github.com/repos/openmrs/openmrs-core/pulls/3452,https://github.com/openmrs/openmrs-core/pull/3452,closed,23,68,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-06 09:55:04+00:00,2021-06-14 00:12:48+00:00,26921864.0,"311 days, 14:17:44",[],"[{'commit_sha': '013a69acbc1b47d29e302553bbb27646b2f828d5', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+464427266,TRUNK-5910: ConceptStateConversion Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5910
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3460,https://api.github.com/repos/openmrs/openmrs-core/pulls/3460,https://github.com/openmrs/openmrs-core/pull/3460,closed,23,40,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-07 06:51:26+00:00,2021-06-14 00:12:45+00:00,26846479.0,"310 days, 17:21:19",[],"[{'commit_sha': '43c12e68e8a614861f7c11dbec603ad7849cc430', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+464436361,TRUNK-5911: ConceptStopWord Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5911
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3461,https://api.github.com/repos/openmrs/openmrs-core/pulls/3461,https://github.com/openmrs/openmrs-core/pull/3461,closed,20,35,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-07 07:11:50+00:00,2021-06-14 00:12:43+00:00,26845253.0,"310 days, 17:00:53",[],"[{'commit_sha': 'ab7c2c41ea04a908df8ff0109bc38fd5f75e9bae', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+464445746,TRUNK: ConceptClass Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5912
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3462,https://api.github.com/repos/openmrs/openmrs-core/pulls/3462,https://github.com/openmrs/openmrs-core/pull/3462,closed,14,56,4,1,2,0,1,0,[{'name': 'Stale'}],2020-08-07 07:34:53+00:00,2021-06-14 00:12:41+00:00,26843868.0,"310 days, 16:37:48",[],"[{'commit_sha': 'a1d4ca1ac3780e0932503452ab6c384cc87e564d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+465961771,TRUNK-5913: ClobDatatypeStorage Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5913
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3496,https://api.github.com/repos/openmrs/openmrs-core/pulls/3496,https://github.com/openmrs/openmrs-core/pull/3496,closed,17,33,4,5,4,2,1,0,[{'name': 'Stale'}],2020-08-11 08:46:30+00:00,2021-06-14 00:12:35+00:00,26493965.0,"306 days, 15:26:05","[{'comment_id': 468491000, 'comment_body': ""@alinmihaila99, you will have to use JPA's `@Lob` for this to work because of this [underlying liquibase changeset](https://github.com/openmrs/openmrs-core/blob/e3b1d06cc494a60617a2304412b8d47b89b5a2b0/api/src/main/resources/org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-2.3.x.xml#L111) line."", 'comment_created': datetime.datetime(2020, 8, 11, 10, 48, 27, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}, {'comment_id': 469828200, 'comment_body': 'Thanks @Ruhanga. This worked', 'comment_created': datetime.datetime(2020, 8, 13, 9, 41, 4, tzinfo=datetime.timezone.utc), 'commenter': 'alinmihaila99', 'type': 'User'}]","[{'commit_sha': 'eac4bfde14d8e6fab3e8f9331f0460b6283c088e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'afef7986a3266878a3de2783999985eb96a17f6c', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '499d637632c7365fc900eb473f9918188c625d12', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '458e10dc2f58db69aac7f9308be38cf19c5220f8', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '179e41a35799f8e69114307601b5266bbcc9593e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+465589083,TRUNK-5918: ConceptName Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5918
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3492,https://api.github.com/repos/openmrs/openmrs-core/pulls/3492,https://github.com/openmrs/openmrs-core/pull/3492,closed,46,69,4,4,3,0,1,0,[{'name': 'Stale'}],2020-08-10 15:57:08+00:00,2021-06-14 00:12:38+00:00,26554530.0,"307 days, 8:15:30",[],"[{'commit_sha': '2fa3377c72468e47e96a8678851d9fd2b1983870', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '68efcc3f5c427355774e743a5316824c0136f0e0', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b2a77373f4f263089697d1b2ab3151630cfa1a62', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'dc39dbd81117707bfe1aaf16611c5e50d16f80ed', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+465934827,TRUNK-5919: ConceptNameTag Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5919
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3495,https://api.github.com/repos/openmrs/openmrs-core/pulls/3495,https://github.com/openmrs/openmrs-core/pull/3495,closed,32,49,4,2,3,0,1,0,[{'name': 'Stale'}],2020-08-11 07:54:50+00:00,2021-06-14 00:12:36+00:00,26497066.0,"306 days, 16:17:46",[],"[{'commit_sha': '2e1de19d1519e6d601d28f4b7ccb5478388816af', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ef37188ead76861323fa8e0826211c21a8d71fb2', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+465982238,TRUNK-5922: DrugReferenceMap Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5922
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3497,https://api.github.com/repos/openmrs/openmrs-core/pulls/3497,https://github.com/openmrs/openmrs-core/pull/3497,closed,29,44,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-11 09:24:42+00:00,2021-06-14 00:12:33+00:00,26491671.0,"306 days, 14:47:51",[],"[{'commit_sha': '7a0fb86482ff411f524540734568fd4a6fe0e0a0', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+465996363,TRUNK-5923: GlobalProperty Domain - Switching from Hibernate Mappingsto Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5923
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3499,https://api.github.com/repos/openmrs/openmrs-core/pulls/3499,https://github.com/openmrs/openmrs-core/pull/3499,closed,25,50,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-11 09:50:45+00:00,2021-06-14 00:12:31+00:00,26490106.0,"306 days, 14:21:46",[],"[{'commit_sha': '729d31f365ccb34ae2fc09ffef9bdc3c3b4c17b8', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+466632928,TRUNK-5924: PatientIdentifier Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5924
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3503,https://api.github.com/repos/openmrs/openmrs-core/pulls/3503,https://github.com/openmrs/openmrs-core/pull/3503,closed,27,45,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-12 09:09:31+00:00,2021-06-14 00:12:29+00:00,26406178.0,"305 days, 15:02:58",[],"[{'commit_sha': '1141491b5984bf9d43905da3195b5df260e0fa4a', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+466649382,TRUNK-5925: PatientIdentifierType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5925
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3504,https://api.github.com/repos/openmrs/openmrs-core/pulls/3504,https://github.com/openmrs/openmrs-core/pull/3504,closed,29,101,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-12 09:40:23+00:00,2021-06-14 00:12:27+00:00,26404324.0,"305 days, 14:32:04",[],"[{'commit_sha': 'be0c8b7087fc71b41dfd2ec6b71d3293856510d7', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+466813804,TRUNK-5926: PatientState Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+<!--- This project only accepts pull requests related to open issues -->
+<!--- Want a new feature or change? Discuss it in an issue first! -->
+<!--- Found a bug? Point us to the issue/or create one so we can reproduce it! -->
+<!--- Just add the issue number at the end: -->
+see https://issues.openmrs.org/browse/TRUNK-5926
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3505,https://api.github.com/repos/openmrs/openmrs-core/pulls/3505,https://github.com/openmrs/openmrs-core/pull/3505,closed,23,58,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-12 14:36:42+00:00,2021-06-14 00:12:26+00:00,26386544.0,"305 days, 9:35:44",[],"[{'commit_sha': '0a5c16350a63d35b7245cedc3fe2be50f7e4313d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+475358740,TRUNK-5928: PersonAdress Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5928
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [ ] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3549,https://api.github.com/repos/openmrs/openmrs-core/pulls/3549,https://github.com/openmrs/openmrs-core/pull/3549,closed,47,2,3,1,2,0,1,0,[{'name': 'Stale'}],2020-08-28 11:45:52+00:00,2021-06-14 00:12:05+00:00,25014373.0,"289 days, 12:26:13",[],"[{'commit_sha': '7fce20c37d5819d1d64dd74aad3be1184f5db8fc', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+468708478,TRUNK-5943: LoginCredential Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5943
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3512,https://api.github.com/repos/openmrs/openmrs-core/pulls/3512,https://github.com/openmrs/openmrs-core/pull/3512,closed,25,41,4,1,4,0,1,0,[{'name': 'Stale'}],2020-08-17 09:25:37+00:00,2021-06-14 00:12:22+00:00,25973205.0,"300 days, 14:46:45",[],"[{'commit_sha': '413a323ed35171ed08d981ba2d1a6df85caba32e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+468719218,TRUNK-5944: LocationAttributeType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5944
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3513,https://api.github.com/repos/openmrs/openmrs-core/pulls/3513,https://github.com/openmrs/openmrs-core/pull/3513,closed,15,65,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-17 09:45:11+00:00,2021-06-14 00:12:21+00:00,25972030.0,"300 days, 14:27:10",[],"[{'commit_sha': 'aa148bd2c871709a1a49fdb4f193a4f950355b6d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+468839171,TRUNK-5945: PersonAttributeType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5945
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3515,https://api.github.com/repos/openmrs/openmrs-core/pulls/3515,https://github.com/openmrs/openmrs-core/pull/3515,closed,23,72,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-17 13:39:38+00:00,2021-06-14 00:12:19+00:00,25957961.0,"300 days, 10:32:41",[],"[{'commit_sha': '94b8253dff7bf0f69aaeabdac6c45bfc559e819c', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+468849201,TRUNK-5946: ProgramAttributeType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5946
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3516,https://api.github.com/repos/openmrs/openmrs-core/pulls/3516,https://github.com/openmrs/openmrs-core/pull/3516,closed,17,66,4,1,4,0,1,0,[{'name': 'Stale'}],2020-08-17 13:56:25+00:00,2021-06-14 00:12:17+00:00,25956952.0,"300 days, 10:15:52",[],"[{'commit_sha': '1dffbdb7fe2bf197f622e815e5f8d15822c03da3', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+468872070,TRUNK-5947: ProviderAttributeType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5947
+
+## Checklist: I completed these to help reviewers :)
+
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3517,https://api.github.com/repos/openmrs/openmrs-core/pulls/3517,https://github.com/openmrs/openmrs-core/pull/3517,closed,15,67,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-17 14:34:31+00:00,2021-06-14 00:12:15+00:00,25954664.0,"300 days, 9:37:44",[],"[{'commit_sha': '7e9a1dbacc408aa077109ddb806c2d9fc7bfee28', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+469467738,TRUNK-5948: LocationAttribute Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5948
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [ ] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3521,https://api.github.com/repos/openmrs/openmrs-core/pulls/3521,https://github.com/openmrs/openmrs-core/pull/3521,closed,21,55,5,1,3,0,1,0,[{'name': 'Stale'}],2020-08-18 12:32:20+00:00,2021-06-14 00:12:10+00:00,25875590.0,"299 days, 11:39:50",[],"[{'commit_sha': 'a05c30151b215afb300fbda8b2d15da6c4339eb1', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+470102177,TRUNK-5949: User Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5949
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3523,https://api.github.com/repos/openmrs/openmrs-core/pulls/3523,https://github.com/openmrs/openmrs-core/pull/3523,closed,61,92,4,1,5,0,1,0,[{'name': 'Stale'}],2020-08-19 11:28:07+00:00,2021-12-30 00:17:42+00:00,42986975.0,"497 days, 12:49:35",[],"[{'commit_sha': '68d9596ae618e8a48a90aa1ec4f013fa43053883', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+459447208,TRUNK-5896: VisitAttributeType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5896
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3408,https://api.github.com/repos/openmrs/openmrs-core/pulls/3408,https://github.com/openmrs/openmrs-core/pull/3408,closed,16,68,4,2,6,1,1,0,[{'name': 'Stale'}],2020-07-30 17:49:41+00:00,2021-06-14 00:13:02+00:00,27498201.0,"318 days, 6:23:21","[{'comment_id': 463965125, 'comment_body': 'looks good cc @ibacher  @Ruhanga ', 'comment_created': datetime.datetime(2020, 8, 1, 14, 4, 3, tzinfo=datetime.timezone.utc), 'commenter': 'HerbertYiga', 'type': 'User'}]","[{'commit_sha': '131563f070c840ad65a9cc6ba40e3ac116c8662e', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd78c5a1fd37c0ac37b3bed5f25db9ca07f78bf79', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+467417913,TRUNK-5929: PersonMergeLog Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5929
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3507,https://api.github.com/repos/openmrs/openmrs-core/pulls/3507,https://github.com/openmrs/openmrs-core/pull/3507,closed,24,64,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-13 14:20:12+00:00,2021-06-14 00:12:24+00:00,26301132.0,"304 days, 9:52:12",[],"[{'commit_sha': 'f80fd9a4eb745d83944024530f065eee680155b0', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+470115353,TRUNK-5950: RelationshipType Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5950
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3524,https://api.github.com/repos/openmrs/openmrs-core/pulls/3524,https://github.com/openmrs/openmrs-core/pull/3524,closed,41,65,6,2,5,1,1,0,[{'name': 'Stale'}],2020-08-19 11:55:39+00:00,2021-12-30 00:17:41+00:00,42985322.0,"497 days, 12:22:02","[{'comment_id': 479745228, 'comment_body': 'Thanks @alinmihaila99 for this suggested solution. We will include this change once an agreement has been reached from [the community thread](https://talk.openmrs.org/t/missing-columns/30042) you created.', 'comment_created': datetime.datetime(2020, 8, 30, 9, 22, 22, tzinfo=datetime.timezone.utc), 'commenter': 'Ruhanga', 'type': 'User'}]","[{'commit_sha': 'b974642b7cedd60f4ce2041c38cfbe2b7389edcc', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '425ecc26cbebf96393d904cdb72c1c10675af126', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+472467181,TRUNK-5951:  SerializedObject Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5951
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [x] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3532,https://api.github.com/repos/openmrs/openmrs-core/pulls/3532,https://github.com/openmrs/openmrs-core/pull/3532,closed,19,57,4,2,6,0,1,0,[{'name': 'Stale'}],2020-08-24 11:58:32+00:00,2021-12-30 00:17:39+00:00,42553147.0,"492 days, 12:19:07",[],"[{'commit_sha': '974fb901add86de425eabb99243dca260ac8193d', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '77e1c363122db401ee5c3458c1ce1990f92d5349', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+473094331,TRUNK-5953: Person Domain - Switching from Hibernate Mappings to Annotations,"## Description of what I changed
+
+## Issue I worked on
+see https://issues.openmrs.org/browse/TRUNK-5953
+
+## Checklist: I completed these to help reviewers :)
+- [x] My IDE is configured to follow the [**code style**](https://wiki.openmrs.org/display/docs/Java+Conventions) of this project.
+- [x] I have **added tests** to cover my changes. (If you refactored
+  existing code that was well tested you do not have to add tests)
+- [x] I ran `mvn clean package` right before creating this pull request and
+  added all formatting changes to my commit.
+- [ ] All new and existing **tests passed**.
+- [x] My pull request is **based on the latest changes** of the master branch.",False,3534,https://api.github.com/repos/openmrs/openmrs-core/pulls/3534,https://github.com/openmrs/openmrs-core/pull/3534,closed,71,113,4,1,3,0,1,0,[{'name': 'Stale'}],2020-08-25 10:10:24+00:00,2021-06-14 00:12:08+00:00,25279304.0,"292 days, 14:01:44",[],"[{'commit_sha': 'e2aba2b9be4e6bb2fb4cfcb69a81faed4f4585d3', 'committer_username': 'alinmihaila99', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2019, 12, 27, 22, 9, 29, tzinfo=datetime.timezone.utc)}]",,59296256,,User,,7,,0,3
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+5187976,openmrs-core,openmrs/openmrs-core,Java,3618,1391,148,465,12255,35,42,35,"[{'id': 475358740, 'number': 3549, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 28, 11, 45, 52, tzinfo=datetime.timezone.utc), 'time_taken': 25014373.0, 'time_delta': '289 days, 12:26:13', 'additions': 47, 'deletions': 2, 'state': 'closed'}, {'id': 473094331, 'number': 3534, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 25, 10, 10, 24, tzinfo=datetime.timezone.utc), 'time_taken': 25279304.0, 'time_delta': '292 days, 14:01:44', 'additions': 71, 'deletions': 113, 'state': 'closed'}, {'id': 472467181, 'number': 3532, 'closed': datetime.datetime(2021, 12, 30, 0, 17, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 24, 11, 58, 32, tzinfo=datetime.timezone.utc), 'time_taken': 42553147.0, 'time_delta': '492 days, 12:19:07', 'additions': 19, 'deletions': 57, 'state': 'closed'}, {'id': 470115353, 'number': 3524, 'closed': datetime.datetime(2021, 12, 30, 0, 17, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 19, 11, 55, 39, tzinfo=datetime.timezone.utc), 'time_taken': 42985322.0, 'time_delta': '497 days, 12:22:02', 'additions': 41, 'deletions': 65, 'state': 'closed'}, {'id': 470102177, 'number': 3523, 'closed': datetime.datetime(2021, 12, 30, 0, 17, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 19, 11, 28, 7, tzinfo=datetime.timezone.utc), 'time_taken': 42986975.0, 'time_delta': '497 days, 12:49:35', 'additions': 61, 'deletions': 92, 'state': 'closed'}, {'id': 469467738, 'number': 3521, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 18, 12, 32, 20, tzinfo=datetime.timezone.utc), 'time_taken': 25875590.0, 'time_delta': '299 days, 11:39:50', 'additions': 21, 'deletions': 55, 'state': 'closed'}, {'id': 468898011, 'number': 3518, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 15, 18, tzinfo=datetime.timezone.utc), 'time_taken': 25952054.0, 'time_delta': '300 days, 8:54:14', 'additions': 50, 'deletions': 94, 'state': 'closed'}, {'id': 468872070, 'number': 3517, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 15, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 14, 34, 31, tzinfo=datetime.timezone.utc), 'time_taken': 25954664.0, 'time_delta': '300 days, 9:37:44', 'additions': 15, 'deletions': 67, 'state': 'closed'}, {'id': 468849201, 'number': 3516, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 13, 56, 25, tzinfo=datetime.timezone.utc), 'time_taken': 25956952.0, 'time_delta': '300 days, 10:15:52', 'additions': 17, 'deletions': 66, 'state': 'closed'}, {'id': 468839171, 'number': 3515, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 13, 39, 38, tzinfo=datetime.timezone.utc), 'time_taken': 25957961.0, 'time_delta': '300 days, 10:32:41', 'additions': 23, 'deletions': 72, 'state': 'closed'}, {'id': 468719218, 'number': 3513, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 9, 45, 11, tzinfo=datetime.timezone.utc), 'time_taken': 25972030.0, 'time_delta': '300 days, 14:27:10', 'additions': 15, 'deletions': 65, 'state': 'closed'}, {'id': 468708478, 'number': 3512, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 17, 9, 25, 37, tzinfo=datetime.timezone.utc), 'time_taken': 25973205.0, 'time_delta': '300 days, 14:46:45', 'additions': 25, 'deletions': 41, 'state': 'closed'}, {'id': 467417913, 'number': 3507, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 24, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 13, 14, 20, 12, tzinfo=datetime.timezone.utc), 'time_taken': 26301132.0, 'time_delta': '304 days, 9:52:12', 'additions': 24, 'deletions': 64, 'state': 'closed'}, {'id': 466813804, 'number': 3505, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 12, 14, 36, 42, tzinfo=datetime.timezone.utc), 'time_taken': 26386544.0, 'time_delta': '305 days, 9:35:44', 'additions': 23, 'deletions': 58, 'state': 'closed'}, {'id': 466649382, 'number': 3504, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 12, 9, 40, 23, tzinfo=datetime.timezone.utc), 'time_taken': 26404324.0, 'time_delta': '305 days, 14:32:04', 'additions': 29, 'deletions': 101, 'state': 'closed'}, {'id': 466632928, 'number': 3503, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 12, 9, 9, 31, tzinfo=datetime.timezone.utc), 'time_taken': 26406178.0, 'time_delta': '305 days, 15:02:58', 'additions': 27, 'deletions': 45, 'state': 'closed'}, {'id': 465996363, 'number': 3499, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 11, 9, 50, 45, tzinfo=datetime.timezone.utc), 'time_taken': 26490106.0, 'time_delta': '306 days, 14:21:46', 'additions': 25, 'deletions': 50, 'state': 'closed'}, {'id': 465982238, 'number': 3497, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 11, 9, 24, 42, tzinfo=datetime.timezone.utc), 'time_taken': 26491671.0, 'time_delta': '306 days, 14:47:51', 'additions': 29, 'deletions': 44, 'state': 'closed'}, {'id': 465961771, 'number': 3496, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 11, 8, 46, 30, tzinfo=datetime.timezone.utc), 'time_taken': 26493965.0, 'time_delta': '306 days, 15:26:05', 'additions': 17, 'deletions': 33, 'state': 'closed'}, {'id': 465934827, 'number': 3495, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 11, 7, 54, 50, tzinfo=datetime.timezone.utc), 'time_taken': 26497066.0, 'time_delta': '306 days, 16:17:46', 'additions': 32, 'deletions': 49, 'state': 'closed'}, {'id': 465589083, 'number': 3492, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 10, 15, 57, 8, tzinfo=datetime.timezone.utc), 'time_taken': 26554530.0, 'time_delta': '307 days, 8:15:30', 'additions': 46, 'deletions': 69, 'state': 'closed'}, {'id': 464445746, 'number': 3462, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 41, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 7, 7, 34, 53, tzinfo=datetime.timezone.utc), 'time_taken': 26843868.0, 'time_delta': '310 days, 16:37:48', 'additions': 14, 'deletions': 56, 'state': 'closed'}, {'id': 464436361, 'number': 3461, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 43, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 7, 7, 11, 50, tzinfo=datetime.timezone.utc), 'time_taken': 26845253.0, 'time_delta': '310 days, 17:00:53', 'additions': 20, 'deletions': 35, 'state': 'closed'}, {'id': 464427266, 'number': 3460, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 7, 6, 51, 26, tzinfo=datetime.timezone.utc), 'time_taken': 26846479.0, 'time_delta': '310 days, 17:21:19', 'additions': 23, 'deletions': 40, 'state': 'closed'}, {'id': 463928984, 'number': 3453, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 46, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 6, 10, 11, 4, tzinfo=datetime.timezone.utc), 'time_taken': 26920902.0, 'time_delta': '311 days, 14:01:42', 'additions': 39, 'deletions': 50, 'state': 'closed'}, {'id': 463921118, 'number': 3452, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 6, 9, 55, 4, tzinfo=datetime.timezone.utc), 'time_taken': 26921864.0, 'time_delta': '311 days, 14:17:44', 'additions': 23, 'deletions': 68, 'state': 'closed'}, {'id': 463899185, 'number': 3451, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 6, 9, 12, 42, tzinfo=datetime.timezone.utc), 'time_taken': 26924408.0, 'time_delta': '311 days, 15:00:08', 'additions': 34, 'deletions': 64, 'state': 'closed'}, {'id': 463221780, 'number': 3437, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 8, 10, 34, tzinfo=datetime.timezone.utc), 'time_taken': 27014538.0, 'time_delta': '312 days, 16:02:18', 'additions': 41, 'deletions': 52, 'state': 'closed'}, {'id': 463205921, 'number': 3436, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 5, 7, 39, 51, tzinfo=datetime.timezone.utc), 'time_taken': 27016383.0, 'time_delta': '312 days, 16:33:03', 'additions': 33, 'deletions': 70, 'state': 'closed'}, {'id': 462733719, 'number': 3428, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 4, 12, 26, 17, tzinfo=datetime.timezone.utc), 'time_taken': 27085598.0, 'time_delta': '313 days, 11:46:38', 'additions': 16, 'deletions': 55, 'state': 'closed'}, {'id': 462698044, 'number': 3427, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 4, 11, 12, 44, tzinfo=datetime.timezone.utc), 'time_taken': 27090013.0, 'time_delta': '313 days, 13:00:13', 'additions': 38, 'deletions': 47, 'state': 'closed'}, {'id': 462299263, 'number': 3416, 'closed': datetime.datetime(2021, 6, 14, 0, 12, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 3, 17, 18, 14, tzinfo=datetime.timezone.utc), 'time_taken': 27154485.0, 'time_delta': '314 days, 6:54:45', 'additions': 38, 'deletions': 62, 'state': 'closed'}, {'id': 462182566, 'number': 3415, 'closed': datetime.datetime(2021, 6, 14, 0, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 3, 13, 37, 7, tzinfo=datetime.timezone.utc), 'time_taken': 27167753.0, 'time_delta': '314 days, 10:35:53', 'additions': 15, 'deletions': 67, 'state': 'closed'}, {'id': 459447208, 'number': 3408, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 2, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 30, 17, 49, 41, tzinfo=datetime.timezone.utc), 'time_taken': 27498201.0, 'time_delta': '318 days, 6:23:21', 'additions': 16, 'deletions': 68, 'state': 'closed'}, {'id': 458320495, 'number': 3406, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 29, 9, 43, 40, tzinfo=datetime.timezone.utc), 'time_taken': 27613764.0, 'time_delta': '319 days, 14:29:24', 'additions': 15, 'deletions': 45, 'state': 'closed'}, {'id': 457768683, 'number': 3402, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 6, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 28, 12, 11, 59, tzinfo=datetime.timezone.utc), 'time_taken': 27691267.0, 'time_delta': '320 days, 12:01:07', 'additions': 25, 'deletions': 52, 'state': 'closed'}, {'id': 457709830, 'number': 3401, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 8, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 28, 10, 11, 16, tzinfo=datetime.timezone.utc), 'time_taken': 27698512.0, 'time_delta': '320 days, 14:01:52', 'additions': 22, 'deletions': 2, 'state': 'closed'}, {'id': 456217147, 'number': 3396, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 24, 10, 45, 36, tzinfo=datetime.timezone.utc), 'time_taken': 28042054.0, 'time_delta': '324 days, 13:27:34', 'additions': 15, 'deletions': 46, 'state': 'closed'}, {'id': 455628716, 'number': 3394, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 23, 10, 53, 34, tzinfo=datetime.timezone.utc), 'time_taken': 28127978.0, 'time_delta': '325 days, 13:19:38', 'additions': 121, 'deletions': 4, 'state': 'closed'}, {'id': 454360268, 'number': 3388, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 21, 10, 25, 39, tzinfo=datetime.timezone.utc), 'time_taken': 28302454.0, 'time_delta': '327 days, 13:47:34', 'additions': 40, 'deletions': 69, 'state': 'closed'}, {'id': 453661047, 'number': 3386, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 20, 17, 22, 2, tzinfo=datetime.timezone.utc), 'time_taken': 28363875.0, 'time_delta': '328 days, 6:51:15', 'additions': 10, 'deletions': 2, 'state': 'closed'}, {'id': 452763462, 'number': 3384, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 19, 20, 40, 50, tzinfo=datetime.timezone.utc), 'time_taken': 28438348.0, 'time_delta': '329 days, 3:32:28', 'additions': 29, 'deletions': 72, 'state': 'closed'}, {'id': 449914024, 'number': 3367, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 16, 5, 45, 8, tzinfo=datetime.timezone.utc), 'time_taken': 28751294.0, 'time_delta': '332 days, 18:28:14', 'additions': 35, 'deletions': 81, 'state': 'closed'}, {'id': 449697267, 'number': 3364, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 23, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 15, 19, 49, 43, tzinfo=datetime.timezone.utc), 'time_taken': 28787020.0, 'time_delta': '333 days, 4:23:40', 'additions': 49, 'deletions': 66, 'state': 'closed'}, {'id': 448953629, 'number': 3356, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 14, 15, 28, 20, tzinfo=datetime.timezone.utc), 'time_taken': 28889105.0, 'time_delta': '334 days, 8:45:05', 'additions': 35, 'deletions': 56, 'state': 'closed'}, {'id': 448173048, 'number': 3335, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 26, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 13, 10, 45, 24, tzinfo=datetime.timezone.utc), 'time_taken': 28992482.0, 'time_delta': '335 days, 13:28:02', 'additions': 57, 'deletions': 81, 'state': 'closed'}, {'id': 447342533, 'number': 3322, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 28, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 10, 9, 49, 48, tzinfo=datetime.timezone.utc), 'time_taken': 29255020.0, 'time_delta': '338 days, 14:23:40', 'additions': 44, 'deletions': 91, 'state': 'closed'}, {'id': 447310076, 'number': 3321, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 10, 8, 43, 19, tzinfo=datetime.timezone.utc), 'time_taken': 29259011.0, 'time_delta': '338 days, 15:30:11', 'additions': 52, 'deletions': 90, 'state': 'closed'}, {'id': 446215065, 'number': 3313, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 8, 12, 37, 29, tzinfo=datetime.timezone.utc), 'time_taken': 29417762.0, 'time_delta': '340 days, 11:36:02', 'additions': 34, 'deletions': 65, 'state': 'closed'}, {'id': 446121745, 'number': 3312, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 8, 9, 42, 27, tzinfo=datetime.timezone.utc), 'time_taken': 29428266.0, 'time_delta': '340 days, 14:31:06', 'additions': 20, 'deletions': 60, 'state': 'closed'}, {'id': 445381847, 'number': 3303, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 7, 12, 31, 46, tzinfo=datetime.timezone.utc), 'time_taken': 29504509.0, 'time_delta': '341 days, 11:41:49', 'additions': 39, 'deletions': 54, 'state': 'closed'}, {'id': 444074456, 'number': 3293, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 3, 14, 1, 54, tzinfo=datetime.timezone.utc), 'time_taken': 29844703.0, 'time_delta': '345 days, 10:11:43', 'additions': 26, 'deletions': 45, 'state': 'closed'}, {'id': 443524437, 'number': 3289, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 2, 13, 40, 6, tzinfo=datetime.timezone.utc), 'time_taken': 29932412.0, 'time_delta': '346 days, 10:33:32', 'additions': 26, 'deletions': 58, 'state': 'closed'}, {'id': 442732434, 'number': 3286, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 1, 14, 19, 43, tzinfo=datetime.timezone.utc), 'time_taken': 30016437.0, 'time_delta': '347 days, 9:53:57', 'additions': 66, 'deletions': 116, 'state': 'closed'}, {'id': 441992413, 'number': 3283, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 30, 12, 25, 21, tzinfo=datetime.timezone.utc), 'time_taken': 30109701.0, 'time_delta': '348 days, 11:48:21', 'additions': 37, 'deletions': 65, 'state': 'closed'}, {'id': 441522197, 'number': 3281, 'closed': datetime.datetime(2021, 12, 30, 0, 17, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 29, 16, 25, 14, tzinfo=datetime.timezone.utc), 'time_taken': 47375550.0, 'time_delta': '548 days, 7:52:30', 'additions': 44, 'deletions': 81, 'state': 'closed'}, {'id': 438609229, 'number': 3275, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 23, 14, 27, 13, tzinfo=datetime.timezone.utc), 'time_taken': 30707191.0, 'time_delta': '355 days, 9:46:31', 'additions': 25, 'deletions': 56, 'state': 'closed'}, {'id': 437441050, 'number': 3270, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 20, 17, 50, 8, tzinfo=datetime.timezone.utc), 'time_taken': 30954217.0, 'time_delta': '358 days, 6:23:37', 'additions': 88, 'deletions': 155, 'state': 'closed'}, {'id': 437090084, 'number': 3267, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 19, 13, 3, 42, tzinfo=datetime.timezone.utc), 'time_taken': 31057806.0, 'time_delta': '359 days, 11:10:06', 'additions': 32, 'deletions': 90, 'state': 'closed'}, {'id': 436388660, 'number': 3263, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 18, 10, 47, 44, tzinfo=datetime.timezone.utc), 'time_taken': 31152366.0, 'time_delta': '360 days, 13:26:06', 'additions': 117, 'deletions': 151, 'state': 'closed'}, {'id': 436362093, 'number': 3261, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 18, 9, 57, 11, tzinfo=datetime.timezone.utc), 'time_taken': 31155400.0, 'time_delta': '360 days, 14:16:40', 'additions': 33, 'deletions': 52, 'state': 'closed'}, {'id': 435732908, 'number': 3259, 'closed': datetime.datetime(2020, 6, 22, 13, 57, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 17, 9, 45, 7, tzinfo=datetime.timezone.utc), 'time_taken': 447149.0, 'time_delta': '5 days, 4:12:29', 'additions': 27, 'deletions': 55, 'state': 'closed'}, {'id': 435209667, 'number': 3255, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 53, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 16, 13, 21, 12, tzinfo=datetime.timezone.utc), 'time_taken': 31315961.0, 'time_delta': '362 days, 10:52:41', 'additions': 34, 'deletions': 81, 'state': 'closed'}, {'id': 434150096, 'number': 3251, 'closed': datetime.datetime(2021, 6, 14, 0, 13, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 14, 14, 9, 56, tzinfo=datetime.timezone.utc), 'time_taken': 31485839.0, 'time_delta': '364 days, 10:03:59', 'additions': 29, 'deletions': 91, 'state': 'closed'}, {'id': 433697457, 'number': 3243, 'closed': datetime.datetime(2021, 6, 15, 0, 13, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 12, 13, 59, 24, tzinfo=datetime.timezone.utc), 'time_taken': 31745625.0, 'time_delta': '367 days, 10:13:45', 'additions': 23, 'deletions': 61, 'state': 'closed'}, {'id': 433150342, 'number': 3242, 'closed': datetime.datetime(2021, 6, 15, 0, 13, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 11, 15, 16, 5, tzinfo=datetime.timezone.utc), 'time_taken': 31827426.0, 'time_delta': '368 days, 8:57:06', 'additions': 26, 'deletions': 37, 'state': 'closed'}, {'id': 431271220, 'number': 3236, 'closed': datetime.datetime(2021, 6, 15, 0, 13, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 8, 16, 54, 5, tzinfo=datetime.timezone.utc), 'time_taken': 32080748.0, 'time_delta': '371 days, 7:19:08', 'additions': 51, 'deletions': 107, 'state': 'closed'}, {'id': 386612485, 'number': 3146, 'closed': datetime.datetime(2020, 3, 11, 12, 51, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 11, 10, 44, 18, tzinfo=datetime.timezone.utc), 'time_taken': 7607.0, 'time_delta': '2:06:47', 'additions': 3318, 'deletions': 3318, 'state': 'closed'}, {'id': 384523423, 'number': 3139, 'closed': datetime.datetime(2021, 8, 2, 0, 13, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 5, 22, 3, 25, tzinfo=datetime.timezone.utc), 'time_taken': 44417415.0, 'time_delta': '514 days, 2:10:15', 'additions': 154, 'deletions': 5, 'state': 'closed'}, {'id': 380551245, 'number': 3135, 'closed': datetime.datetime(2020, 4, 10, 14, 25, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 2, 26, 23, 2, 42, tzinfo=datetime.timezone.utc), 'time_taken': 3770541.0, 'time_delta': '43 days, 15:22:21', 'additions': 318, 'deletions': 2, 'state': 'closed'}]"

@@ -1,0 +1,255 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+965897673,Integrations' Wildvalue migration (from the end),"<!-- Describe your pull request here.-->
+This PR consists of a WIP migration of integrations to use the WildValue system, starting from the end.
+Fixes part of #21525.
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+",True,22242,https://api.github.com/repos/zulip/zulip/pulls/22242,https://github.com/zulip/zulip/pull/22242,closed,875,695,28,26,5,12,1,0,[{'name': 'size: XL'}],2022-06-13 15:37:07+00:00,2022-09-01 21:11:45+00:00,6932078.0,"80 days, 5:34:38","[{'comment_id': 905710231, 'comment_body': 'For something used repeatedly like this, extract `event_type = payload[""eventType""].tame(check_string)` as a variable.', 'comment_created': datetime.datetime(2022, 6, 24, 4, 39, 32, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 905922030, 'comment_body': 'Will do!', 'comment_created': datetime.datetime(2022, 6, 24, 10, 8, 34, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 914969763, 'comment_body': 'Any reason for changing this logic? (Just curious, not suggesting to revert)', 'comment_created': datetime.datetime(2022, 7, 6, 15, 19, 30, tzinfo=datetime.timezone.utc), 'commenter': 'chdinesh1089', 'type': 'User'}, {'comment_id': 916516498, 'comment_body': '`previous_attributes` was recognized as a WildValue and that raised a Mypy error since WildValue does not have the `pop` method. That was the reason for the change.', 'comment_created': datetime.datetime(2022, 7, 8, 6, 54, 52, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 917326485, 'comment_body': '`check_anything` is usually a sign that something’s wrong. This should just be `if ""build"" not in message:`, and then `message = payload[""build""]` later.', 'comment_created': datetime.datetime(2022, 7, 10, 1, 35, 59, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 917326587, 'comment_body': 'This should be `.tame(check_union([check_string, check_int]))`.', 'comment_created': datetime.datetime(2022, 7, 10, 1, 38, 29, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 917326685, 'comment_body': 'Use real names like `key` and `value`.', 'comment_created': datetime.datetime(2022, 7, 10, 1, 39, 44, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 917327158, 'comment_body': 'Testing `Optional[str]` using truthiness is [not an improvement](https://zulip.readthedocs.io/en/latest/testing/mypy.html#use-optional-and-none-correctly); it loses information about whether you’re checking for `None` or checking for `""""`.', 'comment_created': datetime.datetime(2022, 7, 10, 1, 46, 6, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 917327227, 'comment_body': '```suggestion\r\n    if ""milestone"" in message[""data""] and ""name"" in message[""data""][""milestone""]:\r\n```', 'comment_created': datetime.datetime(2022, 7, 10, 1, 47, 14, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 917327960, 'comment_body': '`""background"": null` wouldn’t make sense, so I assume this should just be `if ""background"" in data[""old""].get(""prefs"", {})`.', 'comment_created': datetime.datetime(2022, 7, 10, 1, 58, 27, tzinfo=datetime.timezone.utc), 'commenter': 'andersk', 'type': 'User'}, {'comment_id': 919317006, 'comment_body': 'Some of the tests fail at the second condition from the suggestion, `django.core.exceptions.ValidationError: [""request[\'data\'][\'milestone\'] is not a dict""]`. This however doesn\'t occur when I use a `if message[""data""].get(""milestone"")` as the first condition in your suggestion.', 'comment_created': datetime.datetime(2022, 7, 12, 19, 11, 16, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 961105307, 'comment_body': ""Let's try to keep logic changes like this in prep commits separate from the WildValue migrations themselves; it makes reviewing a lot harder if there's other things happening in a commit than just switching to WildValue."", 'comment_created': datetime.datetime(2022, 9, 1, 21, 11, 12, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '76b49459f874be03f17cc475bbba9ff70bdf7910', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e9e1c1d6b128ca44c15fa26058f2310cbf9b26da', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eca9088176cecd06502cccbaa5531e500cd89024', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6ac9b63defb3fc7036caf1d9757950817d2cd4da', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b46d96af1a3f14d38993f49d1f3d335c893d42e0', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c5579cf15a3fe7bbb3f8d828cd511f7c5508c85c', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9b7a91b49c68d4d8794ab8de1df1de31b90f60fb', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0052ad55a614fbb1f9294f6866ecd0e002f8a213', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6a22c626d635ea275882a850631890f99c2fa40b', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '146dd68cf2ce1d1ec75d58f12b031018ac102b0d', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '31c7f8266d4504f40ec3fd491cf651b138653714', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2dab5cbd032f019f14b687747829c13e65daefe9', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd8a467e1e70b3edb08566cc6ba455220946ad48a', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e68be37bb3e46f0cc087f756cef5fd38da1bedc6', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c8750e56098bc35fff5f3be91cb4d6942077a640', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e34484b24612e96ffb9548d545bff65a350482d', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dfcb775b507dad5561c77257a7f779dfff6248c', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a5281323fc824beed357cdf390e208ca2d3a507e', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '736e10d9f791422966aa159fd254056ce4864692', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e2c1768c9a75e8bcf7662a7a7206746de870627', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c5793d9ad6cd0110d0393b2edcc43f77bc59ada8', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '35ec9c3fd6d02fdc0efe1e9d75f79cc8d6e69650', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2f5a20a1e7368650a14273c5ff7cdaae3655dcce', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f3c7d41316cf4159fd830a475ffdeac81f2c8395', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3f1c2c3f3140c6e0e0de3f3f3006f71fbcd642c2', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7268060df3333a8a8dd2ea19877ff09b6e393a3e', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+1029157219,slack_incoming: Handle optional attachment fields aptly.,"This PR checks for null values for keys within ""attachment"" in
+the Slack integration's incoming payloads. These keys were expected
+to exist optionally previously, and the existence of null values for
+these wasn't anticipated. Due to an issue report for such null
+values in the payload, their handling is updated appropriately.
+
+The checks for these values are truthiness checks since the strategy
+for these values being null or falsy ("""", 0) is the same; we don't
+process that key-value pair. This is consistent with how Slack handles
+this scenario.
+
+For the case where all the attachment fields have null values, Slack
+displays this as an empty block with no content, and therefore our
+strategy for this is a no-op.
+
+Tests updated.
+
+<!-- Describe your pull request here.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22738,https://api.github.com/repos/zulip/zulip/pulls/22738,https://github.com/zulip/zulip/pull/22738,closed,286,10,11,1,4,0,1,0,[{'name': 'size: XL'}],2022-08-17 18:25:46+00:00,2022-08-22 23:40:13+00:00,450867.0,"5 days, 5:14:27",[],"[{'commit_sha': '35c45cf36680838ea86233339f080e0610229efa', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+1005201021,integrations: Add Patreon webhook integration.,"This PR adds the Patreon incoming webhook integration.
+Fixes: #18321.
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+![001](https://user-images.githubusercontent.com/60441372/180373510-62bd3fc0-dae0-4d60-9f8e-c31b9dfdd11d.png)
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",False,22561,https://api.github.com/repos/zulip/zulip/pulls/22561,https://github.com/zulip/zulip/pull/22561,closed,2558,0,15,1,5,6,3,0,"[{'name': 'area: integrations'}, {'name': 'good first issue'}, {'name': 'size: XL'}]",2022-07-22 06:01:45+00:00,2024-01-15 01:53:52+00:00,46813927.0,"541 days, 19:52:07","[{'comment_id': 927904163, 'comment_body': 'I think it\'d be nice if the ending sentence was always something like ""You now have {patron_count} patrons donating a total of {dollars} per month."" -- if we have the data for that.\r\n\r\n(Would it make sense to just make this second sentence generated by a function, that can just be called from each of these, rather than duplicating it for each event type?)\r\n\r\nIs `pledge_sum` the right value?', 'comment_created': datetime.datetime(2022, 7, 22, 18, 37, 3, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 928053937, 'comment_body': ""Just to add a further comment to @timabbott's comment about saying how many you currently have. looks like that date is here, and I definitely agree that's a good idea. If anything that's probably the most important piece of data we can provide. Although beware, that this is a separate field for each patreon reward level, so there will have to be sum sort of sum involved to calculate total."", 'comment_created': datetime.datetime(2022, 7, 23, 0, 27, 9, tzinfo=datetime.timezone.utc), 'commenter': 'adambirds', 'type': 'User'}, {'comment_id': 928054021, 'comment_body': 'See, more than one value for `patron_count`', 'comment_created': datetime.datetime(2022, 7, 23, 0, 27, 37, tzinfo=datetime.timezone.utc), 'commenter': 'adambirds', 'type': 'User'}, {'comment_id': 928054499, 'comment_body': ""As with the above comments, there is multiple `patron_count` values in the payload. Need to make sure we're interpreting this correctly."", 'comment_created': datetime.datetime(2022, 7, 23, 0, 31, 7, tzinfo=datetime.timezone.utc), 'commenter': 'adambirds', 'type': 'User'}, {'comment_id': 930570754, 'comment_body': '> I think it\'d be nice if the ending sentence was always something like ""You now have {patron_count} patrons donating a total of {dollars} per month."" -- if we have the data for that.\r\nIs `pledge_sum` the right value?\r\n\r\nI think that data exists within the webhook, but I\'m not sure how to verify; their documentation lacks details on what information is being provided.\r\n\r\n> (Would it make sense to just make this second sentence generated by a function, that can just be called from each of these, rather than duplicating it for each event type?)\r\n\r\nYes, sounds apt.\r\n\r\n\r\n\r\n', 'comment_created': datetime.datetime(2022, 7, 27, 2, 51, 18, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 930571963, 'comment_body': 'I believe the one mentioned here is the `patron_count` for that particular tier. The `patron_count` within `data[""attributes""]` might be the total count, but I\'m unable to find a reference in their documentation to link to.', 'comment_created': datetime.datetime(2022, 7, 27, 2, 54, 43, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}]","[{'commit_sha': '7905d0d0e4d1cff62c1cea2cc98e2f4faa77925b', 'committer_username': 'sudipto', 'committer_name': 'Sudipto Mondal', 'committer_email': None, 'commit_date': datetime.datetime(2018, 10, 6, 14, 35, 59, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+1049588632,grafana: Support notifications from Grafana Alerting.,"<!-- Describe your pull request here.-->
+Adds support for Grafana's new alerting system. The proposed integration
+update wouldn't require explicit configuration and would support both old
+and new notifications parallelly. Internally, we differentiate between versions
+based on the structure of the incoming payload.
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [ ] Highlights technical choices and bugs encountered.
+- [ ] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x]  Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,22882,https://api.github.com/repos/zulip/zulip/pulls/22882,https://github.com/zulip/zulip/pull/22882,closed,299,42,4,2,6,0,1,0,[{'name': 'size: XL'}],2022-09-08 06:25:29+00:00,2022-11-15 00:28:59+00:00,5853810.0,"67 days, 18:03:30",[],"[{'commit_sha': '94df1e26e2a9082efc02cd997b6ab8d8eb7ed129', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '90fa5f046d87cc070638c04c57012b6e29e64579', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+1073774990,circleci: Rewrite integration to support the new webhook format.,"CircleCI has updated its webhook format for CircleCI Cloud, Server version 3.x and 4.x. This commit rewrites the integration to parse the new webhook structure. The new output displayed is similar to the previous output. The tests have also been rewritten for the new format.
+
+The output screenshots in the CircleCI's integration doc have been updated as well.
+
+<!-- Describe your pull request here.-->
+
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+
+**Screenshots and screen captures:**
+![001](https://user-images.githubusercontent.com/60441372/200164260-dbf7e161-e1f3-481d-bfd4-c80b8abd5a0d.png)
+![002](https://user-images.githubusercontent.com/60441372/194804011-da611f87-0618-4f2c-8f32-eedd018c46fd.png)
+
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions, and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,23121,https://api.github.com/repos/zulip/zulip/pulls/23121,https://github.com/zulip/zulip/pull/23121,closed,713,2108,18,1,7,10,2,0,"[{'name': 'size: XL'}, {'name': 'integration review'}]",2022-10-02 08:05:04+00:00,2022-11-15 18:45:05+00:00,3840001.0,"44 days, 10:40:01","[{'comment_id': 1015843079, 'comment_body': ""I don't understand why it's only checking for `gitlab`, and not the other two providers, here."", 'comment_created': datetime.datetime(2022, 11, 7, 19, 58, 37, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1015844011, 'comment_body': 'Why 7? Generally we tend to go with 12 or so, since some larger projects like Linux require more than 7 characters of the hash to be unique.', 'comment_created': datetime.datetime(2022, 11, 7, 19, 59, 48, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1015846145, 'comment_body': ""I guess I see some instances of 7 elsewhere in the Git integrations; probably we should deal with that as a follow-up; we seem to have this function `zerver/lib/webhooks/git.py`, but it's not properly used across the Git integrations.\r\n\r\n```\r\ndef get_short_sha(sha: str) -> str:                                                                      \r\n    return sha[:7]                                                                                       \r\n```"", 'comment_created': datetime.datetime(2022, 11, 7, 20, 2, 28, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1015848549, 'comment_body': 'Opened https://github.com/zulip/zulip/issues/23475 for this follow-up.', 'comment_created': datetime.datetime(2022, 11, 7, 20, 5, 10, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1015849082, 'comment_body': ""I guess the others don't use this `trigger_parameters` format?"", 'comment_created': datetime.datetime(2022, 11, 7, 20, 5, 40, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1015849172, 'comment_body': '`trigger_parameters` is a key that exists only for providers other than GitHub and BitBucket, so if this key exists and the ""other"" provider isn\'t GitLab, we respond with a `JsonableError`.', 'comment_created': datetime.datetime(2022, 11, 7, 20, 5, 46, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 1015853336, 'comment_body': ""I sliced the SHA to 7 characters to maintain consistency with GitHub's interface, which displays a shortened SHA of 7 characters. That's probably why the other integrations also slice it to 7 characters."", 'comment_created': datetime.datetime(2022, 11, 7, 20, 10, 49, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 1023126380, 'comment_body': ""Shouldn't `latest` be a variable substitution here? A project can have a variety of ways they use tags."", 'comment_created': datetime.datetime(2022, 11, 15, 18, 22, 1, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1023138508, 'comment_body': ""There isn't a provision to run CircleCI manually on a specific tag, it seems to be triggered only on tag creation, which is why I went with this. There isn't any other relevant information in the incoming payload to display here."", 'comment_created': datetime.datetime(2022, 11, 15, 18, 36, 2, tzinfo=datetime.timezone.utc), 'commenter': 'prah23', 'type': 'User'}, {'comment_id': 1023145499, 'comment_body': 'OK, weird.', 'comment_created': datetime.datetime(2022, 11, 15, 18, 44, 22, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': '0025ad89d378c96f66412d726e160405ef299d4a', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+1081360553,Migrate remaining webhooks to use WildValue.,"<!-- Describe your pull request here.-->
+This PR consists of a migration of the remaining integrations to use the WildValue system.
+Fixes: <!-- Issue link, or clear description.-->
+
+<!-- If the PR makes UI changes, always include one or more still screenshots to demonstrate your changes. If it seems helpful, add a screen capture of the new functionality as well.
+
+Tooling tips: https://zulip.readthedocs.io/en/latest/tutorials/screenshot-and-gif-software.html
+-->
+**Self-review checklist**
+
+<!-- Prior to submitting a PR, follow our step-by-step guide to review your own code:
+https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code -->
+
+<!-- Once you create the PR, check off all the steps below that you have completed.
+If any of these steps are not relevant or you have not completed, leave them unchecked.-->
+
+- [x] [Self-reviewed](https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html#how-to-review-code) the changes for clarity and maintainability
+      (variable names, code reuse, readability, etc.).
+
+Communicate decisions, questions, and potential concerns.
+
+- [x] Explains differences from previous plans (e.g., issue description).
+- [x] Highlights technical choices and bugs encountered.
+- [x] Calls out remaining decisions and concerns.
+- [x] Automated tests verify logic where appropriate.
+
+Individual commits are ready for review (see [commit discipline](https://zulip.readthedocs.io/en/latest/contributing/version-control.html)).
+
+- [x] Each commit is a coherent idea.
+- [x] Commit message(s) explain reasoning and motivation for changes.
+
+Completed manual review and testing of the following:
+
+- [x] Visual appearance of the changes.
+- [x] Responsiveness and internationalization.
+- [x] Strings and tooltips.
+- [x] End-to-end functionality of buttons, interactions and flows.
+- [x] Corner cases, error conditions, and easily imagined bugs.
+",True,23182,https://api.github.com/repos/zulip/zulip/pulls/23182,https://github.com/zulip/zulip/pull/23182,closed,277,204,14,13,2,2,1,0,[{'name': 'size: XL'}],2022-10-09 20:37:25+00:00,2022-11-14 21:49:39+00:00,3114734.0,"36 days, 1:12:14","[{'comment_id': 1021851749, 'comment_body': ""Why are these `check_anything`? I'm pretty sure they'll need to be strings in order to work..."", 'comment_created': datetime.datetime(2022, 11, 14, 17, 22, 55, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}, {'comment_id': 1021869061, 'comment_body': 'Extracted this commit as https://github.com/zulip/zulip/pull/23553.', 'comment_created': datetime.datetime(2022, 11, 14, 17, 40, 5, tzinfo=datetime.timezone.utc), 'commenter': 'timabbott', 'type': 'User'}]","[{'commit_sha': 'b59426393ef05421eadb9e54e7da0a69d55c7b0d', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b6f428b2f0c7f62f245137a83b8d0cdfd0e86854', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6e1f82603512f17c6f2ce5791662286bb3aa20c5', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b7d2c8422deaf225217c28f78fd15d4dc17d4ef', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1007d8659435578f64367d5b4025cfad25433d79', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9efa3beeecb636cede12d645586bde1dcaf8aaf8', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f460a0e23ba7f8b0159af2b4116a79c84b075187', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '065afe6da1d8328297c6de38b5d4a0c0fd939c30', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ade3f3eac81a13ac1455a658f3a3e76d4322e2a2', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '13361199f93d5b3bf46186d4278b79e99b9d7a55', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58fe1fbcdb984c63daafb22d4e4c30f747c228e2', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': '73f899df5d58a59a1627d748a15f5593311fa5ea', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd3bee3b67e62364cf2c45248f3a307a27efa60d0', 'committer_username': 'prah23', 'committer_name': 'Hari Prashant Bhimaraju', 'committer_email': None, 'commit_date': datetime.datetime(2020, 1, 29, 16, 50, 39, tzinfo=datetime.timezone.utc)}]",Hari Prashant Bhimaraju,60441372,,User,,21,,1,18
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43160685,zulip,zulip/zulip,Python,7618,21021,375,1134,60349,2460,28,795,"[{'id': 1123392935, 'number': 23585, 'closed': datetime.datetime(2022, 11, 15, 23, 5, 3, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 11, 15, 20, 53, 11, tzinfo=datetime.timezone.utc), 'time_taken': 7912.0, 'time_delta': '2:11:52', 'additions': 37, 'deletions': 44, 'state': 'closed'}, {'id': 1081360553, 'number': 23182, 'closed': datetime.datetime(2022, 11, 14, 21, 49, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 9, 20, 37, 25, tzinfo=datetime.timezone.utc), 'time_taken': 3114734.0, 'time_delta': '36 days, 1:12:14', 'additions': 277, 'deletions': 204, 'state': 'closed'}, {'id': 1073774990, 'number': 23121, 'closed': datetime.datetime(2022, 11, 15, 18, 45, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 10, 2, 8, 5, 4, tzinfo=datetime.timezone.utc), 'time_taken': 3840001.0, 'time_delta': '44 days, 10:40:01', 'additions': 713, 'deletions': 2108, 'state': 'closed'}, {'id': 1049588632, 'number': 22882, 'closed': datetime.datetime(2022, 11, 15, 0, 28, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 8, 6, 25, 29, tzinfo=datetime.timezone.utc), 'time_taken': 5853810.0, 'time_delta': '67 days, 18:03:30', 'additions': 299, 'deletions': 42, 'state': 'closed'}, {'id': 1029157219, 'number': 22738, 'closed': datetime.datetime(2022, 8, 22, 23, 40, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 17, 18, 25, 46, tzinfo=datetime.timezone.utc), 'time_taken': 450867.0, 'time_delta': '5 days, 5:14:27', 'additions': 286, 'deletions': 10, 'state': 'closed'}, {'id': 1005201021, 'number': 22561, 'closed': datetime.datetime(2024, 1, 15, 1, 53, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 22, 6, 1, 45, tzinfo=datetime.timezone.utc), 'time_taken': 46813927.0, 'time_delta': '541 days, 19:52:07', 'additions': 2558, 'deletions': 0, 'state': 'closed'}, {'id': 965897673, 'number': 22242, 'closed': datetime.datetime(2022, 9, 1, 21, 11, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 13, 15, 37, 7, tzinfo=datetime.timezone.utc), 'time_taken': 6932078.0, 'time_delta': '80 days, 5:34:38', 'additions': 875, 'deletions': 695, 'state': 'closed'}]"

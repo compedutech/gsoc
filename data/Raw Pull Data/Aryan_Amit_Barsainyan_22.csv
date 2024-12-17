@@ -1,0 +1,589 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+956552888,atom features function and helper functions for DMPNN Featurizer,"# Pull Request Template
+
+## Description
+
+This PR contains code for the atom_features() function and other required helper functions which will be helpful in making the DMPNN featurizer. It also contains a file with unit tests for all the added functions. 
+
+This will be the first PR for GSOC'22 Project: D-MPNN Model Implementation
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.22.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2929,https://api.github.com/repos/deepchem/deepchem/pulls/2929,https://github.com/deepchem/deepchem/pull/2929,closed,257,0,3,1,8,3,0,0,[],2022-06-02 22:57:45+00:00,2022-06-10 16:06:11+00:00,666506.0,"7 days, 17:08:26","[{'comment_id': 888483935, 'comment_body': 'You need to create an actual DeepChem featurizer object that inherits from `MolecularFeaturizer`. See for example https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#deepchem.feat.ConvMolFeaturizer. Are you planning to do this in a future PR?', 'comment_created': datetime.datetime(2022, 6, 2, 23, 25, 35, tzinfo=datetime.timezone.utc), 'commenter': 'rbharath', 'type': 'User'}, {'comment_id': 888484275, 'comment_body': 'Ok reading your comment I think you are planning to do this in a future PR if I understand correctly', 'comment_created': datetime.datetime(2022, 6, 2, 23, 26, 27, tzinfo=datetime.timezone.utc), 'commenter': 'rbharath', 'type': 'User'}, {'comment_id': 888633444, 'comment_body': 'I plan to implement featurizer support functions, and graph object class for this week and will try to implement the DMPNNFeaturizer class and DMPNNEncoding class next week.', 'comment_created': datetime.datetime(2022, 6, 3, 5, 56, 42, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}]","[{'commit_sha': 'f2ac6dc12efa4b28fb1d8a0247f9e4f5caf73c86', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+965250068,add bond_features and reaction mapping with suitable tests for DMPNN,"# Pull Request Template
+This PR aims to add 2 more helper functions to dmpnn_featurizer.py and other small changes.
+
+## Description
+  ### What are we doing here?
+  ============================
+
+  This commit modifies the bond_feature() function in graph_features.py by adding a use_extended_chirality boolean 
+  condition. It also adds the bond_feature(), reaction mapping function and modifies atom_feature() in dmpnn_featurizer.py 
+  file.
+
+  It also adds suitable unit tests for all the added/modified changes.
+  
+  ### Why are we doing this?
+  ============================
+  
+  An extra condition was added in the bond_features() function to incorporate the use of chirality of 6 different types for 
+  one-hot encoding. This is essential for dmpnn model. 
+  
+  The atom_features() is modified to add a condition when 'atom' is equal to None. The bond_features() to generate bond 
+  feature vectors and reaction mapping function to map reactions to products for future use in reaction featurization.
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.22.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2942,https://api.github.com/repos/deepchem/deepchem/pulls/2942,https://github.com/deepchem/deepchem/pull/2942,closed,221,6,4,1,1,0,0,0,[],2022-06-13 04:26:52+00:00,2022-06-14 06:50:25+00:00,95013.0,"1 day, 2:23:33",[],"[{'commit_sha': 'ca85dd7ae1fc8e7a0472e718edebae43bde20450', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+980077355,modify molecular featurizer base class and suitable tests,"# Pull Request Template
+PR to modify `MolecularFeaturizer` base class
+## Description
+
+This PR modifies the base class `MolecularFeaturizer` to give the users access to the original order of the atoms (for very specific purposes) instead of the canonical order of atoms (default).
+It also contains suitable unit tests.
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.22.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2960,https://api.github.com/repos/deepchem/deepchem/pulls/2960,https://github.com/deepchem/deepchem/pull/2960,closed,150,6,2,1,3,0,0,0,[],2022-06-27 13:34:59+00:00,2022-06-28 18:40:35+00:00,104736.0,"1 day, 5:05:36",[],"[{'commit_sha': 'cacc8f5b76a6a7ca80e4db77743c6239ec1b92da', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+982568399,added _MapperDMPNN class and suitable tests,"# Pull Request Template
+This PR adds `_MapperDMPNN` class and suitable unit tests.
+
+## Description
+
+### What are we doing here?
+============================
+
+This commit creates a `_MapperDMPNN` class and adds suitable unit tests.
+It also modifies some type-annotations.
+
+### Why are we doing this?
+============================
+
+The `_MapperDMPNN` class will act as a helper class to generate concatenated features and required bond-to-incoming bonds mapping, for the upcoming `DMPNNFeaturizer` class.
+
+RDKit mol, atom, and bond type annotations are updated to the custom type annotations for Deepchem.
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2962,https://api.github.com/repos/deepchem/deepchem/pulls/2962,https://github.com/deepchem/deepchem/pull/2962,closed,280,14,2,2,0,4,0,0,[],2022-06-29 13:00:41+00:00,2022-06-30 16:09:39+00:00,97738.0,"1 day, 3:08:58","[{'comment_id': 910190956, 'comment_body': 'Typo, this should be benzene without ""N""', 'comment_created': datetime.datetime(2022, 6, 29, 16, 44, 29, tzinfo=datetime.timezone.utc), 'commenter': 'rbharath', 'type': 'User'}, {'comment_id': 910191280, 'comment_body': 'np.zeros', 'comment_created': datetime.datetime(2022, 6, 29, 16, 44, 49, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 910651643, 'comment_body': 'resolved the issue', 'comment_created': datetime.datetime(2022, 6, 30, 6, 27, 5, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 910652055, 'comment_body': 'resolved the typo', 'comment_created': datetime.datetime(2022, 6, 30, 6, 27, 47, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}]","[{'commit_sha': 'c24aa9e22439f7e71e47a58596b24bb7106692f2', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '09d96336aa72da8b415bdc23e8204af1929f534a', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+984880926,add global feature generator and suitable unit tests,"# Pull Request Template
+
+This PR adds `generate_global_features()` function and suitable unit tests.
+
+## Description
+
+### What are we doing here?
+============================
+
+This commit creates a `generate_global_features()` function, adds a feature generators dictionary, and adds suitable unit tests.
+
+### Why are we doing this?
+============================
+
+The `generate_global_features()` function will act as a helper function to generate global features for RDKit mols based on the given list of generators.
+
+`FEATURE_GENERATORS` dictionary is added to the GraphConvConstants class, which contains instance objects of available global_featurizers to be used for DMPNN featurizer.
+
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2971,https://api.github.com/repos/deepchem/deepchem/pulls/2971,https://github.com/deepchem/deepchem/pull/2971,closed,149,0,2,1,0,0,0,0,[],2022-07-01 11:58:36+00:00,2022-07-05 16:18:51+00:00,361215.0,"4 days, 4:20:15",[],"[{'commit_sha': '6dbc41ca2452dded6198f964d3e744bfc69aa652', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+988561676,add count-based morgan fingerprint featurizer and suitable unit tests,"# Pull Request Template
+## Description
+This  PR adds a facility to calculate count-based morgan features in `CircularFingerprint` class using `rdMolDescriptors.GetHashedMorganFingerprint()`  method. It also adds suitable unit tests.
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2980,https://api.github.com/repos/deepchem/deepchem/pulls/2980,https://github.com/deepchem/deepchem/pull/2980,closed,61,30,2,2,1,2,0,0,[],2022-07-06 09:43:11+00:00,2022-07-11 16:08:04+00:00,455093.0,"5 days, 6:24:53",[],"[{'commit_sha': '7362ec585c15cca581893011bee9860f7ad047c0', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5edfebb162986a035101b21af8fbc1b4d90da3b0', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+990451144,modify RDKitDescriptors class for normalized features,"# Pull Request Template
+This PR modifies `RDKitDescriptors` class for normalized descriptors
+
+## Description
+### What are we doing here?
+============================
+
+- This PR modifies the existing `RDKitDescriptors` class.
+- Creates `DescriptorsNormalizationParameters` class in `rdkit_utils.py`.
+- Creates additional unit tests for the `RDKitDescriptors` class.
+- Fix doctest error caused due to PR https://github.com/deepchem/deepchem/pull/2980
+
+### Why are we doing this?
+============================
+
+- The existing `RDKitDescriptors` class has been modified to add functionality to generate **Normalized** descriptors if needed.
+- This functionality is based on the implementation of  `RDKit2DNormalized()` method in `'descriptastorus'` library.
+- The `DescriptorsNormalizationParameters` class is created in `rdkit_utils.py` to hold the dictionary required for generating normalizing functions based on `continuous distribution` classes available in `scipy.stats` module.
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2983,https://api.github.com/repos/deepchem/deepchem/pulls/2983,https://github.com/deepchem/deepchem/pull/2983,closed,894,59,4,5,1,2,0,0,[],2022-07-07 15:48:44+00:00,2022-07-12 16:24:11+00:00,434127.0,"5 days, 0:35:27","[{'comment_id': 918123214, 'comment_body': 'Reference for values', 'comment_created': datetime.datetime(2022, 7, 11, 16, 17, 58, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 918165476, 'comment_body': 'I have added the link in the latest commit ', 'comment_created': datetime.datetime(2022, 7, 11, 17, 4, 23, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}]","[{'commit_sha': '723dce5abaee0cc464c6f485bd69421bd03bccf3', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '660dfb0517c7bc91d362b296fe38449c2073f761', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fbee89d61085c338737dbb009ee2d3d1485d08be', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f778037987dc3ec0bfea6a9bdaccd03a7e7c5c90', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8f4af7ed05bae7ff1efe54226d442ad581d77b54', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1005662242,add new global feature generators and units tests for DMPNN featurizer,"# Pull Request Template
+This PR adds new global feature generators to the `FEATURE_GENERATORS` dictionary in the `GraphConvConstants` class.
+## Description
+New global feature generators added:
+* `morgan_count` : based on `CircularFingerprint` class
+* `rdkit_desc` and `rdkit_desc_normalized` : based on `RDKitDescriptors` class
+
+This PR also fixes the typo: 'indicies' -> 'indices'
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3005,https://api.github.com/repos/deepchem/deepchem/pulls/3005,https://github.com/deepchem/deepchem/pull/3005,closed,74,23,2,2,2,0,0,0,[],2022-07-22 10:56:19+00:00,2022-07-25 16:08:10+00:00,277911.0,"3 days, 5:11:51",[],"[{'commit_sha': '99ee9a27528ca85ebcf660967f8636b757d5ae51', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c95f8712ee0ef867f12dadbc82a9160fb9783962', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1002224665,add mapper class for dmpnn model and suitable unit tests,"# Pull Request Template
+This PR adds `_MapperDMPNN` class and suitable unit tests.
+## Description
+### Why are we doing this?
+============================
+
+The `_MapperDMPNN` class will act as a helper class to generate concatenated features and required bond-to-incoming bonds mapping from `GraphData` objects generated by `DMPNNFeaturizer`, for the upcoming `DMPNN` model class.
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3001,https://api.github.com/repos/deepchem/deepchem/pulls/3001,https://github.com/deepchem/deepchem/pull/3001,closed,313,0,2,4,2,0,0,0,[],2022-07-20 13:39:12+00:00,2022-07-28 16:06:55+00:00,700063.0,"8 days, 2:27:43",[],"[{'commit_sha': '187f901d86361ae9a40b7f5a482b62f400491c84', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd6d67637c47a059c077de73496b3c0fab6e3d10d', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e589bf1a8bfecb280775127bde9b027ddb7f15b0', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3334eb9af5b5e26d1ef44771521e1c147ead5408', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1047265237,Fix issue #3057 (update _Mapper class for dmpnn),"# Pull Request Template
+
+## Description
+Update the `self.atom_to_incoming_bonds` based on `self.num_atoms` when number of bonds = 0.
+
+Fix #3057 
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3058,https://api.github.com/repos/deepchem/deepchem/pulls/3058,https://github.com/deepchem/deepchem/pull/3058,closed,16,4,2,2,0,0,0,0,[],2022-09-06 09:00:11+00:00,2022-09-06 16:39:33+00:00,27562.0,7:39:22,[],"[{'commit_sha': '4b507287efce14873cfe64024fc30b84339fb416', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0a2169cd24e1cd6383f3ded5daaffe002c077674', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1017454834,add dmpnn encoder layer and suitable unit test,"# Pull Request Template
+This PR adds the `DMPNNEncoderLayer` class and a suitable unit test.
+## Description
+
+### Why are we doing this?
+The `DMPNNEncoderLayer` class will be the layer used to perform the message passing algorithm for the DMPNN model.
+The role of the `DMPNNEncoderLayer` class is to generate molecule encodings in the following steps:
+  - Message passing phase
+  - Get new atom hidden states and readout phase
+  - Concatenate the global features
+ 
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [x] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3023,https://api.github.com/repos/deepchem/deepchem/pulls/3023,https://github.com/deepchem/deepchem/pull/3023,closed,414,1,3,3,1,2,0,0,[],2022-08-04 12:17:30+00:00,2022-08-08 16:26:48+00:00,360558.0,"4 days, 4:09:18","[{'comment_id': 937994575, 'comment_body': 'Probably better to just remove separator and have white space', 'comment_created': datetime.datetime(2022, 8, 4, 16, 13, 45, tzinfo=datetime.timezone.utc), 'commenter': 'rbharath', 'type': 'User'}, {'comment_id': 937995455, 'comment_body': 'Same here', 'comment_created': datetime.datetime(2022, 8, 4, 16, 14, 40, tzinfo=datetime.timezone.utc), 'commenter': 'rbharath', 'type': 'User'}]","[{'commit_sha': 'a029b499e478cf4dd231be67698623170a8d8672', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3392aca2a973cd8b9d727117c122192f3c050ef', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '500f7e82af8a1b09ce9e82c53de72827336a46cb', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1007945546,modify PositionwiseFeedForward class and add unit tests,"# Pull Request Template
+This PR modifies the `PositionwiseFeedForward` class and adds unit tests.
+## Description
+### Why are we doing this?
+============================
+
+This modified version of `PositionwiseFeedForward` class contains `dropout_at_input_no_act` condition to facilitate its use in defining the feed-forward (FFN) algorithm for the Directed Message Passing Neural Network (D-MPNN)
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3009,https://api.github.com/repos/deepchem/deepchem/pulls/3009,https://github.com/deepchem/deepchem/pull/3009,closed,33,2,2,1,0,0,0,0,[],2022-07-26 01:17:07+00:00,2022-07-26 16:10:50+00:00,53623.0,14:53:43,[],"[{'commit_sha': '7242109d61a5bf5141f524056049ff00de780133', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1022742259,add dmpnn class and suitable unit tests,"# Pull Request Template
+This PR adds the `DMPNN` class and suitable unit tests.
+## Description
+
+### Why are we doing this?
+The `DMPNN` class will be the implementation used to define the various encoder layers and establish a sequential model for the DMPNN model. It also defines the forward call of this model in the forward function.
+
+**Note: Current implementation of the DMPNN class only supports features of 1 molecule per batch.**
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3028,https://api.github.com/repos/deepchem/deepchem/pulls/3028,https://github.com/deepchem/deepchem/pull/3028,closed,387,1,2,5,2,0,0,0,[],2022-08-10 13:52:33+00:00,2022-08-15 16:05:35+00:00,439982.0,"5 days, 2:13:02",[],"[{'commit_sha': 'b93c09c07c7f38c2374ae342cc0ca11020b38751', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '487b28e16a78cafcc60f9cd0a26257b8c4e1f959', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '485a55596fde53e948f84652ff2fec1de7c36bc2', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '369dc9518a9d2baedc68d4474ed317f6c19daea8', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '67c9f9fcf779387a44f1a56349ba8e48cd8ebf88', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1029586776,add torch model wrapper for DMPNN model class,"# Pull Request Template
+This PR adds the `DMPNNModel` class and suitable unit tests.
+## Description
+### Why are we doing this?
+The `DMPNNModel` class will be the torch model wrapper class for implementation of the DMPNN model.
+
+**Note: Current implementation of the DMPNNModel class only supports features of 1 molecule per batch.**
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [x] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [x] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3034,https://api.github.com/repos/deepchem/deepchem/pulls/3034,https://github.com/deepchem/deepchem/pull/3034,closed,341,2,7,4,0,1,0,0,[],2022-08-18 06:49:16+00:00,2022-08-22 16:09:49+00:00,379233.0,"4 days, 9:20:33","[{'comment_id': 949340643, 'comment_body': 'Some more docs/details here would be useful.', 'comment_created': datetime.datetime(2022, 8, 18, 16, 7, 7, tzinfo=datetime.timezone.utc), 'commenter': 'rbharath', 'type': 'User'}]","[{'commit_sha': '0257c25f999e02eee5470992bbb0a21b7e844ad2', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f4ecf7ac440a6324c247f66bf4322da14cacfe5c', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '073a974900f51824d1525fac12794327df047880', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1d263113b2e64e5c3f5fcd73f586c699999098f', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+1036903114,implementation of batching for DMPNN model,"# Pull Request Template
+
+## Description
+
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,3040,https://api.github.com/repos/deepchem/deepchem/pulls/3040,https://github.com/deepchem/deepchem/pull/3040,closed,290,129,6,12,8,13,0,0,[],2022-08-25 15:11:08+00:00,2022-10-30 10:11:59+00:00,5684451.0,"65 days, 19:00:51","[{'comment_id': 963606194, 'comment_body': 'Try adding `--extra-index-url https://data.pyg.org/whl/torch-1.12.0+cpu.html` for installing torch-geometric because the docs [here](https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html) for `pip` adds the extra index url.', 'comment_created': datetime.datetime(2022, 9, 6, 11, 44, 52, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 963606562, 'comment_body': 'Also, do you need torch sparse in docs? It seems only torch geometric is used in docstrings.', 'comment_created': datetime.datetime(2022, 9, 6, 11, 46, 7, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 963794719, 'comment_body': '> Also, do you need torch sparse in docs? It seems only torch geometric is used in docstrings.\r\n\r\ntorch geometric requires sparse and scatter', 'comment_created': datetime.datetime(2022, 9, 6, 14, 39, 38, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 963795558, 'comment_body': '> Try adding `--extra-index-url https://data.pyg.org/whl/torch-1.12.0+cpu.html` for installing torch-geometric because the docs [here](https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html) for `pip` adds the extra index url.\r\n\r\nThanks a lot. I have made the commit. Lets see.', 'comment_created': datetime.datetime(2022, 9, 6, 14, 40, 21, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 963802477, 'comment_body': 'https://github.com/deepchem/deepchem/runs/8209463671?check_suite_focus=true\r\n@arunppsg  This solution did not work. Still showing the same error', 'comment_created': datetime.datetime(2022, 9, 6, 14, 46, 10, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 963993796, 'comment_body': 'For torch sparse, inplace of the `torch-sparse>=0.6.14`, replace it directly with the link to the following whl file: https://data.pyg.org/whl/torch-1.12.0%2Bcpu/torch_sparse-0.6.14-cp38-cp38-linux_x86_64.whl . I think this will fix it.', 'comment_created': datetime.datetime(2022, 9, 6, 17, 31, 36, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 964991538, 'comment_body': 'This worked! Thanks a lot for the help.', 'comment_created': datetime.datetime(2022, 9, 7, 15, 28, 51, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 965675574, 'comment_body': 'Why can;t we directly use torch_geometric.data.Data?', 'comment_created': datetime.datetime(2022, 9, 8, 8, 43, 10, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 965679685, 'comment_body': 'I am not sure this a good practice to put an entire class under try-except block. A better way will be to check for torch_geometric in `torch_models/__init__.py` and if only torch geometric is present, import the module otherwise do not import the module.\r\n\r\nAlso, we can consider adding torch-geometric to CI.', 'comment_created': datetime.datetime(2022, 9, 8, 8, 47, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 965794566, 'comment_body': 'To solve the import checking error, where pytorch-geometric cannot be imported, I put the import statement under Try-except. Hence when importing pytorch-geometric is not possible, the type notation **torch_geometric.data.Data** would be undefined. So, I made new type annotations for data and batch. \r\n\r\nThis is the error that was solved by doing the above: https://github.com/deepchem/deepchem/runs/8231081333?check_suite_focus=true', 'comment_created': datetime.datetime(2022, 9, 8, 10, 36, 23, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 965796131, 'comment_body': 'ok, I will update `torch_models/__init__.py`, thanks!', 'comment_created': datetime.datetime(2022, 9, 8, 10, 38, 18, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}, {'comment_id': 966846166, 'comment_body': 'Exceptions in `dmpnn.py` is not needed. Catch all exceptions in `models/__init__.py`. Let the module dmpnn be as it is.', 'comment_created': datetime.datetime(2022, 9, 9, 9, 40, 9, tzinfo=datetime.timezone.utc), 'commenter': 'arunppsg', 'type': 'User'}, {'comment_id': 966910410, 'comment_body': 'ok, got it', 'comment_created': datetime.datetime(2022, 9, 9, 10, 45, 52, tzinfo=datetime.timezone.utc), 'commenter': 'ARY2260', 'type': 'User'}]","[{'commit_sha': '168ae5bf1b71762b1bde9eeecf8a250a4397d3d1', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd26a2e5c318dff50248a60faaa948422d96cf5f', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eb007eeef3cd13849fb20391b97d88d45d07788a', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd6db36d13dd60c37a3de2163f94e05479cf15757', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8c86e622d8661c8a8c018f6e0585625963367fb3', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b40a9ac0f03747007e06637db815feab3253832a', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fc7034ff83d304234e320ff1fddd648f9d7a77e7', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7fe461a43ecd8149f4321b1a539843f71ec94215', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2b58383d4b41c9b77d184a14a6e006600c1c82a7', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '402ecd29ef049160cfbac62d0bf6749ddf36777b', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '62a683a97c92198351b8a1a327a6552a97257a1f', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04a9a1068e44abdc93e8e9ff26c863a927db802a', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+961144500,resolved deprecation warning,"# Pull Request Template
+
+## Description
+PR to fix VisibleDeprecationWarning reported in doctest of graph_features.py
+
+Fix #2936 
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.22.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2937,https://api.github.com/repos/deepchem/deepchem/pulls/2937,https://github.com/deepchem/deepchem/pull/2937,closed,36,34,1,2,2,0,0,0,[],2022-06-08 03:54:33+00:00,2022-06-10 16:04:40+00:00,216607.0,"2 days, 12:10:07",[],"[{'commit_sha': '8b6ee1f30ca82fcf842e355b053299443f5eab07', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf88dcd544d483573ec6fd40f710c9cb81054858', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+988434180,fix bug in GraphData class and add suitable unit test,"# Pull Request Template
+This PR fixes a bug in GraphData class and adds a suitable unit test.
+
+## Description
+
+Fix #2978 
+
+`np.max()` method works only for a non-empty array, so the size of the array should be non-zero. This condition is added in the `GraphData` class through this PR.
+
+## Type of change
+
+Please check the option that is related to your PR.
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+  - In this case, we recommend to discuss your modification on GitHub issues before creating the PR
+- [ ] Documentations (modification for documents)
+
+## Checklist
+
+- [x] My code follows [the style guidelines of this project](https://deepchem.readthedocs.io/en/latest/development_guide/coding.html)
+  - [x] Run `yapf -i <modified file>` and check no errors (**yapf version must be  0.32.0**)
+  - [x] Run `mypy -p deepchem` and check no errors
+  - [x] Run `flake8 <modified file> --count` and check no errors
+  - [x] Run `python -m doctest <modified file>` and check no errors
+- [x] I have performed a self-review of my own code
+- [x] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [x] I have added tests that prove my fix is effective or that my feature works
+- [x] New unit tests pass locally with my changes
+- [x] I have checked my code and corrected any misspellings
+",True,2979,https://api.github.com/repos/deepchem/deepchem/pulls/2979,https://github.com/deepchem/deepchem/pull/2979,closed,33,14,2,1,1,0,0,0,[],2022-07-06 08:15:57+00:00,2022-07-06 16:27:35+00:00,29498.0,8:11:38,[],"[{'commit_sha': 'ff14f52e05e637e37a2322ff536d0c12648b8e22', 'committer_username': 'ARY2260', 'committer_name': 'Aryan Amit Barsainyan', 'committer_email': None, 'commit_date': datetime.datetime(2020, 12, 8, 13, 55, 29, tzinfo=datetime.timezone.utc)}]",Aryan Amit Barsainyan,75680850,,User,,37,,17,37
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43098215,deepchem,deepchem/deepchem,Python,1650,5354,144,247,10525,623,15,164,"[{'id': 1626099893, 'number': 3694, 'closed': None, 'created': datetime.datetime(2023, 12, 1, 17, 48, 34, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1, 'deletions': 1, 'state': 'open'}, {'id': 1612594354, 'number': 3684, 'closed': datetime.datetime(2023, 11, 22, 17, 32, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 11, 22, 11, 11, 17, tzinfo=datetime.timezone.utc), 'time_taken': 22875.0, 'time_delta': '6:21:15', 'additions': 844, 'deletions': 0, 'state': 'closed'}, {'id': 1387174592, 'number': 3425, 'closed': datetime.datetime(2023, 7, 26, 9, 8, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 10, 14, 50, 58, tzinfo=datetime.timezone.utc), 'time_taken': 3953874.0, 'time_delta': '45 days, 18:17:54', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1385015729, 'number': 3424, 'closed': datetime.datetime(2023, 6, 9, 15, 32, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 8, 19, 42, 51, tzinfo=datetime.timezone.utc), 'time_taken': 71362.0, 'time_delta': '19:49:22', 'additions': 19, 'deletions': 7, 'state': 'closed'}, {'id': 1380729631, 'number': 3422, 'closed': datetime.datetime(2023, 6, 7, 16, 36, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 6, 6, 12, 2, 1, tzinfo=datetime.timezone.utc), 'time_taken': 102852.0, 'time_delta': '1 day, 4:34:12', 'additions': 2, 'deletions': 2, 'state': 'closed'}, {'id': 1379299455, 'number': 3419, 'closed': None, 'created': datetime.datetime(2023, 6, 5, 16, 11, 54, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 39, 'deletions': 7, 'state': 'open'}, {'id': 1360802494, 'number': 3407, 'closed': datetime.datetime(2023, 5, 31, 14, 3, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 23, 7, 15, 43, tzinfo=datetime.timezone.utc), 'time_taken': 715659.0, 'time_delta': '8 days, 6:47:39', 'additions': 34, 'deletions': 5, 'state': 'closed'}, {'id': 1179511179, 'number': 3152, 'closed': datetime.datetime(2022, 12, 30, 3, 32, 45, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 12, 28, 15, 20, 29, tzinfo=datetime.timezone.utc), 'time_taken': 130336.0, 'time_delta': '1 day, 12:12:16', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1055142790, 'number': 3063, 'closed': datetime.datetime(2022, 9, 14, 7, 50, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 13, 20, 15, 31, tzinfo=datetime.timezone.utc), 'time_taken': 41705.0, 'time_delta': '11:35:05', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 1047265237, 'number': 3058, 'closed': datetime.datetime(2022, 9, 6, 16, 39, 33, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 6, 9, 0, 11, tzinfo=datetime.timezone.utc), 'time_taken': 27562.0, 'time_delta': '7:39:22', 'additions': 16, 'deletions': 4, 'state': 'closed'}, {'id': 1036903114, 'number': 3040, 'closed': datetime.datetime(2022, 10, 30, 10, 11, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 25, 15, 11, 8, tzinfo=datetime.timezone.utc), 'time_taken': 5684451.0, 'time_delta': '65 days, 19:00:51', 'additions': 290, 'deletions': 129, 'state': 'closed'}, {'id': 1033033799, 'number': 3037, 'closed': datetime.datetime(2022, 9, 14, 6, 56, 20, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 22, 15, 53, 46, tzinfo=datetime.timezone.utc), 'time_taken': 1954954.0, 'time_delta': '22 days, 15:02:34', 'additions': 472, 'deletions': 44, 'state': 'closed'}, {'id': 1029586776, 'number': 3034, 'closed': datetime.datetime(2022, 8, 22, 16, 9, 49, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 18, 6, 49, 16, tzinfo=datetime.timezone.utc), 'time_taken': 379233.0, 'time_delta': '4 days, 9:20:33', 'additions': 341, 'deletions': 2, 'state': 'closed'}, {'id': 1024015598, 'number': 3029, 'closed': datetime.datetime(2022, 8, 18, 6, 24, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 11, 15, 30, 30, tzinfo=datetime.timezone.utc), 'time_taken': 572064.0, 'time_delta': '6 days, 14:54:24', 'additions': 717, 'deletions': 2, 'state': 'closed'}, {'id': 1022742259, 'number': 3028, 'closed': datetime.datetime(2022, 8, 15, 16, 5, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 10, 13, 52, 33, tzinfo=datetime.timezone.utc), 'time_taken': 439982.0, 'time_delta': '5 days, 2:13:02', 'additions': 387, 'deletions': 1, 'state': 'closed'}, {'id': 1017454834, 'number': 3023, 'closed': datetime.datetime(2022, 8, 8, 16, 26, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 4, 12, 17, 30, tzinfo=datetime.timezone.utc), 'time_taken': 360558.0, 'time_delta': '4 days, 4:09:18', 'additions': 414, 'deletions': 1, 'state': 'closed'}, {'id': 1011011744, 'number': 3014, 'closed': datetime.datetime(2022, 9, 14, 6, 56, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 28, 15, 48, 40, tzinfo=datetime.timezone.utc), 'time_taken': 4115294.0, 'time_delta': '47 days, 15:08:14', 'additions': 1486, 'deletions': 2, 'state': 'closed'}, {'id': 1007945546, 'number': 3009, 'closed': datetime.datetime(2022, 7, 26, 16, 10, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 26, 1, 17, 7, tzinfo=datetime.timezone.utc), 'time_taken': 53623.0, 'time_delta': '14:53:43', 'additions': 33, 'deletions': 2, 'state': 'closed'}, {'id': 1005662242, 'number': 3005, 'closed': datetime.datetime(2022, 7, 25, 16, 8, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 22, 10, 56, 19, tzinfo=datetime.timezone.utc), 'time_taken': 277911.0, 'time_delta': '3 days, 5:11:51', 'additions': 74, 'deletions': 23, 'state': 'closed'}, {'id': 1005561183, 'number': 3004, 'closed': datetime.datetime(2022, 7, 26, 1, 26, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 22, 9, 17, 56, tzinfo=datetime.timezone.utc), 'time_taken': 317322.0, 'time_delta': '3 days, 16:08:42', 'additions': 92, 'deletions': 1, 'state': 'closed'}, {'id': 1002224665, 'number': 3001, 'closed': datetime.datetime(2022, 7, 28, 16, 6, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 20, 13, 39, 12, tzinfo=datetime.timezone.utc), 'time_taken': 700063.0, 'time_delta': '8 days, 2:27:43', 'additions': 313, 'deletions': 0, 'state': 'closed'}, {'id': 1000980456, 'number': 3000, 'closed': datetime.datetime(2022, 7, 20, 13, 40, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 19, 16, 9, 45, tzinfo=datetime.timezone.utc), 'time_taken': 77427.0, 'time_delta': '21:30:27', 'additions': 658, 'deletions': 2, 'state': 'closed'}, {'id': 999552920, 'number': 2999, 'closed': datetime.datetime(2022, 7, 19, 16, 8, 27, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 18, 15, 31, 43, tzinfo=datetime.timezone.utc), 'time_taken': 88604.0, 'time_delta': '1 day, 0:36:44', 'additions': 750, 'deletions': 167, 'state': 'closed'}, {'id': 995585085, 'number': 2995, 'closed': datetime.datetime(2022, 7, 19, 16, 24, 55, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 13, 14, 35, 54, tzinfo=datetime.timezone.utc), 'time_taken': 524941.0, 'time_delta': '6 days, 1:49:01', 'additions': 401, 'deletions': 2, 'state': 'closed'}, {'id': 990451144, 'number': 2983, 'closed': datetime.datetime(2022, 7, 12, 16, 24, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 7, 15, 48, 44, tzinfo=datetime.timezone.utc), 'time_taken': 434127.0, 'time_delta': '5 days, 0:35:27', 'additions': 894, 'deletions': 59, 'state': 'closed'}, {'id': 988561676, 'number': 2980, 'closed': datetime.datetime(2022, 7, 11, 16, 8, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 6, 9, 43, 11, tzinfo=datetime.timezone.utc), 'time_taken': 455093.0, 'time_delta': '5 days, 6:24:53', 'additions': 61, 'deletions': 30, 'state': 'closed'}, {'id': 988434180, 'number': 2979, 'closed': datetime.datetime(2022, 7, 6, 16, 27, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 6, 8, 15, 57, tzinfo=datetime.timezone.utc), 'time_taken': 29498.0, 'time_delta': '8:11:38', 'additions': 33, 'deletions': 14, 'state': 'closed'}, {'id': 985664738, 'number': 2974, 'closed': datetime.datetime(2022, 7, 12, 10, 51, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 3, 7, 43, 41, tzinfo=datetime.timezone.utc), 'time_taken': 788869.0, 'time_delta': '9 days, 3:07:49', 'additions': 630, 'deletions': 3, 'state': 'closed'}, {'id': 984880926, 'number': 2971, 'closed': datetime.datetime(2022, 7, 5, 16, 18, 51, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 7, 1, 11, 58, 36, tzinfo=datetime.timezone.utc), 'time_taken': 361215.0, 'time_delta': '4 days, 4:20:15', 'additions': 149, 'deletions': 0, 'state': 'closed'}, {'id': 983590964, 'number': 2968, 'closed': datetime.datetime(2022, 6, 30, 9, 51, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 30, 9, 25, 51, tzinfo=datetime.timezone.utc), 'time_taken': 1559.0, 'time_delta': '0:25:59', 'additions': 48, 'deletions': 51, 'state': 'closed'}, {'id': 983545646, 'number': 2967, 'closed': datetime.datetime(2022, 6, 30, 16, 55, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 30, 8, 43, 36, tzinfo=datetime.timezone.utc), 'time_taken': 29489.0, 'time_delta': '8:11:29', 'additions': 149, 'deletions': 1, 'state': 'closed'}, {'id': 982568399, 'number': 2962, 'closed': datetime.datetime(2022, 6, 30, 16, 9, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 29, 13, 0, 41, tzinfo=datetime.timezone.utc), 'time_taken': 97738.0, 'time_delta': '1 day, 3:08:58', 'additions': 280, 'deletions': 14, 'state': 'closed'}, {'id': 980077355, 'number': 2960, 'closed': datetime.datetime(2022, 6, 28, 18, 40, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 27, 13, 34, 59, tzinfo=datetime.timezone.utc), 'time_taken': 104736.0, 'time_delta': '1 day, 5:05:36', 'additions': 150, 'deletions': 6, 'state': 'closed'}, {'id': 972432660, 'number': 2955, 'closed': datetime.datetime(2022, 6, 27, 9, 48, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 20, 16, 28, 22, tzinfo=datetime.timezone.utc), 'time_taken': 580808.0, 'time_delta': '6 days, 17:20:08', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 965250068, 'number': 2942, 'closed': datetime.datetime(2022, 6, 14, 6, 50, 25, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 13, 4, 26, 52, tzinfo=datetime.timezone.utc), 'time_taken': 95013.0, 'time_delta': '1 day, 2:23:33', 'additions': 221, 'deletions': 6, 'state': 'closed'}, {'id': 964156878, 'number': 2939, 'closed': datetime.datetime(2022, 6, 13, 4, 19, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 10, 13, 45, 22, tzinfo=datetime.timezone.utc), 'time_taken': 225262.0, 'time_delta': '2 days, 14:34:22', 'additions': 221, 'deletions': 6, 'state': 'closed'}, {'id': 961144500, 'number': 2937, 'closed': datetime.datetime(2022, 6, 10, 16, 4, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 8, 3, 54, 33, tzinfo=datetime.timezone.utc), 'time_taken': 216607.0, 'time_delta': '2 days, 12:10:07', 'additions': 36, 'deletions': 34, 'state': 'closed'}, {'id': 956552888, 'number': 2929, 'closed': datetime.datetime(2022, 6, 10, 16, 6, 11, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 6, 2, 22, 57, 45, tzinfo=datetime.timezone.utc), 'time_taken': 666506.0, 'time_delta': '7 days, 17:08:26', 'additions': 257, 'deletions': 0, 'state': 'closed'}, {'id': 889732226, 'number': 2892, 'closed': datetime.datetime(2022, 6, 2, 22, 20, 4, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 3, 25, 17, 51, 36, tzinfo=datetime.timezone.utc), 'time_taken': 5977708.0, 'time_delta': '69 days, 4:28:28', 'additions': 5, 'deletions': 0, 'state': 'closed'}]"

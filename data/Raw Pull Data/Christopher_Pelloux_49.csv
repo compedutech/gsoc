@@ -1,0 +1,539 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+391693078,Add Windows fixes to #46 vIRQ patch,"This PR completes #46 by adding the missing Windows implementations and fixes:
+- bfexec: Fix the [timespec_get() not implemented](https://www.gnu.org/software/gnulib/manual/html_node/timespec_005fget.html) in cygwin issue by linking at runtime `_timespec64_get` from `ucrtbase.dll`
+- bfexec: Add the missing vmcall ioctl and the corresponding ioctl handler in the hypervisor's bfdriver (see other PR)
+- Add VS 2019 tooling support",True,49,https://api.github.com/repos/Bareflank/boxy/pulls/49,https://github.com/Bareflank/boxy/pull/49,closed,2953,2631,61,4,2,0,0,0,[],2020-03-20 18:57:18+00:00,2020-03-25 10:56:18+00:00,403140.0,"4 days, 15:59:00",[],"[{'commit_sha': '0ad62952e0410ae07088d2958fcf6b986ec7dea1', 'committer_username': 'rianquinn', 'committer_name': 'Rian Quinn ', 'committer_email': 'rianquinn@gmail.com', 'commit_date': datetime.datetime(2013, 11, 13, 18, 10, 25, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8de17b9dd689af15aa9b160b3277254d505b6df6', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f5d5208a07778752fa6b7a7bdf3ea2aa991a9c43', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '81e71ef2966577864f4299ec86f5db3683265557', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}]",Christopher Pelloux,2874925,,User,,41,,80,21
+241043417,Bareflank driver,"This PR adds support to the [Bareflank hypervisor](https://bareflank.github.io/hypervisor) when running it with the [LibVMI extensions](https://github.com/libvmi/bareflank_libvmi_extension).
+
+The Bareflank driver is unique in that it provides host-introspection instead of VM-introspection. That is, the hypervisor provides access to raw physical memory to the actual system the LibVMI applications is running on by performing EPT-remapping of physical memory. The hypervisor also provides access to the vCPU registers through a shared-memory buffer formatted in JSON. The presence of the hypervisor is detected through `CPUID` when querying the leaf `1337` to which the hypervisor responds with `42` in all CPUID leafs.
+
+It is important to note that the Bareflank hypervisor does not sanity check accesses to physical memory. Running some examples (for example `vmi-dump-memory`) may be dangerous and crash the system, for example when accessing MMIO regions. To avoid that a new API is added that allows one to specify the memory map of the target system so that LibVMI won't access invalid ranges.
+
+This PR is loosely based on @boddumanohar Google Summer of Code 2018 project
+
+Here is an example output running on my laptop with Ubuntu 18.04 desktop. Notice how the actual vmi application shows up in the list:
+```
+~/workspace/libvmi$ ./examples/vmi-process-list host
+Process listing for VM (null) (id=0)
+[    0] swapper/0 (struct addr:ffffffff9e212480)
+[    1] systemd (struct addr:ffff9293a45a9740)
+[    2] kthreadd (struct addr:ffff9293a45a8000)
+[    4] kworker/0:0H (struct addr:ffff9293a45ac5c0)
+[    6] mm_percpu_wq (struct addr:ffff9293a45e2e80)
+[    7] ksoftirqd/0 (struct addr:ffff9293a45e45c0)
+[    8] rcu_sched (struct addr:ffff9293a45e5d00)
+[    9] rcu_bh (struct addr:ffff9293a45e1740)
+[   10] migration/0 (struct addr:ffff9293a45e0000)
+[   11] watchdog/0 (struct addr:ffff9293a45f5d00)
+[   12] cpuhp/0 (struct addr:ffff9293a4619740)
+[   13] cpuhp/1 (struct addr:ffff9293a4618000)
+[   14] watchdog/1 (struct addr:ffff9293a4649740)
+[   15] migration/1 (struct addr:ffff9293a4648000)
+[   16] ksoftirqd/1 (struct addr:ffff9293a464ae80)
+[   18] kworker/1:0H (struct addr:ffff9293a464dd00)
+[   19] cpuhp/2 (struct addr:ffff9293a47a0000)
+[   20] watchdog/2 (struct addr:ffff9293a47a2e80)
+[   21] migration/2 (struct addr:ffff9293a47a45c0)
+[   22] ksoftirqd/2 (struct addr:ffff9293a47a5d00)
+[   24] kworker/2:0H (struct addr:ffff9293a47aae80)
+[   25] cpuhp/3 (struct addr:ffff9293a47ac5c0)
+[   26] watchdog/3 (struct addr:ffff9293a47add00)
+[   27] migration/3 (struct addr:ffff9293a47a9740)
+[   28] ksoftirqd/3 (struct addr:ffff9293a47a8000)
+[   30] kworker/3:0H (struct addr:ffff9293a401c5c0)
+[   31] cpuhp/4 (struct addr:ffff9293a401dd00)
+[   32] watchdog/4 (struct addr:ffff9293a4019740)
+[   33] migration/4 (struct addr:ffff9293a4018000)
+[   34] ksoftirqd/4 (struct addr:ffff9293a4072e80)
+[   36] kworker/4:0H (struct addr:ffff9293a4075d00)
+[   37] cpuhp/5 (struct addr:ffff9293a4071740)
+[   38] watchdog/5 (struct addr:ffff9293a4070000)
+[   39] migration/5 (struct addr:ffff9293a40c8000)
+[   40] ksoftirqd/5 (struct addr:ffff9293a40cae80)
+[   42] kworker/5:0H (struct addr:ffff9293a40cdd00)
+[   43] cpuhp/6 (struct addr:ffff9293a40c9740)
+[   44] watchdog/6 (struct addr:ffff9293a4120000)
+[   45] migration/6 (struct addr:ffff9293a4122e80)
+[   46] ksoftirqd/6 (struct addr:ffff9293a41245c0)
+[   48] kworker/6:0H (struct addr:ffff9293a4121740)
+[   49] cpuhp/7 (struct addr:ffff9293a4178000)
+[   50] watchdog/7 (struct addr:ffff9293a417ae80)
+[   51] migration/7 (struct addr:ffff9293a417c5c0)
+[   52] ksoftirqd/7 (struct addr:ffff9293a417dd00)
+[   54] kworker/7:0H (struct addr:ffff9293a41a45c0)
+[   55] kdevtmpfs (struct addr:ffff9293a41f5d00)
+[   56] netns (struct addr:ffff9293a4268000)
+[   57] rcu_tasks_kthre (struct addr:ffff9293a426ae80)
+[   58] kauditd (struct addr:ffff9293a426c5c0)
+[   61] khungtaskd (struct addr:ffff9293a4348000)
+[   62] oom_reaper (struct addr:ffff9293a4352e80)
+[   63] writeback (struct addr:ffff9293a43545c0)
+[   64] kcompactd0 (struct addr:ffff9293a4355d00)
+[   65] ksmd (struct addr:ffff9293a436ae80)
+[   66] khugepaged (struct addr:ffff9293a436c5c0)
+[   67] crypto (struct addr:ffff9293a436dd00)
+[   68] kintegrityd (struct addr:ffff9293a4369740)
+[   69] kblockd (struct addr:ffff9293a4368000)
+[   76] ata_sff (struct addr:ffff9293a41a0000)
+[   77] md (struct addr:ffff9293a41a2e80)
+[   78] edac-poller (struct addr:ffff9293a3e4dd00)
+[   79] devfreq_wq (struct addr:ffff9293a3e49740)
+[   81] watchdogd (struct addr:ffff9293a3e4ae80)
+[   85] kswapd0 (struct addr:ffff9293a266c5c0)
+[   86] ecryptfs-kthrea (struct addr:ffff9293a266dd00)
+[  128] kthrotld (struct addr:ffff929399660000)
+[  129] acpi_thermal_pm (struct addr:ffff929399662e80)
+[  134] ipv6_addrconf (struct addr:ffff9293a4349740)
+[  143] kstrp (struct addr:ffff929399622e80)
+[  160] charger_manager (struct addr:ffff929399605d00)
+[  217] scsi_eh_0 (struct addr:ffff9293a43ec5c0)
+[  218] scsi_tmf_0 (struct addr:ffff9293a43edd00)
+[  219] scsi_eh_1 (struct addr:ffff9293a43eae80)
+[  220] scsi_tmf_1 (struct addr:ffff92939805dd00)
+[  221] scsi_eh_2 (struct addr:ffff929398059740)
+[  222] scsi_tmf_2 (struct addr:ffff929398058000)
+[  224] kworker/u17:0 (struct addr:ffff929399632e80)
+[  225] i915/signal:0 (struct addr:ffff9293996345c0)
+[  226] i915/signal:1 (struct addr:ffff929399635d00)
+[  227] i915/signal:2 (struct addr:ffff929399655d00)
+[  228] i915/signal:4 (struct addr:ffff929399651740)
+[  230] kworker/2:1H (struct addr:ffff929399650000)
+[  261] jbd2/sda5-8 (struct addr:ffff92939805c5c0)
+[  262] ext4-rsv-conver (struct addr:ffff9293984a2e80)
+[  306] systemd-journal (struct addr:ffff92939962ae80)
+[  327] kworker/3:1H (struct addr:ffff9293a4351740)
+[  333] lvmetad (struct addr:ffff92939eb62e80)
+[  337] kworker/7:1H (struct addr:ffff92939eb61740)
+[  338] kworker/1:1H (struct addr:ffff92939eb60000)
+[  339] systemd-udevd (struct addr:ffff9293a3208000)
+[  341] loop0 (struct addr:ffff929399631740)
+[  370] kworker/4:1H (struct addr:ffff9293a3c8dd00)
+[  371] loop1 (struct addr:ffff9293a3c89740)
+[  375] loop2 (struct addr:ffff9293a3c08000)
+[  376] loop3 (struct addr:ffff9293a3c09740)
+[  379] loop4 (struct addr:ffff929397512e80)
+[  380] kworker/0:1H (struct addr:ffff9293a320ae80)
+[  385] loop5 (struct addr:ffff92939962c5c0)
+[  386] kworker/5:1H (struct addr:ffff9293a3c0ae80)
+[  387] loop6 (struct addr:ffff92939898ae80)
+[  388] loop7 (struct addr:ffff9293a3c88000)
+[  389] loop8 (struct addr:ffff9293a3c8c5c0)
+[  390] loop9 (struct addr:ffff9293a43c0000)
+[  391] kworker/6:1H (struct addr:ffff9293a3c0dd00)
+[  392] loop10 (struct addr:ffff929399628000)
+[  393] loop11 (struct addr:ffff929399629740)
+[  398] loop12 (struct addr:ffff9293975145c0)
+[  424] kworker/u17:2 (struct addr:ffff92939e515d00)
+[  543] irq/51-DELL081B (struct addr:ffff92939965ae80)
+[  607] kmemstick (struct addr:ffff9293a320dd00)
+[  612] cfg80211 (struct addr:ffff92939858dd00)
+[  617] irq/131-iwlwifi (struct addr:ffff92939965dd00)
+[  700] systemd-timesyn (struct addr:ffff9293a09a0000)
+[  704] systemd-resolve (struct addr:ffff9293a09a45c0)
+[  797] cron (struct addr:ffff9293a2de8000)
+[  798] rsyslogd (struct addr:ffff9293a2dec5c0)
+[  800] dbus-daemon (struct addr:ffff92939898c5c0)
+[  806] networkd-dispat (struct addr:ffff9293a3209740)
+[  807] udisksd (struct addr:ffff9293996545c0)
+[  808] avahi-daemon (struct addr:ffff929399600000)
+[  812] ModemManager (struct addr:ffff92939e695d00)
+[  814] systemd-logind (struct addr:ffff92939e6945c0)
+[  817] thermald (struct addr:ffff92939e690000)
+[  818] NetworkManager (struct addr:ffff9293a41f0000)
+[  820] avahi-daemon (struct addr:ffff92939852c5c0)
+[  822] acpid (struct addr:ffff9293a41f45c0)
+[  824] snapd (struct addr:ffff9293a2de9740)
+[  825] irqbalance (struct addr:ffff929398a65d00)
+[  855] accounts-daemon (struct addr:ffff9293a06b0000)
+[  856] bluetoothd (struct addr:ffff9293a06b5d00)
+[  857] wpa_supplicant (struct addr:ffff929398fcc5c0)
+[  866] kerneloops (struct addr:ffff929399621740)
+[  870] kerneloops (struct addr:ffff9293a0602e80)
+[  887] polkitd (struct addr:ffff9293a06b2e80)
+[  928] unattended-upgr (struct addr:ffff9293a266ae80)
+[  930] libvirtd (struct addr:ffff929398fc9740)
+[  937] gdm3 (struct addr:ffff92939b038000)
+[  952] gdm-session-wor (struct addr:ffff9293a32cdd00)
+[  979] systemd (struct addr:ffff92939e622e80)
+[  980] (sd-pam) (struct addr:ffff9293a41f2e80)
+[  991] gdm-wayland-ses (struct addr:ffff9293a25c45c0)
+[  993] dbus-daemon (struct addr:ffff9293a0605d00)
+[  995] gnome-session-b (struct addr:ffff9293a25c0000)
+[ 1012] gnome-shell (struct addr:ffff92939a2745c0)
+[ 1037] upowerd (struct addr:ffff9293a25c2e80)
+[ 1075] Xwayland (struct addr:ffff9293a27add00)
+[ 1094] at-spi-bus-laun (struct addr:ffff92939c005d00)
+[ 1099] dbus-daemon (struct addr:ffff92939d9c1740)
+[ 1101] at-spi2-registr (struct addr:ffff929397f91740)
+[ 1107] pulseaudio (struct addr:ffff929397511740)
+[ 1108] rtkit-daemon (struct addr:ffff929397f92e80)
+[ 1225] dnsmasq (struct addr:ffff92939a36dd00)
+[ 1226] dnsmasq (struct addr:ffff92939d1c45c0)
+[ 1254] ibus-daemon (struct addr:ffff92939c9c45c0)
+[ 1257] ibus-dconf (struct addr:ffff92939d0a9740)
+[ 1259] ibus-x11 (struct addr:ffff92939d131740)
+[ 1262] ibus-portal (struct addr:ffff92939d0aae80)
+[ 1275] boltd (struct addr:ffff9293a09a1740)
+[ 1276] packagekitd (struct addr:ffff92939d1bae80)
+[ 1277] gsd-xsettings (struct addr:ffff92939d1b8000)
+[ 1282] gsd-a11y-settin (struct addr:ffff92939d1bdd00)
+[ 1284] gsd-clipboard (struct addr:ffff92939d1bc5c0)
+[ 1286] gsd-color (struct addr:ffff929396f40000)
+[ 1288] gsd-datetime (struct addr:ffff929396f42e80)
+[ 1290] gsd-housekeepin (struct addr:ffff929396f45d00)
+[ 1291] gsd-keyboard (struct addr:ffff92939c819740)
+[ 1294] gsd-media-keys (struct addr:ffff929396f445c0)
+[ 1296] gsd-mouse (struct addr:ffff929396f41740)
+[ 1300] gsd-power (struct addr:ffff92939d0f5d00)
+[ 1302] gsd-print-notif (struct addr:ffff92939d0f45c0)
+[ 1306] gsd-rfkill (struct addr:ffff92939c86ae80)
+[ 1308] gsd-screensaver (struct addr:ffff929399601740)
+[ 1312] gsd-sharing (struct addr:ffff92939d1c1740)
+[ 1314] gsd-smartcard (struct addr:ffff92939bca0000)
+[ 1318] gsd-sound (struct addr:ffff929396f48000)
+[ 1319] gsd-wacom (struct addr:ffff92939d0f2e80)
+[ 1333] ibus-engine-sim (struct addr:ffff92939d1b9740)
+[ 1367] colord (struct addr:ffff92939ba51740)
+[ 1491] kworker/1:1 (struct addr:ffff92936f0d0000)
+[ 1502] kworker/5:0 (struct addr:ffff92936f1e2e80)
+[ 1538] kworker/u16:18 (struct addr:ffff92939c1a0000)
+[ 1583] irq/127-mei_me (struct addr:ffff9293a41a5d00)
+[ 1589] kworker/4:0 (struct addr:ffff9293a2df8000)
+[ 1664] kworker/2:2 (struct addr:ffff929369c92e80)
+[ 1667] dhclient (struct addr:ffff92939b9f45c0)
+[ 1740] gdm-session-wor (struct addr:ffff929369c39740)
+[ 1744] systemd (struct addr:ffff929369ce5d00)
+[ 1745] (sd-pam) (struct addr:ffff929369d25d00)
+[ 1758] gnome-keyring-d (struct addr:ffff929399661740)
+[ 1762] gdm-x-session (struct addr:ffff929369d29740)
+[ 1764] Xorg (struct addr:ffff92939ba58000)
+[ 1769] dbus-daemon (struct addr:ffff929369c38000)
+[ 1772] gnome-session-b (struct addr:ffff929369d2dd00)
+[ 1869] ssh-agent (struct addr:ffff92939bb81740)
+[ 1871] at-spi-bus-laun (struct addr:ffff92939bb85d00)
+[ 1876] dbus-daemon (struct addr:ffff9293a40cc5c0)
+[ 1878] at-spi2-registr (struct addr:ffff929369c945c0)
+[ 1895] gnome-shell (struct addr:ffff929369d3ae80)
+[ 1901] gvfsd (struct addr:ffff9293a45add00)
+[ 1906] gvfsd-fuse (struct addr:ffff92939bbec5c0)
+[ 1917] pulseaudio (struct addr:ffff929369c3dd00)
+[ 1934] krfcommd (struct addr:ffff92939ba59740)
+[ 1937] ibus-daemon (struct addr:ffff92939a369740)
+[ 1941] ibus-dconf (struct addr:ffff92939cd945c0)
+[ 1943] ibus-x11 (struct addr:ffff92939bb80000)
+[ 1945] ibus-portal (struct addr:ffff92935d5145c0)
+[ 1957] gnome-shell-cal (struct addr:ffff92935d4f0000)
+[ 1961] evolution-sourc (struct addr:ffff92935d511740)
+[ 1971] goa-daemon (struct addr:ffff92935d5e0000)
+[ 1978] gvfs-udisks2-vo (struct addr:ffff92935d7045c0)
+[ 1987] goa-identity-se (struct addr:ffff92935d660000)
+[ 1992] gvfs-goa-volume (struct addr:ffff929369d20000)
+[ 1996] gvfs-afc-volume (struct addr:ffff9293a401ae80)
+[ 2001] gvfs-mtp-volume (struct addr:ffff92935d705d00)
+[ 2005] gvfs-gphoto2-vo (struct addr:ffff92935d5e1740)
+[ 2009] gsd-power (struct addr:ffff92936f34dd00)
+[ 2010] gsd-print-notif (struct addr:ffff92936f349740)
+[ 2012] gsd-rfkill (struct addr:ffff9293996645c0)
+[ 2013] gsd-screensaver (struct addr:ffff929358592e80)
+[ 2014] gsd-sharing (struct addr:ffff9293585945c0)
+[ 2016] gsd-smartcard (struct addr:ffff92935d545d00)
+[ 2021] gsd-sound (struct addr:ffff929357d2dd00)
+[ 2024] gsd-xsettings (struct addr:ffff929357d8c5c0)
+[ 2028] gsd-wacom (struct addr:ffff929357e5dd00)
+[ 2041] gsd-a11y-settin (struct addr:ffff929357951740)
+[ 2043] gsd-clipboard (struct addr:ffff9293585e5d00)
+[ 2044] gsd-color (struct addr:ffff92935858dd00)
+[ 2046] gsd-datetime (struct addr:ffff929358589740)
+[ 2049] gsd-housekeepin (struct addr:ffff92935798dd00)
+[ 2054] gsd-keyboard (struct addr:ffff9293575c5d00)
+[ 2055] gsd-media-keys (struct addr:ffff929357671740)
+[ 2066] gsd-mouse (struct addr:ffff929358651740)
+[ 2103] gsd-disk-utilit (struct addr:ffff929357a65d00)
+[ 2109] nautilus-deskto (struct addr:ffff929357a61740)
+[ 2117] gsd-printer (struct addr:ffff929357d50000)
+[ 2126] gvfsd-trash (struct addr:ffff9293577b2e80)
+[ 2144] evolution-calen (struct addr:ffff929357d1dd00)
+[ 2148] dconf-service (struct addr:ffff929357c45d00)
+[ 2153] ibus-engine-sim (struct addr:ffff929357a62e80)
+[ 2164] evolution-calen (struct addr:ffff929357ebae80)
+[ 2176] evolution-addre (struct addr:ffff929356c9ae80)
+[ 2186] evolution-addre (struct addr:ffff929357ea8000)
+[ 2660] gnome-software (struct addr:ffff929339702e80)
+[ 2663] update-notifier (struct addr:ffff929357ebdd00)
+[ 2669] livepatch-notif (struct addr:ffff929369d3c5c0)
+[ 2681] fwupd (struct addr:ffff929348049740)
+[ 2784] gnome-terminal- (struct addr:ffff929327af9740)
+[ 2794] bash (struct addr:ffff92930a139740)
+[ 4034] bash (struct addr:ffff929356c11740)
+[ 4244] cupsd (struct addr:ffff92934cca5d00)
+[ 4245] cups-browsed (struct addr:ffff9293a06045c0)
+[ 4247] dbus (struct addr:ffff9293278add00)
+[ 4248] dbus (struct addr:ffff9293278ac5c0)
+[ 4362] gnome-calculato (struct addr:ffff929357c40000)
+[ 4481] firefox (struct addr:ffff92939d0ac5c0)
+[ 4563] Web Content (struct addr:ffff929356c10000)
+[ 4626] WebExtensions (struct addr:ffff929357c41740)
+[ 4717] Web Content (struct addr:ffff92930a03c5c0)
+[ 4770] bash (struct addr:ffff929346065d00)
+[ 5192] kworker/3:0 (struct addr:ffff9292c9a5dd00)
+[ 7235] sudo (struct addr:ffff9293463c0000)
+[ 7236] su (struct addr:ffff92930a355d00)
+[ 7237] systemd (struct addr:ffff9292c99aae80)
+[ 7238] (sd-pam) (struct addr:ffff9293a3e48000)
+[ 7249] bash (struct addr:ffff929348021740)
+[ 7318] gedit (struct addr:ffff9293996045c0)
+[ 7365] kworker/7:0 (struct addr:ffff9293a41a1740)
+[ 7404] Web Content (struct addr:ffff929346061740)
+[ 8001] Web Content (struct addr:ffff9292a471dd00)
+[ 8053] nautilus (struct addr:ffff9292a6f5c5c0)
+[ 8068] mattermost-desk (struct addr:ffff9292a6950000)
+[ 8071] mattermost-desk (struct addr:ffff92934817ae80)
+[ 8086] gconfd-2 (struct addr:ffff9292a6eb8000)
+[ 8107] mattermost-desk (struct addr:ffff9292a558c5c0)
+[ 8115] mattermost-desk (struct addr:ffff9292a441ae80)
+[ 8197] mattermost-desk (struct addr:ffff9292a6ebc5c0)
+[ 8485] kworker/u16:2 (struct addr:ffff9292a5335d00)
+[ 8506] ssh-agent (struct addr:ffff929247ee2e80)
+[15933] kworker/u16:0 (struct addr:ffff929247ebae80)
+[27333] kworker/u16:3 (struct addr:ffff929289c51740)
+[29753] bash (struct addr:ffff9292c9a5c5c0)
+[31148] kworker/6:2 (struct addr:ffff92930a039740)
+[31339] kworker/5:2 (struct addr:ffff9292a4b09740)
+[ 4482] kworker/0:0 (struct addr:ffff9292a4548000)
+[ 4483] kworker/6:0 (struct addr:ffff9293396fae80)
+[ 4557] kworker/2:1 (struct addr:ffff9293396fc5c0)
+[ 4558] kworker/7:2 (struct addr:ffff9292a5332e80)
+[ 4653] kworker/1:2 (struct addr:ffff929247eb9740)
+[ 4698] kworker/3:1 (struct addr:ffff929356c145c0)
+[ 4716] kworker/5:1 (struct addr:ffff929289c545c0)
+[ 4744] kworker/4:1 (struct addr:ffff929289c52e80)
+[ 4745] kworker/0:1 (struct addr:ffff929358590000)
+[ 4751] kworker/6:1 (struct addr:ffff9291b44945c0)
+[ 4758] kworker/7:1 (struct addr:ffff9293578e5d00)
+[ 4763] kworker/1:0 (struct addr:ffff9292a471ae80)
+[ 4765] kworker/2:0 (struct addr:ffff929247faae80)
+[ 4782] kworker/u16:1 (struct addr:ffff929247fac5c0)
+[ 4808] kworker/3:2 (struct addr:ffff9292a4aac5c0)
+[ 4841] vmi-process-lis (struct addr:ffff9293396f9740)
+```",True,693,https://api.github.com/repos/libvmi/libvmi/pulls/693,https://github.com/libvmi/libvmi/pull/693,closed,1027,115,29,3,9,0,0,0,[],2018-12-26 22:17:49+00:00,2019-01-16 22:38:41+00:00,1815652.0,"21 days, 0:20:52",[],"[{'commit_sha': 'b7fb22f22128cdedb17c8c8acd1c0e638487ae1b', 'committer_username': 'tklengyel', 'committer_name': 'Tamas K Lengyel', 'committer_email': 'tamas@tklengyel.com', 'commit_date': datetime.datetime(2013, 1, 2, 22, 48, 53, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5dc59caed75c7081678ae6a7feecac3858e4de2e', 'committer_username': 'tklengyel', 'committer_name': 'Tamas K Lengyel', 'committer_email': 'tamas@tklengyel.com', 'commit_date': datetime.datetime(2013, 1, 2, 22, 48, 53, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab37db736721740cb0d35fc75a0f306fed226111', 'committer_username': 'tklengyel', 'committer_name': 'Tamas K Lengyel', 'committer_email': 'tamas@tklengyel.com', 'commit_date': datetime.datetime(2013, 1, 2, 22, 48, 53, tzinfo=datetime.timezone.utc)}]",Tamas K Lengyel,3172829,tamas@tklengyel.com,User,,125,,134,297
+438088933,Add initial support for LibVMI,"Commit https://github.com/Bareflank/boxy/commit/cb72f0cb9b8c2c24dd18408ef86089d929301866 is based on the previous work available from [bareflank_libvmi_extension](https://github.com/libvmi/bareflank_libvmi_extension/blob/master/libvmi_extension/exit_handler/exit_handler.cpp) which targeted the base Bareflank hypervisor without Boxy.
+
+This previous work was based on the original license used by Bareflank which was LGPL. For reasons stated in https://github.com/Bareflank/hypervisor/issues/724, Bareflank has switched from LGPL to MIT. @boddumanohar , @tklengyel and @ssentanoe , could you please confirm that you agree with this change by writing it in a comment bellow? Thank you :)",False,55,https://api.github.com/repos/Bareflank/boxy/pulls/55,https://github.com/Bareflank/boxy/pull/55,closed,577,1,15,5,6,9,0,0,[],2020-06-22 17:43:26+00:00,2020-08-04 13:42:54+00:00,3700768.0,"42 days, 19:59:28","[{'comment_id': 444340466, 'comment_body': 'Please remove all commented out code from the PR. ', 'comment_created': datetime.datetime(2020, 6, 23, 16, 7, 41, tzinfo=datetime.timezone.utc), 'commenter': 'rianquinn', 'type': 'User'}, {'comment_id': 444341481, 'comment_body': 'Please remove these types of debug statements from your PR, or change the priority. Having them set to 0 is an issue. ', 'comment_created': datetime.datetime(2020, 6, 23, 16, 9, 12, tzinfo=datetime.timezone.utc), 'commenter': 'rianquinn', 'type': 'User'}, {'comment_id': 444343190, 'comment_body': 'Is there a way to remove the need for JSON here? I understand why we did this originally, but there is a huge issue with the use of JSON. Specifically, it performs allocations in the hypervisor which results in fragmentation. Allocations should never happen from a exit handler (including VMCalls) outside of doing things like creating new vCPUs and domains. A versioned structure makes a lot more sense here. It would be faster, and it would remove this long-term issue with the ABI. It also removes the need for an additional library', 'comment_created': datetime.datetime(2020, 6, 23, 16, 11, 45, tzinfo=datetime.timezone.utc), 'commenter': 'rianquinn', 'type': 'User'}, {'comment_id': 444343558, 'comment_body': 'same thing, please remove the debug statements', 'comment_created': datetime.datetime(2020, 6, 23, 16, 12, 19, tzinfo=datetime.timezone.utc), 'commenter': 'rianquinn', 'type': 'User'}, {'comment_id': 444384176, 'comment_body': ""C structures are a bad idea for a hypervisor ABI, Xen is still struggling with that choice. It requires all structures to be meticulously typed for padding and variable length, which is very easy to get wrong. I don't see why allocations are an issue and why you wouldn't be allowed to do this here since it just constructs the json string which then gets dumped onto the shared page and then freed afterwards."", 'comment_created': datetime.datetime(2020, 6, 23, 17, 19, 9, tzinfo=datetime.timezone.utc), 'commenter': 'tklengyel', 'type': 'User'}, {'comment_id': 444450475, 'comment_body': 'Would using a library like https://github.com/beached/daw_json_link help? It advertises itself as a *Static JSON parsing in C++* library and seems to use `constexpr` everywhere. I can do some testing to see how it handles (de)serialization and large values.', 'comment_created': datetime.datetime(2020, 6, 23, 19, 15, 59, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}, {'comment_id': 444477023, 'comment_body': 'I can also delay the need to use an external JSON library (or a version structure) allowing us to discuss this further by implementing a hypercall for each register which is what [domain_op](https://github.com/Bareflank/boxy/blob/872d0afb55a0f48f2cf49f783e7b39b2728f7744/bfvmm/src/hve/arch/intel_x64/vmcall/domain_op.cpp) is already doing.\r\n\r\nIt might be worth taking some time before deciding to add support for an external library as Bareflank is currently making efforts to be AUTOSAR and C++ Core Guideline compliant with the BSL. My understanding is that future version of Bareflank will need to be AUTOSAR compliant in the VMM and adding support for an external library now might delay the support of upcoming Bareflank VMMs with LibVMI.', 'comment_created': datetime.datetime(2020, 6, 23, 20, 7, 51, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}, {'comment_id': 444954478, 'comment_body': 'The conversation is continuing on [slack #boxy](https://bareflank.slack.com/archives/CUB38DB4J/p1593009311057400)', 'comment_created': datetime.datetime(2020, 6, 24, 14, 52, 29, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}, {'comment_id': 444955264, 'comment_body': ""I changed the debug priority to 10. Let me know if that's fine."", 'comment_created': datetime.datetime(2020, 6, 24, 14, 53, 29, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}]","[{'commit_sha': '66becdaf7bcfdd31583b9a6173b2c6fe301d5133', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c3072eae35072e5f411e8c885593c98de151ff8e', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cb72f0cb9b8c2c24dd18408ef86089d929301866', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '250818c31055be1e8c77bae6f50d2286a027036b', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '76e5b2418dd20cda282966c306c00c3ed25b1d86', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}]",Christopher Pelloux,2874925,,User,,41,,80,21
+434958332,Add Bareflank Boxy / MicroV support,"This PR adds support for [Bareflank boxy](https://github.com/Bareflank/boxy).
+In order to be able to use this PR, I will also send a PR to the Bareflank Boxy repo for:
+- Boxy VMM: Adding first class support for LibVMI in Boxy based on the [previous Bareflank extension](https://github.com/libvmi/bareflank_libvmi_extension) work.
+- vmilinux: An example VM that includes a vmi init app and uses Buildroot to cross-compile LibVMI with this PR and build the rootfs.
+
+This last point requires this PR to be accepted first.
+
+### Bareflank Boxy
+
+Bareflank is a very interesting hypervisor with multi-platform support (e.g. Windows, Linux and UEFI). It can boot from UEFI, or with its late-lunch feature, it can rootkit the current running host OS and demote it into a VM (dom0). With Boxy, an extension of the base hypervisor that adds guest support, we can run LibVMI into a tiny linux VM and, for the first time, have libvmi introspect a **Windows host**!
+Of course, we can also introspect a Linux host just like before. Another difference is that the libvmi process isn't directly scheduled by the host OS and it won't show up in the process list.
+Instead we see bfexec which is Boxy's way to use the host scheduler to schedule VMs. i.e. When bfexec is scheduled by the host OS, it then vmcalls the VMM to execute its associated VM.
+
+### The base hypervisor vs Bareflank Boxy
+
+#### LibVMI with the Bareflank base hypervisor only
+
+When running without Boxy (i.e. with the base hypervisor only) LibVMI runs directly on the host it is introspecting which limits it to Linux. As shown in the [original bareflank driver PR](https://github.com/libvmi/libvmi/pull/693), notice the libvmi process `vmi-process-list` actually displayed as part of the process list running on the host:
+
+```
+$ ~/workspace/libvmi$ ./examples/vmi-process-list host
+Process listing for VM (null) (id=0)
+[    0] swapper/0 (struct addr:ffffffff9e212480)
+...
+[ 4841] vmi-process-lis (struct addr:ffff9293396f9740)
+```
+
+
+#### LibVMI with Bareflank Boxy
+
+With Boxy, libvmi runs inside a VM with an ultra-light Linux. Bfexec can pass arguments to the linux cmdline so I made an init app that parses the kernel command line and passes it to the VMI application (e.g. `vmi-process-list`). In this example, we're introspecting a Windows host from the host in cygwin. With bfexec's UART emulation, we can see linux boot, start init which in turn starts the vmi process list example, all done in milliseconds:
+
+```
+$ ./bareflank/prefixes/x86_64-userspace-pe/bin/bfexec.exe --bzimage --path ./buildroot/output/images/bzImage --initrd ./buildroot/output/images/rootfs.cpio.gz --uart=0x3f8 --verbose --size=0x8000000 --cmdline=""vmi=/usr/bin/vmi-process-list,-n,dom0""
+
+Created VM from bzImage file:
+--------------------------------------------------------------------------------
+    kernel | ./buildroot/output/images/bzImage
+    initrd | ./buildroot/output/images/rootfs.cpio.gz
+ domain id | 1
+  ram size | 128MB
+   cmdline | console=uart,io,0x3f8,115200n8 vmi=/usr/bin/vmi-process-list,-n,dom0
+
+[0xOutput from VM's UART:
+10000--------------------------------------------------------------------------------
+]
+vcpu fault: [    0.000000] Linux version 4.20.0-rc7 (vagrant@vagrant) (gcc version 8.4.0 (Buildroot 2020.02.2)) #1 Wed Jun 10 05:54:59 UTC 2020
+[    0.000000] Command line: console=uart,io,0x3f8,115200n8 vmi=/usr/bin/vmi-process-list,-n,dom0
+[    0.000000] KERNEL supported cpus:
+[    0.000000]   Intel GenuineIntel
+[    0.000000] x86/fpu: x87 FPU will use FXSAVE
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x00000000000e7fff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000000e8000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000080fffff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000fec00000-0x00000000fffffffe] reserved
+[    0.000000] earlycon: uart0 at I/O port 0x3f8 (options '115200n8')
+[    0.000000] printk: bootconsole [uart0] enabled
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] Hypervisor detected: Boxy Hypervisor
+[    0.000001] clocksource: boxy-clocksource: mask: 0xffffffffffffffff max_cycles: 0x255cb6cc5db, max_idle_ns: 440795203504 ns
+[    0.000390] tsc: Detected 2592.000 MHz processor
+...
+[    0.088346] Run /sbin/init as init process
+[    0.088700] [U] Init: reached
+[    0.088851] [U] Init: Starting /usr/bin/vmi-process-list -n dom0 at Sat Jun 13 23:36:09 2020
+[    0.100063] random: vmi-process-lis: uninitialized urandom read (4 bytes read)
+[    0.147687] [U] Process listing for VM (null) (id=0)
+[    0.148272] [U] [    4] System (struct addr:ffff8a09392c1140)
+[    0.148784] [U] [  148] Registry (struct addr:ffff8a09393f3040)
+[    0.149300] [U] [  516] smss.exe (struct addr:ffff8a0941deb040)
+[    0.149816] [U] [  840] csrss.exe (struct addr:ffff8a0945135140)
+[    0.150337] [U] [  968] wininit.exe (struct addr:ffff8a0947c240c0)
+[    0.150862] [U] [  972] csrss.exe (struct addr:ffff8a0947c27140)
+[    0.151379] [U] [  468] services.exe (struct addr:ffff8a0947c60280)
+[    0.151920] [U] [  636] WerFault.exe (struct addr:ffff8a0947d042c0)
+[    0.152449] [U] [  624] lsass.exe (struct addr:ffff8a0947d06280)
+[    0.152972] [U] [ 1052] svchost.exe (struct addr:ffff8a0947d95080)
+[    0.153592] [U] [ 1076] svchost.exe (struct addr:ffff8a0947d980c0)
+[    0.154120] [U] [ 1100] fontdrvhost.ex (struct addr:ffff8a0947d9f340)
+[    0.154654] [U] [ 1168] svchost.exe (struct addr:ffff8a0948467240)
+[    0.155179] [U] [ 1216] svchost.exe (struct addr:ffff8a094848d080)
+[    0.155709] [U] [ 1280] winlogon.exe (struct addr:ffff8a09485e20c0)
+[    0.156240] [U] [ 1332] WUDFHost.exe (struct addr:ffff8a0948613240)
+[    0.156773] [U] [ 1372] fontdrvhost.ex (struct addr:ffff8a09486d3340)
+[    0.157312] [U] [ 1444] WUDFHost.exe (struct addr:ffff8a0948716080)
+[    0.157842] [U] [ 1496] LogonUI.exe (struct addr:ffff8a0948720280)
+[    0.158369] [U] [ 1504] dwm.exe (struct addr:ffff8a0948722080)
+...
+[    0.285676] [U] [11872] firefox.exe (struct addr:ffff8a094daec080)
+[    0.286203] [U] [16148] audiodg.exe (struct addr:ffff8a094a5df080)
+[    0.286775] [U] [ 8316] mspdbsrv.exe (struct addr:ffff8a095031a080)
+[    0.287306] [U] [13420] svchost.exe (struct addr:ffff8a095401c080)
+[    0.287829] [U] [ 6640] svchost.exe (struct addr:ffff8a094fca6080)
+[    0.288353] [U] [ 8012] svchost.exe (struct addr:ffff8a095425f240)
+[    0.288900] [U] [ 6320] cpptools-srv.e (struct addr:ffff8a09534ef080)
+[    0.289438] [U] [  740] SearchProtocol (struct addr:ffff8a094df27080)
+[    0.289972] [U] [12768] SearchFilterHo (struct addr:ffff8a094a50b340)
+[    0.290509] [U] [ 4672] zsh.exe (struct addr:ffff8a095008d080)
+[    0.291046] [U] [ 8020] bfexec.exe (struct addr:ffff8a0952feb080)
+[    0.308360] [U] Init: return code is 0. Nothing left to do.
+[    0.308590] reboot: System halted
+```
+",False,909,https://api.github.com/repos/libvmi/libvmi/pulls/909,https://github.com/libvmi/libvmi/pull/909,closed,2405,275,19,15,13,2,0,0,[],2020-06-16 03:58:47+00:00,2022-09-20 01:09:13+00:00,71356226.0,"825 days, 21:10:26","[{'comment_id': 442347649, 'comment_body': 'This is a new API introduced in **json-c 0.14** allowing us to not have to split `uin64_t` values into high/low values anymore.', 'comment_created': datetime.datetime(2020, 6, 18, 16, 19, 36, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}, {'comment_id': 442394996, 'comment_body': 'Well, if you rely on a particular API being available you better check for that during the configure stage to alert the user that they need to install a newer version of the lib. Especially if its not something available by default in the repository.', 'comment_created': datetime.datetime(2020, 6, 18, 17, 39, 46, tzinfo=datetime.timezone.utc), 'commenter': 'tklengyel', 'type': 'User'}]","[{'commit_sha': '6c597c8a08914aac056d5582e1c60651ac56bfa5', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58431ee5cfc61b80757108a427ebc127d403c74b', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2f9717be0261d946b1cf98c7c35147f1d156750', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04bbaca5ef7c91b7e10117bde5ff06ccb5b37aee', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53b31812355a69b06c8c5ab58a76236009d1dab6', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7970f0439f6b64c1d32a8155126397cb7a5f1f44', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dd5a2e48e43b70b50d7ff4a01ad1fcb3b8cbba7', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b87c7c5c1efa4a2775d854d119157590ae460db0', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '809cc705e1b4d68088ca5ffa7c9dc828a9043987', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd32e8474986938c985c948c0dbd6d77ad9687511', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3de524c1ebbb2aaddfe506a954ca071713051e7e', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cebf2b728cd16576166768e4cf5db1210eab323e', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8541b668e0c976702833931e4e20044901207459', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5d5dc70e3481590186814757dfa5207ca8c0a28f', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40312d3965e48ecb1ac4f1a53c3885fcafbd1cef', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}]",Christopher Pelloux,2874925,,User,,41,,80,21
+434958332,Add Bareflank Boxy / MicroV support,"This PR adds support for [Bareflank boxy](https://github.com/Bareflank/boxy).
+In order to be able to use this PR, I will also send a PR to the Bareflank Boxy repo for:
+- Boxy VMM: Adding first class support for LibVMI in Boxy based on the [previous Bareflank extension](https://github.com/libvmi/bareflank_libvmi_extension) work.
+- vmilinux: An example VM that includes a vmi init app and uses Buildroot to cross-compile LibVMI with this PR and build the rootfs.
+
+This last point requires this PR to be accepted first.
+
+### Bareflank Boxy
+
+Bareflank is a very interesting hypervisor with multi-platform support (e.g. Windows, Linux and UEFI). It can boot from UEFI, or with its late-lunch feature, it can rootkit the current running host OS and demote it into a VM (dom0). With Boxy, an extension of the base hypervisor that adds guest support, we can run LibVMI into a tiny linux VM and, for the first time, have libvmi introspect a **Windows host**!
+Of course, we can also introspect a Linux host just like before. Another difference is that the libvmi process isn't directly scheduled by the host OS and it won't show up in the process list.
+Instead we see bfexec which is Boxy's way to use the host scheduler to schedule VMs. i.e. When bfexec is scheduled by the host OS, it then vmcalls the VMM to execute its associated VM.
+
+### The base hypervisor vs Bareflank Boxy
+
+#### LibVMI with the Bareflank base hypervisor only
+
+When running without Boxy (i.e. with the base hypervisor only) LibVMI runs directly on the host it is introspecting which limits it to Linux. As shown in the [original bareflank driver PR](https://github.com/libvmi/libvmi/pull/693), notice the libvmi process `vmi-process-list` actually displayed as part of the process list running on the host:
+
+```
+$ ~/workspace/libvmi$ ./examples/vmi-process-list host
+Process listing for VM (null) (id=0)
+[    0] swapper/0 (struct addr:ffffffff9e212480)
+...
+[ 4841] vmi-process-lis (struct addr:ffff9293396f9740)
+```
+
+
+#### LibVMI with Bareflank Boxy
+
+With Boxy, libvmi runs inside a VM with an ultra-light Linux. Bfexec can pass arguments to the linux cmdline so I made an init app that parses the kernel command line and passes it to the VMI application (e.g. `vmi-process-list`). In this example, we're introspecting a Windows host from the host in cygwin. With bfexec's UART emulation, we can see linux boot, start init which in turn starts the vmi process list example, all done in milliseconds:
+
+```
+$ ./bareflank/prefixes/x86_64-userspace-pe/bin/bfexec.exe --bzimage --path ./buildroot/output/images/bzImage --initrd ./buildroot/output/images/rootfs.cpio.gz --uart=0x3f8 --verbose --size=0x8000000 --cmdline=""vmi=/usr/bin/vmi-process-list,-n,dom0""
+
+Created VM from bzImage file:
+--------------------------------------------------------------------------------
+    kernel | ./buildroot/output/images/bzImage
+    initrd | ./buildroot/output/images/rootfs.cpio.gz
+ domain id | 1
+  ram size | 128MB
+   cmdline | console=uart,io,0x3f8,115200n8 vmi=/usr/bin/vmi-process-list,-n,dom0
+
+[0xOutput from VM's UART:
+10000--------------------------------------------------------------------------------
+]
+vcpu fault: [    0.000000] Linux version 4.20.0-rc7 (vagrant@vagrant) (gcc version 8.4.0 (Buildroot 2020.02.2)) #1 Wed Jun 10 05:54:59 UTC 2020
+[    0.000000] Command line: console=uart,io,0x3f8,115200n8 vmi=/usr/bin/vmi-process-list,-n,dom0
+[    0.000000] KERNEL supported cpus:
+[    0.000000]   Intel GenuineIntel
+[    0.000000] x86/fpu: x87 FPU will use FXSAVE
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x00000000000e7fff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000000e8000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000080fffff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000fec00000-0x00000000fffffffe] reserved
+[    0.000000] earlycon: uart0 at I/O port 0x3f8 (options '115200n8')
+[    0.000000] printk: bootconsole [uart0] enabled
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] Hypervisor detected: Boxy Hypervisor
+[    0.000001] clocksource: boxy-clocksource: mask: 0xffffffffffffffff max_cycles: 0x255cb6cc5db, max_idle_ns: 440795203504 ns
+[    0.000390] tsc: Detected 2592.000 MHz processor
+...
+[    0.088346] Run /sbin/init as init process
+[    0.088700] [U] Init: reached
+[    0.088851] [U] Init: Starting /usr/bin/vmi-process-list -n dom0 at Sat Jun 13 23:36:09 2020
+[    0.100063] random: vmi-process-lis: uninitialized urandom read (4 bytes read)
+[    0.147687] [U] Process listing for VM (null) (id=0)
+[    0.148272] [U] [    4] System (struct addr:ffff8a09392c1140)
+[    0.148784] [U] [  148] Registry (struct addr:ffff8a09393f3040)
+[    0.149300] [U] [  516] smss.exe (struct addr:ffff8a0941deb040)
+[    0.149816] [U] [  840] csrss.exe (struct addr:ffff8a0945135140)
+[    0.150337] [U] [  968] wininit.exe (struct addr:ffff8a0947c240c0)
+[    0.150862] [U] [  972] csrss.exe (struct addr:ffff8a0947c27140)
+[    0.151379] [U] [  468] services.exe (struct addr:ffff8a0947c60280)
+[    0.151920] [U] [  636] WerFault.exe (struct addr:ffff8a0947d042c0)
+[    0.152449] [U] [  624] lsass.exe (struct addr:ffff8a0947d06280)
+[    0.152972] [U] [ 1052] svchost.exe (struct addr:ffff8a0947d95080)
+[    0.153592] [U] [ 1076] svchost.exe (struct addr:ffff8a0947d980c0)
+[    0.154120] [U] [ 1100] fontdrvhost.ex (struct addr:ffff8a0947d9f340)
+[    0.154654] [U] [ 1168] svchost.exe (struct addr:ffff8a0948467240)
+[    0.155179] [U] [ 1216] svchost.exe (struct addr:ffff8a094848d080)
+[    0.155709] [U] [ 1280] winlogon.exe (struct addr:ffff8a09485e20c0)
+[    0.156240] [U] [ 1332] WUDFHost.exe (struct addr:ffff8a0948613240)
+[    0.156773] [U] [ 1372] fontdrvhost.ex (struct addr:ffff8a09486d3340)
+[    0.157312] [U] [ 1444] WUDFHost.exe (struct addr:ffff8a0948716080)
+[    0.157842] [U] [ 1496] LogonUI.exe (struct addr:ffff8a0948720280)
+[    0.158369] [U] [ 1504] dwm.exe (struct addr:ffff8a0948722080)
+...
+[    0.285676] [U] [11872] firefox.exe (struct addr:ffff8a094daec080)
+[    0.286203] [U] [16148] audiodg.exe (struct addr:ffff8a094a5df080)
+[    0.286775] [U] [ 8316] mspdbsrv.exe (struct addr:ffff8a095031a080)
+[    0.287306] [U] [13420] svchost.exe (struct addr:ffff8a095401c080)
+[    0.287829] [U] [ 6640] svchost.exe (struct addr:ffff8a094fca6080)
+[    0.288353] [U] [ 8012] svchost.exe (struct addr:ffff8a095425f240)
+[    0.288900] [U] [ 6320] cpptools-srv.e (struct addr:ffff8a09534ef080)
+[    0.289438] [U] [  740] SearchProtocol (struct addr:ffff8a094df27080)
+[    0.289972] [U] [12768] SearchFilterHo (struct addr:ffff8a094a50b340)
+[    0.290509] [U] [ 4672] zsh.exe (struct addr:ffff8a095008d080)
+[    0.291046] [U] [ 8020] bfexec.exe (struct addr:ffff8a0952feb080)
+[    0.308360] [U] Init: return code is 0. Nothing left to do.
+[    0.308590] reboot: System halted
+```
+",False,909,https://api.github.com/repos/libvmi/libvmi/pulls/909,https://github.com/libvmi/libvmi/pull/909,closed,2405,275,19,15,13,2,0,0,[],2020-06-16 03:58:47+00:00,2022-09-20 01:09:13+00:00,71356226.0,"825 days, 21:10:26","[{'comment_id': 442347649, 'comment_body': 'This is a new API introduced in **json-c 0.14** allowing us to not have to split `uin64_t` values into high/low values anymore.', 'comment_created': datetime.datetime(2020, 6, 18, 16, 19, 36, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}, {'comment_id': 442394996, 'comment_body': 'Well, if you rely on a particular API being available you better check for that during the configure stage to alert the user that they need to install a newer version of the lib. Especially if its not something available by default in the repository.', 'comment_created': datetime.datetime(2020, 6, 18, 17, 39, 46, tzinfo=datetime.timezone.utc), 'commenter': 'tklengyel', 'type': 'User'}]","[{'commit_sha': '6c597c8a08914aac056d5582e1c60651ac56bfa5', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '58431ee5cfc61b80757108a427ebc127d403c74b', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd2f9717be0261d946b1cf98c7c35147f1d156750', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '04bbaca5ef7c91b7e10117bde5ff06ccb5b37aee', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '53b31812355a69b06c8c5ab58a76236009d1dab6', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7970f0439f6b64c1d32a8155126397cb7a5f1f44', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1dd5a2e48e43b70b50d7ff4a01ad1fcb3b8cbba7', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b87c7c5c1efa4a2775d854d119157590ae460db0', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '809cc705e1b4d68088ca5ffa7c9dc828a9043987', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd32e8474986938c985c948c0dbd6d77ad9687511', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3de524c1ebbb2aaddfe506a954ca071713051e7e', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cebf2b728cd16576166768e4cf5db1210eab323e', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8541b668e0c976702833931e4e20044901207459', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5d5dc70e3481590186814757dfa5207ca8c0a28f', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '40312d3965e48ecb1ac4f1a53c3885fcafbd1cef', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}]",Christopher Pelloux,2874925,,User,,41,,80,21
+475710739,Add support for the new MicroV spec,This update provides the needed changes for the new MicroV spec.,False,922,https://api.github.com/repos/Bareflank/hypervisor/pulls/922,https://github.com/Bareflank/hypervisor/pull/922,closed,535,38,6,8,0,2,0,0,[],2020-08-29 03:07:05+00:00,2021-01-29 16:15:21+00:00,13266496.0,"153 days, 13:08:16","[{'comment_id': 480240731, 'comment_body': 'need to add a gsl::finally call to make sure its unlocked if an exception is thrown before the unlock() call below:\r\n```cpp\r\nif (should_lock) {\r\n    m_mutex.lock();\r\n}\r\n\r\nauto unlock = gsl::finally([&]() { if (should_lock) m_mutex.unlock(); });\r\n```\r\n\r\nNow when unlock goes out of scope, either through normal return or via exception, the mutex is unlocked. With this you can remove the unlock() call below', 'comment_created': datetime.datetime(2020, 8, 31, 16, 21, 12, tzinfo=datetime.timezone.utc), 'commenter': 'cjams', 'type': 'User'}, {'comment_id': 486634619, 'comment_body': 'Thank you for the feedback. I resolved this issue in https://github.com/Bareflank/hypervisor/pull/922/commits/37f0095d263f6cd950223f34f0b46ee55208682d', 'comment_created': datetime.datetime(2020, 9, 10, 21, 8, 35, tzinfo=datetime.timezone.utc), 'commenter': 'chp-io', 'type': 'User'}]","[{'commit_sha': '15542b2df180a572f98ae306fb7af28b2c6d21e9', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9358b546244a71512d92e7983638048733f8abbb', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a105ac5e714cbd7b296cdda3d128f89319c98202', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5051339929ad5de3a44aec64766163b561e63063', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5bb0498fd7e120a9febbe9e8ae1b9f67086c9487', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '65f104a3be0e64591c66e2d1242b3f5886ffb13a', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c39a898bf7e7239c12a7e1e1f6dae2798a421bcf', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '37f0095d263f6cd950223f34f0b46ee55208682d', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}]",Christopher Pelloux,2874925,,User,,41,,80,21
+434960909,Fix dependency issues,"Should fix #526
+
+Only tested with `rekal.py convert_profile` to generated a linux profile for libvmi.",True,533,https://api.github.com/repos/google/rekall/pulls/533,https://github.com/google/rekall/pull/533,closed,2,2,2,1,3,0,0,0,[],2020-06-16 04:09:22+00:00,2020-06-16 04:18:29+00:00,547.0,0:09:07,[],"[{'commit_sha': '56dd5138bb04b3814ee3a61c235925faee1e90aa', 'committer_username': 'chp-io', 'committer_name': 'Christopher Pelloux', 'committer_email': None, 'commit_date': datetime.datetime(2012, 11, 24, 0, 23, 14, tzinfo=datetime.timezone.utc)}]",Christopher Pelloux,2874925,,User,,41,,80,21
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+162897475,boxy,Bareflank/boxy,C++,20,59,18,6,78,2,2,1,"[{'id': 483957143, 'number': 58, 'closed': None, 'created': datetime.datetime(2020, 9, 10, 14, 51, 34, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 1866, 'deletions': 73, 'state': 'open'}, {'id': 438088933, 'number': 55, 'closed': datetime.datetime(2020, 8, 4, 13, 42, 54, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 22, 17, 43, 26, tzinfo=datetime.timezone.utc), 'time_taken': 3700768.0, 'time_delta': '42 days, 19:59:28', 'additions': 577, 'deletions': 1, 'state': 'closed'}, {'id': 402989074, 'number': 52, 'closed': datetime.datetime(2020, 5, 13, 13, 58, 17, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 4, 14, 6, 12, 55, tzinfo=datetime.timezone.utc), 'time_taken': 2533522.0, 'time_delta': '29 days, 7:45:22', 'additions': 1, 'deletions': 1, 'state': 'closed'}, {'id': 393954189, 'number': 50, 'closed': datetime.datetime(2020, 3, 26, 13, 23, 48, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 26, 4, 47, tzinfo=datetime.timezone.utc), 'time_taken': 31008.0, 'time_delta': '8:36:48', 'additions': 119, 'deletions': 67, 'state': 'closed'}, {'id': 391693078, 'number': 49, 'closed': datetime.datetime(2020, 3, 25, 10, 56, 18, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 20, 18, 57, 18, tzinfo=datetime.timezone.utc), 'time_taken': 403140.0, 'time_delta': '4 days, 15:59:00', 'additions': 2953, 'deletions': 2631, 'state': 'closed'}]"
+7414172,libvmi,libvmi/libvmi,C,244,664,68,91,1576,89,2,6,"[{'id': 434958332, 'number': 909, 'closed': datetime.datetime(2022, 9, 20, 1, 9, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 16, 3, 58, 47, tzinfo=datetime.timezone.utc), 'time_taken': 71356226.0, 'time_delta': '825 days, 21:10:26', 'additions': 2405, 'deletions': 275, 'state': 'closed'}]"
+43819033,hypervisor,Bareflank/hypervisor,C++,203,1337,68,40,1434,4,5,1,"[{'id': 760486157, 'number': 975, 'closed': datetime.datetime(2021, 10, 18, 15, 3, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 18, 13, 47, 45, tzinfo=datetime.timezone.utc), 'time_taken': 4555.0, 'time_delta': '1:15:55', 'additions': 23, 'deletions': 10, 'state': 'closed'}, {'id': 749201838, 'number': 971, 'closed': datetime.datetime(2021, 10, 4, 19, 3, 58, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 4, 18, 35, 39, tzinfo=datetime.timezone.utc), 'time_taken': 1699.0, 'time_delta': '0:28:19', 'additions': 4, 'deletions': 4, 'state': 'closed'}, {'id': 475710739, 'number': 922, 'closed': datetime.datetime(2021, 1, 29, 16, 15, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 29, 3, 7, 5, tzinfo=datetime.timezone.utc), 'time_taken': 13266496.0, 'time_delta': '153 days, 13:08:16', 'additions': 535, 'deletions': 38, 'state': 'closed'}, {'id': 435590362, 'number': 920, 'closed': datetime.datetime(2020, 6, 22, 15, 24, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 17, 4, 9, 44, tzinfo=datetime.timezone.utc), 'time_taken': 472500.0, 'time_delta': '5 days, 11:15:00', 'additions': 6, 'deletions': 1, 'state': 'closed'}, {'id': 391699128, 'number': 890, 'closed': datetime.datetime(2020, 3, 25, 19, 33, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 3, 20, 19, 12, 34, tzinfo=datetime.timezone.utc), 'time_taken': 433231.0, 'time_delta': '5 days, 0:20:31', 'additions': 99, 'deletions': 4, 'state': 'closed'}]"
+19864741,rekall,google/rekall,Python,399,1913,170,49,1409,1,4,1,"[{'id': 489828259, 'number': 548, 'closed': datetime.datetime(2020, 9, 21, 7, 52, 31, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 19, 22, 7, 12, tzinfo=datetime.timezone.utc), 'time_taken': 121519.0, 'time_delta': '1 day, 9:45:19', 'additions': 3, 'deletions': 2, 'state': 'closed'}, {'id': 434960909, 'number': 533, 'closed': datetime.datetime(2020, 6, 16, 4, 18, 29, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 16, 4, 9, 22, tzinfo=datetime.timezone.utc), 'time_taken': 547.0, 'time_delta': '0:09:07', 'additions': 2, 'deletions': 2, 'state': 'closed'}]"

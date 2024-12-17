@@ -1,0 +1,116 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+475778988,GSoC 2020: Webassembly backend for the Ergo compiler,"# GSoC 2020: Webassembly Backend for the Ergo compiler
+
+I worked on translating Ergo smart contracts to Webassembly as part of [Google Summer of Code (GSoC)][gsoc] 2020. This PR documents
+
+- the goals of the project,
+- technical aspects of the implementation,
+- the achievements made, and
+- future work.
+
+I will submit a link to this PR for final evaluation of my GSoC project. We probably want to freeze this PR on Monday 8/31/2020 and keep it around for future reference. Future additions should go to Jerome's [PR #773][workingpr].
+
+[gsoc]: https://summerofcode.withgoogle.com/
+[workingpr]: https://github.com/accordproject/ergo/pull/773
+
+## Goals
+
+[Webassembly (Wasm)][wasm] is a novel binary instruction format designed as portable compilation target for higher programming languages. It was primarily designed for efficient, fast, and safe execution on the web stack. Unlike previous attempts for bringing portable executables to the web (Flash, Java Applets, ActiveX), Wasm succeeded in being adopted in all major browsers. Additionally, Wasm is increasingly used outside the browser, e.g.:
+
+- Cloud providers investigate how Wasm could enable safe execution of functions on Edge hardware (e.g. [Cloudflare][cloudflare], [Fastly][fastly]).
+- Various blockchains adopt Wasm as executable format for their distributes state machines (e.g. [Ethereum][ewasm], [EOS][eoswasm], [Substrate][substratewasm]).
+- Various projects work on interoperability between different language platforms based on Wasm (e.g. [Bytecode Alliance][bca], [Wasmer][wasmer]).
+
+Wasm as a compilation target is interesting for the Accord project because it provides safe execution and access to wider range of platforms (relative to the currently used Javascript backend). I provide a more detailed argument in [this Tech-WG call recording][techwg1].
+
+[wasm]: https://webassembly.org/
+[fastly]: https://www.fastly.com/blog/edge-programming-rust-web-assembly
+[cloudflare]: https://blog.cloudflare.com/webassembly-on-cloudflare-workers/
+[eoswasm]: https://github.com/EOSIO/eos-vm
+[ewasm]: https://github.com/ewasm/design
+[substratewasm]: https://substrate.dev/docs/en/knowledgebase/smart-contracts/overview
+[wasmer]: https://wasmer.io/
+[bca]: https://bytecodealliance.org/
+[techwg1]: https://vimeo.com/438697657#t=36m11s
+
+The goal of this GSoC project was to investigate how Ergo smart contracts can be translated to and executed as Wasm. A complete compiler backend and execution engine seemed unrealistic from the beginning. We thus settled on working towards a proof-of-concept implementation that can compile and run basic Ergo contracts.
+
+## Technical Overview
+
+Ergo is based on the verified query compiler [Q*cert][qcert] which is implemented in Coq. Q\*cert translates from various input query languages such as SQL to Spark, Java, and Javascript. Accord projects adds an additional frontend for their smart contract language Ergo. Naturally, we implement the Wasm backend for Ergo by adding an additional compiler backend in Q\*cert. Consequently, most of my work happened in the Q\*cert repository. I document the technical details [over there][qcertpr].
+
+In a nutshell: Q\*cert translates Ergo to an imperative intermediate representation (Imp) which has only basic control flow constructs, few operators, and operates on JSON-like values. Q\*cert gives strong correctness guarantees about this part of the compilation: evaluation based equality of Ergo input and Imp output is proven in the proof assistant Coq. The translation step between Imp and Javascript is relatively small. This last part of Ergo's existing compilation  not verified and implemented in OCaml.
+
+For the Wasm backend, I start from the same Imp. I translate the Imp control flow to Wasm using OCaml. I directly target the abstract syntax tree (AST) provided with the [Wasm reference implementation][specimpl] (also OCaml). This allows to reuse their serialization of the AST into the Wasm binary and text formats. It also enables testing against the reference Wasm interpreter.
+
+The generated Wasm binaries rely on a Wasm runtime for execution. This runtime supplies a runtime encoding for Imp's JSON-like values and implements Imp's operators. The runtime is implemented in [Assemblyscript][asc]. This setup allows us to reuse existing implementations for memory allocation, garbage collection, strings, arrays and dictionaries. Unfortunately, we also lose control about the exact memory representation of Imp values. In order to supply arguments to and read results from the Wasm contract, I developed a binary encoding of Imp's JSON values. This encoding is heavily inspired by [MessagePack][msgpack] but I omit some features and optimization for easier implementation.
+
+Execution of ergo smart contracts on the new Wasm backend goes as follows.
+
+1. The compiler generates a `logic.wasm` that describes the clauses of as smart contract as Wasm functions.
+2. The engine instantiates and links `logic.wasm` and `runtime.wasm`.
+3. The engine encodes the arguments into the binary encoding and writes them the runtime's linear memory.
+4. The engine calls the function corresponding to the to-be-evaluated contract clause with the address of the binary encoded values as argument.
+5. The Wasm runtime (NodeJS) executes the program given in `logic.wasm` which includes the following steps.
+   - decoding the binary value into a runtime value
+   - calling operators in `runtime.wasm`
+   - encoding the resulting runtime value into the binary format
+   - returning the address of the resulting binary value
+6. The engine reads the binary return value from the runtime's linear memory and translates it into the output format.
+
+I provide execution engines for OCaml and NodeJS. The former is used for testing in the Q\*cert repository. The latter enables debugging with Chrome DevTools. This PR integrates the NodeJS engine with the Ergo command line utility (mostly my supervisor's @jeromesimeon work since he is familiar with the code base).
+
+[qcert]: https://github.com/querycert/qcert
+[qcertpr]: https://github.com/querycert/qcert/pull/147
+[specimpl]: https://github.com/WebAssembly/spec/tree/opam-1.0.1/interpreter
+[asc]: https://www.assemblyscript.org/
+[msgpack]: https://msgpack.org/
+
+## Achievements
+
+We can compile basic Ergo smart contracts to Wasm and execute them using the Ergo command line utility. You can watch a recorded demo in [my final presentation of the project on the TechWG call][techwg2] (21m25s into the video). If you want to try it yourself, you can follow these steps.
+
+```sh
+# setup
+git clone -b wasm git@github.com:accordproject/ergo.git
+cd ergo
+git clone -b wasm https://github.com/querycert/qcert
+cd qcert
+opam install .
+cd ..
+make configure && make all
+cd tests
+# compile to and run on javascript backend
+../packages/ergo-cli/index.js compile --target es6 helloworld/model/model.cto helloworld/logic/logic.ergo
+./packages/ergo-cli/index.js trigger --template helloworld --data helloworld/data.json --request helloworld/request.json --state helloworld/state.json --target es6
+# compile to and run on wasm backend
+../packages/ergo-cli/index.js compile --target wasm helloworld/model/model.cto helloworld/logic/logic.ergo
+./packages/ergo-cli/index.js trigger --template helloworld --data helloworld/data.json --request helloworld/request.json --state helloworld/state.json --target wasm
+```
+
+This also works on non-trivial tests like `volumediscount`, `helloworldenforce`, and `integertest`. However, not all Ergo concepts are supported.
+
+[techwg2]: https://vimeo.com/449443355#t=4m46s
+
+## Future Work
+
+In order to turn this PoC into a usable piece of software, some steps are missing.
+
+**Essentials:**
+- support all Imp operators ([qcert #133](https://github.com/querycert/qcert/issues/133))
+- advanced types (e.g. dates)
+
+**Improvements:**
+- clean up Ergo integration ([#769](https://github.com/accordproject/ergo/issues/769))
+- verify parts of the translation ([qcert #146](https://github.com/querycert/qcert/issues/146))
+
+**Integration:**
+- into the AP platform (i.e. `cicero archive --target wasm`)
+- potentially: Ergo on GraalVM (replacing Java backend?)
+- potentially: Ergo in a database (e.g. [Postgres][pgwasm]) or on a Blockchain (e.g. Ethereum, Substrate)
+- potentially: Wasm FFI (e.g. call Rust from Ergo via Wasm) (#727)
+
+[pgwasm]: https://github.com/wasmerio/postgres-ext-wasm",False,777,https://api.github.com/repos/accordproject/ergo/pulls/777,https://github.com/accordproject/ergo/pull/777,closed,49523,39697,122,30,3,0,0,0,[],2020-08-29 13:44:56+00:00,2021-03-14 05:29:12+00:00,16991056.0,"196 days, 15:44:16",[],"[{'commit_sha': '020fb15b0b04690925740f29f4cc6185cc89e53d', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '867132836801d792bdaaab13771e8eaf164a0910', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6edb6e36298385af204d9b9fffa965c59f0ba52a', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ec3bb0b93ba8010a793e6e0b1b30ff5245369e50', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'abfb13446ed83f41458fb61dff92337e3956ea42', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4d744a8a75917d4c8b990a5cbfc38151610d94ee', 'committer_username': 'pkel', 'committer_name': 'Patrik Keller', 'committer_email': 'git@pkel.dev', 'commit_date': datetime.datetime(2015, 3, 5, 19, 7, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd60966c74012fa4cba59e176f272e7a6ce456d4b', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '69d91a9c2f5c0c8711fd69eb9fd58e09b18e9e55', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7aee5351cf60997465729d091270bdfcb4ebaefe', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '49878e7e16c8dda7022fb9a76e944881d8f8d52f', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '03f61d583b2dd8fefcfd2a376baaa5d0e9014ac0', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'f37ede864da066abf9c5723f18d707cefa876701', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9f2f9c2d22d2efd425025c80f54008fa5a138b43', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7e63b8a3c8bd903559723e592076192ff8a6a3eb', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '68ee55caf292b0e86e3732d30b65f39e1589598a', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '8dfa0cb14dd04fdf5be2c433d76dd0c3ac6fe603', 'committer_username': 'pkel', 'committer_name': 'Patrik Keller', 'committer_email': 'git@pkel.dev', 'commit_date': datetime.datetime(2015, 3, 5, 19, 7, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'd87329ba62b75deef00da15e18bb7b1da1f6b8da', 'committer_username': 'pkel', 'committer_name': 'Patrik Keller', 'committer_email': 'git@pkel.dev', 'commit_date': datetime.datetime(2015, 3, 5, 19, 7, 14, tzinfo=datetime.timezone.utc)}, {'commit_sha': '80a1a4b5094fb6ed6df1a3aefdc411914bd49477', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '41411c61c23df4a5fd58e520e247a0da527c61da', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9226af2750afa19219e16d662b26713a0d3c0355', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4e8ffb1fd05d340dc501b6da1cb740d89be9debe', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'edf30217639f182eb8b35da30639c1c6699a9d9d', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c56bc014f430acac318599ff669ada031490368e', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '7d8c13aa23e50b70d0c9cf03319f256ea2b2d903', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'eda9a86a2ae4ba234bd92b70669252bf7166ab49', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '60abe46a4d4f6661e4458462a16bac60299dd117', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'bd3c019784d3fec243c9a4826807702179d9b576', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee4232453cc8431bd9398583097f0f03e3b30637', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1fd376ec4548deda9970f5fb2c5cf87239738918', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1ee3619cb4c34e1cd33dcd3c5e4001e87f88caba', 'committer_username': 'jeromesimeon', 'committer_name': 'Jerome Simeon', 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 15, 1, 49, 50, tzinfo=datetime.timezone.utc)}]",Patrik Keller,11337857,git@pkel.dev,User,,39,,25,15
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+120471715,ergo,accordproject/ergo,Coq,55,157,18,24,1472,49,11,6,"[{'id': 475778988, 'number': 777, 'closed': datetime.datetime(2021, 3, 14, 5, 29, 12, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 29, 13, 44, 56, tzinfo=datetime.timezone.utc), 'time_taken': 16991056.0, 'time_delta': '196 days, 15:44:16', 'additions': 49523, 'deletions': 39697, 'state': 'closed'}, {'id': 415384707, 'number': 756, 'closed': datetime.datetime(2020, 7, 17, 17, 13, 50, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 5, 8, 19, 7, 42, tzinfo=datetime.timezone.utc), 'time_taken': 6041168.0, 'time_delta': '69 days, 22:06:08', 'additions': 62784, 'deletions': 58566, 'state': 'closed'}]"

@@ -1,0 +1,69 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1476526769,[app]: MediaPipe Interactive Web Demo — Contactless ATM Playground,"### Description
+I'm a Google Summer of Code 2023 participant and as a part of my contribution, I've developed an Interactive Web Demo that demonstrates *touchless interactions* using the MediaPipe Machine Learning Library. The demo showcases the capabilities of the MediaPipe [Hand Landmarker](https://developers.google.com/mediapipe/api/solutions/js/tasks-vision.handlandmarker) task, which accurately detects and tracks [21](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker#models) hand landmarks. These landmarks are utilized in the web app to enable users to perform contactless interactions with the interface using simple gestures.
+
+The source code for the demo includes detailed comments that explain the implementation and rationale behind the design decisions. This documentation is intended to assist other developers in utilizing the MediaPipe library and implementing similar touchless interaction features in their projects.
+
+cc: @jenperson 
+
+🔸 Parent Repo → [@Neilblaze/GSOC-23](https://github.com/Neilblaze/GSOC-23)
+🔸 Live Demo → [**Here**](https://atm-playground.netlify.app)
+
+### Screenshot
+<p align=""center"">
+<img src=""https://user-images.githubusercontent.com/48355572/260842692-34bcee72-228a-4b24-84be-146c4973bd18.gif"" alt=""demo-gif"">
+</p>
+
+
+",True,209,https://api.github.com/repos/google-ai-edge/mediapipe-samples/pulls/209,https://github.com/google-ai-edge/mediapipe-samples/pull/209,closed,18213,0,51,1,0,0,0,0,[],2023-08-15 21:40:46+00:00,2023-08-16 14:50:59+00:00,61813.0,17:10:13,[],"[{'commit_sha': '8bbf4a807b806e56ac070c34a9bdc7570dfd7f43', 'committer_username': 'Neilblaze', 'committer_name': 'Pratyay Banerjee', 'committer_email': 'dev@neilblaze.live', 'commit_date': datetime.datetime(2019, 3, 8, 13, 4, 18, tzinfo=datetime.timezone.utc)}]",Pratyay Banerjee,48355572,dev@neilblaze.live,User,,149,,25,189
+1485294433,[feat]: Adding Offline Support for Interactive Web Demo,"### Description 🤔
+This update aims to provide **100%** *offline support* for the Interactive Web Demo ([ATM Playground](https://github.com/googlesamples/mediapipe/tree/main/tutorials/atm_playground)) that demonstrates touchless interactions using the MediaPipe Machine Learning Library. 
+
+### Advantages 🚀
+If precaching is enabled, the app will work offline after the first load. 🎉
+
+Caching assets with a service worker can speed up repeat visits and provide offline support. [Workbox](https://developer.chrome.com/docs/workbox) makes this easy and is included in [React App](https://create-react-app.dev/) by default. Feel free to explore [this](https://web.dev/precache-with-workbox-react/) guide to know more!
+
+> 📌 For security purposes (especially to avoid cache-poisoning), the support has been limited to active [session](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/sessions/Session#:~:text=Note%20that%20different%20browsers%20might,is%20recorded%20as%20a%20Tab.) only, and cache expiration of 30 days has been set with [_stale-while-revalidate_](https://developer.chrome.com/docs/workbox/caching-strategies-overview/#stale-while-revalidate) strategy for achieving best performance.
+
+Additionally, a few other optimizations include updates to [Kernel](https://github.com/Neilblaze/mediapipe-examples/blob/478d14085b4532c81141d58d3866e03a3df33b9b/tutorials/atm_playground/src/components/Kernel.jsx#L76-L121), minor UI bug fixing & adding LICENSE header to `index.html`.
+
+🔸 Parent Repo → [@Neilblaze/GSOC-23](https://github.com/Neilblaze/GSOC-23)
+🔸 Live Demo → [**Here**](https://atm-playground.netlify.app)
+
+<br/>
+
+cc: @jenperson 
+
+
+### Testing
+To test the changes, open the [**live demo**](https://atm-playground.netlify.app) on your browser. If you're accessing it for the first time, it might take some time to load the model & assets on your local (depending on your internet speed). Once it's loaded, feel free to explore and interact with the demo. Disconnect the internet and then perform a refresh (or press F5); it should still load and work even in offline mode!
+
+
+To extend it further, open [DevTools](https://developer.chrome.com/docs/devtools/network/#:~:text=%23%20Open%20the%20Network%20panel&text=Open%20DevTools%20by%20pressing%20Control,The%20Console%20panel%20opens.&text=You%20might%20prefer%20to%20dock%20DevTools%20to%20the%20bottom%20of%20your%20window.&text=Click%20the%20Network%20tab.) by pressing `Control+Shift+J` or `Command+Option+J` (Mac). The `Console` panel opens. Then click on the `Network` tab, which will open the Network panel. Click on `No Throttling` & uncheck the `Disable Cache` to make sure the cached data is accessible & then perform a normal refresh to make it run while offline. If you want to compare different trials, you can use the profiler to capture the waterfall. The mean result of these trials can be found above. 
+
+> Please note that if you terminate the current browser session, you will need to perform the initial load using an internet connection.
+
+<br/>
+
+- **Performance Boost** → `6.1s` from `16.8s`, i.e. **`275%`** (after 1st load) 📈
+- **Browser** : <img src=""https://user-images.githubusercontent.com/48355572/229278869-fd29ec92-c61e-48a6-bdca-aa6d27ce7900.png"" width=""15px"" height=""15px""> Google Chrome — Version 116.0.5845.97 (Official Build) (64-bit)
+
+
+---
+
+### Checklist
+Please ensure the following items are complete before submitting a pull request:
+
+- [x] My code follows the code style of the project.
+- [x] I have updated the documentation (if applicable).
+
+### Type of Change
+Please check the relevant option below:
+
+- [x] Bug fix (non-breaking change which fixes an issue)
+- [x] Documentation update (non-breaking change which updates documentation)
+- [x] New feature (non-breaking change which adds functionality)",True,215,https://api.github.com/repos/google-ai-edge/mediapipe-samples/pulls/215,https://github.com/google-ai-edge/mediapipe-samples/pull/215,closed,11698,7381,10,3,1,0,0,1,[],2023-08-22 19:15:33+00:00,2023-08-22 21:46:19+00:00,9046.0,2:30:46,[],"[{'commit_sha': '28a5d14049742aad5a28285ae553a527a3442e58', 'committer_username': 'Neilblaze', 'committer_name': 'Pratyay Banerjee', 'committer_email': 'dev@neilblaze.live', 'commit_date': datetime.datetime(2019, 3, 8, 13, 4, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b6172acd6455bcb356137f2703387c1a619dda27', 'committer_username': 'Neilblaze', 'committer_name': 'Pratyay Banerjee', 'committer_email': 'dev@neilblaze.live', 'commit_date': datetime.datetime(2019, 3, 8, 13, 4, 18, tzinfo=datetime.timezone.utc)}, {'commit_sha': '478d14085b4532c81141d58d3866e03a3df33b9b', 'committer_username': 'Neilblaze', 'committer_name': 'Pratyay Banerjee', 'committer_email': 'dev@neilblaze.live', 'commit_date': datetime.datetime(2019, 3, 8, 13, 4, 18, tzinfo=datetime.timezone.utc)}]",Pratyay Banerjee,48355572,dev@neilblaze.live,User,,149,,25,189
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+555519447,mediapipe-samples,google-ai-edge/mediapipe-samples,Jupyter Notebook,370,1448,23,40,679,85,97,3,"[{'id': 1485294433, 'number': 215, 'closed': datetime.datetime(2023, 8, 22, 21, 46, 19, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 22, 19, 15, 33, tzinfo=datetime.timezone.utc), 'time_taken': 9046.0, 'time_delta': '2:30:46', 'additions': 11698, 'deletions': 7381, 'state': 'closed'}, {'id': 1476526769, 'number': 209, 'closed': datetime.datetime(2023, 8, 16, 14, 50, 59, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 8, 15, 21, 40, 46, tzinfo=datetime.timezone.utc), 'time_taken': 61813.0, 'time_delta': '17:10:13', 'additions': 18213, 'deletions': 0, 'state': 'closed'}, {'id': 1316382106, 'number': 97, 'closed': datetime.datetime(2023, 4, 17, 15, 48, 57, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 4, 17, 10, 45, 4, tzinfo=datetime.timezone.utc), 'time_taken': 18233.0, 'time_delta': '5:03:53', 'additions': 63, 'deletions': 2, 'state': 'closed'}]"

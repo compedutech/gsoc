@@ -1,0 +1,192 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1048655158,Added round corner property for rect() in WebGL mode,"<!--
+  Thank you for contributing! Please use this pull request (PR) template.
+
+
+ In the description field of this PR, include ""resolves #XXXX"" tagging the issue you are fixing. If this PR addresses the issue but doesn't completely resolve it (ie the issue should remain open after your PR is merged), write ""addresses #XXXX"".-->
+Addresses #5001
+
+ Changes:
+
+Finally decided to follow what processing does to round the corner of rect(). Still, here we use the retained-mode for drawing a rectangle if the user does not provide args for rounding the rectangle and use Immediate mode to round the rectangle corner if the user provides args for rounding corners.
+As mentioned by @aferriss [comment](https://github.com/processing/p5.js/issues/5001#issuecomment-1019020743) also, using vertex and quadraticVertex() to draw rounded corners has a few issues like:
+- Larger strokeWeight shows some artifacts.
+<img width=""479"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/188867789-d5439065-9a3d-4f43-9b5d-69e39c01620a.png"">
+
+
+-  texturing doesn't work while using vertex and quadraticVertex().
+
+That's why followed retained-mode until any user deliberately wanted to use the rounded rectangle behavior.
+
+
+Screenshots of the change:
+<!-- If applicable, add screenshots depicting the changes. -->
+Code:
+```
+function setup() {
+ // Create the canvas
+ createCanvas(720, 400, WEBGL);
+ background(200);
+ 
+ // Set colors
+ fill(204, 101, 192, 127);
+ stroke(127, 63, 120);
+ 
+ // A rectangle
+ rect(-100, -100, 200, 80, 40, 1, 5, 1);
+}
+
+```
+
+Before:
+<img width=""472"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/188867361-1271855e-8311-4b4c-ac73-299e992a3d96.png"">
+
+After:
+<img width=""468"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/188867489-7736fc4b-cb38-46d0-b310-090d18679356.png"">
+
+
+#### PR Checklist
+<!--
+  To check any option, replace the ""[ ]"" with a ""[x]"". Be sure to check out how it looks in the Preview tab! Feel free to remove any portion of the template that is not relevant for your issue.
+-->
+
+- [x] `npm run lint` passes
+- [x] [Inline documentation] is included / updated
+
+[Inline documentation]: https://github.com/processing/p5.js/blob/main/contributor_docs/inline_documentation.md
+[Unit tests]: https://github.com/processing/p5.js/tree/main/contributor_docs#unit-tests
+",True,5789,https://api.github.com/repos/processing/p5.js/pulls/5789,https://github.com/processing/p5.js/pull/5789,closed,113,43,1,1,8,0,0,0,[],2022-09-07 11:45:33+00:00,2022-09-09 23:25:13+00:00,214780.0,"2 days, 11:39:40",[],"[{'commit_sha': '979353a293c1766c7c591a7d78b81ead05c5073f', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}]",Shubham Kumar,47415702,,User,,55,,19,11
+1041156755,Feature Implemeted -- Multiple Material support for geometry,"<!--
+  Thank you for contributing! Please use this pull request (PR) template.
+
+
+ In the description field of this PR, include ""resolves #XXXX"" tagging the issue you are fixing. If this PR addresses the issue but doesn't completely resolve it (ie the issue should remain open after your PR is merged), write ""addresses #XXXX"".-->
+Resolves #3806 #5308
+
+ Changes:
+<!-- Add here what changes were made in this pull request and if possible provide links showcasing the changes. -->
+Implemented a few new uniforms (uSpecularMatColor, uAmbientMatColor, uEmissiveMatColor) which store the RGB colors for different materials and fill the geometry with different color properties and thus contributing separately to the lighting of the surface.
+
+So finally, we have decided to move away from the current overwriting of fill colors to the geometry, towards the approach that Processing uses where the material has different color properties (ambient, emissive, specular) that all contribute separately to the lighting of the surface.
+
+ Screenshots of the change:
+<!-- If applicable, add screenshots depicting the changes. -->
+Before:
+![image](https://user-images.githubusercontent.com/47415702/187476176-7b4799e5-dcaa-4e0d-a176-36195755c360.png)
+
+[Code](https://editor.p5js.org/ShenpaiSharma/sketches/Rg-58jQmM)
+
+After:
+<img width=""595"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/187476501-080d46d0-6712-486f-83fb-4abc109333dc.png"">
+
+[Code](https://editor.p5js.org/cfoss/sketches/xTZuZViai)
+
+
+#### PR Checklist
+<!--
+  To check any option, replace the ""[ ]"" with a ""[x]"". Be sure to check out how it looks in the Preview tab! Feel free to remove any portion of the template that is not relevant for your issue.
+-->
+
+- [x] `npm run lint` passes
+- [x] [Inline documentation] is included / updated
+
+[Inline documentation]: https://github.com/processing/p5.js/blob/main/contributor_docs/inline_documentation.md
+[Unit tests]: https://github.com/processing/p5.js/tree/main/contributor_docs#unit-tests
+",True,5774,https://api.github.com/repos/processing/p5.js/pulls/5774,https://github.com/processing/p5.js/pull/5774,closed,26,20,4,7,13,0,0,0,[],2022-08-30 15:36:15+00:00,2022-09-18 21:14:01+00:00,1661866.0,"19 days, 5:37:46",[],"[{'commit_sha': '680113fb76ffed9db98b4f4c06e30fb3656a4591', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab615d4c5d76d75c1fd3dccbbe72d319105c770d', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '406e00a20faf846e7ffdd66baf5e82ddf3e85d21', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '667cf5ea593b7e30d77c2d2d9c6c309361d6bbd3', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e1147d8c079a4e2763d3ab77d51b1222e6c4c28', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1baa59735983e705b0b8ba0237e9fd70cda0abb', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c95d5d83cc84463d1b0283b21e04ad3d9e1cea0f', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}]",Shubham Kumar,47415702,,User,,55,,19,11
+1048655158,Added round corner property for rect() in WebGL mode,"<!--
+  Thank you for contributing! Please use this pull request (PR) template.
+
+
+ In the description field of this PR, include ""resolves #XXXX"" tagging the issue you are fixing. If this PR addresses the issue but doesn't completely resolve it (ie the issue should remain open after your PR is merged), write ""addresses #XXXX"".-->
+Addresses #5001
+
+ Changes:
+
+Finally decided to follow what processing does to round the corner of rect(). Still, here we use the retained-mode for drawing a rectangle if the user does not provide args for rounding the rectangle and use Immediate mode to round the rectangle corner if the user provides args for rounding corners.
+As mentioned by @aferriss [comment](https://github.com/processing/p5.js/issues/5001#issuecomment-1019020743) also, using vertex and quadraticVertex() to draw rounded corners has a few issues like:
+- Larger strokeWeight shows some artifacts.
+<img width=""479"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/188867789-d5439065-9a3d-4f43-9b5d-69e39c01620a.png"">
+
+
+-  texturing doesn't work while using vertex and quadraticVertex().
+
+That's why followed retained-mode until any user deliberately wanted to use the rounded rectangle behavior.
+
+
+Screenshots of the change:
+<!-- If applicable, add screenshots depicting the changes. -->
+Code:
+```
+function setup() {
+ // Create the canvas
+ createCanvas(720, 400, WEBGL);
+ background(200);
+ 
+ // Set colors
+ fill(204, 101, 192, 127);
+ stroke(127, 63, 120);
+ 
+ // A rectangle
+ rect(-100, -100, 200, 80, 40, 1, 5, 1);
+}
+
+```
+
+Before:
+<img width=""472"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/188867361-1271855e-8311-4b4c-ac73-299e992a3d96.png"">
+
+After:
+<img width=""468"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/188867489-7736fc4b-cb38-46d0-b310-090d18679356.png"">
+
+
+#### PR Checklist
+<!--
+  To check any option, replace the ""[ ]"" with a ""[x]"". Be sure to check out how it looks in the Preview tab! Feel free to remove any portion of the template that is not relevant for your issue.
+-->
+
+- [x] `npm run lint` passes
+- [x] [Inline documentation] is included / updated
+
+[Inline documentation]: https://github.com/processing/p5.js/blob/main/contributor_docs/inline_documentation.md
+[Unit tests]: https://github.com/processing/p5.js/tree/main/contributor_docs#unit-tests
+",True,5789,https://api.github.com/repos/processing/p5.js/pulls/5789,https://github.com/processing/p5.js/pull/5789,closed,113,43,1,1,8,0,0,0,[],2022-09-07 11:45:33+00:00,2022-09-09 23:25:13+00:00,214780.0,"2 days, 11:39:40",[],"[{'commit_sha': '979353a293c1766c7c591a7d78b81ead05c5073f', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}]",Shubham Kumar,47415702,,User,,55,,19,11
+1041156755,Feature Implemeted -- Multiple Material support for geometry,"<!--
+  Thank you for contributing! Please use this pull request (PR) template.
+
+
+ In the description field of this PR, include ""resolves #XXXX"" tagging the issue you are fixing. If this PR addresses the issue but doesn't completely resolve it (ie the issue should remain open after your PR is merged), write ""addresses #XXXX"".-->
+Resolves #3806 #5308
+
+ Changes:
+<!-- Add here what changes were made in this pull request and if possible provide links showcasing the changes. -->
+Implemented a few new uniforms (uSpecularMatColor, uAmbientMatColor, uEmissiveMatColor) which store the RGB colors for different materials and fill the geometry with different color properties and thus contributing separately to the lighting of the surface.
+
+So finally, we have decided to move away from the current overwriting of fill colors to the geometry, towards the approach that Processing uses where the material has different color properties (ambient, emissive, specular) that all contribute separately to the lighting of the surface.
+
+ Screenshots of the change:
+<!-- If applicable, add screenshots depicting the changes. -->
+Before:
+![image](https://user-images.githubusercontent.com/47415702/187476176-7b4799e5-dcaa-4e0d-a176-36195755c360.png)
+
+[Code](https://editor.p5js.org/ShenpaiSharma/sketches/Rg-58jQmM)
+
+After:
+<img width=""595"" alt=""image"" src=""https://user-images.githubusercontent.com/47415702/187476501-080d46d0-6712-486f-83fb-4abc109333dc.png"">
+
+[Code](https://editor.p5js.org/cfoss/sketches/xTZuZViai)
+
+
+#### PR Checklist
+<!--
+  To check any option, replace the ""[ ]"" with a ""[x]"". Be sure to check out how it looks in the Preview tab! Feel free to remove any portion of the template that is not relevant for your issue.
+-->
+
+- [x] `npm run lint` passes
+- [x] [Inline documentation] is included / updated
+
+[Inline documentation]: https://github.com/processing/p5.js/blob/main/contributor_docs/inline_documentation.md
+[Unit tests]: https://github.com/processing/p5.js/tree/main/contributor_docs#unit-tests
+",True,5774,https://api.github.com/repos/processing/p5.js/pulls/5774,https://github.com/processing/p5.js/pull/5774,closed,26,20,4,7,13,0,0,0,[],2022-08-30 15:36:15+00:00,2022-09-18 21:14:01+00:00,1661866.0,"19 days, 5:37:46",[],"[{'commit_sha': '680113fb76ffed9db98b4f4c06e30fb3656a4591', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ab615d4c5d76d75c1fd3dccbbe72d319105c770d', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '406e00a20faf846e7ffdd66baf5e82ddf3e85d21', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '667cf5ea593b7e30d77c2d2d9c6c309361d6bbd3', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': '2e1147d8c079a4e2763d3ab77d51b1222e6c4c28', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'b1baa59735983e705b0b8ba0237e9fd70cda0abb', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'c95d5d83cc84463d1b0283b21e04ad3d9e1cea0f', 'committer_username': 'ShenpaiSharma', 'committer_name': 'Shubham Kumar', 'committer_email': None, 'commit_date': datetime.datetime(2019, 2, 7, 9, 57, 4, tzinfo=datetime.timezone.utc)}]",Shubham Kumar,47415702,,User,,55,,19,11
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+8424040,p5.js,processing/p5.js,JavaScript,3255,21314,498,753,13058,313,7,40,"[{'id': 1054787961, 'number': 5800, 'closed': datetime.datetime(2022, 9, 13, 21, 50, 42, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 13, 14, 28, 11, tzinfo=datetime.timezone.utc), 'time_taken': 26551.0, 'time_delta': '7:22:31', 'additions': 115, 'deletions': 0, 'state': 'closed'}, {'id': 1048655158, 'number': 5789, 'closed': datetime.datetime(2022, 9, 9, 23, 25, 13, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 9, 7, 11, 45, 33, tzinfo=datetime.timezone.utc), 'time_taken': 214780.0, 'time_delta': '2 days, 11:39:40', 'additions': 113, 'deletions': 43, 'state': 'closed'}, {'id': 1041156755, 'number': 5774, 'closed': datetime.datetime(2022, 9, 18, 21, 14, 1, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2022, 8, 30, 15, 36, 15, tzinfo=datetime.timezone.utc), 'time_taken': 1661866.0, 'time_delta': '19 days, 5:37:46', 'additions': 26, 'deletions': 20, 'state': 'closed'}, {'id': 602291963, 'number': 5134, 'closed': datetime.datetime(2021, 3, 29, 2, 46, 38, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 3, 28, 19, 3, 4, tzinfo=datetime.timezone.utc), 'time_taken': 27814.0, 'time_delta': '7:43:34', 'additions': 34, 'deletions': 8, 'state': 'closed'}, {'id': 580918533, 'number': 5060, 'closed': datetime.datetime(2021, 3, 28, 13, 18, 40, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 26, 14, 56, 1, tzinfo=datetime.timezone.utc), 'time_taken': 2586159.0, 'time_delta': '29 days, 22:22:39', 'additions': 19, 'deletions': 3, 'state': 'closed'}, {'id': 565365122, 'number': 5025, 'closed': datetime.datetime(2021, 2, 2, 15, 27, 10, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 2, 1, 17, 44, 28, tzinfo=datetime.timezone.utc), 'time_taken': 78162.0, 'time_delta': '21:42:42', 'additions': 6, 'deletions': 1, 'state': 'closed'}]"

@@ -1,0 +1,2633 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+661860768,simpleFigure builder [GSoC 2021],"Introducing new constructor to handle figures. This is in the context of pandoc's issue [#3177](https://github.com/jgm/pandoc/issues/3177). Use of these on `Readers` and `Writers` was submitted with the [pandoc pull request](https://github.com/jgm/pandoc/pull/7364).
+
+# The `SimpleFigure` construction
+
+To address some of the issues with the previous handling of figures, we introduced, along with some helper functions, the `SimpleFigure` [pattern synonym](https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/pattern_synonyms.html)
+
+```haskell
+-- | Constructor for a figure with a single image.
+--
+-- It can be used to construct a figure:
+--
+-- >>> SimpleFigure nullAttr [] (T.pack """", T.pack ""title"")
+-- Para [Image ("""",[],[]) [] ("""",""fig:title"")]
+--
+--
+-- It can be used to pattern match:
+--
+-- >>> let img = Para [Image undefined undefined (undefined, T.pack ""title"")]
+-- >>> case img of { SimpleFigure _ _ _ -> True; _ -> False }
+-- False
+-- >>> let fig = Para [Image undefined undefined (undefined, T.pack ""fig:title"")]
+-- >>> case fig of { SimpleFigure _ _ tit -> snd tit; _ -> T.pack """" }
+-- ""title""
+pattern SimpleFigure :: Attr -> [Inline] -> Target -> Block
+pattern SimpleFigure attributes figureCaption tgt <-
+    Para [Image attributes figureCaption
+        (isFigureTarget -> Just tgt)]  where
+  SimpleFigure attributes figureCaption tgt =
+    Para [Image attributes figureCaption (second (""fig:"" <>) tgt)]
+```
+
+This is very much like adding a new constructor to the `Block` type but with some differences.
+
+Some benefits of this approach are:
+
+* It is backward compatible with the previous construction.
+* It formalizes, without enforcing, the roles for the construction's elements.
+* It makes it easier to find where are figures handled in the code for both `Readers` and `Writers`.
+
+  Here is an example diff from the RST `Reader` in the [pandoc pull request](https://github.com/jgm/pandoc/pull/7364):
+
+  ```diff
+  - return $ B.para (B.imageWith (imgAttr ""figclass"") src ""fig:""
+  -             caption) <> legend
+  + return $ B.simpleFigureWith
+  +     (imgAttr ""figclass"") caption src """" <> legend
+  ```
+
+Of course, there are also some limitations:
+
+* It doesn't *enforce* the construction on new code, as an *actual constructor* would do. For example, code with non-exhaustive patterns matches won't rise a warning if `SimpleFigure` is not handled.
+
+* It lacks an explicit `alt-text` field. This can be included using attributes, but I would have liked to give it more importance.
+
+
+
+I believe this is a modest improvement of the previous code. It provides an explicit representation for figures. It could go a little further with an explicit constructor; but keeping the behavior backward compatible prevents breaking some workflows down the line, for example someone using a `lua-filter`.
+
+# The `Figure` constructor
+
+The `SimpleFigure` constructor only addressed one type of figures, the ones with only one image in them. To address the general case of the concept of a document within a document detailed in the section on figures, we introduced the following `Block` constructor:
+
+```haskell
+data Block =
+	-- ...
+	-- | Figure, with attributes, caption and caption position, width
+	-- (optional), and content (list of blocks)
+	| Figure Attr Caption [Block]
+	-- ...
+```
+
+This includes other helper functions and tests and is part of the [pandoc-types pull request](https://github.com/jgm/pandoc/pull/7364). It's based on the previous work by [@despresc](https://github.com/jgm/pandoc-types/pull/83). Modifications include: the removal of the `CaptionPos` argument that can be specified as an attribute; and the code involving tables.
+
+Tests for this constructor are also included with the pull request.
+
+This constructor allows pandoc to capture the semantics of figures from different formats into its internal representation. It also helps when writing output in formats that support figures.
+
+
+",False,90,https://api.github.com/repos/jgm/pandoc-types/pulls/90,https://github.com/jgm/pandoc-types/pull/90,closed,104,15,5,8,7,3,0,0,[],2021-06-04 15:23:30+00:00,2021-09-15 21:46:44+00:00,8922194.0,"103 days, 6:23:14","[{'comment_id': 646488786, 'comment_body': 'Redundant braces around `(p_figureRepresentation)`.', 'comment_created': datetime.datetime(2021, 6, 7, 11, 7, 23, tzinfo=datetime.timezone.utc), 'commenter': 'tarleb', 'type': 'User'}, {'comment_id': 652811092, 'comment_body': 'Nice! We should also check that title has a `fig:` prefix, which we can do with this view pattern:\r\n``` haskell\r\nImage attr figureCaption (src, (T.stripPrefix ""fig:"" -> Just title))\r\n```', 'comment_created': datetime.datetime(2021, 6, 16, 15, 36, 39, tzinfo=datetime.timezone.utc), 'commenter': 'tarleb', 'type': 'User'}, {'comment_id': 652813029, 'comment_body': 'Probably good to use the [Haddock examples syntax](https://haskell-haddock.readthedocs.io/en/latest/markup.html#examples) for this.', 'comment_created': datetime.datetime(2021, 6, 16, 15, 38, 56, tzinfo=datetime.timezone.utc), 'commenter': 'tarleb', 'type': 'User'}]","[{'commit_sha': '04cb48907557c987c0324df5baef75a615900bbb', 'committer_username': 'despresc', 'committer_name': 'Christian Despres', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 1, 2, 26, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '757cca3765fe59c45e810f9c36eb1c394df3d35e', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be85d6fe51d356b77d222a7b274381f845aa3c71', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3272d6d73d501ea491c70628b23513971f684f9', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '74874de3264dee960e33697f365608d5229b5123', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '52db8bf9c60cba08964755aeb1529bbc09ef3ae0', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4cbccdfa0c7667909cccfce2259b6dae4573239e', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b32019746d1692c593c080f9a8ee45c7d25ecba', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+665895942,Use the new 'simpleFigure' builder function in the readers.,"## Reading input with figures
+
+Reading figures is now supported for two formats natively and one format through a Lua filter. This functionality has to be enabled with a new [pandoc extension](https://pandoc.org/MANUAL.html#extensions): `native_figures`.
+
+```
+#### Extension: `native_figures` ####
+
+Use pandoc's native `Figure` element for content inside `<figure>` tags, in the case of HTML, or `figure` environments, in case of LaTeX. This, in turn, allows some writers to produce more accurate representations of figures. It also allows the use of the `Figure` element in filters, for custom figure output.
+
+This extension can be enabled/disabled for the following formats:
+
+input formats
+: `latex` `html`
+```
+
+The choice of an extension was made to introduce the new behavior with minimal disruption of the old one.
+
+### Reading HTML 5 figures
+
+This version of pandoc can now read figures from HTML into its internal representation:
+
+**Now**
+```
+$ pandoc -f html+native_figures -t native
+<figure class=""important"">
+  <img src=""../media/rId25.jpg"" />
+  <ul> <li> ITEM </li> </ul>
+  <figcaption> CAP2 </figcaption>
+</figure>
+^D
+[Figure ("""",[""important""],[]) (Caption Nothing [Plain [Str ""CAP2""]])\
+	[ Plain [Image ("""",[],[]) [] (""../media/rId25.jpg"","""")]
+	, BulletList [[Plain [Str ""ITEM""]]]]]
+```
+
+The difference with the old handling is that, now, elements inside a figure are not limited to only one image:
+
+**Before**
+```
+$ pandoc-before -f html -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP2""] (""../media/rId25.jpg"",""fig:"")]]
+```
+
+Notice the missing `ITEM`. Handling of attributes and classes has also become more granular and accurate. Notice the missing `important` class above.
+
+### Reading LaTeX figures
+
+It can also read LaTeX figures:
+
+**Now**
+```
+pandoc -f latex+native_figures -t native
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.2}
+    \end{subfigure}
+    \caption{CAP1}
+    \label{fig:inner1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics{test/media/rId25.jpg}
+    \caption{CAP2}
+    \label{fig:inner2}
+  \end{subfigure}
+  \caption{CAP}
+  \label{fig:outer}
+\end{figure}
+^D
+[Figure (""fig:outer"",[],[]) (Caption Nothing [Plain [Str ""CAP""]]) 
+	[ Figure (""fig:inner1"",[],[]) (Caption Nothing [Plain [Str ""CAP1""]])
+		[ Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.1""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]
+		, Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.2""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+	, Figure (""fig:inner2"",[],[]) (Caption Nothing [Plain [Str ""CAP2""]])
+		[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]]
+```
+
+It respects the figure and sub figure hierarchies, labels and captions accurately.
+
+**Before**
+
+```
+pandoc -f latex -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP1.1""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image ("""",[],[]) [Str ""CAP1.2""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image (""fig:inner2"",[],[]) [Str ""CAP2""] (""test/media/rId25.jpg"",""fig:"")]]
+```
+
+Figures with sub-figures where flattened into a list of figures using the construction mentioned in the original figure handling section. Some captions and labels are lost.
+
+### Markdown figures
+
+Handling of markdown figures was implemented through a Lua filter. We opted for this approach because there is yet no agreed-upon syntax for figures in markdown (for example commonmark). Pandoc has its own markdown flavor but we have also opted to propose our syntax by implementing it as a filter. The code of the filter has been submitted in the [lua-filters pull request](https://github.com/pandoc/lua-filters/pull/187).
+
+I've written two filters that represent two possible markdown syntax extensions to represent figures. Both use pandoc's markdown `div` sytax with special classes.
+
+#### The explcit caption syntax
+
+```markdown
+::: { .figure }
+
+content.
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+In this syntax a figure is a pandoc div with a `figure` class and the caption,
+if present, is a div with a `caption` class.
+
+Here is an example that converts this to HTML
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-explicit.lua
+...
+```
+
+```html
+<figure>
+<p>content.</p>
+<figcaption><p>caption</p></figcaption>
+</figure>
+```
+
+#### The implicit caption syntax
+
+```markdown
+::: { .figure }
+figure content
+
+figure caption.
+:::
+```
+
+This, more concise, syntax uses the last paragraph inside the div as the caption for the figure.
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-implicit.lua
+...
+```
+
+```html
+<figure>
+<p>figure content</p>
+<figcaption><p>figure caption.</p></figcaption>
+</figure>
+```
+
+## Generating output with figures.
+
+Once figures can be described in pandoc's internal representation, it is the `Writers` that translate them into various output formats. Not all output formats can represent figures, and for those that can, we have decided to focus on the ones that would make the least intrusive modifications first.
+
+Next, I'll briefly enumerate the output resulting from the `Figure` constructor in various formats.
+
+### HTML
+
+
+```
+% pandoc -f native -t html5
+[Figure (""fig-id"",[],[]) (Caption Nothing [Plain [Str ""caption""]]) [Para [Str ""content""]]]
+
+^D
+```
+```html
+<figure id=""fig-id"">
+<p>content</p>
+<figcaption>caption</figcaption>
+</figure>
+```
+
+Figures are represented as `<figure>` tags.
+
+### Org mode format
+
+```
+% pandoc -f native -t org
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+^D
+```
+```org
+<<fig-id>>
+content
+```
+
+Emac's org mode adds an anchor to the content of the figure.
+
+### Textile
+
+```
+% pandoc -f native -t textile
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Image ("""",[],[]) [] (""foo.png"", """")]]]
+^D
+```
+```html
+<figure id=""fig-id"">
+
+!foo.png!
+
+
+</figure>
+```
+
+The textile format constructs an HTML5 figure.
+
+### Texinfo
+
+```
+% pandoc -f native -t texinfo
+[Figure (""fig-id"",[],[])
+	(Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```texinfo
+@node Top
+@top Top
+
+@float Figure
+@image{foo,,,Caption,png}
+@caption{Caption}
+@end float
+```
+
+GNU Info's figures.
+
+### RST
+
+```
+% pandoc -f native -t rst
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```rst
+.. container:: float
+   :name: fig-id
+
+   .. figure:: foo.png
+      :alt: 
+```
+
+Figures are represented as containers.
+
+### Markdown
+
+
+```
+% pandoc -f native -t markdown
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+^D
+```
+```markdown
+::: {#fig-id .figure}
+![](foo.png)
+:::
+```
+
+Figures are represented as a pandoc div ith the `.figure` class.
+
+### MediaWiki
+
+
+```
+% pandoc -f native -t mediawiki
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```mediawiki
+<div id=""fig-id"" class=""figure"">
+
+[[File:foo.png|thumb|none]]
+
+
+</div>
+```
+
+Figures are represented as a div with the `figure` class.
+
+### Jats
+
+
+```
+% pandoc -f native -t jats
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]]) [Para [Str ""Text""],
+Para [Image (""fig-id-2"",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```jats
+<boxed-text id=""fig-id"">
+  <p>Text</p>
+  <fig id=""fig-id-2"">
+    <graphic mimetype=""image"" mime-subtype=""png"" xlink:href=""foo.png"" xlink:title="""" />
+  </fig>
+</boxed-text>
+```
+
+Figures are represented with the `boxed-text` tag in JATS.
+
+### XWiki
+
+```
+% pandoc -f native -t xwiki
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+
+^D
+```
+```xwiki
+(((
+{{id name=""fig-id"" /}}content
+)))
+```
+
+Figures are represented as groups.
+
+### Ohter formats
+
+All other formats handle figures like they handle pandoc's divs.
+
+## Testing
+
+To test these formats the command line testing can now be done in a particular folder:
+
+```
+$ test-pandoc -pfigure
+pandoc tests
+  Command folder: command
+    5474-figures.md
+      #1:                  OK (0.03s)
+    html-read-figure.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+      #5:                  OK (0.02s)
+    jats-figure-alt-text.md
+      #1:                  OK (0.02s)
+  Command folder: command/figures
+    figures-haddock.md
+      #1:                  OK (0.02s)
+    figures-org.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+    figures-fb2.md
+      #1:                  OK (0.02s)
+    figures-zimwiki.md
+      #1:                  OK (0.02s)
+    figures-textile.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+    figures-texinfo.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+    figures-rst.md
+      #1:                  OK (0.01s)
+    figures-mediawiki.md
+      #1:                  OK (0.01s)
+    figures-markdown.md
+      #1:                  OK (0.01s)
+    figures-jats.md
+      #1:                  OK (0.01s)
+    figures-jira.md
+      #1:                  OK (0.01s)
+    figures-xwiki.md
+      #1:                  OK (0.01s)
+    figures-html.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.01s)
+      #4:                  OK (0.01s)
+      #5:                  OK (0.01s)
+      #6:                  OK (0.01s)
+    figures-latex.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+  Readers
+    Org
+      Basic Blocks
+        Figures
+          Labelled figure: OK
+
+All 33 tests passed (0.57s)
+```
+
+# Readers
+
+- [X] JATS, also capture the `alt-text` tag in figures and test.
+- [X] HTML
+- [X] Markdown
+- [X] Latex
+- [X] MediaWiki: This could be refactored when I find a pattern repeated in other readers.
+- [X] ~~VimWiki~~
+- [X] ~~DokuWiki~~
+- [X] ~~Ipynb~~
+- [X] ~~Docx~~
+- [X] ~~ODT~~
+- [X] OrgMode
+- [X] RTS
+
+# Writers
+
+- [X] HTML
+- [X] JATS
+- [X] Markdown
+- [X] LaTex
+- [X] MediaWiki
+- [X] Org
+- [X] RTS
+- [X] AsciiDoc
+- [X] ConTeXt
+- [X] Docbook
+- [X] Docx
+- [X] DokuWiki
+- [X] FB2
+- [X] Haddock
+- [X] ICML
+- [X] ~~Muse~~. It works directly on `Inline`
+- [X] OpenDocument
+- [X] ~~TEI~~. Code is commented. Seems like it's fixable. Figure descriptions have a 'fig:' prefix in the output.
+- [X] Texinfo
+- [X] Textile
+- [X] ZimWiki
+
+",False,7364,https://api.github.com/repos/jgm/pandoc/pulls/7364,https://github.com/jgm/pandoc/pull/7364,closed,756,161,62,3,6,0,0,0,[],2021-06-09 13:14:08+00:00,2023-01-17 06:10:37+00:00,50691389.0,"586 days, 16:56:29",[],"[{'commit_sha': '899e0c0c99148ee32198bdb43ce69170102e2a18', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dc0e1fff076ab2601ed938d4022f5b24aa7af0c', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe42884ce686eefd893311684f4a64a64b614644', 'committer_username': 'jgm', 'committer_name': 'John MacFarlane', 'committer_email': None, 'commit_date': datetime.datetime(2008, 3, 13, 21, 28, 32, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+488080864,"[API change] Add a Figure block, modify Table block","Resolves jgm/pandoc#3177 in this library.
+
+The design of `Figure` is the more expressive one:
+
+```haskell
+data Block
+  = ...
+  | Figure Attr CaptionPos Caption [Block]
+  ...
+
+data CaptionPos = CaptionBefore | CaptionAfter -- should there be a CaptionPosDefault?
+```
+
+and the `Caption` from `Table` has been removed, since that seemed to be desired. The idea now is that a few `Figure` configurations will be special:
+
+- a `Figure` with `[Plain [Image...]]` content is a captioned image
+- a `Figure` with a sequence of captioned images as content is a ""gallery"" of images (could expand this to allow `Plain [Image...]` blocks in the content, which would be considered captionless sub-images)
+- a `Figure` with `[Table...]` content is a captioned table
+- a `Figure` with `[CodeBlock...]` content is a captioned code listing
+
+These map fairly straightforwardly onto a lot of different formats as I mentioned in [this comment](https://github.com/jgm/pandoc/issues/3177#issuecomment-687670695). Some formats allow for more complex `Figure` content as well, but all formats will still need to keep these in mind, since they usually have explicit captions in their tables and code listings (when those elements exist). A future numbering/referencing system will need to respect them as well, to make sure that figures and tables can be numbered and referenced properly.
+
+At the start, writers can attempt to render a `Figure` by instead rendering a `Div` with an added `""figure""` class, inside of which is a `Div` caption and the figure content, the caption being before or after the content depending on what the `CaptionPos` is. I think that is a decent fallback in future for writers that encounter a `Figure` in an invalid position or with invalid content for that format, but specific formats might have better ways of handling those situations.
+
+The exceptions are the captioned image and captioned table configurations, which should be detected and handled like implicit figures and tables are now, from the start, to avoid regressions in behaviour.
+
+Each of LaTeX, JATS, DocBook, and HTML support more complex `Figure` content (which is why the `Figure` block isn't just a sequence of captioned images). Beyond the special handling of the configurations above, I think the following `Figure` support is possible in those formats with this design:
+
+- HTML allowing arbitrary block content in figures
+- JATS and DocBook allowing figures without figure children (both have some additional restrictions)
+- JATS and DocBook 5.2 allowing figures with a sequence of subfigures, corresponding to the `<fig-group>` and `<formalgroup>` elements
+- LaTeX allowing figures without figure children. While there is the [subcaption](https://www.ctan.org/pkg/subcaption) package for one-deep figure and table nesting, that package needs an explicit figure width in `Figure`.
+
+There may be other formats that support more complex figures, but I'm not too familiar with them.",False,83,https://api.github.com/repos/jgm/pandoc-types/pulls/83,https://github.com/jgm/pandoc-types/pull/83,open,89,58,5,1,3,0,0,0,[],2020-09-16 15:45:14+00:00,,0.0,,[],"[{'commit_sha': '04cb48907557c987c0324df5baef75a615900bbb', 'committer_username': 'despresc', 'committer_name': 'Christian Despres', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 1, 2, 26, 8, tzinfo=datetime.timezone.utc)}]",Christian Despres,50160106,,User,,10,,0,3
+665895942,Use the new 'simpleFigure' builder function in the readers.,"## Reading input with figures
+
+Reading figures is now supported for two formats natively and one format through a Lua filter. This functionality has to be enabled with a new [pandoc extension](https://pandoc.org/MANUAL.html#extensions): `native_figures`.
+
+```
+#### Extension: `native_figures` ####
+
+Use pandoc's native `Figure` element for content inside `<figure>` tags, in the case of HTML, or `figure` environments, in case of LaTeX. This, in turn, allows some writers to produce more accurate representations of figures. It also allows the use of the `Figure` element in filters, for custom figure output.
+
+This extension can be enabled/disabled for the following formats:
+
+input formats
+: `latex` `html`
+```
+
+The choice of an extension was made to introduce the new behavior with minimal disruption of the old one.
+
+### Reading HTML 5 figures
+
+This version of pandoc can now read figures from HTML into its internal representation:
+
+**Now**
+```
+$ pandoc -f html+native_figures -t native
+<figure class=""important"">
+  <img src=""../media/rId25.jpg"" />
+  <ul> <li> ITEM </li> </ul>
+  <figcaption> CAP2 </figcaption>
+</figure>
+^D
+[Figure ("""",[""important""],[]) (Caption Nothing [Plain [Str ""CAP2""]])\
+	[ Plain [Image ("""",[],[]) [] (""../media/rId25.jpg"","""")]
+	, BulletList [[Plain [Str ""ITEM""]]]]]
+```
+
+The difference with the old handling is that, now, elements inside a figure are not limited to only one image:
+
+**Before**
+```
+$ pandoc-before -f html -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP2""] (""../media/rId25.jpg"",""fig:"")]]
+```
+
+Notice the missing `ITEM`. Handling of attributes and classes has also become more granular and accurate. Notice the missing `important` class above.
+
+### Reading LaTeX figures
+
+It can also read LaTeX figures:
+
+**Now**
+```
+pandoc -f latex+native_figures -t native
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.2}
+    \end{subfigure}
+    \caption{CAP1}
+    \label{fig:inner1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics{test/media/rId25.jpg}
+    \caption{CAP2}
+    \label{fig:inner2}
+  \end{subfigure}
+  \caption{CAP}
+  \label{fig:outer}
+\end{figure}
+^D
+[Figure (""fig:outer"",[],[]) (Caption Nothing [Plain [Str ""CAP""]]) 
+	[ Figure (""fig:inner1"",[],[]) (Caption Nothing [Plain [Str ""CAP1""]])
+		[ Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.1""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]
+		, Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.2""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+	, Figure (""fig:inner2"",[],[]) (Caption Nothing [Plain [Str ""CAP2""]])
+		[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]]
+```
+
+It respects the figure and sub figure hierarchies, labels and captions accurately.
+
+**Before**
+
+```
+pandoc -f latex -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP1.1""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image ("""",[],[]) [Str ""CAP1.2""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image (""fig:inner2"",[],[]) [Str ""CAP2""] (""test/media/rId25.jpg"",""fig:"")]]
+```
+
+Figures with sub-figures where flattened into a list of figures using the construction mentioned in the original figure handling section. Some captions and labels are lost.
+
+### Markdown figures
+
+Handling of markdown figures was implemented through a Lua filter. We opted for this approach because there is yet no agreed-upon syntax for figures in markdown (for example commonmark). Pandoc has its own markdown flavor but we have also opted to propose our syntax by implementing it as a filter. The code of the filter has been submitted in the [lua-filters pull request](https://github.com/pandoc/lua-filters/pull/187).
+
+I've written two filters that represent two possible markdown syntax extensions to represent figures. Both use pandoc's markdown `div` sytax with special classes.
+
+#### The explcit caption syntax
+
+```markdown
+::: { .figure }
+
+content.
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+In this syntax a figure is a pandoc div with a `figure` class and the caption,
+if present, is a div with a `caption` class.
+
+Here is an example that converts this to HTML
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-explicit.lua
+...
+```
+
+```html
+<figure>
+<p>content.</p>
+<figcaption><p>caption</p></figcaption>
+</figure>
+```
+
+#### The implicit caption syntax
+
+```markdown
+::: { .figure }
+figure content
+
+figure caption.
+:::
+```
+
+This, more concise, syntax uses the last paragraph inside the div as the caption for the figure.
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-implicit.lua
+...
+```
+
+```html
+<figure>
+<p>figure content</p>
+<figcaption><p>figure caption.</p></figcaption>
+</figure>
+```
+
+## Generating output with figures.
+
+Once figures can be described in pandoc's internal representation, it is the `Writers` that translate them into various output formats. Not all output formats can represent figures, and for those that can, we have decided to focus on the ones that would make the least intrusive modifications first.
+
+Next, I'll briefly enumerate the output resulting from the `Figure` constructor in various formats.
+
+### HTML
+
+
+```
+% pandoc -f native -t html5
+[Figure (""fig-id"",[],[]) (Caption Nothing [Plain [Str ""caption""]]) [Para [Str ""content""]]]
+
+^D
+```
+```html
+<figure id=""fig-id"">
+<p>content</p>
+<figcaption>caption</figcaption>
+</figure>
+```
+
+Figures are represented as `<figure>` tags.
+
+### Org mode format
+
+```
+% pandoc -f native -t org
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+^D
+```
+```org
+<<fig-id>>
+content
+```
+
+Emac's org mode adds an anchor to the content of the figure.
+
+### Textile
+
+```
+% pandoc -f native -t textile
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Image ("""",[],[]) [] (""foo.png"", """")]]]
+^D
+```
+```html
+<figure id=""fig-id"">
+
+!foo.png!
+
+
+</figure>
+```
+
+The textile format constructs an HTML5 figure.
+
+### Texinfo
+
+```
+% pandoc -f native -t texinfo
+[Figure (""fig-id"",[],[])
+	(Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```texinfo
+@node Top
+@top Top
+
+@float Figure
+@image{foo,,,Caption,png}
+@caption{Caption}
+@end float
+```
+
+GNU Info's figures.
+
+### RST
+
+```
+% pandoc -f native -t rst
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```rst
+.. container:: float
+   :name: fig-id
+
+   .. figure:: foo.png
+      :alt: 
+```
+
+Figures are represented as containers.
+
+### Markdown
+
+
+```
+% pandoc -f native -t markdown
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+^D
+```
+```markdown
+::: {#fig-id .figure}
+![](foo.png)
+:::
+```
+
+Figures are represented as a pandoc div ith the `.figure` class.
+
+### MediaWiki
+
+
+```
+% pandoc -f native -t mediawiki
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```mediawiki
+<div id=""fig-id"" class=""figure"">
+
+[[File:foo.png|thumb|none]]
+
+
+</div>
+```
+
+Figures are represented as a div with the `figure` class.
+
+### Jats
+
+
+```
+% pandoc -f native -t jats
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]]) [Para [Str ""Text""],
+Para [Image (""fig-id-2"",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```jats
+<boxed-text id=""fig-id"">
+  <p>Text</p>
+  <fig id=""fig-id-2"">
+    <graphic mimetype=""image"" mime-subtype=""png"" xlink:href=""foo.png"" xlink:title="""" />
+  </fig>
+</boxed-text>
+```
+
+Figures are represented with the `boxed-text` tag in JATS.
+
+### XWiki
+
+```
+% pandoc -f native -t xwiki
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+
+^D
+```
+```xwiki
+(((
+{{id name=""fig-id"" /}}content
+)))
+```
+
+Figures are represented as groups.
+
+### Ohter formats
+
+All other formats handle figures like they handle pandoc's divs.
+
+## Testing
+
+To test these formats the command line testing can now be done in a particular folder:
+
+```
+$ test-pandoc -pfigure
+pandoc tests
+  Command folder: command
+    5474-figures.md
+      #1:                  OK (0.03s)
+    html-read-figure.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+      #5:                  OK (0.02s)
+    jats-figure-alt-text.md
+      #1:                  OK (0.02s)
+  Command folder: command/figures
+    figures-haddock.md
+      #1:                  OK (0.02s)
+    figures-org.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+    figures-fb2.md
+      #1:                  OK (0.02s)
+    figures-zimwiki.md
+      #1:                  OK (0.02s)
+    figures-textile.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+    figures-texinfo.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+    figures-rst.md
+      #1:                  OK (0.01s)
+    figures-mediawiki.md
+      #1:                  OK (0.01s)
+    figures-markdown.md
+      #1:                  OK (0.01s)
+    figures-jats.md
+      #1:                  OK (0.01s)
+    figures-jira.md
+      #1:                  OK (0.01s)
+    figures-xwiki.md
+      #1:                  OK (0.01s)
+    figures-html.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.01s)
+      #4:                  OK (0.01s)
+      #5:                  OK (0.01s)
+      #6:                  OK (0.01s)
+    figures-latex.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+  Readers
+    Org
+      Basic Blocks
+        Figures
+          Labelled figure: OK
+
+All 33 tests passed (0.57s)
+```
+
+# Readers
+
+- [X] JATS, also capture the `alt-text` tag in figures and test.
+- [X] HTML
+- [X] Markdown
+- [X] Latex
+- [X] MediaWiki: This could be refactored when I find a pattern repeated in other readers.
+- [X] ~~VimWiki~~
+- [X] ~~DokuWiki~~
+- [X] ~~Ipynb~~
+- [X] ~~Docx~~
+- [X] ~~ODT~~
+- [X] OrgMode
+- [X] RTS
+
+# Writers
+
+- [X] HTML
+- [X] JATS
+- [X] Markdown
+- [X] LaTex
+- [X] MediaWiki
+- [X] Org
+- [X] RTS
+- [X] AsciiDoc
+- [X] ConTeXt
+- [X] Docbook
+- [X] Docx
+- [X] DokuWiki
+- [X] FB2
+- [X] Haddock
+- [X] ICML
+- [X] ~~Muse~~. It works directly on `Inline`
+- [X] OpenDocument
+- [X] ~~TEI~~. Code is commented. Seems like it's fixable. Figure descriptions have a 'fig:' prefix in the output.
+- [X] Texinfo
+- [X] Textile
+- [X] ZimWiki
+
+",False,7364,https://api.github.com/repos/jgm/pandoc/pulls/7364,https://github.com/jgm/pandoc/pull/7364,closed,756,161,62,3,6,0,0,0,[],2021-06-09 13:14:08+00:00,2023-01-17 06:10:37+00:00,50691389.0,"586 days, 16:56:29",[],"[{'commit_sha': '899e0c0c99148ee32198bdb43ce69170102e2a18', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dc0e1fff076ab2601ed938d4022f5b24aa7af0c', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe42884ce686eefd893311684f4a64a64b614644', 'committer_username': 'jgm', 'committer_name': 'John MacFarlane', 'committer_email': None, 'commit_date': datetime.datetime(2008, 3, 13, 21, 28, 32, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+661860768,simpleFigure builder [GSoC 2021],"Introducing new constructor to handle figures. This is in the context of pandoc's issue [#3177](https://github.com/jgm/pandoc/issues/3177). Use of these on `Readers` and `Writers` was submitted with the [pandoc pull request](https://github.com/jgm/pandoc/pull/7364).
+
+# The `SimpleFigure` construction
+
+To address some of the issues with the previous handling of figures, we introduced, along with some helper functions, the `SimpleFigure` [pattern synonym](https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/pattern_synonyms.html)
+
+```haskell
+-- | Constructor for a figure with a single image.
+--
+-- It can be used to construct a figure:
+--
+-- >>> SimpleFigure nullAttr [] (T.pack """", T.pack ""title"")
+-- Para [Image ("""",[],[]) [] ("""",""fig:title"")]
+--
+--
+-- It can be used to pattern match:
+--
+-- >>> let img = Para [Image undefined undefined (undefined, T.pack ""title"")]
+-- >>> case img of { SimpleFigure _ _ _ -> True; _ -> False }
+-- False
+-- >>> let fig = Para [Image undefined undefined (undefined, T.pack ""fig:title"")]
+-- >>> case fig of { SimpleFigure _ _ tit -> snd tit; _ -> T.pack """" }
+-- ""title""
+pattern SimpleFigure :: Attr -> [Inline] -> Target -> Block
+pattern SimpleFigure attributes figureCaption tgt <-
+    Para [Image attributes figureCaption
+        (isFigureTarget -> Just tgt)]  where
+  SimpleFigure attributes figureCaption tgt =
+    Para [Image attributes figureCaption (second (""fig:"" <>) tgt)]
+```
+
+This is very much like adding a new constructor to the `Block` type but with some differences.
+
+Some benefits of this approach are:
+
+* It is backward compatible with the previous construction.
+* It formalizes, without enforcing, the roles for the construction's elements.
+* It makes it easier to find where are figures handled in the code for both `Readers` and `Writers`.
+
+  Here is an example diff from the RST `Reader` in the [pandoc pull request](https://github.com/jgm/pandoc/pull/7364):
+
+  ```diff
+  - return $ B.para (B.imageWith (imgAttr ""figclass"") src ""fig:""
+  -             caption) <> legend
+  + return $ B.simpleFigureWith
+  +     (imgAttr ""figclass"") caption src """" <> legend
+  ```
+
+Of course, there are also some limitations:
+
+* It doesn't *enforce* the construction on new code, as an *actual constructor* would do. For example, code with non-exhaustive patterns matches won't rise a warning if `SimpleFigure` is not handled.
+
+* It lacks an explicit `alt-text` field. This can be included using attributes, but I would have liked to give it more importance.
+
+
+
+I believe this is a modest improvement of the previous code. It provides an explicit representation for figures. It could go a little further with an explicit constructor; but keeping the behavior backward compatible prevents breaking some workflows down the line, for example someone using a `lua-filter`.
+
+# The `Figure` constructor
+
+The `SimpleFigure` constructor only addressed one type of figures, the ones with only one image in them. To address the general case of the concept of a document within a document detailed in the section on figures, we introduced the following `Block` constructor:
+
+```haskell
+data Block =
+	-- ...
+	-- | Figure, with attributes, caption and caption position, width
+	-- (optional), and content (list of blocks)
+	| Figure Attr Caption [Block]
+	-- ...
+```
+
+This includes other helper functions and tests and is part of the [pandoc-types pull request](https://github.com/jgm/pandoc/pull/7364). It's based on the previous work by [@despresc](https://github.com/jgm/pandoc-types/pull/83). Modifications include: the removal of the `CaptionPos` argument that can be specified as an attribute; and the code involving tables.
+
+Tests for this constructor are also included with the pull request.
+
+This constructor allows pandoc to capture the semantics of figures from different formats into its internal representation. It also helps when writing output in formats that support figures.
+
+
+",False,90,https://api.github.com/repos/jgm/pandoc-types/pulls/90,https://github.com/jgm/pandoc-types/pull/90,closed,104,15,5,8,7,3,0,0,[],2021-06-04 15:23:30+00:00,2021-09-15 21:46:44+00:00,8922194.0,"103 days, 6:23:14","[{'comment_id': 646488786, 'comment_body': 'Redundant braces around `(p_figureRepresentation)`.', 'comment_created': datetime.datetime(2021, 6, 7, 11, 7, 23, tzinfo=datetime.timezone.utc), 'commenter': 'tarleb', 'type': 'User'}, {'comment_id': 652811092, 'comment_body': 'Nice! We should also check that title has a `fig:` prefix, which we can do with this view pattern:\r\n``` haskell\r\nImage attr figureCaption (src, (T.stripPrefix ""fig:"" -> Just title))\r\n```', 'comment_created': datetime.datetime(2021, 6, 16, 15, 36, 39, tzinfo=datetime.timezone.utc), 'commenter': 'tarleb', 'type': 'User'}, {'comment_id': 652813029, 'comment_body': 'Probably good to use the [Haddock examples syntax](https://haskell-haddock.readthedocs.io/en/latest/markup.html#examples) for this.', 'comment_created': datetime.datetime(2021, 6, 16, 15, 38, 56, tzinfo=datetime.timezone.utc), 'commenter': 'tarleb', 'type': 'User'}]","[{'commit_sha': '04cb48907557c987c0324df5baef75a615900bbb', 'committer_username': 'despresc', 'committer_name': 'Christian Despres', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 1, 2, 26, 8, tzinfo=datetime.timezone.utc)}, {'commit_sha': '757cca3765fe59c45e810f9c36eb1c394df3d35e', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'be85d6fe51d356b77d222a7b274381f845aa3c71', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'a3272d6d73d501ea491c70628b23513971f684f9', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '74874de3264dee960e33697f365608d5229b5123', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '52db8bf9c60cba08964755aeb1529bbc09ef3ae0', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4cbccdfa0c7667909cccfce2259b6dae4573239e', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5b32019746d1692c593c080f9a8ee45c7d25ecba', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+665895942,Use the new 'simpleFigure' builder function in the readers.,"## Reading input with figures
+
+Reading figures is now supported for two formats natively and one format through a Lua filter. This functionality has to be enabled with a new [pandoc extension](https://pandoc.org/MANUAL.html#extensions): `native_figures`.
+
+```
+#### Extension: `native_figures` ####
+
+Use pandoc's native `Figure` element for content inside `<figure>` tags, in the case of HTML, or `figure` environments, in case of LaTeX. This, in turn, allows some writers to produce more accurate representations of figures. It also allows the use of the `Figure` element in filters, for custom figure output.
+
+This extension can be enabled/disabled for the following formats:
+
+input formats
+: `latex` `html`
+```
+
+The choice of an extension was made to introduce the new behavior with minimal disruption of the old one.
+
+### Reading HTML 5 figures
+
+This version of pandoc can now read figures from HTML into its internal representation:
+
+**Now**
+```
+$ pandoc -f html+native_figures -t native
+<figure class=""important"">
+  <img src=""../media/rId25.jpg"" />
+  <ul> <li> ITEM </li> </ul>
+  <figcaption> CAP2 </figcaption>
+</figure>
+^D
+[Figure ("""",[""important""],[]) (Caption Nothing [Plain [Str ""CAP2""]])\
+	[ Plain [Image ("""",[],[]) [] (""../media/rId25.jpg"","""")]
+	, BulletList [[Plain [Str ""ITEM""]]]]]
+```
+
+The difference with the old handling is that, now, elements inside a figure are not limited to only one image:
+
+**Before**
+```
+$ pandoc-before -f html -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP2""] (""../media/rId25.jpg"",""fig:"")]]
+```
+
+Notice the missing `ITEM`. Handling of attributes and classes has also become more granular and accurate. Notice the missing `important` class above.
+
+### Reading LaTeX figures
+
+It can also read LaTeX figures:
+
+**Now**
+```
+pandoc -f latex+native_figures -t native
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.2}
+    \end{subfigure}
+    \caption{CAP1}
+    \label{fig:inner1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics{test/media/rId25.jpg}
+    \caption{CAP2}
+    \label{fig:inner2}
+  \end{subfigure}
+  \caption{CAP}
+  \label{fig:outer}
+\end{figure}
+^D
+[Figure (""fig:outer"",[],[]) (Caption Nothing [Plain [Str ""CAP""]]) 
+	[ Figure (""fig:inner1"",[],[]) (Caption Nothing [Plain [Str ""CAP1""]])
+		[ Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.1""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]
+		, Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.2""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+	, Figure (""fig:inner2"",[],[]) (Caption Nothing [Plain [Str ""CAP2""]])
+		[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]]
+```
+
+It respects the figure and sub figure hierarchies, labels and captions accurately.
+
+**Before**
+
+```
+pandoc -f latex -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP1.1""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image ("""",[],[]) [Str ""CAP1.2""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image (""fig:inner2"",[],[]) [Str ""CAP2""] (""test/media/rId25.jpg"",""fig:"")]]
+```
+
+Figures with sub-figures where flattened into a list of figures using the construction mentioned in the original figure handling section. Some captions and labels are lost.
+
+### Markdown figures
+
+Handling of markdown figures was implemented through a Lua filter. We opted for this approach because there is yet no agreed-upon syntax for figures in markdown (for example commonmark). Pandoc has its own markdown flavor but we have also opted to propose our syntax by implementing it as a filter. The code of the filter has been submitted in the [lua-filters pull request](https://github.com/pandoc/lua-filters/pull/187).
+
+I've written two filters that represent two possible markdown syntax extensions to represent figures. Both use pandoc's markdown `div` sytax with special classes.
+
+#### The explcit caption syntax
+
+```markdown
+::: { .figure }
+
+content.
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+In this syntax a figure is a pandoc div with a `figure` class and the caption,
+if present, is a div with a `caption` class.
+
+Here is an example that converts this to HTML
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-explicit.lua
+...
+```
+
+```html
+<figure>
+<p>content.</p>
+<figcaption><p>caption</p></figcaption>
+</figure>
+```
+
+#### The implicit caption syntax
+
+```markdown
+::: { .figure }
+figure content
+
+figure caption.
+:::
+```
+
+This, more concise, syntax uses the last paragraph inside the div as the caption for the figure.
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-implicit.lua
+...
+```
+
+```html
+<figure>
+<p>figure content</p>
+<figcaption><p>figure caption.</p></figcaption>
+</figure>
+```
+
+## Generating output with figures.
+
+Once figures can be described in pandoc's internal representation, it is the `Writers` that translate them into various output formats. Not all output formats can represent figures, and for those that can, we have decided to focus on the ones that would make the least intrusive modifications first.
+
+Next, I'll briefly enumerate the output resulting from the `Figure` constructor in various formats.
+
+### HTML
+
+
+```
+% pandoc -f native -t html5
+[Figure (""fig-id"",[],[]) (Caption Nothing [Plain [Str ""caption""]]) [Para [Str ""content""]]]
+
+^D
+```
+```html
+<figure id=""fig-id"">
+<p>content</p>
+<figcaption>caption</figcaption>
+</figure>
+```
+
+Figures are represented as `<figure>` tags.
+
+### Org mode format
+
+```
+% pandoc -f native -t org
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+^D
+```
+```org
+<<fig-id>>
+content
+```
+
+Emac's org mode adds an anchor to the content of the figure.
+
+### Textile
+
+```
+% pandoc -f native -t textile
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Image ("""",[],[]) [] (""foo.png"", """")]]]
+^D
+```
+```html
+<figure id=""fig-id"">
+
+!foo.png!
+
+
+</figure>
+```
+
+The textile format constructs an HTML5 figure.
+
+### Texinfo
+
+```
+% pandoc -f native -t texinfo
+[Figure (""fig-id"",[],[])
+	(Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```texinfo
+@node Top
+@top Top
+
+@float Figure
+@image{foo,,,Caption,png}
+@caption{Caption}
+@end float
+```
+
+GNU Info's figures.
+
+### RST
+
+```
+% pandoc -f native -t rst
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```rst
+.. container:: float
+   :name: fig-id
+
+   .. figure:: foo.png
+      :alt: 
+```
+
+Figures are represented as containers.
+
+### Markdown
+
+
+```
+% pandoc -f native -t markdown
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+^D
+```
+```markdown
+::: {#fig-id .figure}
+![](foo.png)
+:::
+```
+
+Figures are represented as a pandoc div ith the `.figure` class.
+
+### MediaWiki
+
+
+```
+% pandoc -f native -t mediawiki
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```mediawiki
+<div id=""fig-id"" class=""figure"">
+
+[[File:foo.png|thumb|none]]
+
+
+</div>
+```
+
+Figures are represented as a div with the `figure` class.
+
+### Jats
+
+
+```
+% pandoc -f native -t jats
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]]) [Para [Str ""Text""],
+Para [Image (""fig-id-2"",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```jats
+<boxed-text id=""fig-id"">
+  <p>Text</p>
+  <fig id=""fig-id-2"">
+    <graphic mimetype=""image"" mime-subtype=""png"" xlink:href=""foo.png"" xlink:title="""" />
+  </fig>
+</boxed-text>
+```
+
+Figures are represented with the `boxed-text` tag in JATS.
+
+### XWiki
+
+```
+% pandoc -f native -t xwiki
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+
+^D
+```
+```xwiki
+(((
+{{id name=""fig-id"" /}}content
+)))
+```
+
+Figures are represented as groups.
+
+### Ohter formats
+
+All other formats handle figures like they handle pandoc's divs.
+
+## Testing
+
+To test these formats the command line testing can now be done in a particular folder:
+
+```
+$ test-pandoc -pfigure
+pandoc tests
+  Command folder: command
+    5474-figures.md
+      #1:                  OK (0.03s)
+    html-read-figure.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+      #5:                  OK (0.02s)
+    jats-figure-alt-text.md
+      #1:                  OK (0.02s)
+  Command folder: command/figures
+    figures-haddock.md
+      #1:                  OK (0.02s)
+    figures-org.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+    figures-fb2.md
+      #1:                  OK (0.02s)
+    figures-zimwiki.md
+      #1:                  OK (0.02s)
+    figures-textile.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+    figures-texinfo.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+    figures-rst.md
+      #1:                  OK (0.01s)
+    figures-mediawiki.md
+      #1:                  OK (0.01s)
+    figures-markdown.md
+      #1:                  OK (0.01s)
+    figures-jats.md
+      #1:                  OK (0.01s)
+    figures-jira.md
+      #1:                  OK (0.01s)
+    figures-xwiki.md
+      #1:                  OK (0.01s)
+    figures-html.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.01s)
+      #4:                  OK (0.01s)
+      #5:                  OK (0.01s)
+      #6:                  OK (0.01s)
+    figures-latex.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+  Readers
+    Org
+      Basic Blocks
+        Figures
+          Labelled figure: OK
+
+All 33 tests passed (0.57s)
+```
+
+# Readers
+
+- [X] JATS, also capture the `alt-text` tag in figures and test.
+- [X] HTML
+- [X] Markdown
+- [X] Latex
+- [X] MediaWiki: This could be refactored when I find a pattern repeated in other readers.
+- [X] ~~VimWiki~~
+- [X] ~~DokuWiki~~
+- [X] ~~Ipynb~~
+- [X] ~~Docx~~
+- [X] ~~ODT~~
+- [X] OrgMode
+- [X] RTS
+
+# Writers
+
+- [X] HTML
+- [X] JATS
+- [X] Markdown
+- [X] LaTex
+- [X] MediaWiki
+- [X] Org
+- [X] RTS
+- [X] AsciiDoc
+- [X] ConTeXt
+- [X] Docbook
+- [X] Docx
+- [X] DokuWiki
+- [X] FB2
+- [X] Haddock
+- [X] ICML
+- [X] ~~Muse~~. It works directly on `Inline`
+- [X] OpenDocument
+- [X] ~~TEI~~. Code is commented. Seems like it's fixable. Figure descriptions have a 'fig:' prefix in the output.
+- [X] Texinfo
+- [X] Textile
+- [X] ZimWiki
+
+",False,7364,https://api.github.com/repos/jgm/pandoc/pulls/7364,https://github.com/jgm/pandoc/pull/7364,closed,756,161,62,3,6,0,0,0,[],2021-06-09 13:14:08+00:00,2023-01-17 06:10:37+00:00,50691389.0,"586 days, 16:56:29",[],"[{'commit_sha': '899e0c0c99148ee32198bdb43ce69170102e2a18', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dc0e1fff076ab2601ed938d4022f5b24aa7af0c', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe42884ce686eefd893311684f4a64a64b614644', 'committer_username': 'jgm', 'committer_name': 'John MacFarlane', 'committer_email': None, 'commit_date': datetime.datetime(2008, 3, 13, 21, 28, 32, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+679866903,Remove duplicated alt text in HTML output.,"Addresses  #7416
+
+It prefers the explicitly provided alt attribute.
+
+```
+$ pandoc -f markdown -t html
+![caption](../media/rId25.jpg ""title""){alt=""alt""}
+
+<figure>
+<img src=""../media/rId25.jpg"" title=""title"" alt=""alt"" /><figcaption aria-hidden=""true"">caption</figcaption>
+</figure>
+```
+
+It keeps the old behavior otherwise.
+
+```
+% pandoc -f markdown -t html
+![caption](../media/rId25.jpg ""title"")
+
+^D
+<figure>
+<img src=""../media/rId25.jpg"" title=""title"" alt=""caption"" /><figcaption aria-hidden=""true"">caption</figcaption>
+</figure>
+```",True,7417,https://api.github.com/repos/jgm/pandoc/pulls/7417,https://github.com/jgm/pandoc/pull/7417,closed,22,2,2,1,1,0,0,0,[],2021-06-29 11:39:15+00:00,2021-06-29 16:02:14+00:00,15779.0,4:22:59,[],"[{'commit_sha': 'c749412d8473d00cff4723279ee7e62b301d7e06', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+682668763,"HTML5 writer, remove aria-hidden when explicit atl text is provided.","Related to #7416 
+
+This PR removes the `aria-hidden=true` attribute from the HTML5 output when an explicit alt text is provided.
+
+```
+% pandoc -f markdown -t html
+![caption](../media/rId25.jpg ""title""){alt=""alt""}
+
+^D
+<figure>
+<img src=""../media/rId25.jpg"" title=""title"" alt=""alt"" /><figcaption>caption</figcaption>
+</figure>
+```
+
+Quoting from the [w3 recommendation](https://www.w3.org/TR/wai-aria-1.1/#aria-hidden), emphasis mine:
+
+> aria-hidden (state)
+>
+> Indicates whether the element is exposed to an accessibility API. See related aria-disabled.
+>
+> User agents determine an element's hidden status based on whether it is rendered, and the rendering is usually controlled by CSS. For example, an element whose display property is set to none is not rendered. An element is considered hidden if it, or any of its ancestors are not rendered or have their aria-hidden attribute value set to true.
+>
+> Authors MAY, with caution, **use aria-hidden** to hide visibly rendered content from assistive technologies only if the act of hiding this content is intended to improve the experience for users of assistive technologies **by removing redundant or extraneous content**. Authors using aria-hidden to hide visible content from screen readers MUST ensure that identical or equivalent meaning and functionality is exposed to assistive technologies.
+
+It made sense to use it when the content was ""redundant"", but when an explicit alt text is provided, this is no longer the case.
+
+**Further discussion**
+
+[Discussion](https://github.com/tarleb/pandoc/discussions/12#discussioncomment-943251)",True,7425,https://api.github.com/repos/jgm/pandoc/pulls/7425,https://github.com/jgm/pandoc/pull/7425,closed,8,5,2,1,1,1,0,0,[],2021-07-02 14:22:26+00:00,2021-07-02 20:02:52+00:00,20426.0,5:40:26,"[{'comment_id': 663122504, 'comment_body': ""This change makes good sense to me! I'd only suggest, for conformity to local style, moving the `if` clause to the next line so that the `then` is lined up with the condition of the `if`.\r\n"", 'comment_created': datetime.datetime(2021, 7, 2, 16, 17, 48, tzinfo=datetime.timezone.utc), 'commenter': 'jgm', 'type': 'User'}]","[{'commit_sha': '9211e39c002febcb9bfe1f69d3127bfa5e49396c', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+665895942,Use the new 'simpleFigure' builder function in the readers.,"## Reading input with figures
+
+Reading figures is now supported for two formats natively and one format through a Lua filter. This functionality has to be enabled with a new [pandoc extension](https://pandoc.org/MANUAL.html#extensions): `native_figures`.
+
+```
+#### Extension: `native_figures` ####
+
+Use pandoc's native `Figure` element for content inside `<figure>` tags, in the case of HTML, or `figure` environments, in case of LaTeX. This, in turn, allows some writers to produce more accurate representations of figures. It also allows the use of the `Figure` element in filters, for custom figure output.
+
+This extension can be enabled/disabled for the following formats:
+
+input formats
+: `latex` `html`
+```
+
+The choice of an extension was made to introduce the new behavior with minimal disruption of the old one.
+
+### Reading HTML 5 figures
+
+This version of pandoc can now read figures from HTML into its internal representation:
+
+**Now**
+```
+$ pandoc -f html+native_figures -t native
+<figure class=""important"">
+  <img src=""../media/rId25.jpg"" />
+  <ul> <li> ITEM </li> </ul>
+  <figcaption> CAP2 </figcaption>
+</figure>
+^D
+[Figure ("""",[""important""],[]) (Caption Nothing [Plain [Str ""CAP2""]])\
+	[ Plain [Image ("""",[],[]) [] (""../media/rId25.jpg"","""")]
+	, BulletList [[Plain [Str ""ITEM""]]]]]
+```
+
+The difference with the old handling is that, now, elements inside a figure are not limited to only one image:
+
+**Before**
+```
+$ pandoc-before -f html -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP2""] (""../media/rId25.jpg"",""fig:"")]]
+```
+
+Notice the missing `ITEM`. Handling of attributes and classes has also become more granular and accurate. Notice the missing `important` class above.
+
+### Reading LaTeX figures
+
+It can also read LaTeX figures:
+
+**Now**
+```
+pandoc -f latex+native_figures -t native
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.2}
+    \end{subfigure}
+    \caption{CAP1}
+    \label{fig:inner1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics{test/media/rId25.jpg}
+    \caption{CAP2}
+    \label{fig:inner2}
+  \end{subfigure}
+  \caption{CAP}
+  \label{fig:outer}
+\end{figure}
+^D
+[Figure (""fig:outer"",[],[]) (Caption Nothing [Plain [Str ""CAP""]]) 
+	[ Figure (""fig:inner1"",[],[]) (Caption Nothing [Plain [Str ""CAP1""]])
+		[ Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.1""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]
+		, Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.2""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+	, Figure (""fig:inner2"",[],[]) (Caption Nothing [Plain [Str ""CAP2""]])
+		[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]]
+```
+
+It respects the figure and sub figure hierarchies, labels and captions accurately.
+
+**Before**
+
+```
+pandoc -f latex -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP1.1""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image ("""",[],[]) [Str ""CAP1.2""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image (""fig:inner2"",[],[]) [Str ""CAP2""] (""test/media/rId25.jpg"",""fig:"")]]
+```
+
+Figures with sub-figures where flattened into a list of figures using the construction mentioned in the original figure handling section. Some captions and labels are lost.
+
+### Markdown figures
+
+Handling of markdown figures was implemented through a Lua filter. We opted for this approach because there is yet no agreed-upon syntax for figures in markdown (for example commonmark). Pandoc has its own markdown flavor but we have also opted to propose our syntax by implementing it as a filter. The code of the filter has been submitted in the [lua-filters pull request](https://github.com/pandoc/lua-filters/pull/187).
+
+I've written two filters that represent two possible markdown syntax extensions to represent figures. Both use pandoc's markdown `div` sytax with special classes.
+
+#### The explcit caption syntax
+
+```markdown
+::: { .figure }
+
+content.
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+In this syntax a figure is a pandoc div with a `figure` class and the caption,
+if present, is a div with a `caption` class.
+
+Here is an example that converts this to HTML
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-explicit.lua
+...
+```
+
+```html
+<figure>
+<p>content.</p>
+<figcaption><p>caption</p></figcaption>
+</figure>
+```
+
+#### The implicit caption syntax
+
+```markdown
+::: { .figure }
+figure content
+
+figure caption.
+:::
+```
+
+This, more concise, syntax uses the last paragraph inside the div as the caption for the figure.
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-implicit.lua
+...
+```
+
+```html
+<figure>
+<p>figure content</p>
+<figcaption><p>figure caption.</p></figcaption>
+</figure>
+```
+
+## Generating output with figures.
+
+Once figures can be described in pandoc's internal representation, it is the `Writers` that translate them into various output formats. Not all output formats can represent figures, and for those that can, we have decided to focus on the ones that would make the least intrusive modifications first.
+
+Next, I'll briefly enumerate the output resulting from the `Figure` constructor in various formats.
+
+### HTML
+
+
+```
+% pandoc -f native -t html5
+[Figure (""fig-id"",[],[]) (Caption Nothing [Plain [Str ""caption""]]) [Para [Str ""content""]]]
+
+^D
+```
+```html
+<figure id=""fig-id"">
+<p>content</p>
+<figcaption>caption</figcaption>
+</figure>
+```
+
+Figures are represented as `<figure>` tags.
+
+### Org mode format
+
+```
+% pandoc -f native -t org
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+^D
+```
+```org
+<<fig-id>>
+content
+```
+
+Emac's org mode adds an anchor to the content of the figure.
+
+### Textile
+
+```
+% pandoc -f native -t textile
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Image ("""",[],[]) [] (""foo.png"", """")]]]
+^D
+```
+```html
+<figure id=""fig-id"">
+
+!foo.png!
+
+
+</figure>
+```
+
+The textile format constructs an HTML5 figure.
+
+### Texinfo
+
+```
+% pandoc -f native -t texinfo
+[Figure (""fig-id"",[],[])
+	(Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```texinfo
+@node Top
+@top Top
+
+@float Figure
+@image{foo,,,Caption,png}
+@caption{Caption}
+@end float
+```
+
+GNU Info's figures.
+
+### RST
+
+```
+% pandoc -f native -t rst
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```rst
+.. container:: float
+   :name: fig-id
+
+   .. figure:: foo.png
+      :alt: 
+```
+
+Figures are represented as containers.
+
+### Markdown
+
+
+```
+% pandoc -f native -t markdown
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+^D
+```
+```markdown
+::: {#fig-id .figure}
+![](foo.png)
+:::
+```
+
+Figures are represented as a pandoc div ith the `.figure` class.
+
+### MediaWiki
+
+
+```
+% pandoc -f native -t mediawiki
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```mediawiki
+<div id=""fig-id"" class=""figure"">
+
+[[File:foo.png|thumb|none]]
+
+
+</div>
+```
+
+Figures are represented as a div with the `figure` class.
+
+### Jats
+
+
+```
+% pandoc -f native -t jats
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]]) [Para [Str ""Text""],
+Para [Image (""fig-id-2"",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```jats
+<boxed-text id=""fig-id"">
+  <p>Text</p>
+  <fig id=""fig-id-2"">
+    <graphic mimetype=""image"" mime-subtype=""png"" xlink:href=""foo.png"" xlink:title="""" />
+  </fig>
+</boxed-text>
+```
+
+Figures are represented with the `boxed-text` tag in JATS.
+
+### XWiki
+
+```
+% pandoc -f native -t xwiki
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+
+^D
+```
+```xwiki
+(((
+{{id name=""fig-id"" /}}content
+)))
+```
+
+Figures are represented as groups.
+
+### Ohter formats
+
+All other formats handle figures like they handle pandoc's divs.
+
+## Testing
+
+To test these formats the command line testing can now be done in a particular folder:
+
+```
+$ test-pandoc -pfigure
+pandoc tests
+  Command folder: command
+    5474-figures.md
+      #1:                  OK (0.03s)
+    html-read-figure.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+      #5:                  OK (0.02s)
+    jats-figure-alt-text.md
+      #1:                  OK (0.02s)
+  Command folder: command/figures
+    figures-haddock.md
+      #1:                  OK (0.02s)
+    figures-org.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+    figures-fb2.md
+      #1:                  OK (0.02s)
+    figures-zimwiki.md
+      #1:                  OK (0.02s)
+    figures-textile.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+    figures-texinfo.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+    figures-rst.md
+      #1:                  OK (0.01s)
+    figures-mediawiki.md
+      #1:                  OK (0.01s)
+    figures-markdown.md
+      #1:                  OK (0.01s)
+    figures-jats.md
+      #1:                  OK (0.01s)
+    figures-jira.md
+      #1:                  OK (0.01s)
+    figures-xwiki.md
+      #1:                  OK (0.01s)
+    figures-html.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.01s)
+      #4:                  OK (0.01s)
+      #5:                  OK (0.01s)
+      #6:                  OK (0.01s)
+    figures-latex.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+  Readers
+    Org
+      Basic Blocks
+        Figures
+          Labelled figure: OK
+
+All 33 tests passed (0.57s)
+```
+
+# Readers
+
+- [X] JATS, also capture the `alt-text` tag in figures and test.
+- [X] HTML
+- [X] Markdown
+- [X] Latex
+- [X] MediaWiki: This could be refactored when I find a pattern repeated in other readers.
+- [X] ~~VimWiki~~
+- [X] ~~DokuWiki~~
+- [X] ~~Ipynb~~
+- [X] ~~Docx~~
+- [X] ~~ODT~~
+- [X] OrgMode
+- [X] RTS
+
+# Writers
+
+- [X] HTML
+- [X] JATS
+- [X] Markdown
+- [X] LaTex
+- [X] MediaWiki
+- [X] Org
+- [X] RTS
+- [X] AsciiDoc
+- [X] ConTeXt
+- [X] Docbook
+- [X] Docx
+- [X] DokuWiki
+- [X] FB2
+- [X] Haddock
+- [X] ICML
+- [X] ~~Muse~~. It works directly on `Inline`
+- [X] OpenDocument
+- [X] ~~TEI~~. Code is commented. Seems like it's fixable. Figure descriptions have a 'fig:' prefix in the output.
+- [X] Texinfo
+- [X] Textile
+- [X] ZimWiki
+
+",False,7364,https://api.github.com/repos/jgm/pandoc/pulls/7364,https://github.com/jgm/pandoc/pull/7364,closed,756,161,62,3,6,0,0,0,[],2021-06-09 13:14:08+00:00,2023-01-17 06:10:37+00:00,50691389.0,"586 days, 16:56:29",[],"[{'commit_sha': '899e0c0c99148ee32198bdb43ce69170102e2a18', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dc0e1fff076ab2601ed938d4022f5b24aa7af0c', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe42884ce686eefd893311684f4a64a64b614644', 'committer_username': 'jgm', 'committer_name': 'John MacFarlane', 'committer_email': None, 'commit_date': datetime.datetime(2008, 3, 13, 21, 28, 32, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+488080864,"[API change] Add a Figure block, modify Table block","Resolves jgm/pandoc#3177 in this library.
+
+The design of `Figure` is the more expressive one:
+
+```haskell
+data Block
+  = ...
+  | Figure Attr CaptionPos Caption [Block]
+  ...
+
+data CaptionPos = CaptionBefore | CaptionAfter -- should there be a CaptionPosDefault?
+```
+
+and the `Caption` from `Table` has been removed, since that seemed to be desired. The idea now is that a few `Figure` configurations will be special:
+
+- a `Figure` with `[Plain [Image...]]` content is a captioned image
+- a `Figure` with a sequence of captioned images as content is a ""gallery"" of images (could expand this to allow `Plain [Image...]` blocks in the content, which would be considered captionless sub-images)
+- a `Figure` with `[Table...]` content is a captioned table
+- a `Figure` with `[CodeBlock...]` content is a captioned code listing
+
+These map fairly straightforwardly onto a lot of different formats as I mentioned in [this comment](https://github.com/jgm/pandoc/issues/3177#issuecomment-687670695). Some formats allow for more complex `Figure` content as well, but all formats will still need to keep these in mind, since they usually have explicit captions in their tables and code listings (when those elements exist). A future numbering/referencing system will need to respect them as well, to make sure that figures and tables can be numbered and referenced properly.
+
+At the start, writers can attempt to render a `Figure` by instead rendering a `Div` with an added `""figure""` class, inside of which is a `Div` caption and the figure content, the caption being before or after the content depending on what the `CaptionPos` is. I think that is a decent fallback in future for writers that encounter a `Figure` in an invalid position or with invalid content for that format, but specific formats might have better ways of handling those situations.
+
+The exceptions are the captioned image and captioned table configurations, which should be detected and handled like implicit figures and tables are now, from the start, to avoid regressions in behaviour.
+
+Each of LaTeX, JATS, DocBook, and HTML support more complex `Figure` content (which is why the `Figure` block isn't just a sequence of captioned images). Beyond the special handling of the configurations above, I think the following `Figure` support is possible in those formats with this design:
+
+- HTML allowing arbitrary block content in figures
+- JATS and DocBook allowing figures without figure children (both have some additional restrictions)
+- JATS and DocBook 5.2 allowing figures with a sequence of subfigures, corresponding to the `<fig-group>` and `<formalgroup>` elements
+- LaTeX allowing figures without figure children. While there is the [subcaption](https://www.ctan.org/pkg/subcaption) package for one-deep figure and table nesting, that package needs an explicit figure width in `Figure`.
+
+There may be other formats that support more complex figures, but I'm not too familiar with them.",False,83,https://api.github.com/repos/jgm/pandoc-types/pulls/83,https://github.com/jgm/pandoc-types/pull/83,open,89,58,5,1,3,0,0,0,[],2020-09-16 15:45:14+00:00,,0.0,,[],"[{'commit_sha': '04cb48907557c987c0324df5baef75a615900bbb', 'committer_username': 'despresc', 'committer_name': 'Christian Despres', 'committer_email': None, 'commit_date': datetime.datetime(2019, 5, 1, 2, 26, 8, tzinfo=datetime.timezone.utc)}]",Christian Despres,50160106,,User,,10,,0,3
+665895942,Use the new 'simpleFigure' builder function in the readers.,"## Reading input with figures
+
+Reading figures is now supported for two formats natively and one format through a Lua filter. This functionality has to be enabled with a new [pandoc extension](https://pandoc.org/MANUAL.html#extensions): `native_figures`.
+
+```
+#### Extension: `native_figures` ####
+
+Use pandoc's native `Figure` element for content inside `<figure>` tags, in the case of HTML, or `figure` environments, in case of LaTeX. This, in turn, allows some writers to produce more accurate representations of figures. It also allows the use of the `Figure` element in filters, for custom figure output.
+
+This extension can be enabled/disabled for the following formats:
+
+input formats
+: `latex` `html`
+```
+
+The choice of an extension was made to introduce the new behavior with minimal disruption of the old one.
+
+### Reading HTML 5 figures
+
+This version of pandoc can now read figures from HTML into its internal representation:
+
+**Now**
+```
+$ pandoc -f html+native_figures -t native
+<figure class=""important"">
+  <img src=""../media/rId25.jpg"" />
+  <ul> <li> ITEM </li> </ul>
+  <figcaption> CAP2 </figcaption>
+</figure>
+^D
+[Figure ("""",[""important""],[]) (Caption Nothing [Plain [Str ""CAP2""]])\
+	[ Plain [Image ("""",[],[]) [] (""../media/rId25.jpg"","""")]
+	, BulletList [[Plain [Str ""ITEM""]]]]]
+```
+
+The difference with the old handling is that, now, elements inside a figure are not limited to only one image:
+
+**Before**
+```
+$ pandoc-before -f html -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP2""] (""../media/rId25.jpg"",""fig:"")]]
+```
+
+Notice the missing `ITEM`. Handling of attributes and classes has also become more granular and accurate. Notice the missing `important` class above.
+
+### Reading LaTeX figures
+
+It can also read LaTeX figures:
+
+**Now**
+```
+pandoc -f latex+native_figures -t native
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+      \centering
+      \includegraphics{test/media/rId25.jpg}
+      \caption{CAP1.2}
+    \end{subfigure}
+    \caption{CAP1}
+    \label{fig:inner1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics{test/media/rId25.jpg}
+    \caption{CAP2}
+    \label{fig:inner2}
+  \end{subfigure}
+  \caption{CAP}
+  \label{fig:outer}
+\end{figure}
+^D
+[Figure (""fig:outer"",[],[]) (Caption Nothing [Plain [Str ""CAP""]]) 
+	[ Figure (""fig:inner1"",[],[]) (Caption Nothing [Plain [Str ""CAP1""]])
+		[ Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.1""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]
+		, Figure ("""",[],[]) (Caption Nothing [Plain [Str ""CAP1.2""]])
+			[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+	, Figure (""fig:inner2"",[],[]) (Caption Nothing [Plain [Str ""CAP2""]])
+		[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]]
+```
+
+It respects the figure and sub figure hierarchies, labels and captions accurately.
+
+**Before**
+
+```
+pandoc -f latex -t native
+...
+^D
+[Para [Image ("""",[],[]) [Str ""CAP1.1""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image ("""",[],[]) [Str ""CAP1.2""] (""test/media/rId25.jpg"",""fig:"")]
+,Para [Image (""fig:inner2"",[],[]) [Str ""CAP2""] (""test/media/rId25.jpg"",""fig:"")]]
+```
+
+Figures with sub-figures where flattened into a list of figures using the construction mentioned in the original figure handling section. Some captions and labels are lost.
+
+### Markdown figures
+
+Handling of markdown figures was implemented through a Lua filter. We opted for this approach because there is yet no agreed-upon syntax for figures in markdown (for example commonmark). Pandoc has its own markdown flavor but we have also opted to propose our syntax by implementing it as a filter. The code of the filter has been submitted in the [lua-filters pull request](https://github.com/pandoc/lua-filters/pull/187).
+
+I've written two filters that represent two possible markdown syntax extensions to represent figures. Both use pandoc's markdown `div` sytax with special classes.
+
+#### The explcit caption syntax
+
+```markdown
+::: { .figure }
+
+content.
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+In this syntax a figure is a pandoc div with a `figure` class and the caption,
+if present, is a div with a `caption` class.
+
+Here is an example that converts this to HTML
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-explicit.lua
+...
+```
+
+```html
+<figure>
+<p>content.</p>
+<figcaption><p>caption</p></figcaption>
+</figure>
+```
+
+#### The implicit caption syntax
+
+```markdown
+::: { .figure }
+figure content
+
+figure caption.
+:::
+```
+
+This, more concise, syntax uses the last paragraph inside the div as the caption for the figure.
+
+```
+$ pandoc -f markdown -t html --lua-filter=../lua-filters/markdown-figures/md-figure-implicit.lua
+...
+```
+
+```html
+<figure>
+<p>figure content</p>
+<figcaption><p>figure caption.</p></figcaption>
+</figure>
+```
+
+## Generating output with figures.
+
+Once figures can be described in pandoc's internal representation, it is the `Writers` that translate them into various output formats. Not all output formats can represent figures, and for those that can, we have decided to focus on the ones that would make the least intrusive modifications first.
+
+Next, I'll briefly enumerate the output resulting from the `Figure` constructor in various formats.
+
+### HTML
+
+
+```
+% pandoc -f native -t html5
+[Figure (""fig-id"",[],[]) (Caption Nothing [Plain [Str ""caption""]]) [Para [Str ""content""]]]
+
+^D
+```
+```html
+<figure id=""fig-id"">
+<p>content</p>
+<figcaption>caption</figcaption>
+</figure>
+```
+
+Figures are represented as `<figure>` tags.
+
+### Org mode format
+
+```
+% pandoc -f native -t org
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+^D
+```
+```org
+<<fig-id>>
+content
+```
+
+Emac's org mode adds an anchor to the content of the figure.
+
+### Textile
+
+```
+% pandoc -f native -t textile
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Image ("""",[],[]) [] (""foo.png"", """")]]]
+^D
+```
+```html
+<figure id=""fig-id"">
+
+!foo.png!
+
+
+</figure>
+```
+
+The textile format constructs an HTML5 figure.
+
+### Texinfo
+
+```
+% pandoc -f native -t texinfo
+[Figure (""fig-id"",[],[])
+	(Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```texinfo
+@node Top
+@top Top
+
+@float Figure
+@image{foo,,,Caption,png}
+@caption{Caption}
+@end float
+```
+
+GNU Info's figures.
+
+### RST
+
+```
+% pandoc -f native -t rst
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```rst
+.. container:: float
+   :name: fig-id
+
+   .. figure:: foo.png
+      :alt: 
+```
+
+Figures are represented as containers.
+
+### Markdown
+
+
+```
+% pandoc -f native -t markdown
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+^D
+```
+```markdown
+::: {#fig-id .figure}
+![](foo.png)
+:::
+```
+
+Figures are represented as a pandoc div ith the `.figure` class.
+
+### MediaWiki
+
+
+```
+% pandoc -f native -t mediawiki
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]])
+	[Para [Image ("""",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```mediawiki
+<div id=""fig-id"" class=""figure"">
+
+[[File:foo.png|thumb|none]]
+
+
+</div>
+```
+
+Figures are represented as a div with the `figure` class.
+
+### Jats
+
+
+```
+% pandoc -f native -t jats
+[Figure (""fig-id"",[],[]) (Caption Nothing [Para [Str ""Caption""]]) [Para [Str ""Text""],
+Para [Image (""fig-id-2"",[],[]) [] (""foo.png"", ""fig:"")]]]
+
+^D
+```
+```jats
+<boxed-text id=""fig-id"">
+  <p>Text</p>
+  <fig id=""fig-id-2"">
+    <graphic mimetype=""image"" mime-subtype=""png"" xlink:href=""foo.png"" xlink:title="""" />
+  </fig>
+</boxed-text>
+```
+
+Figures are represented with the `boxed-text` tag in JATS.
+
+### XWiki
+
+```
+% pandoc -f native -t xwiki
+[Figure (""fig-id"",[],[]) (Caption Nothing []) [Para [Str ""content""]]]
+
+^D
+```
+```xwiki
+(((
+{{id name=""fig-id"" /}}content
+)))
+```
+
+Figures are represented as groups.
+
+### Ohter formats
+
+All other formats handle figures like they handle pandoc's divs.
+
+## Testing
+
+To test these formats the command line testing can now be done in a particular folder:
+
+```
+$ test-pandoc -pfigure
+pandoc tests
+  Command folder: command
+    5474-figures.md
+      #1:                  OK (0.03s)
+    html-read-figure.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+      #5:                  OK (0.02s)
+    jats-figure-alt-text.md
+      #1:                  OK (0.02s)
+  Command folder: command/figures
+    figures-haddock.md
+      #1:                  OK (0.02s)
+    figures-org.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+    figures-fb2.md
+      #1:                  OK (0.02s)
+    figures-zimwiki.md
+      #1:                  OK (0.02s)
+    figures-textile.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+    figures-texinfo.md
+      #1:                  OK (0.02s)
+      #2:                  OK (0.02s)
+      #3:                  OK (0.02s)
+      #4:                  OK (0.02s)
+    figures-rst.md
+      #1:                  OK (0.01s)
+    figures-mediawiki.md
+      #1:                  OK (0.01s)
+    figures-markdown.md
+      #1:                  OK (0.01s)
+    figures-jats.md
+      #1:                  OK (0.01s)
+    figures-jira.md
+      #1:                  OK (0.01s)
+    figures-xwiki.md
+      #1:                  OK (0.01s)
+    figures-html.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.01s)
+      #3:                  OK (0.01s)
+      #4:                  OK (0.01s)
+      #5:                  OK (0.01s)
+      #6:                  OK (0.01s)
+    figures-latex.md
+      #1:                  OK (0.01s)
+      #2:                  OK (0.02s)
+  Readers
+    Org
+      Basic Blocks
+        Figures
+          Labelled figure: OK
+
+All 33 tests passed (0.57s)
+```
+
+# Readers
+
+- [X] JATS, also capture the `alt-text` tag in figures and test.
+- [X] HTML
+- [X] Markdown
+- [X] Latex
+- [X] MediaWiki: This could be refactored when I find a pattern repeated in other readers.
+- [X] ~~VimWiki~~
+- [X] ~~DokuWiki~~
+- [X] ~~Ipynb~~
+- [X] ~~Docx~~
+- [X] ~~ODT~~
+- [X] OrgMode
+- [X] RTS
+
+# Writers
+
+- [X] HTML
+- [X] JATS
+- [X] Markdown
+- [X] LaTex
+- [X] MediaWiki
+- [X] Org
+- [X] RTS
+- [X] AsciiDoc
+- [X] ConTeXt
+- [X] Docbook
+- [X] Docx
+- [X] DokuWiki
+- [X] FB2
+- [X] Haddock
+- [X] ICML
+- [X] ~~Muse~~. It works directly on `Inline`
+- [X] OpenDocument
+- [X] ~~TEI~~. Code is commented. Seems like it's fixable. Figure descriptions have a 'fig:' prefix in the output.
+- [X] Texinfo
+- [X] Textile
+- [X] ZimWiki
+
+",False,7364,https://api.github.com/repos/jgm/pandoc/pulls/7364,https://github.com/jgm/pandoc/pull/7364,closed,756,161,62,3,6,0,0,0,[],2021-06-09 13:14:08+00:00,2023-01-17 06:10:37+00:00,50691389.0,"586 days, 16:56:29",[],"[{'commit_sha': '899e0c0c99148ee32198bdb43ce69170102e2a18', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': '6dc0e1fff076ab2601ed938d4022f5b24aa7af0c', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'fe42884ce686eefd893311684f4a64a64b614644', 'committer_username': 'jgm', 'committer_name': 'John MacFarlane', 'committer_email': None, 'commit_date': datetime.datetime(2008, 3, 13, 21, 28, 32, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+699868815,Add markdown figure filters.,"This PR requires a `Figure` constructor in pandoc's AST.
+
+The code for a pandoc fork that has such constructor can be found [here](https://github.com/argent0/pandoc/tree/figures-gsoc-constructor-keep-behavior).
+
+# Details
+
+This filter provides two syntaxs to represent figures in markdown.
+
+## Explicit syntax
+
+The explicit syntax is constructed using a `div` with ""figure"" class. The
+caption is also specified using a `div` but with a ""caption"" class.
+
+Here is an example.
+
+```
+::: { .figure }
+
+content.
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+All elements inside the figure that are an image without a caption in its own
+paragraph become html's `img` tags.
+
+Here is an example of figure containing two images and a caption.
+
+```{markdown}
+::: { .figure }
+
+![](test/media/rId25.jpg """")
+
+![](test/media/rId25.jpg """")
+
+:::: {.caption }
+caption
+::::
+
+:::
+```
+
+This will result in a single figure containing multiple images.
+
+```
+$ pandoc -f markdown -t native --lua-filter=md-figure-explicit.lua fig-explicit.md
+
+[Figure ("""",[],[]) (Caption (Just []) [Para [Str ""caption""]])
+	[ Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]
+	, Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+```
+
+
+```{html}
+<figure>
+<img src=""test/media/rId25.jpg"" />
+<img src=""test/media/rId25.jpg"" />
+<figcaption><p>caption</p></figcaption>
+</figure>
+```
+
+This will result in a single figure containing multiple images.
+
+## Implicit syntax
+
+The second syntax uses the last paragraph inside the figure as the caption.
+
+```{markdown}
+::: { .figure }
+
+
+![](test/media/rId25.jpg """")
+
+![](test/media/rId25.jpg """")
+
+This is a caption with
+multiple lines
+
+:::
+
+```
+
+This results in the following output:
+
+
+```
+$ pandoc -f markdown -t native --lua-filter=md-figure-implicit.lua fig-implict.md
+[Figure ("""",[],[])
+	(Caption
+		(Just [])
+		[ Para [Str ""This"",Space,Str ""is"",Space,Str ""a"",Space,Str ""caption"",Space,Str ""with"",SoftBreak,Str ""multiple"",Space,Str ""lines""]]) 
+	[Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")],Plain [Image ("""",[],[]) [] (""test/media/rId25.jpg"","""")]]]
+```
+
+```{html}
+<figure>
+<img src=""test/media/rId25.jpg"" />
+<img src=""test/media/rId25.jpg"" />
+<figcaption><p>This is a caption with multiple lines</p></figcaption>
+</figure>
+```
+
+## Sample Firefox's HTML rendering
+
+For the implicit syntax example, this is firefox's render.
+
+![render](https://user-images.githubusercontent.com/691306/127571573-f30e403f-32e9-40fc-bb6e-2d159530c1d1.png)
+
+",False,187,https://api.github.com/repos/pandoc/lua-filters/pulls/187,https://github.com/pandoc/lua-filters/pull/187,open,226,0,5,1,2,0,0,0,[],2021-07-29 22:03:38+00:00,,0.0,,[],"[{'commit_sha': '50cbeba446231e7d4e75a9950fe78e3d3d9f9126', 'committer_username': 'argent0', 'committer_name': None, 'committer_email': None, 'commit_date': datetime.datetime(2011, 3, 25, 23, 12, 34, tzinfo=datetime.timezone.utc)}]",,691306,,User,,53,,1,7
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+1055744,pandoc-types,jgm/pandoc-types,Haskell,65,107,13,31,484,16,4,10,"[{'id': 734945589, 'number': 93, 'closed': datetime.datetime(2021, 9, 17, 4, 52, 36, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 9, 15, 21, 46, 4, tzinfo=datetime.timezone.utc), 'time_taken': 111992.0, 'time_delta': '1 day, 7:06:32', 'additions': 57, 'deletions': 3, 'state': 'closed'}, {'id': 661860768, 'number': 90, 'closed': datetime.datetime(2021, 9, 15, 21, 46, 44, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 4, 15, 23, 30, tzinfo=datetime.timezone.utc), 'time_taken': 8922194.0, 'time_delta': '103 days, 6:23:14', 'additions': 104, 'deletions': 15, 'state': 'closed'}]"
+571770,pandoc,jgm/pandoc,Haskell,3329,33719,516,568,17597,1134,73,83,"[{'id': 752704839, 'number': 7611, 'closed': datetime.datetime(2021, 10, 22, 22, 19, 22, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 10, 6, 23, 35, 58, tzinfo=datetime.timezone.utc), 'time_taken': 1377804.0, 'time_delta': '15 days, 22:43:24', 'additions': 95, 'deletions': 113, 'state': 'closed'}, {'id': 682668763, 'number': 7425, 'closed': datetime.datetime(2021, 7, 2, 20, 2, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 7, 2, 14, 22, 26, tzinfo=datetime.timezone.utc), 'time_taken': 20426.0, 'time_delta': '5:40:26', 'additions': 8, 'deletions': 5, 'state': 'closed'}, {'id': 679866903, 'number': 7417, 'closed': datetime.datetime(2021, 6, 29, 16, 2, 14, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 29, 11, 39, 15, tzinfo=datetime.timezone.utc), 'time_taken': 15779.0, 'time_delta': '4:22:59', 'additions': 22, 'deletions': 2, 'state': 'closed'}, {'id': 665895942, 'number': 7364, 'closed': datetime.datetime(2023, 1, 17, 6, 10, 37, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2021, 6, 9, 13, 14, 8, tzinfo=datetime.timezone.utc), 'time_taken': 50691389.0, 'time_delta': '586 days, 16:56:29', 'additions': 756, 'deletions': 161, 'state': 'closed'}, {'id': 521099652, 'number': 6837, 'closed': datetime.datetime(2020, 11, 15, 5, 38, 32, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 11, 14, 23, 7, 4, tzinfo=datetime.timezone.utc), 'time_taken': 23488.0, 'time_delta': '6:31:28', 'additions': 340, 'deletions': 334, 'state': 'closed'}, {'id': 490409018, 'number': 6693, 'closed': datetime.datetime(2020, 11, 14, 19, 55, 21, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 21, 16, 9, 11, tzinfo=datetime.timezone.utc), 'time_taken': 4679170.0, 'time_delta': '54 days, 3:46:10', 'additions': 0, 'deletions': 0, 'state': 'closed'}, {'id': 482347330, 'number': 6671, 'closed': datetime.datetime(2020, 9, 20, 1, 22, 52, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 9, 8, 22, 42, 33, tzinfo=datetime.timezone.utc), 'time_taken': 960019.0, 'time_delta': '11 days, 2:40:19', 'additions': 43, 'deletions': 28, 'state': 'closed'}, {'id': 473314653, 'number': 6637, 'closed': datetime.datetime(2020, 8, 28, 14, 0, 39, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 8, 25, 16, 15, 47, tzinfo=datetime.timezone.utc), 'time_taken': 251092.0, 'time_delta': '2 days, 21:44:52', 'additions': 2, 'deletions': 3, 'state': 'closed'}]"
+111613589,lua-filters,pandoc/lua-filters,Lua,164,594,29,50,342,49,2,16,"[{'id': 699868815, 'number': 187, 'closed': None, 'created': datetime.datetime(2021, 7, 29, 22, 3, 38, tzinfo=datetime.timezone.utc), 'time_taken': 0.0, 'time_delta': '', 'additions': 226, 'deletions': 0, 'state': 'open'}]"

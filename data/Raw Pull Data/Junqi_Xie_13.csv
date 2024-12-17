@@ -1,0 +1,96 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+1368734701,MDEV-30610 Update RocksDB to v8.1.1,"<!--
+Thank you for contributing to the MariaDB Server repository!
+
+You can help us review your changes faster by filling this template <3
+
+If you have any questions related to MariaDB or you just want to
+hang out and meet other community members, please join us on
+https://mariadb.zulipchat.com/ .
+-->
+
+<!--
+If you've already identified a https://jira.mariadb.org/ issue
+that seems to track this bug/feature, please add its number below.
+-->
+- [x] *The Jira issue number for this PR is: [MDEV-30610](https://jira.mariadb.org/browse/MDEV-30610)*
+- [x] *This PR is part of Google Summer of Code 2023 Project: [Update RocksDB to the latest upstream version](https://summerofcode.withgoogle.com/programs/2023/projects/slotQabK)*
+
+<!--
+An amazing description should answer some questions like:
+1. What problem is the patch trying to solve?
+2. If some output changed, what was it looking like before
+   the change and how it's looking with this patch applied
+3. Do you think this patch might introduce side-effects in
+   other parts of the server?
+-->
+## Description
+MariaRocks is currently lagging behind the main branch of the RocksDB engine. This commit brings MariaRocks up to date with the latest release of RocksDB by backporting changes from Facebook's MyRocks. These changes include API updates, bug fixes, and improvements for compatibility with RocksDB v8.1.1. Some system variables and metadata tables are modified to reflect the internal changes in RocksDB.
+
+Additionally, this commit backports improved and more stable test cases from Facebook's MyRocks, including tests for the `write_unprepared` isolation level of RocksDB. It also reverts workarounds for MDEV-29875 and MDEV-31057 and adds support for the latest compilation options.
+
+## How can this PR be tested?
+This PR passes all tests within `storage/rocksdb` subdirectory, with the exception of `group_min_max` (MDEV-31581) and `unique_check` (MDEV-31428).
+
+<!--
+Tick one of the following boxes [x] to help us understand
+if the base branch for the PR is correct
+(Currently the earliest maintained branch is 10.3)
+-->
+## Basing the PR against the correct MariaDB version
+- [x] *This is a new feature and the PR is based against the latest MariaDB development branch*
+- [ ] *This is a bug fix and the PR is based against the earliest maintained branch in which the bug can be reproduced*
+
+<!--
+You might consider answering some questions like:
+1. Does this affect the on-disk format used by MariaDB?
+2. Does this change any behavior experienced by a user
+   who upgrades from a version prior to this patch?
+3. Would a user be able to start MariaDB on a datadir
+   created prior to your fix?
+-->
+## Backward compatibility
+The default value of the following system variables are changed:
+* `rocksdb_stats_level`: `1 (kExceptHistogramOrTimers)`
+* `rocksdb_wal_recovery_mode`: `2 (kPointInTimeRecovery)`
+
+The following system variables are added:
+* `rocksdb_cancel_manual_compactions`
+* `rocksdb_enable_iterate_bounds`
+* `rocksdb_enable_pipelined_write`
+* `rocksdb_enable_remove_orphaned_dropped_cfs`
+* `rocksdb_manual_compaction_bottommost_level`
+* `rocksdb_max_background_compactions`
+* `rocksdb_max_background_flushes`
+* `rocksdb_max_bottom_pri_background_compactions`
+* `rocksdb_skip_locks_if_skip_unique_check`
+* `rocksdb_track_and_verify_wals_in_manifest`
+* `rocksdb_write_batch_flush_threshold`
+
+The following system variables are deprecated:
+* `rocksdb_hash_index_allow_collision`
+* `rocksdb_new_table_reader_for_compaction_inputs`
+
+The following dynamic metadata table is added:
+* `INFORMATION_SCHEMA.ROCKSDB_LIVE_FILES_METADATA`
+
+The following status variables are added:
+* `rocksdb_manual_compactions_cancelled`
+* `rocksdb_manual_compactions_pending`
+
+The following status variables are removed:
+* `rocksdb_block_cache_filter_bytes_evict`
+* `rocksdb_block_cache_index_bytes_evict`
+* `rocksdb_block_cachecompressed_hit`
+* `rocksdb_block_cachecompressed_miss`
+* `rocksdb_no_file_closes`
+* `rocksdb_num_iterators`
+* `rocksdb_number_deletes_filtered`
+* `rocksdb_write_timedout`
+
+## PR quality check
+- [x] I checked the [CODING_STANDARDS.md](https://github.com/MariaDB/server/blob/11.0/CODING_STANDARDS.md) file and my PR conforms to this where appropriate.
+",True,2648,https://api.github.com/repos/MariaDB/server/pulls/2648,https://github.com/MariaDB/server/pull/2648,closed,11927,2942,134,1,4,16,1,0,[{'name': 'GSoC'}],2023-05-29 08:20:00+00:00,2023-08-17 13:05:00+00:00,6929100.0,"80 days, 4:45:00","[{'comment_id': 1209639031, 'comment_body': ""any reason `CHECK_FUNCTION_EXISTS` wasn't used here?"", 'comment_created': datetime.datetime(2023, 5, 30, 2, 4, 34, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209639749, 'comment_body': ""I'm not sure its necessary to repeat `option`."", 'comment_created': datetime.datetime(2023, 5, 30, 2, 6, 37, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209640389, 'comment_body': 'the setting of cflags here appears to duplicate top level CMakeLists.txt', 'comment_created': datetime.datetime(2023, 5, 30, 2, 8, 14, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209640468, 'comment_body': 'same as ASAN', 'comment_created': datetime.datetime(2023, 5, 30, 2, 8, 29, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209640519, 'comment_body': 'same as ASAN', 'comment_created': datetime.datetime(2023, 5, 30, 2, 8, 38, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209641857, 'comment_body': 'might need to deprecate these rather than straight remove, even if they are there without a purpose.', 'comment_created': datetime.datetime(2023, 5, 30, 2, 12, 9, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209641997, 'comment_body': 'same as `new_table_reader_for_compaction_inputs`', 'comment_created': datetime.datetime(2023, 5, 30, 2, 12, 30, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209643510, 'comment_body': 'this excludes windows - intentional?', 'comment_created': datetime.datetime(2023, 5, 30, 2, 16, 30, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209645498, 'comment_body': ""I'm ok with the change in value of this and ROCKSDB_STATS_LEVEL variables, but could a description/rational be included in the commit message."", 'comment_created': datetime.datetime(2023, 5, 30, 2, 21, 58, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1209650865, 'comment_body': ""After updating RocksDB, the filename of the MANIFEST file may change periodically. The test is designed to check the file's number rather than its name.\r\n\r\nHowever, the modified test will fail in Buildbot, so I kept it back. But the test result was modified accordingly."", 'comment_created': datetime.datetime(2023, 5, 30, 2, 36, 32, tzinfo=datetime.timezone.utc), 'commenter': 'junqi-xie', 'type': 'User'}, {'comment_id': 1209651611, 'comment_body': 'These changes originate from RocksDB, as it changes its way of interpreting integers. I will detail the changes in the commit message.', 'comment_created': datetime.datetime(2023, 5, 30, 2, 38, 22, tzinfo=datetime.timezone.utc), 'commenter': 'junqi-xie', 'type': 'User'}, {'comment_id': 1209659116, 'comment_body': 'From what I can tell, this verifies the presence of the `SYNC_FILE_RANGE_WRITE` flag in the function call.', 'comment_created': datetime.datetime(2023, 5, 30, 2, 58, 15, tzinfo=datetime.timezone.utc), 'commenter': 'junqi-xie', 'type': 'User'}, {'comment_id': 1209661064, 'comment_body': 'Indeed, the duplication is unnecessary.', 'comment_created': datetime.datetime(2023, 5, 30, 3, 3, 9, tzinfo=datetime.timezone.utc), 'commenter': 'junqi-xie', 'type': 'User'}, {'comment_id': 1209669194, 'comment_body': '`CHECK_SYMBOL_EXIST(SYNC_FILE_RANGE_WRITE ""fcntl.h"" HAVE_SYNC_FILE_RANGE_WRITE)`', 'comment_created': datetime.datetime(2023, 5, 30, 3, 25, 30, tzinfo=datetime.timezone.utc), 'commenter': 'grooverdan', 'type': 'User'}, {'comment_id': 1210489538, 'comment_body': 'This file [misses a newline at the end](https://gist.github.com/camh-/1bebfcff1b0f814e9b191edc60d5206b).\r\n\r\nThere are a handful of other files that have the same problem. Please address them also.', 'comment_created': datetime.datetime(2023, 5, 30, 15, 52, 35, tzinfo=datetime.timezone.utc), 'commenter': 'haidong', 'type': 'User'}, {'comment_id': 1213341141, 'comment_body': ""One minor thing, it is likely these will need recalculating. That doesn't have to be in this PR though."", 'comment_created': datetime.datetime(2023, 6, 1, 15, 34, tzinfo=datetime.timezone.utc), 'commenter': 'LinuxJedi', 'type': 'User'}]","[{'commit_sha': '57db3768434b558198965b29f2335afbfd33d30f', 'committer_username': 'junqi-xie', 'committer_name': 'Junqi Xie', 'committer_email': None, 'commit_date': datetime.datetime(2018, 9, 23, 6, 17, 2, tzinfo=datetime.timezone.utc)}]",Junqi Xie,43510903,,User,,7,,76,94
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+19816070,server,MariaDB/server,C++,1668,5520,268,1875,201521,237,2625,237,"[{'id': 1368734701, 'number': 2648, 'closed': datetime.datetime(2023, 8, 17, 13, 5, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 5, 29, 8, 20, tzinfo=datetime.timezone.utc), 'time_taken': 6929100.0, 'time_delta': '80 days, 4:45:00', 'additions': 11927, 'deletions': 2942, 'state': 'closed'}, {'id': 1237009467, 'number': 2491, 'closed': datetime.datetime(2023, 4, 12, 1, 4, 30, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2023, 2, 10, 17, 0, 37, tzinfo=datetime.timezone.utc), 'time_taken': 5213033.0, 'time_delta': '60 days, 8:03:53', 'additions': 1232, 'deletions': 962, 'state': 'closed'}]"

@@ -1,0 +1,53 @@
+pr_id,pr_title,pr_body,is_merged,pr_number,pr_url,pr_html_url,pr_state,additions,deletions,pr_changed_files,pr_commits_count,pr_comments_count,pr_review_comments_count,pr_labels_count,pr_assignees_count,pr_labels,pr_created_at,pr_closed_at,time_taken,time_delta,pr_review_comments,pr_commits,contributor,contributor_id,contributor_email,contributor_type,contributions,contributor_public_repos,contributor_private_repos,contributor_followings,contributor_followers
+455761000,SCMS Implementation,"Implementing Social Currency Metric System in Grimoirelabs for GSoC'20
+This PR is in extension to the PR at chaoss/grimoirelab-elk#887
+
+For testing purposes, use projects.json as:
+```
+{
+    ""chaoss"": {
+        ""scmsgithub"": [
+            ""https://github.com/chaoss/grimoirelab-perceval"",
+            ""https://github.com/chaoss/grimoirelab-elk""
+        ],
+         ""scmspipermail"": [
+            ""https://lists.linuxfoundation.org/pipermail/grimoirelab-discussions/""
+        ],
+         ""scmssupybot"": [
+            ""irc://chat.freenode.net/chaoss-community /irclogs/freenode/#chaoss-community"",
+            ""irc://chat.freenode.net/grimoirelab /irclogs/freenode/#grimoirelab""
+        ]
+    }
+}
+```
+Setup.cfg :
+```
+[scmspipermail]
+raw_index = scmspipermail_chaoss_raw
+enriched_index = scmspipermail_chaoss_enriched
+no-ssl-verify = true
+studies = [enrich_extra_data:scms]
+
+[scmsgithub]
+raw_index = scms_github_issues_chaoss_raw
+enriched_index = scms_github_issues_chaoss_enriched
+api-token = xxxx
+sleep-for-rate = true
+no-archive = true
+category = issue
+sleep-time = 300
+studies = [enrich_extra_data:scms]
+
+[scmssupybot]
+raw_index = data_irc_raw
+enriched_index = supybot_enriched
+studies = [enrich_extra_data:scms]
+
+[enrich_extra_data:scms]
+json_url = https://gist.githubusercontent.com/ria18405/630346bac7856658fd19ed63bce4d9c0/raw/61d3afc8aab75219f8ab67218ec377a641cd664b/try.json
+```
+
+SCMS Enrichers and related tests have been added.",False,924,https://api.github.com/repos/chaoss/grimoirelab-elk/pulls/924,https://github.com/chaoss/grimoirelab-elk/pull/924,closed,7231,6,23,15,2,0,0,0,[],2020-07-23 14:42:05+00:00,2023-10-13 15:29:35+00:00,101695650.0,"1177 days, 0:47:30",[],"[{'commit_sha': '5ecc46acf253adc4a9e6eea73543743c30db2096', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'cf96fac4e7cf71b9f31f6c16e6d46395abc14288', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '42484f4b4a16a602b8e14b36229e45d38e854731', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '0dddfe1912d7d43ac59fda6433c70c14162bc7ec', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '3b29c039fbf7ee4ca194d350808acc96dc7d246d', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'e50e14dc31d18de6d4c1f97ace1279e89d5b3e6e', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '9fe5a5c93833e844732a653937b6105ceaae637d', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '4fbf79eb777c04969300af9b86c9a64978adcced', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '1d2840679aa24a768e6ae0e1ad7e2e906b1f6371', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '17d610ad544cf6c35f85876b959e3f6ef4d8930f', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': 'ee26d978805ea28ba0ec3bf6b0049b3a0e0e01f8', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '70d9f485880c615951e0c64720bca0bfd966be1b', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '18d28b0f0e4ae4393dcb3c3956c8a134e00be193', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '39577663e8beab8cae188a4c5fda69a1ab86d80f', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}, {'commit_sha': '5984169ab5f2412004765852f28b5ec413080a68', 'committer_username': 'ria18405', 'committer_name': 'Ria Gupta', 'committer_email': 'ria18405@iiitd.ac.in', 'commit_date': datetime.datetime(2018, 10, 1, 12, 39, 47, tzinfo=datetime.timezone.utc)}]",Ria Gupta,43749600,ria18405@iiitd.ac.in,User,,37,,16,29
+
+Project_ID,Name,Full_name,Language,Forks,Stars,Watchers,contributors,commits,issues,branches,PRs_count,contributor pullrequests
+43443738,grimoirelab-elk,chaoss/grimoirelab-elk,Python,121,59,16,52,3389,51,5,12,"[{'id': 455761000, 'number': 924, 'closed': datetime.datetime(2023, 10, 13, 15, 29, 35, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 7, 23, 14, 42, 5, tzinfo=datetime.timezone.utc), 'time_taken': 101695650.0, 'time_delta': '1177 days, 0:47:30', 'additions': 7231, 'deletions': 6, 'state': 'closed'}, {'id': 427853686, 'number': 887, 'closed': datetime.datetime(2020, 7, 29, 19, 38, 9, tzinfo=datetime.timezone.utc), 'created': datetime.datetime(2020, 6, 4, 13, 50, 23, tzinfo=datetime.timezone.utc), 'time_taken': 4772866.0, 'time_delta': '55 days, 5:47:46', 'additions': 5638, 'deletions': 2, 'state': 'closed'}]"
