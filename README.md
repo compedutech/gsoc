@@ -7,6 +7,5 @@ The data is freely available for non-commercial purpose.
 
 To cite this dataset, please consider citing these papers instead of the github page.
 
-a. [GSOC]	-Saheed Popoola. "Empirical Analysis of Pull Requests for Google Summer of Code." arXiv preprint arXiv:2412.13120(2024).
+Saheed Popoola. "Empirical Analysis of Pull Requests for Google Summer of Code." arXiv preprint arXiv:2412.13120(2024).
 
-b. [Reddit-Intern] -	Saheed Popoola, Ashwitha Vollem, and Kofi Nti. "What do Computing Interns Discuss Online? An Empirical Analysis of Reddit Posts." arXiv preprint arXiv:2412.13296 (2024).
