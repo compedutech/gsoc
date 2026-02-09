@@ -5,3 +5,5 @@ summer_code_main.py - extract all the pull request information from the pull req
 process_summer_code.py - extract pull , project and user information from each pull request
 
 extract_gsoc_info.py - used to extract each project information from the GSOC web page. The info also include each participant page, and this info is used in the get_pull_url.py
+
+extract_gsoc_info.py - updated version for extract_gsoc_info. This has been tested on Google Colab as as Feb, 2026.
