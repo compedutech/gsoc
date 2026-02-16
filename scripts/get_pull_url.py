@@ -7,11 +7,12 @@ from selenium.webdriver.common.by import By
 
 
 
-chrome_options = webdriver.SafariOptions()
+#chrome_options = webdriver.SafariOptions()
+chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Safari(options=chrome_options)
+driver = webdriver.Chrome(options=chrome_options)
 
 def isPull(url):
     if "pull" in url:
@@ -35,8 +36,8 @@ def extract_links(soup):
   return [pull,issues]
 
 
-input_handle = open(r"/Users/popoolso/Desktop/summer_code_edit_2.csv", mode='r',encoding='UTF-8',newline='',errors='ignore')
-handle_out = open(r"/Users/popoolso/Desktop/summer_code_out_2.csv", 'w', encoding='UTF-8', newline='')
+input_handle = open(r"/Users/saheedpopoola/Desktop/Fake/summer_code_2025_1.csv", mode='r',encoding='UTF-8',newline='',errors='ignore')
+handle_out = open(r"/Users/saheedpopoola/Desktop/summer_code_2025.csv", 'w', encoding='UTF-8', newline='')
 writer_out = csv.writer(handle_out)
 i=0
 try:
